@@ -140,6 +140,15 @@ class SRTAdapter(nn.Module):
             f"{frozen:,}",
         )
 
+        # Cast adapter modules to backbone dtype so bf16 hidden states flow
+        # through without dtype mismatch (backbone is frozen bf16, adapter
+        # modules default to float32)
+        for module in [
+            self.community_head, self.mah_heads, self.rrm,
+            self.chain_predictor, self.ben,
+        ]:
+            module.to(load_dtype)
+
     def forward(
         self,
         input_ids: torch.Tensor,
