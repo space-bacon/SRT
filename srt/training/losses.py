@@ -19,6 +19,7 @@ from srt.config import LossConfig
 def chain_loss(
     divergences: list[torch.Tensor],
     chain_predictor: torch.nn.Module,
+    attention_mask: torch.Tensor | None = None,
 ) -> torch.Tensor:
     """Self-supervised chain-of-interpretants loss.
 
@@ -29,6 +30,7 @@ def chain_loss(
     Args:
         divergences: list of (B, T, d_div) tensors from successive MAH layers.
         chain_predictor: nn.Linear that predicts next divergence from current.
+        attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
 
     Returns:
         Scalar loss.
@@ -40,7 +42,12 @@ def chain_loss(
     for i in range(len(divergences) - 1):
         pred = chain_predictor(divergences[i])
         target = divergences[i + 1].detach()
-        loss = loss + F.mse_loss(pred, target)
+        per_pos = (pred - target).pow(2).mean(dim=-1)  # (B, T)
+        if attention_mask is not None:
+            mask = attention_mask.to(per_pos.dtype)
+            loss = loss + (per_pos * mask).sum() / mask.sum().clamp(min=1)
+        else:
+            loss = loss + per_pos.mean()
     return loss / (len(divergences) - 1)
 
 
@@ -101,39 +108,63 @@ def regime_loss(
     return F.cross_entropy(logits_masked, targets_masked)
 
 
-def divergence_alive_loss(divergences: list[torch.Tensor]) -> torch.Tensor:
+def divergence_alive_loss(
+    divergences: list[torch.Tensor],
+    attention_mask: torch.Tensor | None = None,
+) -> torch.Tensor:
     """Prevent divergence vectors from collapsing to zero.
 
     Encourages divergence norms to stay near a target value (1.0).
 
     Args:
         divergences: list of (B, T, d_div) tensors.
+        attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
 
     Returns:
         Scalar loss.
     """
     if not divergences:
-        return torch.tensor(0.0)
+        return torch.tensor(0.0, device=divergences[0].device if divergences else "cpu")
 
-    mean_norm = sum(d.norm(dim=-1).mean() for d in divergences) / len(divergences)
-    return (1.0 - mean_norm).abs()
+    total = torch.tensor(0.0, device=divergences[0].device)
+    for d in divergences:
+        norms = d.norm(dim=-1)  # (B, T)
+        if attention_mask is not None:
+            mask = attention_mask.to(norms.dtype)
+            mean_norm = (norms * mask).sum() / mask.sum().clamp(min=1)
+        else:
+            mean_norm = norms.mean()
+        total = total + (1.0 - mean_norm).abs()
+    return total / len(divergences)
 
 
-def injection_regularization(injections: list[torch.Tensor]) -> torch.Tensor:
+def injection_regularization(
+    injections: list[torch.Tensor],
+    attention_mask: torch.Tensor | None = None,
+) -> torch.Tensor:
     """Keep injection vectors small (L2 penalty).
 
     The adapter should make subtle corrections, not override the backbone.
 
     Args:
         injections: list of (B, T, d_backbone) injection vectors.
+        attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
 
     Returns:
         Scalar loss.
     """
     if not injections:
-        return torch.tensor(0.0)
+        return torch.tensor(0.0, device=injections[0].device if injections else "cpu")
 
-    return sum(inj.pow(2).mean() for inj in injections) / len(injections)
+    total = torch.tensor(0.0, device=injections[0].device)
+    for inj in injections:
+        per_pos = inj.pow(2).mean(dim=-1)  # (B, T)
+        if attention_mask is not None:
+            mask = attention_mask.to(per_pos.dtype)
+            total = total + (per_pos * mask).sum() / mask.sum().clamp(min=1)
+        else:
+            total = total + per_pos.mean()
+    return total / len(injections)
 
 
 def community_entropy_loss(community_weights: torch.Tensor) -> torch.Tensor:
@@ -160,6 +191,7 @@ def compute_total_loss(
     r_true: torch.Tensor | None,
     r_mask: torch.Tensor | None,
     config: LossConfig,
+    attention_mask: torch.Tensor | None = None,
 ) -> tuple[torch.Tensor, dict[str, float]]:
     """Compute combined loss from adapter output.
 
@@ -169,6 +201,7 @@ def compute_total_loss(
         r_true: (B, T) ground-truth reflexivity, or None.
         r_mask: (B, T) bool mask for valid r_true positions, or None.
         config: LossConfig with weights.
+        attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
 
     Returns:
         (total_loss, metrics_dict) where metrics_dict has per-component values.
@@ -184,7 +217,7 @@ def compute_total_loss(
 
     # Chain-of-interpretants loss
     if output.divergences:
-        l_chain = chain_loss(output.divergences, chain_predictor)
+        l_chain = chain_loss(output.divergences, chain_predictor, attention_mask)
         total = total + config.chain_weight * l_chain
         metrics["chain"] = l_chain.item()
 
@@ -200,13 +233,13 @@ def compute_total_loss(
 
     # Divergence alive
     if output.divergences:
-        l_alive = divergence_alive_loss(output.divergences)
+        l_alive = divergence_alive_loss(output.divergences, attention_mask)
         total = total + config.div_alive_weight * l_alive
         metrics["div_alive"] = l_alive.item()
 
     # Injection regularization
     if output.injections:
-        l_inject = injection_regularization(output.injections)
+        l_inject = injection_regularization(output.injections, attention_mask)
         total = total + config.inject_reg_weight * l_inject
         metrics["inject_reg"] = l_inject.item()
 

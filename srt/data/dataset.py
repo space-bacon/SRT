@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 import torch
+import torch.nn.functional as F
 from torch.utils.data import Dataset
 from transformers import PreTrainedTokenizerBase
 
@@ -148,24 +149,25 @@ def _align_word_labels_to_bpe(
     return token_labels, token_mask
 
 
-def collate_fn(batch: list[dict[str, torch.Tensor]]) -> dict[str, torch.Tensor]:
-    """Collate with dynamic padding to the longest sequence in the batch."""
-    max_len = max(item["input_ids"].size(0) for item in batch)
+def make_collate_fn(pad_token_id: int = 0):
+    """Create a collate function with the correct pad token id."""
 
-    padded = {key: [] for key in batch[0]}
-    for item in batch:
-        T = item["input_ids"].size(0)
-        pad_len = max_len - T
-        padded["input_ids"].append(F.pad(item["input_ids"], (0, pad_len), value=0))
-        padded["attention_mask"].append(
-            F.pad(item["attention_mask"], (0, pad_len), value=0)
-        )
-        padded["labels"].append(F.pad(item["labels"], (0, pad_len), value=-100))
-        padded["r_true"].append(F.pad(item["r_true"], (0, pad_len), value=0.0))
-        padded["r_mask"].append(F.pad(item["r_mask"], (0, pad_len), value=False))
+    def collate_fn(batch: list[dict[str, torch.Tensor]]) -> dict[str, torch.Tensor]:
+        """Collate with dynamic padding to the longest sequence in the batch."""
+        max_len = max(item["input_ids"].size(0) for item in batch)
 
-    return {k: torch.stack(v) for k, v in padded.items()}
+        padded = {key: [] for key in batch[0]}
+        for item in batch:
+            T = item["input_ids"].size(0)
+            pad_len = max_len - T
+            padded["input_ids"].append(F.pad(item["input_ids"], (0, pad_len), value=pad_token_id))
+            padded["attention_mask"].append(
+                F.pad(item["attention_mask"], (0, pad_len), value=0)
+            )
+            padded["labels"].append(F.pad(item["labels"], (0, pad_len), value=-100))
+            padded["r_true"].append(F.pad(item["r_true"], (0, pad_len), value=0.0))
+            padded["r_mask"].append(F.pad(item["r_mask"], (0, pad_len), value=False))
 
+        return {k: torch.stack(v) for k, v in padded.items()}
 
-# Need F for pad
-import torch.nn.functional as F
+    return collate_fn

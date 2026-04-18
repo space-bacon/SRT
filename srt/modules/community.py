@@ -51,17 +51,26 @@ class CommunityDiscoveryHead(nn.Module):
         # Learnable community prototypes
         self.prototypes = nn.Embedding(cfg.num_prototypes, cfg.d_community)
 
-    def forward(self, hidden_states: torch.Tensor) -> CommunityOutput:
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        attention_mask: torch.Tensor | None = None,
+    ) -> CommunityOutput:
         """Discover community from hidden states.
 
         Args:
             hidden_states: (B, T, d_backbone) from an early backbone layer.
+            attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
 
         Returns:
             CommunityOutput with soft assignment and community vector.
         """
-        # Pool across positions → document-level representation
-        pooled = hidden_states.mean(dim=1)  # (B, d_backbone)
+        # Masked mean pool across positions → document-level representation
+        if attention_mask is not None:
+            mask = attention_mask.unsqueeze(-1).to(hidden_states.dtype)  # (B, T, 1)
+            pooled = (hidden_states * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1)
+        else:
+            pooled = hidden_states.mean(dim=1)  # (B, d_backbone)
         encoded = self.encoder(pooled)  # (B, d_community)
 
         # Cosine similarity to prototypes

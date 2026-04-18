@@ -31,7 +31,7 @@ from transformers import AutoTokenizer
 
 from srt.adapter import SRTAdapter
 from srt.config import SRTConfig
-from srt.data.dataset import SRTAdapterDataset, collate_fn
+from srt.data.dataset import SRTAdapterDataset, make_collate_fn
 from srt.training.losses import compute_total_loss
 
 logging.basicConfig(
@@ -111,12 +111,14 @@ def validate(model: SRTAdapter, dataloader: DataLoader, config: SRTConfig) -> di
             batch["r_true"],
             batch["r_mask"],
             config.loss,
+            attention_mask=batch["attention_mask"],
         )
         for k, v in metrics.items():
             totals[k] = totals.get(k, 0.0) + v
         count += 1
 
     model.train()
+    model.backbone.eval()  # backbone must stay in eval mode always
     return {k: v / max(count, 1) for k, v in totals.items()}
 
 
@@ -152,6 +154,8 @@ def train(args: argparse.Namespace) -> None:
     tokenizer = AutoTokenizer.from_pretrained(args.backbone, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+
+    collate_fn = make_collate_fn(pad_token_id=tokenizer.pad_token_id)
 
     train_ds = SRTAdapterDataset(
         args.train_data, tokenizer, args.max_seq_len, args.max_train_samples
@@ -224,6 +228,7 @@ def train(args: argparse.Namespace) -> None:
                 batch["r_true"],
                 batch["r_mask"],
                 config.loss,
+                attention_mask=batch["attention_mask"],
             )
 
             # Backward

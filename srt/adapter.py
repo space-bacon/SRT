@@ -171,14 +171,19 @@ class SRTAdapter(nn.Module):
         # 3. Causal mask for MAH attention
         mah_causal_mask = _make_causal_mask(T, h.dtype, device)
 
-        # 4. Prepare 4D attention mask for backbone layers
-        # If user provides a padding mask, convert to 4D additive mask
+        # 4. Prepare 4D causal+padding mask for backbone layers
+        # Must combine causal mask (T, T) with padding mask (B, T) into (B, 1, T, T)
+        # so that SDPA doesn't drop is_causal=True behavior
+        causal_4d = _make_causal_mask(T, h.dtype, device)  # (1, 1, T, T)
         backbone_mask = None
         if attention_mask is not None:
-            # (B, T) → (B, 1, 1, T) additive mask
-            backbone_mask = (1.0 - attention_mask[:, None, None, :].to(h.dtype)) * torch.finfo(
+            # (B, T) → (B, 1, 1, T) padding mask
+            pad_mask = (1.0 - attention_mask[:, None, None, :].to(h.dtype)) * torch.finfo(
                 h.dtype
             ).min
+            backbone_mask = causal_4d + pad_mask  # (B, 1, T, T)
+        else:
+            backbone_mask = causal_4d  # (1, 1, T, T) — causal only
 
         # 5. Layer-by-layer forward with semiotic taps
         divergences: list[torch.Tensor] = []
@@ -201,7 +206,7 @@ class SRTAdapter(nn.Module):
 
             # Community discovery at early layer
             if layer_i == self.config.community_layer_idx and community_out is None:
-                community_out = self.community_head(h.detach())
+                community_out = self.community_head(h.detach(), attention_mask)
                 community_vec = community_out.vector
 
             # MAH hook: extract divergence
