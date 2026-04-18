@@ -85,7 +85,44 @@ python scripts/train.py \
     --output-dir checkpoints/adapter_v1 \
     --batch-size 16 \
     --epochs 3
+
+# Resume from checkpoint (restores optimizer, scheduler, step, epoch)
+python scripts/train.py \
+    --backbone Qwen/Qwen2.5-7B \
+    --train-data data/all_train.jsonl \
+    --val-data data/all_val.jsonl \
+    --output-dir checkpoints/adapter_v1 \
+    --resume checkpoints/adapter_v1/training_checkpoint.pt \
+    --batch-size 16 \
+    --epochs 3
 ```
+
+## Training Diagnostics
+
+Every `--log-every` steps, the training script logs standard loss metrics
+plus semiotic diagnostics:
+
+| Diagnostic | What It Shows | Healthy Range |
+|------------|--------------|---------------|
+| `div_norms` | MAH divergence vector L2 norms per hook layer | > 0.1 (not collapsed) |
+| `inj_norms` | RRM injection magnitudes at each injection point | < 5% of hidden norm |
+| `r_hat_mean±std` | BEN reflexivity predictions — distribution spread | std > 0.1 (not saturated) |
+| `r_hat_min/max` | Range of r̂ across the batch | Should span [-1, 1] |
+
+**Red flags to watch for:**
+- `div_norms` → 0: divergence vectors collapsed, MAH not learning
+- `r_hat_std` < 0.05: BEN stuck in trivial constant prediction
+- CE climbing steadily: injections corrupting backbone representations
+- Chain loss exactly 0.0: divergence collapsed to a constant
+
+## Checkpointing
+
+The training script saves:
+- `training_checkpoint.pt` — full state (adapter weights + optimizer + scheduler + step + epoch) at every validation step, for seamless resumption
+- `best_adapter.pt` — adapter weights only, at best validation loss
+- `adapter_epoch{N}.pt` — adapter weights at end of each epoch
+- `final_adapter.pt` — adapter weights at end of training
+- `train_log.jsonl` — all metrics + diagnostics in structured format
 
 ## Theoretical Foundation
 

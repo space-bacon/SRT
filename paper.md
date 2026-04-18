@@ -299,33 +299,38 @@ Best checkpoint selected by lowest validation total loss. Model state includes o
 
 *This section reports early training metrics from the first run. Full evaluation will follow in a subsequent revision.*
 
-### 5.1 Step 100 (Warmup Phase)
+### 5.1 Early Training Dynamics (Steps 100–300)
 
-At step 100 of 187,500 (lr warmup still in progress at $6 \times 10^{-5}$):
+Training was conducted on a single NVIDIA A6000 (48 GB) with the Qwen 2.5-7B backbone frozen in bfloat16. The adapter's 12.7M trainable parameters were optimized with AdamW (lr = $3 \times 10^{-4}$, linear warmup over 500 steps, cosine decay). Diagnostic instrumentation was added at step 0 of the current run to log divergence norms, injection magnitudes, and $\hat{r}$ distribution statistics at every logging interval.
 
-| Metric | Value |
-|--------|-------|
-| Total loss | 15.735 |
-| Cross-entropy | 2.734 |
-| Chain loss | 7.344 |
-| Bifurcation loss | 6.769 |
-| Training speed | 0.5 step/s |
-| GPU utilization | 100% |
-| VRAM usage | 48.5 / 49.1 GB |
+| Step | Total | CE | Chain | Bif | div\_norms (L7/L14/L21) | inj\_norms (L14/L21) | $\hat{r}$ mean ± std [min, max] | LR |
+|------|-------|----|-------|-----|------------------------|---------------------|--------------------------------|-----|
+| 100 | 20.47 | 2.78 | 7.78 | 11.01 | 8.9 / 8.3 / 18.5 | 0.03 / 0.14 | 0.89 ± 0.07 [−0.21, 0.99] | 6e-5 |
+| 200 | 13.97 | 2.67 | 1.10 | 9.71 | 4.1 / 6.0 / 11.1 | 0.79 / 2.23 | 0.76 ± 0.28 [−0.45, 1.00] | 1.2e-4 |
+| 300 | 10.99 | 2.64 | 1.39 | 6.47 | 4.4 / 5.6 / 8.3 | 3.44 / 5.78 | 0.73 ± 0.28 [−0.65, 1.00] | 1.8e-4 |
 
 **Observations:**
-- **CE = 2.734** at step 100 confirms the core design claim: by preserving the backbone's native embeddings and LM head, cross-entropy starts near pretrained quality rather than the ~200 seen in the original full-SRT architecture. The adapter is not degrading language modeling.
-- **Chain = 7.34** and **Bif = 6.77** are high but expected during warmup. The chain predictor has not yet learned the divergence evolution pattern, and BEN's $\hat{r}$ estimates are effectively random at this stage.
-- **0.5 step/s** reflects the computational cost of the layer-by-layer forward pass with semiotic hooks on a 28-layer, 7B-parameter backbone at batch size 16 × 512 tokens.
+
+1. **CE stability (2.64–2.78).** Cross-entropy remains near pretrained quality throughout, confirming the core design claim: the frozen backbone's native LM head is not degraded by adapter injection. This stands in sharp contrast to the original SRT's CE of ~200 at initialization.
+
+2. **Chain convergence.** Chain loss drops from 7.78 → 1.10 within 100 steps after warmup begins, indicating the linear chain predictor rapidly learns to map divergence at layer $l$ to layer $l+1$. This is the fastest-converging loss, consistent with its simple regression structure.
+
+3. **Divergence vectors are alive.** Mean L2 norms of 4.4–18.5 across the three MAH hook layers confirm the divergence subspaces are not collapsing. Layer 21 consistently produces the largest divergence, suggesting that deeper representations carry more semiotic information — consistent with the Peircean expectation that later interpretants incorporate more community-specific processing.
+
+4. **Injection magnitudes are small but growing.** Injection norms rose from 0.03/0.14 at step 100 to 3.44/5.78 at step 300, relative to a backbone hidden norm of ~60 ($\sqrt{3584}$). At step 300, injections represent ~5–10% of the hidden state norm — large enough to carry signal, small enough to not corrupt the backbone. The zero-initialized projection and sigmoid gating are functioning as designed.
+
+5. **$\hat{r}$ desaturation.** At step 100, BEN produced a near-constant $\hat{r} \approx 0.89$ (std = 0.07), indicating Tanh saturation. By step 300, the distribution has spread to mean 0.73 ± 0.28 with min reaching −0.65. The bifurcation loss is successfully driving BEN away from the trivial constant-prediction solution. If this trend continues, $\hat{r}$ should cover the full [−1, 1] range by step 1000.
 
 ### 5.2 Expected Training Trajectory
 
 Based on the loss structure and learning rate schedule:
-- Chain loss should decrease significantly once lr ramps past warmup (step 500), as the linear chain predictor has a well-defined regression target.
-- Bifurcation loss will plateau initially due to class imbalance (99.2% subcritical), then improve as focal weighting takes effect.
-- CE should remain near 2.7–3.0 throughout, degrading only if injections become harmful (monitored via injection regularization loss).
+- Chain loss should stabilize below 0.1 once lr reaches peak at step 500 and the predictor fully converges.
+- Bifurcation loss will continue to decrease as $\hat{r}$ predictions spread to match the r\_true distribution (99.2% subcritical, with focal weighting upweighting the rare supercritical cases).
+- CE should remain near 2.6–2.9 throughout. Any sustained climb above 3.5 would indicate injection harm.
+- Divergence norms should stabilize, with the divergence\_alive loss keeping them from collapsing to zero.
+- First validation checkpoint at step 2000 will provide the first generalization signal.
 
-*Full training curves and validation metrics will be added upon completion of the three-epoch run.*
+*Full training curves, validation metrics, and evaluation against the falsification criteria will be added upon completion of the three-epoch run.*
 
 ---
 

@@ -60,7 +60,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--warmup-steps", type=int, default=500)
     p.add_argument("--dtype", default="bfloat16", choices=["float32", "float16", "bfloat16"])
     p.add_argument("--device", default=None, help="Device (auto-detected if not set)")
-    p.add_argument("--resume", default=None, help="Path to adapter checkpoint to resume from")
+    p.add_argument("--resume", default=None, help="Path to full training checkpoint to resume from")
     return p.parse_args()
 
 
@@ -142,8 +142,6 @@ def train(args: argparse.Namespace) -> None:
 
     # ── Model ─────────────────────────────────────────────────────────
     model = SRTAdapter(config)
-    if args.resume:
-        model.load_adapter(args.resume)
     model = model.to(device)
 
     # Only put adapter params in training mode (backbone stays eval)
@@ -200,12 +198,37 @@ def train(args: argparse.Namespace) -> None:
         import dataclasses
         json.dump(dataclasses.asdict(config), f, indent=2, default=str)
 
-    # ── Training loop ─────────────────────────────────────────────────
+    # ── Resume from checkpoint ────────────────────────────────────────
     global_step = 0
+    start_epoch = 0
     best_val_loss = float("inf")
+
+    if args.resume:
+        ckpt = torch.load(args.resume, map_location=device, weights_only=False)
+        if "adapter_state" in ckpt:
+            # Full training checkpoint
+            missing, _ = model.load_state_dict(ckpt["adapter_state"], strict=False)
+            non_bb = [k for k in missing if not k.startswith("backbone.")]
+            if non_bb:
+                logger.warning("Missing adapter keys: %s", non_bb)
+            optimizer.load_state_dict(ckpt["optimizer_state"])
+            scheduler.load_state_dict(ckpt["scheduler_state"])
+            global_step = ckpt["global_step"]
+            start_epoch = ckpt["epoch"]
+            best_val_loss = ckpt.get("best_val_loss", float("inf"))
+            logger.info(
+                "Resumed from checkpoint: step=%d, epoch=%d, best_val=%.4f",
+                global_step, start_epoch, best_val_loss,
+            )
+        else:
+            # Legacy: plain adapter weights only
+            model.load_adapter(args.resume)
+            logger.info("Loaded adapter weights (no optimizer state) from %s", args.resume)
+
+    # ── Training loop ─────────────────────────────────────────────────
     log_file = open(out_dir / "train_log.jsonl", "a")
 
-    for epoch in range(args.epochs):
+    for epoch in range(start_epoch, args.epochs):
         logger.info("=== Epoch %d/%d ===", epoch + 1, args.epochs)
         epoch_loss = 0.0
         epoch_steps = 0
@@ -250,12 +273,30 @@ def train(args: argparse.Namespace) -> None:
                 elapsed = time.time() - t0
                 steps_per_sec = epoch_steps / elapsed
                 lr_now = scheduler.get_last_lr()[0]
+
+                # ── Diagnostic: divergence norms, r_hat stats, injection norms
+                with torch.no_grad():
+                    div_norms = [d.norm(dim=-1).mean().item() for d in output.divergences]
+                    inj_norms = [inj.norm(dim=-1).mean().item() for inj in output.injections]
+                    diag = {
+                        "div_norm_mean": round(sum(div_norms) / max(len(div_norms), 1), 5),
+                        "div_norms": [round(n, 5) for n in div_norms],
+                        "inj_norms": [round(n, 5) for n in inj_norms],
+                    }
+                    if output.ben_output is not None:
+                        rh = output.ben_output.r_hat
+                        diag["r_hat_mean"] = round(rh.mean().item(), 5)
+                        diag["r_hat_std"] = round(rh.std().item(), 5)
+                        diag["r_hat_min"] = round(rh.min().item(), 5)
+                        diag["r_hat_max"] = round(rh.max().item(), 5)
+
                 log_entry = {
                     "step": global_step,
                     "epoch": epoch + 1,
                     "lr": lr_now,
                     "steps_per_sec": round(steps_per_sec, 2),
                     **{k: round(v, 4) for k, v in metrics.items()},
+                    **diag,
                 }
                 log_file.write(json.dumps(log_entry) + "\n")
                 log_file.flush()
@@ -268,6 +309,15 @@ def train(args: argparse.Namespace) -> None:
                     metrics.get("bif", 0),
                     lr_now,
                     steps_per_sec,
+                )
+                logger.info(
+                    "  diag: div_norms=%s  inj_norms=%s  r_hat=%.4f±%.4f [%.4f, %.4f]",
+                    diag["div_norms"],
+                    diag["inj_norms"],
+                    diag.get("r_hat_mean", 0),
+                    diag.get("r_hat_std", 0),
+                    diag.get("r_hat_min", 0),
+                    diag.get("r_hat_max", 0),
                 )
 
             # Validation
@@ -289,6 +339,20 @@ def train(args: argparse.Namespace) -> None:
                     best_val_loss = val_loss
                     model.save_adapter(str(out_dir / "best_adapter.pt"))
                     logger.info("New best val loss: %.4f", val_loss)
+
+                # Save full training checkpoint for resumption
+                torch.save({
+                    "adapter_state": {
+                        k: v for k, v in model.state_dict().items()
+                        if not k.startswith("backbone.")
+                    },
+                    "optimizer_state": optimizer.state_dict(),
+                    "scheduler_state": scheduler.state_dict(),
+                    "global_step": global_step,
+                    "epoch": epoch,
+                    "best_val_loss": best_val_loss,
+                }, str(out_dir / "training_checkpoint.pt"))
+                logger.info("Saved training checkpoint at step %d", global_step)
 
         avg_epoch_loss = epoch_loss / max(epoch_steps, 1)
         logger.info(
