@@ -48,7 +48,7 @@ class LossConfig:
     bif_weight: float = 1.0  # bifurcation (r_hat vs r_true)
     regime_weight: float = 5.0  # regime classification
     div_alive_weight: float = 0.1  # prevent divergence collapse
-    inject_reg_weight: float = 0.01  # keep injections small
+    inject_reg_weight: float = 0.1  # keep injections small (v2: raised from 0.01)
     community_entropy_weight: float = 0.01  # diverse community usage
 
 

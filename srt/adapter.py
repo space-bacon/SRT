@@ -154,6 +154,7 @@ class SRTAdapter(nn.Module):
         input_ids: torch.Tensor,
         attention_mask: torch.Tensor | None = None,
         labels: torch.Tensor | None = None,
+        forced_community: torch.Tensor | None = None,
     ) -> SRTAdapterOutput:
         """Forward pass: backbone with semiotic taps and injections.
 
@@ -161,6 +162,9 @@ class SRTAdapter(nn.Module):
             input_ids: (B, T) token ids.
             attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
             labels: (B, T) target token ids for CE loss. Optional.
+            forced_community: (B, d_community) override community vector. Optional.
+                When provided, uses this instead of CommunityDiscoveryHead output
+                for conditioning MAH heads. Discovery still runs for diagnostics.
 
         Returns:
             SRTAdapterOutput with logits, losses, and semiotic intermediates.
@@ -216,7 +220,11 @@ class SRTAdapter(nn.Module):
             # Community discovery at early layer
             if layer_i == self.config.community_layer_idx and community_out is None:
                 community_out = self.community_head(h.detach(), attention_mask)
-                community_vec = community_out.vector
+                # Use forced_community override if provided, else discovered
+                community_vec = (
+                    forced_community if forced_community is not None
+                    else community_out.vector
+                )
 
             # MAH hook: extract divergence
             if layer_i in self._mah_set:

@@ -56,9 +56,13 @@ def bifurcation_loss(
     r_true: torch.Tensor,
     r_mask: torch.Tensor,
 ) -> torch.Tensor:
-    """Smooth L1 loss between predicted and true reflexivity coefficient.
+    """Smooth L1 loss between predicted and log-compressed true reflexivity.
 
-    Uses focal weighting to upweight rare supercritical samples.
+    r_true spans [0, ~13] but BEN outputs Tanh ∈ [-1, 1].  Log-compressing
+    the target via  sign(r) * log(1 + |r|)  maps the bulk of r_true into
+    roughly [-1.5, 1.5], much better aligned with the output range.
+
+    Uses mild focal weighting (1.0×) for supercritical tokens.
 
     Args:
         r_hat: (B, T) predicted reflexivity from BEN.
@@ -74,9 +78,12 @@ def bifurcation_loss(
     r_hat_masked = r_hat[r_mask]
     r_true_masked = r_true[r_mask]
 
-    # Focal weighting: upweight non-zero r_true (rare supercritical signals)
-    focal_weight = 1.0 + 3.0 * r_true_masked.abs()
-    diff = F.smooth_l1_loss(r_hat_masked, r_true_masked, reduction="none")
+    # Log-compress targets to match BEN's Tanh output range
+    r_true_compressed = r_true_masked.sign() * (1.0 + r_true_masked.abs()).log()
+
+    # Mild focal weighting on compressed scale
+    focal_weight = 1.0 + 1.0 * r_true_compressed.abs()
+    diff = F.smooth_l1_loss(r_hat_masked, r_true_compressed, reduction="none")
     return (diff * focal_weight).mean()
 
 
