@@ -263,10 +263,16 @@ class SRTAdapter(nn.Module):
             meta_state=meta_state,
         )
 
+    # Adapter module prefixes for save/load (everything else is backbone)
+    _ADAPTER_PREFIXES = (
+        "community_head.", "mah_heads.", "rrm.", "chain_predictor.", "ben.",
+    )
+
     def save_adapter(self, path: str) -> None:
         """Save only the trainable adapter weights (not the backbone)."""
         state = {
-            k: v for k, v in self.state_dict().items() if not k.startswith("backbone.")
+            k: v for k, v in self.state_dict().items()
+            if k.startswith(self._ADAPTER_PREFIXES)
         }
         torch.save(state, path)
         logger.info("Saved adapter weights (%d tensors) to %s", len(state), path)
@@ -275,10 +281,10 @@ class SRTAdapter(nn.Module):
         """Load adapter weights (backbone loaded separately from HF)."""
         state = torch.load(path, map_location="cpu", weights_only=True)
         missing, unexpected = self.load_state_dict(state, strict=False)
-        # Expected: all backbone.* keys will be "missing" (they're loaded from HF)
-        non_backbone_missing = [k for k in missing if not k.startswith("backbone.")]
-        if non_backbone_missing:
-            logger.warning("Missing adapter keys: %s", non_backbone_missing)
+        # Expected: all non-adapter keys will be "missing" (loaded from HF)
+        adapter_missing = [k for k in missing if k.startswith(self._ADAPTER_PREFIXES)]
+        if adapter_missing:
+            logger.warning("Missing adapter keys: %s", adapter_missing)
         logger.info("Loaded adapter weights from %s", path)
 
     def trainable_parameters(self):

@@ -344,7 +344,7 @@ def train(args: argparse.Namespace) -> None:
                 torch.save({
                     "adapter_state": {
                         k: v for k, v in model.state_dict().items()
-                        if not k.startswith("backbone.")
+                        if k.startswith(model._ADAPTER_PREFIXES)
                     },
                     "optimizer_state": optimizer.state_dict(),
                     "scheduler_state": scheduler.state_dict(),
