@@ -105,13 +105,14 @@ plus semiotic diagnostics:
 | Diagnostic | What It Shows | Healthy Range |
 |------------|--------------|---------------|
 | `div_norms` | MAH divergence vector L2 norms per hook layer | > 0.1 (not collapsed) |
-| `inj_norms` | RRM injection magnitudes at each injection point | < 5% of hidden norm |
+| `inj_norms` | RRM injection magnitudes at each injection point | ~1.0 (target norm) |
 | `r_hat_mean±std` | BEN reflexivity predictions — distribution spread | std > 0.1 (not saturated) |
 | `r_hat_min/max` | Range of r̂ across the batch | Should span [-1, 1] |
 
 **Red flags to watch for:**
 - `div_norms` → 0: divergence vectors collapsed, MAH not learning
 - `r_hat_std` < 0.05: BEN stuck in trivial constant prediction
+- `inj_norms` > 5: injection regularization not constraining norms (fixed in v3)
 - CE climbing steadily: injections corrupting backbone representations
 - Chain loss exactly 0.0: divergence collapsed to a constant
 

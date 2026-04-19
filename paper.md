@@ -271,7 +271,9 @@ $$\mathcal{L}_{\text{bif}} = \text{mean}[(1 + 3|r_{\text{true}}|) \cdot \text{Sm
 **Divergence alive** ($\lambda = 0.1$): Prevents divergence vectors from collapsing to zero by penalizing deviation of mean divergence norm from 1.0:
 $$\mathcal{L}_{\text{alive}} = \frac{1}{|\mathcal{M}|} \sum_l \left|1 - \bar{\|d^{(l)}\|}\right|$$
 
-**Injection regularization** ($\lambda = 0.01$): L2 penalty on injection vectors, ensuring corrections remain small relative to backbone hidden states.
+**Injection regularization** ($\lambda = 0.5$): Target-norm penalty on injection vectors, pulling norms toward a target of 1.0 rather than toward zero:
+$$\mathcal{L}_{\text{inject}} = \frac{1}{|\mathcal{I}|} \sum_l \left(\|\Delta h^{(l)}\| - \tau\right)^2$$
+where $\tau = 1.0$ is the target norm. This replaced the original L2 penalty $\text{mean}(x^2)$ which, when averaged over $d_{\text{backbone}} = 3584$ dimensions, produced negligible gradients (effective contribution $< 0.002$ at norms of 7). The target-norm formulation produces penalty $(7-1)^2 = 36$ at norm 7 and zero at the target, providing strong corrective signal.
 
 **Community entropy** ($\lambda = 0.01$): Encourages diverse community usage by maximizing entropy of the average community assignment distribution across the batch:
 $$\mathcal{L}_{\text{comm}} = \log K - H(\bar{w})$$
@@ -317,7 +319,7 @@ Training was conducted on a single NVIDIA A6000 (48 GB) with the Qwen 2.5-7B bac
 
 3. **Divergence vectors are alive.** Mean L2 norms of 4.4–18.5 across the three MAH hook layers confirm the divergence subspaces are not collapsing. Layer 21 consistently produces the largest divergence, suggesting that deeper representations carry more semiotic information — consistent with the Peircean expectation that later interpretants incorporate more community-specific processing.
 
-4. **Injection magnitudes are small but growing.** Injection norms rose from 0.03/0.14 at step 100 to 3.44/5.78 at step 300, relative to a backbone hidden norm of ~60 ($\sqrt{3584}$). At step 300, injections represent ~5–10% of the hidden state norm — large enough to carry signal, small enough to not corrupt the backbone. The zero-initialized projection and sigmoid gating are functioning as designed.
+4. **Injection magnitudes are small but growing.** Injection norms rose from 0.03/0.14 at step 100 to 3.44/5.78 at step 300, relative to a backbone hidden norm of ~60 ($\sqrt{3584}$). At step 300, injections represent ~5–10% of the hidden state norm. In v2, norms plateaued at 6–8 with no downward trend, revealing that the original L2 penalty (mean of squared elements over $d = 3584$) was negligible. V3 replaced this with a target-norm penalty $(\|\text{inj}\| - 1.0)^2$ at weight 0.5, which provides strong corrective signal at observed norms while allowing useful signal at the target.
 
 5. **$\hat{r}$ desaturation.** At step 100, BEN produced a near-constant $\hat{r} \approx 0.89$ (std = 0.07), indicating Tanh saturation. By step 300, the distribution has spread to mean 0.73 ± 0.28 with min reaching −0.65. The bifurcation loss is successfully driving BEN away from the trivial constant-prediction solution. If this trend continues, $\hat{r}$ should cover the full [−1, 1] range by step 1000.
 
@@ -437,7 +439,8 @@ SRTConfig(
     loss = LossConfig(
         ce_weight=1.0, chain_weight=0.5, bif_weight=1.0,
         regime_weight=5.0, div_alive_weight=0.1,
-        inject_reg_weight=0.01, community_entropy_weight=0.01,
+        inject_reg_weight=0.5, inject_target_norm=1.0,
+        community_entropy_weight=0.01,
     ),
 )
 ```
