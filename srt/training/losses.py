@@ -148,14 +148,18 @@ def divergence_alive_loss(
 def injection_regularization(
     injections: list[torch.Tensor],
     attention_mask: torch.Tensor | None = None,
+    target_norm: float = 1.0,
 ) -> torch.Tensor:
-    """Keep injection vectors small (L2 penalty).
+    """Penalize injection norms that deviate from a target.
 
-    The adapter should make subtle corrections, not override the backbone.
+    Uses (||inj|| - target)^2 per position, which pulls norms toward the
+    target rather than toward zero.  This lets the RRM contribute useful
+    signal at norm ~1 while strongly penalizing the 6-8 norms seen in v2.
 
     Args:
         injections: list of (B, T, d_backbone) injection vectors.
         attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
+        target_norm: desired L2 norm for injection vectors.
 
     Returns:
         Scalar loss.
@@ -165,7 +169,8 @@ def injection_regularization(
 
     total = torch.tensor(0.0, device=injections[0].device)
     for inj in injections:
-        per_pos = inj.pow(2).mean(dim=-1)  # (B, T)
+        norms = inj.norm(dim=-1)  # (B, T) — L2 norm per position
+        per_pos = (norms - target_norm).pow(2)  # (B, T)
         if attention_mask is not None:
             mask = attention_mask.to(per_pos.dtype)
             total = total + (per_pos * mask).sum() / mask.sum().clamp(min=1)
@@ -244,9 +249,11 @@ def compute_total_loss(
         total = total + config.div_alive_weight * l_alive
         metrics["div_alive"] = l_alive.item()
 
-    # Injection regularization
+    # Injection regularization (target-norm penalty)
     if output.injections:
-        l_inject = injection_regularization(output.injections, attention_mask)
+        l_inject = injection_regularization(
+            output.injections, attention_mask, target_norm=config.inject_target_norm,
+        )
         total = total + config.inject_reg_weight * l_inject
         metrics["inject_reg"] = l_inject.item()
 

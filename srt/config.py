@@ -48,7 +48,8 @@ class LossConfig:
     bif_weight: float = 1.0  # bifurcation (r_hat vs r_true)
     regime_weight: float = 5.0  # regime classification
     div_alive_weight: float = 0.1  # prevent divergence collapse
-    inject_reg_weight: float = 0.1  # keep injections small (v2: raised from 0.01)
+    inject_reg_weight: float = 0.5  # target-norm penalty (v3: raised from 0.1, now uses ||inj||-target)
+    inject_target_norm: float = 1.0  # desired injection L2 norm (v3: new)
     community_entropy_weight: float = 0.01  # diverse community usage
 
 
