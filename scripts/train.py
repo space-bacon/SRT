@@ -61,6 +61,15 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--dtype", default="bfloat16", choices=["float32", "float16", "bfloat16"])
     p.add_argument("--device", default=None, help="Device (auto-detected if not set)")
     p.add_argument("--resume", default=None, help="Path to full training checkpoint to resume from")
+    p.add_argument(
+        "--warm-start",
+        default=None,
+        help=(
+            "Path to a v3 best_adapter.pt to warm-start from. Loads compatible "
+            "weights non-strictly; v4-only modules (RRM FiLM projections) keep "
+            "their fresh initialization. Optimizer/scheduler/step start from zero."
+        ),
+    )
     return p.parse_args()
 
 
@@ -112,6 +121,7 @@ def validate(model: SRTAdapter, dataloader: DataLoader, config: SRTConfig) -> di
             batch["r_mask"],
             config.loss,
             attention_mask=batch["attention_mask"],
+            community_ids=batch.get("community_id"),
         )
         for k, v in metrics.items():
             totals[k] = totals.get(k, 0.0) + v
@@ -225,6 +235,35 @@ def train(args: argparse.Namespace) -> None:
             model.load_adapter(args.resume)
             logger.info("Loaded adapter weights (no optimizer state) from %s", args.resume)
 
+    # ── Warm-start (v4 from v3) ───────────────────────────────────────
+    if args.warm_start and not args.resume:
+        logger.info("Warm-starting from %s (v3 → v4 architecture migration)", args.warm_start)
+        v3_state = torch.load(args.warm_start, map_location=device, weights_only=True)
+        # Drop v3-only keys that no longer exist in v4 architecture (RRM redesign).
+        v3_only_prefixes = ("rrm.inject_proj", "rrm.inject_gate")
+        filtered = {
+            k: v for k, v in v3_state.items()
+            if not any(k.startswith(p) for p in v3_only_prefixes)
+        }
+        dropped = sorted(set(v3_state.keys()) - set(filtered.keys()))
+        missing, unexpected = model.load_state_dict(filtered, strict=False)
+        # Expected missing: backbone.* (loaded from HF) and v4-only RRM keys
+        adapter_missing = [
+            k for k in missing
+            if k.startswith(model._ADAPTER_PREFIXES)
+        ]
+        logger.info(
+            "Warm-start: loaded %d v3 tensors, dropped %d v3-only (%s), "
+            "reinitialized %d v4-only adapter keys: %s",
+            len(filtered),
+            len(dropped),
+            dropped,
+            len(adapter_missing),
+            adapter_missing,
+        )
+        if unexpected:
+            logger.warning("Unexpected keys in warm-start checkpoint: %s", unexpected)
+
     # ── Training loop ─────────────────────────────────────────────────
     log_file = open(out_dir / "train_log.jsonl", "a")
 
@@ -252,6 +291,7 @@ def train(args: argparse.Namespace) -> None:
                 batch["r_mask"],
                 config.loss,
                 attention_mask=batch["attention_mask"],
+                community_ids=batch.get("community_id"),
             )
 
             # Backward

@@ -82,13 +82,35 @@ class SRTAdapterDataset(Dataset):
             r_true[:len(token_r)] = token_r[:T]
             r_mask[:len(token_mask)] = token_mask[:T]
 
+        # Community id: stable int hash of the source-community string.
+        # Used by the supervised contrastive loss to push prototypes apart.
+        # Two samples from the same source share an id; samples from different
+        # sources almost certainly differ (mod a large prime to avoid collisions).
+        community_str = row.get("community", "") or ""
+        community_id = _stable_hash(community_str)
+
         return {
             "input_ids": input_ids,
             "attention_mask": attention_mask,
             "labels": input_ids.clone(),  # next-token prediction
             "r_true": r_true,
             "r_mask": r_mask,
+            "community_id": torch.tensor(community_id, dtype=torch.long),
         }
+
+
+def _stable_hash(s: str, modulus: int = 100003) -> int:
+    """Stable non-cryptographic hash → int in [0, modulus). FNV-1a 32-bit.
+
+    We use FNV-1a rather than the built-in `hash()` because the latter is
+    randomized per-process under PYTHONHASHSEED=random, which would give
+    different ids each run.
+    """
+    h = 2166136261
+    for ch in s.encode("utf-8"):
+        h ^= ch
+        h = (h * 16777619) & 0xFFFFFFFF
+    return h % modulus
 
 
 def _align_word_labels_to_bpe(
@@ -156,7 +178,7 @@ def make_collate_fn(pad_token_id: int = 0):
         """Collate with dynamic padding to the longest sequence in the batch."""
         max_len = max(item["input_ids"].size(0) for item in batch)
 
-        padded = {key: [] for key in batch[0]}
+        padded: dict[str, list[torch.Tensor]] = {key: [] for key in batch[0]}
         for item in batch:
             T = item["input_ids"].size(0)
             pad_len = max_len - T
@@ -167,6 +189,9 @@ def make_collate_fn(pad_token_id: int = 0):
             padded["labels"].append(F.pad(item["labels"], (0, pad_len), value=-100))
             padded["r_true"].append(F.pad(item["r_true"], (0, pad_len), value=0.0))
             padded["r_mask"].append(F.pad(item["r_mask"], (0, pad_len), value=False))
+            # community_id is a scalar — stack without padding
+            if "community_id" in item:
+                padded.setdefault("community_id", []).append(item["community_id"])
 
         return {k: torch.stack(v) for k, v in padded.items()}
 

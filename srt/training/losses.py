@@ -197,6 +197,63 @@ def community_entropy_loss(community_weights: torch.Tensor) -> torch.Tensor:
     return max_entropy - entropy
 
 
+def community_supcon_loss(
+    community_vectors: torch.Tensor,
+    community_ids: torch.Tensor,
+    temperature: float = 0.1,
+) -> torch.Tensor:
+    """Supervised contrastive loss on per-sample community vectors.
+
+    The v3 entropy regularizer kept the prototype distribution from collapsing
+    to a single mode but produced congruent collapse instead: pairwise cosine
+    similarity between learned prototypes converged to ~0.99 and the assignment
+    head learned to be near-uniform.  SupCon (Khosla et al. 2020) gives the
+    encoder direct gradient pressure to put samples from the same source into
+    a tight neighborhood and push different sources apart, which forces
+    prototypes to diversify because that is the only way to satisfy the loss.
+
+    Args:
+        community_vectors: (B, d_community) from CommunityDiscoveryHead.
+        community_ids: (B,) integer ids — same id = positive pair.
+        temperature: softmax temperature.
+
+    Returns:
+        Scalar loss.
+    """
+    B = community_vectors.shape[0]
+    if B < 2:
+        return torch.tensor(0.0, device=community_vectors.device)
+
+    # Cast to float32 for numerical stability of the contrastive softmax;
+    # the input vector may be bf16 because the adapter modules run in bf16.
+    z = F.normalize(community_vectors.float(), dim=-1)
+    sim = (z @ z.T) / temperature  # (B, B)
+
+    # Mask: True where i != j and ids match
+    eye = torch.eye(B, dtype=torch.bool, device=z.device)
+    pos_mask = (community_ids.view(-1, 1) == community_ids.view(1, -1)) & ~eye
+
+    # If no positive pairs in this batch, loss is zero (skip rather than NaN)
+    pos_count = pos_mask.sum(dim=1)
+    if pos_count.sum() == 0:
+        return torch.tensor(0.0, device=community_vectors.device)
+
+    # Mask self-similarity from denominator
+    sim = sim.masked_fill(eye, float("-inf"))
+    log_prob = sim - torch.logsumexp(sim, dim=1, keepdim=True)  # (B, B)
+    # Diagonal entries are -inf; zero them so they don't contaminate the
+    # masked sum below (0 * -inf = NaN otherwise).
+    log_prob = log_prob.masked_fill(eye, 0.0)
+
+    # Per-anchor average log-prob over its positives; rows with no positives
+    # contribute 0 (avoid divide-by-zero with clamp).
+    per_anchor = -(log_prob * pos_mask.float()).sum(dim=1) / pos_count.clamp(min=1).float()
+    valid = pos_count > 0
+    if not valid.any():
+        return torch.tensor(0.0, device=community_vectors.device)
+    return per_anchor[valid].mean()
+
+
 def compute_total_loss(
     output: SRTAdapterOutput,
     chain_predictor: torch.nn.Module,
@@ -204,6 +261,7 @@ def compute_total_loss(
     r_mask: torch.Tensor | None,
     config: LossConfig,
     attention_mask: torch.Tensor | None = None,
+    community_ids: torch.Tensor | None = None,
 ) -> tuple[torch.Tensor, dict[str, float]]:
     """Compute combined loss from adapter output.
 
@@ -262,6 +320,16 @@ def compute_total_loss(
         l_comm = community_entropy_loss(output.community_output.weights)
         total = total + config.community_entropy_weight * l_comm
         metrics["comm_entropy"] = l_comm.item()
+
+        # Community SupCon (v4 — forces prototypes apart)
+        if community_ids is not None and config.community_supcon_weight > 0:
+            l_supcon = community_supcon_loss(
+                output.community_output.vector,
+                community_ids,
+                temperature=config.community_supcon_temperature,
+            )
+            total = total + config.community_supcon_weight * l_supcon
+            metrics["comm_supcon"] = l_supcon.item()
 
     metrics["total"] = total.item()
     return total, metrics
