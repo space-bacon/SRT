@@ -20,7 +20,7 @@ class RRMConfig:
     """Reflexive Recurrent Module configuration."""
 
     d_meta: int = 512  # GRU meta-state dimension
-    inject_scale: float = 0.1  # scale injection relative to hidden norms
+    inject_scale: float = 1.0  # FiLM correction scale (v3 used 0.1 with linear inject; v4 uses 1.0 with FiLM)
 
 
 @dataclass
@@ -48,9 +48,18 @@ class LossConfig:
     bif_weight: float = 1.0  # bifurcation (r_hat vs r_true)
     regime_weight: float = 5.0  # regime classification
     div_alive_weight: float = 0.1  # prevent divergence collapse
-    inject_reg_weight: float = 0.5  # target-norm penalty (v3: raised from 0.1, now uses ||inj||-target)
-    inject_target_norm: float = 1.0  # desired injection L2 norm (v3: new)
+    # v4: dropped to 0 because v3 ablation showed the inject-norm regularizer
+    # was driving the optimizer to satisfy ||inj||=1 with arbitrary directions
+    # rather than directions useful for downstream loss.  FiLM init handles
+    # gradient flow without needing a norm prior.
+    inject_reg_weight: float = 0.0
+    inject_target_norm: float = 1.0
     community_entropy_weight: float = 0.01  # diverse community usage
+    # v4: SupCon loss on community vectors keyed by source-id hash.  Forces
+    # prototypes apart by giving same-source pairs positive gradient and
+    # different-source pairs negative gradient through the encoder.
+    community_supcon_weight: float = 0.5
+    community_supcon_temperature: float = 0.1
 
 
 @dataclass
