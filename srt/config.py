@@ -62,6 +62,19 @@ class LossConfig:
     # was overwhelmed and the loss flatlined at log(B-1)=2.71.
     community_supcon_weight: float = 2.0
     community_supcon_temperature: float = 0.1
+    # v6 additions:
+    #   - divergence SupCon on mean-pooled last-MAH divergence (analog of v5
+    #     community SupCon, applied to the metapragmatic channel)
+    #   - ListNet ranking loss on r̂ within each sequence (sharpens ordering;
+    #     pointwise smooth-L1 alone tolerates large rank errors at the tails)
+    #   - chain-residual auxiliary floor: keeps inference signal alive after
+    #     chain_loss has driven the per-position residual near zero
+    divergence_supcon_weight: float = 1.0
+    divergence_supcon_temperature: float = 0.1
+    listnet_weight: float = 0.5
+    listnet_temperature: float = 1.0
+    chain_residual_aux_weight: float = 0.05
+    chain_residual_aux_target: float = 0.5
 
 
 @dataclass

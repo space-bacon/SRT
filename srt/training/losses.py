@@ -270,6 +270,120 @@ def community_supcon_loss(
     }
 
 
+def divergence_supcon_loss(
+    divergences: list[torch.Tensor],
+    community_ids: torch.Tensor,
+    attention_mask: torch.Tensor | None = None,
+    temperature: float = 0.1,
+) -> tuple[torch.Tensor, dict[str, float]]:
+    """Supervised contrastive loss on per-sample mean divergence vectors.
+
+    v6 extension of the v5 community-SupCon idea applied to MAH divergence:
+    the last MAH layer's divergence is mean-pooled (masked) to a per-sample
+    vector, then contrasted by community id. Same lesson as v5 — operate on
+    a representation that is bijective with the encoder input rather than on
+    a quantity that can collapse to a constant across the batch.
+
+    Args:
+        divergences: list of (B, T, d_div) tensors from successive MAH layers.
+            The last entry is used as the contrastive representation.
+        community_ids: (B,) integer ids — same id = positive pair.
+        attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
+        temperature: softmax temperature.
+
+    Returns:
+        (loss, diagnostics).
+    """
+    if not divergences:
+        device = community_ids.device if community_ids is not None else "cpu"
+        return torch.tensor(0.0, device=device), {
+            "pos_pairs": 0.0, "unique_classes": 0.0,
+        }
+    div = divergences[-1]  # (B, T, d_div)
+    if attention_mask is not None:
+        m = attention_mask.to(div.dtype).unsqueeze(-1)  # (B, T, 1)
+        pooled = (div * m).sum(dim=1) / m.sum(dim=1).clamp(min=1)
+    else:
+        pooled = div.mean(dim=1)
+    # Reuse the same SupCon kernel as community_supcon_loss.
+    return community_supcon_loss(pooled, community_ids, temperature=temperature)
+
+
+def listnet_loss(
+    r_hat: torch.Tensor,
+    r_true: torch.Tensor,
+    r_mask: torch.Tensor,
+    temperature: float = 1.0,
+) -> torch.Tensor:
+    """ListNet ranking loss for r̂ over each sequence.
+
+    Cross-entropy between softmax(r_true) and softmax(r_hat) treated as
+    rankings over the valid positions of each sequence. Complements the
+    pointwise smooth-L1 bifurcation loss by giving direct gradient on the
+    *ordering* of r̂ within a passage, which is what downstream uses
+    (top-k attention probes, heatmap visualization, percentile thresholds).
+
+    Args:
+        r_hat: (B, T) predicted reflexivity.
+        r_true: (B, T) ground-truth reflexivity (same scale).
+        r_mask: (B, T) bool mask.
+        temperature: softmax temperature.
+
+    Returns:
+        Scalar loss averaged over sequences with >=2 valid positions.
+    """
+    B, T = r_hat.shape
+    device = r_hat.device
+    losses: list[torch.Tensor] = []
+    # Compress true reflexivity to match r_hat scale (same transform as bif loss).
+    r_true_c = r_true.sign() * (1.0 + r_true.abs()).log()
+    for b in range(B):
+        m = r_mask[b]
+        n = int(m.sum())
+        if n < 2:
+            continue
+        rh = r_hat[b][m].float() / temperature
+        rt = r_true_c[b][m].float() / temperature
+        # Softmax over the valid positions; mask out -inf done implicitly
+        # because we only index the valid slice.
+        log_p_hat = rh - torch.logsumexp(rh, dim=0)
+        p_true = torch.softmax(rt, dim=0)
+        losses.append(-(p_true * log_p_hat).sum())
+    if not losses:
+        return torch.tensor(0.0, device=device)
+    return torch.stack(losses).mean()
+
+
+def chain_residual_aux_loss(
+    chain_residual: torch.Tensor,
+    attention_mask: torch.Tensor | None = None,
+    target: float = 0.5,
+) -> torch.Tensor:
+    """Auxiliary penalty pulling mean per-token chain residual toward a target.
+
+    The chain prediction loss already minimizes the residual directly, but
+    that signal is averaged across all positions and dimensions. This term
+    keeps the per-token residual at a non-trivial level so it remains a
+    useful inference-time signal (used by the hallucination probe) rather
+    than collapsing to ~0 everywhere as training proceeds. With a small
+    weight this acts as a soft floor, not a primary objective.
+
+    Args:
+        chain_residual: (B, T) per-token mean chain residual.
+        attention_mask: (B, T) padding mask.
+        target: desired mean residual on real tokens.
+
+    Returns:
+        Scalar loss.
+    """
+    if attention_mask is not None:
+        m = attention_mask.to(chain_residual.dtype)
+        mean = (chain_residual * m).sum() / m.sum().clamp(min=1)
+    else:
+        mean = chain_residual.mean()
+    return (mean - target).pow(2)
+
+
 def compute_total_loss(
     output: SRTAdapterOutput,
     chain_predictor: torch.nn.Module,
@@ -317,11 +431,43 @@ def compute_total_loss(
         total = total + config.regime_weight * l_regime
         metrics["regime"] = l_regime.item()
 
+        # v6: ListNet ranking loss on r̂ within each sequence.
+        if config.listnet_weight > 0:
+            l_listnet = listnet_loss(
+                output.ben_output.r_hat, r_true, r_mask,
+                temperature=config.listnet_temperature,
+            )
+            total = total + config.listnet_weight * l_listnet
+            metrics["listnet"] = l_listnet.item()
+
     # Divergence alive
     if output.divergences:
         l_alive = divergence_alive_loss(output.divergences, attention_mask)
         total = total + config.div_alive_weight * l_alive
         metrics["div_alive"] = l_alive.item()
+
+        # v6: SupCon on mean-pooled last-MAH divergence.
+        if (community_ids is not None
+                and config.divergence_supcon_weight > 0):
+            l_div_sup, div_sup_diag = divergence_supcon_loss(
+                output.divergences, community_ids,
+                attention_mask=attention_mask,
+                temperature=config.divergence_supcon_temperature,
+            )
+            total = total + config.divergence_supcon_weight * l_div_sup
+            metrics["div_supcon"] = l_div_sup.item()
+            metrics["div_supcon_pos_pairs"] = div_sup_diag["pos_pairs"]
+
+    # v6: chain-residual auxiliary floor (keeps inference signal alive).
+    if (output.chain_residual_per_token is not None
+            and config.chain_residual_aux_weight > 0):
+        l_chain_aux = chain_residual_aux_loss(
+            output.chain_residual_per_token,
+            attention_mask=attention_mask,
+            target=config.chain_residual_aux_target,
+        )
+        total = total + config.chain_residual_aux_weight * l_chain_aux
+        metrics["chain_aux"] = l_chain_aux.item()
 
     # Injection regularization (target-norm penalty)
     if output.injections:
