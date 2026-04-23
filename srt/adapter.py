@@ -42,6 +42,7 @@ class SRTAdapterOutput:
     ben_output: BENOutput | None = None
     community_output: CommunityOutput | None = None
     meta_state: torch.Tensor | None = None  # (B, T, d_meta)
+    chain_residual_per_token: torch.Tensor | None = None  # (B, T) mean chain residual
 
 
 def _make_causal_mask(
@@ -261,6 +262,20 @@ class SRTAdapter(nn.Module):
         if meta_state is not None:
             ben_out = self.ben(meta_state)
 
+        # Per-token chain residual: mean across consecutive divergence pairs of
+        # squared error (chain_predictor(div_i) - div_{i+1})^2 averaged over
+        # the divergence dim. Shape (B, T). Same quantity that chain_loss
+        # reduces to a scalar; surfaced here for inference/probing.
+        chain_res = None
+        if len(divergences) >= 2:
+            B_, T_, _ = divergences[0].shape
+            acc = torch.zeros(B_, T_, dtype=divergences[0].dtype,
+                              device=divergences[0].device)
+            for i in range(len(divergences) - 1):
+                pred = self.chain_predictor(divergences[i])
+                acc = acc + (pred - divergences[i + 1]).pow(2).mean(dim=-1)
+            chain_res = acc / (len(divergences) - 1)
+
         return SRTAdapterOutput(
             logits=logits,
             ce_loss=ce_loss,
@@ -269,6 +284,7 @@ class SRTAdapter(nn.Module):
             ben_output=ben_out,
             community_output=community_out,
             meta_state=meta_state,
+            chain_residual_per_token=chain_res,
         )
 
     # Adapter module prefixes for save/load (everything else is backbone)
