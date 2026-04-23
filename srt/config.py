@@ -55,10 +55,12 @@ class LossConfig:
     inject_reg_weight: float = 0.0
     inject_target_norm: float = 1.0
     community_entropy_weight: float = 0.01  # diverse community usage
-    # v4: SupCon loss on community vectors keyed by source-id hash.  Forces
-    # prototypes apart by giving same-source pairs positive gradient and
-    # different-source pairs negative gradient through the encoder.
-    community_supcon_weight: float = 0.5
+    # v4/v5: SupCon loss on community ENCODER output keyed by source-id
+    # hash.  Forces prototypes apart by giving same-source pairs positive
+    # gradient and different-source pairs negative gradient through the
+    # encoder.  v5 raised the weight 0.5 -> 2.0 because v4's signal at 0.5
+    # was overwhelmed and the loss flatlined at log(B-1)=2.71.
+    community_supcon_weight: float = 2.0
     community_supcon_temperature: float = 0.1
 
 

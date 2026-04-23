@@ -33,6 +33,7 @@ class CommunityOutput:
     logits: torch.Tensor  # (B, K) raw assignment scores
     weights: torch.Tensor  # (B, K) soft assignment probabilities
     vector: torch.Tensor  # (B, d_community) weighted community embedding
+    encoded: torch.Tensor  # (B, d_community) pre-prototype-mixing encoder output
 
 
 class CommunityDiscoveryHead(nn.Module):
@@ -81,4 +82,6 @@ class CommunityDiscoveryHead(nn.Module):
         weights = F.softmax(logits, dim=-1)  # (B, K)
         vector = weights @ self.prototypes.weight  # (B, d_community)
 
-        return CommunityOutput(logits=logits, weights=weights, vector=vector)
+        return CommunityOutput(
+            logits=logits, weights=weights, vector=vector, encoded=encoded,
+        )

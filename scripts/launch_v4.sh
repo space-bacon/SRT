@@ -31,6 +31,9 @@ fi
 LOG=/root/srt-adapter/checkpoints/adapter_v4/adapter_v4_stdout.log
 mkdir -p "$(dirname "$LOG")"
 
+# Avoid CUDA fragmentation OOMs on relaunch (seen 2026-04-22 14:56).
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
 nohup python scripts/train.py \
     --backbone Qwen/Qwen2.5-7B \
     --train-data /root/srt-adapter/data/all_train.jsonl \
@@ -44,6 +47,7 @@ nohup python scripts/train.py \
     --warmup-steps 500 \
     --max-seq-len 512 \
     --val-every 1000 \
+    --max-val-samples 5000 \
     --log-every 100 \
     --grad-clip 1.0 \
     --dtype bfloat16 \
