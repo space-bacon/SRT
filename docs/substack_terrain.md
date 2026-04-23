@@ -118,12 +118,24 @@ Whether this constitutes "understanding" in any philosophically interesting sens
 
 The terrain is real. The wells are real. The self-deepening is real. The question is whether we can build instruments sensitive enough to read the curvature before the ground gives way.
 
-We think we can. The validation data — 86% regime classification accuracy, ρ = 0.822 divergence tracking, Cohen's *d* = 2.065 between pre- and post-bifurcation contexts — suggests the seismometer is working.
+We think we can. As of April 2026 the seismometer is real and the readings hold up.
+
+**Update, April 2026.** The architecture described above was originally conceived as a standalone model trained from scratch. The current realization is leaner. Rather than train a new transformer, we bolt the SRT modules (MAH, community head, RRM, BEN) onto a frozen Qwen2.5-7B as a 14.6M-parameter adapter (0.19% of backbone). The semiotic decomposition that the SEL was designed to produce now emerges inside the frozen representations the adapter reads from. The backbone keeps its language modeling intact while the adapter learns to read curvature on top of it.
+
+Five validated measurements as of v5 (the version currently being superseded by v6 in training):
+
+1. **Community geometry.** Recall@1 between an utterance and its source community sits at 0.36 over a 32-community space, about 12.6 times chance. The interpretive basins are real and discriminable.
+2. **Counterfactual decoding.** Holding the prompt fixed and swapping the community prototype, hard facts produce identical continuations across communities (0.00 disagreement) while contested topics diverge at 0.95 to 1.00. The model has learned which signs are bedrock and which are battleground.
+3. **Hallucination signal.** On TruthfulQA, the bifurcation index separates true from false answers at AUROC 0.57, from a feature the model was never trained to compute.
+4. **Calibration.** P(supercritical) is calibrated to ECE = 0.0009 over 351K validation tokens. The regime head reports its uncertainty honestly.
+5. **One clean negative.** The bifurcation index does not spike on charged words mid-sentence the way we initially hypothesized. r-hat tracks information density. The community head is the contestedness detector. Each instrument measures what it measures.
+
+v6 is in training as I write this, with three new losses targeting tighter community geometry, sharper r-hat ranking, and a chain-residual auxiliary. Public release of weights, eval harness, paper, and reproducibility scripts is targeted for early to mid May 2026.
 
 Now we are teaching it to steer.
 
 ---
 
-*This is Part 2 of a series on the Semiotic-Reflexive Transformer. Part 1 introduced the theoretical framework. Part 3 will present the Stage 3 training campaign and the engineering challenges of training a machine to read curvature on an Apple laptop. Future installments will cover the prenatal origins of iconic grounding and the cross-species evidence that the ground floor of meaning was poured 310 million years before anyone had a word for anything.*
+*This is Part 2 of a series on the Semiotic-Reflexive Transformer. Part 1 introduced the theoretical framework. Part 3 will cover the adapter training campaign, the five validation probes, and the engineering choices behind keeping the backbone frozen. Future installments will cover the prenatal origins of iconic grounding and the cross-species evidence that the ground floor of meaning was poured 310 million years before anyone had a word for anything.*
 
-*The SRT is open source and under active development at [github.com/space-bacon/Semiotic-Reflexive-Transformer](https://github.com/space-bacon/Semiotic-Reflexive-Transformer). The code reflects the current state of the research — messy, incomplete, and occasionally on fire — because that is the nature of building instruments for phenomena that the existing paradigm says do not exist.*
+*The SRT adapter is open source at [github.com/space-bacon/SRT](https://github.com/space-bacon/SRT). The code reflects the current state of the research, messy and incomplete and occasionally on fire, because that is the nature of building instruments for phenomena the existing paradigm says do not exist.*
