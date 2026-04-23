@@ -70,6 +70,15 @@ def parse_args() -> argparse.Namespace:
             "their fresh initialization. Optimizer/scheduler/step start from zero."
         ),
     )
+    p.add_argument(
+        "--reset-community",
+        action="store_true",
+        help=(
+            "When warm-starting, drop community_head.* weights so the head "
+            "re-initializes from scratch. Use when the source checkpoint's "
+            "community head has collapsed (v4 -> v5 migration)."
+        ),
+    )
     return p.parse_args()
 
 
@@ -235,15 +244,19 @@ def train(args: argparse.Namespace) -> None:
             model.load_adapter(args.resume)
             logger.info("Loaded adapter weights (no optimizer state) from %s", args.resume)
 
-    # ── Warm-start (v4 from v3) ───────────────────────────────────────
+    # ── Warm-start (v4 from v3, or v5 from v4) ────────────────────
     if args.warm_start and not args.resume:
-        logger.info("Warm-starting from %s (v3 → v4 architecture migration)", args.warm_start)
+        logger.info("Warm-starting from %s", args.warm_start)
         v3_state = torch.load(args.warm_start, map_location=device, weights_only=True)
         # Drop v3-only keys that no longer exist in v4 architecture (RRM redesign).
-        v3_only_prefixes = ("rrm.inject_proj", "rrm.inject_gate")
+        drop_prefixes: tuple[str, ...] = ("rrm.inject_proj", "rrm.inject_gate")
+        if args.reset_community:
+            # v5: community head collapsed in v4; reset it.
+            drop_prefixes = drop_prefixes + ("community_head.",)
+            logger.info("--reset-community: dropping community_head.* from warm-start")
         filtered = {
             k: v for k, v in v3_state.items()
-            if not any(k.startswith(p) for p in v3_only_prefixes)
+            if not any(k.startswith(p) for p in drop_prefixes)
         }
         dropped = sorted(set(v3_state.keys()) - set(filtered.keys()))
         missing, unexpected = model.load_state_dict(filtered, strict=False)
@@ -253,8 +266,8 @@ def train(args: argparse.Namespace) -> None:
             if k.startswith(model._ADAPTER_PREFIXES)
         ]
         logger.info(
-            "Warm-start: loaded %d v3 tensors, dropped %d v3-only (%s), "
-            "reinitialized %d v4-only adapter keys: %s",
+            "Warm-start: loaded %d tensors, dropped %d (%s), "
+            "reinitialized %d adapter keys: %s",
             len(filtered),
             len(dropped),
             dropped,

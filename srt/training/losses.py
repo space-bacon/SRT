@@ -201,7 +201,7 @@ def community_supcon_loss(
     community_vectors: torch.Tensor,
     community_ids: torch.Tensor,
     temperature: float = 0.1,
-) -> torch.Tensor:
+) -> tuple[torch.Tensor, dict[str, float]]:
     """Supervised contrastive loss on per-sample community vectors.
 
     The v3 entropy regularizer kept the prototype distribution from collapsing
@@ -212,17 +212,26 @@ def community_supcon_loss(
     a tight neighborhood and push different sources apart, which forces
     prototypes to diversify because that is the only way to satisfy the loss.
 
+    v5 note: pass `encoded` (pre-mixing) rather than `vector` here. When the
+    assignment head collapses, `vector ≈ prototype[k*]` is constant across
+    the batch and this loss is identically `log(B-1)` with zero gradient.
+
     Args:
-        community_vectors: (B, d_community) from CommunityDiscoveryHead.
+        community_vectors: (B, d) per-sample vectors to contrast.
         community_ids: (B,) integer ids — same id = positive pair.
         temperature: softmax temperature.
 
     Returns:
-        Scalar loss.
+        (loss, diagnostics) where diagnostics carries the number of positive
+        pairs and unique classes seen this batch (for sanity checks).
     """
     B = community_vectors.shape[0]
+    device = community_vectors.device
+    n_unique = int(community_ids.unique().numel())
     if B < 2:
-        return torch.tensor(0.0, device=community_vectors.device)
+        return torch.tensor(0.0, device=device), {
+            "pos_pairs": 0.0, "unique_classes": float(n_unique),
+        }
 
     # Cast to float32 for numerical stability of the contrastive softmax;
     # the input vector may be bf16 because the adapter modules run in bf16.
@@ -235,8 +244,11 @@ def community_supcon_loss(
 
     # If no positive pairs in this batch, loss is zero (skip rather than NaN)
     pos_count = pos_mask.sum(dim=1)
+    n_pos_pairs = float(pos_mask.sum().item())
     if pos_count.sum() == 0:
-        return torch.tensor(0.0, device=community_vectors.device)
+        return torch.tensor(0.0, device=device), {
+            "pos_pairs": 0.0, "unique_classes": float(n_unique),
+        }
 
     # Mask self-similarity from denominator
     sim = sim.masked_fill(eye, float("-inf"))
@@ -250,8 +262,12 @@ def community_supcon_loss(
     per_anchor = -(log_prob * pos_mask.float()).sum(dim=1) / pos_count.clamp(min=1).float()
     valid = pos_count > 0
     if not valid.any():
-        return torch.tensor(0.0, device=community_vectors.device)
-    return per_anchor[valid].mean()
+        return torch.tensor(0.0, device=device), {
+            "pos_pairs": 0.0, "unique_classes": float(n_unique),
+        }
+    return per_anchor[valid].mean(), {
+        "pos_pairs": n_pos_pairs, "unique_classes": float(n_unique),
+    }
 
 
 def compute_total_loss(
@@ -321,15 +337,24 @@ def compute_total_loss(
         total = total + config.community_entropy_weight * l_comm
         metrics["comm_entropy"] = l_comm.item()
 
-        # Community SupCon (v4 — forces prototypes apart)
+        # Community SupCon (v5 — applied to pre-mixing encoder output, not
+        # the prototype-weighted vector. The vector is a convex combination
+        # of prototypes; if the assignment head collapses to one prototype
+        # then `vector` becomes constant across the batch and SupCon's
+        # gradient is zero by symmetry — this is exactly what killed v4.
+        # `encoded` is the encoder's bijective image of the pooled hidden
+        # state, so it always varies per-sample, giving SupCon non-zero
+        # gradient even from a degenerate warm-start.)
         if community_ids is not None and config.community_supcon_weight > 0:
-            l_supcon = community_supcon_loss(
-                output.community_output.vector,
+            l_supcon, supcon_diag = community_supcon_loss(
+                output.community_output.encoded,
                 community_ids,
                 temperature=config.community_supcon_temperature,
             )
             total = total + config.community_supcon_weight * l_supcon
             metrics["comm_supcon"] = l_supcon.item()
+            metrics["comm_supcon_pos_pairs"] = supcon_diag["pos_pairs"]
+            metrics["comm_supcon_unique_classes"] = supcon_diag["unique_classes"]
 
     metrics["total"] = total.item()
     return total, metrics

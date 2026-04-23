@@ -82,12 +82,20 @@ class SRTAdapterDataset(Dataset):
             r_true[:len(token_r)] = token_r[:T]
             r_mask[:len(token_mask)] = token_mask[:T]
 
-        # Community id: stable int hash of the source-community string.
-        # Used by the supervised contrastive loss to push prototypes apart.
-        # Two samples from the same source share an id; samples from different
-        # sources almost certainly differ (mod a large prime to avoid collisions).
-        community_str = row.get("community", "") or ""
-        community_id = _stable_hash(community_str)
+        # Community id: prefer the explicit integer in the data; fall back
+        # to a stable hash of a string-typed source field if the integer is
+        # missing.  v5 fix: training data has `community_id: int` populated
+        # for every row; v3-v5 was reading a non-existent `community` field
+        # and hashing the empty string, giving every sample the same id and
+        # collapsing the SupCon signal.
+        if "community_id" in row and row["community_id"] is not None:
+            community_id = int(row["community_id"])
+        else:
+            for fld in ("community_label", "source", "community"):
+                community_str = row.get(fld) or ""
+                if community_str:
+                    break
+            community_id = _stable_hash(community_str)
 
         return {
             "input_ids": input_ids,
