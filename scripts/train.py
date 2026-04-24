@@ -79,6 +79,10 @@ def parse_args() -> argparse.Namespace:
             "community head has collapsed (v4 -> v5 migration)."
         ),
     )
+    # Loss weight overrides (v6+); None means keep config default.
+    p.add_argument("--divergence-supcon-weight", type=float, default=None)
+    p.add_argument("--listnet-weight", type=float, default=None)
+    p.add_argument("--chain-residual-aux-weight", type=float, default=None)
     return p.parse_args()
 
 
@@ -158,6 +162,19 @@ def train(args: argparse.Namespace) -> None:
     config.training.warmup_steps = args.warmup_steps
     config.training.val_every = args.val_every
     config.training.log_every = args.log_every
+
+    if args.divergence_supcon_weight is not None:
+        config.loss.divergence_supcon_weight = args.divergence_supcon_weight
+    if args.listnet_weight is not None:
+        config.loss.listnet_weight = args.listnet_weight
+    if args.chain_residual_aux_weight is not None:
+        config.loss.chain_residual_aux_weight = args.chain_residual_aux_weight
+    logger.info(
+        "Loss weights: div_supcon=%.3f listnet=%.3f chain_aux=%.3f",
+        config.loss.divergence_supcon_weight,
+        config.loss.listnet_weight,
+        config.loss.chain_residual_aux_weight,
+    )
 
     # ── Model ─────────────────────────────────────────────────────────
     model = SRTAdapter(config)

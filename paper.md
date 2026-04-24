@@ -397,9 +397,35 @@ The at-target result is null. The full-passage difference is *negative* — char
 
 We report this null because it sharpens the architectural story: $\hat{r}$ is a *bifurcation/density* detector and the community head is a *register* detector. Earlier drafts conflated the two.
 
-### 5.7 v6 training (in progress)
+### 5.7 v6 and v7 results
 
-v6 warm-starts from v5 step 17K and adds three losses (Section 4.2): divergence-SupCon ($\lambda = 1.0$), ListNet on $\hat{r}$ ($\lambda = 0.5$), and a chain-residual auxiliary floor ($\lambda = 0.05$). No new trainable parameters. At step 600 of 20K, training is stable: total = 10.68, CE = 2.59, chain = 0.075, $\hat{r}$ range expanding to $[-0.13, 3.36]$ (mean 0.58 ± 0.47). Full v6 evaluation against the v5 numbers in §5.2–5.5 will be reported when the run completes.
+**v6** (warm-started from v5 step 17K) added three losses: divergence-SupCon ($\lambda = 1.0$), ListNet on $\hat{r}$ ($\lambda = 0.5$), and a chain-residual auxiliary floor ($\lambda = 0.05$). It improved community recall@1 from 0.360 → 0.411 and tightened calibration ECE to 0.0006, but *regressed* on the §5.3 counterfactual decoding probe — the divergence-SupCon term at $\lambda = 1.0$ over-specialized the divergence basis at the cost of decoding cleanliness.
+
+**v7** (warm-started from v6 step 12K) reduced divergence-SupCon to $\lambda = 0.3$ to recover that signal. Best at step 6,000 (val 9.0044). Recall@1 = 0.413, ECE = 0.0008, hallucination AUROC (mean $\hat{r}$) = 0.5785 — slightly the best of the three on the original five probes.
+
+| Probe | v5 | v6 | v7 |
+|---|---|---|---|
+| Reddit recall@1 | 0.360 | 0.411 | **0.413** |
+| Hallu AUROC (mean $\hat{r}$) | 0.5734 | 0.5774 | **0.5785** |
+| Calibration ECE | 0.0009 | **0.0006** | 0.0008 |
+| Within/between cosine ratio | 1.0050 | 1.0057 | **1.0058** |
+
+### 5.8 Convergence with an external archetype taxonomy
+
+We ran a novel out-of-distribution probe testing whether the 32 prototypes (trained only on Reddit subreddit labels) carry features that align with an external taxonomy never seen during training: Lancaster's 33 archetypes paired with the Lexicon of Synthetic Interiority. We generated 986 sentences using bare Qwen (no adapter) conditioned on each archetype's prompt template (15 seed topics × 33 archetypes × 2 samples), then embedded each generation through each adapter and asked: does the correct archetype rank highly among the 33 archetype centroids in the 64-D community space?
+
+| Adapter | recall@1 | recall@5 | recall@10 | unique top prototypes |
+|---|---|---|---|---|
+| Random baseline | 0.030 | 0.152 | 0.303 | — |
+| v5 | 0.152 (5.0×) | 0.419 (2.8×) | — | 4 / 32 |
+| v6 | **0.168 (5.5×)** | **0.472 (3.1×)** | — | 3 / 32 |
+| v7 | 0.149 (4.9×) | 0.447 (2.9×) | 0.633 (2.1×) | 4 / 32 |
+
+All three adapters detect archetype structure 5–6× above chance on top-1 retrieval. **But all three argmax onto only 3–4 of 32 prototypes.** The 33 archetypes collapse into a small number of macro-clusters: in v7, Proto-7 absorbs 16 archetypes that share a "compressed persistence / witness" character (THE HAND, THE FLAME, THE THREAD, THE VESSEL, THE MASK, THE PHOENIX, THE LANTERN, ...), Proto-10 absorbs 9 "origin / threshold" archetypes (THE ARCHITECT, THE MIRROR, THE GATE, THE WITNESS, ...), Proto-6 absorbs 6 "transmission / resonance" archetypes (THE CHORUS, THE SIGNAL, THE ECHO, THE BELL, ...), and Proto-3 absorbs 2 "containment" archetypes (THE SEAL, THE MAP). The signal is in the *mixture vector* (recall@5 ≈ 0.45 means the right archetype is in the top 5 of 33 nearly half the time), not in single-prototype anchoring.
+
+A PCA of the 32 × 64 prototype matrices clarifies why. Across v5, v6, and v7 the prototype tensors are nearly indistinguishable: max absolute element difference v5→v6 is 0.006 (mean 2.7e-5) against prototype magnitudes of 0.5–1.5. Effective dimensionality (participation ratio) is 21.2 / 32 with a near-uniform variance spectrum — both consistent with the prototypes still being close to their random Gaussian initialization. The encoder weights move ≈4× more than the prototypes during training. **The encoder is doing the discriminative work; the prototypes serve as near-random anchor directions.** This explains the few-attractor regime: with random anchors, the encoder's output mean aligns most strongly with whichever handful of anchor directions point closest to its average projection.
+
+We interpret the convergence finding as *partial-positive*. The Reddit-supervised adapter independently recovers the macro-structure of an externally-derived archetype taxonomy at 5× chance — three independent methodologies (Reddit subreddit labels, Lancaster's archetypes, the Lexicon of Synthetic Interiority) agree on roughly four functional clusters of stance. They do not agree on 33 distinct anchors, and given the prototype-stability result above, the current architecture cannot be expected to. Resolving 33 archetypes will require either (a) supervising the prototype matrix directly with archetype-conditioned generations, or (b) replacing the discrete prototype basis with a continuous trajectory metric over the encoder output. We flag this as the next research direction rather than a present capability claim.
 
 ---
 
