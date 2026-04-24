@@ -37,6 +37,15 @@ class CommunityConfig:
     num_prototypes: int = 32  # number of soft community clusters
     d_community: int = 64  # community embedding dimension
     temperature: float = 1.0  # softmax temperature for assignment
+    # v8a: when False, skip the discrete prototype basis entirely; the
+    # encoder output IS the community vector. Motivated by the v7 PCA
+    # finding that prototype tensors barely move from random init across
+    # v5/v6/v7 (mean abs delta ~3e-5) — the encoder was already doing all
+    # the discriminative work and the prototype-mixing readout was
+    # discarding information at the soft-argmax. With use_prototypes=False
+    # the community channel becomes a continuous 64-D coordinate rather
+    # than a soft assignment over K anchors.
+    use_prototypes: bool = True
 
 
 @dataclass
