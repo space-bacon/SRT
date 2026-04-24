@@ -101,9 +101,10 @@ def main() -> None:
     model.backbone.eval()
 
     # Run forward pass batched
-    weights_all: list[np.ndarray] = []  # (N, 32)
+    weights_all: list[np.ndarray] = []  # (N, 32) — may stay empty in trajectory mode
     vectors_all: list[np.ndarray] = []  # (N, 64)
     arch_all: list[int] = []
+    has_weights = True  # set False if community_output.weights is None (v8a)
 
     K = config.community.num_prototypes  # 32
     D = config.community.d_community     # 64
@@ -118,26 +119,32 @@ def main() -> None:
         out = model(input_ids=enc["input_ids"], attention_mask=enc["attention_mask"])
         if out.community_output is None:
             raise RuntimeError("Adapter returned no community_output; check checkpoint.")
-        w = out.community_output.weights.detach().float().cpu().numpy()  # (B, 32)
+        if out.community_output.weights is None:
+            has_weights = False
+        else:
+            w = out.community_output.weights.detach().float().cpu().numpy()  # (B, 32)
+            weights_all.append(w)
         v = out.community_output.vector.detach().float().cpu().numpy()   # (B, 64)
-        weights_all.append(w)
         vectors_all.append(v)
         arch_all.extend(r["archetype_id"] for r in batch)
         if (i // args.batch_size) % 10 == 0:
             logger.info("processed %d / %d", i + len(batch), len(rows))
 
-    W = np.concatenate(weights_all, axis=0)  # (N, 32)
+    W = np.concatenate(weights_all, axis=0) if has_weights else None
     V = np.concatenate(vectors_all, axis=0)  # (N, 64)
     A = np.asarray(arch_all, dtype=np.int64)
     N = len(A)
-    logger.info("Collected: weights %s, vectors %s", W.shape, V.shape)
+    if has_weights:
+        logger.info("Collected: weights %s, vectors %s", W.shape, V.shape)
+    else:
+        logger.info("Collected: vectors %s (trajectory mode — no prototype weights)", V.shape)
 
     # Group means
     arch_index = {a: i for i, a in enumerate(archetype_ids)}
-    mean_W = np.zeros((n_arch, K), dtype=np.float64)
+    mean_W = np.zeros((n_arch, K), dtype=np.float64) if has_weights else None
     mean_V = np.zeros((n_arch, D), dtype=np.float64)
     counts = np.zeros(n_arch, dtype=np.int64)
-    within_var_W = np.zeros(n_arch, dtype=np.float64)
+    within_var_W = np.zeros(n_arch, dtype=np.float64) if has_weights else None
     within_var_V = np.zeros(n_arch, dtype=np.float64)
 
     # Pass 1: means
@@ -147,7 +154,8 @@ def main() -> None:
         counts[ai] = int(mask.sum())
         if counts[ai] == 0:
             continue
-        mean_W[ai] = W[mask].mean(axis=0)
+        if has_weights:
+            mean_W[ai] = W[mask].mean(axis=0)
         mean_V[ai] = V[mask].mean(axis=0)
 
     # Pass 2: within-archetype variance (mean squared distance to own centroid)
@@ -156,24 +164,29 @@ def main() -> None:
         mask = A == a
         if counts[ai] == 0:
             continue
-        diff_W = W[mask] - mean_W[ai]
+        if has_weights:
+            diff_W = W[mask] - mean_W[ai]
+            within_var_W[ai] = (diff_W ** 2).sum(axis=-1).mean()
         diff_V = V[mask] - mean_V[ai]
-        within_var_W[ai] = (diff_W ** 2).sum(axis=-1).mean()
         within_var_V[ai] = (diff_V ** 2).sum(axis=-1).mean()
 
     # Between-archetype variance (mean squared distance between centroid pairs)
-    grand_W = mean_W.mean(axis=0)
     grand_V = mean_V.mean(axis=0)
-    between_var_W = ((mean_W - grand_W) ** 2).sum(axis=-1).mean()
     between_var_V = ((mean_V - grand_V) ** 2).sum(axis=-1).mean()
-    sep_ratio_W = float(between_var_W / (within_var_W.mean() + 1e-12))
     sep_ratio_V = float(between_var_V / (within_var_V.mean() + 1e-12))
+    if has_weights:
+        grand_W = mean_W.mean(axis=0)
+        between_var_W = ((mean_W - grand_W) ** 2).sum(axis=-1).mean()
+        sep_ratio_W = float(between_var_W / (within_var_W.mean() + 1e-12))
+        cos_W = cosine_sim_matrix(mean_W)
+        off_diag_W = float(cos_W[~np.eye(n_arch, dtype=bool)].mean())
+    else:
+        sep_ratio_W = None
+        cos_W = None
+        off_diag_W = None
 
-    # Pairwise cosine separation
-    cos_W = cosine_sim_matrix(mean_W)
+    # Pairwise cosine separation in 64-D vector space
     cos_V = cosine_sim_matrix(mean_V)
-    # Mean off-diagonal cosine (excluding self)
-    off_diag_W = cos_W[~np.eye(n_arch, dtype=bool)].mean()
     off_diag_V = cos_V[~np.eye(n_arch, dtype=bool)].mean()
 
     # recall@k against archetype-mean centroids in the 64D space (cosine)
@@ -187,51 +200,64 @@ def main() -> None:
     recall_at_5 = float((rank_of_true < 5).mean())
     recall_at_10 = float((rank_of_true < 10).mean())
 
-    # Top prototype per archetype (which of the 32 fires most under each)
-    top_proto = mean_W.argmax(axis=-1)  # (33,)
-    proto_archetypes: dict[int, list[str]] = defaultdict(list)
-    for ai, a in enumerate(archetype_ids):
-        proto_archetypes[int(top_proto[ai])].append(id2name[a])
-    n_unique_top_proto = len(set(top_proto.tolist()))
+    # Top prototype per archetype (which of the 32 fires most under each).
+    # Only available in prototype mode.
+    if has_weights:
+        top_proto = mean_W.argmax(axis=-1)  # (33,)
+        proto_archetypes: dict[int, list[str]] = defaultdict(list)
+        for ai, a in enumerate(archetype_ids):
+            proto_archetypes[int(top_proto[ai])].append(id2name[a])
+        n_unique_top_proto = len(set(top_proto.tolist()))
+    else:
+        top_proto = None
+        proto_archetypes = None
+        n_unique_top_proto = None
 
     results = {
         "tag": args.tag,
+        "mode": "prototype" if has_weights else "trajectory",
         "n_generations": int(N),
         "n_archetypes": int(n_arch),
-        "K_prototypes": K,
+        "K_prototypes": K if has_weights else None,
         "D_community": D,
         "random_baseline_recall_at_1": round(1.0 / n_arch, 4),
         "recall_at_1": round(recall_at_1, 4),
         "recall_at_5": round(recall_at_5, 4),
         "recall_at_10": round(recall_at_10, 4),
-        "separation_ratio_weights_32": round(sep_ratio_W, 4),
+        "separation_ratio_weights_32": (
+            round(sep_ratio_W, 4) if sep_ratio_W is not None else None
+        ),
         "separation_ratio_vectors_64": round(sep_ratio_V, 4),
-        "mean_offdiag_cosine_weights": round(float(off_diag_W), 4),
+        "mean_offdiag_cosine_weights": (
+            round(off_diag_W, 4) if off_diag_W is not None else None
+        ),
         "mean_offdiag_cosine_vectors": round(float(off_diag_V), 4),
-        "n_unique_top_prototypes": int(n_unique_top_proto),
-        "top_prototype_per_archetype": {
-            id2name[a]: int(top_proto[arch_index[a]]) for a in archetype_ids
-        },
-        "archetypes_per_top_prototype": {
-            int(p): names for p, names in sorted(proto_archetypes.items())
-        },
+        "n_unique_top_prototypes": n_unique_top_proto,
+        "top_prototype_per_archetype": (
+            {id2name[a]: int(top_proto[arch_index[a]]) for a in archetype_ids}
+            if top_proto is not None else None
+        ),
+        "archetypes_per_top_prototype": (
+            {int(p): names for p, names in sorted(proto_archetypes.items())}
+            if proto_archetypes is not None else None
+        ),
     }
 
     out_dir = Path(args.output_root) / args.tag
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "results.json").write_text(json.dumps(results, indent=2))
-    np.savez(
-        out_dir / "vectors.npz",
-        W=W, V=V, A=A,
-        mean_W=mean_W, mean_V=mean_V,
-        cos_W=cos_W, cos_V=cos_V,
-        archetype_ids=np.asarray(archetype_ids),
-    )
+    npz_kwargs = {
+        "V": V, "A": A, "mean_V": mean_V, "cos_V": cos_V,
+        "archetype_ids": np.asarray(archetype_ids),
+    }
+    if has_weights:
+        npz_kwargs.update({"W": W, "mean_W": mean_W, "cos_W": cos_W})
+    np.savez(out_dir / "vectors.npz", **npz_kwargs)
     logger.info("Wrote %s", out_dir / "results.json")
     logger.info(
-        "recall@1=%.3f (baseline %.3f)  recall@5=%.3f  sep_ratio(64D)=%.3f  unique_top_proto=%d/%d",
+        "recall@1=%.3f (baseline %.3f)  recall@5=%.3f  sep_ratio(64D)=%.3f%s",
         recall_at_1, 1.0 / n_arch, recall_at_5, sep_ratio_V,
-        n_unique_top_proto, K,
+        f"  unique_top_proto={n_unique_top_proto}/{K}" if has_weights else "  [trajectory mode]",
     )
 
 

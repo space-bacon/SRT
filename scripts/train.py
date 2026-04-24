@@ -83,6 +83,16 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--divergence-supcon-weight", type=float, default=None)
     p.add_argument("--listnet-weight", type=float, default=None)
     p.add_argument("--chain-residual-aux-weight", type=float, default=None)
+    # v8a: continuous-trajectory community head (no discrete prototypes).
+    p.add_argument(
+        "--no-prototypes",
+        action="store_true",
+        help=(
+            "v8a: skip the K-prototype basis in the community head; the"
+            " encoder output IS the community vector. Disables the entropy"
+            " regularizer (no soft assignment to entropize)."
+        ),
+    )
     return p.parse_args()
 
 
@@ -169,6 +179,9 @@ def train(args: argparse.Namespace) -> None:
         config.loss.listnet_weight = args.listnet_weight
     if args.chain_residual_aux_weight is not None:
         config.loss.chain_residual_aux_weight = args.chain_residual_aux_weight
+    if args.no_prototypes:
+        config.community.use_prototypes = False
+        logger.info("v8a: community head running in continuous-trajectory mode (no prototypes)")
     logger.info(
         "Loss weights: div_supcon=%.3f listnet=%.3f chain_aux=%.3f",
         config.loss.divergence_supcon_weight,

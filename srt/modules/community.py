@@ -28,20 +28,37 @@ from srt.config import CommunityConfig
 
 @dataclass
 class CommunityOutput:
-    """Output from community discovery."""
+    """Output from community discovery.
 
-    logits: torch.Tensor  # (B, K) raw assignment scores
-    weights: torch.Tensor  # (B, K) soft assignment probabilities
-    vector: torch.Tensor  # (B, d_community) weighted community embedding
+    When the head runs in continuous-trajectory mode (cfg.use_prototypes=False,
+    v8a), `logits` and `weights` are None and `vector == encoded`.
+    """
+
+    logits: torch.Tensor | None  # (B, K) raw assignment scores, or None
+    weights: torch.Tensor | None  # (B, K) soft assignment probabilities, or None
+    vector: torch.Tensor  # (B, d_community) community embedding (mixture or encoded)
     encoded: torch.Tensor  # (B, d_community) pre-prototype-mixing encoder output
 
 
 class CommunityDiscoveryHead(nn.Module):
-    """Soft clustering of hidden states into discourse communities."""
+    """Soft clustering of hidden states into discourse communities.
+
+    With cfg.use_prototypes=True (default): pooled hidden state → encoder →
+    cosine similarity to K learned prototypes → soft assignment weights →
+    weighted mixture of prototypes as the community vector. This is the
+    v3–v7 architecture.
+
+    With cfg.use_prototypes=False (v8a): pooled hidden state → encoder →
+    the encoder output IS the community vector. No discrete basis. Motivated
+    by the v7 PCA finding that prototype tensors barely move from random
+    init; the encoder was already doing the discriminative work and the
+    soft-argmax over K anchors was throwing information away.
+    """
 
     def __init__(self, cfg: CommunityConfig, d_backbone: int) -> None:
         super().__init__()
         self.temperature = cfg.temperature
+        self.use_prototypes = cfg.use_prototypes
 
         # Encode pooled hidden states → community space
         self.encoder = nn.Sequential(
@@ -49,8 +66,11 @@ class CommunityDiscoveryHead(nn.Module):
             nn.SiLU(),
         )
 
-        # Learnable community prototypes
-        self.prototypes = nn.Embedding(cfg.num_prototypes, cfg.d_community)
+        # Learnable community prototypes (only when enabled)
+        if cfg.use_prototypes:
+            self.prototypes = nn.Embedding(cfg.num_prototypes, cfg.d_community)
+        else:
+            self.prototypes = None  # type: ignore[assignment]
 
     def forward(
         self,
@@ -64,7 +84,10 @@ class CommunityDiscoveryHead(nn.Module):
             attention_mask: (B, T) padding mask (1 = real, 0 = pad). Optional.
 
         Returns:
-            CommunityOutput with soft assignment and community vector.
+            CommunityOutput. In prototype mode, logits/weights are populated
+            and vector is the prototype-weighted mixture. In trajectory mode
+            (use_prototypes=False), logits and weights are None and vector
+            equals encoded.
         """
         # Masked mean pool across positions → document-level representation
         if attention_mask is not None:
@@ -73,6 +96,12 @@ class CommunityDiscoveryHead(nn.Module):
         else:
             pooled = hidden_states.mean(dim=1)  # (B, d_backbone)
         encoded = self.encoder(pooled)  # (B, d_community)
+
+        if not self.use_prototypes:
+            # v8a: continuous-trajectory mode — no discrete basis.
+            return CommunityOutput(
+                logits=None, weights=None, vector=encoded, encoded=encoded,
+            )
 
         # Cosine similarity to prototypes
         encoded_norm = F.normalize(encoded, dim=-1)

@@ -477,11 +477,12 @@ def compute_total_loss(
         total = total + config.inject_reg_weight * l_inject
         metrics["inject_reg"] = l_inject.item()
 
-    # Community entropy
+    # Community entropy (only meaningful when there is a soft assignment)
     if output.community_output is not None:
-        l_comm = community_entropy_loss(output.community_output.weights)
-        total = total + config.community_entropy_weight * l_comm
-        metrics["comm_entropy"] = l_comm.item()
+        if output.community_output.weights is not None:
+            l_comm = community_entropy_loss(output.community_output.weights)
+            total = total + config.community_entropy_weight * l_comm
+            metrics["comm_entropy"] = l_comm.item()
 
         # Community SupCon (v5 — applied to pre-mixing encoder output, not
         # the prototype-weighted vector. The vector is a convex combination
