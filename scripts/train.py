@@ -83,6 +83,13 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--divergence-supcon-weight", type=float, default=None)
     p.add_argument("--listnet-weight", type=float, default=None)
     p.add_argument("--chain-residual-aux-weight", type=float, default=None)
+    # v8b: tune the community-side SupCon (the only discriminative pressure
+    # once prototypes are removed).
+    p.add_argument("--community-supcon-weight", type=float, default=None)
+    p.add_argument("--community-supcon-temperature", type=float, default=None)
+    # v8b: optionally widen the community embedding. NOTE: changes encoder
+    # output shape; incompatible with warm-start unless --reset-community.
+    p.add_argument("--d-community", type=int, default=None)
     # v8a: continuous-trajectory community head (no discrete prototypes).
     p.add_argument(
         "--no-prototypes",
@@ -179,9 +186,21 @@ def train(args: argparse.Namespace) -> None:
         config.loss.listnet_weight = args.listnet_weight
     if args.chain_residual_aux_weight is not None:
         config.loss.chain_residual_aux_weight = args.chain_residual_aux_weight
+    if args.community_supcon_weight is not None:
+        config.loss.community_supcon_weight = args.community_supcon_weight
+    if args.community_supcon_temperature is not None:
+        config.loss.community_supcon_temperature = args.community_supcon_temperature
+    if args.d_community is not None:
+        config.community.d_community = args.d_community
+        logger.info("d_community overridden to %d", args.d_community)
     if args.no_prototypes:
         config.community.use_prototypes = False
         logger.info("v8a: community head running in continuous-trajectory mode (no prototypes)")
+    logger.info(
+        "Community SupCon: weight=%.3f temperature=%.3f",
+        config.loss.community_supcon_weight,
+        config.loss.community_supcon_temperature,
+    )
     logger.info(
         "Loss weights: div_supcon=%.3f listnet=%.3f chain_aux=%.3f",
         config.loss.divergence_supcon_weight,
