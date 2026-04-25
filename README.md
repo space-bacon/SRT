@@ -51,11 +51,15 @@ tokens ──► Backbone Embeddings (native, frozen)
 1. **Zero CE degradation** — The backbone's native embeddings and LM head are
    untouched. Cross-entropy starts at pretrained quality (~3.5), not 200+.
 
-2. **~11M trainable params** — Only the semiotic modules train. The 7B backbone
+2. **~14.6M trainable params** — Only the semiotic modules train. The 7B backbone
    is fully frozen. Trains in hours, not weeks.
 
-3. **Unsupervised community discovery** — A small clustering head discovers
-   discourse communities from hidden state patterns. No hardcoded labels.
+3. **Unsupervised community discovery** — A small encoder discovers
+   discourse-trajectory structure from hidden state patterns. No hardcoded
+   labels. As of v8a the encoder output is the community vector directly
+   (continuous trajectory mode); earlier checkpoints used a 32-prototype
+   soft-argmax readout that turned out to be a discriminability bottleneck
+   (see `paper.md` §5.8–§5.9).
 
 4. **Backbone-agnostic** — Works with any HuggingFace `AutoModelForCausalLM`:
    Qwen, LLaMA, Mistral, Phi, Gemma, etc.
@@ -70,7 +74,7 @@ tokens ──► Backbone Embeddings (native, frozen)
 | **MAH** (Metapragmatic Attention Head) | Detects where meaning diverges across positions | ~2.7M × 3 layers |
 | **RRM** (Reflexive Recurrent Module) | Tracks semiotic meta-state, injects corrections | ~2.2M |
 | **BEN** (Bifurcation Estimation Network) | Estimates reflexivity coefficient r̂ and regime | ~0.2M |
-| **Community Head** | Discovers discourse communities unsupervised | ~0.2M |
+| **Community Head** | Discovers discourse-trajectory structure unsupervised | ~0.2M |
 
 ## Quick Start
 
