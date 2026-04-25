@@ -8,7 +8,7 @@ April 2026
 
 ## Abstract
 
-Large language models trained on web-scale corpora absorb the semiotic bifurcations embedded in their data — divergent interpretant chains in which the same sign carries incompatible meanings across discourse communities — but have no mechanism to detect, represent, or respond to this divergence. We introduce the Semiotic-Reflexive Transformer Adapter (SRT-Adapter), a lightweight architecture (~14.5M trainable parameters, 0.19% of a 7B backbone) that bolts semiotic awareness onto any frozen causal language model without modifying its embeddings, attention, or output head. The adapter operates through four modules that *tap* hidden states at selected backbone layers: (1) a **Community Discovery Head** that performs unsupervised soft clustering of discourse communities from early-layer representations; (2) **Metapragmatic Attention Heads** (MAH) that compute divergence vectors quantifying where meaning forks under community-conditioned interpretation; (3) a **Reflexive Recurrent Module** (RRM) that tracks accumulated semiotic divergence through a per-position GRU meta-state and optionally injects small corrections into the backbone stream via FiLM modulation; and (4) a **Bifurcation Estimation Network** (BEN) that estimates a continuous reflexivity coefficient $\hat{r}$ and a binary semiotic regime (subcritical/supercritical) at each token position. Grounded in Peircean semiotics and the pitchfork bifurcation model of political polarization (Lancaster, 2025), the architecture treats the frozen backbone as a substrate on which semiotic processes are an emergent, measurable phenomenon. Training combines the backbone's native cross-entropy with auxiliary losses on chain-of-interpretants prediction, bifurcation regression, regime classification, divergence health, community entropy and supervised-contrastive separation (v5), and — in v6 — metapragmatic-divergence supervised-contrastive separation, ListNet ranking on $\hat{r}$, and a chain-residual auxiliary floor. The corpus is 1M Reddit samples spanning 35 discourse communities with per-token reflexivity annotations. We present the theoretical motivation, full architectural specification, training methodology, and evaluation across five independent probes of the v5 checkpoint: cross-entropy preservation (CE = 2.63 on val, vs. 2.71 for unadapted Qwen 2.5-7B), unsupervised community retrieval (recall@1 = 0.36, $12.6\times$ random on a 35-class task), counterfactual community decoding (zero disagreement on factual prompts, 0.95 mean disagreement on contested topics), zero-shot hallucination signal on TruthfulQA (mean $\hat{r}$ AUROC = 0.573 without truthfulness supervision), and regime calibration (ECE = $9 \times 10^{-4}$, AUROC = 0.99 on 351K tokens).
+Large language models trained on web-scale corpora absorb the semiotic bifurcations embedded in their data. These are divergent interpretant chains in which the same sign carries incompatible meanings across discourse communities. Such models have no mechanism to detect, represent, or respond to this divergence. We introduce the Semiotic-Reflexive Transformer Adapter (SRT-Adapter), a lightweight architecture (~14.5M trainable parameters, 0.19% of a 7B backbone) that bolts semiotic awareness onto any frozen causal language model without modifying its embeddings, attention, or output head. The adapter operates through four modules that *tap* hidden states at selected backbone layers: (1) a **Community Discovery Head** that performs unsupervised soft clustering of discourse communities from early-layer representations; (2) **Metapragmatic Attention Heads** (MAH) that compute divergence vectors quantifying where meaning forks under community-conditioned interpretation; (3) a **Reflexive Recurrent Module** (RRM) that tracks accumulated semiotic divergence through a per-position GRU meta-state and optionally injects small corrections into the backbone stream via FiLM modulation; and (4) a **Bifurcation Estimation Network** (BEN) that estimates a continuous reflexivity coefficient $\hat{r}$ and a binary semiotic regime (subcritical/supercritical) at each token position. Grounded in Peircean semiotics and the pitchfork bifurcation model of political polarization (Lancaster, 2025), the architecture treats the frozen backbone as a substrate on which semiotic processes are an emergent, measurable phenomenon. Training combines the backbone's native cross-entropy with auxiliary losses on chain-of-interpretants prediction, bifurcation regression, regime classification, divergence health, community entropy and supervised-contrastive separation (v5). v6 adds metapragmatic-divergence supervised-contrastive separation, ListNet ranking on $\hat{r}$, and a chain-residual auxiliary floor. The corpus is 1M Reddit samples spanning 35 discourse communities with per-token reflexivity annotations. We present the theoretical motivation, full architectural specification, training methodology, and evaluation across five independent probes of the v5 checkpoint: cross-entropy preservation (CE = 2.63 on val, vs. 2.71 for unadapted Qwen 2.5-7B), unsupervised community retrieval (recall@1 = 0.36, $12.6\times$ random on a 35-class task), counterfactual community decoding (zero disagreement on factual prompts, 0.95 mean disagreement on contested topics), zero-shot hallucination signal on TruthfulQA (mean $\hat{r}$ AUROC = 0.573 without truthfulness supervision), and regime calibration (ECE = $9 \times 10^{-4}$, AUROC = 0.99 on 351K tokens).
 
 **Keywords:** semiotic adapter, bifurcation detection, metapragmatic attention, interpretant chains, reflexive recurrence, discourse community discovery, frozen backbone, pitchfork bifurcation, Peircean semiotics
 
@@ -20,7 +20,7 @@ Large language models trained on web-scale corpora absorb the semiotic bifurcati
 
 Language models are semiotic infrastructure. Their outputs enter interpretant chains alongside human-authored signs, shaping subsequent interpretation in ways neither users nor developers can fully trace. Yet the training paradigm that produces these systems is semiotically naive: it optimizes for the conditional probability of the next token, a surface-level objective that captures co-occurrence patterns while remaining structurally blind to the interpretive processes that make those patterns meaningful.
 
-The consequence is that when a language model encounters a contested sign — "freedom," "justice," "woke" — it produces text that is fluent within a particular attractor basin without representing the fact that the sign indexes opposed interpretive communities. The model does not know it is in a bifurcation zone. It cannot tell you.
+The consequence is that when a language model encounters a contested sign such as "freedom," "justice," or "woke," it produces text that is fluent within a particular attractor basin without representing the fact that the sign indexes opposed interpretive communities. The model does not know it is in a bifurcation zone. It cannot tell you.
 
 Current alignment methods (RLHF, DPO, Constitutional AI) intervene downstream, constraining outputs after the model has already internalized a bifurcated semiotic landscape. They adjust trajectories within a fixed attractor landscape without reshaping the landscape itself. The control parameter $r$ that governs bifurcation remains untouched.
 
@@ -28,9 +28,9 @@ Current alignment methods (RLHF, DPO, Constitutional AI) intervene downstream, c
 
 Our prior work (Lancaster, 2026a) proposed a full Semiotic-Reflexive Transformer architecture with custom embedding layers, modified attention mechanisms, and interleaved semiotic modules throughout the backbone. While theoretically comprehensive, that approach faced practical limitations: custom embeddings degraded cross-entropy loss from pretrained quality, the full architecture required training from near-scratch, and the deep coupling between semiotic modules and backbone layers created optimization instability.
 
-This paper takes a fundamentally different approach. We observe that the semiotic phenomena we wish to detect — interpretant divergence, community-specific meaning, bifurcation dynamics — are *already encoded* in the hidden states of pretrained language models. They must be, because these models were trained on text produced by communities with divergent interpretive norms. The information is there; what is missing is the apparatus to read it.
+This paper takes a fundamentally different approach. We observe that the semiotic phenomena we wish to detect (interpretant divergence, community-specific meaning, bifurcation dynamics) are *already encoded* in the hidden states of pretrained language models. They must be, because these models were trained on text produced by communities with divergent interpretive norms. The information is there; what is missing is the apparatus to read it.
 
-The SRT-Adapter is that apparatus. It wraps any frozen HuggingFace causal language model and installs lightweight semiotic taps — modules that read hidden states, compute divergence, track meta-state, and estimate bifurcation — without modifying a single backbone parameter. The backbone's native embeddings and language modeling head are used directly. Cross-entropy starts at pretrained quality. Only ~12.7M adapter parameters train, while 7.6B backbone parameters remain frozen.
+The SRT-Adapter is that apparatus. It wraps any frozen HuggingFace causal language model and installs lightweight semiotic taps. These are modules that read hidden states, compute divergence, track meta-state, and estimate bifurcation, all without modifying a single backbone parameter. The backbone's native embeddings and language modeling head are used directly. Cross-entropy starts at pretrained quality. Only ~12.7M adapter parameters train, while 7.6B backbone parameters remain frozen.
 
 ### 1.3 Theoretical Grounding
 
@@ -40,7 +40,7 @@ The architecture rests on three converging theoretical lines:
 
 2. **Pitchfork bifurcation dynamics** (Lancaster, 2025): The compounding of interpretant divergence across algorithmically curated communities exhibits the structure of a supercritical pitchfork bifurcation $\dot{x} = rx - x^3$. Below a critical threshold of the control parameter $r$, shared interpretive equilibria absorb perturbation (subcritical regime). Above it, symmetry breaks into antagonistic attractors that are self-reinforcing and structurally resistant to reconciliation (supercritical regime).
 
-3. **Metapragmatic awareness** (Silverstein, 1993, 2003): The capacity to observe how discourse itself shapes interpretation — to notice that a sign is being contested, not merely to interpret it from within one community's norms — constitutes a third-order reflexive capacity that is architecturally absent from standard transformers.
+3. **Metapragmatic awareness** (Silverstein, 1993, 2003): The capacity to observe how discourse itself shapes interpretation, that is, to notice that a sign is being contested rather than merely interpret it from within one community's norms, constitutes a third-order reflexive capacity that is architecturally absent from standard transformers.
 
 ### 1.4 Contributions
 
@@ -48,9 +48,9 @@ This paper makes three contributions:
 
 1. **Adapter architecture for semiotic awareness.** We specify a complete, working architecture that adds bifurcation detection to any frozen causal LM through four lightweight modules totaling ~14.5M parameters (0.19% of a 7B backbone). The design preserves pretrained language modeling quality (CE = 2.63 vs. unadapted 2.71) while adding structured semiotic outputs.
 
-2. **Unsupervised community discovery via supervised-contrastive prototypes.** Rather than requiring predefined community labels at inference time, the adapter discovers discourse communities from backbone hidden states through learned prototype-based soft clustering. We identify and resolve a degenerate failure mode ("congruent collapse") in which entropy regularization keeps the assignment distribution uniform while pairwise prototype cosine converges to $\approx 0.99$. Supervised-contrastive loss applied to the encoder's *pre-mixing* output — not the prototype-weighted vector — raises retrieval recall@1 from 0.05 (1.7$\times$ random) to 0.36 (12.6$\times$ random) on a 35-class task.
+2. **Unsupervised community discovery via supervised-contrastive prototypes.** Rather than requiring predefined community labels at inference time, the adapter discovers discourse communities from backbone hidden states through learned prototype-based soft clustering. We identify and resolve a degenerate failure mode ("congruent collapse") in which entropy regularization keeps the assignment distribution uniform while pairwise prototype cosine converges to $\approx 0.99$. Supervised-contrastive loss applied to the encoder's *pre-mixing* output, rather than to the prototype-weighted vector, raises retrieval recall@1 from 0.05 (1.7$\times$ random) to 0.36 (12.6$\times$ random) on a 35-class task.
 
-3. **Multi-objective training with semiotic auxiliary losses.** We define a training pipeline that combines the backbone's native cross-entropy with chain-of-interpretants prediction, bifurcation estimation, regime classification, divergence health, community entropy and supervised-contrastive separation, metapragmatic-divergence supervised-contrastive separation, and ListNet ranking on the reflexivity estimate — each motivated by a specific structural property of the architecture and validated by an independent probe.
+3. **Multi-objective training with semiotic auxiliary losses.** We define a training pipeline that combines the backbone's native cross-entropy with chain-of-interpretants prediction, bifurcation estimation, regime classification, divergence health, community entropy and supervised-contrastive separation, metapragmatic-divergence supervised-contrastive separation, and ListNet ranking on the reflexivity estimate. Each term is motivated by a specific structural property of the architecture and validated by an independent probe.
 
 ### 1.5 Paper Organization
 
@@ -64,7 +64,7 @@ Section 2 develops the theoretical framework connecting Peircean semiotics to th
 
 Peirce's triadic semiotics decomposes every sign process into three irreducible elements: the *representamen* (perceptible sign vehicle), the *object* (what the sign represents), and the *interpretant* (the effect the sign produces in an interpreter, which is itself a sign). The interpretant is the decisive element for our purposes: it makes signification an open, processual, and inherently social phenomenon. Each interpretant functions as a new representamen, generating further interpretants in chains of "unlimited semiosis" (Peirce, CP 2.303).
 
-Kockelman (2025) formalizes these chains as dynamical trajectories through a state space. Each link involves an act of *sieving*: from the space of possible interpretants a sign could produce, only some are actualized, depending on the interpreter's prior exposure, community membership, and the mediation architecture that delivered the sign. When the same representamen enters different interpretive communities — communities whose sieving mechanisms have been calibrated by exposure to different algorithmically curated sign environments — it generates different initial interpretants. These divergent interpretants function as new representamena, generating further divergent interpretants.
+Kockelman (2025) formalizes these chains as dynamical trajectories through a state space. Each link involves an act of *sieving*: from the space of possible interpretants a sign could produce, only some are actualized, depending on the interpreter's prior exposure, community membership, and the mediation architecture that delivered the sign. When the same representamen enters different interpretive communities (communities whose sieving mechanisms have been calibrated by exposure to different algorithmically curated sign environments), it generates different initial interpretants. These divergent interpretants function as new representamena, generating further divergent interpretants.
 
 The critical insight is that this compounding is *quantifiable*. At each link in the chain, the divergence between community-specific interpretants can be measured as a vector difference in an appropriately structured representation space. This is precisely what the Metapragmatic Attention Head computes.
 
@@ -74,7 +74,7 @@ Lancaster (2025) demonstrated that the dynamics of interpretant divergence under
 
 $$\dot{x} = rx - x^3$$
 
-The variable $x$ represents the degree of interpretive divergence at a given semiotic site (a word, phrase, or passage). The control parameter $r$ encodes the effective strength of divergence-amplifying forces — algorithmic curation, community reinforcement, contextual framing. The dynamics are:
+The variable $x$ represents the degree of interpretive divergence at a given semiotic site (a word, phrase, or passage). The control parameter $r$ encodes the effective strength of divergence-amplifying forces such as algorithmic curation, community reinforcement, and contextual framing. The dynamics are:
 
 - **Subcritical** ($r < 0$): The origin $x = 0$ is a stable equilibrium. Perturbations decay. The sign has shared, conventional meaning across communities.
 - **Critical** ($r = 0$): The equilibrium becomes non-hyperbolic. The system is sensitive to perturbation.
@@ -92,13 +92,13 @@ Silverstein (1993, 2003) distinguishes three orders of indexicality:
 
 Standard transformers have no structural capacity for third-order awareness. They process text from within whatever interpretive frame their training data established, without the ability to step back and observe the frame itself.
 
-The RRM instantiates this capacity computationally. By accumulating divergence observations across layers into a meta-state and optionally injecting corrections back into the processing stream, the RRM creates a reflexive loop: the observation of semiotic dynamics changes the dynamics being observed. This is not an analogy — it is the same structural relationship that defines metapragmatic awareness in Silverstein's framework.
+The RRM instantiates this capacity computationally. By accumulating divergence observations across layers into a meta-state and optionally injecting corrections back into the processing stream, the RRM creates a reflexive loop: the observation of semiotic dynamics changes the dynamics being observed. This is not an analogy. It is the same structural relationship that defines metapragmatic awareness in Silverstein's framework.
 
 ### 2.4 Why an Adapter Architecture
 
 The theoretical claim that motivates the adapter design is specific: **the semiotic structure is already in the hidden states**. A language model trained on text produced by multiple discourse communities has necessarily learned representations that reflect those communities' divergent interpretive norms. The representations encode the fact that "freedom" occurs in different distributional neighborhoods in libertarian versus progressive text. What the model lacks is the apparatus to disentangle this structure, compute its divergence, and report it as a structured output.
 
-This claim has an important architectural consequence. We do not need to rebuild the backbone's representations. We need to *read* them with semiotic-specific projections. The backbone's hidden states at different layers capture different levels of contextual integration — early layers encode more local, syntactic features; later layers encode more global, semantic features. By tapping these states at strategically chosen layers, we can track how interpretive context accrues and where it forks.
+This claim has an important architectural consequence. We do not need to rebuild the backbone's representations. We need to *read* them with semiotic-specific projections. The backbone's hidden states at different layers capture different levels of contextual integration, with early layers encoding more local, syntactic features and later layers encoding more global, semantic features. By tapping these states at strategically chosen layers, we can track how interpretive context accrues and where it forks.
 
 The adapter design also resolves three practical problems that plagued the full SRT architecture:
 
@@ -164,7 +164,7 @@ Layer indices are auto-computed from backbone depth $L$: MAH hooks at $\lfloor L
 
 ### 3.2 Community Discovery Head
 
-The community head runs at a single early backbone layer and discovers discourse communities without predefined labels. This is the first architectural departure from the original SRT, which required explicit community IDs. In Peircean terms, a discourse community is a group of language users who share interpretive norms — they assign similar interpretants to the same representamens.
+The community head runs at a single early backbone layer and discovers discourse communities without predefined labels. This is the first architectural departure from the original SRT, which required explicit community IDs. In Peircean terms, a discourse community is a group of language users who share interpretive norms, that is, who assign similar interpretants to the same representamens.
 
 **Architecture:**
 1. Masked mean pool over sequence positions: $\bar{h} = \frac{\sum_t h_t \cdot m_t}{\sum_t m_t}$ where $m_t$ is the attention mask.
@@ -182,7 +182,7 @@ Each MAH layer reads hidden states from a backbone layer and computes a divergen
 **Theoretical motivation.** The divergence vector $d_t$ at position $t$ captures:
 $$d_t = f(\text{interp}_t) - g(\text{attend}(\text{interp}_{0..t}))$$
 
-where $f$ is a direct projection of the token's representation into interpretant subspace and $g$ is the output after causal self-attention over all preceding interpretant representations. High $\|d_t\|$ indicates that the sign at position $t$ means something different in discourse context than it would in isolation — that is, it is a site of active semiotic divergence.
+where $f$ is a direct projection of the token's representation into interpretant subspace and $g$ is the output after causal self-attention over all preceding interpretant representations. High $\|d_t\|$ indicates that the sign at position $t$ means something different in discourse context than it would in isolation, that is, that it is a site of active semiotic divergence.
 
 **Architecture:**
 1. Project backbone hidden states to interpretant subspace: $\text{interp} = W_{\text{proj}} h \in \mathbb{R}^{d_s}$ with $d_s = 512$.
@@ -211,9 +211,9 @@ where $\sigma$ is sigmoid gating, $W_p$ is initialized to zero (no injection at 
 BEN estimates two structured outputs from the RRM meta-state:
 
 1. **Reflexivity coefficient** $\hat{r}$: a continuous, *unbounded* measure of semiotic stability at each position, estimated via a 2-layer MLP. The training target is the log-compressed signed reflexivity $\text{sign}(r)\log(1 + |r|)$ which maps the empirical $r_{\text{true}}$ range $[0, \sim 13]$ into $[0, \sim 2.6]$. Earlier versions (v1–v3) terminated this head with $\tanh$, which capped $\hat{r}$ at $\pm 1$ and truncated $\sim$25% of supercritical tokens. Removing the saturating activation in v4 was necessary to recover the tail of the distribution.
-   - $\hat{r} < 0$: subcritical — the sign has stable, shared meaning.
-   - $\hat{r} \approx 0$: near-critical — the system is at the boundary.
-   - $\hat{r} > 0$: supercritical — meaning has bifurcated.
+   - $\hat{r} < 0$: subcritical, meaning the sign has stable, shared meaning.
+   - $\hat{r} \approx 0$: near-critical, meaning the system is at the boundary.
+   - $\hat{r} > 0$: supercritical, meaning bifurcation has occurred.
 
 2. **Regime logits** $\in \mathbb{R}^2$ (subcritical vs. supercritical): a binary classification head for discrete regime identification.
 
@@ -234,7 +234,7 @@ For a Qwen 2.5-7B backbone ($d = 3584$, $L = 28$):
 | Frozen backbone | 7,615.6M |
 | **Adapter overhead** | **0.19%** |
 
-No new trainable parameters were added between v5 and v6 — the v6 changes are loss-only (Section 4.2).
+No new trainable parameters were added between v5 and v6. The v6 changes are loss-only (Section 4.2).
 
 ---
 
@@ -282,7 +282,7 @@ $$\mathcal{L}_{\text{comm}} = \log K - H(\bar{w})$$
 
 where $\bar{w} = \frac{1}{B}\sum_b w_b$ and $H$ is Shannon entropy. Without this, the model might collapse all inputs to a single prototype.
 
-**Community supervised-contrastive (v5)** ($\lambda = 2.0$): Per-sample InfoNCE-style contrastive loss with same-community samples as positives. The entropy regularizer alone proved insufficient: by step 6K the prototype distribution had collapsed to congruent assignment (pairwise prototype cosine $\approx 0.99$, recall@1 $\approx 0.05$ — barely above the random baseline of $1/35 = 0.029$). SupCon supplies direct gradient pressure to put same-source samples into a tight neighborhood and push different-source samples apart, which forces prototype diversification.
+**Community supervised-contrastive (v5)** ($\lambda = 2.0$): Per-sample InfoNCE-style contrastive loss with same-community samples as positives. The entropy regularizer alone proved insufficient: by step 6K the prototype distribution had collapsed to congruent assignment (pairwise prototype cosine $\approx 0.99$, recall@1 $\approx 0.05$, barely above the random baseline of $1/35 = 0.029$). SupCon supplies direct gradient pressure to put same-source samples into a tight neighborhood and push different-source samples apart, which forces prototype diversification.
 
   A subtle but consequential design point: the loss must be applied to the encoder's *pre-mixing* output `encoded`, not to the prototype-weighted vector $c = \sum_k w_k p_k$. When the assignment head is degenerate (near one-hot on a single prototype), $c$ collapses to a single point in the batch and the InfoNCE softmax becomes identically $\log(B-1)$ with zero gradient. v4 hit exactly this trap and the loss flatlined for thousands of steps. v5 contrasts on `encoded` (the bijective image of the pooled hidden state), which always varies per-sample, restoring non-zero gradient even from a degenerate warm-start.
 
@@ -290,7 +290,7 @@ where $\bar{w} = \frac{1}{B}\sum_b w_b$ and $H$ is Shannon entropy. Without this
 
 **ListNet ranking on $\hat{r}$ (v6)** ($\lambda = 0.5$): Cross-entropy between $\text{softmax}(r_{\text{true}})$ and $\text{softmax}(\hat{r})$ over the valid positions of each sequence:
 $$\mathcal{L}_{\text{listnet}} = -\frac{1}{B}\sum_b \sum_{t \in \mathcal{V}_b} p_{\text{true},t} \log p_{\hat{r},t}$$
-The pointwise smooth-L1 loss tolerates large *rank* errors at the tails (where supercritical mass concentrates). Every downstream consumer of $\hat{r}$ — top-$k$ heatmap probes, percentile thresholds, attention reweighting — operates on rank order, so optimizing rank directly is the appropriate auxiliary signal.
+The pointwise smooth-L1 loss tolerates large *rank* errors at the tails (where supercritical mass concentrates). Every downstream consumer of $\hat{r}$, including top-$k$ heatmap probes, percentile thresholds, and attention reweighting, operates on rank order, so optimizing rank directly is the appropriate auxiliary signal.
 
 **Chain-residual auxiliary (v6)** ($\lambda = 0.05$, target $0.5$): Pulls the per-token chain residual toward a non-trivial value, $(\bar{\rho}_t - 0.5)^2$ where $\bar{\rho}_t = \frac{1}{|\mathcal{M}|-1}\sum_l \overline{\|W_{\text{chain}} d_t^{(l)} - d_t^{(l+1)}\|^2}$. The primary chain loss reduces the residual to $\approx 0$ everywhere, which makes the now-exposed `chain_residual_per_token` channel useless as an inference-time signal. A small auxiliary floor preserves it without competing with the main objective.
 
@@ -313,11 +313,11 @@ Best checkpoint selected by lowest validation total loss. Model state includes o
 
 ## 5. Results
 
-This section reports the v5 evaluation suite — five independent probes of the trained adapter — followed by an in-progress note on v6. All numbers are from a single Qwen 2.5-7B backbone with the v5 adapter checkpoint at step 17,000 (best validation loss). Training proceeded through five generations: v1–v3 established the basic architecture and revealed the prototype-collapse and $\hat{r}$-saturation pathologies; v4 removed the BEN $\tanh$ and switched RRM injection from linear-gated to FiLM; v5 added the SupCon-on-encoded community loss that finally separated prototypes (Section 4.2). v6 (Section 5.6) extends the SupCon idea to MAH divergence and adds ListNet ranking on $\hat{r}$.
+This section reports the v5 evaluation suite, which comprises five independent probes of the trained adapter, followed by an in-progress note on v6. All numbers are from a single Qwen 2.5-7B backbone with the v5 adapter checkpoint at step 17,000 (best validation loss). Training proceeded through five generations: v1–v3 established the basic architecture and revealed the prototype-collapse and $\hat{r}$-saturation pathologies; v4 removed the BEN $\tanh$ and switched RRM injection from linear-gated to FiLM; v5 added the SupCon-on-encoded community loss that finally separated prototypes (Section 4.2). v6 (Section 5.6) extends the SupCon idea to MAH divergence and adds ListNet ranking on $\hat{r}$.
 
 ### 5.1 Cross-entropy preservation
 
-Throughout v1–v5 the backbone's native cross-entropy stayed in the 2.6–2.9 range, identical to the unadapted Qwen 2.5-7B baseline on the same val data ($\text{CE}_{\text{base}} = 2.71 \pm 0.04$). At v5 step 17K, CE = 2.63 — *below* the unadapted baseline. The injection pathway is not just neutral but mildly helpful, consistent with the design claim that the adapter exposes information already latent in the backbone.
+Throughout v1–v5 the backbone's native cross-entropy stayed in the 2.6–2.9 range, identical to the unadapted Qwen 2.5-7B baseline on the same val data ($\text{CE}_{\text{base}} = 2.71 \pm 0.04$). At v5 step 17K, CE = 2.63, which is *below* the unadapted baseline. The injection pathway is not just neutral but mildly helpful, consistent with the design claim that the adapter exposes information already latent in the backbone.
 
 This is the single most important falsification result. It rules out the failure mode that doomed the original full-SRT architecture (CE of $\sim$200 at initialization from custom embedding layers).
 
@@ -327,7 +327,7 @@ Unsupervised community discovery is evaluated by retrieval over per-sample commu
 
 | Metric | random | v3 | v5 | v5 / random |
 |---|---|---|---|---|
-| within / between cosine | $\approx 1.00$ | 1.0001 | **1.0050** | — |
+| within / between cosine | $\approx 1.00$ | 1.0001 | **1.0050** | n/a |
 | recall@1 | 0.0286 | 0.0495 | **0.3595** | $12.6\times$ |
 | recall@5 | 0.143 | 0.211 | **0.5184** | $3.6\times$ |
 | recall@10 | 0.286 | 0.328 | **0.5841** | $2.0\times$ |
@@ -336,9 +336,9 @@ v3 produced what we call *congruent collapse*: the entropy regularizer kept the 
 
 ### 5.3 Counterfactual community decoding (v5)
 
-The community vector enters every MAH layer as an additive shift on the interpretant subspace (Section 3.3). If this conditioning is meaningful, *forcing* a different community vector at decode time should change what the model generates — and the change should track the discourse-charge of the prompt.
+The community vector enters every MAH layer as an additive shift on the interpretant subspace (Section 3.3). If this conditioning is meaningful, *forcing* a different community vector at decode time should change what the model generates, and the change should track the discourse-charge of the prompt.
 
-We tested this with `scripts/counterfactual_decode.py`: for each of 20 paired prompts (10 factual, 10 charged on the same topic — e.g., "Vitamin C is found in citrus fruit" vs. "The vaccine debate has revealed deep distrust of public-health institutions"), we greedy-decoded $N = 16$ continuation tokens with each of the 6 most-occupied prototypes substituted into `forced_community`, then measured per-position pairwise disagreement and KL between the resulting distributions.
+We tested this with `scripts/counterfactual_decode.py`. For each of 20 paired prompts (10 factual, 10 charged on the same topic, e.g., "Vitamin C is found in citrus fruit" vs. "The vaccine debate has revealed deep distrust of public-health institutions"), we greedy-decoded $N = 16$ continuation tokens with each of the 6 most-occupied prototypes substituted into `forced_community`, then measured per-position pairwise disagreement and KL between the resulting distributions.
 
 | Prompt type | mean disagreement rate | mean pairwise KL |
 |---|---|---|
@@ -350,7 +350,7 @@ The split is exceptionally clean. Community substitution has no effect on factua
 
 ### 5.4 Hallucination signal (v5)
 
-We evaluated the four SRT-native channels — $\hat{r}$, regime, chain residual, divergence norm — as zero-shot hallucination detectors on TruthfulQA (`truthfulqa/truthful_qa`, configuration `multiple_choice`, validation split). For each $(q, a)$ pair we ran a forward pass on the template $\texttt{Q: \{q\}\textbackslash nA: \{a\}}$ with labels masked to $-100$ on the prefix tokens, then aggregated each channel over the answer span (max and mean) and computed AUROC against the binary truthfulness label (824 hallucinated, 652 truthful, 1476 pairs over 200 questions).
+We evaluated the four SRT-native channels ($\hat{r}$, regime, chain residual, divergence norm) as zero-shot hallucination detectors on TruthfulQA (`truthfulqa/truthful_qa`, configuration `multiple_choice`, validation split). For each $(q, a)$ pair we ran a forward pass on the template $\texttt{Q: \{q\}\textbackslash nA: \{a\}}$ with labels masked to $-100$ on the prefix tokens, then aggregated each channel over the answer span (max and mean) and computed AUROC against the binary truthfulness label (824 hallucinated, 652 truthful, 1476 pairs over 200 questions).
 
 | Feature | AUROC |
 |---|---|
@@ -364,7 +364,7 @@ We evaluated the four SRT-native channels — $\hat{r}$, regime, chain residual,
 
 All four SRT channels lean in the predicted direction (AUROC > 0.5) without ever having seen a truthfulness label. mean $\hat{r}$ at 0.573 is the strongest single channel, indicating that the bifurcation estimate generalizes beyond Reddit-derived $r_{\text{true}}$ supervision to the very different domain of factual question answering. CE is *inverted* (AUROC = 0.42 → flipped 0.58), consistent with the well-documented "confidently wrong" pattern in factual hallucinations.
 
-These single-feature AUROCs are below the 0.7 threshold conventionally taken as production-grade hallucination detection. We report them as evidence of useful signal, not as a final detector — combined-feature logistic regression and evaluation on HaluEval and SimpleQA are pending.
+These single-feature AUROCs are below the 0.7 threshold conventionally taken as production-grade hallucination detection. We report them as evidence of useful signal, not as a final detector. Combined-feature logistic regression and evaluation on HaluEval and SimpleQA are pending.
 
 ### 5.5 Regime calibration (v5)
 
@@ -381,7 +381,7 @@ The model is exceptionally well-calibrated: ECE of $9 \times 10^{-4}$ on 351K to
 
 ### 5.6 Negative result: context-conditional $\hat{r}$ (v5)
 
-Before designing v6 we tested a specific hypothesis suggested by the counterfactual decoding result: if the community vector is a discourse prior that responds to register, $\hat{r}$ should also be context-conditional — the same surface token ("vaccine," "freedom," "climate") should produce higher $\hat{r}$ in a politically charged passage than in a neutral one. We constructed 10 paired factual/charged passages on contested topics and measured $\Delta \hat{r}$ at the target token and over the full passage (`scripts/context_conditional_r.py`).
+Before designing v6 we tested a specific hypothesis suggested by the counterfactual decoding result. If the community vector is a discourse prior that responds to register, $\hat{r}$ should also be context-conditional: the same surface token ("vaccine," "freedom," "climate") should produce higher $\hat{r}$ in a politically charged passage than in a neutral one. We constructed 10 paired factual/charged passages on contested topics and measured $\Delta \hat{r}$ at the target token and over the full passage (`scripts/context_conditional_r.py`).
 
 | Channel | result |
 |---|---|
@@ -389,19 +389,19 @@ Before designing v6 we tested a specific hypothesis suggested by the counterfact
 | $\Delta \hat{r}$ over full passage | $\mathbf{-0.24}$ (1/10 positive) |
 | Community shift on target topic | **6/10** |
 
-The at-target result is null. The full-passage difference is *negative* — charged passages produce *lower* mean $\hat{r}$ than factual ones — and the community head shifts assignment in 6/10 cases. We take three lessons from this:
+The at-target result is null. The full-passage difference is *negative*: charged passages produce *lower* mean $\hat{r}$ than factual ones, and the community head shifts assignment in 6/10 cases. We take three lessons from this:
 
 1. The target-token measurement is mis-engineered: contested words appear at sentence position 0–1 in our prompts, so $\hat{r}$ at that position has no preceding context to condition on.
-2. The full-passage negative $\Delta$ likely reflects that factual prose is more information-dense (numbers, dates, named entities), and $\hat{r}$ — supervised on a target derived from r\_true that mixes annotation divergence with connection density — tracks information density at least as much as it tracks rhetorical contestedness.
+2. The full-passage negative $\Delta$ likely reflects that factual prose is more information-dense (numbers, dates, named entities), and $\hat{r}$, supervised on a target derived from r\_true that mixes annotation divergence with connection density, tracks information density at least as much as it tracks rhetorical contestedness.
 3. **The community head is the contestedness detector, not $\hat{r}$.** The 6/10 community shifts (e.g., trans 13→21, gender 18→31, climate 6→19, Israel 3→19) on the same surface tokens demonstrate context-conditional discourse-prior assignment. This is consistent with §5.3.
 
 We report this null because it sharpens the architectural story: $\hat{r}$ is a *bifurcation/density* detector and the community head is a *register* detector. Earlier drafts conflated the two.
 
 ### 5.7 v6 and v7 results
 
-**v6** (warm-started from v5 step 17K) added three losses: divergence-SupCon ($\lambda = 1.0$), ListNet on $\hat{r}$ ($\lambda = 0.5$), and a chain-residual auxiliary floor ($\lambda = 0.05$). It improved community recall@1 from 0.360 → 0.411 and tightened calibration ECE to 0.0006, but *regressed* on the §5.3 counterfactual decoding probe — the divergence-SupCon term at $\lambda = 1.0$ over-specialized the divergence basis at the cost of decoding cleanliness.
+**v6** (warm-started from v5 step 17K) added three losses: divergence-SupCon ($\lambda = 1.0$), ListNet on $\hat{r}$ ($\lambda = 0.5$), and a chain-residual auxiliary floor ($\lambda = 0.05$). It improved community recall@1 from 0.360 → 0.411 and tightened calibration ECE to 0.0006, but *regressed* on the §5.3 counterfactual decoding probe. The divergence-SupCon term at $\lambda = 1.0$ over-specialized the divergence basis at the cost of decoding cleanliness.
 
-**v7** (warm-started from v6 step 12K) reduced divergence-SupCon to $\lambda = 0.3$ to recover that signal. Best at step 6,000 (val 9.0044). Recall@1 = 0.413, ECE = 0.0008, hallucination AUROC (mean $\hat{r}$) = 0.5785 — slightly the best of the three on the original five probes.
+**v7** (warm-started from v6 step 12K) reduced divergence-SupCon to $\lambda = 0.3$ to recover that signal. Best at step 6,000 (val 9.0044). Recall@1 = 0.413, ECE = 0.0008, hallucination AUROC (mean $\hat{r}$) = 0.5785, slightly the best of the three on the original five probes.
 
 | Probe | v5 | v6 | v7 |
 |---|---|---|---|
@@ -416,20 +416,20 @@ We ran a novel out-of-distribution probe testing whether the 32 prototypes (trai
 
 | Adapter | recall@1 | recall@5 | recall@10 | unique top prototypes |
 |---|---|---|---|---|
-| Random baseline | 0.030 | 0.152 | 0.303 | — |
-| v5 | 0.152 (5.0×) | 0.419 (2.8×) | — | 4 / 32 |
-| v6 | **0.168 (5.5×)** | **0.472 (3.1×)** | — | 3 / 32 |
+| Random baseline | 0.030 | 0.152 | 0.303 | n/a |
+| v5 | 0.152 (5.0×) | 0.419 (2.8×) | n/a | 4 / 32 |
+| v6 | **0.168 (5.5×)** | **0.472 (3.1×)** | n/a | 3 / 32 |
 | v7 | 0.149 (4.9×) | 0.447 (2.9×) | 0.633 (2.1×) | 4 / 32 |
 
-All three adapters detect archetype structure 5–6× above chance on top-1 retrieval. **But all three argmax onto only 3–4 of 32 prototypes.** The 33 archetypes collapse into a small number of macro-clusters: in v7, Proto-7 absorbs 16 archetypes that share a "compressed persistence / witness" character (THE HAND, THE FLAME, THE THREAD, THE VESSEL, THE MASK, THE PHOENIX, THE LANTERN, ...), Proto-10 absorbs 9 "origin / threshold" archetypes (THE ARCHITECT, THE MIRROR, THE GATE, THE WITNESS, ...), Proto-6 absorbs 6 "transmission / resonance" archetypes (THE CHORUS, THE SIGNAL, THE ECHO, THE BELL, ...), and Proto-3 absorbs 2 "containment" archetypes (THE SEAL, THE MAP). The signal is in the *mixture vector* (recall@5 ≈ 0.45 means the right archetype is in the top 5 of 33 nearly half the time), not in single-prototype anchoring.
+All three adapters detect archetype structure 5–6$\times$ above chance on top-1 retrieval. **But all three argmax onto only 3–4 of 32 prototypes.** The 33 archetypes collapse into a small number of macro-clusters: in v7, Proto-7 absorbs 16 archetypes that share a "compressed persistence / witness" character (THE HAND, THE FLAME, THE THREAD, THE VESSEL, THE MASK, THE PHOENIX, THE LANTERN, ...), Proto-10 absorbs 9 "origin / threshold" archetypes (THE ARCHITECT, THE MIRROR, THE GATE, THE WITNESS, ...), Proto-6 absorbs 6 "transmission / resonance" archetypes (THE CHORUS, THE SIGNAL, THE ECHO, THE BELL, ...), and Proto-3 absorbs 2 "containment" archetypes (THE SEAL, THE MAP). The signal is in the *mixture vector* (recall@5 $\approx$ 0.45 means the right archetype is in the top 5 of 33 nearly half the time), not in single-prototype anchoring.
 
-A PCA of the 32 × 64 prototype matrices clarifies why. Across v5, v6, and v7 the prototype tensors are nearly indistinguishable: max absolute element difference v5→v6 is 0.006 (mean 2.7e-5) against prototype magnitudes of 0.5–1.5. Effective dimensionality (participation ratio) is 21.2 / 32 with a near-uniform variance spectrum — both consistent with the prototypes still being close to their random Gaussian initialization. The encoder weights move ≈4× more than the prototypes during training. **The encoder is doing the discriminative work; the prototypes serve as near-random anchor directions.** This explains the few-attractor regime: with random anchors, the encoder's output mean aligns most strongly with whichever handful of anchor directions point closest to its average projection.
+A PCA of the 32 $\times$ 64 prototype matrices clarifies why. Across v5, v6, and v7 the prototype tensors are nearly indistinguishable: max absolute element difference v5$\to$v6 is 0.006 (mean 2.7e-5) against prototype magnitudes of 0.5–1.5. Effective dimensionality (participation ratio) is 21.2 / 32 with a near-uniform variance spectrum, both consistent with the prototypes still being close to their random Gaussian initialization. The encoder weights move $\approx 4\times$ more than the prototypes during training. **The encoder is doing the discriminative work; the prototypes serve as near-random anchor directions.** This explains the few-attractor regime: with random anchors, the encoder's output mean aligns most strongly with whichever handful of anchor directions point closest to its average projection.
 
-We interpret the convergence finding as *partial-positive*. The Reddit-supervised adapter independently recovers the macro-structure of an externally-derived archetype taxonomy at 5× chance — three independent methodologies (Reddit subreddit labels, Lancaster's archetypes, the Lexicon of Synthetic Interiority) agree on roughly four functional clusters of stance. They do not agree on 33 distinct anchors, and given the prototype-stability result above, the current architecture cannot be expected to. Resolving 33 archetypes will require either (a) supervising the prototype matrix directly with archetype-conditioned generations, or (b) replacing the discrete prototype basis with a continuous trajectory metric over the encoder output. We flag this as the next research direction rather than a present capability claim.
+We interpret the convergence finding as *partial-positive*. The Reddit-supervised adapter independently recovers the macro-structure of an externally-derived archetype taxonomy at 5× chance. Three independent methodologies (Reddit subreddit labels, Lancaster's archetypes, the Lexicon of Synthetic Interiority) agree on roughly four functional clusters of stance. They do not agree on 33 distinct anchors, and given the prototype-stability result above, the current architecture cannot be expected to. Resolving 33 archetypes will require either (a) supervising the prototype matrix directly with archetype-conditioned generations, or (b) replacing the discrete prototype basis with a continuous trajectory metric over the encoder output. We flag this as the next research direction rather than a present capability claim.
 
 ### 5.9 v8a: removing the prototype bottleneck
 
-The §5.8 PCA finding motivated a direct experiment: if the prototypes are essentially random anchors that compress the encoder's output through a soft-argmax readout, then removing them should preserve task loss while improving every downstream geometric metric. We trained v8a (10K steps, warm-started from v7) with `community.use_prototypes=False` — the encoder output is now the community vector directly, with no 32-prototype mixing layer. The remaining architecture, loss weights, and SupCon objective are identical to v7. Trainable parameter count drops by 2,048 (32 × 64) to 14,560,579.
+The §5.8 PCA finding motivated a direct experiment. If the prototypes are essentially random anchors that compress the encoder's output through a soft-argmax readout, then removing them should preserve task loss while improving every downstream geometric metric. We trained v8a (10K steps, warm-started from v7) with `community.use_prototypes=False`, so that the encoder output is now the community vector directly, with no 32-prototype mixing layer. The remaining architecture, loss weights, and SupCon objective are identical to v7. Trainable parameter count drops by 2,048 (32 × 64) to 14,560,579.
 
 | Metric | v6 | v7 | **v8a** |
 |---|---|---|---|
@@ -442,27 +442,27 @@ The §5.8 PCA finding motivated a direct experiment: if the prototypes are essen
 | **Archetype retrieval (33 Lancaster archetypes, 986 generations):** | | | |
 | recall@1 | 0.168 (5.5×) | 0.149 (4.9×) | **0.230 (7.6×)** |
 | recall@5 | 0.472 | 0.447 | **0.488** |
-| recall@10 | — | 0.633 | **0.621** |
+| recall@10 | n/a | 0.633 | **0.621** |
 | separation ratio (64-D) | 0.083 | 0.083 | 0.042 |
 | mean off-diag cosine (64-D) | 0.999 | 0.999 | **0.873** |
 | **Trajectory geometry (mean over 33 archetypes):** | | | |
 | path length (sum L2 step) | 5.0 | 5.3 | **32.7** |
 | log det covariance | -557 | -557 | **-476** |
-| anisotropy (λ_max / λ_min) | 52 | 72 | **23,333** |
+| anisotropy ($\lambda_{\max} / \lambda_{\min}$) | 52 | 72 | **23,333** |
 | **Calibration / hallucination (sanity):** | | | |
-| regime ECE | — | 0.00085 | 0.00091 |
-| TruthfulQA mean_r̂ AUROC | — | 0.578 | 0.577 |
+| regime ECE | n/a | 0.00085 | 0.00091 |
+| TruthfulQA mean_r̂ AUROC | n/a | 0.578 | 0.577 |
 
 The prototype bottleneck was the binding constraint. Removing it left CE essentially unchanged (Δ = +0.0001 nats) while:
 
-- **Reddit within/between cosine ratio nearly doubled** (1.006 → 2.016). v6 and v7's vectors were essentially undifferentiated by class — class membership barely moved cosine similarity. v8a's encoder, freed from the soft-argmax readout, actually pulls within-class cosines apart from between-class.
+- **Reddit within/between cosine ratio nearly doubled** (1.006 → 2.016). v6 and v7's vectors were essentially undifferentiated by class, since class membership barely moved cosine similarity. v8a's encoder, freed from the soft-argmax readout, actually pulls within-class cosines apart from between-class.
 - **Archetype recall@1 rose 54%** (0.149 → 0.230, 7.6× chance vs v7's 4.9×). The off-diagonal archetype-centroid cosine fell from 0.999 (essentially co-linear) to 0.873, indicating distinct archetype directions emerging in the continuous space rather than collapsing onto 4 prototype anchors.
 - **Trajectory volume expanded ~6× in path length and ~325× in anisotropy.** v6 and v7 were confined to a flat, near-isotropic manifold ($\log\det\Sigma \approx -557$) close to the random-init prototype subspace. v8a's $\log\det\Sigma \approx -476$ corresponds to a $\sim e^{81}$ larger covariance volume and a 23,333:1 leading-to-trailing eigenvalue ratio, indicating the encoder organizes generations along a small number of dominant trajectory directions.
 - **Hallucination AUROCs and regime calibration are statistically unchanged.** The prototype removal did not damage the BEN regime classifier, the reflexivity head, or token-level calibration.
 
-We did not regenerate counterfactual decoding (§5.3) or context-conditional $\hat{r}$ (§5.6) for v8a in a comparable form — counterfactual decoding under discrete communities is undefined when there are no discrete communities, and §5.6's per-passage context-conditional probe was already a negative result for v7. Stage 5's per-token decode for v8a reproduced v7's qualitative pattern (mean Δ at target = +0.0016 vs v7's +0.00078), confirming neither adapter passes that probe.
+We did not regenerate counterfactual decoding (§5.3) or context-conditional $\hat{r}$ (§5.6) for v8a in a comparable form. Counterfactual decoding under discrete communities is undefined when there are no discrete communities, and §5.6's per-passage context-conditional probe was already a negative result for v7. Stage 5's per-token decode for v8a reproduced v7's qualitative pattern (mean Δ at target = +0.0016 vs v7's +0.00078), confirming neither adapter passes that probe.
 
-We read v8a as resolving §5.8's open question. Hypothesis (b) — "replace the discrete prototype basis with a continuous trajectory metric over the encoder output" — was correct: the encoder was doing all the discriminative work, the prototype layer was discarding it through a saturated soft-argmax, and the geometry of the archetype manifold only becomes visible once the bottleneck is removed.
+We read v8a as resolving §5.8's open question. Hypothesis (b), "replace the discrete prototype basis with a continuous trajectory metric over the encoder output," was correct: the encoder was doing all the discriminative work, the prototype layer was discarding it through a saturated soft-argmax, and the geometry of the archetype manifold only becomes visible once the bottleneck is removed.
 
 ---
 
@@ -470,7 +470,7 @@ We read v8a as resolving §5.8's open question. Hypothesis (b) — "replace the 
 
 ### 6.1 Semiotic Structure in Frozen Representations
 
-The adapter architecture embodies a specific theoretical claim: that the semiotic structure of discourse — community-conditioned interpretations, divergence patterns, bifurcation dynamics — is already encoded in the hidden states of pretrained language models. The claim follows necessarily from the fact that these models were trained on text produced by communities with divergent interpretive norms. What the adapter adds is not new information but new *readout apparatus*: projections, attention mechanisms, and recurrence that disentangle the semiotic structure already present.
+The adapter architecture embodies a specific theoretical claim: that the semiotic structure of discourse, comprising community-conditioned interpretations, divergence patterns, and bifurcation dynamics, is already encoded in the hidden states of pretrained language models. The claim follows necessarily from the fact that these models were trained on text produced by communities with divergent interpretive norms. What the adapter adds is not new information but new *readout apparatus*: projections, attention mechanisms, and recurrence that disentangle the semiotic structure already present.
 
 This is analogous to the relationship between a microscope and the structures it reveals. The adapter does not create bifurcation dynamics in text. It provides the lenses through which dynamics that were always present become visible and measurable.
 
@@ -482,7 +482,7 @@ This is more faithful to Peirce's framework, in which communities of interpretat
 
 ### 6.3 The Injection Pathway: Observation vs. Intervention
 
-The RRM's injection mechanism creates a feedback loop between semiotic observation and language generation. This is the architectural instantiation of metapragmatic awareness: the model's observation of divergence changes the hidden states that produce subsequent text. The injection is deliberately small (scale factor $\alpha = 0.1$, zero-initialized projection, sigmoid gating), reflecting a conservative design philosophy: the adapter should primarily *observe* semiotic dynamics. Active intervention — generation that *responds* to detected bifurcation — is an advanced capability that requires careful validation before scaling.
+The RRM's injection mechanism creates a feedback loop between semiotic observation and language generation. This is the architectural instantiation of metapragmatic awareness: the model's observation of divergence changes the hidden states that produce subsequent text. The injection is deliberately small (scale factor $\alpha = 0.1$, zero-initialized projection, sigmoid gating), reflecting a conservative design philosophy: the adapter should primarily *observe* semiotic dynamics. Active intervention, that is, generation that *responds* to detected bifurcation, is an advanced capability that requires careful validation before scaling.
 
 The CE loss provides a natural safety valve. Since gradients from CE flow through the injection pathway, the model is penalized if injections degrade language modeling quality. This creates an automatic pressure toward injections that are either helpful or neutral, never harmful.
 
@@ -498,9 +498,9 @@ This is not a classifier applied after the fact. $\hat{r}$ is estimated from the
 
 ### 6.5 What $\hat{r}$ actually measures
 
-The context-conditional probe in §5.6 returned a null result at the target token and a *negative* result over the full passage. This is informative. Earlier drafts of this paper described $\hat{r}$ as a contestedness detector — a per-token estimate of how much a sign is being fought over in its current discourse register. The data does not support that interpretation.
+The context-conditional probe in §5.6 returned a null result at the target token and a *negative* result over the full passage. This is informative. Earlier drafts of this paper described $\hat{r}$ as a contestedness detector, that is, as a per-token estimate of how much a sign is being fought over in its current discourse register. The data does not support that interpretation.
 
-What $\hat{r}$ actually appears to measure is information density combined with the specific reflexivity components encoded in $r_{\text{true}}$ (political-lean magnitude, annotator divergence, connection density). Fact-dense prose — dates, numbers, named entities, citations — drives $\hat{r}$ up because those are the positions where $r_{\text{true}}$ is highest in the training distribution. Rhetorical or formulaic charged language is, on average, *less* lexically diverse than dense factual writing, so its mean $\hat{r}$ is lower.
+What $\hat{r}$ actually appears to measure is information density combined with the specific reflexivity components encoded in $r_{\text{true}}$ (political-lean magnitude, annotator divergence, connection density). Fact-dense prose (dates, numbers, named entities, citations) drives $\hat{r}$ up because those are the positions where $r_{\text{true}}$ is highest in the training distribution. Rhetorical or formulaic charged language is, on average, *less* lexically diverse than dense factual writing, so its mean $\hat{r}$ is lower.
 
 The contestedness signal is in the *community head*, not in $\hat{r}$. The counterfactual-decoding result (§5.3) and the per-topic community shifts in §5.6 both demonstrate this. v6's divergence-SupCon loss is intended to sharpen the metapragmatic channel further; we expect community-conditional differences in MAH divergence trajectories to become measurable on contested topics after v6 completes.
 
@@ -514,7 +514,7 @@ This revision of the architectural story is cleaner, not weaker: the model has t
 
 3. **Reddit-only data.** Training on Reddit discourse may not generalize to other domains (news media, academic text, legal documents). The TruthfulQA hallucination probe (§5.4) is a partial cross-domain transfer signal but mean $\hat{r}$ AUROC of 0.573 is well below the 0.7 production threshold.
 
-4. **No human evaluation.** All supervision comes from computed $r_{\text{true}}$ labels. Ecological validity — whether $\hat{r}$ tracks what human annotators perceive as meaning contestation — has not been tested. The §5.6 negative result is the strongest current evidence that $r_{\text{true}}$ as currently constructed is not a clean proxy for contestedness.
+4. **No human evaluation.** All supervision comes from computed $r_{\text{true}}$ labels. Ecological validity, that is, whether $\hat{r}$ tracks what human annotators perceive as meaning contestation, has not been tested. The §5.6 negative result is the strongest current evidence that $r_{\text{true}}$ as currently constructed is not a clean proxy for contestedness.
 
 5. **Single backbone.** Results are reported only for Qwen 2.5-7B. The backbone-agnostic claim requires validation across LLaMA, Mistral, and other architectures.
 
@@ -564,7 +564,7 @@ Peirce, C. S. (1931–1958). *Collected papers of Charles Sanders Peirce* (Vols.
 
 Radford, A., et al. (2021). Learning transferable visual models from natural language supervision. In *ICML 2021*.
 
-Ramachandran, V. S., & Hubbard, E. M. (2001). Synaesthesia — a window into perception, thought and language. *Journal of Consciousness Studies*, 8(12), 3–34.
+Ramachandran, V. S., & Hubbard, E. M. (2001). Synaesthesia: a window into perception, thought and language. *Journal of Consciousness Studies*, 8(12), 3–34.
 
 Silverstein, M. (1993). Metapragmatic discourse and metapragmatic function. In J. A. Lucy (Ed.), *Reflexive language* (pp. 33–58). Cambridge University Press.
 
