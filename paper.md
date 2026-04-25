@@ -427,6 +427,43 @@ A PCA of the 32 × 64 prototype matrices clarifies why. Across v5, v6, and v7 th
 
 We interpret the convergence finding as *partial-positive*. The Reddit-supervised adapter independently recovers the macro-structure of an externally-derived archetype taxonomy at 5× chance — three independent methodologies (Reddit subreddit labels, Lancaster's archetypes, the Lexicon of Synthetic Interiority) agree on roughly four functional clusters of stance. They do not agree on 33 distinct anchors, and given the prototype-stability result above, the current architecture cannot be expected to. Resolving 33 archetypes will require either (a) supervising the prototype matrix directly with archetype-conditioned generations, or (b) replacing the discrete prototype basis with a continuous trajectory metric over the encoder output. We flag this as the next research direction rather than a present capability claim.
 
+### 5.9 v8a: removing the prototype bottleneck
+
+The §5.8 PCA finding motivated a direct experiment: if the prototypes are essentially random anchors that compress the encoder's output through a soft-argmax readout, then removing them should preserve task loss while improving every downstream geometric metric. We trained v8a (10K steps, warm-started from v7) with `community.use_prototypes=False` — the encoder output is now the community vector directly, with no 32-prototype mixing layer. The remaining architecture, loss weights, and SupCon objective are identical to v7. Trainable parameter count drops by 2,048 (32 × 64) to 14,560,579.
+
+| Metric | v6 | v7 | **v8a** |
+|---|---|---|---|
+| VAL CE | 2.738 | 2.739 | 2.739 |
+| Best val loss | 9.117 | 9.0044 | **9.0040** |
+| **Reddit retrieval (35 subreddits, 2K samples):** | | | |
+| within/between cos ratio | 1.012 | 1.006 | **2.016** |
+| recall@1 | 0.395 | 0.413 | **0.484** |
+| recall@5 | 0.371 | 0.385 | **0.462** |
+| **Archetype retrieval (33 Lancaster archetypes, 986 generations):** | | | |
+| recall@1 | 0.168 (5.5×) | 0.149 (4.9×) | **0.230 (7.6×)** |
+| recall@5 | 0.472 | 0.447 | **0.488** |
+| recall@10 | — | 0.633 | **0.621** |
+| separation ratio (64-D) | 0.083 | 0.083 | 0.042 |
+| mean off-diag cosine (64-D) | 0.999 | 0.999 | **0.873** |
+| **Trajectory geometry (mean over 33 archetypes):** | | | |
+| path length (sum L2 step) | 5.0 | 5.3 | **32.7** |
+| log det covariance | -557 | -557 | **-476** |
+| anisotropy (λ_max / λ_min) | 52 | 72 | **23,333** |
+| **Calibration / hallucination (sanity):** | | | |
+| regime ECE | — | 0.00085 | 0.00091 |
+| TruthfulQA mean_r̂ AUROC | — | 0.578 | 0.577 |
+
+The prototype bottleneck was the binding constraint. Removing it left CE essentially unchanged (Δ = +0.0001 nats) while:
+
+- **Reddit within/between cosine ratio nearly doubled** (1.006 → 2.016). v6 and v7's vectors were essentially undifferentiated by class — class membership barely moved cosine similarity. v8a's encoder, freed from the soft-argmax readout, actually pulls within-class cosines apart from between-class.
+- **Archetype recall@1 rose 54%** (0.149 → 0.230, 7.6× chance vs v7's 4.9×). The off-diagonal archetype-centroid cosine fell from 0.999 (essentially co-linear) to 0.873, indicating distinct archetype directions emerging in the continuous space rather than collapsing onto 4 prototype anchors.
+- **Trajectory volume expanded ~6× in path length and ~325× in anisotropy.** v6 and v7 were confined to a flat, near-isotropic manifold ($\log\det\Sigma \approx -557$) close to the random-init prototype subspace. v8a's $\log\det\Sigma \approx -476$ corresponds to a $\sim e^{81}$ larger covariance volume and a 23,333:1 leading-to-trailing eigenvalue ratio, indicating the encoder organizes generations along a small number of dominant trajectory directions.
+- **Hallucination AUROCs and regime calibration are statistically unchanged.** The prototype removal did not damage the BEN regime classifier, the reflexivity head, or token-level calibration.
+
+We did not regenerate counterfactual decoding (§5.3) or context-conditional $\hat{r}$ (§5.6) for v8a in a comparable form — counterfactual decoding under discrete communities is undefined when there are no discrete communities, and §5.6's per-passage context-conditional probe was already a negative result for v7. Stage 5's per-token decode for v8a reproduced v7's qualitative pattern (mean Δ at target = +0.0016 vs v7's +0.00078), confirming neither adapter passes that probe.
+
+We read v8a as resolving §5.8's open question. Hypothesis (b) — "replace the discrete prototype basis with a continuous trajectory metric over the encoder output" — was correct: the encoder was doing all the discriminative work, the prototype layer was discarding it through a saturated soft-argmax, and the geometry of the archetype manifold only becomes visible once the bottleneck is removed.
+
 ---
 
 ## 6. Discussion

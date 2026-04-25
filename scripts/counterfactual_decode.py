@@ -238,6 +238,12 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
 
     # Resolve community ids
+    if model.community_head.prototypes is None:
+        logger.warning("community head is in trajectory mode (no prototypes); "
+                       "counterfactual decoding under discrete communities is not defined. Skipping.")
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text("<html><body><p>Skipped: adapter is in trajectory mode (no prototypes).</p></body></html>")
+        return
     prototypes = model.community_head.prototypes.weight  # (K, d_community)
     K = prototypes.size(0)
     if args.communities:

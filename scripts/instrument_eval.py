@@ -130,7 +130,9 @@ def run_eval(
                         .argmax(dim=-1).cpu().tolist(),
                     "community_id_true": int(comm_ids[s]) if comm_ids[s] is not None else None,
                     "community_pred": int(out.community_output.weights[s].argmax())
-                        if out.community_output else None,
+                        if out.community_output is not None
+                        and out.community_output.weights is not None
+                        else None,
                 }
                 ftr.write(json.dumps(trace) + "\n")
                 n_traced += 1
