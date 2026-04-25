@@ -45,7 +45,17 @@ class CommunityConfig:
     # discarding information at the soft-argmax. With use_prototypes=False
     # the community channel becomes a continuous 64-D coordinate rather
     # than a soft assignment over K anchors.
+    #
+    # Env override: set SRT_USE_PROTOTYPES=0 (or "false") to flip this off
+    # globally. Lets probe / eval scripts run against v8a checkpoints
+    # without per-script flag plumbing.
     use_prototypes: bool = True
+
+    def __post_init__(self) -> None:
+        import os
+        v = os.environ.get("SRT_USE_PROTOTYPES")
+        if v is not None and v.lower() in ("0", "false", "no", "off"):
+            self.use_prototypes = False
 
 
 @dataclass
