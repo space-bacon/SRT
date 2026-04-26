@@ -8,7 +8,7 @@ April 2026
 
 ## Abstract
 
-Large language models trained on web-scale corpora absorb the semiotic bifurcations embedded in their data. These are divergent interpretant chains in which the same sign carries incompatible meanings across discourse communities. Such models have no mechanism to detect, represent, or respond to this divergence. We introduce the Semiotic-Reflexive Transformer Adapter (SRT-Adapter), a lightweight architecture (~14.5M trainable parameters, 0.19% of a 7B backbone) that bolts semiotic awareness onto any frozen causal language model without modifying its embeddings, attention, or output head. The adapter operates through four modules that *tap* hidden states at selected backbone layers: (1) a **Community Discovery Head** that performs unsupervised soft clustering of discourse communities from early-layer representations; (2) **Metapragmatic Attention Heads** (MAH) that compute divergence vectors quantifying where meaning forks under community-conditioned interpretation; (3) a **Reflexive Recurrent Module** (RRM) that tracks accumulated semiotic divergence through a per-position GRU meta-state and optionally injects small corrections into the backbone stream via FiLM modulation; and (4) a **Bifurcation Estimation Network** (BEN) that estimates a continuous reflexivity coefficient $\hat{r}$ and a binary semiotic regime (subcritical/supercritical) at each token position. Grounded in Peircean semiotics and the pitchfork bifurcation model of political polarization (Lancaster, 2025), the architecture treats the frozen backbone as a substrate on which semiotic processes are an emergent, measurable phenomenon. Training combines the backbone's native cross-entropy with auxiliary losses on chain-of-interpretants prediction, bifurcation regression, regime classification, divergence health, community entropy and supervised-contrastive separation (v5). v6 adds metapragmatic-divergence supervised-contrastive separation, ListNet ranking on $\hat{r}$, and a chain-residual auxiliary floor. The corpus is 1M Reddit samples spanning 35 discourse communities with per-token reflexivity annotations. We present the theoretical motivation, full architectural specification, training methodology, and evaluation across five independent probes of the v5 checkpoint: cross-entropy preservation (CE = 2.63 on val, vs. 2.71 for unadapted Qwen 2.5-7B), unsupervised community retrieval (recall@1 = 0.36, $12.6\times$ random on a 35-class task), counterfactual community decoding (zero disagreement on factual prompts, 0.95 mean disagreement on contested topics), zero-shot hallucination signal on TruthfulQA (mean $\hat{r}$ AUROC = 0.573 without truthfulness supervision), and regime calibration (ECE = $9 \times 10^{-4}$, AUROC = 0.99 on 351K tokens).
+Large language models trained on web-scale corpora absorb the semiotic bifurcations embedded in their data. These are divergent interpretant chains in which the same sign carries incompatible meanings across discourse communities. Such models have no mechanism to detect, represent, or respond to this divergence. We introduce the Semiotic-Reflexive Transformer Adapter (SRT-Adapter), a lightweight architecture (~14.5M trainable parameters, 0.19% of a 7B backbone) that bolts semiotic awareness onto any frozen causal language model without modifying its embeddings, attention, or output head. The adapter operates through four modules that *tap* hidden states at selected backbone layers: (1) a **Community Discovery Head** that performs unsupervised soft clustering of discourse communities from early-layer representations; (2) **Metapragmatic Attention Heads** (MAH) that compute divergence vectors quantifying where meaning forks under community-conditioned interpretation; (3) a **Reflexive Recurrent Module** (RRM) that tracks accumulated semiotic divergence through a per-position GRU meta-state and optionally injects small corrections into the backbone stream via FiLM modulation; and (4) a **Bifurcation Estimation Network** (BEN) that estimates a continuous reflexivity coefficient $\hat{r}$ and a binary semiotic regime (subcritical/supercritical) at each token position. Grounded in Peircean semiotics and the pitchfork bifurcation model of political polarization (Lancaster, 2025), the architecture treats the frozen backbone as a substrate on which semiotic processes are an emergent, measurable phenomenon. Training combines the backbone's native cross-entropy with auxiliary losses on chain-of-interpretants prediction, bifurcation regression, regime classification, divergence health, community entropy, and supervised-contrastive separation on both the community channel (v5) and the metapragmatic divergence channel (v6), together with ListNet ranking on $\hat{r}$ and a chain-residual auxiliary floor. The corpus is 1M Reddit samples spanning 35 discourse communities with per-token reflexivity annotations. We report a five-generation empirical arc on a Qwen 2.5-7B backbone. v5 establishes the basic capability set on a five-probe suite: cross-entropy preservation (CE = 2.63 vs. unadapted 2.71), unsupervised community retrieval (recall@1 = 0.36, $12.6\times$ random on a 35-class task), counterfactual community decoding (zero disagreement on factual prompts, 0.95 mean disagreement on contested topics), zero-shot hallucination signal on TruthfulQA (mean $\hat{r}$ AUROC = 0.573), and regime calibration (ECE = $9\times10^{-4}$, AUROC = 0.99 on 351K tokens). The headline finding is in v8a: removing the 32-prototype mixing layer entirely, leaving the 64-D encoder output as the community vector, leaves CE unchanged (Δ = +0.0001 nats) while raising Reddit recall@1 from 0.413 to 0.484, raising archetype recall@1 on an out-of-distribution 33-class taxonomy from 0.149 to 0.230 ($7.6\times$ chance), nearly doubling the within/between cosine ratio (1.006 → 2.016), and expanding trajectory anisotropy by $\sim$$325\times$. v8b falsifies the "sharper-supcon" hypothesis on this architecture: doubling the contrastive weight and halving the temperature partially undoes v8a's gains. The encoder, not the prototype basis, was doing the discriminative work.
 
 **Keywords:** semiotic adapter, bifurcation detection, metapragmatic attention, interpretant chains, reflexive recurrence, discourse community discovery, frozen backbone, pitchfork bifurcation, Peircean semiotics
 
@@ -42,6 +42,8 @@ The architecture rests on three converging theoretical lines:
 
 3. **Metapragmatic awareness** (Silverstein, 1993, 2003): The capacity to observe how discourse itself shapes interpretation, that is, to notice that a sign is being contested rather than merely interpret it from within one community's norms, constitutes a third-order reflexive capacity that is architecturally absent from standard transformers.
 
+4. **Triadic, processual, cloud-shaped readout** (Anderson, 2014; Durst-Andersen, 2011; Maturana & Varela, 1980; von Foerster, 1981; Sections 2.5–2.7): Faithful detection of meaning, as opposed to co-occurrence, requires three architectural channels (community, divergence, recurrence) operating over a *processual* layer-wise readout into a *soft, continuous* discourse-prior space. The four-line theoretical commitment above motivates the four-module decomposition in Section 3 and the v8a finding (Section 5.9) that removing the discrete prototype basis is what unlocks the manifold the architecture was designed to expose.
+
 ### 1.4 Contributions
 
 This paper makes three contributions:
@@ -51,6 +53,8 @@ This paper makes three contributions:
 2. **Unsupervised community discovery via supervised-contrastive prototypes.** Rather than requiring predefined community labels at inference time, the adapter discovers discourse communities from backbone hidden states through learned prototype-based soft clustering. We identify and resolve a degenerate failure mode ("congruent collapse") in which entropy regularization keeps the assignment distribution uniform while pairwise prototype cosine converges to $\approx 0.99$. Supervised-contrastive loss applied to the encoder's *pre-mixing* output, rather than to the prototype-weighted vector, raises retrieval recall@1 from 0.05 (1.7$\times$ random) to 0.36 (12.6$\times$ random) on a 35-class task.
 
 3. **Multi-objective training with semiotic auxiliary losses.** We define a training pipeline that combines the backbone's native cross-entropy with chain-of-interpretants prediction, bifurcation estimation, regime classification, divergence health, community entropy and supervised-contrastive separation, metapragmatic-divergence supervised-contrastive separation, and ListNet ranking on the reflexivity estimate. Each term is motivated by a specific structural property of the architecture and validated by an independent probe.
+
+4. **Architectural falsification of the prototype-mixing readout.** Across v5–v7, prototype tensors moved $\sim 4\times$ less than the encoder weights and remained near-cosine-collinear (off-diagonal cosine $\approx 0.999$), producing few-attractor collapse on out-of-distribution archetype taxonomies (Section 5.8). v8a (Section 5.9) ablates the 32-prototype mixing layer entirely, replacing the soft-argmax readout with the encoder's continuous 64-D output. CE is unchanged; every encoder-geometry metric improves substantially. v8b (Section 5.10) shows that pushing the supcon objective harder on the continuous architecture produces a softer version of the same collapse, bounding the design from above. The prototype layer was the binding constraint, not the supervision.
 
 ### 1.5 Paper Organization
 
@@ -128,7 +132,15 @@ Two recent results from statistical physics sharpen what the second-order-cybern
 
 *Selection is required for non-trivial organization.* Leighton (2026) shows that for random multipartite stochastic systems with $N$ degrees of freedom, the probability of any subsystem operating as a Maxwell demon decays at least exponentially in $N$ for continuous Langevin dynamics and double-exponentially for discrete master-equation dynamics. The geometric reason is that demon-like behavior requires the alignment of two random vectors in a space whose dimension grows (linearly or exponentially) with $N$, which becomes vanishingly likely at scale. The implication for the adapter is direct. The community discovery head (Section 3.2) is a $\sim 10^7$-parameter system whose self-organized geometry produces the structure documented in Sections 5.1, 5.6, and 5.8. Leighton's result rules out the interpretation that this structure is a generic property of random high-dimensional embeddings under a contrastive readout: at this scale, random initialization combined with a generic objective should produce essentially no organized substructure. The structure that does emerge is therefore evidence that the SupCon objective and the curved 64-D community space jointly constitute a selection pressure of the kind Leighton's analysis identifies as necessary, with gradient descent in our setting playing the role that evolutionary selection plays in the biological cases Leighton's analysis is aimed at. The "seed crystal" framing in Section 2.5 is the cybernetic version of the same claim that Leighton makes in stochastic-thermodynamics terms.
 
-*Measurement-induced ordering and the bounded order parameter.* VanSaders, Fruchart, and Vitelli (2026) construct a many-body informational active matter system in which agents make local measurements of their neighbors' velocities and respond by modulating their own scattering cross-section without exerting work. The resulting hydrodynamic theory yields a non-analytic circle-pitchfork bifurcation at $Q_0 = 0$, where $Q$ is the nematic flocking order parameter and $Q_0$ is a function of the diameter contrast. They prove that the steady-state order parameter is bounded by the mutual information $I$ accumulated by the agents through measurement, $(Q_0/P_0)^2 \le (32/\pi^2)\,I$, and frame the onset of order as a classical *measurement-induced phase transition*. The information-thermodynamic ledger underlying their bound is the Landauer-Bennett tradition (Landauer, 1961; Bennett, 1982; Parrondo, Horowitz, & Sagawa, 2015), in which the cost of measurement and erasure sets the maximum work and, by extension here, the maximum ordering an information-driven system can produce. This is the closest physics analog we know of to the architectural ambitions of the SRT-Adapter, and it sharpens three things in our setup. First, the pitchfork normal form $\dot{x} = rx - x^3$ in Section 2.2 is not unique to sociolinguistic dynamics: the same circle-pitchfork structure arises in the hydrodynamic limit of a measurement-and-control system, which is independent corroboration that this is the right canonical model for ordering processes driven by observation rather than by force. Second, their information bound on $Q_0$ is the physics-side analog of the limit we observe empirically in Section 6.3: the inject-back arm of the RRM has not produced measurable downstream effect, and one possible reading is that the mutual information actually carried by the meta-state about the downstream loss is small, which would bound any inject-back-induced ordering near zero by the same kind of inequality. Third, their result that the same control rule produces robust ordering across thermal, granular, magnetized, sheared, active, and odd-noise environments suggests that the architecturally interesting question for the SRT is not whether a particular noise source is present, but whether the measurement-and-control loop can carry enough mutual information to push $Q_0$ above the bifurcation threshold. We do not claim a formal mapping between the two systems here, but we note the structural analogy as motivation for the v9 onward work on closing the loop.
+*Measurement-induced ordering and the bounded order parameter.* VanSaders, Fruchart, and Vitelli (2026) construct a many-body informational active matter system in which agents make local measurements of their neighbors' velocities and respond by modulating their own scattering cross-section without exerting work. The resulting hydrodynamic theory yields a non-analytic circle-pitchfork bifurcation at $Q_0 = 0$, where $Q$ is the nematic flocking order parameter and $Q_0$ is a function of the diameter contrast. They prove that the steady-state order parameter is bounded by the mutual information $I$ accumulated by the agents through measurement, $(Q_0/P_0)^2 \le (32/\pi^2)\,I$, and frame the onset of order as a classical *measurement-induced phase transition*. The information-thermodynamic ledger underlying their bound is the Landauer-Bennett tradition (Landauer, 1961; Bennett, 1982; Parrondo, Horowitz, & Sagawa, 2015), in which the cost of measurement and erasure sets the maximum work and, by extension here, the maximum ordering an information-driven system can produce. This is the closest physics analog we know of to the architectural ambitions of the SRT-Adapter, and it sharpens three things in our setup:
+
+1. *Pitchfork is the right canonical model.* The pitchfork normal form $\dot{x} = rx - x^3$ in Section 2.2 is not unique to sociolinguistic dynamics: the same circle-pitchfork structure arises in the hydrodynamic limit of a measurement-and-control system, which is independent corroboration that this is the right canonical model for ordering processes driven by observation rather than by force.
+
+2. *Information bound as analog of the dead inject-back arm.* The information bound on $Q_0$ is the physics-side analog of the limit we observe empirically in Section 6.3: the inject-back arm of the RRM has not produced measurable downstream effect, and one possible reading is that the mutual information actually carried by the meta-state about the downstream loss is small, which would bound any inject-back-induced ordering near zero by the same kind of inequality.
+
+3. *Noise-source agnostic ordering.* Their result that the same control rule produces robust ordering across thermal, granular, magnetized, sheared, active, and odd-noise environments suggests that the architecturally interesting question for the SRT is not whether a particular noise source is present, but whether the measurement-and-control loop can carry enough mutual information to push $Q_0$ above the bifurcation threshold.
+
+We do not claim a formal mapping between the two systems here, but we note the structural analogy as motivation for the v9 onward work on closing the loop.
 
 ### 2.7 Languaging, triadicity, and "clouds all the way down"
 
@@ -334,10 +346,10 @@ The pointwise smooth-L1 loss tolerates large *rank* errors at the tails (where s
 - **Schedule**: 500-step linear warmup followed by cosine decay
 - **Gradient clipping**: max norm 1.0
 - **Batch size**: 16 (effective, no gradient accumulation)
-- **Epochs**: 3 (187,500 steps per epoch)
+- **Epoch budget**: up to 3 epochs (62,500 steps per epoch at batch 16 over 1M samples). All reported checkpoints are early-stopped well inside the first epoch by lowest validation total loss (v5: step 17K; v7: step 6K; v8a/v8b: step 10K). The full 3-epoch budget is the design ceiling for v9 onward, not the regime in which the v5–v8 results were collected.
 - **Precision**: bfloat16 for both backbone and adapter modules
 - **Hardware**: Single NVIDIA A6000 (48GB)
-- **Validation**: every 2,000 steps on 100K held-out samples
+- **Validation**: every 2,000 steps on 100K held-out samples (5K-sample subset for v9 onward; see user-memory note on $\texttt{--max-val-samples}$)
 
 ### 4.4 Checkpoint Strategy
 
@@ -431,7 +443,7 @@ The at-target result is null. The full-passage difference is *negative*: charged
 
 We report this null because it sharpens the architectural story: $\hat{r}$ is a *bifurcation/density* detector and the community head is a *register* detector. Earlier drafts conflated the two.
 
-### 5.7 v6 and v7 results
+### 5.7 Intermediate generations: v6 and v7
 
 **v6** (warm-started from v5 step 17K) added three losses: divergence-SupCon ($\lambda = 1.0$), ListNet on $\hat{r}$ ($\lambda = 0.5$), and a chain-residual auxiliary floor ($\lambda = 0.05$). It improved community recall@1 from 0.360 → 0.411 and tightened calibration ECE to 0.0006, but *regressed* on the §5.3 counterfactual decoding probe. The divergence-SupCon term at $\lambda = 1.0$ over-specialized the divergence basis at the cost of decoding cleanliness.
 
@@ -547,6 +559,8 @@ The RRM's injection mechanism creates a feedback loop between semiotic observati
 
 The CE loss provides a natural safety valve. Since gradients from CE flow through the injection pathway, the model is penalized if injections degrade language modeling quality. This creates an automatic pressure toward injections that are either helpful or neutral, never harmful.
 
+The empirical situation through v8b is that this pressure has resolved on the *neutral* side of the helpful/neutral boundary: ablating the inject-back arm at evaluation produces no measurable downstream change on CE, on the regime classifier, or on the hallucination probes (Sections 2.5, 5.7, 5.9). The safety valve held, but the channel through which the meta-state would modulate generation has not learned to carry signal. We read this as consistent with the second-order-cybernetic framing of Section 2.5 and the information-bound framing of Section 2.6: the inject-back arm is a partial second-order loop whose mutual information about the downstream loss is small, and closing the loop in a measurable way is the v9-onward design target rather than a present capability claim. The current adapter should be characterized as a self-organizing observation channel over a frozen backbone, not yet as a closed circular-causal system.
+
 ### 6.4 Relation to the Pitchfork Model
 
 BEN's $\hat{r}$ estimate is the primary output of the entire system. It provides a per-token, continuous measure of semiotic stability that maps directly onto the control parameter of the pitchfork bifurcation:
@@ -563,7 +577,7 @@ The context-conditional probe in §5.6 returned a null result at the target toke
 
 What $\hat{r}$ actually appears to measure is information density combined with the specific reflexivity components encoded in $r_{\text{true}}$ (political-lean magnitude, annotator divergence, connection density). Fact-dense prose (dates, numbers, named entities, citations) drives $\hat{r}$ up because those are the positions where $r_{\text{true}}$ is highest in the training distribution. Rhetorical or formulaic charged language is, on average, *less* lexically diverse than dense factual writing, so its mean $\hat{r}$ is lower.
 
-The contestedness signal is in the *community head*, not in $\hat{r}$. The counterfactual-decoding result (§5.3) and the per-topic community shifts in §5.6 both demonstrate this. v6's divergence-SupCon loss is intended to sharpen the metapragmatic channel further; we expect community-conditional differences in MAH divergence trajectories to become measurable on contested topics after v6 completes.
+The contestedness signal is in the *community head*, not in $\hat{r}$. The counterfactual-decoding result (§5.3) and the per-topic community shifts in §5.6 both demonstrate this. The v6 divergence-SupCon loss was intended to sharpen the metapragmatic channel further; in practice it improved community recall@1 (§5.7) but did not produce the expected community-conditional separation of MAH divergence trajectories on contested topics, and v8a's prototype-bottleneck removal (§5.9) turned out to be the more consequential change for both channels.
 
 This revision of the architectural story is cleaner, not weaker: the model has two distinct outputs that measure two distinct things, and the data tells us which is which.
 
@@ -593,17 +607,19 @@ The von Foerster framing (Section 2.5) makes the same point in cybernetic terms:
 
 The SRT-Adapter demonstrates that semiotic awareness can be added to any frozen language model as a lightweight, modular capability. By tapping hidden states rather than rebuilding the backbone, the architecture preserves pretrained language modeling quality (CE = 2.63 vs. unadapted 2.71 on the same val data) while introducing structured outputs that make the semiotic dynamics of text visible and measurable.
 
-Five independent probes on the v5 checkpoint validate distinct aspects of the design:
+The v5 generation establishes the basic capability set on five independent probes:
 
 1. **CE preservation** (§5.1): the injection pathway is mildly helpful, not harmful.
 2. **Community geometry** (§5.2): recall@1 of 0.36 on a 35-class unsupervised retrieval task ($12.6\times$ random), made possible by SupCon on the encoder's pre-mixing output.
 3. **Counterfactual community decoding** (§5.3): forcing the community vector at decode time produces zero disagreement on factual prompts and near-total disagreement on contested topics, demonstrating the community vector behaves as a discourse prior.
-4. **Hallucination signal** (§5.4): all four SRT-native channels (mean $\hat{r}$, chain residual, divergence norm, and inverted CE) lean in the predicted direction on TruthfulQA without truthfulness supervision; mean $\hat{r}$ AUROC = 0.573.
+4. **Hallucination signal** (§5.4): all four SRT-native channels lean in the predicted direction on TruthfulQA without truthfulness supervision; mean $\hat{r}$ AUROC = 0.573.
 5. **Regime calibration** (§5.5): ECE = $9 \times 10^{-4}$ and AUROC = 0.99 on 351K tokens, unblocking downstream probabilistic use.
 
 The negative result on context-conditional $\hat{r}$ (§5.6) sharpened the architectural story: $\hat{r}$ measures information density and the components of $r_{\text{true}}$, while the community head measures discourse register. Conflating these in earlier drafts was a theoretical error the data corrected.
 
-v6, in progress, extends the SupCon lesson from the community channel to the metapragmatic channel and adds rank-aware optimization of $\hat{r}$. Combined-feature hallucination probes, cross-domain transfer evaluation, and human ecological-validity studies remain the principal open questions.
+The v6–v8 generations then reframe the design. v6 and v7 (§5.7) extend SupCon from the community channel to the metapragmatic divergence channel and add ListNet ranking on $\hat{r}$, giving incremental gains on community recall@1 (0.360 → 0.413) and calibration (ECE → 0.0006). The cross-corpus convergence probe (§5.8) shows the prototype tensors barely move during training and that 33 externally-curated archetypes collapse onto roughly four functional macro-clusters, reproducing at single-backbone scale the macro-attractor pattern Foster, Rzhetsky, & Evans (2015) document for scientific subdisciplines. v8a (§5.9) is the headline architectural result: removing the 32-prototype mixing layer entirely leaves CE unchanged ($\Delta = +0.0001$ nats) while raising Reddit recall@1 from 0.413 to 0.484, raising archetype recall@1 to $7.6\times$ chance, nearly doubling the within/between cosine ratio, and expanding trajectory anisotropy by $\sim 325\times$. v8b (§5.10) falsifies the "sharper-supcon" hypothesis on the continuous-encoder architecture, bounding the v8 design from above. The encoder, not the prototype basis, was doing the discriminative work; the prototype layer was discarding it through a saturated soft-argmax.
+
+What the v5–v8 arc has demonstrated is a *self-organizing observation channel over a frozen backbone* (Sections 2.5–2.6, 5.1–5.10). What it has not yet demonstrated is a *closed circular-causal loop* in which the meta-state's observation modifies generation in a measurable way: ablating the inject-back arm produces no downstream change on CE, calibration, or hallucination probes through v8b (Sections 2.5, 6.3). Reading this through the information-bound framing of Section 2.6, the simplest hypothesis is that the mutual information the meta-state currently carries about the downstream loss is small, and that pushing $Q_0$ above the bifurcation threshold of the inject-back arm requires either a larger meta-state, a different injection geometry, or direct supervision on the closed-loop behavior. v9 onward is the design target for that work, together with archetype-conditioned direct supervision (§5.8 hypothesis (a)) for resolving sub-macro-cluster archetype structure. Combined-feature hallucination probes, cross-domain transfer evaluation, and human ecological-validity studies remain the principal open empirical questions.
 
 ---
 
@@ -631,12 +647,6 @@ Kockelman, P. (2017). *The art of interpretation in the age of computation*. Oxf
 
 Kockelman, P. (2024). *Last words: A theory of everything that matters*. University of Chicago Press.
 
-Landauer, R. (1961). Irreversibility and heat generation in the computing process. *IBM Journal of Research and Development*, 5(3), 183–191.
-
-Latour, B. (1996). On interobjectivity. *Mind, Culture, and Activity*, 3(4), 228–245.
-
-Leighton, M. P. (2026). Will a large complex system be a Maxwell demon? *arXiv preprint* arXiv:2603.03248.
-
 Kockelman, P. (2025). *Semiotic agency in digital environments*. Manuscript.
 
 Lancaster, J. B. (2025). The treachery of signs: Semiotic mediation, pitchfork bifurcation, and political polarization in algorithmically curated societies.
@@ -646,6 +656,12 @@ Lancaster, J. B. (2026a). Semiotic-reflexive language model training: Bridging i
 Lancaster, J. B. (2026b). Prenatal origins of cross-modal iconic correspondence: A semiotic analysis.
 
 Lancaster, J. B. (2026c). Reddit Discourse Corpus: A multi-community dataset for semiotic analysis.
+
+Landauer, R. (1961). Irreversibility and heat generation in the computing process. *IBM Journal of Research and Development*, 5(3), 183–191.
+
+Latour, B. (1996). On interobjectivity. *Mind, Culture, and Activity*, 3(4), 228–245.
+
+Leighton, M. P. (2026). Will a large complex system be a Maxwell demon? *arXiv preprint* arXiv:2603.03248.
 
 Mangalam, M. (2025). Against the Bayesian brain. *Behavioral and Brain Sciences* (forthcoming).
 
@@ -675,7 +691,7 @@ Wildgen, W. (1982). *Catastrophe-theoretic semantics: An elaboration and applica
 
 ---
 
-## Appendix A: Configuration Defaults (v6)
+## Appendix A: Configuration Defaults (v8a)
 
 ```python
 SRTConfig(
@@ -684,7 +700,10 @@ SRTConfig(
     mah = MAHConfig(d_sub=512, d_divergence=256, num_heads=4, dropout=0.1),
     rrm = RRMConfig(d_meta=512, inject_scale=1.0),  # FiLM since v4
     ben = BENConfig(d_hidden=256),                  # tanh removed in v4
-    community = CommunityConfig(num_prototypes=32, d_community=64, temperature=1.0),
+    community = CommunityConfig(
+        num_prototypes=32, d_community=64, temperature=1.0,
+        use_prototypes=False,                       # v8a: encoder output IS the community vector
+    ),
     loss = LossConfig(
         ce_weight=1.0, chain_weight=0.5, bif_weight=1.0,
         regime_weight=5.0, div_alive_weight=0.1,
@@ -694,7 +713,7 @@ SRTConfig(
         community_supcon_weight=2.0,
         community_supcon_temperature=0.1,
         # v6
-        divergence_supcon_weight=1.0,
+        divergence_supcon_weight=0.3,                     # v7: dropped from 1.0 to recover §5.3
         divergence_supcon_temperature=0.1,
         listnet_weight=0.5,
         listnet_temperature=1.0,
@@ -712,8 +731,12 @@ SRTConfig(
 | v2 | Diagnostic instrumentation added | Confirmed both pathologies; CE healthy |
 | v3 | Target-norm injection penalty $(\|\text{inj}\| - 1)^2$ | Injections recovered; community prototypes still collapsed (recall@1 $= 0.05$) |
 | v4 | $\tanh$ removed from BEN; RRM linear-gated → FiLM; first SupCon attempt on `vector` (failed) | $\hat{r}$ tail recovered; SupCon flatlined at $\log(B-1)$ |
-| v5 | SupCon switched to `encoded` (pre-mixing); weight 0.5 → 2.0; warm-restart of community head | recall@1 $= 0.36$, ECE = $9 \times 10^{-4}$, counterfactual-decode contested/factual split |
-| v6 (in progress) | div-SupCon, ListNet on $\hat{r}$, chain-residual aux | TBD |
+| v5 | SupCon switched to `encoded` (pre-mixing); weight $0.5 \to 2.0$; warm-restart of community head | recall@1 $= 0.36$, ECE $= 9 \times 10^{-4}$, counterfactual-decode contested/factual split |
+| v6 | Add divergence-SupCon ($\lambda = 1.0$), ListNet on $\hat{r}$, chain-residual auxiliary floor | Reddit recall@1 $0.36 \to 0.41$, ECE $\to 0.0006$; §5.3 counterfactual decode regressed |
+| v7 | Reduce divergence-SupCon to $\lambda = 0.3$ | Reddit recall@1 $\to 0.413$, hallu AUROC $\to 0.5785$, decode signal recovered |
+| v8a | Drop the 32-prototype mixing layer (`use_prototypes=False`), encoder output = community vector | CE $\Delta = +0.0001$; Reddit recall@1 $\to 0.484$; archetype recall@1 $7.6\times$ chance; within/between cosine ratio $\to 2.016$; trajectory anisotropy $\times 325$ |
+| v8b | Sharpen community-SupCon ($\lambda\colon 2.0 \to 4.0$, $\tau\colon 0.10 \to 0.05$) on v8a base | Partial regression on every encoder-geometry metric except anisotropy; falsifies "sharper is better" on this architecture |
+| v9 (in progress) | Closed-loop training target for the inject-back arm (Sections 2.5, 6.3); archetype-conditioned direct supervision (§5.8 hypothesis (a)) | TBD |
 
 ## Appendix B: Layer Index Auto-Computation
 
