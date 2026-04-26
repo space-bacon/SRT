@@ -9,3 +9,6 @@ build/
 checkpoints/
 wandb/
 .ruff_cache/
+release/
+.env
+hf
