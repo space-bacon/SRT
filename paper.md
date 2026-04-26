@@ -122,6 +122,14 @@ A second theoretical lineage that informs the architecture is second-order cyber
 
 We adopt the second-order-cybernetic framing not as decoration but as a discipline: it forces the paper to distinguish what the adapter has *demonstrated* (a self-organizing observation channel over a frozen backbone) from what it has *not yet demonstrated* (a closed circular-causal loop in which observation modifies generation). Both readings are needed to characterize the system honestly.
 
+### 2.6 Physical analogs: random-system selection and measurement-induced ordering
+
+Two recent results from statistical physics sharpen what the second-order-cybernetic framing of Section 2.5 is and is not claiming, and clarify the formal status of the pitchfork dynamics in Section 2.2.
+
+*Selection is required for non-trivial organization.* Leighton (2026) shows that for random multipartite stochastic systems with $N$ degrees of freedom, the probability of any subsystem operating as a Maxwell demon decays at least exponentially in $N$ for continuous Langevin dynamics and double-exponentially for discrete master-equation dynamics. The geometric reason is that demon-like behavior requires the alignment of two random vectors in a space whose dimension grows (linearly or exponentially) with $N$, which becomes vanishingly likely at scale. The implication for the adapter is direct. The community discovery head (Section 3.2) is a $\sim 10^7$-parameter system whose self-organized geometry produces the structure documented in Sections 5.1, 5.6, and 5.8. Leighton's result rules out the interpretation that this structure is a generic property of random high-dimensional embeddings under a contrastive readout: at this scale, random initialization combined with a generic objective should produce essentially no organized substructure. The structure that does emerge is therefore evidence that the SupCon objective and the curved 64-D community space jointly constitute a selection pressure of the kind Leighton's analysis identifies as necessary. The "seed crystal" framing in Section 2.5 is the cybernetic version of the same claim that Leighton makes in stochastic-thermodynamics terms.
+
+*Measurement-induced ordering and the bounded order parameter.* VanSaders, Fruchart, and Vitelli (2026) construct a many-body informational active matter system in which agents make local measurements of their neighbors' velocities and respond by modulating their own scattering cross-section without exerting work. The resulting hydrodynamic theory yields a non-analytic circle-pitchfork bifurcation at $Q_0 = 0$, where $Q$ is the nematic flocking order parameter and $Q_0$ is a function of the diameter contrast. They prove that the steady-state order parameter is bounded by the mutual information $I$ accumulated by the agents through measurement, $(Q_0/P_0)^2 \le (32/\pi^2)\,I$, and frame the onset of order as a classical *measurement-induced phase transition*. This is the closest physics analog we know of to the architectural ambitions of the SRT-Adapter, and it sharpens three things in our setup. First, the pitchfork normal form $\dot{x} = rx - x^3$ in Section 2.2 is not unique to sociolinguistic dynamics: the same circle-pitchfork structure arises in the hydrodynamic limit of a measurement-and-control system, which is independent corroboration that this is the right canonical model for ordering processes driven by observation rather than by force. Second, their information bound on $Q_0$ is the physics-side analog of the limit we observe empirically in Section 6.3: the inject-back arm of the RRM has not produced measurable downstream effect, and one possible reading is that the mutual information actually carried by the meta-state about the downstream loss is small, which would bound any inject-back-induced ordering near zero by the same kind of inequality. Third, their result that the same control rule produces robust ordering across thermal, granular, magnetized, sheared, active, and odd-noise environments suggests that the architecturally interesting question for the SRT is not whether a particular noise source is present, but whether the measurement-and-control loop can carry enough mutual information to push $Q_0$ above the bifurcation threshold. We do not claim a formal mapping between the two systems here, but we note the structural analogy as motivation for the v9 onward work on closing the loop.
+
 ---
 
 ## 3. Architecture
@@ -605,6 +613,8 @@ Kockelman, P. (2017). *The art of interpretation in the age of computation*. Oxf
 
 Kockelman, P. (2024). *Last words: A theory of everything that matters*. University of Chicago Press.
 
+Leighton, M. P. (2026). Will a large complex system be a Maxwell demon? *arXiv preprint* arXiv:2603.03248.
+
 Kockelman, P. (2025). *Semiotic agency in digital environments*. Manuscript.
 
 Lancaster, J. B. (2025). The treachery of signs: Semiotic mediation, pitchfork bifurcation, and political polarization in algorithmically curated societies.
@@ -626,6 +636,8 @@ Ramachandran, V. S., & Hubbard, E. M. (2001). Synaesthesia: a window into percep
 Silverstein, M. (1993). Metapragmatic discourse and metapragmatic function. In J. A. Lucy (Ed.), *Reflexive language* (pp. 33–58). Cambridge University Press.
 
 Silverstein, M. (2003). Indexical order and the dialectics of sociolinguistic life. *Language & Communication*, 23(3–4), 193–229.
+
+VanSaders, B., Fruchart, M., & Vitelli, V. (2026). Measurement-induced phase transitions in informational active matter. *PNAS Nexus*, pgag077. https://doi.org/10.1093/pnasnexus/pgag077
 
 Versace, E., et al. (2023). Cross-modal correspondences between auditory and visual features in domestic chicks. *Animal Cognition*, 26, 1021–1030.
 
