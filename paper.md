@@ -36,9 +36,9 @@ The SRT-Adapter is that apparatus. It wraps any frozen HuggingFace causal langua
 
 The architecture rests on three converging theoretical lines:
 
-1. **Peircean semiotics** (Peirce, 1931–1958; Kockelman, 2024, 2025): Every sign completes its meaning through a culturally conditioned interpretant, which itself becomes the next sign in an open chain. When the same representamen enters different interpretive communities, it generates different initial interpretants that compound through subsequent links into mutual unintelligibility.
+1. **Peircean semiotics** (Peirce, 1931–1958; Kockelman, 2017, 2024, 2025): Every sign completes its meaning through a culturally conditioned interpretant, which itself becomes the next sign in an open chain. When the same representamen enters different interpretive communities, it generates different initial interpretants that compound through subsequent links into mutual unintelligibility.
 
-2. **Pitchfork bifurcation dynamics** (Lancaster, 2025): The compounding of interpretant divergence across algorithmically curated communities exhibits the structure of a supercritical pitchfork bifurcation $\dot{x} = rx - x^3$. Below a critical threshold of the control parameter $r$, shared interpretive equilibria absorb perturbation (subcritical regime). Above it, symmetry breaks into antagonistic attractors that are self-reinforcing and structurally resistant to reconciliation (supercritical regime).
+2. **Catastrophe-theoretic dynamics of sociolinguistic change** (Wildgen, 1982; Anderson, 2014; Lancaster, 2025): The compounding of interpretant divergence across algorithmically curated communities exhibits the structure of a supercritical pitchfork bifurcation $\dot{x} = rx - x^3$. Below a critical threshold of the control parameter $r$, shared interpretive equilibria absorb perturbation (subcritical regime). Above it, symmetry breaks into antagonistic attractors that are self-reinforcing and structurally resistant to reconciliation (supercritical regime). This continues a research line that has applied Thom-Wildgen catastrophe theory to language change since Wildgen (1982), recently consolidated and extended for sociolinguistic application by Anderson (2014).
 
 3. **Metapragmatic awareness** (Silverstein, 1993, 2003): The capacity to observe how discourse itself shapes interpretation, that is, to notice that a sign is being contested rather than merely interpret it from within one community's norms, constitutes a third-order reflexive capacity that is architecturally absent from standard transformers.
 
@@ -64,13 +64,13 @@ Section 2 develops the theoretical framework connecting Peircean semiotics to th
 
 Peirce's triadic semiotics decomposes every sign process into three irreducible elements: the *representamen* (perceptible sign vehicle), the *object* (what the sign represents), and the *interpretant* (the effect the sign produces in an interpreter, which is itself a sign). The interpretant is the decisive element for our purposes: it makes signification an open, processual, and inherently social phenomenon. Each interpretant functions as a new representamen, generating further interpretants in chains of "unlimited semiosis" (Peirce, CP 2.303).
 
-Kockelman (2025) formalizes these chains as dynamical trajectories through a state space. Each link involves an act of *sieving*: from the space of possible interpretants a sign could produce, only some are actualized, depending on the interpreter's prior exposure, community membership, and the mediation architecture that delivered the sign. When the same representamen enters different interpretive communities (communities whose sieving mechanisms have been calibrated by exposure to different algorithmically curated sign environments), it generates different initial interpretants. These divergent interpretants function as new representamena, generating further divergent interpretants.
+Kockelman (2017, 2025) formalizes these chains as dynamical trajectories through a state space. Each link involves an act of *sieving*: from the space of possible interpretants a sign could produce, only some are actualized, depending on the interpreter's prior exposure, community membership, and the mediation architecture that delivered the sign. When the same representamen enters different interpretive communities (communities whose sieving mechanisms have been calibrated by exposure to different algorithmically curated sign environments), it generates different initial interpretants. These divergent interpretants function as new representamena, generating further divergent interpretants.
 
 The critical insight is that this compounding is *quantifiable*. At each link in the chain, the divergence between community-specific interpretants can be measured as a vector difference in an appropriately structured representation space. This is precisely what the Metapragmatic Attention Head computes.
 
 ### 2.2 The Pitchfork Bifurcation as Control Model
 
-Lancaster (2025) demonstrated that the dynamics of interpretant divergence under algorithmic curation exhibit the qualitative structure of a supercritical pitchfork bifurcation:
+Lancaster (2025) demonstrated that the dynamics of interpretant divergence under algorithmic curation exhibit the qualitative structure of a supercritical pitchfork bifurcation. The choice of a pitchfork-normal-form model is not arbitrary: it follows the catastrophe-theoretic tradition for sociolinguistic change initiated by Wildgen (1982) and developed for cross-community semiotic dynamics by Anderson (2014), under which the qualitative bifurcation structure of meaning differentiation is captured by an elementary catastrophe of the appropriate codimension. The supercritical-pitchfork normal form is
 
 $$\dot{x} = rx - x^3$$
 
@@ -425,7 +425,9 @@ All three adapters detect archetype structure 5–6$\times$ above chance on top-
 
 A PCA of the 32 $\times$ 64 prototype matrices clarifies why. Across v5, v6, and v7 the prototype tensors are nearly indistinguishable: max absolute element difference v5$\to$v6 is 0.006 (mean 2.7e-5) against prototype magnitudes of 0.5–1.5. Effective dimensionality (participation ratio) is 21.2 / 32 with a near-uniform variance spectrum, both consistent with the prototypes still being close to their random Gaussian initialization. The encoder weights move $\approx 4\times$ more than the prototypes during training. **The encoder is doing the discriminative work; the prototypes serve as near-random anchor directions.** This explains the few-attractor regime: with random anchors, the encoder's output mean aligns most strongly with whichever handful of anchor directions point closest to its average projection.
 
-We interpret the convergence finding as *partial-positive*. The Reddit-supervised adapter independently recovers the macro-structure of an externally-derived archetype taxonomy at 5× chance. Three independent methodologies (Reddit subreddit labels, Lancaster's archetypes, the Lexicon of Synthetic Interiority) agree on roughly four functional clusters of stance. They do not agree on 33 distinct anchors, and given the prototype-stability result above, the current architecture cannot be expected to. Resolving 33 archetypes will require either (a) supervising the prototype matrix directly with archetype-conditioned generations, or (b) replacing the discrete prototype basis with a continuous trajectory metric over the encoder output. We flag this as the next research direction rather than a present capability claim.
+We interpret the convergence finding as *partial-positive*. The Reddit-supervised adapter independently recovers the macro-structure of an externally-derived archetype taxonomy at 5$\times$ chance. Three independent methodologies (Reddit subreddit labels, Lancaster's archetypes, the Lexicon of Synthetic Interiority) agree on roughly four functional clusters of stance. They do not agree on 33 distinct anchors, and given the prototype-stability result above, the current architecture cannot be expected to. Resolving 33 archetypes will require either (a) supervising the prototype matrix directly with archetype-conditioned generations, or (b) replacing the discrete prototype basis with a continuous trajectory metric over the encoder output. We flag this as the next research direction rather than a present capability claim.
+
+This is a small-scale instance of the cross-corpus convergence pattern documented at much larger scale by the Knowledge Lab (Evans, 2010; Foster, Rzhetsky, & Evans, 2015): when independently-curated taxonomies of human knowledge or stance are projected into a common representation, they tend to align on a low-dimensional macro-structure rather than on the full nominal label set. Our adapter shows the same effect at single-backbone, single-corpus scale. The fact that 33 hand-curated archetypes collapse to roughly four macro-clusters under Reddit-supervised geometry is consistent with the Knowledge Lab finding that scientific subdiscipline labels collapse to a small number of latent intellectual-style attractors under exposure-pattern embeddings, and suggests that the macro-cluster level may be the architecturally accessible level on a 7B backbone with this corpus and supervision. v9 (Section 7) tests whether direct archetype-conditioned supervision can recover the finer 33-way structure that single-corpus contrastive training cannot.
 
 ### 5.9 v8a: removing the prototype bottleneck
 
@@ -567,9 +569,17 @@ v6, in progress, extends the SupCon lesson from the community channel to the met
 
 Agha, A. (2003). The social life of cultural value. *Language & Communication*, 23(3–4), 231–273.
 
+Anderson, M. (2014). Mathematical modeling of catastrophic change in cultural systems. In M. Anderson (Ed.), *Cultural shaping of violence: Victimization, escalation, response* (selected chapters). Purdue University Press.
+
 Bail, C. A., et al. (2018). Exposure to opposing views on social media can increase political polarization. *Proceedings of the National Academy of Sciences*, 115(37), 9216–9221.
 
+Evans, J. A. (2010). Industry induces academic science to know less about more. *American Journal of Sociology*, 116(2), 389–452.
+
+Foster, J. G., Rzhetsky, A., & Evans, J. A. (2015). Tradition and innovation in scientists' research strategies. *American Sociological Review*, 80(5), 875–908.
+
 Irvine, J. T., & Gal, S. (2000). Language ideology and linguistic differentiation. In P. V. Kroskrity (Ed.), *Regimes of language* (pp. 35–83). SAR Press.
+
+Kockelman, P. (2017). *The art of interpretation in the age of computation*. Oxford University Press.
 
 Kockelman, P. (2024). *Last words: A theory of everything that matters*. University of Chicago Press.
 
@@ -596,6 +606,8 @@ Silverstein, M. (1993). Metapragmatic discourse and metapragmatic function. In J
 Silverstein, M. (2003). Indexical order and the dialectics of sociolinguistic life. *Language & Communication*, 23(3–4), 193–229.
 
 Versace, E., et al. (2023). Cross-modal correspondences between auditory and visual features in domestic chicks. *Animal Cognition*, 26, 1021–1030.
+
+Wildgen, W. (1982). *Catastrophe-theoretic semantics: An elaboration and application of René Thom's theory*. John Benjamins.
 
 ---
 
