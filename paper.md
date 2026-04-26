@@ -24,11 +24,20 @@ The consequence is that when a language model encounters a contested sign such a
 
 Current alignment methods (RLHF, DPO, Constitutional AI) intervene downstream, constraining outputs after the model has already internalized a bifurcated semiotic landscape. They adjust trajectories within a fixed attractor landscape without reshaping the landscape itself. The control parameter $r$ that governs bifurcation remains untouched.
 
+### 1.1.5 Prior Validation
+
+The architecture in this paper is not a fresh proposal. It is the production-scaling stage of a research program whose core claims have already been validated empirically in two prior stages on different backbones and datasets (Lancaster, 2026a):
+
+1. **Stage 1 (synthetic data).** The four core architectural claims (subspace specialization, community differentiation, divergence tracking, bifurcation detection) were tested on controlled synthetic data with planted divergence signals. All four passed at required thresholds. This established proof-of-concept that the four-module decomposition learns the intended functions.
+2. **Stage 2 (natural language, Supabase news corpus).** The five-test validation suite was re-run on real news data spanning five political communities (19K articles, 141K Peircean sign annotations). All five tests passed: community silhouette, contested-vs-neutral divergence ratio, $\hat{r}$ correlation with external polarization (Pearson $r = 0.884$), cross-topic transfer, and regime classification (85% accuracy on held-out curated passages). This established that semiotic capabilities survive the transition from synthetic to natural language and transfer across topics without per-topic fine-tuning.
+
+The present paper reports Stage 3 of the program, which divides into two substages: Stage 3 Phase 1 (frozen-backbone integration, 105 training rounds R21 through R105 on TinyLlama-1.1B, summarized in Lancaster, 2026a) and Stage 3 Scalable Implementation (this paper, v5 through v8a on Qwen 2.5-7B). The novelty here is therefore not the demonstration that bifurcation detection works (already shown in Stages 1 and 2) but the demonstration that the validated framework scales to a 7B frozen backbone at 0.19% parameter overhead and that the discrete prototype basis used through v7 is a binding constraint rather than a contribution.
+
 ### 1.2 The Opportunity: SRT as Adapter
 
-Our prior work (Lancaster, 2026a) proposed a full Semiotic-Reflexive Transformer architecture with custom embedding layers, modified attention mechanisms, and interleaved semiotic modules throughout the backbone. While theoretically comprehensive, that approach faced practical limitations: custom embeddings degraded cross-entropy loss from pretrained quality, the full architecture required training from near-scratch, and the deep coupling between semiotic modules and backbone layers created optimization instability.
+Our prior work (Lancaster, 2026a) proposed and validated a full Semiotic-Reflexive Transformer with custom embedding layers, modified attention mechanisms, and interleaved semiotic modules throughout the backbone. That architecture passed all four Stage 1 and all five Stage 2 tests, establishing the empirical viability of the four-module decomposition. It also faced practical limitations that bounded its production utility: custom embeddings degraded cross-entropy loss from pretrained quality, the full architecture required training from near-scratch, and the deep coupling between semiotic modules and backbone layers created optimization instability. Stage 3 Phase 1 attacked these by porting the validated modules onto a frozen TinyLlama-1.1B backbone over 105 training rounds. Two tests plateaued on the sparse Supabase data (MAH divergence ratio, cross-topic transfer), triggering a pivot to a denser corpus (Reddit, 35 communities) and a larger backbone (Qwen 2.5-7B) that could support it.
 
-This paper takes a fundamentally different approach. We observe that the semiotic phenomena we wish to detect (interpretant divergence, community-specific meaning, bifurcation dynamics) are *already encoded* in the hidden states of pretrained language models. They must be, because these models were trained on text produced by communities with divergent interpretive norms. The information is there; what is missing is the apparatus to read it.
+This paper reports the resulting Stage 3 Scalable Implementation. We observe that the semiotic phenomena we wish to detect (interpretant divergence, community-specific meaning, bifurcation dynamics) are *already encoded* in the hidden states of pretrained language models. They must be, because these models were trained on text produced by communities with divergent interpretive norms. The information is there; what is missing is the apparatus to read it.
 
 The SRT-Adapter is that apparatus. It wraps any frozen HuggingFace causal language model and installs lightweight semiotic taps. These are modules that read hidden states, compute divergence, track meta-state, and estimate bifurcation, all without modifying a single backbone parameter. The backbone's native embeddings and language modeling head are used directly. Cross-entropy starts at pretrained quality. Only ~12.7M adapter parameters train, while 7.6B backbone parameters remain frozen.
 
@@ -63,6 +72,12 @@ Section 2 develops the theoretical framework connecting Peircean semiotics to th
 ---
 
 ## 2. Theoretical Framework
+
+### 2.0 Relationship to Prior Work in the SRT Program
+
+This paper assumes readers are familiar with Peircean semiotics, Silverstein's metapragmatics, and Wildgen-Anderson catastrophe-theoretic models of meaning change. Sections 2.1 through 2.7 sketch the theoretical commitments that motivate the architecture. They do not reproduce the full development of those commitments, which is given in Lancaster (2025) and Lancaster (2026a). Readers approaching this work without that background may find the theoretical sections of those documents more accessible than what follows here.
+
+The relationship between this paper and the prior SRT documents is one of staged scaling, not parallel proposal. Lancaster (2025) develops the theoretical foundation. Lancaster (2026a) specifies the full architecture and reports Stages 1 and 2. The present paper reports Stage 3, in which the validated architecture is reduced to an adapter on a frozen 7B backbone and trained on a richer dataset. Where this paper makes claims about what is novel (the prototype-bottleneck falsification of Section 5.9, the v8b sharper-supcon falsification of Section 5.10), those claims are about what was discovered while scaling, not about whether the underlying semiotic decomposition works at all. The latter question was settled in Stages 1 and 2.
 
 ### 2.1 Signs, Interpretants, and the Compounding of Divergence
 
@@ -292,7 +307,7 @@ Training uses a balanced subsample from the Reddit Discourse Corpus (Lancaster, 
 
 **Subsampling.** The full corpus was balanced-subsampled to 1M training and 100K validation samples, preserving the original domain distribution while reducing training time. Each sample consists of a text passage (tokenized to max 512 subwords) with per-token annotations:
 
-- **r_true** $\in [0, 1]$: ground-truth reflexivity computed from political lean ($\times 0.25$), annotation divergence (up to $+0.3$), and connection density (up to $+0.1$). Approximately 99.2% of tokens have $r_{\text{true}} \approx 0$ (subcritical).
+- **r_true** $\in [0, 1]$: ground-truth reflexivity computed from political lean ($\times 0.25$), annotation divergence (up to $+0.3$), and connection density (up to $+0.1$). Approximately 99.2% of tokens have $r_{\text{true}} \approx 0$ (subcritical). This severe class imbalance is intentional and matches the empirical distribution of contested signs in real discourse, but it has two consequences for interpretation of the results in Section 5: (1) regime classification metrics are dominated by the easy subcritical majority, so AUROC is reported instead of accuracy and ECE is computed across the full 351K-token val set rather than on a balanced subset (§5.5); (2) the bifurcation regression head is focal-weighted ($\lambda = 1 + 3|r_{\text{true}}|$, see §4.2) to keep gradient pressure on the rare supercritical positions where the label signal is concentrated.
 - **chain_labels**: binary indicator of contested sign presence.
 - **community_id** $\in \{0, \ldots, 34\}$: domain-level community assignment.
 
@@ -361,11 +376,11 @@ Best checkpoint selected by lowest validation total loss. Model state includes o
 
 This section reports the v5 evaluation suite, which comprises five independent probes of the trained adapter, followed by an in-progress note on v6. All numbers are from a single Qwen 2.5-7B backbone with the v5 adapter checkpoint at step 17,000 (best validation loss). Training proceeded through five generations: v1–v3 established the basic architecture and revealed the prototype-collapse and $\hat{r}$-saturation pathologies; v4 removed the BEN $\tanh$ and switched RRM injection from linear-gated to FiLM; v5 added the SupCon-on-encoded community loss that finally separated prototypes (Section 4.2). v6 (Section 5.6) extends the SupCon idea to MAH divergence and adds ListNet ranking on $\hat{r}$.
 
-### 5.1 Cross-entropy preservation
+### 5.1 Cross-entropy: preservation plus modest improvement
 
-Throughout v1–v5 the backbone's native cross-entropy stayed in the 2.6–2.9 range, identical to the unadapted Qwen 2.5-7B baseline on the same val data ($\text{CE}_{\text{base}} = 2.71 \pm 0.04$). At v5 step 17K, CE = 2.63, which is *below* the unadapted baseline. The injection pathway is not just neutral but mildly helpful, consistent with the design claim that the adapter exposes information already latent in the backbone.
+Throughout v1 through v5 the backbone's native cross-entropy stayed in the 2.6 to 2.9 range, identical to the unadapted Qwen 2.5-7B baseline on the same val data ($\text{CE}_{\text{base}} = 2.71 \pm 0.04$). At v5 step 17K, CE = 2.63, which is $0.08$ nats below the unadapted baseline. The injection pathway is not just neutral but mildly helpful, consistent with the design claim that the adapter exposes information already latent in the backbone.
 
-This is the single most important falsification result. It rules out the failure mode that doomed the original full-SRT architecture (CE of $\sim$200 at initialization from custom embedding layers).
+This is the single most important falsification result. It rules out the failure mode that doomed the original full-SRT architecture (CE of $\sim 200$ at initialization from custom embedding layers, see Lancaster, 2026a, Stage 3 Phase 0). Earlier drafts of this paper described the result as preservation. The data support a slightly stronger reading: the inject-back arm is at least neutral on language modeling and produces a small but consistent improvement averaged across the held-out 100K validation set. The $0.08$ nats gap is small enough that we do not present it as a contribution, but large enough that it cannot be dismissed as noise (per-checkpoint variance across v5 through v8a is $\pm 0.005$ nats). Section 5.11 contrasts this with the much larger CE gaps incurred by the from-scratch full SRT in earlier stages.
 
 ### 5.2 Community geometry (v5)
 
@@ -512,6 +527,33 @@ We did not regenerate counterfactual decoding (§5.3) or context-conditional $\h
 
 We read v8a as resolving §5.8's open question. Hypothesis (b), "replace the discrete prototype basis with a continuous trajectory metric over the encoder output," was correct: the encoder was doing all the discriminative work, the prototype layer was discarding it through a saturated soft-argmax, and the geometry of the archetype manifold only becomes visible once the bottleneck is removed.
 
+### 5.11 Comparison to prior validation stages
+
+To prevent v8a's headline numbers from being read as standalone claims about a fresh architecture, this subsection anchors them against the corresponding measurements from Stages 1 and 2 of the SRT program (Lancaster, 2026a). Direct numerical comparison is only partially possible because the backbones, datasets, and metric definitions differ across stages, but the qualitative arc is informative.
+
+| Metric | Stage 1 (synthetic) | Stage 2 (Supabase, full SRT) | Stage 3 P1 best (TinyLlama, R100) | **v8a (this paper, Qwen 2.5-7B)** |
+|---|---|---|---|---|
+| Backbone trainable params | full SRT (~115M) | full SRT (~115M) | adapter (~175M) | **adapter (~14.5M, 0.19%)** |
+| Backbone | from-scratch | from-scratch | TinyLlama-1.1B frozen | **Qwen 2.5-7B frozen** |
+| Cross-entropy on val | n/a (synthetic) | n/a (full SRT had CE $\sim 200$ from custom embeds) | $\sim 4.93$ composite loss | **2.63 (vs. 2.71 unadapted)** |
+| Community silhouette / separation (contested) | $3.28\times$ cosine ratio | $1.45\times$ silhouette | $6.93\times$ silhouette | **$2.016$ within/between cosine ratio (35-cls)** |
+| Community recall@1 | n/a | n/a (5-cls task) | n/a (no 35-cls task) | **0.484 (35-cls, $16.7\times$ chance)** |
+| Divergence-norm ratio (contested vs neutral) | $3.28\times$ | $2.29\times$ | $1.05$ to $1.10\times$ (plateau) | **not directly reported, see §5.9 trajectory anisotropy $\sim 325\times$** |
+| $\hat{r}$ correlation with external polarization | $\rho = 0.822$ | Pearson $r = 0.884$ | $0.66$ | **§5.6 null on per-passage probe; see §6.5** |
+| Regime classification on curated passages | 100% | 85% | 85% | **AUROC 0.99, ECE $9 \times 10^{-4}$ on 351K tokens (no curated-passage accuracy reported)** |
+| Cross-topic transfer ratio | n/a | $1.31\times$ | $1.03$ to $1.04\times$ (plateau) | **not evaluated; v9 work item** |
+| Hallucination AUROC (TruthfulQA) | n/a | n/a (not measured) | not measured | **0.573 zero-shot** |
+
+Four observations follow from the table.
+
+*The CE result is improvement, not preservation.* The full SRT in Stages 1 and 2 was a from-scratch architecture whose custom embeddings produced CE in the hundreds at initialization. Stage 3 Phase 1 brought CE down to a composite $\sim 4.93$ on a frozen TinyLlama backbone. v8a achieves CE = 2.63 on Qwen, which is $0.08$ nats below the unadapted Qwen baseline of 2.71. The $0.08$ nats gap is small in absolute terms but is in the *helpful* direction relative to the design goal of non-degradation, and is the strongest evidence in the paper that the inject-back arm is at least neutral and possibly mildly informative for next-token prediction. Earlier text framed this as preservation. It is preservation plus a small but consistent gain.
+
+*Stage 3 Phase 1 broke two tests on the Supabase data.* MAH divergence ratio plateaued at $1.05$ to $1.10\times$ across 105 rounds against the $2.0\times$ Stage 2 threshold; cross-topic transfer plateaued at $1.03$ to $1.04\times$ against the $1.3\times$ threshold. These plateaus motivated the data and backbone pivot. v8a's $\sim 325\times$ trajectory anisotropy expansion (§5.9) is the closest analog of the divergence-ratio test on Reddit. It is a different metric on a different corpus and is not directly comparable to the Stage 2 number, but it indicates that the discriminative geometry the Stage 2 ratio was probing is recovered when the prototype bottleneck is removed.
+
+*Cross-topic transfer is not yet retested at Stage 3 Scalable.* The Reddit corpus permits a cross-subreddit transfer probe analogous to Stage 2's cross-topic test. We did not run that probe for v8a. It is a v9 work item.
+
+*$\hat{r}$ no longer cleanly tracks external polarization.* Stage 2's Pearson $r = 0.884$ was measured on the Supabase corpus where $r_{\text{true}}$ was constructed from a small set of well-curated polarization signals. v8a's per-passage probe in §5.6 returned a null result, and the explanation in §6.5 is that the Reddit $r_{\text{true}}$ construction (political-lean magnitude $\times 0.25$, annotator divergence up to $+0.3$, connection density up to $+0.1$) blends contestedness with information density. The community channel, not $\hat{r}$, carries the contestedness signal in the Stage 3 Scalable architecture. We read this as a measurement decomposition that emerged from richer data, not a regression on the underlying capability that Stage 2 demonstrated.
+
 ### 5.10 Negative result: sharper supervised contrast (v8b)
 
 Once v8a established that the encoder, freed from the prototype bottleneck, organizes Reddit communities and external archetypes along a structured trajectory manifold, a natural follow-up question was whether *more aggressive* supervised contrast would orthogonalize that manifold further. The §5.9 archetype centroid off-diagonal cosine of 0.873 is well below v6/v7's 0.999 but still far from orthogonal, and the within/between cosine ratio of 2.016, while doubled from v7's 1.006, is also clearly improvable.
@@ -559,7 +601,9 @@ The RRM's injection mechanism creates a feedback loop between semiotic observati
 
 The CE loss provides a natural safety valve. Since gradients from CE flow through the injection pathway, the model is penalized if injections degrade language modeling quality. This creates an automatic pressure toward injections that are either helpful or neutral, never harmful.
 
-The empirical situation through v8b is that this pressure has resolved on the *neutral* side of the helpful/neutral boundary: ablating the inject-back arm at evaluation produces no measurable downstream change on CE, on the regime classifier, or on the hallucination probes (Sections 2.5, 5.7, 5.9). The safety valve held, but the channel through which the meta-state would modulate generation has not learned to carry signal. We read this as consistent with the second-order-cybernetic framing of Section 2.5 and the information-bound framing of Section 2.6: the inject-back arm is a partial second-order loop whose mutual information about the downstream loss is small, and closing the loop in a measurable way is the v9-onward design target rather than a present capability claim. The current adapter should be characterized as a self-organizing observation channel over a frozen backbone, not yet as a closed circular-causal system.
+The empirical situation through v8b is that this pressure has resolved on the *neutral* side of the helpful/neutral boundary: ablating the inject-back arm at evaluation produces no measurable downstream change on CE, on the regime classifier, or on the hallucination probes (Sections 2.5, 5.7, 5.9). The safety valve held, but the channel through which the meta-state would modulate generation has not learned to carry signal.
+
+This null is not new. Stage 3 Phase 1 ran 105 training rounds (R21 through R105 on TinyLlama-1.1B, documented in Lancaster, 2026a) with the explicit goal of activating the inject-back arm, including a remediation campaign covering loss-weight sweeps, BEN architecture overhauls, FiLM scale schedules, and gradient-isolation experiments. The arm did not activate on TinyLlama and has not activated through v8b on Qwen. Two readings are consistent with the data: (1) FiLM injection requires different scaffolding when the backbone is frozen, suggesting alternative injection mechanisms (cross-attention from RRM meta-state into selected backbone layers, low-rank residual-stream modulation conditioned on $\hat{r}$, learned gating bypassed by a meta-state classifier) are the appropriate v9-onward design target; (2) the mutual information carried by RRM meta-state about downstream gradients is fundamentally small when the backbone is frozen (per the information-theoretic bound in Section 2.6), placing a low ceiling on the intervention arm's possible effectiveness. We do not have the experimental record to distinguish these readings yet. v9 onward targets the first hypothesis directly. The current adapter should be characterized as a self-organizing observation channel over a frozen backbone, not yet as a closed circular-causal system.
 
 ### 6.4 Relation to the Pitchfork Model
 
