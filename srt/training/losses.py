@@ -270,6 +270,44 @@ def community_supcon_loss(
     }
 
 
+def archetype_supcon_loss(
+    community_vectors: torch.Tensor,
+    archetype_ids: torch.Tensor,
+    temperature: float = 0.1,
+) -> tuple[torch.Tensor, dict[str, float]]:
+    """Supervised contrastive loss keyed by archetype_id.
+
+    v9 addition. Uses the same supcon kernel as community_supcon_loss but
+    masks out anchors with archetype_id == -1 (Reddit-corpus rows that
+    carry no archetype label). Designed to be applied to the same
+    `community_output.encoded` representation that community_supcon
+    operates on, so both signals shape the same encoder geometry.
+
+    Args:
+        community_vectors: (B, d) per-sample encoder output.
+        archetype_ids: (B,) ints in [1, 33] for archetype rows, -1 for
+            Reddit rows. Anchors with id == -1 are dropped.
+        temperature: softmax temperature.
+
+    Returns:
+        (loss, diagnostics).
+    """
+    device = community_vectors.device
+    valid = archetype_ids >= 0
+    n_valid = int(valid.sum().item())
+    if n_valid < 2:
+        return torch.tensor(0.0, device=device), {
+            "pos_pairs": 0.0, "unique_classes": 0.0, "n_valid": float(n_valid),
+        }
+    sub_vec = community_vectors[valid]
+    sub_ids = archetype_ids[valid]
+    loss, diag = community_supcon_loss(
+        sub_vec, sub_ids, temperature=temperature,
+    )
+    diag["n_valid"] = float(n_valid)
+    return loss, diag
+
+
 def divergence_supcon_loss(
     divergences: list[torch.Tensor],
     community_ids: torch.Tensor,
@@ -392,6 +430,7 @@ def compute_total_loss(
     config: LossConfig,
     attention_mask: torch.Tensor | None = None,
     community_ids: torch.Tensor | None = None,
+    archetype_ids: torch.Tensor | None = None,
 ) -> tuple[torch.Tensor, dict[str, float]]:
     """Compute combined loss from adapter output.
 
@@ -502,6 +541,20 @@ def compute_total_loss(
             metrics["comm_supcon"] = l_supcon.item()
             metrics["comm_supcon_pos_pairs"] = supcon_diag["pos_pairs"]
             metrics["comm_supcon_unique_classes"] = supcon_diag["unique_classes"]
+
+        # v9: archetype-keyed SupCon on the same encoder representation.
+        # Skipped silently if no archetype rows are in the batch (n_valid<2).
+        if (archetype_ids is not None
+                and config.archetype_supcon_weight > 0):
+            l_arch, arch_diag = archetype_supcon_loss(
+                output.community_output.encoded,
+                archetype_ids,
+                temperature=config.archetype_supcon_temperature,
+            )
+            total = total + config.archetype_supcon_weight * l_arch
+            metrics["arch_supcon"] = l_arch.item()
+            metrics["arch_supcon_pos_pairs"] = arch_diag["pos_pairs"]
+            metrics["arch_supcon_n_valid"] = arch_diag["n_valid"]
 
     metrics["total"] = total.item()
     return total, metrics

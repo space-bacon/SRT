@@ -100,6 +100,40 @@ def parse_args() -> argparse.Namespace:
             " regularizer (no soft assignment to entropize)."
         ),
     )
+    # v9: archetype-conditioned direct supervision.
+    p.add_argument(
+        "--archetype-data",
+        default=None,
+        help=(
+            "v9: path to JSONL of archetype-conditioned generations"
+            " (artifacts/archetype_probe/generations.jsonl). Each row must"
+            " carry archetype_id ∈ [1, 33]. Mixed into the train loader"
+            " via a WeightedRandomSampler so a configurable fraction of"
+            " each batch carries archetype labels."
+        ),
+    )
+    p.add_argument(
+        "--archetype-supcon-weight",
+        type=float,
+        default=None,
+        help="v9: weight on archetype-keyed SupCon loss (default 0).",
+    )
+    p.add_argument(
+        "--archetype-supcon-temperature",
+        type=float,
+        default=None,
+        help="v9: temperature for archetype-keyed SupCon (default 0.1).",
+    )
+    p.add_argument(
+        "--archetype-mix-fraction",
+        type=float,
+        default=0.25,
+        help=(
+            "v9: target fraction of training samples drawn from the"
+            " archetype dataset under WeightedRandomSampler. 0.25 means"
+            " ~4/16 rows per batch will carry archetype_id != -1."
+        ),
+    )
     return p.parse_args()
 
 
@@ -152,6 +186,7 @@ def validate(model: SRTAdapter, dataloader: DataLoader, config: SRTConfig) -> di
             config.loss,
             attention_mask=batch["attention_mask"],
             community_ids=batch.get("community_id"),
+            archetype_ids=batch.get("archetype_id"),
         )
         for k, v in metrics.items():
             totals[k] = totals.get(k, 0.0) + v
@@ -196,6 +231,10 @@ def train(args: argparse.Namespace) -> None:
     if args.no_prototypes:
         config.community.use_prototypes = False
         logger.info("v8a: community head running in continuous-trajectory mode (no prototypes)")
+    if args.archetype_supcon_weight is not None:
+        config.loss.archetype_supcon_weight = args.archetype_supcon_weight
+    if args.archetype_supcon_temperature is not None:
+        config.loss.archetype_supcon_temperature = args.archetype_supcon_temperature
     logger.info(
         "Community SupCon: weight=%.3f temperature=%.3f",
         config.loss.community_supcon_weight,
@@ -206,6 +245,12 @@ def train(args: argparse.Namespace) -> None:
         config.loss.divergence_supcon_weight,
         config.loss.listnet_weight,
         config.loss.chain_residual_aux_weight,
+    )
+    logger.info(
+        "Archetype SupCon: weight=%.3f temperature=%.3f mix_fraction=%.2f",
+        config.loss.archetype_supcon_weight,
+        config.loss.archetype_supcon_temperature,
+        args.archetype_mix_fraction,
     )
 
     # ── Model ─────────────────────────────────────────────────────────
@@ -226,14 +271,55 @@ def train(args: argparse.Namespace) -> None:
     train_ds = SRTAdapterDataset(
         args.train_data, tokenizer, args.max_seq_len, args.max_train_samples
     )
-    train_loader = DataLoader(
-        train_ds,
-        batch_size=args.batch_size,
-        shuffle=True,
-        collate_fn=collate_fn,
-        num_workers=4,
-        pin_memory=True,
-    )
+
+    # v9: optionally mix in archetype-conditioned generations.
+    if args.archetype_data:
+        from torch.utils.data import ConcatDataset, WeightedRandomSampler
+
+        archetype_ds = SRTAdapterDataset(
+            args.archetype_data, tokenizer, args.max_seq_len, max_samples=None,
+        )
+        n_arch = len(archetype_ds)
+        n_redd = len(train_ds)
+        # Per-row sampling weight chosen so that, in expectation, a
+        # `archetype_mix_fraction` fraction of drawn rows come from the
+        # archetype dataset.
+        f = max(0.0, min(0.99, args.archetype_mix_fraction))
+        w_arch = (f / max(n_arch, 1))
+        w_redd = ((1.0 - f) / max(n_redd, 1))
+        weights = (
+            [w_redd] * n_redd + [w_arch] * n_arch
+        )
+        combined = ConcatDataset([train_ds, archetype_ds])
+        # Length is set to the original Reddit-only step count so epoch
+        # accounting (total_steps below) is unchanged. Replacement=True is
+        # required because n_arch << n_redd; archetype rows will be drawn
+        # multiple times per epoch by design.
+        sampler = WeightedRandomSampler(
+            weights=weights, num_samples=n_redd, replacement=True,
+        )
+        train_loader = DataLoader(
+            combined,
+            batch_size=args.batch_size,
+            sampler=sampler,
+            collate_fn=collate_fn,
+            num_workers=4,
+            pin_memory=True,
+        )
+        logger.info(
+            "v9 mix: %d Reddit + %d archetype rows; target archetype"
+            " fraction %.2f (≈%.1f rows per batch of %d).",
+            n_redd, n_arch, f, f * args.batch_size, args.batch_size,
+        )
+    else:
+        train_loader = DataLoader(
+            train_ds,
+            batch_size=args.batch_size,
+            shuffle=True,
+            collate_fn=collate_fn,
+            num_workers=4,
+            pin_memory=True,
+        )
 
     val_loader = None
     if args.val_data:
@@ -354,6 +440,7 @@ def train(args: argparse.Namespace) -> None:
                 config.loss,
                 attention_mask=batch["attention_mask"],
                 community_ids=batch.get("community_id"),
+                archetype_ids=batch.get("archetype_id"),
             )
 
             # Backward

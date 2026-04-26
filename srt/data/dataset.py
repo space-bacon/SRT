@@ -97,6 +97,14 @@ class SRTAdapterDataset(Dataset):
                     break
             community_id = _stable_hash(community_str)
 
+        # v9: archetype_id is present on rows from the archetype-generations
+        # corpus (data/archetype_train.jsonl); rows from the Reddit corpus
+        # carry -1 here so the v9 archetype-supcon loss masks them out.
+        if "archetype_id" in row and row["archetype_id"] is not None:
+            archetype_id = int(row["archetype_id"])
+        else:
+            archetype_id = -1
+
         return {
             "input_ids": input_ids,
             "attention_mask": attention_mask,
@@ -104,6 +112,7 @@ class SRTAdapterDataset(Dataset):
             "r_true": r_true,
             "r_mask": r_mask,
             "community_id": torch.tensor(community_id, dtype=torch.long),
+            "archetype_id": torch.tensor(archetype_id, dtype=torch.long),
         }
 
 
@@ -200,6 +209,8 @@ def make_collate_fn(pad_token_id: int = 0):
             # community_id is a scalar — stack without padding
             if "community_id" in item:
                 padded.setdefault("community_id", []).append(item["community_id"])
+            if "archetype_id" in item:
+                padded.setdefault("archetype_id", []).append(item["archetype_id"])
 
         return {k: torch.stack(v) for k, v in padded.items()}
 

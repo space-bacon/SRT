@@ -94,6 +94,16 @@ class LossConfig:
     listnet_temperature: float = 1.0
     chain_residual_aux_weight: float = 0.05
     chain_residual_aux_target: float = 0.5
+    # v9: supervised contrastive loss keyed by archetype_id, applied to the
+    # same `community_output.encoded` representation as community_supcon. The
+    # 33 archetypes (Lancaster, paired with the Lexicon of Synthetic
+    # Interiority) are an external taxonomy that has only been a held-out
+    # probe through v8b. v9 promotes them to a training signal alongside
+    # Reddit subreddit ids. Rows whose archetype_id == -1 (Reddit corpus) are
+    # masked out of this loss; rows from the archetype-generations corpus
+    # carry archetype_id ∈ [1, 33] and contribute positive pairs.
+    archetype_supcon_weight: float = 0.0
+    archetype_supcon_temperature: float = 0.1
 
 
 @dataclass
