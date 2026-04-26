@@ -693,9 +693,9 @@ Kockelman, P. (2024). *Last words: A theory of everything that matters*. Univers
 
 Kockelman, P. (2025). *Semiotic agency in digital environments*. Manuscript.
 
-Lancaster, J. B. (2025). The treachery of signs: Semiotic mediation, pitchfork bifurcation, and political polarization in algorithmically curated societies.
+Lancaster, J. B. (2025). The treachery of signs: Semiotic mediation, pitchfork bifurcation, and political polarization in algorithmically curated societies. SSRN. https://papers.ssrn.com/abstract=5987495
 
-Lancaster, J. B. (2026a). Semiotic-reflexive language model training: Bridging interpretive bifurcations through metapragmatic chain architectures and embodied grounding.
+Lancaster, J. B. (2026a). Semiotic-reflexive language model training: Bridging interpretive bifurcations through metapragmatic chain architectures and embodied grounding. SSRN. https://papers.ssrn.com/abstract=6349978
 
 Lancaster, J. B. (2026b). Prenatal origins of cross-modal iconic correspondence: A semiotic analysis.
 
