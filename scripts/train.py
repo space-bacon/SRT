@@ -130,8 +130,31 @@ def parse_args() -> argparse.Namespace:
         default=0.25,
         help=(
             "v9: target fraction of training samples drawn from the"
-            " archetype dataset under WeightedRandomSampler. 0.25 means"
-            " ~4/16 rows per batch will carry archetype_id != -1."
+            " archetype dataset under the stratified batch sampler."
+            " Used to derive the number of archetype slots per batch as"
+            " round(batch_size * mix_fraction). Each batch then groups"
+            " those slots into --archetype-classes-per-batch distinct"
+            " archetype ids with --archetype-rows-per-class rows each so"
+            " positive pairs are guaranteed."
+        ),
+    )
+    p.add_argument(
+        "--archetype-classes-per-batch",
+        type=int,
+        default=2,
+        help=(
+            "v9: number of distinct archetype ids to draw per batch."
+            " arch_slots / classes_per_batch rows are drawn from each"
+            " (rounded down)."
+        ),
+    )
+    p.add_argument(
+        "--archetype-rows-per-class",
+        type=int,
+        default=0,
+        help=(
+            "v9: rows per archetype class (overrides the implicit value"
+            " derived from mix_fraction and classes_per_batch)."
         ),
     )
     return p.parse_args()
@@ -274,42 +297,91 @@ def train(args: argparse.Namespace) -> None:
 
     # v9: optionally mix in archetype-conditioned generations.
     if args.archetype_data:
-        from torch.utils.data import ConcatDataset, WeightedRandomSampler
+        import random as _random
+        from torch.utils.data import ConcatDataset
 
         archetype_ds = SRTAdapterDataset(
             args.archetype_data, tokenizer, args.max_seq_len, max_samples=None,
         )
         n_arch = len(archetype_ds)
         n_redd = len(train_ds)
-        # Per-row sampling weight chosen so that, in expectation, a
-        # `archetype_mix_fraction` fraction of drawn rows come from the
-        # archetype dataset.
-        f = max(0.0, min(0.99, args.archetype_mix_fraction))
-        w_arch = (f / max(n_arch, 1))
-        w_redd = ((1.0 - f) / max(n_redd, 1))
-        weights = (
-            [w_redd] * n_redd + [w_arch] * n_arch
+
+        # Build archetype index → list-of-rows map for stratified sampling.
+        arch_by_id: dict[int, list[int]] = {}
+        for local_idx, sample in enumerate(archetype_ds.samples):
+            aid = int(sample.get("archetype_id", -1) or -1)
+            if aid >= 0:
+                arch_by_id.setdefault(aid, []).append(local_idx + n_redd)
+        arch_ids = sorted(arch_by_id.keys())
+
+        # Number of archetype slots per batch from mix fraction.
+        arch_slots = max(2, int(round(args.batch_size * args.archetype_mix_fraction)))
+        n_classes = max(1, min(args.archetype_classes_per_batch, len(arch_ids)))
+        rows_per_class = (
+            args.archetype_rows_per_class
+            if args.archetype_rows_per_class > 0
+            else max(2, arch_slots // n_classes)
         )
+        arch_slots_actual = n_classes * rows_per_class
+        if arch_slots_actual >= args.batch_size:
+            raise ValueError(
+                f"Archetype slots ({arch_slots_actual}) >= batch_size "
+                f"({args.batch_size}); reduce --archetype-classes-per-batch "
+                f"or --archetype-rows-per-class."
+            )
+        n_redd_per_batch = args.batch_size - arch_slots_actual
+
+        class _StratifiedArchetypeBatchSampler:
+            """Yields per-batch index lists into ConcatDataset(reddit, archetype).
+
+            Each batch reserves `n_classes` * `rows_per_class` slots for
+            archetype rows drawn from `n_classes` distinct archetype ids
+            (one positive group per class). The rest is filled with
+            uniform Reddit samples. This guarantees archetype-supcon has
+            n_classes * (rows_per_class choose 2) positive pairs every step.
+            """
+
+            def __init__(self, num_batches: int) -> None:
+                self.num_batches = num_batches
+
+            def __iter__(self):
+                for _ in range(self.num_batches):
+                    chosen = _random.sample(arch_ids, n_classes)
+                    batch: list[int] = []
+                    for cid in chosen:
+                        pool = arch_by_id[cid]
+                        if len(pool) >= rows_per_class:
+                            batch.extend(_random.sample(pool, rows_per_class))
+                        else:
+                            batch.extend(_random.choices(pool, k=rows_per_class))
+                    batch.extend(
+                        _random.choices(range(n_redd), k=n_redd_per_batch)
+                    )
+                    _random.shuffle(batch)
+                    yield batch
+
+            def __len__(self) -> int:
+                return self.num_batches
+
+        # Same step budget as the Reddit-only baseline so total_steps below
+        # remains comparable across runs.
+        num_batches_per_epoch = n_redd // args.batch_size
         combined = ConcatDataset([train_ds, archetype_ds])
-        # Length is set to the original Reddit-only step count so epoch
-        # accounting (total_steps below) is unchanged. Replacement=True is
-        # required because n_arch << n_redd; archetype rows will be drawn
-        # multiple times per epoch by design.
-        sampler = WeightedRandomSampler(
-            weights=weights, num_samples=n_redd, replacement=True,
-        )
+        batch_sampler = _StratifiedArchetypeBatchSampler(num_batches_per_epoch)
         train_loader = DataLoader(
             combined,
-            batch_size=args.batch_size,
-            sampler=sampler,
+            batch_sampler=batch_sampler,
             collate_fn=collate_fn,
             num_workers=4,
             pin_memory=True,
         )
         logger.info(
-            "v9 mix: %d Reddit + %d archetype rows; target archetype"
-            " fraction %.2f (≈%.1f rows per batch of %d).",
-            n_redd, n_arch, f, f * args.batch_size, args.batch_size,
+            "v9 stratified mix: %d Reddit + %d archetype rows; per batch"
+            " %d archetype rows = %d classes × %d rows/class (≥%d positive"
+            " pairs/step), %d Reddit rows.",
+            n_redd, n_arch, arch_slots_actual, n_classes, rows_per_class,
+            n_classes * rows_per_class * (rows_per_class - 1) // 2,
+            n_redd_per_batch,
         )
     else:
         train_loader = DataLoader(
