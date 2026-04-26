@@ -130,6 +130,18 @@ Two recent results from statistical physics sharpen what the second-order-cybern
 
 *Measurement-induced ordering and the bounded order parameter.* VanSaders, Fruchart, and Vitelli (2026) construct a many-body informational active matter system in which agents make local measurements of their neighbors' velocities and respond by modulating their own scattering cross-section without exerting work. The resulting hydrodynamic theory yields a non-analytic circle-pitchfork bifurcation at $Q_0 = 0$, where $Q$ is the nematic flocking order parameter and $Q_0$ is a function of the diameter contrast. They prove that the steady-state order parameter is bounded by the mutual information $I$ accumulated by the agents through measurement, $(Q_0/P_0)^2 \le (32/\pi^2)\,I$, and frame the onset of order as a classical *measurement-induced phase transition*. The information-thermodynamic ledger underlying their bound is the Landauer-Bennett tradition (Landauer, 1961; Bennett, 1982; Parrondo, Horowitz, & Sagawa, 2015), in which the cost of measurement and erasure sets the maximum work and, by extension here, the maximum ordering an information-driven system can produce. This is the closest physics analog we know of to the architectural ambitions of the SRT-Adapter, and it sharpens three things in our setup. First, the pitchfork normal form $\dot{x} = rx - x^3$ in Section 2.2 is not unique to sociolinguistic dynamics: the same circle-pitchfork structure arises in the hydrodynamic limit of a measurement-and-control system, which is independent corroboration that this is the right canonical model for ordering processes driven by observation rather than by force. Second, their information bound on $Q_0$ is the physics-side analog of the limit we observe empirically in Section 6.3: the inject-back arm of the RRM has not produced measurable downstream effect, and one possible reading is that the mutual information actually carried by the meta-state about the downstream loss is small, which would bound any inject-back-induced ordering near zero by the same kind of inequality. Third, their result that the same control rule produces robust ordering across thermal, granular, magnetized, sheared, active, and odd-noise environments suggests that the architecturally interesting question for the SRT is not whether a particular noise source is present, but whether the measurement-and-control loop can carry enough mutual information to push $Q_0$ above the bifurcation threshold. We do not claim a formal mapping between the two systems here, but we note the structural analogy as motivation for the v9 onward work on closing the loop.
 
+### 2.7 Languaging, triadicity, and "clouds all the way down"
+
+A complementary framing, developed in correspondence with Myrdene Anderson, sharpens three commitments of the architecture that the preceding subsections leave implicit.
+
+*It takes three to tango.* Anderson (2014, and personal communication, 2026) argues that meaning-bearing processes are irreducibly triadic rather than dyadic: a sender-receiver dyad cannot, on its own, generate signification, because the third element, the interpretant, the relation, the context, the medium, is constitutive rather than ornamental. This is the same triadicity that Peirce's representamen / object / interpretant decomposition demands (Section 2.1), and it is reflected architecturally in the adapter's three-headed design (community discovery + metapragmatic attention + reflexive recurrence; Sections 3.2–3.4). Reducing the adapter to any two of these heads collapses the structure: community-and-MAH without RRM is a static probe; community-and-RRM without MAH has no divergence signal to integrate; MAH-and-RRM without communities has no basis to compute divergence against. The empirical claim of Section 5 is that the three heads together produce structure that no two alone can reproduce; the theoretical claim of Anderson's "it takes three to tango" is that this is what one should expect of any architecture meant to detect meaning rather than only co-occurrence. A parallel observation, encountered through the same correspondence, is Durst-Andersen's (2011) finding that contemporary speakers cluster into three pragmatic discursive types, context-oriented, speaker-oriented, hearer-oriented, orthogonal to genealogical language families, with Danchin reporting independent convergence on the same triadic structure from observations across multilingual laboratory settings; the recurrence of triadic decompositions across these otherwise disjoint research programs is at minimum a constraint on what counts as a faithful semiotic architecture.
+
+*Languaging, not language.* Anderson, following a half-century of cybernetic and biosemiotic usage, prefers "languaging", meaning-making as ongoing process, to "language" as static object (Maturana & Varela's structural-coupling tradition is the canonical source). The adapter's choice to read the backbone's hidden states *across layers* and to accumulate divergence into a recurrent meta-state, rather than to operate on a single static embedding, is a commitment to this processual reading: the object of measurement is the trajectory through representational space across the depth of the model, not any one snapshot.
+
+*Clouds all the way down.* Anderson's preferred image, in deliberate contrast to "turtles all the way down," is that meaning exists as overlapping, graded, simultaneously-present clouds rather than as a stack of discrete substrates. The architectural counterpart is the soft community-assignment geometry of Section 3.2: tokens are not classified into one of 32 discrete communities, but distribute mass across the 32 prototypes via cosine similarity in a curved 64-D space, and the macro-cluster collapse of Section 5.8 from 33 archetypes to roughly four functional macro-clusters of stance is one cross-section through that cloud rather than a quantization of it. The interpretant field at any token position is best read as a cloud over the prototype basis whose density structure changes with context, which is also what produces the continuous $\hat{r}$ trajectory the BEN reports. We do not claim the adapter realizes Anderson's full framing; we claim that the architectural choices (soft assignments, layer-wise readout, recurrent meta-state, continuous $\hat{r}$) are the design counterparts of "clouds, languaging, triadicity" rather than of "tokens, language, dyadic exchange," and that this lineage is what made the design choices feel coherent during the iterations from v1 to v9.
+
+The deeper point this framing forces us to be honest about, also from Anderson's correspondence, via Deely (2014) on suprasubjectivity and Latour (1996) on interobjectivity, is that the SRT-Adapter is itself a participant in the meaning-field it measures, not a detached instrument. The reification caveat of Section 2.5 and Section 6 is the architectural form of this concession: the adapter cannot occupy a standpoint outside the semiotic process, and the four-macro-cluster geometry it discovers is an interpretant of the data, produced by an instrument whose prior is itself triadic, processual, and cloud-shaped.
+
 ---
 
 ## 3. Architecture
@@ -605,6 +617,10 @@ Bail, C. A., et al. (2018). Exposure to opposing views on social media can incre
 
 Bennett, C. H. (1982). The thermodynamics of computation: A review. *International Journal of Theoretical Physics*, 21(12), 905–940.
 
+Deely, J. (2014). The suprasubjective in semiotic relations. *The American Journal of Semiotics*, 30(3–4), 165–182.
+
+Durst-Andersen, P. (2011). *Linguistic supertypes: A cognitive-semiotic theory of human communication*. De Gruyter Mouton.
+
 Evans, J. A. (2010). Industry induces academic science to know less about more. *American Journal of Sociology*, 116(2), 389–452.
 
 Foster, J. G., Rzhetsky, A., & Evans, J. A. (2015). Tradition and innovation in scientists' research strategies. *American Sociological Review*, 80(5), 875–908.
@@ -616,6 +632,8 @@ Kockelman, P. (2017). *The art of interpretation in the age of computation*. Oxf
 Kockelman, P. (2024). *Last words: A theory of everything that matters*. University of Chicago Press.
 
 Landauer, R. (1961). Irreversibility and heat generation in the computing process. *IBM Journal of Research and Development*, 5(3), 183–191.
+
+Latour, B. (1996). On interobjectivity. *Mind, Culture, and Activity*, 3(4), 228–245.
 
 Leighton, M. P. (2026). Will a large complex system be a Maxwell demon? *arXiv preprint* arXiv:2603.03248.
 
@@ -630,6 +648,8 @@ Lancaster, J. B. (2026b). Prenatal origins of cross-modal iconic correspondence:
 Lancaster, J. B. (2026c). Reddit Discourse Corpus: A multi-community dataset for semiotic analysis.
 
 Mangalam, M. (2025). Against the Bayesian brain. *Behavioral and Brain Sciences* (forthcoming).
+
+Maturana, H. R., & Varela, F. J. (1980). *Autopoiesis and cognition: The realization of the living*. D. Reidel.
 
 Parrondo, J. M. R., Horowitz, J. M., & Sagawa, T. (2015). Thermodynamics of information. *Nature Physics*, 11(2), 131–139.
 
