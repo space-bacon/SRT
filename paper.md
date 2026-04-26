@@ -108,6 +108,20 @@ The adapter design also resolves three practical problems that plagued the full 
 
 3. **Backbone agnosticism**: The adapter works with any HuggingFace `AutoModelForCausalLM` (LLaMA, Qwen, Mistral, Phi, Gemma) without architecture-specific modifications.
 
+### 2.5 Second-Order Cybernetics: Self-Organization, Circular Causality, and the Observer in the System
+
+A second theoretical lineage that informs the architecture is second-order cybernetics, in particular von Foerster's account of self-organization, circular causality, and the constitutive role of the observer in the systems being observed (von Foerster, 1981, 2003). Four threads of that tradition map onto specific architectural commitments of the adapter and clarify what the empirical results in Section 5 do and do not show.
+
+*Self-organization from a seed crystal.* Von Foerster's central claim is that stable structure can crystallize internally without an external controller, given an appropriate substrate of interaction. The community discovery head (Section 3.2) is the cleanest instance of this in the adapter: 32 community prototypes are initialized as random Gaussian directions in a 64-D space and shaped only by a self-supervised contrastive objective over Reddit subreddit co-occurrence. No taxonomy of communities is supplied. The architecture provides what we call the seed crystal, namely the curved 64-D space and the SupCon objective, and the specific community structure that crystallizes is whatever the data and gradients converge on. Section 5.8's finding that 33 externally-curated archetypes collapse onto roughly four functional macro-clusters of stance is a measurement of the macro-structure of that self-organized geometry, not an imposition of it.
+
+*Circular causality and the observation/intervention asymmetry.* The Reflexive Recurrent Module (Section 3.4) is designed to close a circular-causal loop: the divergence vectors produced by the metapragmatic attention heads are fed into a recurrent meta-state, which in turn modulates the hidden states the next layers will process through a $\gamma$-gated FiLM injection. This is the architectural shape of von Foerster's circular causality. The empirical situation, however, is asymmetric: the *observation* arm, namely the readout of $\hat{r}$ and the divergence trajectories, is well-formed and produces measurable structure (Sections 5.1, 5.6, 5.7); the *intervention* arm, namely the inject-back path that would close the loop, has produced no measurable downstream effect through v8b (Section 6.3). The current adapter is therefore a partial second-order system: the observer is in place, but the channel through which observation modifies the observed process has not yet learned to carry signal. Whether this is a gradient-starvation artifact of the zero-initialized FiLM gate or a deeper architectural consequence of trying to close the loop while the backbone is frozen is the central open question identified in Section 6.3.
+
+*The observer is part of the system.* Von Foerster insists that there is no fully detached, objective standpoint: the act of observation participates in constituting what is observed. The reification paradox documented in Section 6 is the computational form of this claim. Modeling communities as discrete prototypes and supervising for divergence between them risks creating, through the architecture's expectations, the very community boundaries the adapter is meant to detect. Section 5.8's macro-cluster collapse is a partial check on this risk: the four macro-clusters that emerge are not the 33 prototypes the architecture nominally provides, suggesting the geometry recovers structure that is in the data rather than structure imposed by the prototype basis. The reification risk is not eliminated, but it is bounded.
+
+*Trivial vs. non-trivial machines.* Von Foerster's distinction between trivial machines (memoryless input-output) and non-trivial machines (history-dependent, internally-recursive) maps onto the adapter's two intended inference modes: a STANDARD mode in which the inject-back gate is closed ($\lambda = 0$) and the adapter produces structured side-channel outputs only, and a REFLEXIVE mode in which $\lambda > 0$ allows the meta-state to modulate generation. The adapter as currently trained operates almost entirely in the trivial-machine regime: even with the inject-back gate nominally open during training, ablating it at evaluation produces no measurable downstream change (Section 6.3). Achieving a genuinely non-trivial REFLEXIVE mode, in which the model's running estimate of its own semiotic state changes its generation dynamics in a measurable way, remains future work and is the design target of v9 onward.
+
+We adopt the second-order-cybernetic framing not as decoration but as a discipline: it forces the paper to distinguish what the adapter has *demonstrated* (a self-organizing observation channel over a frozen backbone) from what it has *not yet demonstrated* (a closed circular-causal loop in which observation modifies generation). Both readings are needed to characterize the system honestly.
+
 ---
 
 ## 3. Architecture
@@ -545,6 +559,14 @@ This revision of the architectural story is cleaner, not weaker: the model has t
 
 5. **Single backbone.** Results are reported only for Qwen 2.5-7B. The backbone-agnostic claim requires validation across LLaMA, Mistral, and other architectures.
 
+### 6.7 Connections to Emergent Perspective Diversity in Reasoning Models
+
+A separate line of recent work has documented that language models trained with reasoning-style reinforcement spontaneously develop heterogeneous internal features that mechanistic interpretability methods can read out as something like distinct personalities, areas of expertise, or stances, and that these features enter into structured conflict and reconciliation during chain-of-thought generation (Evans, in preparation; cf. Foster, Rzhetsky, & Evans, 2015 for the cross-corpus precedent). The relationship between that finding and the present work is structural rather than methodological. Evans's program reveals what emerges *spontaneously* under reasoning supervision in an architecturally-undifferentiated backbone; the SRT-Adapter provides explicit architectural channels (the four Peircean subspaces of the semiotic embedding layer in the full SRT, and the community / divergence / bifurcation subspaces of the present adapter) into which similar emergent structure can organize. The two approaches are complementary in a specific sense: probing the unstructured backbone reveals the existence of perspective-like features without a vocabulary for what they are; the adapter's explicit decomposition supplies a vocabulary, grounded in Peircean semiotics and linguistic anthropology, but only weakly constrains what fills the slots.
+
+This suggests a research question that neither approach can resolve alone. Reasoning models that develop internal perspective diversity may be performing genuine semiotic work, namely navigating meaning divergence across implicit interpretive communities, or they may be performing something closer to cognitive brainstorming or rhetorical variation within a single interpretive framework. The SRT-Adapter's metapragmatic attention head is designed to detect the former and would, in principle, register low divergence across the latter. Cross-applying mechanistic interpretability tools to adapter-equipped reasoning models, and cross-applying the adapter's divergence and bifurcation readouts to backbones probed for emergent features, is the form of collaboration this paper points toward as the next step.
+
+The von Foerster framing (Section 2.5) makes the same point in cybernetic terms: spontaneous perspective diversity in reasoning models is self-organization without an explicit semiotic substrate; the adapter provides the substrate without yet exhibiting the fully closed circular-causal loop. The two findings, taken together, suggest that the substrate and the emergent dynamics may be separable engineering targets, and that the productive question is what becomes possible when both are present.
+
 ---
 
 ## 7. Conclusion
@@ -606,6 +628,10 @@ Silverstein, M. (1993). Metapragmatic discourse and metapragmatic function. In J
 Silverstein, M. (2003). Indexical order and the dialectics of sociolinguistic life. *Language & Communication*, 23(3–4), 193–229.
 
 Versace, E., et al. (2023). Cross-modal correspondences between auditory and visual features in domestic chicks. *Animal Cognition*, 26, 1021–1030.
+
+von Foerster, H. (1981). *Observing systems*. Intersystems Publications.
+
+von Foerster, H. (2003). *Understanding understanding: Essays on cybernetics and cognition*. Springer.
 
 Wildgen, W. (1982). *Catastrophe-theoretic semantics: An elaboration and application of René Thom's theory*. John Benjamins.
 
