@@ -464,6 +464,31 @@ We did not regenerate counterfactual decoding (§5.3) or context-conditional $\h
 
 We read v8a as resolving §5.8's open question. Hypothesis (b), "replace the discrete prototype basis with a continuous trajectory metric over the encoder output," was correct: the encoder was doing all the discriminative work, the prototype layer was discarding it through a saturated soft-argmax, and the geometry of the archetype manifold only becomes visible once the bottleneck is removed.
 
+### 5.10 Negative result: sharper supervised contrast (v8b)
+
+Once v8a established that the encoder, freed from the prototype bottleneck, organizes Reddit communities and external archetypes along a structured trajectory manifold, a natural follow-up question was whether *more aggressive* supervised contrast would orthogonalize that manifold further. The §5.9 archetype centroid off-diagonal cosine of 0.873 is well below v6/v7's 0.999 but still far from orthogonal, and the within/between cosine ratio of 2.016, while doubled from v7's 1.006, is also clearly improvable.
+
+We trained v8b (10K steps, warm-started from v8a) with the community supervised-contrastive loss weight raised from 2.0 to 4.0 and the InfoNCE temperature lowered from 0.10 to 0.05. Every other architectural and training choice was identical to v8a. Trainable parameter count is unchanged at 14,560,579. The hypothesis: sharper contrastive pressure should pull within-class cosines tighter and push between-class cosines further, both improving Reddit retrieval and reducing archetype-centroid alignment.
+
+The result was a partial regression on every geometric metric.
+
+| metric | v7 | **v8a** | v8b |
+|---|---|---|---|
+| val CE | 2.739 | 2.739 | 2.739 |
+| Reddit recall@1 (35-cls) | 0.413 | **0.484** | 0.465 |
+| within / between cosine ratio | 1.006 | **2.016** | 1.289 |
+| archetype recall@1 (33-cls) | 0.149 | **0.230** | 0.214 |
+| archetype centroid off-diag cosine | 0.999 | **0.873** | 0.945 |
+| trajectory anisotropy ($\lambda_{\max}/\lambda_{\min}$) | 72 | 23,333 | **52,535** |
+| regime ECE | 0.00091 | 0.00091 | **0.00070** |
+| TruthfulQA mean_r̂ AUROC | 0.578 | 0.577 | **0.579** |
+
+Cross-entropy and the BEN-side metrics (regime ECE, hallucination AUROC) were preserved or marginally tightened. Every encoder-geometry metric except trajectory anisotropy moved in the wrong direction. Reddit within-class cosine pulled tighter (0.810 vs v8a's value), but between-class cosine rose faster (0.628), so the ratio collapsed from 2.016 to 1.289. Archetype centroid off-diag cosine *increased* from 0.873 back to 0.945, undoing roughly two-thirds of v8a's centroid separation gain. Anisotropy more than doubled (52,535 vs 23,333), indicating that the encoder collapsed a larger fraction of its variance onto fewer principal directions.
+
+The interpretation is that v8a's supcon weight 2.0 / temperature 0.10 was already near a sweet spot, and pushing harder reproduces a softer version of the prototype-collapse failure one level up the architecture: rather than collapsing 32 prototypes onto a handful of attractors, the encoder collapses its 64-dimensional output onto a low-rank subspace where a few directions carry most of the discriminative weight. The contrastive objective, applied with too much pressure, optimizes a degenerate solution that minimizes within-class spread by squashing the entire embedding space.
+
+We read v8b as a clean falsification of the "sharper is better" hypothesis. The continuous-trajectory architecture from v8a is the v8 generation's headline result; v8b documents the failure mode that bounds it from above. Future work on the community head (Section 7) will not pursue further increases in supcon weight or temperature sharpening on this architecture, and will instead target either archetype-conditioned direct supervision (Section 5.8 hypothesis (a)) or a fundamentally different objective for orthogonalizing the trajectory manifold.
+
 ---
 
 ## 6. Discussion

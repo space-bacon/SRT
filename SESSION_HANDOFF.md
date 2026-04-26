@@ -1,4 +1,4 @@
-# SRT-Adapter — Session Handoff (April 25, 2026)
+# SRT-Adapter — Session Handoff (April 26, 2026)
 
 > Single document handing off live state to a fresh VS Code window opened
 > on `/Users/burtron/development/srt-adapter`. Read top-to-bottom before
@@ -8,30 +8,37 @@
 
 ## 1. Where we are
 
-**v8a is COMPLETE and shipped.** v8b is **TRAINING NOW** on vast.ai A6000
-(launched 15:32 UTC, PID 292290 remote). ETA ~5h.
+**v8a is COMPLETE and shipped. v8b is COMPLETE and FALSIFIED the
+"sharper supcon" hypothesis.** Both checkpoints exist and are evaluated.
+v8a remains the best v8 checkpoint. Paper §5.10 documents v8b as a
+negative result.
 
 The headline arc since v7:
 
-| | v6 | v7 | **v8a** | **v8b (target)** |
+| | v6 | v7 | **v8a (best)** | v8b (regressed) |
 |---|---|---|---|---|
-| VAL CE | 2.738 | 2.739 | 2.739 | preserve |
-| Best val total | 9.117 | 9.0044 | 9.0040 | ≤ 9.004 |
-| Reddit retrieval recall@1 (35 cls) | 0.395 | 0.413 | **0.484** | ≥ 0.484 |
-| within/between cos ratio | 1.012 | 1.006 | **2.016** | ≥ 2.0 |
-| Archetype recall@1 (33 cls, vs 0.030 chance) | 0.168 | 0.149 | **0.230** | ≥ 0.23 |
-| Archetype centroid off-diag cos | 0.999 | 0.999 | **0.873** | < 0.85 |
-| Trajectory anisotropy (λ_max/λ_min) | 52 | 72 | **23,333** | n/a |
-| Hallucination AUROC mean_r̂ | — | 0.578 | 0.577 | preserve |
+| VAL CE | 2.738 | 2.739 | 2.739 | 2.739 |
+| Best val total | 9.117 | 9.0044 | 9.0040 | 12.3106 |
+| Reddit retrieval recall@1 (35 cls) | 0.395 | 0.413 | **0.484** | 0.465 |
+| within/between cos ratio | 1.012 | 1.006 | **2.016** | 1.289 |
+| Archetype recall@1 (33 cls, vs 0.030 chance) | 0.168 | 0.149 | **0.230** | 0.214 |
+| Archetype centroid off-diag cos | 0.999 | 0.999 | **0.873** | 0.945 |
+| Trajectory anisotropy (λ_max/λ_min) | 52 | 72 | 23,333 | 52,535 |
+| Hallucination AUROC mean_r̂ | n/a | 0.578 | 0.577 | 0.579 |
+| Regime ECE | 0.0006 | 0.0008 | 0.00091 | **0.00070** |
 
 **v8a takeaway:** removing the discrete prototype basis (`use_prototypes=False`)
 preserved CE while doubling Reddit retrieval ratio and lifting archetype
 recall 54%. The §5.8 PCA finding (prototypes barely move from random init)
 explained why the bottleneck was the binding constraint.
 
-**v8b hypothesis:** community_supcon_weight 2.0→4.0, temperature 0.1→0.05
-with everything else identical to v8a. Goal: orthogonalize archetype
-centroids further (off-diag cos < 0.85) without disturbing token CE.
+**v8b takeaway (FALSIFIED):** sharpening community supcon (weight 2.0→4.0,
+temp 0.1→0.05) over-collapsed the encoder. Within-class cosines tightened
+but between-class cosines rose faster (ratio 2.016→1.289), centroid
+off-diag jumped from 0.873 back to 0.945, and anisotropy more than
+doubled (23,333→52,535). v8a's loss weights are at or near the optimum
+for this architecture. Future work targets archetype-conditioned direct
+supervision (§5.8 hypothesis (a)) or the dead inject-back arm (§6).
 
 ---
 
