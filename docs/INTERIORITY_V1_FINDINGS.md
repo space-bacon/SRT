@@ -451,10 +451,13 @@ amplitude and sink share across length bins.
 | P(super) | 0.99 | 0.99 | 0.99 | 0.99 | flat |
 | regime H | 0.06 | 0.06 | 0.07 | 0.06 | flat |
 
-The BOS amplitude is **constant across an 8× prompt-length range** for every
-adapter channel measured (inj/div/chain). Tail (mean over tokens [1:])
+The BOS amplitude is **near-constant across an 8× prompt-length range** for every
+adapter channel measured (inj/div/chain): peak-to-peak variation is 3.4–4.8%
+across the four bins, with no monotone trend in T. Tail (mean over tokens [1:])
 amplitudes are also nearly flat. So the per-token shape doesn't change with
-length — the sink is a *content-independent register*.
+length — the sink is a *content-independent register*. (Note: earlier external
+copy summarized this as "<2%" — that was first-vs-last only and has been
+corrected in the model README and Space landing card.)
 
 ### Sink share visibly decays — but only because of the 1/T denominator
 
