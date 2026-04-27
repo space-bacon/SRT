@@ -12,3 +12,8 @@ wandb/
 release/
 .env
 hf
+
+# IDE / OS / local tooling
+.DS_Store
+.venv-tools/
+**/# Code Citations.md
