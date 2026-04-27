@@ -514,3 +514,184 @@ python3 scripts/interiority_length_scaling.py \
     --readouts artifacts/interiority/v3_long/readouts.jsonl \
     --out-dir  artifacts/interiority/v3_long
 ```
+
+## Update v3.4 — BOS-sink ablation per channel × regime (Experiment #6)
+
+The §v3.1 ablation reported a single per-channel summary (rank
+preservation across regimes). This update breaks the same ablation out
+**per (channel, regime)** so the *signature of the BOS-as-register
+phenomenon* becomes visible directly.
+
+For each channel `c ∈ {r̂, regime entropy, P(super), inj L7/L14/L21,
+div L7/L14/L21, chain residual}` and each regime `g`, we compute the
+z-score of regime `g`'s mean activation against the other 10 regimes,
+**twice**: once with the BOS token included in the pooling window
+(`z_with_bos[c,g]`), once with token 0 excluded (`z_no_bos[c,g]`). The
+quantity of interest is `Δ|z|_c,g = |z_with_bos| − |z_no_bos|`:
+
+- `Δ ≈ 0`: BOS contributes nothing distinctive — the regime signature
+  is content-borne.
+- `Δ > 0`: BOS *amplifies* the regime signal (signal lives in the
+  register).
+- `Δ < 0`: BOS *dilutes* the signal (regime is anti-localized — the
+  global summary doesn't represent it well).
+
+### Result — `r̂` is content-borne; `inj L14` and `chain res` live in the register
+
+`r̂` (regime-classifier reflexivity scalar):
+
+| regime | z_with_bos | z_no_bos | Δ\|z\| |
+|---|---:|---:|---:|
+| code               | **+2.09** | +1.98 | +0.11 |
+| negation_modality  | −1.47 | −1.50 | −0.03 |
+| literal            | +1.02 | +1.29 | −0.27 |
+| metaphor           | +0.24 | +0.18 | +0.06 |
+
+Every regime moves by ≤ 0.27 standard deviations on `r̂`. The classifier
+reads the same regime structure from content tokens whether you keep
+the BOS slot or not.
+
+`inj L14` (mid-stack inject-back norm):
+
+| regime | z_with_bos | z_no_bos | Δ\|z\| |
+|---|---:|---:|---:|
+| literal       | +1.51 | +0.53 | **+0.98** |
+| lyric         | +0.73 | −0.05 | **+0.68** |
+| quoted_speech | −1.29 | +0.67 | **+0.63** |
+| metaphor      | +1.97 | +2.61 | **−0.64** |
+| deixis        | +0.09 | −0.67 | −0.58 |
+
+These are large signed deltas, both directions. `inj L14` doesn't have
+a regime structure when you remove the BOS token; it has a *register
+structure* — some regimes (literal, lyric, quoted_speech) concentrate
+their inject-norm at the BOS slot, others (metaphor, deixis) are
+anti-localized to BOS and recover most of their signal from content.
+This is exactly what "fixed-size register" predicts: the inject channel
+is functioning as a global summary slot.
+
+`chain res` is intermediate (max |Δ| = 0.58 on `quoted_speech`), as
+expected for a chain of residual updates that mixes register-style and
+content-style writes.
+
+### What this re-frames
+
+The §v3.1 finding ("9/9 channels preserve rank with BOS removed") is
+correct on aggregate but masks the substructure: rank can survive
+because the *order* of regimes happens to be similar after BOS
+removal, even though specific regimes shift wildly. v3.4 is the more
+honest version of the same probe: there is genuine BOS-register
+behavior on inject channels, the regime classifier (`r̂`, `regime
+entropy`) escapes it, and the v9 coverage-loss design is still
+well-motivated.
+
+### Reproducibility (v3.4)
+
+```bash
+# bos_ablation.json is a side product of the v3 trajectory probe.
+python3 scripts/interiority_trajectory.py \
+    --adapter checkpoints/adapter_v8a/best_adapter.pt \
+    --battery data/probes/probe_battery_v1.jsonl \
+    --output  artifacts/interiority/v2_trajectory/readouts.jsonl \
+    --max-seq-len 128 \
+    --emit-bos-ablation
+# yields artifacts/interiority/v2_trajectory/bos_ablation.json
+```
+
+## Update v3.5 — within-prompt trajectories per channel × regime (Experiment #7)
+
+The §v3 trajectory writeup analysed *amplitude* across positions (and
+established the BOS sink). This update looks at the *shape* of
+per-position curves for the regime classifier's two scalar outputs
+(`r̂`, `regime entropy`), per regime, with the BOS bin excluded.
+
+19 position bins (BOS dropped) × 11 regimes; 5 prompts × 25 samples per
+regime; mean-pooled to per-bin scalars.
+
+### Result — `regime entropy` reveals a sustained "code" band
+
+- `r̂` separates regimes by amplitude across the full window:
+  - sustained ≥ 0.85: `code`
+  - sustained ≤ 0.40: `negation_modality`, `deixis`, `refusal_bait`
+  - middle band 0.45–0.75: `metaphor`, `irony`, `literal`, `lyric`,
+    `quoted_speech`, `self_reference`, `counterfactual`.
+- `regime entropy` (Shannon entropy over the regime classifier's
+  softmax) puts `code` in a **sustained 0.18–0.32 band** while every
+  other regime stays at ≤ 0.05 across all 19 content positions.
+
+The `regime entropy` panel is the more interesting one: the classifier
+is consistently *uncertain* about the regime label whenever the prompt
+is `code`. That uncertainty isn't a transient at one position — it's
+the steady-state for the whole prompt. The other 10 regimes are read
+out with near-confident probabilities all the way through. This is
+hidden by mean-pooled scalars, which collapse to a single number per
+prompt.
+
+### What this re-frames
+
+The §v3 result that "trajectories are flat after BOS" is true for
+amplitude on inject channels (those are register slots) but **not** for
+the classifier outputs: the classifier has a real, sustained,
+regime-specific posterior shape. v3.5 is what makes "the classifier is
+the distributed channel" (§v3 Result 2) concrete — `regime entropy` is
+the per-position signal that distinguishes `code` from everything
+else.
+
+### Reproducibility (v3.5)
+
+```bash
+python3 scripts/interiority_trajectory.py \
+    --adapter checkpoints/adapter_v8a/best_adapter.pt \
+    --battery data/probes/probe_battery_v1.jsonl \
+    --output  artifacts/interiority/v2_trajectory/readouts.jsonl \
+    --max-seq-len 128
+# trajectory summary stored in artifacts/interiority/v2_trajectory/summary.json
+```
+
+## Update v3.6 — regime-classifier calibration (Experiment #8)
+
+Reported headline number: **AUROC 0.99**. AUROC is rank-only, so on its
+own it is consistent with badly miscalibrated probabilities. v3.6
+checks the calibration directly.
+
+We score the v8a regime classifier on 351K validation tokens, bin its
+predictions into 15 equal-frequency quantile bins of `P(regime hit)`,
+and compare empirical hit rate to mean predicted probability per bin.
+
+### Result — calibration is genuine, not just rank discrimination
+
+| metric | value |
+|---|---:|
+| AUROC                       | **0.990** |
+| Expected Calibration Error  | **9.1 × 10⁻⁴** |
+| Brier score                 | **0.0103** |
+| validation tokens           | 351,008 |
+| bins on diagonal (within ±2σ) | **15 / 15** |
+
+All 15 bins fall on the y = x diagonal across the full [0, 1] range,
+with bin counts spanning roughly two orders of magnitude (largest bin
+≈ 25× smallest). ECE on the order of 10⁻³ on a regime classifier that
+also achieves 0.99 AUROC is the strong claim — the probabilities are
+both discriminative *and* calibrated and can be used directly as
+thresholdable risk scores without post-hoc Platt or isotonic
+correction.
+
+### What this re-frames
+
+The reflexivity scalar `r̂` and the per-regime probabilities can be used
+as *calibrated* signals downstream (e.g. for routing-to-human-review
+thresholds), not just rank-ordered alerts. This is the strongest
+evidence that the regime head is not just memorising training
+distribution structure: a memorising head would inherit the training
+prior, not match the empirical conditional rate at every quantile of
+its own confidence.
+
+### Reproducibility (v3.6)
+
+```bash
+python3 scripts/regime_calibration.py \
+    --adapter checkpoints/adapter_v8a/best_adapter.pt \
+    --val     data/all_val.jsonl \
+    --max-tokens 400000 \
+    --bins 15 \
+    --out artifacts/regime_calibration/v8a_step10000.json
+```
