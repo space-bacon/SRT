@@ -1,8 +1,47 @@
-# SRT-Adapter — Session Handoff (April 26, 2026)
+# SRT-Adapter — Session Handoff (April 27, 2026)
 
 > Single document handing off live state to a fresh VS Code window opened
 > on `/Users/burtron/development/srt-adapter`. Read top-to-bottom before
 > doing anything.
+
+---
+
+## 0. Latest state (April 27, 2026 — public surfaces)
+
+Three public surfaces are now live and **mutually consistent**:
+
+| Surface | URL | Latest commit / upload |
+|---|---|---|
+| HF Space (demo card) | https://huggingface.co/spaces/RiverRider/srt-adapter-v8a-demo | `index.html` — Figs 1–11 inline SVG |
+| HF model README | https://huggingface.co/RiverRider/srt-adapter-v8a | `README.md` — 8-experiment Interiority table + cross-backbone + calibration + Space link |
+| GitHub canonical doc | `docs/INTERIORITY_V1_FINDINGS.md` | commit `a6dc6de` on `main` — adds v3.4/v3.5/v3.6 sections |
+
+What got added since the last handoff:
+
+- **Honesty fix on the BOS-register section** (paper §6.3 / canonical doc / model README / Space card all aligned): "amplitude is *stable* across an 8× length sweep (peak-to-peak ≤ 4.8%)" — *not* "constant". Within ±2.5% of the T≈16 baseline.
+- **Fig 8 Cross-backbone transfer.** Same v8a adapter applied without retraining: Qwen2.5-7B 9.1×, Qwen3-8B 7.7×, Mistral-7B-v0.3 10.3× chance. Mistral raw hidden states actually carry the strongest community signal (10.3×); v8a's 16.7× on Qwen2.5-7B is ~1.8× the strongest raw-hidden-state baseline.
+- **Fig 9 Reliability diagram.** AUROC 0.990, ECE 9.1×10⁻⁴, Brier 0.0103, n=351K val tokens, 15/15 bins on the y=x diagonal. Probabilities are calibrated, not just rank-ordered.
+- **Fig 10 Within-prompt trajectories** (`r̂`, `regime H`, BOS bin dropped, 19 bins). `regime H` puts `code` in a sustained 0.18–0.32 high-entropy band while every other regime collapses to ≤ 0.05.
+- **Fig 11 BOS-ablation per channel × regime.** `r̂` Δ ≤ 0.27 across all regimes (content-borne). `inj L14` Δs are huge and signed: `metaphor` Δ −0.64 (BOS-localized), `literal` Δ +0.98 (anti-localized). Confirms the inject channels are functioning as register slots; classifier escapes that.
+- **Fig 7 stale title patched.**
+
+Helper artifacts still in `/tmp` for any rebuild:
+- `/tmp/build_figs_8_11.py` — final builder for all four SVGs + HTML splice.
+- `/tmp/space_index_v6.html` — what's currently live on the Space.
+- `/tmp/v8a_README_v4.md` — what's currently live on the model README.
+- `/tmp/figs/fig_{8,9,10,11}.{svg,png}` — extracted SVGs and rasterized PNGs (rsvg-convert via Homebrew; cairosvg / Inkscape NOT installed).
+
+Standing facts to preserve:
+- HF token: `/Users/burtron/.cache/huggingface/token`.
+- Site palette tokens: pink `#ff5e8a`, blue `#6e8cff`, violet `#9b5de5`, bg `#0f0f1a`, bg2 `#181828`, fg `#e8e8f0`, muted `#9a9ab0`, border `#2a2a40`.
+- `release/` is gitignored. `docs/` is NOT.
+- All Space figures are inline SVG (no external image files).
+- Bootstrap CI on `separation_ratio` is upward-biased — treat 0.85 as a lower bound.
+
+What's NOT done yet (in priority order):
+1. **`paper.md` / arXiv update** to fold Figs 8/9/11 results into §5 (eval) and §6.3 (interiority). Highest scientific leverage of anything pending.
+2. **v8b / v9 training-log status check** — three SSH `tail -f` shells dropped (exit 255). Reconnect to `ssh -p 30761 root@209.137.198.14` to confirm whether runs are still live or finished.
+3. **Cross-backbone v8a-recipe re-train on Mistral-7B-v0.3** — flagged as future work in model README; would give the strongest "architecture transfers" claim.
 
 ---
 
