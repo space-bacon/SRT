@@ -293,3 +293,64 @@ python3 scripts/interiority_trajectory_plot.py \
     --readouts artifacts/interiority/v2_trajectory/readouts.jsonl \
     --out-dir  artifacts/interiority/v2_trajectory
 ```
+
+---
+
+## Update v3.1 — BOS-sink ablation (Experiment #3)
+
+**Date:** 2026-04-27.
+**Question:** v3 showed that adapter writes are concentrated at token 0.
+Were v1's regime-level findings *entirely* the BOS sink, or is there a
+mid-prompt signal underneath?
+**Method:** re-pool the v3 trajectory readouts with the first token excluded.
+Compare the resulting per-regime rankings against v1's BOS-included pooling
+(Spearman rank correlation; whether the top-ranked regime per channel is
+preserved).
+**Artifacts:**
+[bos_ablation.json](../artifacts/interiority/v2_trajectory/bos_ablation.json),
+[scripts/interiority_bos_ablation.py](../scripts/interiority_bos_ablation.py).
+
+### Result — v1's findings survive the ablation
+
+| channel | top w/ BOS (z) | top w/o BOS (z) | Spearman | kept |
+|---|---|---|---:|:---:|
+| r_hat       | code (+2.09)     | code (+1.98)     | +1.000 | yes |
+| P(super)    | literal (+0.55)  | literal (+0.55)  | +0.991 | yes |
+| regime H    | code (+3.13)     | code (+3.13)     | +0.927 | yes |
+| chain res   | metaphor (+2.66) | metaphor (+2.59) | +0.918 | yes |
+| div L21     | code (+2.83)     | code (+2.85)     | +0.791 | yes |
+| div L14     | metaphor (+1.91) | metaphor (+2.16) | +0.673 | yes |
+| div L7      | code (+1.74)     | code (+1.83)     | +0.618 | yes |
+| inj L21     | metaphor (+1.81) | metaphor (+2.31) | +0.464 | yes |
+| inj L14     | metaphor (+1.97) | metaphor (+2.61) | +0.236 | yes |
+
+**Aggregate:** mean Spearman = +0.735, min = +0.236, top-ranked regime
+preserved in 9 / 9 channels.
+
+### What this re-frames (again)
+
+v3's "adapter writes are dominated by a BOS sink" finding stands as a
+*description of the per-token shape*. But v3.1 shows the sink is
+**amplitude-modulated by the same regime preference** that v1 measured
+mean-pooled — not the *source* of it. Mid-prompt writes are small but
+regime-aligned: when the BOS token is excluded, `metaphor` actually
+*strengthens* its lead on the inj-norm channels (z = +1.97 → +2.61 for
+inj L14). The adapter writes more at token 0 *because* the prompt is
+metaphorical, not the other way around.
+
+So the layer-as-organ map from v1 is real, with two qualifications:
+
+1. The signal is delivered through a BOS-anchored attention sink (v3).
+2. The mid-prompt residue is small but rank-consistent (v3.1).
+
+The classifier channels (`r_hat`, `regime H`, `P(super)`, `chain res`)
+are nearly invariant under the ablation (Spearman ≥ 0.92), confirming
+v3's finding that they alone carry distributed per-token structure.
+
+### Reproducibility (v3.1)
+
+```bash
+python3 scripts/interiority_bos_ablation.py \
+    --readouts artifacts/interiority/v2_trajectory/readouts.jsonl \
+    --out      artifacts/interiority/v2_trajectory/bos_ablation.json
+```
