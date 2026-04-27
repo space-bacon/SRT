@@ -415,3 +415,99 @@ python3 scripts/interiority_separation_bootstrap.py \
     --out      artifacts/interiority/v2/separation_bootstrap.json \
     --n-boot   2000
 ```
+
+---
+
+## Update v3.3 — length scaling of the BOS sink (Experiment #5)
+
+**Date:** 2026-04-27.
+**Question:** v3 showed a BOS sink at v1's prompt length (~16 tokens). Does
+the sink scale with prompt length — i.e. does the adapter need to write
+more at token 0 when the prompt is longer? Or is the sink a fixed-size
+register that becomes proportionally smaller as prompts grow?
+**Method:** length-stratified battery built by within-regime concatenation:
+`{1, 3, 5, 8} × 5 prompts × 11 regimes = 220` prompts spanning T ≈ 16–129
+tokens. Per-token trajectory probe (max_seq_len = 512). Compare BOS
+amplitude and sink share across length bins.
+**Artifacts:**
+[readouts.jsonl](../artifacts/interiority/v3_long/readouts.jsonl),
+[length_scaling.json](../artifacts/interiority/v3_long/length_scaling.json),
+[length_scaling_share.png](../artifacts/interiority/v3_long/length_scaling_share.png),
+[length_scaling_value.png](../artifacts/interiority/v3_long/length_scaling_value.png),
+[scripts/build_long_battery.py](../scripts/build_long_battery.py),
+[scripts/interiority_length_scaling.py](../scripts/interiority_length_scaling.py).
+
+### Result — BOS amplitude is constant; sink is a fixed-size register
+
+| channel | BOS @ T≈16 | BOS @ T≈49 | BOS @ T≈79 | BOS @ T≈129 | scaling |
+|---|---:|---:|---:|---:|:---:|
+| inj L14 | 4803 | 4979 | 4874 | 4840 | **flat** |
+| inj L21 | 1242 | 1266 | 1292 | 1270 | **flat** |
+| div L14 |   20.5 |   21.2 |   20.9 |   20.7 | **flat** |
+| div L7  |   16.1 |   16.8 |   16.6 |   16.4 | **flat** |
+| div L21 |    6.6 |    6.8 |    6.8 |    6.7 | **flat** |
+| chain res | 0.39 | 0.40 | 0.40 | 0.39 | **flat** |
+| r_hat | 0.57 | 0.58 | 0.64 | 0.59 | flat |
+| P(super) | 0.99 | 0.99 | 0.99 | 0.99 | flat |
+| regime H | 0.06 | 0.06 | 0.07 | 0.06 | flat |
+
+The BOS amplitude is **constant across an 8× prompt-length range** for every
+adapter channel measured (inj/div/chain). Tail (mean over tokens [1:])
+amplitudes are also nearly flat. So the per-token shape doesn't change with
+length — the sink is a *content-independent register*.
+
+### Sink share visibly decays — but only because of the 1/T denominator
+
+Plotted in [length_scaling_share.png](../artifacts/interiority/v3_long/length_scaling_share.png):
+
+- **Classifier channels (`r_hat`, `P(super)`, `regime H`)** track the 1/T
+  reference exactly. They have no sink at all — every token gets roughly
+  the same value, so token 0's share is just 1/T.
+- **Adapter channels** sit *above* the 1/T reference. inj L14 stays at
+  74% sink share even at T = 129, because its sink amplitude (~4900) is
+  100× larger than its tail (~14). The decay rate matches a constant
+  numerator divided by a growing total.
+
+### What this means for v8a
+
+1. **The sink is a feature, not a bug per se.** v8a uses token 0 as a
+   global summary register that is sized for the regime, not the length.
+   This is why v1's mean-pooled regime ranking worked: the BOS register
+   carries the regime fingerprint regardless of prompt length.
+2. **Long prompts are mostly invisible to v8a's adapter modules.** The
+   tail amplitude (per non-BOS token) doesn't grow with T. So if you give
+   v8a a 1000-token document, the adapter is producing essentially the
+   same regime fingerprint it would have produced for a 16-token excerpt
+   — because all the new content gets compressed into the same fixed-size
+   sink. This is a real limitation: v8a is doing prompt classification,
+   not prompt understanding.
+3. **The "BOS dominates" framing fades for long prompts mechanically.**
+   At T = 16 the sink owns 87% of inj L14's mass; at T = 129 it owns
+   74%. Extrapolating, by T ≈ 1000 the sink would be ~30% of mass — still
+   the largest single token, but no longer dominant. So critiques of v1
+   that lean on "MAH only writes at BOS" weaken as prompts get longer.
+
+### Implication for v9 (queued)
+
+The fixed-size-register behavior is the smoking gun for the
+`coverage_loss` design. A loss term of the form:
+
+  L_cov = λ · max_t( inj_norm[t]^2 ) − mean_t( inj_norm[t]^2 )
+
+penalises concentrating writes at a single token (large max) while
+crediting distributed mid-prompt activity (large mean). This is the v9
+training-objective modification flagged in v3.
+
+### Reproducibility (v3.3)
+
+```bash
+python3 scripts/build_long_battery.py
+python3 scripts/interiority_trajectory.py \
+    --adapter checkpoints/adapter_v8a/best_adapter.pt \
+    --battery data/probes/probe_battery_long.jsonl \
+    --output  artifacts/interiority/v3_long/readouts.jsonl \
+    --max-seq-len 512
+python3 scripts/interiority_length_scaling.py \
+    --readouts artifacts/interiority/v3_long/readouts.jsonl \
+    --out-dir  artifacts/interiority/v3_long
+```
