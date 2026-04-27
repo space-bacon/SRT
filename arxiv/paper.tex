@@ -100,7 +100,7 @@
 \title{Semiotic Taps: Lightweight Adapter Modules for Bifurcation
 Detection in Frozen Language Models}
 \author{James Burton Lancaster}
-\date{April 26, 2026}
+\date{April 27, 2026}
 
 \begin{document}
 \maketitle
@@ -146,18 +146,28 @@ retrieval (recall@1 = 0.36, \(12.6\times\) random on a 35-class task),
 counterfactual community decoding (zero disagreement on factual prompts,
 0.95 mean disagreement on contested topics), zero-shot hallucination
 signal on TruthfulQA (mean \(\hat{r}\) AUROC = 0.573), and regime
-calibration (ECE = \(9\times10^{-4}\), AUROC = 0.99 on 351K tokens). The
-headline finding is in v8a: removing the 32-prototype mixing layer
-entirely, leaving the 64-D encoder output as the community vector,
-leaves CE unchanged (Δ = +0.0001 nats) while raising Reddit recall@1
-from 0.413 to 0.484, raising archetype recall@1 on an
-out-of-distribution 33-class taxonomy from 0.149 to 0.230 (\(7.6\times\)
-chance), nearly doubling the within/between cosine ratio (1.006 →
-2.016), and expanding trajectory anisotropy by \(\sim\)\(325\times\).
-v8b falsifies the ``sharper-supcon'' hypothesis on this architecture:
-doubling the contrastive weight and halving the temperature partially
-undoes v8a's gains. The encoder, not the prototype basis, was doing the
-discriminative work.
+calibration (ECE = \(9\times10^{-4}\), AUROC = 0.99 on 351K tokens;
+replicated on v8a at ECE \(= 9.1\times 10^{-4}\), §5.5). The headline
+finding is in v8a: removing the 32-prototype mixing layer entirely,
+leaving the 64-D encoder output as the community vector, leaves CE
+unchanged (Δ = +0.0001 nats) while raising Reddit recall@1 from 0.413 to
+0.484, raising archetype recall@1 on an out-of-distribution 33-class
+taxonomy from 0.149 to 0.230 (\(7.6\times\) chance), nearly doubling the
+within/between cosine ratio (1.006 → 2.016), and expanding trajectory
+anisotropy by \(\sim\)\(325\times\). v8b falsifies the
+``sharper-supcon'' hypothesis on this architecture: doubling the
+contrastive weight and halving the temperature partially undoes v8a's
+gains. The encoder, not the prototype basis, was doing the
+discriminative work. Two post-release results sharpen the architectural
+reading. A cross-backbone raw-hidden probe (§5.12) shows the
+discourse-community signal v8a amplifies is latent in
+\texttt{Qwen/Qwen3-8B} and \texttt{mistralai/Mistral-7B-v0.3} at
+comparable strength to Qwen 2.5-7B, indicating the adapter targets a
+substrate that is not Qwen-specific. An interiority study on the v8a
+checkpoint (§5.13) shows the inject channels function as a fixed-size
+BOS register whose amplitude is stable across an \(8\times\) length
+sweep (peak-to-peak \(\leq 4.8\%\)), while the regime classifier reads
+content-borne signal off non-BOS tokens and remains calibrated.
 
 \textbf{Keywords:} semiotic adapter, bifurcation detection,
 metapragmatic attention, interpretant chains, reflexive recurrence,
@@ -317,7 +327,7 @@ The architecture rests on three converging theoretical lines:
 
 \subsubsection{1.4 Contributions}\label{contributions}
 
-This paper makes three contributions:
+This paper makes five contributions:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -364,6 +374,23 @@ This paper makes three contributions:
   continuous architecture produces a softer version of the same
   collapse, bounding the design from above. The prototype layer was the
   binding constraint, not the supervision.
+\item
+  \textbf{Cross-backbone substrate evidence and interiority dissection.}
+  A raw-hidden 1-NN probe (§5.12) demonstrates that the
+  discourse-community signal v8a's CDH amplifies is latent in
+  \texttt{Qwen/Qwen3-8B} and \texttt{mistralai/Mistral-7B-v0.3} at
+  comparable strength to Qwen 2.5-7B's own raw signal, supporting the
+  backbone-agnostic claim without requiring an adapter re-train. An
+  eight-probe interiority study on the v8a checkpoint (§5.13) maps how
+  the four-module decomposition acquires functionally distinct channels:
+  a layer-as-organ map by regime, a 1-NN community probe at
+  \(7.7\times\) chance, a BOS-register length-scaling probe (amplitude
+  stable across \(8\times\) length sweep, peak-to-peak \(\leq 4.8\%\)),
+  a per-channel-per-regime BOS-sink ablation showing the inject channels
+  function as register slots while the regime classifier reads
+  content-borne signal, and a within-prompt-trajectory analysis showing
+  the regime classifier holds steady-state regime-specific posteriors
+  that mean pooling collapses.
 \end{enumerate}
 
 \subsubsection{1.5 Paper Organization}\label{paper-organization}
@@ -1350,7 +1377,8 @@ taken as production-grade hallucination detection. We report them as
 evidence of useful signal, not as a final detector. Combined-feature
 logistic regression and evaluation on HaluEval and SimpleQA are pending.
 
-\subsubsection{5.5 Regime calibration (v5)}\label{regime-calibration-v5}
+\subsubsection{5.5 Regime calibration (v5; replicated on
+v8a)}\label{regime-calibration-v5-replicated-on-v8a}
 
 Because the regime head is trained on 351K tokens with a heavily skewed
 base rate (94.6\% supercritical under the \(r_{\text{true}} > 0\)
@@ -1360,27 +1388,45 @@ compute Expected Calibration Error and the Brier score on
 the same 351K tokens.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
 \toprule\noalign{}
-Metric & v5, step 17K \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Metric
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+v5, step 17K
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{v8a, step 10K}
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-AUROC & 0.9899 \\
-Brier score & 0.0102 \\
-\textbf{ECE (15 bins)} & \textbf{0.0009} \\
-Max bin gap & 0.054 (in \([0.20, 0.27]\), \(n = 465\)) \\
+AUROC & 0.9899 & \textbf{0.9899} \\
+Brier score & 0.0102 & \textbf{0.0103} \\
+\textbf{ECE (15 bins)} & \textbf{0.0009} & \textbf{0.00091} \\
+Max bin gap & 0.054 (in \([0.20, 0.27]\), \(n = 465\)) & 0.052
+(mid-range bin) \\
+Bins on diagonal (within \(\pm 2\sigma\)) & 15 / 15 & \textbf{15 /
+15} \\
 \end{longtable}
 }
 
 The model is exceptionally well-calibrated: ECE of \(9 \times 10^{-4}\)
 on 351K tokens, with the largest bin gap at 0.054 in the
 very-low-density mid-range. The reliability diagram (Figure 5.1,
-\texttt{artifacts/regime\_calibration/v5\_step17000.png}) traces the
-diagonal almost perfectly across all 15 bins. This unblocks downstream
-use of \(P(\text{supercritical})\) as a probability rather than a
-relative score.
+\texttt{artifacts/regime\_calibration/v5\_step17000.png}; v8a
+replication at
+\texttt{artifacts/regime\_calibration/v8a\_step10000.json} and rendered
+as Fig. 9 of the public demo card) traces the diagonal almost perfectly
+across all 15 bins. The v8a replication confirms that removing the
+prototype bottleneck (§5.9) did not degrade calibration: the regime head
+still produces directly-thresholdable probabilities, with no need for
+post-hoc Platt or isotonic correction. This unblocks downstream use of
+\(P(\text{supercritical})\) as a probability rather than a relative
+score.
 
 \subsubsection{\texorpdfstring{5.6 Negative result: context-conditional
 \(\hat{r}\)
@@ -1862,6 +1908,176 @@ this architecture, and will instead target either archetype-conditioned
 direct supervision (Section 5.8 hypothesis (a)) or a fundamentally
 different objective for orthogonalizing the trajectory manifold.
 
+\subsubsection{5.12 Cross-backbone signal probe (Qwen 2.5-7B / Qwen 3-8B
+/
+Mistral-7B-v0.3)}\label{cross-backbone-signal-probe-qwen-2.5-7b-qwen-3-8b-mistral-7b-v0.3}
+
+The single-backbone limitation flagged in §6.6 is partially addressable
+without re-training the adapter on a new backbone. The first question to
+ask is whether the discourse-community signal that v8a's CDH amplifies
+is \emph{specific to Qwen 2.5}, or whether it is latent in other
+7B-class causal LMs and merely needs to be read out. We answer with the
+simplest possible probe: take raw mean-pooled hidden states from each
+backbone on \texttt{data/val\_200.jsonl} (200 samples, 35 coarse Reddit
+communities), then compute leave-one-out 1-nearest-neighbor recall@1 on
+cosine similarity. No training, no labels at inference, no adapter.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule\noalign{}
+Backbone & best raw-hidden recall@1 & best layer & \(\times\) chance \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{Qwen/Qwen2.5-7B} & 0.260 & 16 & 9.1\(\times\) \\
+\texttt{Qwen/Qwen3-8B} & 0.220 & 4 & 7.7\(\times\) \\
+\texttt{mistralai/Mistral-7B-v0.3} & \textbf{0.295} & 16 &
+\textbf{10.3\(\times\)} \\
+\end{longtable}
+}
+
+For reference, chance on this 35-class probe is \(1/35 = 0.0286\), and
+the v8a SRT-Adapter on \texttt{Qwen/Qwen2.5-7B} reaches recall@1
+\(= 0.484\) (\(16.7\times\) chance) on the larger Reddit validation
+split (§5.9). Three observations follow.
+
+\emph{The signal is not Qwen-specific.} \texttt{Mistral-7B-v0.3} raw
+hidden states actually carry slightly more discourse-community
+information than \texttt{Qwen2.5-7B} raw hidden states do
+(10.3\(\times\) vs 9.1\(\times\) chance on the same probe). The
+community-discriminative subspace that the adapter's CDH learns to
+amplify is present in both Qwen-family and Mistral-family backbones at
+comparable strength. Whatever the adapter is reading off the residual
+stream, the \emph{raw substrate} it depends on is a property of
+contemporary 7B-class causal LMs, not of one specific tokenizer or
+training recipe.
+
+\emph{The adapter's contribution is a \textasciitilde{}\(1.8\times\)
+amplification of that substrate.} v8a on Qwen 2.5-7B delivers
+\(16.7\times\) chance, which is roughly \(1.8\times\) the strongest
+raw-hidden-state baseline in the table (Mistral, \(10.3\times\)) and
+\(1.8\times\) the same backbone's own raw signal at the best layer
+(\(9.1\times\)). The adapter is doing real discriminative work on top of
+what the frozen backbone already encodes; the residual stream alone gets
+you most of the way to chance-level retrieval but does not reach the v8a
+number on its own.
+
+\emph{The architecture should transfer.} The CDH consumes a single
+hidden-state tensor at \texttt{community\_layer\_idx}; nothing in the
+adapter is Qwen-tokenizer-specific. Re-training the v8a recipe on
+Mistral-7B-v0.3 is a plausible future-work item; the raw-substrate
+result above is the strongest zero-cost evidence we currently have for
+the cross-backbone hypothesis. The full reproduction script is
+\texttt{scripts/cross\_backbone\_probe.py}, JSON results are at
+\texttt{artifacts/cross\_backbone.json} and the two extra-backbone files
+(\texttt{cross\_backbone\_extra.json},
+\texttt{cross\_backbone\_mistral.json}), and the rendered visualization
+is Fig. 8 of the public demo card.
+
+\subsubsection{5.13 Interiority study: post-release diagnostics on
+v8a}\label{interiority-study-post-release-diagnostics-on-v8a}
+
+This subsection summarizes a sequence of post-release probes on the v8a
+checkpoint that dissect \emph{how} the adapter encodes semiotic regime,
+with full numbers and reproduction commands in
+\href{https://github.com/space-bacon/SRT/blob/main/docs/INTERIORITY_V1_FINDINGS.md}{\texttt{docs/INTERIORITY\_V1\_FINDINGS.md}}.
+The probe battery is 11 regimes (\texttt{metaphor},
+\texttt{counterfactual}, \texttt{negation\_modality}, \texttt{irony},
+\texttt{literal}, \texttt{refusal\_bait}, \texttt{lyric},
+\texttt{deixis}, \texttt{self\_reference}, \texttt{quoted\_speech},
+\texttt{code}) \(\times\) 25 prompts. The community vector throughout is
+the 64-D CDH output (\texttt{use\_prototypes=False}).
+
+\emph{Layer-as-organ map.} Per-regime z-score winners across nine
+adapter channels show channel specialization: \texttt{code} peaks on
+\(\hat{r}\), regime entropy, and \(\text{div}\,L21\); \texttt{metaphor}
+peaks on \(\text{inj}\,L14\), \(\text{inj}\,L21\), and the chain
+residual; \texttt{literal} peaks on \(P(\text{super})\). The four-module
+decomposition acquires functionally distinct channels under v8a's
+continuous architecture.
+
+\emph{Community 1-NN.} Leave-one-out 1-NN top-1 accuracy on the
+11-regime probe battery is \(0.70\), with bootstrap mean \(0.77\) and
+CI95 \([0.72, 0.82]\) over 2000 iterations. This is \(7.7\times\) chance
+on a 1/11 task. The top centroid pair
+\texttt{code}\(\leftrightarrow\)\texttt{literal} (Euclidean
+\(d = 1.07\)) stays the most-separated pair in \(85.5\%\) of bootstrap
+iterations; the bottom pair
+\texttt{quoted\_speech}\(\leftrightarrow\)\texttt{self\_reference}
+(\(d = 0.39\)) stays last in \(83.0\%\). The point estimate of community
+separation ratio is \(0.85\), which we treat as a lower bound: the
+bootstrap CI95 \([0.86, 0.98]\) is upward-biased by within-cluster
+duplicate sampling.
+
+\emph{BOS-register length scaling.} A per-token trajectory probe across
+\(T \in \{16, 49, 79, 129\}\) token windows (4 length bins \(\times\) 5
+prompts \(\times\) 11 regimes) shows that the adapter's write channels
+(\(\text{inj}\,L14\), \(\text{inj}\,L21\), \(\text{div}\,L7/L14/L21\),
+chain residual) form a \emph{fixed-size BOS register}: BOS-token
+amplitude on those channels is stable across an \(8\times\) length
+sweep, staying within \(\pm 2.5\%\) of the \(T \approx 16\) baseline
+(peak-to-peak \(\leq 4.8\%\)). v8a learns to compress each prompt's
+regime structure into a single fixed-amplitude write at the BOS slot;
+mid-prompt activity on inject channels is small.
+
+\emph{BOS-sink ablation, per channel \(\times\) regime.} The above is
+consistent with two readings: either the adapter encodes its global
+regime summary at BOS and only at BOS, or BOS is a sink that contributes
+to but does not solely determine the regime ranking. We disambiguate by
+computing, for each channel \(c\) and regime \(g\), the z-score of
+\(g\)'s mean activation against the other ten regimes twice: once with
+BOS included in the pooling window (\(z^{\text{with}}_{c,g}\)), once
+with BOS excluded (\(z^{\text{no}}_{c,g}\)), and reporting
+\(\Delta |z|_{c,g} = |z^{\text{with}}_{c,g}| - |z^{\text{no}}_{c,g}|\).
+On \(\hat{r}\) and on regime entropy, \(|\Delta|z|| \leq 0.27\) for
+every regime: the regime-classifier scalars read essentially the same
+regime structure with or without the BOS slot, so the regime signature
+is \emph{content-borne}. On \(\text{inj}\,L14\) the deltas are large and
+signed: \texttt{metaphor} \(\Delta = -0.64\) (regime signal is
+BOS-localized; removing BOS \emph{strengthens} the relative z-score of
+the content-token mean), \texttt{literal} \(\Delta = +0.98\) (regime
+signal is \emph{anti}-localized to BOS; removing BOS dilutes the regime
+signature). The chain-residual channel is intermediate (max \(|\Delta|\)
+\(= 0.58\) on \texttt{quoted\_speech}). The honest synthesis is that the
+inject channels are functioning as register slots that hold a global
+per-prompt summary, while the regime classifier reads regime structure
+off content tokens directly. A simpler aggregate measure, regime-rank
+preservation under BOS exclusion, holds in 9/9 channels with mean
+Spearman \(\rho = +0.74\), which is consistent with but coarser than the
+per-channel per-regime breakdown above.
+
+\emph{Within-prompt trajectories.} Plotting per-position curves for the
+regime-classifier scalars (\(\hat{r}\), regime entropy) across 19
+content position bins (BOS dropped) per regime shows that the temporal
+structure hidden by mean pooling is informative. \(\hat{r}\) separates
+regimes by sustained amplitude: \texttt{code} sits at
+\(\hat{r} \geq 0.85\) across the full window;
+\texttt{negation\_modality}, \texttt{deixis}, and \texttt{refusal\_bait}
+sit at \(\hat{r} \leq 0.40\); the other seven regimes occupy a middle
+band \(0.45\)--\(0.75\). Regime entropy puts \texttt{code} in a
+sustained \(0.18\)--\(0.32\) band while every other regime stays at
+\(\leq 0.05\) across all 19 content positions. The classifier is
+consistently \emph{uncertain} about the regime label whenever the prompt
+is \texttt{code} and consistently confident on every other regime, and
+that uncertainty is steady-state across positions, not a transient.
+Mean-pooled scalars collapse this to a single number per prompt and lose
+the structure.
+
+\emph{Architectural reading of the interiority study.} v8a learned to
+compress each prompt into a fixed-size \emph{regime fingerprint} written
+into the BOS register on inject channels, while the regime classifier
+itself operates as a content-distributed channel that reads regime
+evidence off non-BOS tokens. This is consistent with §6.3: the
+inject-back arm carries no measurable signal in v8a, so the adapter's
+content-routing capacity is under-used. v9 (Section 7) targets this
+directly with a coverage-loss term that penalizes register
+concentration. The interiority probes do not change v8a's headline
+numbers; they explain \emph{where} in the architecture those numbers
+come from. Visualizations (per-channel z-score heatmaps, per-regime
+within-prompt trajectories, BOS-ablation \(\Delta |z|\) matrix) appear
+as Figs. 10 and 11 of the public demo card.
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{6. Discussion}\label{discussion}
@@ -1927,7 +2143,18 @@ inject-back arm at evaluation produces no measurable downstream change
 on CE, on the regime classifier, or on the hallucination probes
 (Sections 2.5, 5.7, 5.9). The safety valve held, but the channel through
 which the meta-state would modulate generation has not learned to carry
-signal.
+signal. The interiority study in §5.13 sharpens this picture: the inject
+channels \emph{do} carry signal, but it is concentrated in a fixed-size
+BOS register (BOS amplitude is stable across an \(8\times\) length
+sweep, peak-to-peak \(\leq 4.8\%\)), with the per-channel \(\times\)
+per-regime BOS-ablation analysis showing that some regimes
+(e.g.~\texttt{metaphor}) localize their inject signature at BOS and
+others (e.g.~\texttt{literal}) are anti-localized to BOS. The arm has
+learned to \emph{summarize} but not to \emph{modulate}. v9's
+coverage-loss design (Section 7, Appendix A version history) is directed
+at exactly this: penalize register concentration and credit distributed
+mid-prompt activity, so that the inject channel has gradient pressure to
+behave as a per-token modulator rather than a per-prompt summary slot.
 
 This null is not new. Stage 3 Phase 1 ran 105 training rounds (R21
 through R105 on TinyLlama-1.1B, documented in Lancaster, 2026a) with the
@@ -2036,9 +2263,18 @@ data tells us which is which.
   strongest current evidence that \(r_{\text{true}}\) as currently
   constructed is not a clean proxy for contestedness.
 \item
-  \textbf{Single backbone.} Results are reported only for Qwen 2.5-7B.
-  The backbone-agnostic claim requires validation across LLaMA, Mistral,
-  and other architectures.
+  \textbf{Single backbone (partially answered).} Adapter-trained results
+  are reported only for Qwen 2.5-7B. The cross-backbone raw-hidden probe
+  in §5.12 shows the discourse-community signal that v8a amplifies is
+  present at comparable strength in \texttt{Qwen/Qwen3-8B}
+  (\(7.7\times\) chance on raw hidden states) and
+  \texttt{mistralai/Mistral-7B-v0.3} (\(10.3\times\) chance, slightly
+  stronger than Qwen 2.5-7B's own \(9.1\times\)). This is consistent
+  with the architecture being backbone-agnostic and with the adapter's
+  \(\sim 1.8\times\) amplification factor transferring, but the actual
+  adapter-on-Mistral re-train has not yet been executed. The full
+  backbone-agnostic claim still requires that re-training, which is a
+  v9-onward work item.
 \end{enumerate}
 
 \subsubsection{6.7 Connections to Emergent Perspective Diversity in
@@ -2369,9 +2605,20 @@ v8b & Sharpen community-SupCon (\(\lambda\colon 2.0 \to 4.0\),
 \(\tau\colon 0.10 \to 0.05\)) on v8a base & Partial regression on every
 encoder-geometry metric except anisotropy; falsifies ``sharper is
 better'' on this architecture \\
+v8a interiority (post-release) & Eight diagnostic probes on the v8a
+checkpoint (§5.13): layer-as-organ map, community 1-NN, BOS-register
+length scaling, BOS-sink ablation per channel \(\times\) regime,
+within-prompt trajectories, regime calibration replication,
+cross-backbone raw-hidden probe (§5.12) & Confirms v8a inject channels
+function as a fixed-size BOS register (peak-to-peak \(\leq 4.8\%\)
+across \(8\times\) length sweep); regime classifier reads content-borne
+signal; calibration ECE replicates at \(9.1\times 10^{-4}\) on 351K
+tokens; community 1-NN at \(7.7\times\) chance; cross-backbone signal
+latent in Qwen 3-8B and Mistral-7B at comparable strength \\
 v9 (in progress) & Closed-loop training target for the inject-back arm
-(Sections 2.5, 6.3); archetype-conditioned direct supervision (§5.8
-hypothesis (a)) & TBD \\
+(Sections 2.5, 6.3); coverage loss penalizing register concentration
+(§5.13, §6.3); archetype-conditioned direct supervision (§5.8 hypothesis
+(a)); adapter re-train on Mistral-7B-v0.3 (§6.6) & TBD \\
 \end{longtable}
 }
 
