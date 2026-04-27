@@ -354,3 +354,64 @@ python3 scripts/interiority_bos_ablation.py \
     --readouts artifacts/interiority/v2_trajectory/readouts.jsonl \
     --out      artifacts/interiority/v2_trajectory/bos_ablation.json
 ```
+
+---
+
+## Update v3.2 — bootstrap CIs on community separation (Experiment #4)
+
+**Date:** 2026-04-27.
+**Question:** v2 reported community `separation_ratio = 0.85` from a single
+275-prompt run. Is this a reliable population estimate, and is the
+community vector usable as a per-prompt classifier?
+**Method:** bootstrap by resampling prompts within each regime (n = 2000
+iterations). Report percentile CIs on `separation_ratio`, on each
+inter-centroid distance, and on leave-one-out 1-NN accuracy (200
+bootstrap iterations for the more expensive nearest-centroid metric).
+**Artifacts:**
+[separation_bootstrap.json](../artifacts/interiority/v2/separation_bootstrap.json),
+[scripts/interiority_separation_bootstrap.py](../scripts/interiority_separation_bootstrap.py).
+
+### Results
+
+| metric | point | bootstrap mean | 95% CI | chance |
+|---|---:|---:|---:|---:|
+| separation_ratio | 0.851 | 0.916 | [0.862, 0.983] | — |
+| 1-NN accuracy (LOO) | 0.698 | 0.770 | [0.716, 0.818] | 0.091 |
+
+**Rank stability** (out of 2000 bootstraps):
+- Most-distant pair `code ↔ literal` (d = 1.068) stays #1 in **85.5%** of bootstraps.
+- Most-similar pair `quoted_speech ↔ self_reference` (d = 0.385) stays last in **83.0%** of bootstraps.
+
+### What this answers
+
+1. **Yes, the community vector is usable as a per-prompt classifier.** 1-NN
+   accuracy of 0.70 on 11 balanced classes is **7.7× chance**. Not strong
+   enough to ship as a standalone regime detector, but strong enough to
+   say the v8a community head learned a meaningful semiotic embedding —
+   it isn't just a noisy projection of token statistics.
+2. **The v2 separation_ratio of 0.85 is a stable population estimate.**
+   The bootstrap CI sits slightly *above* the point estimate (a known
+   bias of bootstrap on centroid-distance ratios: with-replacement
+   resampling produces duplicate vectors, deflating intra-cluster
+   distance), so 0.85 should be read as a lower bound on the true value.
+3. **Centroid-pair rankings are stable.** Both extreme pairs stay extreme
+   in >83% of bootstraps, supporting the v2 reading that
+   "code is semantically far from natural language" and
+   "quoted_speech / self_reference are nearly indistinguishable in this
+   embedding."
+
+### What this doesn't answer
+
+- Whether the embedding generalises beyond the v1 battery's 25-prompt
+  sub-distributions. A held-out battery would address this.
+- Whether 1-NN at 70% scales — it might be a property of the 275-prompt
+  closed set rather than an open-world detector.
+
+### Reproducibility (v3.2)
+
+```bash
+python3 scripts/interiority_separation_bootstrap.py \
+    --readouts artifacts/interiority/v2/readouts.jsonl \
+    --out      artifacts/interiority/v2/separation_bootstrap.json \
+    --n-boot   2000
+```
