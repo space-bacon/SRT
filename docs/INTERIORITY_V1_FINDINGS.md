@@ -193,3 +193,103 @@ python3 scripts/interiority_heatmap.py \
     --readouts artifacts/interiority/v2/readouts.jsonl \
     --out-dir  artifacts/interiority/v2
 ```
+
+---
+
+## Update v3 — per-position trajectories (Experiment #2)
+
+**Date:** 2026-04-27.
+**Question:** are the regime-level "lifts" from v1/v2 distributed across the
+prompt, or are they concentrated at one or two anchor tokens?
+**Method:** rerun the same 275 prompts but dump per-token readouts instead of
+mean-pooling. Resample each prompt onto 20 evenly-spaced relative positions
+(0 → 1) and average within regime.
+**Artifacts:** [readouts.jsonl](../artifacts/interiority/v2_trajectory/readouts.jsonl),
+[summary.json](../artifacts/interiority/v2_trajectory/summary.json),
+9 small-multiples plots in
+[artifacts/interiority/v2_trajectory/](../artifacts/interiority/v2_trajectory/).
+
+### Result 1 — adapter signal channels are dominated by a BOS sink
+
+For every regime, every MAH-divergence layer, every RRM-injection layer, and
+the chain residual, the per-token signal looks the same: a large spike at
+relative position 0 (the BOS / first content token) followed by an order-of-
+magnitude collapse to ~0 by position 0.2.
+
+The peak/mean ratios make this concrete:
+
+| channel | peak/mean range across regimes | peak position |
+|---|---:|---:|
+| inj L14 | 8.4 – 17.1 | 0.00 |
+| inj L21 | 8.7 – 13.8 | 0.00 |
+| div L7  | 6.1 – 9.1  | 0.00 |
+| div L14 | 5.0 – 8.5  | 0.00 |
+| div L21 | 3.8 – 4.9  | 0.00 |
+| chain residual | 7.0 – 13.4 | 0.00 |
+
+This is the **attention-sink** phenomenon ([Xiao et al., 2024](https://arxiv.org/abs/2309.17453))
+applied to *adapter writes*, not just attention scores: the adapter is using the
+first token as a scratch register and dumping most of its contribution there.
+
+**Implication for v1.** The mean-pooled inj/div/chain numbers we reported in
+the v1 heatmap are real, but they are largely averages over the BOS spike
+amplitude. The regime ordering survives — `metaphor` does write more at
+token 0 than `quoted_speech` — but readers should not interpret those columns
+as "metaphor uses MAH consistently across the prompt." The right reading is:
+*metaphor prompts produce a larger first-token write into the residual stream.*
+Mid-prompt MAH/RRM activity is essentially zero in v8a.
+
+### Result 2 — only the regime classifier is distributed
+
+`r_hat` and the regime-classifier entropy carry per-token structure that is
+not concentrated at the BOS token. The shapes are regime-specific:
+
+- **literal** — `r_hat` rises monotonically through the prompt, peak at
+  position 1.00 (P/M = 1.84). The classifier integrates evidence as the
+  literal context accumulates.
+- **metaphor** — clear mid-prompt bump at position 0.42 (P/M = 1.60),
+  consistent with the classifier reacting to the metaphorical word once
+  it appears.
+- **counterfactual** — late rise (peak at 1.00, P/M = 1.43), consistent
+  with the conditional being resolved at the consequent.
+- **deixis, negation_modality, refusal_bait, self_reference** — flat
+  trajectories (P/M ≈ 1.2). The classifier locks in early and does not
+  update.
+- **code** — uniformly elevated `r_hat` and the only regime with
+  sustained classifier *uncertainty* (regime entropy ≈ 0.3 nats throughout
+  vs. ~0.03 nats for natural language). This corroborates v1's "abstain on
+  code" reading at the per-token level.
+
+So when we said in v1 that "the regime classifier is the most discriminating
+column," v3 sharpens that: it is also the **only column with token-resolved
+behavior** in v8a.
+
+### Result 3 — community vector is a single coordinate
+
+The community head pools internally before producing its 64-D vector, so
+trajectories do not apply to it; v2's separation_ratio = 0.85 finding stands
+as the per-prompt summary.
+
+### What this re-frames
+
+- v1's "metaphor draws more adapter compute" remains true, but the compute
+  is delivered as a single first-token write, not a distributed lift.
+- v1's "code lights up the regime classifier" generalises to "code is the
+  *only* regime where the classifier remains uncertain at every token."
+- The MAH/RRM modules in v8a appear to have learned a **prompt-summary**
+  policy (write everything at token 0) rather than a **content-routing**
+  policy (write at the relevant words). This is a training-objective
+  finding worth flagging for v9.
+
+### Reproducibility (v3)
+
+```bash
+python3 scripts/interiority_trajectory.py \
+    --adapter checkpoints/adapter_v8a/best_adapter.pt \
+    --battery data/probes/probe_battery_v1.jsonl \
+    --output  artifacts/interiority/v2_trajectory/readouts.jsonl \
+    --max-seq-len 128
+python3 scripts/interiority_trajectory_plot.py \
+    --readouts artifacts/interiority/v2_trajectory/readouts.jsonl \
+    --out-dir  artifacts/interiority/v2_trajectory
+```
