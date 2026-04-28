@@ -198,6 +198,53 @@ agreement is therefore not a coincidence of single-layer choice on either
 side — both heads carry signal at L21, with consistent sign, large effect,
 and p ≤ 10⁻⁵ in both cases.
 
+## Length-matched falsification (added 2026-04-28)
+
+In v1 the technical continuations are systematically ~4 words longer than
+the bedrock and mystical continuations. The bedrock-vs-technical MAH effect
+runs *opposite* to the length difference (bedrock peak is *larger* despite
+being shorter, which weakens the length-confound reading), but the proper
+test is to re-run on a length-matched battery. We built
+`data/probes/separatrix_illusion_v1_lentrunc.jsonl` by, for each item,
+truncating all three branches to the minimum word count among them
+(per-item mean 13.2 words, range 7-20, no items dropped). Re-running both
+heads:
+
+**MAH peak ‖divergence‖ (length-matched, n = 61):**
+
+| MAH layer | bedrock − tech | bedrock − mystic | mystic − tech |
+|---:|---|---|---|
+| L7  | +0.24, p = 1 × 10⁻³ | +0.53, p = 3 × 10⁻¹⁰ | −0.29, p = 1 × 10⁻⁴ |
+| L14 | +0.18, p = 6 × 10⁻⁵ | +0.35, p = 1 × 10⁻¹⁰ | −0.17, p = 3 × 10⁻⁹ |
+| L21 | +0.31, p = 5 × 10⁻⁷ | +0.49, p = 4 × 10⁻¹⁰ | −0.18, p = 2 × 10⁻⁷ |
+
+**T-Head (length-matched, per-layer eps calib):**
+
+| layer | Lyap std mystic − bedrock | recurrence bedrock − tech |
+|---:|---|---|
+| L7  | +0.21, p = 4 × 10⁻⁸ | +2.31, p = 4 × 10⁻⁶ |
+| L14 | +0.20, p = 2 × 10⁻⁷ | +1.56, p = 6 × 10⁻⁸ |
+| L16 | +0.21, p = 2 × 10⁻⁸ | +3.11, p = 2 × 10⁻⁹ |
+| L21 | +0.16, p = 3 × 10⁻⁶ | +3.85, p = 2 × 10⁻⁹ |
+
+**Interpretation.** The bedrock > technical > mystical MAH-peak rank
+ordering holds at every depth, every contrast, p ≤ 10⁻³ everywhere on the
+length-matched battery. T-Head Lyap-std mystical-volatility holds at every
+depth, p ≤ 10⁻⁵ everywhere. T-Head recurrence bedrock > technical holds at
+every depth, with L21 still the largest (the strict monotonicity in the
+unmatched battery was a length artifact: L7 went from NS to p = 4 × 10⁻⁶
+under length matching, indicating the unmatched L7 result was *deflated*
+by the longer technical branches at that shallow layer where eps
+calibration is most sensitive). Effect sizes attenuate ~40-50% under
+truncation, which is itself partly a power loss from shorter trajectories.
+The convergence claim survives the principal alternative explanation
+(length confound).
+
+Artifacts:
+`artifacts/separatrix/v8a/readouts_mah_layers_lentrunc.jsonl`,
+`artifacts/thead/separatrix_v1/readouts_lentrunc_L{7,14,16,21}_calib.jsonl`,
+`data/probes/separatrix_illusion_v1_lentrunc.jsonl`.
+
 ## Reproducibility
 
 ```bash
