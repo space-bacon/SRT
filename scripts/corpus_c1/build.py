@@ -129,6 +129,47 @@ def extract_url_html(path_or_url: str) -> str:
     return extract_local_html(cached)
 
 
+def _extract_html_with_selector(url: str, selector: str, drop_selectors: tuple[str, ...] = ()) -> str:
+    """Fetch HTML at `url`, return text inside the first element matching `selector`.
+
+    Requires beautifulsoup4. Used for SEP and IEP extraction where the
+    naive regex tag-strip would drag in nav, footer, and sidebar text.
+    """
+    try:
+        from bs4 import BeautifulSoup  # local import; not all manifests need it
+    except ImportError as e:
+        raise RuntimeError(
+            "beautifulsoup4 required for sep/iep extraction; "
+            "pip install beautifulsoup4"
+        ) from e
+    cached = _http_get(url, ".html")
+    raw = cached.read_text(encoding="utf-8", errors="replace")
+    soup = BeautifulSoup(raw, "html.parser")
+    article = soup.select_one(selector)
+    if article is None:
+        raise RuntimeError(f"no element matching {selector!r} at {url}")
+    for sel in ("script", "style", "nav", "header", "footer") + drop_selectors:
+        for el in article.select(sel):
+            el.decompose()
+    return article.get_text(separator="\n", strip=True)
+
+
+def extract_sep(url: str) -> str:
+    return _extract_html_with_selector(
+        url,
+        "#article-content",
+        drop_selectors=("#bibliography", "#academic-tools", "#other-internet-resources", "#related-entries"),
+    )
+
+
+def extract_iep(url: str) -> str:
+    return _extract_html_with_selector(
+        url,
+        ".entry-content",
+        drop_selectors=(".sharedaddy", ".jp-relatedposts", "#author-info"),
+    )
+
+
 def extract_arxiv(arxiv_id: str) -> str:
     """`arxiv_id` like '2603.03248' or '2603.03248v2'."""
     url = f"https://arxiv.org/pdf/{arxiv_id}"
@@ -150,6 +191,8 @@ EXTRACTORS = {
     "url_html": extract_url_html,
     "arxiv": extract_arxiv,
     "europepmc": extract_europepmc,
+    "sep": extract_sep,
+    "iep": extract_iep,
 }
 
 
