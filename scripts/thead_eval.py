@@ -157,7 +157,7 @@ def main() -> int:
         recurrence_eps=args.recurrence_eps,
         project_to=args.project_to,
     )
-    thead = TakensHead(thead_cfg, d_hidden=d_hidden).to(device).to(load_dtype)
+    thead = TakensHead(thead_cfg, d_hidden=d_hidden).to(device).to(torch.float32)
     thead.eval()
     log.info("T-Head config=%s params=%d", thead_cfg,
              sum(p.numel() for p in thead.parameters()))
@@ -191,7 +191,7 @@ def main() -> int:
                 # hidden_states: tuple of length n_layers+1 (incl. embeddings)
                 h = out.hidden_states[layer_idx + 1]  # +1 to skip embed layer
                 # truncate to real tokens; T-Head ops are O(T^2) so keep tight
-                h = h[:, :T, :]
+                h = h[:, :T, :].float()  # T-Head runs fp32 (cdist needs fp32 on CUDA)
 
                 t_out = thead(h)
                 lyap = t_out.lyapunov[0].float().cpu()
