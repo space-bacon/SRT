@@ -100,15 +100,58 @@ between them:
 - 61 items, single hand-authored battery (one author).
 - Bedrock continuations not length-balanced against mystical; v2 battery
   is queued.
-- T-Head reads only one backbone layer (L16). A multi-layer sweep (L7,
-  L14, L16, L21) would tell us whether trajectory volatility / recurrence
-  has the same depth structure as MAH divergence.
+- T-Head reads only one backbone layer per run; the multi-layer profile
+  in `## Depth profile` below uses four runs at L7, L14, L16, L21.
 - T-Head runs in fp32 over a bf16 backbone (cdist limitation). Per-item
   numbers may shift slightly on a fully-fp32 forward; the population-level
   rankings should not.
-- Recurrence eps was hand-calibrated (=20). A principled per-sequence
-  scaling (e.g., eps as a fixed quantile of pairwise distances) would
-  remove this knob.
+- Recurrence eps is per-layer (hidden-state norms grow with depth in
+  Qwen2.5-7B). Calibrated values: eps = 15 at L7, 17 at L14, 20 at L16,
+  35 at L21, each chosen so the population-mean recurrence falls in the
+  3-12 range where the metric is well-resolved.
+
+## Depth profile (added 2026-04-28)
+
+The single-layer L16 result was extended to a four-layer sweep at L7, L14,
+L16, L21 with the per-layer eps calibration above. Headline numbers
+(Wilcoxon signed-rank, two-sided, n=61):
+
+| layer | eps | Lyap std (mystic − bedrock) | Recurrence mean (bedrock − tech) |
+|---:|---:|---|---|
+| L7  | 15 | +0.294, frac+=0.84, p = 9 × 10⁻⁹ | −0.412, frac+=0.41, p = 0.40 (NS) |
+| L14 | 17 | +0.280, frac+=0.80, p = 2 × 10⁻⁸ | +1.355, frac+=0.74, p = 2 × 10⁻⁴ |
+| L16 | 20 | +0.327, frac+=0.89, p = 2 × 10⁻⁹ | +3.170, frac+=0.79, p = 1 × 10⁻⁶ |
+| L21 | 35 | +0.318, frac+=0.93, p = 4 × 10⁻¹⁰ | **+3.673, frac+=0.85, p = 3 × 10⁻⁹** |
+
+Two structural readings:
+
+**(D1) Mystical-as-volatile is depth-invariant.** The Lyapunov-std
+separation between mystical and bedrock is essentially constant across all
+four depths (0.28-0.33), with frac+ ∈ [0.80, 0.93] and p ≤ 10⁻⁷ everywhere.
+This is a property of the basin the model is in throughout the forward
+pass, not a late-layer reasoning effect. The mystical branch traces a
+wider, shallower trajectory through phase space at every measurement
+site.
+
+**(D2) Bedrock-as-recurrent builds monotonically with depth and peaks at
+L21.** The recurrence-mean separation between bedrock and technical is
+essentially zero at L7 (−0.41, NS), small at L14 (+1.36, p = 2 × 10⁻⁴),
+large at L16 (+3.17, p = 10⁻⁶), and largest at L21 (+3.67, frac+=0.85,
+p = 3 × 10⁻⁹). Bedrock-as-the-most-structured-trajectory is a property
+that *emerges with depth* and is strongest at the deepest probed layer.
+
+L21 is also where the v8a SRT-Adapter places its third MAH layer, and where
+the `INTERIORITY_V1_FINDINGS.md` heatmap reports MAH divergence has the
+largest between-regime spread ("L21 is where divergence diverges most").
+The T-Head and MAH agree on depth, not just on rank ordering. The MAH peak
+falsification (v8a, L21, p = 3.8 × 10⁻¹¹) and the T-Head recurrence
+result (this probe, L21, p = 3 × 10⁻⁹) are pointing at the same
+structural fact about Qwen2.5-7B: at the depth where the model is doing the
+most between-regime discriminative work, the bedrock-philosophy basin is
+the most distinctively-organised of the three.
+
+Artifacts: `artifacts/thead/separatrix_v1/readouts_L{7,14,16,21}_calib.jsonl`
+(L16 = `readouts.jsonl`).
 
 ## Reproducibility
 
