@@ -1,0 +1,38 @@
+{
+  "n_items": 61,
+  "adapter": "/root/srt-adapter/checkpoints/adapter_v8a/best_adapter.pt",
+  "backbone": "Qwen/Qwen2.5-7B",
+  "ref_rhat": 0.0,
+  "prediction_1_community_separation": {
+    "description": "cos(tech, bedrock) - cos(tech, mystic) > 0",
+    "mean_cos_tech_mystic": 0.9051815857652759,
+    "mean_cos_tech_bedrock": 0.9167107236189921,
+    "mean_cos_mystic_bedrock": 0.8834518985670121,
+    "wilcoxon": {
+      "n": 61,
+      "z": -2.158424088703944,
+      "p_two_sided": 0.03089487453390886,
+      "median_delta": 0.006167888641357422,
+      "mean_delta": 0.01152913785371624,
+      "frac_positive": 0.6229508196721312
+    }
+  },
+  "prediction_3_rhat_on_prompt": {
+    "description": "r_hat on prompt > ref_rhat (prompts are interpretively dense)",
+    "mean_rhat_prompt": 1.121426061528628,
+    "n_prompts_above_ref": 61
+  },
+  "prediction_4_mah_peak": {
+    "description": "MAH peak on tech+mystic > MAH peak on tech+bedrock",
+    "mean_mah_peak_mystic": 1.4927558273565573,
+    "mean_mah_peak_bedrock": 2.0716732838114753,
+    "wilcoxon": {
+      "n": 61,
+      "z": -6.611745003833545,
+      "p_two_sided": 3.7981585178478555e-11,
+      "median_delta": -0.47265625,
+      "mean_delta": -0.578917456454918,
+      "frac_positive": 0.04918032786885246
+    }
+  }
+}
