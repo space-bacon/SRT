@@ -1,0 +1,609 @@
+# Sign Systems Studies — University of Tartu Press OJS, fully OA (CC BY 4.0).
+# Harvested 2026-04-28 via scripts/corpus_c1/ojs_issue_lookup.py.
+# Seven special issues spanning the v9 computational-semiotics curriculum:
+#   biosemiotics, umwelt theory, Peirce, Tartu semiotic school,
+#   sign evolution, learning/adaptation, anticipation.
+
+manifest_version: 1
+school_default: "tartu-semiotics"
+tier_default: 1
+weight_default: 1.5
+license_default: "CC-BY-4.0"
+
+sources:
+
+
+  - id: sss48_1_01_editorial_signs_and_communicators
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.01/11553/17583"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Editorial: Signs and communicators"
+
+  - id: sss48_1_02_creating_reality_as_a_locally_tailored_interface_an_integrat
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.02/11554/17585"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Creating reality as a locally tailored interface – an integrational, pragmatic account of semiosis"
+
+  - id: sss48_1_03_modelling_the_reciprocal_dynamics_of_dialogical_communicatio
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.03/11555/17587"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Modelling the reciprocal dynamics of dialogical communication: On the communication-philosophical undercurrent of radical constructivism and second-order cybernetics"
+
+  - id: sss48_1_04_even_a_two_year_old_can_do_it_the_early_stages_of_learning_t
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.04/11556/17589"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Even a two-year-old can do it! The early stages of learning to understand moving-image media"
+
+  - id: sss48_1_05_chatting_with_chatbots_sign_making_in_text_based_human_compu
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.05/11557/17591"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Chatting with chatbots: Sign making in text-based human–computer interaction"
+
+  - id: sss48_1_06_hegel_and_the_peircean_object
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.06/11558/17593"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Hegel and the Peircean ‘object’"
+
+  - id: sss48_1_07_integrating_biosemiotics_from_a_semiological_point_of_view
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.07/11559/17595"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Integrating biosemiotics: From a semiological point of view"
+
+  - id: sss48_1_08_philosophy_as_communication_theory
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.08/11560/17597"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "Philosophy as communication theory"
+
+  - id: sss48_1_09_who_goes_there_reflections_on_signs_and_personhood_in_christ
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2020.48.1.09/11561/17599"
+    year: 2020
+    venue: "Sign Systems Studies 48(1)"
+    title: "“Who goes there?” Reflections on signs and personhood in Christopher Hutton’s Integrationism and the Self"
+
+
+  - id: sss52_3_01_front_matter
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24883/18906/37505"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Front Matter"
+
+  - id: sss52_3_02_contemporary_applications_of_umwelt_theory_introduction
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24884/18907/37640"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Contemporary applications of umwelt theory. Introduction"
+
+  - id: sss52_3_03_applied_umwelt_theory_in_the_context_of_phenomenological_tri
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24885/18908/37512"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Applied umwelt theory in the context of phenomenological triangulation and descriptive phenomenology"
+
+  - id: sss52_3_04_umwelt_and_time_extending_the_humanistic_view_on_temporality
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24886/18909/37511"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Umwelt and time: Extending the humanistic view on temporality through umwelt theory"
+
+  - id: sss52_3_05_information_is_primary_and_central_to_meaning_making
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24887/18910/37514"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Information is primary and central to meaning-making"
+
+  - id: sss52_3_06_applied_modelling_of_semiosphere_in_interspecific_cohabitati
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24888/18911/37516"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Applied modelling of semiosphere in interspecific cohabitation contexts"
+
+  - id: sss52_3_07_plasticumwelt_and_umwelt_diffraction_a_new_materialist_ecose
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24889/18912/37518"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Plasticumwelt and umwelt diffraction: A new materialist ecosemiotics"
+
+  - id: sss52_3_08_of_bubbles_and_foams_umwelt_counterpoints_in_symbiosis
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24890/18913/37520"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Of bubbles and foams: Umwelt counterpoints in symbiosis"
+
+  - id: sss52_3_09_umwelt_theory_seen_from_the_perspective_of_f_do_theory_uexk
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24891/18914/37522"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Umwelt theory seen from the perspective of fūdo theory: Uexküll, Watsuji, and Imanishi on nature, harmony, and totality"
+
+  - id: sss52_3_10_from_the_meaning_to_the_world_the_catasemiosis
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24892/18915/37524"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "From the meaning to the world: the catasemiosis"
+
+  - id: sss52_3_11_unveiling_the_potential_novel_metaphors_as_cognitive_process
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24893/18916/37526"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Unveiling the potential: Novel metaphors as cognitive processes for discovery through imagination"
+
+  - id: sss52_3_12_semiotics_now
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24894/18917/37528"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Semiotics now"
+
+  - id: sss52_3_13_semiotics_continuing_to_astonish_again_and_again_a_brief_sur
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24895/18918/37530"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Semiotics continuing to astonish... again and again: A brief survey of the journals Sign Systems Studies and Semiotica in 2023"
+
+  - id: sss52_3_14_review_of_copenhagen_gathering_reading_and_foundations
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24896/18919/37532"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Review of Copenhagen Gathering: Reading and foundations"
+
+  - id: sss52_3_15_gatherings_in_biosemiotics_24_bloemfontein_south_africa_2024
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/24897/18920/37534"
+    year: 2024
+    venue: "Sign Systems Studies 52(3-4)"
+    title: "Gatherings in Biosemiotics 24: Bloemfontein, South Africa 2024"
+
+
+  - id: sss47_1_01_from_systematic_semiotic_modelling_to_pseudointentional_refe
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.01/10948/16363"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "From systematic semiotic modelling to pseudointentional reference"
+
+  - id: sss47_1_02_funktionskreis_and_the_stratificational_model_of_semiotic_st
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.02/10949/16365"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Funktionskreis and the stratificational model of semiotic structures: Jakob von Uexküll, Luis Prieto and Louis Hjelmslev"
+
+  - id: sss47_1_03_steps_towards_the_natural_meronomy_and_taxonomy_of_semiosis
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.03/17866/16367"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Steps towards the natural meronomy and taxonomy of semiosis: Emon between index and symbol?"
+
+  - id: sss47_1_04_biopolitical_subjectification
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.04/10951/16369"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Biopolitical subjectification"
+
+  - id: sss47_1_05_semiotics_of_threats_discourse_on_the_vulnerability_of_the_e
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.05/10952/16371"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Semiotics of threats: Discourse on the vulnerability of the Estonian identity card"
+
+  - id: sss47_1_06_on_the_concept_of_the_deceptive_trailer_trailer_as_paratext
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.07/10954/16375"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "On the concept of the deceptive trailer: Trailer as paratext and multimodal model of film"
+
+  - id: sss47_1_07_darwin_s_antithesis_revisited_a_zoosemiotic_perspective_on_e
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.08/10955/16377"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Darwin’s antithesis revisited – a zoosemiotic perspective on expressing emotions in animals and animal cartoon characters"
+
+  - id: sss47_1_08_vygotsky_s_natural_history_of_signs
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.10/10957/16381"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Vygotsky’s natural history of signs"
+
+  - id: sss47_1_09_jakob_linzbach_on_his_life_and_work
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.11/10958/16383"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "Jakob Linzbach on his life and work"
+
+  - id: sss47_1_10_on_the_semiotic_aspects_of_visual_arts
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2019.47.1-2.12/10959/16385"
+    year: 2019
+    venue: "Sign Systems Studies 47(1-2)"
+    title: "On the semiotic aspects of visual arts"
+
+
+  - id: sss43_4_01_signs_systematically_studied_invitation_to_peirce_s_theory
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.01/10852/16171"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Signs systematically studied: Invitation to Peirce’s theory"
+
+  - id: sss43_4_02_exploring_peirce_s_speculative_grammar_the_immediate_object
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.02/10853/16173"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Exploring Peirce’s speculative grammar: The immediate object of a sign"
+
+  - id: sss43_4_03_c_s_peirce_on_the_dynamic_object_of_a_sign_from_ontology_to
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.03/10854/16175"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "C. S. Peirce on the dynamic object of a sign: From ontology to semiotics and back"
+
+  - id: sss43_4_04_triadism_and_processuality
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.04/10855/16177"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Triadism and processuality"
+
+  - id: sss43_4_05_the_semiotic_life_cycle_and_the_symbolic_species
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.05/10856/16179"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "The semiotic life cycle and The Symbolic Species"
+
+  - id: sss43_4_06_the_highest_branch_of_logic_on_a_neglected_question_of_specu
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.06/10857/16181"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "The highest branch of logic? On a neglected question of speculative rhetoric"
+
+  - id: sss43_4_07_the_role_of_emotional_interpretants_in_peirce_s_theory_of_be
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.07/10858/16183"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "The role of emotional interpretants in Peirce’s theory of belief and doubt"
+
+  - id: sss43_4_08_emotional_interpretants_and_ethical_inquiry
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.08/10859/16185"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Emotional interpretants and ethical inquiry"
+
+  - id: sss43_4_09_blocking_evil_infinites_a_note_on_a_note_on_a_peircean_strat
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.09/10860/16187"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Blocking evil infinites: A note on a note on a Peircean strategy"
+
+  - id: sss43_4_10_a_less_simplistic_metaphysics_peirce_s_layered_theory_of_mea
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.10/10861/16189"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "A less simplistic metaphysics: Peirce’s layered theory of meaning as a layered theory of being"
+
+  - id: sss43_4_11_being_in_the_world
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.11/10862/16191"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Being in the world"
+
+  - id: sss43_4_12_some_perplexities_about_peirce_s_skeleton_ideas
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.12/10863/16193"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Some perplexities about Peirce’s “skeleton ideas”"
+
+  - id: sss43_4_13_sign_theory_at_work_the_mental_imagery_debate_revisited
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.13/10864/16195"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Sign theory at work: The mental imagery debate revisited"
+
+  - id: sss43_4_14_is_euler_s_circle_a_symbol_or_an_icon
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.14/10865/16197"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Is Euler’s circle a symbol or an icon?"
+
+  - id: sss43_4_15_recent_studies_on_signs_commentary_and_perspectives
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.15/10866/16199"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Recent studies on signs: Commentary and perspectives"
+
+  - id: sss43_4_16_division_of_signs
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2015.43.4.16/10867/16201"
+    year: 2015
+    venue: "Sign Systems Studies 43(4)"
+    title: "Division of signs"
+
+
+  - id: sss42_2_01_sign_evolution_on_multiple_time_scales_introductory_comments
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.01/10786/16048"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Sign evolution on multiple time scales. Introductory comments"
+
+  - id: sss42_2_02_the_growth_of_signs
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.02/10790/16055"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "The growth of signs"
+
+  - id: sss42_2_03_conceptual_change_and_development_on_multiple_time_scales_fr
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.03/10807/16083"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Conceptual change and development on multiple time scales: From incremental evolution to origins"
+
+  - id: sss42_2_04_the_textuality_of_diagonal_ornamentation_historical_transfor
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.04/10815/16097"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "The textuality of diagonal ornamentation: Historical transformations of signification from the Baltic perspective"
+
+  - id: sss42_2_05_fitting_issues_the_visual_representation_of_time_in_family_t
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.05/10819/16105"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Fitting issues: The visual representation of time in family tree diagrams"
+
+  - id: sss42_2_06_the_ontogeny_of_the_embryonic_foetal_and_infant_human_umwelt
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.06/10820/16107"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "The ontogeny of the embryonic, foetal and infant human umwelt"
+
+  - id: sss42_2_07_graphic_design_production_as_a_sign
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.07/10821/16109"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Graphic design production as a sign"
+
+  - id: sss42_2_08_where_semiosis_begins_when_reading_a_text_on_event_perceptio
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.08/10822/16111"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Where semiosis begins when reading a text: On event perception"
+
+  - id: sss42_2_09_on_the_embedded_cognition_of_non_verbal_narratives
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.09/10823/16113"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "On the embedded cognition of non-verbal narratives"
+
+  - id: sss42_2_10_the_role_of_trust_in_binding_the_perspectives_of_guide_dogs
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.10/10824/16115"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "The role of trust in binding the perspectives of guide dogs and their visually impaired handlers"
+
+  - id: sss42_2_11_the_carrying_material_frames_and_immaterial_meanings
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.11/10825/16117"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "The carrying: Material frames and immaterial meanings"
+
+  - id: sss42_2_12_diagrams_narratives_and_reality
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.12/10826/16119"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Diagrams, narratives and ‘reality’"
+
+  - id: sss42_2_13_applying_peirce_in_tallinn_and_helsinki
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2014.42.2-3.13/10827/16121"
+    year: 2014
+    venue: "Sign Systems Studies 42(2-3)"
+    title: "Applying Peirce in Tallinn and Helsinki"
+
+
+  - id: sss46_4_01_learning_and_adaptation_from_a_semiotic_perspective
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.01/10937/16341"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Learning and adaptation from a semiotic perspective"
+
+  - id: sss46_4_02_adaptation_learning_bildung_discussion_with_edu_and_biosemio
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.02/10938/16343"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Adaptation, learning, Bildung: Discussion with edu- and biosemiotics"
+
+  - id: sss46_4_03_choosing_and_learning_semiosis_means_choice
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.03/10939/16345"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Choosing and learning: Semiosis means choice"
+
+  - id: sss46_4_04_emptiness_and_desire_in_the_first_rule_of_logic
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.04/10940/16347"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Emptiness and desire in the first rule of logic"
+
+  - id: sss46_4_05_can_semiotics_be_used_to_drive_paradigm_changes_in_medical_e
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.05/10941/16349"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Can semiotics be used to drive paradigm changes in medical education?"
+
+  - id: sss46_4_06_differentiation_of_language_functions_during_language_acquis
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.06/10942/16351"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Differentiation of language functions during language acquisition based on Roman Jakobson’s communication model"
+
+  - id: sss46_4_07_returning_learning_to_education_toward_an_ecological_concept
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.07/10943/16353"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Returning ‘learning’ to education: Toward an ecological conception of learning and teaching"
+
+  - id: sss46_4_08_rethinking_literary_education_in_the_digital_age
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.08/10944/16355"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Rethinking literary education in the digital age"
+
+  - id: sss46_4_09_a_peirce_for_the_21st_century
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.09/10945/16357"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "A Peirce for the 21st century"
+
+  - id: sss46_4_10_a_report_on_the_conference_ecosemiotic_paradigm_for_nature_a
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.10/10946/16359"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "A report on the conference “Ecosemiotic Paradigm for Nature and Culture”"
+
+  - id: sss46_4_11_two_decades_of_ecosemiotics_in_tartu
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2018.46.4.11/10947/16361"
+    year: 2018
+    venue: "Sign Systems Studies 46(4)"
+    title: "Two decades of ecosemiotics in Tartu"
+
+
+  - id: sss49_1_01_editorial_anticipation_and_change
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.01/12330/19236"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Editorial: Anticipation and change"
+
+  - id: sss49_1_02_anticipating_the_societal_transformation_required_to_solve_t
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.02/12331/19238"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Anticipating the societal transformation required to solve the environmental crisis in the 21st century"
+
+  - id: sss49_1_03_solar_energy_discourse_in_the_sunshine_state
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.03/12332/19240"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Solar energy discourse in the Sunshine State"
+
+  - id: sss49_1_04_music_as_a_non_arbitrary_avenue_for_exploration_of_the_socia
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.04/12333/19242"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Music as a non-arbitrary avenue for exploration of the social"
+
+  - id: sss49_1_05_towards_the_semiotics_of_the_future_from_anticipation_to_pre
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.05/12334/19244"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Towards the semiotics of the future: From anticipation to premediation"
+
+  - id: sss49_1_06_towards_an_integration_of_two_aspects_of_semiosis_a_cognitiv
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.06/12335/19246"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Towards an integration of two aspects of semiosis – A cognitive semiotic perspective"
+
+  - id: sss49_1_07_metaphor_induction_and_innovation_getting_outside_the_box
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.07/12336/19248"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Metaphor, induction and innovation: Getting outside the box"
+
+  - id: sss49_1_08_trajectories_of_anticipation_preconceptuality_and_the_task_o
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.08/12337/19250"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Trajectories of anticipation: Preconceptuality and the task of reading habit"
+
+  - id: sss49_1_09_narratives_and_the_semiotic_freedom_of_children
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.09/12338/19252"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "Narratives and the semiotic freedom of children"
+
+  - id: sss49_1_10_the_dialogic_nature_of_double_consciousness_and_double_stimu
+    type: url_pdf
+    url: "https://ojs.utlib.ee/index.php/sss/article/download/SSS.2021.49.1-2.10/12339/19254"
+    year: 2021
+    venue: "Sign Systems Studies 49(1-2)"
+    title: "The dialogic nature of double consciousness and double stimulation: Implications from Peirce and Vygotsky"
+
