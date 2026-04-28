@@ -1,0 +1,40 @@
+# Cited-paper DOIs to resolve via Crossref + Unpaywall.
+# Format: <doi>  # <human label>
+# Pipe through: python scripts/corpus_c1/doi_lookup.py --batch scripts/corpus_c1/dois.txt
+# Then add OA hits to a manifest as `type: doi`.
+
+# === Bail et al. — exposure to opposing views (PNAS) ===
+10.1073/pnas.1804840115       # Bail et al 2018 PNAS
+
+# === Foster, Rzhetsky, Evans — tradition + innovation (ASR) ===
+10.1177/0003122415601618      # Foster, Rzhetsky, Evans 2015 ASR
+
+# === Shi, Foster, Evans — weaving the fabric of science ===
+10.1016/j.socnet.2015.02.006  # Shi, Foster, Evans 2015 Social Networks
+
+# === Rzhetsky, Foster, Evans — choosing experiments (PNAS) ===
+10.1073/pnas.1509757112       # Rzhetsky et al 2015 PNAS
+
+# === Sourati & Evans — accelerating science (Nature Human Behaviour) ===
+10.1038/s41562-024-02070-9    # Sourati & Evans 2024 Nat Hum Behav (replacing arXiv-only label)
+
+# === VanSaders et al — measurement-induced phase, PNAS Nexus ===
+10.1093/pnasnexus/pgaf077     # VanSaders, Fruchart, Vitelli 2025 PNAS Nexus
+
+# === Parrondo, Horowitz, Sagawa — thermodynamics of information (Nature Phys) ===
+10.1038/nphys3230             # Parrondo, Horowitz, Sagawa 2015 Nat Phys
+
+# === Evans 2010 — open science / industry science (AJS) ===
+10.1086/652094                # Evans 2010 AJS Industry Collaboration
+
+# === Yin, Wang, Evans, Wang — failure across science (Nature) ===
+10.1038/s41586-019-1725-y     # Yin et al 2019 Nature
+
+# === Mangalam — against the Bayesian brain (BBS forthcoming) ===
+# No DOI yet (forthcoming); skip.
+
+# === Latour — selected OA pieces (test bruno-latour.fr) ===
+10.1086/421123                # Latour 2004 Critical Inquiry "Why Has Critique Run Out of Steam?"
+
+# === Kockelman — OA HAU pieces ===
+10.14318/hau1.1.024           # Kockelman 2011 HAU "Biosemiosis, technocognition, sociogenesis"

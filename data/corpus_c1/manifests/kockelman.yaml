@@ -1,0 +1,238 @@
+# Paul Kockelman - self-archived essays from his Yale faculty page.
+# Enumerated 2026-04-28 from
+#   https://campuspress.yale.edu/paulkockelman/essays/
+# via scripts/corpus_c1/landing_lookup.py.
+# These are author preprints/postprints; canonical OA route for Kockelman's
+# work because almost all his journal venues (HAU, Signs & Society,
+# Current Anthropology, Anth. Theory, L&C, JLA) are closed at the publisher.
+
+manifest_version: 1
+author_default: ["Kockelman, Paul"]
+school_default: "semiotic-anthropology"
+tier_default: 1
+weight_default: 2.0
+license_default: "author-self-archive-yale"
+
+sources:
+
+  - id: kockelman_anthropology_of_equation
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/AE.pdf"
+    doi: "10.14318/hau3.3.003"
+    year: 2013
+    title: "The Anthropology of an Equation"
+    venue: "HAU 3(3)"
+
+  - id: kockelman_huckleberry_finn_turing
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/HFTT.pdf"
+    doi: "10.1016/j.langcom.2013.03.002"
+    year: 2013
+    title: "Huckleberry Finn takes the Turing test"
+    venue: "Language & Communication"
+
+  - id: kockelman_information_enclosure_meaning
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/IEM.pdf"
+    doi: "10.1016/j.langcom.2013.01.002"
+    year: 2013
+    title: "Information is the enclosure of meaning: Cybernetics, semiotics, and alternative theories of information"
+    venue: "Language & Communication"
+
+  - id: kockelman_semiotic_technologies
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/STTRPM.pdf"
+    doi: "10.1177/1463499612463308"
+    year: 2012
+    title: "Semiotic technologies, temporal reckoning, and the portability of meaning"
+    venue: "Anthropological Theory"
+
+  - id: kockelman_biosemiosis_technocognition
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/BSTCSG.pdf"
+    doi: "10.1086/661708"
+    year: 2011
+    title: "Biosemiosis, Technocognition, and Sociogenesis"
+    venue: "Current Anthropology"
+
+  - id: kockelman_biosemiosis_replies
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/LFFL.pdf"
+    year: 2011
+    title: "Biosemiosis paper - replies and CA discussion (LFFL)"
+    venue: "Current Anthropology 52(5)"
+    note: "Continuation of Biosemiosis paper; verified by content (page 734-onward)"
+
+  - id: kockelman_mayan_ontology_poultry
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Mayan-Ontology-of-Poultry.pdf"
+    doi: "10.1017/S0047404511000467"
+    year: 2011
+    title: "A Mayan ontology of poultry: Selfhood, affect, animals, and ethnography"
+    venue: "Language in Society"
+
+  - id: kockelman_enemies_parasites_noise
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Enemies-Parasites-and-Noise.pdf"
+    year: 2010
+    title: "Enemies, Parasites, and Noise: How to Take Up Residence in a System Without Becoming a Term in It"
+
+  - id: kockelman_meaning_motivation_mind
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Meaning-Motivation-and-Mind.pdf"
+    doi: "10.1016/j.newideapsych.2010.03.009"
+    year: 2012
+    title: "Meaning, motivation, and mind"
+    venue: "New Ideas in Psychology"
+
+  - id: kockelman_semiotics_preprint
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Semiotics-preprint.pdf"
+    year: 2014
+    title: "Semiotics (preprint, encyclopedia entry)"
+
+  - id: kockelman_value_is_life
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Value-is-Life-Under-an-Interpretation.pdf"
+    doi: "10.1177/1463499610365381"
+    year: 2010
+    title: "Value is life under an interpretation"
+    venue: "Anthropological Theory"
+
+  - id: kockelman_meaning_and_time
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2015/08/Meaning-and-Time-12biw9u.pdf"
+    year: 2015
+    title: "Meaning and Time"
+
+  - id: kockelman_complexity_of_discourse
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2015/08/The-Complexity-of-Discourse-2a38dbc.pdf"
+    doi: "10.1080/09296170802514146"
+    year: 2009
+    title: "The Complexity of Discourse"
+    venue: "Journal of Quantitative Linguistics"
+
+  - id: kockelman_enclosure_disclosure
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Enclosure-and-Disclosure.pdf"
+    doi: "10.1215/08992363-2006-037"
+    year: 2007
+    title: "Enclosure and Disclosure"
+    venue: "Public Culture"
+
+  - id: kockelman_agency
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Agency.pdf"
+    year: 2007
+    title: "Agency: The Relation Between Meaning, Power, and Knowledge"
+    venue: "Current Anthropology"
+
+  - id: kockelman_status_to_contract
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/From-Status-to-Contract-Revisited.pdf"
+    doi: "10.1177/1463499607077296"
+    year: 2007
+    title: "From status to contract revisited"
+    venue: "Anthropological Theory"
+
+  - id: kockelman_inalienable_possession
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Inalienable-Possession-and-Personhood.pdf"
+    year: 2009
+    title: "Inalienable Possession and Personhood"
+
+  - id: kockelman_number_unity_utility
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Number-Unity-and-Utility.pdf"
+    doi: "10.1111/j.1467-9655.2007.00433.x"
+    year: 2007
+    title: "Number, unit, and utility in a Mayan community"
+    venue: "JRAI"
+
+  - id: kockelman_agent_person_subject_self
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Agent-Person-Subject-Self.pdf"
+    doi: "10.1515/sem.2006.072"
+    year: 2006
+    title: "Agent, person, subject, self"
+    venue: "Semiotica"
+
+  - id: kockelman_residence_in_world
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Residence-in-the-World.pdf"
+    doi: "10.1515/sem.2006.073"
+    year: 2006
+    title: "Residence in the world: Affordances, instruments, actions, roles, and identities"
+    venue: "Semiotica"
+
+  - id: kockelman_representations_of_world
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Representations-of-the-World.pdf"
+    doi: "10.1515/sem.2006.074"
+    year: 2006
+    title: "Representations of the world: Memories, perceptions, beliefs, intentions"
+    venue: "Semiotica"
+
+  - id: kockelman_semiotic_ontology_commodity
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Semiotic-Ontology-of-the-Commodity.pdf"
+    doi: "10.1525/jlin.2006.16.1.076"
+    year: 2006
+    title: "A Semiotic Ontology of the Commodity"
+    venue: "Journal of Linguistic Anthropology"
+
+  - id: kockelman_psychological_depth
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Psychological-Depth.pdf"
+    doi: "10.1016/j.langcom.2005.03.005"
+    year: 2006
+    title: "Psychological depth is the internalization of dialogical breadth"
+    venue: "Language & Communication"
+
+  - id: kockelman_stance_and_subjectivity
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Stance-and-Subjectivity.pdf"
+    year: 2004
+    title: "Stance and Subjectivity"
+    venue: "Journal of Linguistic Anthropology"
+
+  - id: kockelman_semiotic_stance
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/The-Semiotic-Stance.pdf"
+    doi: "10.1515/semi.2005.2005.157.1-4.233"
+    year: 2005
+    title: "The Semiotic Stance"
+    venue: "Semiotica"
+
+  - id: kockelman_interjections_emotions
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Interjections-and-Emotions.pdf"
+    year: 2003
+    title: "The Interclausal-Pragmatic Functions of Interjections and Emotions"
+
+  - id: kockelman_interclausal_relations
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/The-Interclausal-Relations-Hierarchy.pdf"
+    doi: "10.1086/376484"
+    year: 2003
+    title: "The Interclausal Relations Hierarchy in Q'eqchi' Maya"
+    venue: "International Journal of American Linguistics"
+
+  - id: kockelman_copal
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Copal.pdf"
+    year: 2010
+    title: "Copal" # short essay
+
+  - id: kockelman_poetic_function
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Poetic-Function.pdf"
+    year: 2008
+    title: "The Poetic Function"
+
+  - id: kockelman_legend_of_suns
+    type: url_pdf
+    url: "https://campuspress.yale.edu/paulkockelman/files/2014/05/Legend-of-the-Suns.pdf"
+    year: 2010
+    title: "The Legend of the Suns" # essay/translation

@@ -1,0 +1,15 @@
+# DOIs harvested from https://knowledgelab.org/publications/ on 2026-04-28
+10.1038/s41586-025-09922-y    # Knowledge Lab Nature 2025/2026
+10.1038/s41467-023-36741-4    # Nat Communications
+10.1073/pnas.2021636118       # PNAS
+10.1038/s41586-019-0941-9     # Nature
+10.1111/soc4.13043            # Sociological Compass
+10.1073/pnas.1719792115       # PNAS
+10.1371/journal.pcbi.1002132  # PLOS Comp Bio
+10.1371/journal.pcbi.1001055  # PLOS Comp Bio
+10.1016/j.respol.2023.104911  # Research Policy
+10.1371/journal.pone.0273994  # PLOS One
+10.1073/pnas.2200927119       # PNAS
+10.7554/eLife.43094           # eLife
+10.1371/journal.pcbi.1004205  # PLOS Comp Bio
+10.1371/journal.pcbi.1003799  # PLOS Comp Bio

@@ -1,0 +1,138 @@
+# Lancaster, James Burton — full local corpus
+# Tier 1 / weight 5.0 / school=srt
+# All sources are local files in adjacent repositories the user owns.
+
+manifest_version: 1
+author_default:
+  - "Lancaster, James Burton"
+school_default: "srt"
+tier_default: 1
+weight_default: 5.0
+license_default: "author-authorized-research-use"
+
+sources:
+
+  - id: lancaster_treachery_2025
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/Lancaster_Treachery_of_Signs_2025_v3.md
+    year: 2025
+    title: "The Treachery of Signs"
+    venue: "SSRN 5987495"
+    note: "Program-level theoretical foundation"
+
+  - id: lancaster_srt_2025
+    type: local_pdf
+    path: /Users/burtron/development/SRT/docs/Lancaster_SRT_Neural_Architecture_Meaning_Divergence_2025.pdf
+    year: 2025
+    title: "SRT Neural Architecture for Meaning Divergence (2025 version)"
+
+  - id: lancaster_srt_2026c
+    type: local_pdf
+    path: /Users/burtron/development/SRT/docs/Lancaster_SRT_Neural_Architecture_Meaning_Divergence_2026-c.pdf
+    year: 2026
+    title: "SRT Neural Architecture for Meaning Divergence (2026c version)"
+    note: "Cited in paper.md as Lancaster 2026a / Reddit Discourse Corpus paper"
+
+  - id: lancaster_extended_theory
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/EXTENDEDTHEORY.md
+    year: 2025
+    title: "SRT Extended Theory"
+
+  - id: lancaster_proven
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/PROVEN.md
+    year: 2026
+    title: "SRT Validation: Proven Claims"
+
+  - id: lancaster_validation
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/VALIDATION.md
+    year: 2026
+    title: "SRT Validation"
+
+  - id: lancaster_preprint
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/PREPRINT.md
+    year: 2026
+    title: "SRT Preprint draft"
+
+  - id: lancaster_architecture
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/ARCHITECTURE.md
+    year: 2026
+    title: "SRT Architecture spec"
+
+  - id: lancaster_research_roadmap
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/RESEARCH_ROADMAP.md
+    year: 2026
+    title: "SRT Research Roadmap"
+
+  - id: lancaster_scale_roadmap
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/SCALE_ROADMAP.md
+    year: 2026
+    title: "SRT Scale Roadmap"
+
+  - id: lancaster_paper_md
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/paper.md
+    year: 2026
+    title: "SRT paper draft (full)"
+
+  - id: lancaster_substack_terrain
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/substack_terrain.md
+    year: 2026
+    title: "Substack: Terrain"
+
+  - id: lancaster_substack_instrument
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/substack_instrument.md
+    year: 2026
+    title: "Substack: Instrument"
+
+  # Adapter repo (this repo) — engineering write-ups
+  - id: lancaster_adapter_paper
+    type: local_md
+    path: /Users/burtron/development/srt-adapter/paper.md
+    year: 2026
+    title: "SRT-Adapter paper (current draft)"
+
+  - id: lancaster_interiority_v1
+    type: local_md
+    path: /Users/burtron/development/srt-adapter/docs/INTERIORITY_V1_FINDINGS.md
+    year: 2026
+    title: "Interiority v1 findings"
+
+  - id: lancaster_interiority_study
+    type: local_md
+    path: /Users/burtron/development/srt-adapter/docs/INTERIORITY_STUDY.md
+    year: 2026
+    title: "Interiority study design"
+
+  - id: lancaster_adapter_v2_plan
+    type: local_md
+    path: /Users/burtron/development/srt-adapter/docs/ADAPTER_V2_PLAN.md
+    year: 2026
+    title: "Adapter v2 plan"
+
+  - id: lancaster_adapter_v8a_readme
+    type: local_md
+    path: /Users/burtron/development/srt-adapter/release/srt-adapter-v8a/README.md
+    year: 2026
+    title: "v8a release README"
+
+  # Patent disclosure (your own IP)
+  - id: lancaster_patent_spec
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/patent/01_SPECIFICATION.md
+    year: 2026
+    title: "SRT Patent Specification"
+
+  - id: lancaster_patent_claims
+    type: local_md
+    path: /Users/burtron/development/SRT/docs/patent/02_CLAIMS.md
+    year: 2026
+    title: "SRT Patent Claims"

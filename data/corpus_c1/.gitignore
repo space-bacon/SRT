@@ -1,0 +1,5 @@
+# C1 corpus build artifacts - reproducible from manifests + scripts
+cache/
+extracted/
+jsonl/
+rejected.jsonl

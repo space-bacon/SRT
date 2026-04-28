@@ -1,0 +1,55 @@
+# Tier 1 OA papers verified via Crossref + Unpaywall.
+# Each PDF URL was returned by Unpaywall as the best OA location and the
+# corresponding metadata was confirmed against the citing context.
+# Add new entries ONLY after running:
+#   python scripts/corpus_c1/doi_lookup.py <doi>
+# and confirming title + authors match the intended paper.
+
+manifest_version: 1
+author_default: ["various"]
+school_default: "tier1-cited-doi"
+tier_default: 1
+weight_default: 2.0
+license_default: "see-per-source"
+
+sources:
+
+  - id: bail_2018_exposure_pnas
+    type: europepmc
+    pmc_id: "PMC6140520"
+    doi: "10.1073/pnas.1804840115"
+    author: ["Bail, C. A.", "Argyle, L. P.", "Brown, T. W.", "Bumpus, J. P."]
+    year: 2018
+    title: "Exposure to opposing views on social media can increase political polarization"
+    venue: "PNAS 115(37)"
+    license: "pmc-green-oa"
+    school: "computational-social-science"
+
+  # NOTE: Shi, Foster, Evans 2015 (Social Networks 43) is CC-BY at Elsevier
+  # but Elsevier blocks our scraper (403) and the paper is not in PMC.
+  # TODO: locate Knowledge Lab self-archive URL and add as `url_pdf`.
+  # - id: shi_foster_evans_2015_weaving
+  #   type: url_pdf
+  #   url: "<knowledgelab self-archive url here>"
+
+  - id: rzhetsky_foster_evans_2015_choosing_pnas
+    type: europepmc
+    pmc_id: "PMC4664375"
+    doi: "10.1073/pnas.1509757112"
+    author: ["Rzhetsky, A.", "Foster, J. G.", "Foster, I. T.", "Evans, J. A."]
+    year: 2015
+    title: "Choosing experiments to accelerate collective discovery"
+    venue: "PNAS 112(47)"
+    license: "pnas-bronze-oa"
+    school: "sociology-of-science"
+
+  - id: yin_evans_2019_failure_nature
+    type: arxiv
+    arxiv_id: "1903.07562"
+    doi: "10.1038/s41586-019-1725-y"
+    author: ["Yin, Y.", "Wang, Y.", "Evans, J. A.", "Wang, D."]
+    year: 2019
+    title: "Quantifying the dynamics of failure across science, startups and security"
+    venue: "Nature 575"
+    license: "arxiv-green-oa"
+    school: "sociology-of-science"

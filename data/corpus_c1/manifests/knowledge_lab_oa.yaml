@@ -1,0 +1,118 @@
+# Knowledge Lab (James A. Evans + colleagues), DOI-verified OA papers.
+# All sources verified via Crossref + Unpaywall and (where used) PMC IDs
+# returned by the NCBI idconv API. PMC IDs verified 2026-04-28.
+
+manifest_version: 1
+author_default: ["Evans, James A. and colleagues"]
+school_default: "sociology-of-science"
+tier_default: 1
+weight_default: 2.0
+license_default: "see-per-source"
+
+sources:
+
+  - id: shi_evans_2023_surprising_combinations
+    type: europepmc
+    pmc_id: "PMC10039062"
+    doi: "10.1038/s41467-023-36741-4"
+    author: ["Shi, F.", "Evans, J. A."]
+    year: 2023
+    title: "Surprising combinations of research contents and contexts are related to impact and emerge with scientific outsiders from distant disciplines"
+    venue: "Nature Communications"
+    license: "cc-by"
+
+  - id: chu_evans_2021_slowed_canonical
+    type: europepmc
+    pmc_id: "PMC8522281"
+    doi: "10.1073/pnas.2021636118"
+    author: ["Chu, J. S. G.", "Evans, J. A."]
+    year: 2021
+    title: "Slowed canonical progress in large fields of science"
+    venue: "PNAS"
+    license: "cc-by-nc-nd"
+
+  - id: cao_chen_evans_2022_destructive_creation
+    type: arxiv
+    arxiv_id: "2210.10661"
+    doi: "10.1111/soc4.13043"
+    author: ["Cao, L.", "Chen, Z.", "Evans, J."]
+    year: 2022
+    title: "Destructive creation, creative destruction, and the paradox of innovation science"
+    venue: "Sociology Compass"
+    license: "arxiv-green-oa"
+
+  - id: gerow_2018_discursive_influence
+    type: europepmc
+    pmc_id: "PMC5879694"
+    doi: "10.1073/pnas.1719792115"
+    author: ["Gerow, A.", "Hu, Y.", "Boyd-Graber, J.", "Blei, D. M.", "Evans, J. A."]
+    year: 2018
+    title: "Measuring discursive influence across scholarship"
+    venue: "PNAS 115(13)"
+    license: "pnas-bronze-oa"
+
+  - id: divoli_2011_conflicting_assumptions
+    type: url_pdf
+    url: "https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1002132&type=printable"
+    doi: "10.1371/journal.pcbi.1002132"
+    author: ["Divoli, A.", "Mendonca, E. A.", "Evans, J. A.", "Rzhetsky, A."]
+    year: 2011
+    title: "Conflicting Biomedical Assumptions for Mathematical Modeling: The Case of Cancer Metastasis"
+    venue: "PLoS Computational Biology"
+    license: "cc-by"
+
+  - id: yao_2011_benchmarking_ontologies
+    type: url_pdf
+    url: "https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1001055&type=printable"
+    doi: "10.1371/journal.pcbi.1001055"
+    author: ["Yao, L.", "Divoli, A.", "Mayzus, I.", "Evans, J. A.", "Rzhetsky, A."]
+    year: 2011
+    title: "Benchmarking Ontologies: Bigger or Better?"
+    venue: "PLoS Computational Biology"
+    license: "cc-by"
+
+  - id: acuna_2022_author_suggested_reviewers
+    type: url_pdf
+    url: "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0273994&type=printable"
+    doi: "10.1371/journal.pone.0273994"
+    author: ["Acuna, D. E.", "Teplitskiy, M.", "Evans, J. A.", "Kording, K."]
+    year: 2022
+    title: "Author-suggested reviewers rate manuscripts much more favorably"
+    venue: "PLOS ONE"
+    license: "cc-by"
+
+  - id: xu_wu_evans_2022_flat_teams
+    type: europepmc
+    pmc_id: "PMC9191666"
+    doi: "10.1073/pnas.2200927119"
+    author: ["Xu, F.", "Wu, L.", "Evans, J."]
+    year: 2022
+    title: "Flat teams drive scientific innovation"
+    venue: "PNAS 119(23)"
+    license: "cc-by"
+
+  - id: weinberger_2015_writing_science
+    type: url_pdf
+    url: "https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1004205&type=printable"
+    doi: "10.1371/journal.pcbi.1004205"
+    author: ["Weinberger, C. J.", "Evans, J. A.", "Allesina, S."]
+    year: 2015
+    title: "Ten Simple (Empirical) Rules for Writing Science"
+    venue: "PLOS Computational Biology"
+    license: "cc-by"
+
+  - id: blair_2014_undocumented_synonymy
+    type: url_pdf
+    url: "https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1003799&type=printable"
+    doi: "10.1371/journal.pcbi.1003799"
+    author: ["Blair, D. R.", "Wang, K.", "Nestorov, S.", "Evans, J. A."]
+    year: 2014
+    title: "Quantifying the Impact and Extent of Undocumented Biomedical Synonymy"
+    venue: "PLoS Computational Biology"
+    license: "cc-by"
+
+  # Skipped (verified closed at publisher, no PMC, no arXiv):
+  # - 10.1038/s41586-025-09922-y (Hao, Xu, Li, Evans 2026 Nature)
+  # - 10.1038/s41586-019-0941-9  (Wu, Wang, Evans 2019 Nature)
+  # eLife and Research Policy entries omitted: doi.org redirects don't reliably
+  # serve the PDF; need direct article URLs - left for next batch.

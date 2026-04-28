@@ -1,0 +1,13 @@
+# Kockelman + semiotic-anthropology DOIs harvested via Crossref author search.
+10.14318/hau3.3.003           # Kockelman 2013 HAU "Anthropology of an equation"
+10.14318/hau6.3.022           # Kockelman 2016 HAU "Grading, gradients..."
+10.1086/704007                # Kockelman 2019 HAU "Being multiversed in the multiverse"
+10.1086/679706                # Kockelman 2015 Signs & Society "Four Theories of Things"
+10.1086/708249                # Kockelman 2020 Signs & Society "Epistemic and Performative Dynamics of ML"
+10.1086/661708                # Kockelman 2011 Current Anthropology "Biosemiosis, Technocognition..."
+10.1086/732402                # Kockelman 2024 Current Anthropology "Ontologies and Worlds"
+10.1016/j.langcom.2013.01.002 # Kockelman 2013 L&C "Information is the enclosure of meaning"
+10.1016/j.langcom.2013.03.002 # Kockelman 2013 L&C "Huckleberry Finn takes Turing test"
+10.1525/jlin.2006.16.1.076    # Kockelman 2006 JLA "Semiotic Ontology of the Commodity"
+10.1177/1463499612463308      # Kockelman 2012 Anth Theory "Semiotic technologies"
+10.1177/1463499610365381      # Kockelman 2010 Anth Theory "Value is life under an interpretation"

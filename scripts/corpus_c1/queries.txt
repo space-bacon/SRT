@@ -1,0 +1,12 @@
+# Title|Author queries for arxiv lookup; hand-verified before adding to manifests.
+Tradition and Innovation in Scientists Research Strategies|Foster Rzhetsky Evans
+Choosing experiments to accelerate collective discovery|Rzhetsky Foster Evans
+Weaving the fabric of science|Shi Foster Evans
+Quantifying the dynamics of failure across science|Yin Wang Evans
+Accelerating science with human-aware artificial intelligence|Sourati Evans
+Metaknowledge|Evans Foster
+Exposure to opposing views on social media|Bail
+Measurement-induced phase transitions informational active matter|VanSaders Fruchart Vitelli
+Thermodynamics of information|Parrondo Horowitz Sagawa
+Will a large complex system be a Maxwell demon|Leighton
+Against the Bayesian brain|Mangalam
