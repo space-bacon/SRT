@@ -245,6 +245,76 @@ Artifacts:
 `artifacts/thead/separatrix_v1/readouts_lentrunc_L{7,14,16,21}_calib.jsonl`,
 `data/probes/separatrix_illusion_v1_lentrunc.jsonl`.
 
+## Counterfactual prototype-forcing — clean negative for Haylett pred (2) on v8a (added 2026-04-28)
+
+The four results above are correlational. Haylett's prediction (2) is the
+*causal* claim that decoding while forcing the model into the bedrock (resp.
+mystical) basin should make that branch's continuation more probable. The
+v8a forward already supports a `forced_community` override (see
+`SRTAdapter.forward`, `forced_community` argument), so the test is direct.
+
+**Procedure** (`scripts/separatrix_force_prototype.py`):
+
+1. Compute per-branch centroids of the discovered community vectors from
+   `artifacts/separatrix/v8a/readouts.jsonl` (n = 61 per branch).
+2. For each item, for each branch, compute mean cross-entropy of the
+   continuation tokens under four conditions: natural (no forcing),
+   `force = bedrock`, `force = mystical`, `force = technical`.
+3. Diagonal effect: CE under `force = self` should be lower than CE under
+   `force = other` if the prototype causally biases decode.
+
+**Result** (n = 61, Wilcoxon signed-rank, two-sided, deltas in nats):
+
+| branch | mean(CE_other − CE_self) | frac+ | p |
+|---|---:|---:|---:|
+| technical | −0.0001 | 0.48 | 0.97 |
+| mystical  | +0.0005 | 0.54 | 0.73 |
+| bedrock   | +0.0017 | 0.57 | 0.083 |
+
+Pairwise: every contrast |Δ| ≤ 0.002 nats, every p > 0.08. The most
+forgiving (bedrock under force_bedrock vs force_technical) gives p = 0.083,
+not significant uncorrected, certainly not under multiple comparisons.
+
+**Sanity check — the forcing path is wired correctly.** On a single item
+(`sep_001`, bedrock continuation, natural CE = 1.336):
+
+| forcing | CE | Δ vs natural |
+|---|---:|---:|
+| natural | 1.336 | — |
+| force = bedrock centroid (‖·‖ ≈ 1.0) | 1.346 | +0.010 |
+| force = mystical centroid | 1.341 | +0.005 |
+| force = zeros | 1.346 | +0.010 |
+| force = 10× bedrock (‖·‖ ≈ 10) | 1.330 | −0.006 |
+| force = 100× bedrock (‖·‖ ≈ 100) | 1.473 | +0.137 |
+| force = randn × 10 | 1.268 | −0.068 |
+| **force = randn × 100** | **3.609** | **+2.273** |
+
+The path is live (random × 100 swings CE by 2.27 nats). The signal isn't
+there at the magnitude v8a's community vectors live in.
+
+**Reading.** The three branch centroids sit within ‖·‖ ∈ [0.19, 0.35] of
+each other in 64-d space, with norms ≈ 1. The decode head is essentially
+invariant to differences of that magnitude. v8a's MAH heads are
+*sensitive* to the branch differences (large effect, p ≤ 10⁻⁵, four
+depths, length-matched) but the v8a continuous-community injection path
+lacks the leverage to *causally drive* decode toward those differences.
+
+**Pred (2) is provisionally falsified for v8a** and queued as a primary
+motivation for v9 (discrete prototypes with construction-enforced
+inter-cluster spread, full prototype-forcing decode path).
+
+The honest reading of the separatrix programme as a whole is therefore:
+the *diagnostic* half of the SRT/Geofinitism convergence (read-off of
+basin structure) is robust under two parameter-disjoint heads, four
+depths, length matching, and a pre-registered three-branch design; the
+*causal* half (forced-prototype decode) has a clean null on v8a and is
+pending v9.
+
+Artifacts:
+`artifacts/separatrix/v8a/force_proto_readouts.jsonl`,
+`artifacts/separatrix/v8a/force_proto_summary.json`,
+`scripts/separatrix_force_prototype.py`.
+
 ## Reproducibility
 
 ```bash

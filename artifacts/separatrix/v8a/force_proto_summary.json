@@ -1,0 +1,61 @@
+{
+  "n_items": 61,
+  "results": {
+    "technical": {
+      "n": 61,
+      "mean": -0.00014532980371694096,
+      "fracpos": 0.47540983606557374,
+      "p": 0.9742148737378238
+    },
+    "mystical": {
+      "n": 61,
+      "mean": 0.0004836946237282675,
+      "fracpos": 0.5409836065573771,
+      "p": 0.7329666903273728
+    },
+    "bedrock": {
+      "n": 61,
+      "mean": 0.0016036248597942416,
+      "fracpos": 0.5737704918032787,
+      "p": 0.08538250683360805
+    }
+  },
+  "pairwise": {
+    "branch=technical, force_mystical - force_technical": {
+      "n": 61,
+      "mean": 0.0009294709221261447,
+      "fracpos": 0.5245901639344263,
+      "p": 0.5631200250289345
+    },
+    "branch=technical, force_bedrock - force_technical": {
+      "n": 61,
+      "mean": -0.0012201305295600265,
+      "fracpos": 0.47540983606557374,
+      "p": 0.39468108090637627
+    },
+    "branch=mystical, force_technical - force_mystical": {
+      "n": 61,
+      "mean": 2.8141209336577868e-05,
+      "fracpos": 0.5081967213114754,
+      "p": 0.905658977885216
+    },
+    "branch=mystical, force_bedrock - force_mystical": {
+      "n": 61,
+      "mean": 0.0009392480381199571,
+      "fracpos": 0.6065573770491803,
+      "p": 0.5203159701517801
+    },
+    "branch=bedrock, force_technical - force_bedrock": {
+      "n": 61,
+      "mean": 0.0017075831772851162,
+      "fracpos": 0.5737704918032787,
+      "p": 0.08280453239492239
+    },
+    "branch=bedrock, force_mystical - force_bedrock": {
+      "n": 61,
+      "mean": 0.0014996665423033667,
+      "fracpos": 0.5409836065573771,
+      "p": 0.20232953058363465
+    }
+  }
+}
