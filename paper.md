@@ -652,6 +652,8 @@ What $\hat{r}$ actually appears to measure is information density combined with 
 
 The contestedness signal is in the *community head*, not in $\hat{r}$. The counterfactual-decoding result (§5.3) and the per-topic community shifts in §5.6 both demonstrate this. The v6 divergence-SupCon loss was intended to sharpen the metapragmatic channel further; in practice it improved community recall@1 (§5.7) but did not produce the expected community-conditional separation of MAH divergence trajectories on contested topics, and v8a's prototype-bottleneck removal (§5.9) turned out to be the more consequential change for both channels.
 
+A cleaner restatement, owed to a measurement-theoretic framing developed independently by Haylett (2025, 2026) and discussed in §6.8: the two outputs decompose into an *activity* axis and an *alignment* axis. $\hat{r}$ is sensitive to how much measurement is happening at a token (the density at which continuous cognitive-acoustic flow is being transduced into discrete symbols, *exogenous measurement* in Haylett's terms). The community head is sensitive to which interpretive manifold those symbols are being negotiated against (*endogenous measurement*). The earlier draft conflated these because the original architectural story expected a single bifurcation-proximity scalar; the data tells us instead that the two axes need two channels, and the model already has them.
+
 This revision of the architectural story is cleaner, not weaker: the model has two distinct outputs that measure two distinct things, and the data tells us which is which.
 
 ### 6.6 Limitations
@@ -673,6 +675,18 @@ A separate line of recent work has documented that language models trained with 
 This suggests a research question that neither approach can resolve alone. Reasoning models that develop internal perspective diversity may be performing genuine semiotic work, namely navigating meaning divergence across implicit interpretive communities, or they may be performing something closer to cognitive brainstorming or rhetorical variation within a single interpretive framework. The SRT-Adapter's metapragmatic attention head is designed to detect the former and would, in principle, register low divergence across the latter. Cross-applying mechanistic interpretability tools to adapter-equipped reasoning models, and cross-applying the adapter's divergence and bifurcation readouts to backbones probed for emergent features, is the form of collaboration this paper points toward as the next step.
 
 The von Foerster framing (Section 2.5) makes the same point in cybernetic terms: spontaneous perspective diversity in reasoning models is self-organization without an explicit semiotic substrate; the adapter provides the substrate without yet exhibiting the fully closed circular-causal loop. The two findings, taken together, suggest that the substrate and the emergent dynamics may be separable engineering targets, and that the productive question is what becomes possible when both are present.
+
+### 6.8 Convergence with the Geofinitism / Takens-Based Transformer Program
+
+A contemporaneous and independent line of work by Haylett (2025, 2026) arrives at much the same picture of meaning, basins, attractors, separatrices, and bifurcation, from a non-Peircean foundation. Where the SRT route runs through Peirce, Silverstein, and Wildgen-Anderson catastrophe-theoretic semantics, Haylett's *Geofinitism* program runs through Takens' (1981) delay-embedding theorem, treating word sequences as a quantized scalar time series whose underlying continuous semantic phase space can be reconstructed from delay coordinates. The proof-of-concept system, MARINA (Manifold-Aware Reconstruction and Inference Network Architecture), replaces attention entirely with explicit delay-coordinate reconstruction over the token stream.
+
+The convergence between the two programs is at the level of ontology, not implementation. Both treat language as a dynamical system whose observable symbols are lossy projections of a higher-dimensional flow; both identify hallucination as a probability-gradient crossing of a separatrix between a target basin and a geometrically adjacent but epistemically disjoint one (Haylett's "separatrix illusion", e.g., "quantum entanglement" → "mystical oneness"); both name the failure of static-symbol metaphysics to account for the lived geometry of meaning under amplification. That two routes from different starting axioms produce the same picture is, we think, evidence that the picture is not an artifact of either route.
+
+The methodological disagreement is sharp and useful. SRT keeps a frozen attention backbone and adds reflexive readouts on top; MARINA replaces attention with phase-space reconstruction. The two stances generate complementary tests. Cross-applying an SRT-style adapter to MARINA would test whether the community-discovery, metapragmatic-divergence, and regime-calibration signals reported here are properties of language itself or properties of attention; cross-applying MARINA's delay-embedding readout to a frozen attention backbone would supply the SRT toolchain with a trajectory-curvature channel orthogonal to the MAH's pairwise interpretant divergence. Both directions are queued for future work.
+
+Haylett's measurement-theoretic frame also gives the §6.5 finding a cleaner positive reading. If $\hat{r}$ tracks information density and $r_\text{true}$ components, while the community head tracks discourse register, then the two outputs decompose into something close to Haylett's distinction between *exogenous measurement* (the act of transducing continuous flow into discrete symbol, where $\hat{r}$ peaks) and *endogenous measurement* (the negotiation of those symbols against an internal manifold, which is what the community head reads). The two-axis decomposition is *activity × alignment*, and the two channels are reading the two axes.
+
+Finally, Haylett's *Semantic Uncertainty Appendix* practice (a structured per-term disclosure of operational definition, ambiguity bounds, and validity domain) is one we have adopted for the v9 release artifact (`release/srt-adapter-v9/SUA.md`). Several SRT terms that have proven load-bearing for misreading, *interiority*, *reflexive*, *bedrock* vs. *battleground*, *bifurcation* in our usage vs. the formal pitchfork, *intervention* (the BEN raises basin walls; it does not select a basin), are now disclosed there explicitly. We treat this as an alignment-relevant engineering practice, not a stylistic one.
 
 ---
 
@@ -714,6 +728,10 @@ Evans, J. A. (2010). Industry induces academic science to know less about more. 
 
 Foster, J. G., Rzhetsky, A., & Evans, J. A. (2015). Tradition and innovation in scientists' research strategies. *American Sociological Review*, 80(5), 875–908.
 
+Haylett, K. R. (2025). *Finite Tractus: The hidden geometry of language and thought*. finitemechanics.com.
+
+Haylett, K. R. (2026). Geofinitism: Language as a nonlinear dynamical system — attractors, basins, and the geometry of understanding. *Substack* / kevinhaylett.substack.com, January 2026. Companion paper: *Pairwise phase space embedding in transformer architecture* (MARINA / Takens-Based Transformer), finitemechanics.com.
+
 Irvine, J. T., & Gal, S. (2000). Language ideology and linguistic differentiation. In P. V. Kroskrity (Ed.), *Regimes of language* (pp. 35–83). SAR Press.
 
 Kockelman, P. (2017). *The art of interpretation in the age of computation*. Oxford University Press.
@@ -751,6 +769,8 @@ Ramachandran, V. S., & Hubbard, E. M. (2001). Synaesthesia: a window into percep
 Silverstein, M. (1993). Metapragmatic discourse and metapragmatic function. In J. A. Lucy (Ed.), *Reflexive language* (pp. 33–58). Cambridge University Press.
 
 Silverstein, M. (2003). Indexical order and the dialectics of sociolinguistic life. *Language & Communication*, 23(3–4), 193–229.
+
+Takens, F. (1981). Detecting strange attractors in turbulence. In D. A. Rand & L.-S. Young (Eds.), *Dynamical systems and turbulence, Warwick 1980*. Lecture Notes in Mathematics, vol. 898 (pp. 366–381). Springer.
 
 VanSaders, B., Fruchart, M., & Vitelli, V. (2026). Measurement-induced phase transitions in informational active matter. *PNAS Nexus*, pgag077. https://doi.org/10.1093/pnasnexus/pgag077
 
