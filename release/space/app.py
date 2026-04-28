@@ -667,16 +667,49 @@ import os as _os, time as _time, hashlib as _hashlib, threading as _threading
 _USAGE_LOG = _os.environ.get("SRT_USAGE_LOG", "/root/srt-adapter/logs/usage.jsonl")
 _os.makedirs(_os.path.dirname(_USAGE_LOG), exist_ok=True)
 _USAGE_LOCK = _threading.Lock()
+# Salt for client-IP hashing. Stable across process lifetime so the same client
+# gets the same hash, but never written to disk and rotates on restart.
+_IP_SALT = _os.environ.get("SRT_IP_SALT") or _os.urandom(16).hex()
 _inner_do_inference = _do_inference
 
-def _do_inference(text: str):  # type: ignore[no-redef]
+def _do_inference(text: str, request: "gr.Request | None" = None):  # type: ignore[no-redef]
     t0 = _time.time()
     raw = text or ""
+    client_ip = ""
+    session_hash = ""
+    user_agent = ""
+    try:
+        if request is not None:
+            client = getattr(request, "client", None)
+            if client is not None:
+                client_ip = getattr(client, "host", "") or ""
+            session_hash = getattr(request, "session_hash", "") or ""
+            headers = getattr(request, "headers", None) or {}
+            try:
+                user_agent = (headers.get("user-agent") or "")[:200]
+            except Exception:
+                user_agent = ""
+            # Honour standard reverse-proxy headers if Gradio is behind a proxy.
+            try:
+                fwd = headers.get("x-forwarded-for") or ""
+                if fwd:
+                    client_ip = fwd.split(",")[0].strip() or client_ip
+            except Exception:
+                pass
+    except Exception:
+        pass
+    client_hash = (
+        _hashlib.sha1((_IP_SALT + "|" + client_ip).encode("utf-8")).hexdigest()[:12]
+        if client_ip else ""
+    )
     rec = {
         "ts": _time.strftime("%Y-%m-%dT%H:%M:%SZ", _time.gmtime()),
+        "client_hash": client_hash,
+        "session_hash": (session_hash or "")[:12],
+        "user_agent": user_agent,
         "text_len": len(raw),
         "text_hash": _hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12],
-        "text_sample": raw[:160],
+        "text_sample": raw[:512],
     }
     try:
         out = _inner_do_inference(text)
