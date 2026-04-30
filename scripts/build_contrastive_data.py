@@ -140,38 +140,39 @@ def _stream_quora(limit: int) -> Iterator[dict]:
 
 
 def _stream_msmarco(limit: int, max_negs: int) -> Iterator[dict]:
+    """Stream MS MARCO query/positive/negative triplets.
+
+    Switched 2026-04-30 from `sentence-transformers/msmarco-hard-negatives`
+    (whose `negative` column ships as `struct<msmarco_neg: list<int64>>`
+    -> TypeError on schema cast) to
+    `sentence-transformers/msmarco-msmarco-distilbert-base-tas-b` cfg=`triplet`,
+    which exposes clean `query/positive/negative: str` columns. Each row is
+    one mined hard negative; collapse multiple rows per query for higher
+    negative count is left to caller (`max_negs` only caps within-row, which
+    here is always 1).
+    """
     from datasets import load_dataset
 
     log.info(
-        "Streaming sentence-transformers/msmarco-hard-negatives "
+        "Streaming sentence-transformers/msmarco-msmarco-distilbert-base-tas-b "
         "(triplet, train) limit=%d max_negs=%d",
         limit,
         max_negs,
     )
-    # The "triplet-hard" config gives one hard negative per row; for
-    # the full mined set we pull the "default" config and pluck the
-    # "negative" column (single hard negative per row already curated).
     ds = load_dataset(
-        "sentence-transformers/msmarco-hard-negatives",
+        "sentence-transformers/msmarco-msmarco-distilbert-base-tas-b",
+        "triplet",
         split="train",
         streaming=True,
     )
     n = 0
     for row in ds:
-        q = row.get("query") or row.get("anchor")
+        q = row.get("query")
         pos = row.get("positive")
-        # Some configs name negatives differently; collect any list-typed neg field
-        negs: list[str] = []
-        for k, v in row.items():
-            if k in {"query", "anchor", "positive"}:
-                continue
-            if isinstance(v, list):
-                negs.extend([x for x in v if isinstance(x, str)])
-            elif isinstance(v, str) and "negative" in k:
-                negs.append(v)
-        if not (q and pos):
+        neg = row.get("negative")
+        if not (isinstance(q, str) and isinstance(pos, str) and isinstance(neg, str)):
             continue
-        yield {"query": q, "positive": pos, "negatives": negs[:max_negs]}
+        yield {"query": q, "positive": pos, "negatives": [neg][:max_negs]}
         n += 1
         if n >= limit:
             break

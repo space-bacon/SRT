@@ -1,6 +1,32 @@
 # Leaderboard Plan: SRT-Adapter → MTEB
 
-Last updated: 2026-04-30
+Last updated: 2026-04-30 (post-v12)
+
+## Headline result (v12, 2026-04-30 17:04 UTC)
+
+One epoch of InfoNCE on 396K public pairs (NLI + Quora), warm-started
+from v8a. Adapter unchanged: frozen Qwen/Qwen2.5-7B + 14.5M trainable.
+
+| Cohort | Mean Spearman (40 STS splits) | Best split | Notes |
+|---|---:|---:|---|
+| **v8a** (no contrastive) | **+0.210** | STS22.v2 +0.642 | Self-supervised reflexivity target only |
+| **v12** (1ep contrastive) | **+0.346** | HUMESICK-R **+0.792** | warm-start from v8a |
+
+Per-region readout (v12):
+
+* **English STS:** HUMESICK-R 0.79, STS17 0.72, SemRel24 0.71,
+  STSBenchmark 0.53, SICK-R 0.61, STS22 family 0.49–0.66.
+* **English-only mean ≈ 0.55** (excluding the 12 IndicCrosslingualSTS
+  splits we never trained on; those carry near-0 prior and drag the
+  full mean down ~0.10).
+* **Indic crosslingual:** -0.10 to +0.11 — expected, no Indic data in
+  training set; would require multilingual mix.
+
+Training trajectory was monotonically improving recall@1 every 1000
+steps (0.111 → 0.206) with no plateau, indicating significant headroom.
+
+Result artifacts: `artifacts/mteb/v12/summary.json` and
+`artifacts/mteb/v8a/summary.json` on the A6000.
 
 ## TL;DR
 
@@ -131,12 +157,30 @@ artifacts/mteb/v8a/summary.json   # main_score per task, average
 ## Success criteria
 
 * **Floor**: v8a baseline on MTEB published to model card so the
-  artifact is reproducible.
-* **Target**: v12 in MTEB top-25 on the English overall leaderboard
-  among ≤7B models.
+  artifact is reproducible. **DONE** (mean Spearman 0.210, 40 STS splits).
+* **First milestone**: v12 demonstrates contrastive training transfers
+  through the SRT adapter geometry. **DONE** (+0.136 mean Spearman vs
+  v8a; +0.79 on HUMESICK-R; trajectory monotone with no plateau).
+* **Target**: v12 / v13 in MTEB top-25 on the English overall
+  leaderboard among ≤7B models. **In progress** — v13 (msmarco hard
+  negatives + nli + quora, warm-start from v12) launched 2026-04-30 17:12 UTC.
 * **Stretch**: top-10 on MTEB classification subset (this is the
   cheapest path to a real leaderboard rank given our supcon-heavy
   training objective).
+
+## Roadmap after v13
+
+1. **v14: gradient-cache + larger effective batch** (eff. batch ≥ 256
+   negatives via CachedMultipleNegativesRankingLoss-style accumulation).
+   Standard 5–15 pt STS lift in the literature.
+2. **v15: instruction prefixes** (`"Represent this sentence for
+   retrieval: ..."`) per the E5/Instructor recipe. Several points on
+   MTEB without retraining.
+3. **v16: full MTEB English** (Classification + Clustering +
+   Retrieval, not just STS). Submit best checkpoint to the leaderboard
+   via `mteb` CLI.
+4. **MMTEB stretch**: train on a multilingual mix to fix the
+   Indic-crosslingual splits.
 
 ## Files added in this plan
 

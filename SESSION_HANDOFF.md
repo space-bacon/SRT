@@ -1,8 +1,27 @@
-# SRT-Adapter — Session Handoff (April 27, 2026)
+# SRT-Adapter — Session Handoff (April 30, 2026)
 
 > Single document handing off live state to a fresh VS Code window opened
 > on `/Users/burtron/development/srt-adapter`. Read top-to-bottom before
 > doing anything.
+
+---
+
+## 0a. MTEB v12 — first leaderboard-credible result (April 30, 2026, 17:04 UTC)
+
+**Adapter v12** (1 epoch contrastive InfoNCE on NLI+Quora 396K pairs,
+warm-start from v8a) achieved **mean Spearman +0.346 across 40 MTEB
+STS splits**, vs **+0.210 for v8a baseline**. Best English split
+**HUMESICK-R +0.792**. ~100 min A6000 wall-time. Same forward pass
+still produces the per-token reflexivity readout.
+
+Full breakdown: [docs/MTEB_V12_RESULTS.md](docs/MTEB_V12_RESULTS.md).
+Roadmap: [docs/LEADERBOARD_PLAN.md](docs/LEADERBOARD_PLAN.md).
+
+**Active job:** v13 chain launched 17:12 UTC (msmarco hard negatives
++ nli + quora, warm-start from v12). Log:
+`/root/srt-adapter/artifacts/v13_chain.log` on A6000
+(`ssh -p 21970 root@209.137.198.14`). Will auto-run MTEB STS eval to
+`artifacts/mteb/v13/` on completion.
 
 ---
 
