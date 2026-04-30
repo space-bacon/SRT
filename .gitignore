@@ -17,3 +17,16 @@ hf
 .DS_Store
 .venv-tools/
 **/# Code Citations.md
+
+# Private / local-only notes (never pushed)
+private/
+
+# Personal correspondence and substack progress notes (held back from public release)
+**/*email_draft*
+**/*EMAIL_DRAFT*
+**/*email_draft*.md
+**/*email_draft*.html
+**/paper_notification_email*
+docs/substack_*
+**/*newsletter*
+*.eml
