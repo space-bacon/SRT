@@ -82,10 +82,28 @@ def parse_args() -> argparse.Namespace:
         help="Max number of Quora triplets to include.",
     )
     p.add_argument(
+        "--pubmed-limit",
+        type=int,
+        default=0,
+        help="Max number of PubMedQA (pqa_artificial) Q/long-answer pairs to include. 0 disables.",
+    )
+    p.add_argument(
         "--val-fraction",
         type=float,
         default=0.01,
         help="Fraction held out for validation.",
+    )
+    p.add_argument(
+        "--prefix-style",
+        default="none",
+        choices=["none", "e5"],
+        help=(
+            "Prepend instruction prefixes per row. e5: NLI/Quora rows get "
+            "'query: ' on both sides (symmetric STS); MSMARCO/PubMed rows get "
+            "'query: ' on the query and 'passage: ' on positive+negatives "
+            "(asymmetric retrieval). Match these prefixes at MTEB eval time "
+            "via mteb_eval.py --query-prompt 'query: ' --passage-prompt 'passage: '."
+        ),
     )
     p.add_argument("--seed", type=int, default=0)
     return p.parse_args()
@@ -179,6 +197,54 @@ def _stream_msmarco(limit: int, max_negs: int) -> Iterator[dict]:
     log.info("  MS MARCO rows emitted: %d", n)
 
 
+def _stream_pubmed(limit: int) -> Iterator[dict]:
+    """Stream PubMedQA pqa_artificial Q/long-answer pairs as retrieval rows.
+
+    pubmed_qa pqa_artificial: ~211k machine-generated Q/A from PubMed
+    abstracts. We treat the question as the query and the long_answer
+    (or first context if missing) as the positive. No mined hard negatives
+    -> rely on in-batch + cross-rank negatives during training.
+    """
+    from datasets import load_dataset
+
+    log.info("Streaming pubmed_qa pqa_artificial limit=%d", limit)
+    ds = load_dataset("pubmed_qa", "pqa_artificial", split="train", streaming=True)
+    n = 0
+    for row in ds:
+        q = row.get("question")
+        pos = row.get("long_answer")
+        if not pos:
+            ctx = row.get("context", {})
+            if isinstance(ctx, dict):
+                texts = ctx.get("contexts") or []
+                pos = texts[0] if texts else None
+        if not (isinstance(q, str) and isinstance(pos, str) and q and pos):
+            continue
+        yield {"query": q, "positive": pos, "negatives": [], "task_type": "retrieval"}
+        n += 1
+        if n >= limit:
+            break
+    log.info("  PubMedQA rows emitted: %d", n)
+
+
+_PREFIX_E5 = {
+    "sts": ("query: ", "query: "),
+    "retrieval": ("query: ", "passage: "),
+}
+
+
+def _apply_prefix(row: dict, style: str) -> dict:
+    if style == "none":
+        return row
+    task = row.get("task_type", "sts")
+    qp, pp = _PREFIX_E5.get(task, ("query: ", "query: "))
+    row["query"] = qp + row["query"]
+    row["positive"] = pp + row["positive"]
+    if row.get("negatives"):
+        row["negatives"] = [pp + n for n in row["negatives"]]
+    return row
+
+
 def main() -> None:
     args = parse_args()
     rng = random.Random(args.seed)
@@ -190,19 +256,23 @@ def main() -> None:
     sources = {s.strip() for s in args.include.split(",") if s.strip()}
     log.info("Sources: %s", sources)
 
-    streams: list[Iterator[dict]] = []
+    streams: list[tuple[str, Iterator[dict]]] = []
     if "nli" in sources:
-        streams.append(_stream_nli(args.nli_limit))
+        streams.append(("sts", _stream_nli(args.nli_limit)))
     if "quora" in sources:
-        streams.append(_stream_quora(args.quora_limit))
+        streams.append(("sts", _stream_quora(args.quora_limit)))
     if "msmarco" in sources:
-        streams.append(_stream_msmarco(args.msmarco_limit, args.negatives_per_row))
+        streams.append(("retrieval", _stream_msmarco(args.msmarco_limit, args.negatives_per_row)))
+    if "pubmed" in sources and args.pubmed_limit > 0:
+        streams.append(("retrieval", _stream_pubmed(args.pubmed_limit)))
 
     n_train = 0
     n_val = 0
     with train_path.open("w") as ftr, val_path.open("w") as fval:
-        for stream in streams:
+        for default_task, stream in streams:
             for row in stream:
+                row.setdefault("task_type", default_task)
+                row = _apply_prefix(row, args.prefix_style)
                 line = json.dumps(row, ensure_ascii=False) + "\n"
                 if rng.random() < args.val_fraction:
                     fval.write(line)
