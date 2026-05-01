@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
-"""DDP supervised STS regression for SRT adapter.
+"""DDP supervised STS training for SRT adapter.
 
-Loss: MSE between cosine(emb_s1, emb_s2) and human-labeled similarity score in [0, 1].
-Best-checkpoint criterion: Spearman rank correlation on a held-out dev set
-(matches MTEB STS metric directly).
+Loss (selectable via --loss):
+  mse    -- MSE(cos(e1, e2), score in [0, 1]).  Optimizes Pearson on absolute
+            cosine values.  Used by v17.
+  cosent -- CoSENT pairwise ranking loss:
+              L = log(1 + sum_{(i,j): s_i > s_j} exp(scale * (cos_j - cos_i)))
+            Optimizes Spearman rank correlation directly (matches MTEB metric).
+            Standard sentence-transformers default for STS.
+
+Best-checkpoint criterion: Spearman rank correlation on a held-out dev set.
 
 Architecture: single SRTAdapter forward over concatenated (s1 || s2), then
 split outputs and compute pairwise cosine. No negatives, no all_gather --
-loss is per-row, so DDP just averages gradients normally.
+loss is per-row (or per-pair within batch for cosent), so DDP just averages
+gradients normally.
 
 Launch:
     torchrun --standalone --nproc_per_node=2 scripts/train_supervised_sts_ddp.py \\
@@ -19,6 +26,7 @@ Launch:
         --batch-size 32 --max-seq-len 128 \\
         --lr 1e-5 --warmup-steps 50 --epochs 5 \\
         --val-every 100 --log-every 20 \\
+        --loss cosent --cosent-scale 20.0 \\
         --num-workers 2 --dtype bfloat16
 """
 
@@ -125,17 +133,39 @@ def _pad_to(t: torch.Tensor, length: int, value: int = 0) -> torch.Tensor:
 # ─────────────────── forward / loss / eval ─────────────────────
 
 
-def cosine_mse_step(
+def _cosent_loss(cos: torch.Tensor, scores: torch.Tensor, scale: float = 20.0) -> torch.Tensor:
+    """CoSENT pairwise ranking loss.
+
+    For every pair (i, j) in the batch with score_i > score_j, push cos_i > cos_j.
+    Implementation:
+        L = log(1 + sum_{(i,j): s_i > s_j} exp(scale * (cos_j - cos_i)))
+    Equivalent to a single softplus over the LSE of all violation margins,
+    using a sentinel zero so an empty-violations batch yields exactly L=0.
+    """
+    # diffs[i, j] = scale * (cos_j - cos_i)  -- punished when score_i > score_j
+    diffs = scale * (cos.unsqueeze(0) - cos.unsqueeze(1))  # (B, B)
+    pair_mask = scores.unsqueeze(1) > scores.unsqueeze(0)  # True where s_i > s_j
+    # Mask out non-violations to -inf so they contribute 0 to LSE
+    diffs = diffs.masked_fill(~pair_mask, float("-inf"))
+    # Append a 0 sentinel so LSE = log(1 + sum exp(diffs))
+    flat = diffs.flatten()
+    sentinel = torch.zeros(1, device=cos.device, dtype=cos.dtype)
+    return torch.logsumexp(torch.cat([sentinel, flat]), dim=0)
+
+
+def cosine_sup_step(
     model: torch.nn.Module,
     batch: dict,
     device: torch.device,
     pad_token_id: int = 0,
+    loss_kind: str = "mse",
+    cosent_scale: float = 20.0,
 ):
-    """Single-forward DDP-safe cosine-MSE step.
+    """Single-forward DDP-safe supervised STS step.
 
     Concatenate s1 || s2 along batch axis (right-padded to common Lmax),
     one forward through SRTAdapter, split outputs, compute pairwise cosine
-    and MSE against labeled score.
+    and the selected loss against labeled score.
     """
     s1_enc = batch["s1"]
     s2_enc = batch["s2"]
@@ -161,14 +191,22 @@ def cosine_mse_step(
     e2 = enc[B:]
     cos = (e1 * e2).sum(dim=-1)  # (B,)
 
-    loss = F.mse_loss(cos, scores)
+    if loss_kind == "mse":
+        loss = F.mse_loss(cos, scores)
+        loss_val = loss.item()
+    elif loss_kind == "cosent":
+        loss = _cosent_loss(cos, scores, scale=cosent_scale)
+        loss_val = loss.item()
+    else:
+        raise ValueError(f"unknown loss kind: {loss_kind}")
+
     with torch.no_grad():
         # rough proxy: pearson correlation on this minibatch
         cm = cos - cos.mean()
         sm = scores - scores.mean()
         denom = (cm.pow(2).sum().sqrt() * sm.pow(2).sum().sqrt()).clamp_min(1e-8)
         pearson = (cm * sm).sum() / denom
-    return loss, {"mse": loss.item(), "pearson_batch": pearson.item()}
+    return loss, {"loss": loss_val, "loss_kind": loss_kind, "pearson_batch": pearson.item()}
 
 
 def _spearmanr(a: torch.Tensor, b: torch.Tensor) -> float:
@@ -237,6 +275,10 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--grad-clip", type=float, default=1.0)
     p.add_argument("--dtype", default="bfloat16",
                    choices=["float32", "float16", "bfloat16"])
+    p.add_argument("--loss", default="mse", choices=["mse", "cosent"],
+                   help="Supervised loss: mse (Pearson-aligned) or cosent (Spearman-aligned).")
+    p.add_argument("--cosent-scale", type=float, default=20.0,
+                   help="Margin scale for CoSENT loss (sentence-transformers default = 20).")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--num-workers", type=int, default=2)
     return p.parse_args()
@@ -258,9 +300,11 @@ def main() -> None:
 
     if main_proc:
         log.info(
-            "DDP rank=%d/%d device=%s dtype=%s (supervised STS, cosine-MSE)",
-            rank, world_size, device, args.dtype,
+            "DDP rank=%d/%d device=%s dtype=%s loss=%s",
+            rank, world_size, device, args.dtype, args.loss,
         )
+        if args.loss == "cosent":
+            log.info("CoSENT scale=%.1f", args.cosent_scale)
         log.info("Loading adapter (warm-start=%s)", args.warm_start)
 
     cfg = SRTConfig()
@@ -348,9 +392,11 @@ def main() -> None:
                 g["lr"] = lr_at(step)
 
             optim.zero_grad(set_to_none=True)
-            loss, stats = cosine_mse_step(
+            loss, stats = cosine_sup_step(
                 model, batch, device,
                 pad_token_id=tok.pad_token_id or 0,
+                loss_kind=args.loss,
+                cosent_scale=args.cosent_scale,
             )
             loss.backward()
             torch.nn.utils.clip_grad_norm_(trainable, args.grad_clip)
@@ -364,9 +410,9 @@ def main() -> None:
                     "world_size": world_size, **stats,
                 }
                 log.info(
-                    "step %d  mse %.4f  pearson_batch %.3f  lr %.2e  elapsed %.0fs",
-                    step, stats["mse"], stats["pearson_batch"],
-                    lr_at(step), elapsed,
+                    "step %d  %s %.4f  pearson_batch %.3f  lr %.2e  elapsed %.0fs",
+                    step, stats["loss_kind"], stats["loss"],
+                    stats["pearson_batch"], lr_at(step), elapsed,
                 )
                 with log_path.open("a") as f:
                     f.write(json.dumps(rec) + "\n")
