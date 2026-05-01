@@ -1,8 +1,61 @@
-# SRT-Adapter — Session Handoff (April 30, 2026)
+# SRT-Adapter — Session Handoff (May 1, 2026)
 
 > Single document handing off live state to a fresh VS Code window opened
 > on `/Users/burtron/development/srt-adapter`. Read top-to-bottom before
 > doing anything.
+
+---
+
+## 0c. v18 — CoSENT pairwise loss = NEW SOTA (May 1, 2026, 13:17 UTC)
+
+**Adapter v18** (warm v15a + 5K STSB pairs + CoSENT loss, scale=20, lr=1e-5)
+takes the lead on the 40-subset MTEB-STS suite:
+
+| | v15a (prev SOTA) | v17 (cosine-MSE) | **v18 (CoSENT)** |
+|---|---|---|---|
+| Mean STS Spearman | 0.3634 | 0.3531 | **0.3707** |
+| Δ vs v15a | — | −0.010 | **+0.0074** |
+| Wins vs v15a | — | 11/40 | **29/40** |
+
+Big wins: HUMESTS12 +0.036, STS17/fr-en +0.040, STS17/en-ar +0.037,
+BIOSSES +0.013, STS12 +0.020, **all 12 IndicCrosslingual subsets improved**
+despite English-only training. Small losses: STSBenchmark/test −0.004
+(in-distribution noise) and STS13/14/15 ~−0.02.
+
+**Hypothesis confirmed:** when the eval metric is Spearman, use a rank-loss
+(CoSENT) not regression on absolute cosines (MSE). Same 5K pairs that overfit
+under MSE *generalized* and *improved cross-lingual transfer* under CoSENT.
+
+**Caveat:** dev Spearman peaked at step ~100 (0.6856), then **degraded** to
+0.5626 by step 500. Best-checkpoint saver caught the early peak, but the
+schedule was clearly over-long. Future supervised STS runs should val every
+~25 steps and shorten the schedule.
+
+- Released: `RiverRider/srt-adapter-v18` on HF.
+- Local checkpoint: [artifacts/checkpoints/v18/best_adapter.pt](artifacts/checkpoints/v18/best_adapter.pt) (29 MB, gitignored).
+- Results: [artifacts/mteb/v18/summary.json](artifacts/mteb/v18/summary.json), [artifacts/mteb/v18/train.log](artifacts/mteb/v18/train.log).
+- Commit: `2b10754` ("v18 results: CoSENT pairwise loss = NEW SOTA").
+- Memory updated: `/memories/srt-adapter-training.md` line 56.
+
+**Active job: v19a** (CoSENT-tuned, lr=5e-6, epochs=2, val_every=25) launched
+13:?? UTC. Tests whether v18's degrading-after-peak was schedule (fixable) vs
+corpus saturation (need more data). Log on box: `/root/srt-adapter/artifacts/v19a_chain.log`.
+Decision rule in [scripts/v19a_chain.sh](scripts/v19a_chain.sh).
+
+---
+
+## 0b. v17 — cosine-MSE on STSB-only regressed (May 1, 2026, ~12:50 UTC)
+
+v17: warm v15a + 5K STSB pairs + cosine-MSE loss, lr=1e-5, 5 epochs.
+Mean STS **0.3531** vs v15a 0.3634 (−0.010, lost 11/40 subsets).
+Dev Spearman 0.6936 → test 0.5613 = **0.13 in-distribution overfit gap**.
+Cross-lingual got hammered (STS17 fr/it/nl/de all −0.01 to −0.03,
+IndicCrosslingual −0.01 to −0.05). Lesson: cosine-MSE is Pearson-aligned,
+not Spearman-aligned, and overfits STSB's narrow English-news domain.
+
+This was the failure that motivated v18's loss-function swap. v17 results
+preserved at [artifacts/mteb/v17/summary.json](artifacts/mteb/v17/summary.json),
+commit `2035261`.
 
 ---
 
