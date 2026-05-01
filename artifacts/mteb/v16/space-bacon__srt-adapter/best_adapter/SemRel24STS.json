@@ -1,0 +1,27 @@
+{
+  "dataset_revision": "f5146bf724c55899ca20502851dc98c5405b67f9",
+  "task_name": "SemRel24STS",
+  "mteb_version": "2.12.30",
+  "scores": {
+    "test": [
+      {
+        "pearson": 0.717709,
+        "spearman": 0.738829,
+        "cosine_pearson": 0.717709,
+        "cosine_spearman": 0.738829,
+        "manhattan_pearson": 0.729609,
+        "manhattan_spearman": 0.734075,
+        "euclidean_pearson": 0.734916,
+        "euclidean_spearman": 0.738829,
+        "main_score": 0.738829,
+        "hf_subset": "eng",
+        "languages": [
+          "eng-Latn"
+        ]
+      }
+    ]
+  },
+  "evaluation_time": 10.764287233352661,
+  "kg_co2_emissions": null,
+  "date": null
+}
