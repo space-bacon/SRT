@@ -1,0 +1,704 @@
+[Fri May  1 12:59:21 UTC 2026] === v17: build supervised STS data -> /root/srt-adapter/data/supervised_sts_v17 ===
+Generating train split:   0%|          | 0/5749 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 5749/5749 [00:00<00:00, 855649.33 examples/s]
+Generating validation split:   0%|          | 0/1500 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 1500/1500 [00:00<00:00, 722491.50 examples/s]
+Generating test split:   0%|          | 0/1379 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 1379/1379 [00:00<00:00, 760245.17 examples/s]
+  + stsb train: +5749 rows
+  dev pool stsb-dev: 1500 rows
+  + stsb dev (also in train): +1500 rows
+
+wrote /root/srt-adapter/data/supervised_sts_v17/train.jsonl: 7249 rows
+wrote /root/srt-adapter/data/supervised_sts_v17/dev.jsonl: 1500 rows
+  train score range: [0.000, 1.000], mean=0.526
+[Fri May  1 12:59:24 UTC 2026] === v17: starting watcher -> RiverRider/srt-adapter-v17 ===
+[Fri May  1 12:59:24 UTC 2026] watcher PID=14407
+[Fri May  1 12:59:24 UTC 2026] === v17: DDP supervised STS train (warm=/root/srt-adapter/checkpoints/adapter_v15a/best_adapter.pt, lr=1e-5, world=2) ===
+
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+12:59:27 INFO Loading backbone: Qwen/Qwen2.5-7B in bfloat16
+12:59:27 INFO DDP rank=0/2 device=cuda:0 dtype=bfloat16 (supervised STS, cosine-MSE)
+12:59:27 INFO Loading adapter (warm-start=/root/srt-adapter/checkpoints/adapter_v15a/best_adapter.pt)
+12:59:27 INFO Loading backbone: Qwen/Qwen2.5-7B in bfloat16
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00, 17.53it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00, 15.58it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 19.47it/s]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 17.02it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 16.77it/s]
+12:59:27 INFO Backbone: d=3584, L=28, MAH@[7, 14, 21], inject@[14, 21], community@4
+12:59:28 INFO SRT Adapter: 14,562,627 trainable, 7,615,616,512 frozen (backbone)
+12:59:28 INFO Backbone: d=3584, L=28, MAH@[7, 14, 21], inject@[14, 21], community@4
+12:59:28 INFO SRT Adapter: 14,562,627 trainable, 7,615,616,512 frozen (backbone)
+12:59:29 INFO Loaded adapter weights from /root/srt-adapter/checkpoints/adapter_v15a/best_adapter.pt
+12:59:29 INFO Loaded adapter weights from /root/srt-adapter/checkpoints/adapter_v15a/best_adapter.pt
+/root/srt_venv/lib/python3.12/site-packages/torch/nn/parallel/distributed.py:949: UserWarning: You passed find_unused_parameters=true to DistributedDataParallel, `_set_static_graph` will detect unused parameters automatically, so you do not need to set find_unused_parameters=true, just be sure these unused parameters will not change during training loop while calling `_set_static_graph`.
+  self._set_static_graph()
+/root/srt_venv/lib/python3.12/site-packages/torch/nn/parallel/distributed.py:949: UserWarning: You passed find_unused_parameters=true to DistributedDataParallel, `_set_static_graph` will detect unused parameters automatically, so you do not need to set find_unused_parameters=true, just be sure these unused parameters will not change during training loop while calling `_set_static_graph`.
+  self._set_static_graph()
+12:59:30 INFO Train rows: 7249 (per-rank batch=32, world=2, effective=64)
+12:59:30 INFO Dev rows (rank0 only): 1500
+12:59:30 INFO Total steps: 565  warmup: 50
+12:59:31 INFO step 0  mse 0.1215  pearson_batch 0.704  lr 2.00e-07  elapsed 1s
+12:59:33 INFO step 20  mse 0.1181  pearson_batch 0.511  lr 4.20e-06  elapsed 3s
+12:59:36 INFO step 40  mse 0.1432  pearson_batch 0.546  lr 8.20e-06  elapsed 5s
+12:59:38 INFO step 60  mse 0.0739  pearson_batch 0.496  lr 9.99e-06  elapsed 8s
+12:59:41 INFO step 80  mse 0.0908  pearson_batch 0.589  lr 9.92e-06  elapsed 10s
+12:59:43 INFO step 100  mse 0.1038  pearson_batch 0.667  lr 9.77e-06  elapsed 13s
+12:59:48 INFO VAL step 100  spearman 0.6936  pearson 0.6887  n=1500
+12:59:48 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/best_adapter.pt
+12:59:48 INFO   saved best (spearman 0.6936)
+/root/srt_venv/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+12:59:49 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/adapter_epoch1.pt
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+12:59:50 INFO step 120  mse 0.1013  pearson_batch 0.662  lr 9.55e-06  elapsed 20s
+12:59:53 INFO step 140  mse 0.1044  pearson_batch 0.627  lr 9.27e-06  elapsed 22s
+12:59:55 INFO step 160  mse 0.0681  pearson_batch 0.688  lr 8.92e-06  elapsed 25s
+12:59:58 INFO step 180  mse 0.0606  pearson_batch 0.753  lr 8.51e-06  elapsed 27s
+13:00:00 INFO step 200  mse 0.0871  pearson_batch 0.745  lr 8.05e-06  elapsed 30s
+13:00:04 INFO VAL step 200  spearman 0.6915  pearson 0.6882  n=1500
+13:00:07 INFO step 220  mse 0.1166  pearson_batch 0.455  lr 7.54e-06  elapsed 36s
+13:00:07 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/adapter_epoch2.pt
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+13:00:09 INFO step 240  mse 0.0989  pearson_batch 0.476  lr 7.00e-06  elapsed 39s
+13:00:12 INFO step 260  mse 0.0999  pearson_batch 0.521  lr 6.43e-06  elapsed 41s
+13:00:14 INFO step 280  mse 0.1261  pearson_batch 0.482  lr 5.83e-06  elapsed 44s
+13:00:16 INFO step 300  mse 0.0778  pearson_batch 0.701  lr 5.23e-06  elapsed 46s
+13:00:21 INFO VAL step 300  spearman 0.6906  pearson 0.6877  n=1500
+13:00:23 INFO step 320  mse 0.0719  pearson_batch 0.782  lr 4.62e-06  elapsed 53s
+13:00:25 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/adapter_epoch3.pt
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+13:00:26 INFO step 340  mse 0.0906  pearson_batch 0.743  lr 4.02e-06  elapsed 55s
+13:00:28 INFO step 360  mse 0.1071  pearson_batch 0.621  lr 3.43e-06  elapsed 58s
+13:00:31 INFO step 380  mse 0.0785  pearson_batch 0.656  lr 2.86e-06  elapsed 60s
+13:00:33 INFO step 400  mse 0.1197  pearson_batch 0.632  lr 2.33e-06  elapsed 63s
+13:00:38 INFO VAL step 400  spearman 0.6905  pearson 0.6876  n=1500
+13:00:40 INFO step 420  mse 0.0703  pearson_batch 0.771  lr 1.83e-06  elapsed 70s
+13:00:43 INFO step 440  mse 0.0630  pearson_batch 0.731  lr 1.38e-06  elapsed 72s
+13:00:44 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/adapter_epoch4.pt
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+13:00:45 INFO step 460  mse 0.0873  pearson_batch 0.707  lr 9.91e-07  elapsed 75s
+13:00:47 INFO step 480  mse 0.0878  pearson_batch 0.448  lr 6.57e-07  elapsed 77s
+13:00:50 INFO step 500  mse 0.1044  pearson_batch 0.531  lr 3.88e-07  elapsed 80s
+13:00:54 INFO VAL step 500  spearman 0.6905  pearson 0.6876  n=1500
+13:00:57 INFO step 520  mse 0.1231  pearson_batch 0.593  lr 1.87e-07  elapsed 86s
+13:00:59 INFO step 540  mse 0.0638  pearson_batch 0.710  lr 5.80e-08  elapsed 89s
+13:01:01 INFO step 560  mse 0.1051  pearson_batch 0.612  lr 2.33e-09  elapsed 91s
+13:01:02 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/adapter_epoch5.pt
+13:01:06 INFO FINAL VAL  spearman 0.6905  pearson 0.6876
+13:01:06 INFO Saved adapter weights (41 tensors) to /root/srt-adapter/checkpoints/adapter_v17/final_adapter.pt
+13:01:06 INFO Done. best_val_spearman=0.6936  steps=565
+[Fri May  1 13:01:08 UTC 2026] === v17: MTEB STS eval ===
+13:01:09 INFO Device cuda, dtype bfloat16
+13:01:09 INFO Loading adapter from /root/srt-adapter/checkpoints/adapter_v17/best_adapter.pt
+13:01:09 INFO Loading backbone: Qwen/Qwen2.5-7B in bfloat16
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00, 16.45it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 19.32it/s]
+13:01:10 INFO Backbone: d=3584, L=28, MAH@[7, 14, 21], inject@[14, 21], community@4
+13:01:10 INFO SRT Adapter: 14,562,627 trainable, 7,615,616,512 frozen (backbone)
+13:01:11 INFO Loaded adapter weights from /root/srt-adapter/checkpoints/adapter_v17/best_adapter.pt
+13:01:12 INFO PyTorch version 2.11.0+cu128 available.
+13:01:12 INFO Polars version 1.40.1 available.
+13:01:13 INFO Selected 17 MTEB tasks
+/root/srt-adapter/scripts/mteb_eval.py:276: DeprecationWarning: MTEB is deprecated and will be removed in future versions. Please use the `mteb.evaluate` function instead.
+  runner = mteb.MTEB(tasks=tasks)
+13:01:13 INFO 
+
+## Evaluating 17 tasks:
+─────────────────────────────── Selected tasks  ────────────────────────────────
+STS
+    - HUMESICK-R, t2t
+    - HUMESTS12, t2t
+    - STS12, t2t
+    - STS13, t2t
+    - STS14, t2t
+    - STS15, t2t
+    - STS16, t2t
+    - BIOSSES, t2t
+    - HUMESTSBenchmark, t2t
+    - STSBenchmark, t2t
+    - SICK-R, t2t
+    - HUMESTS22, t2t, multilingual 1 / 4 Subsets
+    - IndicCrosslingualSTS, t2t, multilingual 12 / 12 Subsets
+    - STS17, t2t, multilingual 8 / 11 Subsets
+    - STS22.v2, t2t, multilingual 5 / 18 Subsets
+    - STSBenchmarkMultilingualSTS, t2t, multilingual 1 / 10 Subsets
+    - SemRel24STS, t2t, multilingual 1 / 12 Subsets
+
+
+13:01:13 INFO 
+
+********************** Evaluating HUMESICK-R **********************
+Overwrite dataset info from restored data version if exists.
+13:01:14 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sickr-sts/default/0.0.0/cf7172d4b730a743570f25291d04abeee086c824
+13:01:14 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sickr-sts/default/0.0.0/cf7172d4b730a743570f25291d04abeee086c824
+Found cached dataset mteb-human-sickr-sts (/root/hf_cache/datasets/mteb___mteb-human-sickr-sts/default/0.0.0/cf7172d4b730a743570f25291d04abeee086c824)
+13:01:14 INFO Found cached dataset mteb-human-sickr-sts (/root/hf_cache/datasets/mteb___mteb-human-sickr-sts/default/0.0.0/cf7172d4b730a743570f25291d04abeee086c824)
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sickr-sts/default/0.0.0/cf7172d4b730a743570f25291d04abeee086c824
+13:01:14 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sickr-sts/default/0.0.0/cf7172d4b730a743570f25291d04abeee086c824
+13:01:14 INFO Running task HUMESICK-R (split='test', hf_subset='default')...
+13:01:14 INFO Running semantic similarity - Encoding samples (1/2)
+13:01:14 INFO Running semantic similarity - Encoding samples (2/2)...
+13:01:14 INFO Running semantic similarity - Evaluating similarity...
+13:01:14 INFO Running semantic similarity - Finished.
+13:01:14 INFO Evaluation for HUMESICK-R on test took 0.43 seconds
+13:01:14 INFO Scores: {'default': {'pearson': 0.7705235814838952, 'spearman': 0.7983662471393459, 'cosine_pearson': 0.7705236054327905, 'cosine_spearman': 0.7983662471393459, 'manhattan_pearson': 0.8229603111079445, 'manhattan_spearman': 0.820723132281029, 'euclidean_pearson': 0.8082389173987126, 'euclidean_spearman': 0.7983662471393459, 'main_score': 0.7983662471393459}}
+13:01:14 INFO 
+
+********************** Evaluating HUMESTS12 **********************
+Overwrite dataset info from restored data version if exists.
+13:01:15 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts12-sts/default/0.0.0/76cbf76792ec03cb1f76dc6ada05abcb23c82c0c
+13:01:15 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts12-sts/default/0.0.0/76cbf76792ec03cb1f76dc6ada05abcb23c82c0c
+Found cached dataset mteb-human-sts12-sts (/root/hf_cache/datasets/mteb___mteb-human-sts12-sts/default/0.0.0/76cbf76792ec03cb1f76dc6ada05abcb23c82c0c)
+13:01:15 INFO Found cached dataset mteb-human-sts12-sts (/root/hf_cache/datasets/mteb___mteb-human-sts12-sts/default/0.0.0/76cbf76792ec03cb1f76dc6ada05abcb23c82c0c)
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts12-sts/default/0.0.0/76cbf76792ec03cb1f76dc6ada05abcb23c82c0c
+13:01:15 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts12-sts/default/0.0.0/76cbf76792ec03cb1f76dc6ada05abcb23c82c0c
+13:01:15 INFO Running task HUMESTS12 (split='test', hf_subset='default')...
+13:01:15 INFO Running semantic similarity - Encoding samples (1/2)
+13:01:15 INFO Running semantic similarity - Encoding samples (2/2)...
+13:01:15 INFO Running semantic similarity - Evaluating similarity...
+13:01:15 INFO Running semantic similarity - Finished.
+13:01:15 INFO Evaluation for HUMESTS12 on test took 0.25 seconds
+13:01:15 INFO Scores: {'default': {'pearson': 0.5504235345457016, 'spearman': 0.5545222247897169, 'cosine_pearson': 0.5504235546450392, 'cosine_spearman': 0.5545355391281652, 'manhattan_pearson': 0.5218828475067301, 'manhattan_spearman': 0.5205353113800417, 'euclidean_pearson': 0.5585194423659037, 'euclidean_spearman': 0.5545355391281652, 'main_score': 0.5545355391281652}}
+13:01:15 INFO 
+
+********************** Evaluating STS12 **********************
+No config specified, defaulting to the single config: sts12-sts/default
+13:01:15 INFO No config specified, defaulting to the single config: sts12-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:01:15 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:01:15 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts12-sts/default/0.0.0/a0d554a64d88156834ff5ae9920b964011b16384
+13:01:15 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts12-sts/default/0.0.0/a0d554a64d88156834ff5ae9920b964011b16384
+Found cached dataset sts12-sts (/root/hf_cache/datasets/mteb___sts12-sts/default/0.0.0/a0d554a64d88156834ff5ae9920b964011b16384)
+13:01:15 INFO Found cached dataset sts12-sts (/root/hf_cache/datasets/mteb___sts12-sts/default/0.0.0/a0d554a64d88156834ff5ae9920b964011b16384)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts12-sts/default/0.0.0/a0d554a64d88156834ff5ae9920b964011b16384
+13:01:15 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts12-sts/default/0.0.0/a0d554a64d88156834ff5ae9920b964011b16384
+13:01:15 INFO Running task STS12 (split='test', hf_subset='default')...
+13:01:15 INFO Running semantic similarity - Encoding samples (1/2)
+13:01:21 INFO Running semantic similarity - Encoding samples (2/2)...
+13:01:27 INFO Running semantic similarity - Evaluating similarity...
+13:01:27 INFO Running semantic similarity - Finished.
+13:01:27 INFO Evaluation for STS12 on test took 11.59 seconds
+13:01:27 INFO Scores: {'default': {'pearson': 0.5892603942712374, 'spearman': 0.4600470636661423, 'cosine_pearson': 0.5892603875126398, 'cosine_spearman': 0.46004774152622846, 'manhattan_pearson': 0.5300036277078701, 'manhattan_spearman': 0.4450655558076848, 'euclidean_pearson': 0.5574140315277681, 'euclidean_spearman': 0.46004774152622846, 'main_score': 0.46004774152622846}}
+13:01:27 INFO 
+
+********************** Evaluating STS13 **********************
+No config specified, defaulting to the single config: sts13-sts/default
+13:01:28 INFO No config specified, defaulting to the single config: sts13-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:01:28 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:01:28 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts13-sts/default/0.0.0/7e90230a92c190f1bf69ae9002b8cea547a64cca
+13:01:28 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts13-sts/default/0.0.0/7e90230a92c190f1bf69ae9002b8cea547a64cca
+Found cached dataset sts13-sts (/root/hf_cache/datasets/mteb___sts13-sts/default/0.0.0/7e90230a92c190f1bf69ae9002b8cea547a64cca)
+13:01:28 INFO Found cached dataset sts13-sts (/root/hf_cache/datasets/mteb___sts13-sts/default/0.0.0/7e90230a92c190f1bf69ae9002b8cea547a64cca)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts13-sts/default/0.0.0/7e90230a92c190f1bf69ae9002b8cea547a64cca
+13:01:28 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts13-sts/default/0.0.0/7e90230a92c190f1bf69ae9002b8cea547a64cca
+13:01:28 INFO Running task STS13 (split='test', hf_subset='default')...
+13:01:28 INFO Running semantic similarity - Encoding samples (1/2)
+13:01:30 INFO Running semantic similarity - Encoding samples (2/2)...
+13:01:33 INFO Running semantic similarity - Evaluating similarity...
+13:01:33 INFO Running semantic similarity - Finished.
+13:01:33 INFO Evaluation for STS13 on test took 5.08 seconds
+13:01:33 INFO Scores: {'default': {'pearson': 0.4810996847030807, 'spearman': 0.493904651474635, 'cosine_pearson': 0.4810996757536413, 'cosine_spearman': 0.493904651474635, 'manhattan_pearson': 0.5029665679434776, 'manhattan_spearman': 0.49804108325426066, 'euclidean_pearson': 0.5006618202615308, 'euclidean_spearman': 0.493904651474635, 'main_score': 0.493904651474635}}
+13:01:33 INFO 
+
+********************** Evaluating STS14 **********************
+No config specified, defaulting to the single config: sts14-sts/default
+13:01:33 INFO No config specified, defaulting to the single config: sts14-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:01:33 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:01:33 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts14-sts/default/0.0.0/6031580fec1f6af667f0bd2da0a551cf4f0b2375
+13:01:33 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts14-sts/default/0.0.0/6031580fec1f6af667f0bd2da0a551cf4f0b2375
+Found cached dataset sts14-sts (/root/hf_cache/datasets/mteb___sts14-sts/default/0.0.0/6031580fec1f6af667f0bd2da0a551cf4f0b2375)
+13:01:33 INFO Found cached dataset sts14-sts (/root/hf_cache/datasets/mteb___sts14-sts/default/0.0.0/6031580fec1f6af667f0bd2da0a551cf4f0b2375)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts14-sts/default/0.0.0/6031580fec1f6af667f0bd2da0a551cf4f0b2375
+13:01:33 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts14-sts/default/0.0.0/6031580fec1f6af667f0bd2da0a551cf4f0b2375
+13:01:33 INFO Running task STS14 (split='test', hf_subset='default')...
+13:01:33 INFO Running semantic similarity - Encoding samples (1/2)
+13:01:40 INFO Running semantic similarity - Encoding samples (2/2)...
+13:01:46 INFO Running semantic similarity - Evaluating similarity...
+13:01:46 INFO Running semantic similarity - Finished.
+13:01:46 INFO Evaluation for STS14 on test took 12.88 seconds
+13:01:46 INFO Scores: {'default': {'pearson': 0.48912088331926523, 'spearman': 0.4538644490242624, 'cosine_pearson': 0.4891208846869292, 'cosine_spearman': 0.45386430060944083, 'manhattan_pearson': 0.4745588864301402, 'manhattan_spearman': 0.44838927770238995, 'euclidean_pearson': 0.48145124797599925, 'euclidean_spearman': 0.4538645359059704, 'main_score': 0.45386430060944083}}
+13:01:46 INFO 
+
+********************** Evaluating STS15 **********************
+No config specified, defaulting to the single config: sts15-sts/default
+13:01:47 INFO No config specified, defaulting to the single config: sts15-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:01:47 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:01:47 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts15-sts/default/0.0.0/ae752c7c21bf194d8b67fd573edf7ae58183cbe3
+13:01:47 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts15-sts/default/0.0.0/ae752c7c21bf194d8b67fd573edf7ae58183cbe3
+Found cached dataset sts15-sts (/root/hf_cache/datasets/mteb___sts15-sts/default/0.0.0/ae752c7c21bf194d8b67fd573edf7ae58183cbe3)
+13:01:47 INFO Found cached dataset sts15-sts (/root/hf_cache/datasets/mteb___sts15-sts/default/0.0.0/ae752c7c21bf194d8b67fd573edf7ae58183cbe3)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts15-sts/default/0.0.0/ae752c7c21bf194d8b67fd573edf7ae58183cbe3
+13:01:47 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts15-sts/default/0.0.0/ae752c7c21bf194d8b67fd573edf7ae58183cbe3
+13:01:47 INFO Running task STS15 (split='test', hf_subset='default')...
+13:01:47 INFO Running semantic similarity - Encoding samples (1/2)
+13:01:52 INFO Running semantic similarity - Encoding samples (2/2)...
+13:01:58 INFO Running semantic similarity - Evaluating similarity...
+13:01:58 INFO Running semantic similarity - Finished.
+13:01:58 INFO Evaluation for STS15 on test took 10.80 seconds
+13:01:58 INFO Scores: {'default': {'pearson': 0.6555289620063011, 'spearman': 0.6586032994232085, 'cosine_pearson': 0.6555289573013339, 'cosine_spearman': 0.6586033001549899, 'manhattan_pearson': 0.646302758532637, 'manhattan_spearman': 0.6465267571986473, 'euclidean_pearson': 0.6583034536431294, 'euclidean_spearman': 0.6586033001549899, 'main_score': 0.6586033001549899}}
+13:01:58 INFO 
+
+********************** Evaluating STS16 **********************
+No config specified, defaulting to the single config: sts16-sts/default
+13:01:58 INFO No config specified, defaulting to the single config: sts16-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:01:58 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:01:58 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts16-sts/default/0.0.0/4d8694f8f0e0100860b497b999b3dbed754a0513
+13:01:58 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts16-sts/default/0.0.0/4d8694f8f0e0100860b497b999b3dbed754a0513
+Found cached dataset sts16-sts (/root/hf_cache/datasets/mteb___sts16-sts/default/0.0.0/4d8694f8f0e0100860b497b999b3dbed754a0513)
+13:01:58 INFO Found cached dataset sts16-sts (/root/hf_cache/datasets/mteb___sts16-sts/default/0.0.0/4d8694f8f0e0100860b497b999b3dbed754a0513)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts16-sts/default/0.0.0/4d8694f8f0e0100860b497b999b3dbed754a0513
+13:01:58 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts16-sts/default/0.0.0/4d8694f8f0e0100860b497b999b3dbed754a0513
+13:01:58 INFO Running task STS16 (split='test', hf_subset='default')...
+13:01:58 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:01 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:03 INFO Running semantic similarity - Evaluating similarity...
+13:02:03 INFO Running semantic similarity - Finished.
+13:02:03 INFO Evaluation for STS16 on test took 4.81 seconds
+13:02:03 INFO Scores: {'default': {'pearson': 0.5226908775047697, 'spearman': 0.5617819815863391, 'cosine_pearson': 0.5226908738970424, 'cosine_spearman': 0.5617791972357553, 'manhattan_pearson': 0.5569202078734181, 'manhattan_spearman': 0.557759640054667, 'euclidean_pearson': 0.5607671047426267, 'euclidean_spearman': 0.5617791972357553, 'main_score': 0.5617791972357553}}
+13:02:03 INFO 
+
+********************** Evaluating BIOSSES **********************
+No config specified, defaulting to the single config: biosses-sts/default
+13:02:04 INFO No config specified, defaulting to the single config: biosses-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:02:04 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:02:04 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___biosses-sts/default/0.0.0/d3fb88f8f02e40887cd149695127462bbcf29b4a
+13:02:04 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___biosses-sts/default/0.0.0/d3fb88f8f02e40887cd149695127462bbcf29b4a
+Found cached dataset biosses-sts (/root/hf_cache/datasets/mteb___biosses-sts/default/0.0.0/d3fb88f8f02e40887cd149695127462bbcf29b4a)
+13:02:04 INFO Found cached dataset biosses-sts (/root/hf_cache/datasets/mteb___biosses-sts/default/0.0.0/d3fb88f8f02e40887cd149695127462bbcf29b4a)
+Loading Dataset info from /root/hf_cache/datasets/mteb___biosses-sts/default/0.0.0/d3fb88f8f02e40887cd149695127462bbcf29b4a
+13:02:04 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___biosses-sts/default/0.0.0/d3fb88f8f02e40887cd149695127462bbcf29b4a
+13:02:04 INFO Running task BIOSSES (split='test', hf_subset='default')...
+13:02:04 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:04 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:04 INFO Running semantic similarity - Evaluating similarity...
+13:02:04 INFO Running semantic similarity - Finished.
+13:02:04 INFO Evaluation for BIOSSES on test took 0.78 seconds
+13:02:04 INFO Scores: {'default': {'pearson': 0.5371706877480676, 'spearman': 0.5144394326948314, 'cosine_pearson': 0.5371707320596372, 'cosine_spearman': 0.5144394326948314, 'manhattan_pearson': 0.5115475158240871, 'manhattan_spearman': 0.49887883717225107, 'euclidean_pearson': 0.5411608732830671, 'euclidean_spearman': 0.5144394326948314, 'main_score': 0.5144394326948314}}
+13:02:04 INFO 
+
+********************** Evaluating HUMESTSBenchmark **********************
+Overwrite dataset info from restored data version if exists.
+13:02:05 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-stsbenchmark-sts/default/0.0.0/cb05d5409f802e68d6ed39615ed67f7dc2235ac5
+13:02:05 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-stsbenchmark-sts/default/0.0.0/cb05d5409f802e68d6ed39615ed67f7dc2235ac5
+Found cached dataset mteb-human-stsbenchmark-sts (/root/hf_cache/datasets/mteb___mteb-human-stsbenchmark-sts/default/0.0.0/cb05d5409f802e68d6ed39615ed67f7dc2235ac5)
+13:02:05 INFO Found cached dataset mteb-human-stsbenchmark-sts (/root/hf_cache/datasets/mteb___mteb-human-stsbenchmark-sts/default/0.0.0/cb05d5409f802e68d6ed39615ed67f7dc2235ac5)
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-stsbenchmark-sts/default/0.0.0/cb05d5409f802e68d6ed39615ed67f7dc2235ac5
+13:02:05 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-stsbenchmark-sts/default/0.0.0/cb05d5409f802e68d6ed39615ed67f7dc2235ac5
+13:02:05 INFO Running task HUMESTSBenchmark (split='test', hf_subset='default')...
+13:02:05 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:05 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:05 INFO Running semantic similarity - Evaluating similarity...
+13:02:05 INFO Running semantic similarity - Finished.
+13:02:05 INFO Evaluation for HUMESTSBenchmark on test took 0.26 seconds
+13:02:05 INFO Scores: {'default': {'pearson': 0.43567344438112404, 'spearman': 0.28289762449574185, 'cosine_pearson': 0.4356733796363239, 'cosine_spearman': 0.28289762449574185, 'manhattan_pearson': 0.34599950238133814, 'manhattan_spearman': 0.2797233226907913, 'euclidean_pearson': 0.36388077252913575, 'euclidean_spearman': 0.28289762449574185, 'main_score': 0.28289762449574185}}
+13:02:05 INFO 
+
+********************** Evaluating STSBenchmark **********************
+No config specified, defaulting to the single config: stsbenchmark-sts/default
+13:02:05 INFO No config specified, defaulting to the single config: stsbenchmark-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:02:05 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:02:05 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___stsbenchmark-sts/default/0.0.0/b0fddb56ed78048fa8b90373c8a3cfc37b684831
+13:02:05 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___stsbenchmark-sts/default/0.0.0/b0fddb56ed78048fa8b90373c8a3cfc37b684831
+Found cached dataset stsbenchmark-sts (/root/hf_cache/datasets/mteb___stsbenchmark-sts/default/0.0.0/b0fddb56ed78048fa8b90373c8a3cfc37b684831)
+13:02:05 INFO Found cached dataset stsbenchmark-sts (/root/hf_cache/datasets/mteb___stsbenchmark-sts/default/0.0.0/b0fddb56ed78048fa8b90373c8a3cfc37b684831)
+Loading Dataset info from /root/hf_cache/datasets/mteb___stsbenchmark-sts/default/0.0.0/b0fddb56ed78048fa8b90373c8a3cfc37b684831
+13:02:05 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___stsbenchmark-sts/default/0.0.0/b0fddb56ed78048fa8b90373c8a3cfc37b684831
+13:02:05 INFO Running task STSBenchmark (split='test', hf_subset='default')...
+13:02:05 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:08 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:10 INFO Running semantic similarity - Evaluating similarity...
+13:02:10 INFO Running semantic similarity - Finished.
+13:02:10 INFO Evaluation for STSBenchmark on test took 4.83 seconds
+13:02:10 INFO Scores: {'default': {'pearson': 0.6039380287556043, 'spearman': 0.5612669585185234, 'cosine_pearson': 0.6039380281322121, 'cosine_spearman': 0.5612669585185234, 'manhattan_pearson': 0.5949994983586251, 'manhattan_spearman': 0.556018849220755, 'euclidean_pearson': 0.6008144820352866, 'euclidean_spearman': 0.5612669585185234, 'main_score': 0.5612669585185234}}
+13:02:10 INFO 
+
+********************** Evaluating SICK-R **********************
+No config specified, defaulting to the single config: sickr-sts/default
+13:02:11 INFO No config specified, defaulting to the single config: sickr-sts/default
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:02:11 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:02:11 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sickr-sts/default/0.0.0/20a6d6f312dd54037fe07a32d58e5e168867909d
+13:02:11 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sickr-sts/default/0.0.0/20a6d6f312dd54037fe07a32d58e5e168867909d
+Found cached dataset sickr-sts (/root/hf_cache/datasets/mteb___sickr-sts/default/0.0.0/20a6d6f312dd54037fe07a32d58e5e168867909d)
+13:02:11 INFO Found cached dataset sickr-sts (/root/hf_cache/datasets/mteb___sickr-sts/default/0.0.0/20a6d6f312dd54037fe07a32d58e5e168867909d)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sickr-sts/default/0.0.0/20a6d6f312dd54037fe07a32d58e5e168867909d
+13:02:11 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sickr-sts/default/0.0.0/20a6d6f312dd54037fe07a32d58e5e168867909d
+13:02:11 INFO Running task SICK-R (split='test', hf_subset='default')...
+13:02:11 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:26 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:41 INFO Running semantic similarity - Evaluating similarity...
+13:02:41 INFO Running semantic similarity - Finished.
+13:02:41 INFO Evaluation for SICK-R on test took 29.79 seconds
+13:02:41 INFO Scores: {'default': {'pearson': 0.7241730850635264, 'spearman': 0.6368919719810705, 'cosine_pearson': 0.7241730882879824, 'cosine_spearman': 0.6368921920903627, 'manhattan_pearson': 0.6938819490519333, 'manhattan_spearman': 0.6301172079272416, 'euclidean_pearson': 0.7023455032845959, 'euclidean_spearman': 0.6368922217744819, 'main_score': 0.6368921920903627}}
+13:02:41 INFO 
+
+********************** Evaluating HUMESTS22 **********************
+Overwrite dataset info from restored data version if exists.
+13:02:41 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts22-sts/default/0.0.0/ab40ed76c4283318b7b146aff31f8cdefd6ebae0
+13:02:41 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts22-sts/default/0.0.0/ab40ed76c4283318b7b146aff31f8cdefd6ebae0
+Found cached dataset mteb-human-sts22-sts (/root/hf_cache/datasets/mteb___mteb-human-sts22-sts/default/0.0.0/ab40ed76c4283318b7b146aff31f8cdefd6ebae0)
+13:02:41 INFO Found cached dataset mteb-human-sts22-sts (/root/hf_cache/datasets/mteb___mteb-human-sts22-sts/default/0.0.0/ab40ed76c4283318b7b146aff31f8cdefd6ebae0)
+Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts22-sts/default/0.0.0/ab40ed76c4283318b7b146aff31f8cdefd6ebae0
+13:02:41 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___mteb-human-sts22-sts/default/0.0.0/ab40ed76c4283318b7b146aff31f8cdefd6ebae0
+13:02:41 INFO Running task HUMESTS22 (split='test', hf_subset='en')...
+13:02:41 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:42 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:42 INFO Running semantic similarity - Evaluating similarity...
+13:02:42 INFO Running semantic similarity - Finished.
+13:02:42 INFO Evaluation for HUMESTS22 on test took 0.75 seconds
+13:02:42 INFO Scores: {'en': {'pearson': 0.3706427447356325, 'spearman': 0.6148244226774593, 'cosine_pearson': 0.37064266895656356, 'cosine_spearman': 0.6148244226774593, 'manhattan_pearson': 0.4635837492427972, 'manhattan_spearman': 0.6132143325320264, 'euclidean_pearson': 0.47721687605317653, 'euclidean_spearman': 0.6148244226774593, 'main_score': 0.6148244226774593}}
+13:02:42 INFO 
+
+********************** Evaluating IndicCrosslingualSTS **********************
+Overwrite dataset info from restored data version if exists.
+13:02:43 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-as/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-as/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-as/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:43 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-as/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-as/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-as/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:43 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-bn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-bn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-bn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:43 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-bn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-bn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-bn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:43 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-gu/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-gu/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-gu/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:43 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-gu/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-gu/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-gu/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:43 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-hi/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-hi/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-hi/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:43 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-hi/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-hi/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:43 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-hi/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:44 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-kn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:44 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-kn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-kn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:44 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-kn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-kn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:44 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-kn/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:44 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ml/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:44 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ml/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ml/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:44 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ml/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ml/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:44 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ml/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:44 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-mr/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:44 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-mr/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-mr/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:44 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-mr/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-mr/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:44 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-mr/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:45 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-or/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-or/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-or/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:45 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-or/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-or/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-or/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:45 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-pa/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-pa/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-pa/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:45 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-pa/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-pa/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-pa/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:45 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ta/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ta/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ta/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:45 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ta/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ta/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ta/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:45 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-te/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-te/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-te/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:45 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-te/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-te/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:45 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-te/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Overwrite dataset info from restored data version if exists.
+13:02:46 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ur/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:46 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ur/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ur/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+13:02:46 INFO Found cached dataset indic_crosslingual_sts (/root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ur/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51)
+Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ur/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:46 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___indic_crosslingual_sts/en-ur/0.0.0/f0366eb5a20087355c0e131162bbed943ba54b51
+13:02:46 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-as')...
+13:02:46 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:46 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:49 INFO Running semantic similarity - Evaluating similarity...
+13:02:49 INFO Running semantic similarity - Finished.
+13:02:49 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-bn')...
+13:02:49 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:50 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:52 INFO Running semantic similarity - Evaluating similarity...
+13:02:52 INFO Running semantic similarity - Finished.
+13:02:52 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-gu')...
+13:02:52 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:53 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:56 INFO Running semantic similarity - Evaluating similarity...
+13:02:56 INFO Running semantic similarity - Finished.
+13:02:56 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-hi')...
+13:02:56 INFO Running semantic similarity - Encoding samples (1/2)
+13:02:57 INFO Running semantic similarity - Encoding samples (2/2)...
+13:02:59 INFO Running semantic similarity - Evaluating similarity...
+13:02:59 INFO Running semantic similarity - Finished.
+13:02:59 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-kn')...
+13:02:59 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:00 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:03 INFO Running semantic similarity - Evaluating similarity...
+13:03:03 INFO Running semantic similarity - Finished.
+13:03:03 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-ml')...
+13:03:03 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:04 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:07 INFO Running semantic similarity - Evaluating similarity...
+13:03:07 INFO Running semantic similarity - Finished.
+13:03:07 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-mr')...
+13:03:07 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:08 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:10 INFO Running semantic similarity - Evaluating similarity...
+13:03:10 INFO Running semantic similarity - Finished.
+13:03:10 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-or')...
+13:03:10 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:10 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:13 INFO Running semantic similarity - Evaluating similarity...
+13:03:13 INFO Running semantic similarity - Finished.
+13:03:13 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-pa')...
+13:03:13 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:14 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:17 INFO Running semantic similarity - Evaluating similarity...
+13:03:17 INFO Running semantic similarity - Finished.
+13:03:17 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-ta')...
+13:03:17 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:18 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:21 INFO Running semantic similarity - Evaluating similarity...
+13:03:21 INFO Running semantic similarity - Finished.
+13:03:21 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-te')...
+13:03:21 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:22 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:25 INFO Running semantic similarity - Evaluating similarity...
+13:03:25 INFO Running semantic similarity - Finished.
+13:03:25 INFO Running task IndicCrosslingualSTS (split='test', hf_subset='en-ur')...
+13:03:25 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:25 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:28 INFO Running semantic similarity - Evaluating similarity...
+13:03:28 INFO Running semantic similarity - Finished.
+13:03:28 INFO Evaluation for IndicCrosslingualSTS on test took 42.34 seconds
+13:03:28 INFO Scores: {'en-as': {'pearson': 0.08659005484148644, 'spearman': 0.08355524209328678, 'cosine_pearson': 0.08659005841753167, 'cosine_spearman': 0.08355524209328678, 'manhattan_pearson': 0.08658844405449428, 'manhattan_spearman': 0.09743078722574708, 'euclidean_pearson': 0.0814861592502566, 'euclidean_spearman': 0.08355524209328678, 'main_score': 0.08355524209328678}, 'en-bn': {'pearson': -0.17686951606283768, 'spearman': -0.21634997120909538, 'cosine_pearson': -0.17686951492152764, 'cosine_spearman': -0.21634997120909538, 'manhattan_pearson': -0.16983993351010007, 'manhattan_spearman': -0.19930890497796624, 'euclidean_pearson': -0.17975745104462687, 'euclidean_spearman': -0.21634997120909538, 'main_score': -0.21634997120909538}, 'en-gu': {'pearson': -0.03649625965739862, 'spearman': -0.055847390525072475, 'cosine_pearson': -0.03649627393769392, 'cosine_spearman': -0.055847390525072475, 'manhattan_pearson': -0.039170674800821245, 'manhattan_spearman': -0.06985504966412971, 'euclidean_pearson': -0.025682126136110775, 'euclidean_spearman': -0.055847390525072475, 'main_score': -0.055847390525072475}, 'en-hi': {'pearson': -0.11963305034597656, 'spearman': -0.1275100982561612, 'cosine_pearson': -0.1196330518872386, 'cosine_spearman': -0.1275100982561612, 'manhattan_pearson': -0.12724788411854276, 'manhattan_spearman': -0.11409274022455035, 'euclidean_pearson': -0.11699727109382618, 'euclidean_spearman': -0.1275100982561612, 'main_score': -0.1275100982561612}, 'en-kn': {'pearson': 0.011107860180443335, 'spearman': 0.009388181659260298, 'cosine_pearson': 0.011107877332374796, 'cosine_spearman': 0.009388181659260298, 'manhattan_pearson': 0.014228752248393903, 'manhattan_spearman': 0.008180430261719761, 'euclidean_pearson': 0.028332219134881407, 'euclidean_spearman': 0.009388181659260298, 'main_score': 0.009388181659260298}, 'en-ml': {'pearson': -0.061331439488684886, 'spearman': -0.08781907311813568, 'cosine_pearson': -0.061331437847421316, 'cosine_spearman': -0.08781907311813568, 'manhattan_pearson': -0.0608438275898969, 'manhattan_spearman': -0.06762116860217827, 'euclidean_pearson': -0.063310334621309, 'euclidean_spearman': -0.08781907311813568, 'main_score': -0.08781907311813568}, 'en-mr': {'pearson': 0.05275026841370275, 'spearman': 0.05926271009670831, 'cosine_pearson': 0.052750269138551326, 'cosine_spearman': 0.05926271009670831, 'manhattan_pearson': 0.05819064025220018, 'manhattan_spearman': 0.057858982461421356, 'euclidean_pearson': 0.06756286633037936, 'euclidean_spearman': 0.05926271009670831, 'main_score': 0.05926271009670831}, 'en-or': {'pearson': -0.017403345137025752, 'spearman': -0.06905039000365656, 'cosine_pearson': -0.017403323384716462, 'cosine_spearman': -0.06905039000365656, 'manhattan_pearson': -0.006017455374195046, 'manhattan_spearman': -0.05301188490591215, 'euclidean_pearson': -0.017684237974424453, 'euclidean_spearman': -0.06905039000365656, 'main_score': -0.06905039000365656}, 'en-pa': {'pearson': -0.13576077826451083, 'spearman': -0.06546634441062248, 'cosine_pearson': -0.13576076206567878, 'cosine_spearman': -0.06546634441062248, 'manhattan_pearson': -0.17364473178805984, 'manhattan_spearman': -0.09688281650024348, 'euclidean_pearson': -0.14639048156873866, 'euclidean_spearman': -0.06546634441062248, 'main_score': -0.06546634441062248}, 'en-ta': {'pearson': -0.14140783519409988, 'spearman': -0.15296016639289017, 'cosine_pearson': -0.1414078458005435, 'cosine_spearman': -0.15296016639289017, 'manhattan_pearson': -0.14164434133354484, 'manhattan_spearman': -0.1390515056825926, 'euclidean_pearson': -0.1392634789823155, 'euclidean_spearman': -0.15296016639289017, 'main_score': -0.15296016639289017}, 'en-te': {'pearson': -0.07729347829674003, 'spearman': -0.08976546141850188, 'cosine_pearson': -0.07729347024250097, 'cosine_spearman': -0.08976546141850188, 'manhattan_pearson': -0.07005787235300565, 'manhattan_spearman': -0.07916400682784987, 'euclidean_pearson': -0.07680392860696912, 'euclidean_spearman': -0.08976546141850188, 'main_score': -0.08976546141850188}, 'en-ur': {'pearson': -0.037217020225673275, 'spearman': -0.02580434448673364, 'cosine_pearson': -0.037217020154159716, 'cosine_spearman': -0.02580434448673364, 'manhattan_pearson': -0.058931384197612006, 'manhattan_spearman': -0.06127060992384711, 'euclidean_pearson': -0.04223217927952117, 'euclidean_spearman': -0.02580434448673364, 'main_score': -0.02580434448673364}}
+13:03:28 INFO 
+
+********************** Evaluating STS17 **********************
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+13:03:29 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+13:03:29 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts17-crosslingual-sts/default/0.0.0/faeb762787bd10488a50c8b5be4a3b82e411949c
+13:03:29 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts17-crosslingual-sts/default/0.0.0/faeb762787bd10488a50c8b5be4a3b82e411949c
+Found cached dataset sts17-crosslingual-sts (/root/hf_cache/datasets/mteb___sts17-crosslingual-sts/default/0.0.0/faeb762787bd10488a50c8b5be4a3b82e411949c)
+13:03:29 INFO Found cached dataset sts17-crosslingual-sts (/root/hf_cache/datasets/mteb___sts17-crosslingual-sts/default/0.0.0/faeb762787bd10488a50c8b5be4a3b82e411949c)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts17-crosslingual-sts/default/0.0.0/faeb762787bd10488a50c8b5be4a3b82e411949c
+13:03:29 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts17-crosslingual-sts/default/0.0.0/faeb762787bd10488a50c8b5be4a3b82e411949c
+13:03:29 INFO Running task STS17 (split='test', hf_subset='en-ar')...
+13:03:29 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:29 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:30 INFO Running semantic similarity - Evaluating similarity...
+13:03:30 INFO Running semantic similarity - Finished.
+13:03:30 INFO Running task STS17 (split='test', hf_subset='en-de')...
+13:03:30 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:30 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:31 INFO Running semantic similarity - Evaluating similarity...
+13:03:31 INFO Running semantic similarity - Finished.
+13:03:31 INFO Running task STS17 (split='test', hf_subset='en-en')...
+13:03:31 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:31 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:31 INFO Running semantic similarity - Evaluating similarity...
+13:03:31 INFO Running semantic similarity - Finished.
+13:03:31 INFO Running task STS17 (split='test', hf_subset='en-tr')...
+13:03:31 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:32 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:32 INFO Running semantic similarity - Evaluating similarity...
+13:03:32 INFO Running semantic similarity - Finished.
+13:03:32 INFO Running task STS17 (split='test', hf_subset='es-en')...
+13:03:32 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:33 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:33 INFO Running semantic similarity - Evaluating similarity...
+13:03:33 INFO Running semantic similarity - Finished.
+13:03:33 INFO Running task STS17 (split='test', hf_subset='fr-en')...
+13:03:33 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:34 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:34 INFO Running semantic similarity - Evaluating similarity...
+13:03:34 INFO Running semantic similarity - Finished.
+13:03:34 INFO Running task STS17 (split='test', hf_subset='it-en')...
+13:03:34 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:35 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:35 INFO Running semantic similarity - Evaluating similarity...
+13:03:35 INFO Running semantic similarity - Finished.
+13:03:35 INFO Running task STS17 (split='test', hf_subset='nl-en')...
+13:03:35 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:36 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:36 INFO Running semantic similarity - Evaluating similarity...
+13:03:36 INFO Running semantic similarity - Finished.
+13:03:36 INFO Evaluation for STS17 on test took 7.25 seconds
+13:03:36 INFO Scores: {'en-ar': {'pearson': 0.30392236023454183, 'spearman': 0.2815049373831848, 'cosine_pearson': 0.3039223568252239, 'cosine_spearman': 0.2815049373831848, 'manhattan_pearson': 0.33796775526667094, 'manhattan_spearman': 0.3014552412102934, 'euclidean_pearson': 0.3073467732024874, 'euclidean_spearman': 0.2815049373831848, 'main_score': 0.2815049373831848}, 'en-de': {'pearson': 0.38449413040002195, 'spearman': 0.40398309293733625, 'cosine_pearson': 0.3844941236329948, 'cosine_spearman': 0.40398309293733625, 'manhattan_pearson': 0.393363841221322, 'manhattan_spearman': 0.4132043818010485, 'euclidean_pearson': 0.38334361567891206, 'euclidean_spearman': 0.40398309293733625, 'main_score': 0.40398309293733625}, 'en-en': {'pearson': 0.7134159756560227, 'spearman': 0.7394820963353437, 'cosine_pearson': 0.7134159726943222, 'cosine_spearman': 0.7394820963353437, 'manhattan_pearson': 0.7378962998008664, 'manhattan_spearman': 0.7388063271985558, 'euclidean_pearson': 0.7384624705988476, 'euclidean_spearman': 0.7394820963353437, 'main_score': 0.7394820963353437}, 'en-tr': {'pearson': 0.03277167867079567, 'spearman': 0.04606652517597875, 'cosine_pearson': 0.03277170745011178, 'cosine_spearman': 0.04606652517597875, 'manhattan_pearson': 0.05782385228059182, 'manhattan_spearman': 0.07794992165892425, 'euclidean_pearson': 0.03369723545196756, 'euclidean_spearman': 0.04606652517597875, 'main_score': 0.04606652517597875}, 'es-en': {'pearson': 0.4745320548998955, 'spearman': 0.49478001360839774, 'cosine_pearson': 0.47453204426706524, 'cosine_spearman': 0.49478001360839774, 'manhattan_pearson': 0.45979797762471303, 'manhattan_spearman': 0.46707248969442455, 'euclidean_pearson': 0.4829733031332262, 'euclidean_spearman': 0.49478001360839774, 'main_score': 0.49478001360839774}, 'fr-en': {'pearson': 0.43092334828510725, 'spearman': 0.45324158897470324, 'cosine_pearson': 0.43092334621080725, 'cosine_spearman': 0.45324158897470324, 'manhattan_pearson': 0.43236148450418055, 'manhattan_spearman': 0.4570498056061925, 'euclidean_pearson': 0.4318194784930075, 'euclidean_spearman': 0.45324158897470324, 'main_score': 0.45324158897470324}, 'it-en': {'pearson': 0.4384238413407281, 'spearman': 0.45356601966380966, 'cosine_pearson': 0.43842385842892445, 'cosine_spearman': 0.45356601966380966, 'manhattan_pearson': 0.4252851647946449, 'manhattan_spearman': 0.4402981883069424, 'euclidean_pearson': 0.43510430109462417, 'euclidean_spearman': 0.45356601966380966, 'main_score': 0.45356601966380966}, 'nl-en': {'pearson': 0.4594611794868827, 'spearman': 0.4737764371296229, 'cosine_pearson': 0.4594611514536735, 'cosine_spearman': 0.4737764371296229, 'manhattan_pearson': 0.43958671679572314, 'manhattan_spearman': 0.4462943901071444, 'euclidean_pearson': 0.46328390691604515, 'euclidean_spearman': 0.4737764371296229, 'main_score': 0.4737764371296229}}
+13:03:36 INFO 
+
+********************** Evaluating STS22.v2 **********************
+Overwrite dataset info from restored data version if exists.
+13:03:37 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts22-crosslingual-sts/default/0.0.0/d31f33a128469b20e357535c39b82fb3c3f6f2bd
+13:03:37 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts22-crosslingual-sts/default/0.0.0/d31f33a128469b20e357535c39b82fb3c3f6f2bd
+Found cached dataset sts22-crosslingual-sts (/root/hf_cache/datasets/mteb___sts22-crosslingual-sts/default/0.0.0/d31f33a128469b20e357535c39b82fb3c3f6f2bd)
+13:03:37 INFO Found cached dataset sts22-crosslingual-sts (/root/hf_cache/datasets/mteb___sts22-crosslingual-sts/default/0.0.0/d31f33a128469b20e357535c39b82fb3c3f6f2bd)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sts22-crosslingual-sts/default/0.0.0/d31f33a128469b20e357535c39b82fb3c3f6f2bd
+13:03:37 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sts22-crosslingual-sts/default/0.0.0/d31f33a128469b20e357535c39b82fb3c3f6f2bd
+13:03:37 INFO Running task STS22.v2 (split='test', hf_subset='en')...
+13:03:37 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:39 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:42 INFO Running semantic similarity - Evaluating similarity...
+13:03:42 INFO Running semantic similarity - Finished.
+13:03:42 INFO Running task STS22.v2 (split='test', hf_subset='de-en')...
+13:03:42 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:44 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:45 INFO Running semantic similarity - Evaluating similarity...
+13:03:45 INFO Running semantic similarity - Finished.
+13:03:45 INFO Running task STS22.v2 (split='test', hf_subset='es-en')...
+13:03:45 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:50 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:55 INFO Running semantic similarity - Evaluating similarity...
+13:03:55 INFO Running semantic similarity - Finished.
+13:03:55 INFO Running task STS22.v2 (split='test', hf_subset='pl-en')...
+13:03:55 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:55 INFO Running semantic similarity - Encoding samples (2/2)...
+13:03:56 INFO Running semantic similarity - Evaluating similarity...
+13:03:56 INFO Running semantic similarity - Finished.
+13:03:56 INFO Running task STS22.v2 (split='test', hf_subset='zh-en')...
+13:03:56 INFO Running semantic similarity - Encoding samples (1/2)
+13:03:58 INFO Running semantic similarity - Encoding samples (2/2)...
+13:04:00 INFO Running semantic similarity - Evaluating similarity...
+13:04:00 INFO Running semantic similarity - Finished.
+13:04:00 INFO Evaluation for STS22.v2 on test took 23.16 seconds
+13:04:00 INFO Scores: {'en': {'pearson': 0.48417285970067336, 'spearman': 0.5937102275970509, 'cosine_pearson': 0.4841728853070794, 'cosine_spearman': 0.5937102275970509, 'manhattan_pearson': 0.5476128988680152, 'manhattan_spearman': 0.58832081556935, 'euclidean_pearson': 0.5547145308815904, 'euclidean_spearman': 0.5937102275970509, 'main_score': 0.5937102275970509}, 'de-en': {'pearson': 0.37250237949806003, 'spearman': 0.5121396756952573, 'cosine_pearson': 0.3725023520279413, 'cosine_spearman': 0.5121396756952573, 'manhattan_pearson': 0.43279000645343796, 'manhattan_spearman': 0.4945862964284452, 'euclidean_pearson': 0.4393704003998161, 'euclidean_spearman': 0.5121396756952573, 'main_score': 0.5121396756952573}, 'es-en': {'pearson': 0.4552107983093158, 'spearman': 0.5504580081436548, 'cosine_pearson': 0.45521079343407767, 'cosine_spearman': 0.5504580081436548, 'manhattan_pearson': 0.4824360749044931, 'manhattan_spearman': 0.5381305320156258, 'euclidean_pearson': 0.4969650115692319, 'euclidean_spearman': 0.5504580081436548, 'main_score': 0.5504580081436548}, 'pl-en': {'pearson': 0.613938500571108, 'spearman': 0.6082936538884407, 'cosine_pearson': 0.6139386077761693, 'cosine_spearman': 0.6082936538884407, 'manhattan_pearson': 0.5718323180380775, 'manhattan_spearman': 0.5584979887231057, 'euclidean_pearson': 0.6224940098958487, 'euclidean_spearman': 0.6082936538884407, 'main_score': 0.6082936538884407}, 'zh-en': {'pearson': 0.5384053116921032, 'spearman': 0.6663958168717584, 'cosine_pearson': 0.5384053426905473, 'cosine_spearman': 0.6663958168717584, 'manhattan_pearson': 0.6072297180548967, 'manhattan_spearman': 0.6626595819032131, 'euclidean_pearson': 0.6061216318792944, 'euclidean_spearman': 0.6663958168717584, 'main_score': 0.6663958168717584}}
+13:04:00 INFO 
+
+********************** Evaluating STSBenchmarkMultilingualSTS **********************
+Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/parquet
+13:04:01 INFO Loading Dataset Infos from /root/srt_venv/lib/python3.12/site-packages/datasets/packaged_modules/parquet
+Overwrite dataset info from restored data version if exists.
+13:04:01 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___stsb_multi_mt/default/0.0.0/29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c
+13:04:01 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___stsb_multi_mt/default/0.0.0/29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c
+Found cached dataset stsb_multi_mt (/root/hf_cache/datasets/mteb___stsb_multi_mt/default/0.0.0/29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c)
+13:04:01 INFO Found cached dataset stsb_multi_mt (/root/hf_cache/datasets/mteb___stsb_multi_mt/default/0.0.0/29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c)
+Loading Dataset info from /root/hf_cache/datasets/mteb___stsb_multi_mt/default/0.0.0/29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c
+13:04:01 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___stsb_multi_mt/default/0.0.0/29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c
+13:04:01 INFO Running task STSBenchmarkMultilingualSTS (split='dev', hf_subset='en')...
+13:04:01 INFO Running semantic similarity - Encoding samples (1/2)
+13:04:03 INFO Running semantic similarity - Encoding samples (2/2)...
+13:04:06 INFO Running semantic similarity - Evaluating similarity...
+13:04:06 INFO Running semantic similarity - Finished.
+13:04:06 INFO Evaluation for STSBenchmarkMultilingualSTS on dev took 5.42 seconds
+13:04:06 INFO Scores: {'en': {'pearson': 0.6900979584710734, 'spearman': 0.6911570611553939, 'cosine_pearson': 0.6900979615458309, 'cosine_spearman': 0.6911570611553939, 'manhattan_pearson': 0.6839917023502088, 'manhattan_spearman': 0.6814172056966826, 'euclidean_pearson': 0.6943102955159195, 'euclidean_spearman': 0.6911570611553939, 'main_score': 0.6911570611553939}}
+13:04:06 INFO Running task STSBenchmarkMultilingualSTS (split='test', hf_subset='en')...
+13:04:06 INFO Running semantic similarity - Encoding samples (1/2)
+13:04:09 INFO Running semantic similarity - Encoding samples (2/2)...
+13:04:11 INFO Running semantic similarity - Evaluating similarity...
+13:04:11 INFO Running semantic similarity - Finished.
+13:04:11 INFO Evaluation for STSBenchmarkMultilingualSTS on test took 4.81 seconds
+13:04:11 INFO Scores: {'en': {'pearson': 0.6044620262890817, 'spearman': 0.562452369409215, 'cosine_pearson': 0.6044620286513703, 'cosine_spearman': 0.562452369409215, 'manhattan_pearson': 0.5959921653844963, 'manhattan_spearman': 0.5574185221821557, 'euclidean_pearson': 0.6017491776797669, 'euclidean_spearman': 0.562452369409215, 'main_score': 0.562452369409215}}
+13:04:11 INFO 
+
+********************** Evaluating SemRel24STS **********************
+Overwrite dataset info from restored data version if exists.
+13:04:12 INFO Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /root/hf_cache/datasets/mteb___sem_rel24_sts/eng/0.0.0/f5146bf724c55899ca20502851dc98c5405b67f9
+13:04:12 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sem_rel24_sts/eng/0.0.0/f5146bf724c55899ca20502851dc98c5405b67f9
+Found cached dataset sem_rel24_sts (/root/hf_cache/datasets/mteb___sem_rel24_sts/eng/0.0.0/f5146bf724c55899ca20502851dc98c5405b67f9)
+13:04:12 INFO Found cached dataset sem_rel24_sts (/root/hf_cache/datasets/mteb___sem_rel24_sts/eng/0.0.0/f5146bf724c55899ca20502851dc98c5405b67f9)
+Loading Dataset info from /root/hf_cache/datasets/mteb___sem_rel24_sts/eng/0.0.0/f5146bf724c55899ca20502851dc98c5405b67f9
+13:04:12 INFO Loading Dataset info from /root/hf_cache/datasets/mteb___sem_rel24_sts/eng/0.0.0/f5146bf724c55899ca20502851dc98c5405b67f9
+13:04:12 INFO Running task SemRel24STS (split='test', hf_subset='eng')...
+13:04:12 INFO Running semantic similarity - Encoding samples (1/2)
+13:04:17 INFO Running semantic similarity - Encoding samples (2/2)...
+13:04:22 INFO Running semantic similarity - Evaluating similarity...
+13:04:22 INFO Running semantic similarity - Finished.
+13:04:22 INFO Evaluation for SemRel24STS on test took 10.64 seconds
+13:04:22 INFO Scores: {'eng': {'pearson': 0.7216637864887488, 'spearman': 0.7390299402959006, 'cosine_pearson': 0.7216637838680363, 'cosine_spearman': 0.7390300808671848, 'manhattan_pearson': 0.7297536994281338, 'manhattan_spearman': 0.7338127433058481, 'euclidean_pearson': 0.7351341375759031, 'euclidean_spearman': 0.7390300808671848, 'main_score': 0.7390300808671848}}
+13:04:22 INFO Wrote /root/srt-adapter/artifacts/mteb/v17/summary.json
+[Fri May  1 13:04:23 UTC 2026] === v17: push MTEB summary to HF ===
+pushed https://huggingface.co/RiverRider/srt-adapter-v17/blob/main/mteb/summary.json
+[Fri May  1 13:04:24 UTC 2026] === v17: killing watcher 14407 ===
+[Fri May  1 13:04:24 UTC 2026] === v17 DONE ===
