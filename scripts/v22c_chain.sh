@@ -28,7 +28,7 @@ for ALPHA in 0.50 0.30 0.70; do
 done
 
 # ─── 2. eval each soup ───
-for TAG in 050 030 070; do
+for TAG in 50 30 70; do
   echo "[$(date)] === v22c: eval v22c_a0${TAG} ===" >> "${VLOG}"
   ${PY} scripts/mteb_eval.py \
     --backbone Qwen/Qwen2.5-7B \
