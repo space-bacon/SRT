@@ -85,7 +85,7 @@ def forward_batch(model, tok, texts, device, max_len):
 def cap_a_community_purity(model, tok, device, args, rng):
     """NMI of K-means(community_encoded) vs Banking77 intent labels."""
     from datasets import load_dataset
-    ds = load_dataset("PolyAI/banking77", split="test")
+    ds = load_dataset("PolyAI/banking77", split="test", trust_remote_code=True)
     n = min(args.n_cap_a, len(ds))
     idx = rng.choice(len(ds), size=n, replace=False)
     texts = [ds[int(i)]["text"] for i in idx]
@@ -112,7 +112,7 @@ def cap_b_boundary_f1(model, tok, device, args, rng):
     Check whether peaks of last-layer divergence norm align with the 4
     boundary positions (token tolerance ±2)."""
     from datasets import load_dataset
-    ds = load_dataset("PolyAI/banking77", split="test")
+    ds = load_dataset("PolyAI/banking77", split="test", trust_remote_code=True)
     by_intent: dict[int, list[str]] = {}
     for row in ds:
         by_intent.setdefault(row["label"], []).append(row["text"])
@@ -206,7 +206,7 @@ def cap_c_paraphrase_stability(model, tok, device, args):
 def cap_d_ben_regime(model, tok, device, args, rng):
     """Fraction of positions classified subcritical vs supercritical."""
     from datasets import load_dataset
-    ds = load_dataset("PolyAI/banking77", split="test")
+    ds = load_dataset("PolyAI/banking77", split="test", trust_remote_code=True)
     n = min(500, len(ds))
     idx = rng.choice(len(ds), size=n, replace=False)
     texts = [ds[int(i)]["text"] for i in idx]
@@ -218,7 +218,7 @@ def cap_d_ben_regime(model, tok, device, args, rng):
         out, mask = forward_batch(model, tok, chunk, device, args.max_seq_len)
         if out.ben_output is None:
             continue
-        regime = out.ben_output.regime  # (B, T) or (B,) depending on impl
+        regime = out.ben_output.regime_logits.argmax(-1)  # (B, T) 0=sub, 1=sup
         r_hat = out.ben_output.r_hat
         if regime.dim() == 2:
             valid = mask.bool()
