@@ -79,27 +79,53 @@ tokens ──► Backbone Embeddings (native, frozen)
 ## Quick Start
 
 ```bash
+# install
+git clone https://github.com/space-bacon/SRT.git
+cd SRT
 pip install -e .
-
-# Train on Reddit corpus
-python scripts/train.py \
-    --backbone Qwen/Qwen2.5-7B \
-    --train-data data/all_train.jsonl \
-    --val-data data/all_val.jsonl \
-    --output-dir checkpoints/adapter_v1 \
-    --batch-size 16 \
-    --epochs 3
-
-# Resume from checkpoint (restores optimizer, scheduler, step, epoch)
-python scripts/train.py \
-    --backbone Qwen/Qwen2.5-7B \
-    --train-data data/all_train.jsonl \
-    --val-data data/all_val.jsonl \
-    --output-dir checkpoints/adapter_v1 \
-    --resume checkpoints/adapter_v1/training_checkpoint.pt \
-    --batch-size 16 \
-    --epochs 3
 ```
+
+### Run inference (frozen Qwen-7B + released adapter)
+
+```python
+from srt.adapter import SRTAdapter
+from srt.config import build_config_from_json
+from safetensors.torch import load_file
+from huggingface_hub import hf_hub_download
+from transformers import AutoTokenizer
+import torch
+
+repo = "RiverRider/srt-adapter-v1.0"          # or RiverRider/srt-adapter-v8a
+cfg  = build_config_from_json(hf_hub_download(repo, "config.json"))
+adap = SRTAdapter(cfg).cuda().eval()
+adap.load_state_dict(load_file(hf_hub_download(repo, "adapter.safetensors")), strict=False)
+tok  = AutoTokenizer.from_pretrained(cfg.backbone_id)
+
+enc = tok("meaning forks here", return_tensors="pt").to("cuda")
+with torch.no_grad():
+    out = adap(input_ids=enc.input_ids, attention_mask=enc.attention_mask)
+print(out.r_hat.mean().item(), out.community_output.encoded.shape)
+```
+
+See [examples/](examples/) for end-to-end loading, scoring, and sentence-encoding scripts.
+
+### Live demos
+
+- v1.0 demo: <https://huggingface.co/spaces/RiverRider/srt-adapter-v1.0-demo>
+- v8a demo: <https://huggingface.co/spaces/RiverRider/srt-adapter-v8a-demo>
+
+### Train from scratch
+
+```bash
+python scripts/train.py \
+    --backbone Qwen/Qwen2.5-7B \
+    --train-data data/all_train.jsonl \
+    --val-data   data/all_val.jsonl \
+    --output-dir checkpoints/adapter_v1 \
+    --batch-size 16 --epochs 3 --lr 3e-4 --max-val-samples 5000
+```
+
+Resume from a saved `training_checkpoint.pt` with `--resume <path>` (restores optimizer, scheduler, step, epoch).
 
 ## Training Diagnostics
 
@@ -143,5 +169,31 @@ means different things to different communities. SRT makes the model
 - **BEN** estimates the bifurcation point: where a sign tips from stable
   (subcritical) to contested (supercritical) interpretation.
 
-See [Lancaster (2025)](../docs/Lancaster_Treachery_of_Signs_2025_v3.md) for
-the full theoretical treatment.
+See [Lancaster (2025)](paper.md) — the full paper and arXiv source live in this
+repository (`paper.md`, `paper.pdf`, `arxiv/`).
+
+## Released checkpoints
+
+| Repo | Generation | Notes |
+|---|---|---|
+| [`RiverRider/srt-adapter-v8a`](https://huggingface.co/RiverRider/srt-adapter-v8a) | v8a | Encoder-as-community headline result (Reddit recall@1 0.484). |
+| [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) | v15a → v1.0 | First versioned release. |
+
+## Citation
+
+```bibtex
+@misc{lancaster2025srtadapter,
+  title  = {The Semiotic-Reflexive Transformer Adapter: Lightweight Semiotic Awareness for Frozen Causal Language Models},
+  author = {Lancaster, Burton},
+  year   = {2025},
+  url    = {https://github.com/space-bacon/SRT},
+}
+```
+
+See `CITATION.cff` for machine-readable metadata.
+
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE). The released adapter weights on Hugging
+Face are also Apache-2.0; the underlying `Qwen/Qwen2.5-7B` backbone is released
+under its own Qwen license, which applies whenever the backbone is loaded.

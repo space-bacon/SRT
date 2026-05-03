@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use SRT-Adapter in your research, please cite both the software and the paper."
+title: "SRT-Adapter: Semiotic-Reflexive Transformer Adapter"
+version: "1.0.0"
+date-released: "2025-04-28"
+authors:
+  - family-names: Lancaster
+    given-names: Burton
+license: Apache-2.0
+repository-code: "https://github.com/space-bacon/SRT"
+url: "https://huggingface.co/RiverRider/srt-adapter-v1.0"
+keywords:
+  - nlp
+  - transformers
+  - adapter
+  - semiotics
+  - interpretability
+preferred-citation:
+  type: generic
+  title: "The Semiotic-Reflexive Transformer Adapter: Lightweight Semiotic Awareness for Frozen Causal Language Models"
+  authors:
+    - family-names: Lancaster
+      given-names: Burton
+  year: 2025
+  url: "https://github.com/space-bacon/SRT"

@@ -330,6 +330,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--find-unused-parameters", action="store_true", default=True,
                    help="DDP flag; on because the adapter has heads (MAH/BEN/RRM/archetype) "
                         "that do not contribute to the contrastive loss path.")
+    p.add_argument("--max-steps", type=int, default=None,
+                   help="Stop after this many optimizer steps (across all epochs). "
+                        "Useful for short profiling probes.")
+    p.add_argument("--profile-only", action="store_true",
+                   help="Profiling mode: skip validation, skip checkpoint saves, "
+                        "and emit a throughput summary at exit. Combine with --max-steps N.")
     return p.parse_args()
 
 
@@ -470,7 +476,7 @@ def main() -> None:
                 with log_path.open("a") as f:
                     f.write(json.dumps(rec) + "\n")
 
-            if val_pairs and step > 0 and step % args.val_every == 0 and main_proc:
+            if val_pairs and step > 0 and step % args.val_every == 0 and main_proc and not args.profile_only:
                 vstats = _eval_pairs(
                     adapter_for_save, tok, val_pairs, device,
                     args.max_seq_len, args.batch_size,
@@ -491,15 +497,30 @@ def main() -> None:
                 model.train()
 
             # Sync at val boundary so non-rank0 don't run ahead during eval
-            if is_distributed and step > 0 and step % args.val_every == 0:
+            if is_distributed and step > 0 and step % args.val_every == 0 and not args.profile_only:
                 dist.barrier()
 
             step += 1
 
-        if main_proc:
+            if args.max_steps is not None and step >= args.max_steps:
+                break
+
+        if args.max_steps is not None and step >= args.max_steps:
+            break
+
+        if main_proc and not args.profile_only:
             adapter_for_save.save_adapter(str(out_dir / f"adapter_epoch{epoch+1}.pt"))
 
-    if main_proc:
+    if main_proc and args.profile_only:
+        elapsed = time.time() - t0
+        steps_done = max(step, 1)
+        log.info(
+            "PROFILE  steps=%d  elapsed=%.1fs  steps/s=%.2f  s/step=%.3f  effective_batch=%d  world_size=%d",
+            steps_done, elapsed, steps_done / elapsed, elapsed / steps_done,
+            args.batch_size * world_size, world_size,
+        )
+
+    if main_proc and not args.profile_only:
         adapter_for_save.save_adapter(str(out_dir / "final_adapter.pt"))
         cfg_dict = {
             "args": vars(args),

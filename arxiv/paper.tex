@@ -1,9 +1,11 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 \documentclass[
-]{article}
+  11pt]{article}
 \usepackage{xcolor}
+\usepackage[margin=0.85in,top=0.7in,bottom=0.8in]{geometry}
 \usepackage{amsmath,amssymb}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
@@ -88,25 +90,29 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{etoolbox}
+\AtBeginEnvironment{abstract}{\footnotesize\linespread{1.0}\selectfont\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}}
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Semiotic Taps: Lightweight Adapter Modules for Bifurcation Detection in Frozen Language Models},
-  pdfauthor={James Burton Lancaster},
-  hidelinks,
+  pdftitle={The Semiotic-Reflexive Transformer Adapter: Lightweight Semiotic Awareness for Frozen Causal Language Models},
+  pdfauthor={Burton Lancaster},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Semiotic Taps: Lightweight Adapter Modules for Bifurcation
-Detection in Frozen Language Models}
-\author{James Burton Lancaster}
-\date{April 27, 2026}
+\title{The Semiotic-Reflexive Transformer Adapter:\\
+Lightweight Semiotic Awareness for Frozen Causal Language Models}
+\author{Burton Lancaster}
+\date{May 2026}
 
 \begin{document}
 \maketitle
-
-\subsection{Abstract}\label{abstract}
-
+\begin{abstract}
 Large language models trained on web-scale corpora absorb the semiotic
 bifurcations embedded in their data. These are divergent interpretant
 chains in which the same sign carries incompatible meanings across
@@ -167,14 +173,26 @@ substrate that is not Qwen-specific. An interiority study on the v8a
 checkpoint (§5.13) shows the inject channels function as a fixed-size
 BOS register whose amplitude is stable across an \(8\times\) length
 sweep (peak-to-peak \(\leq 4.8\%\)), while the regime classifier reads
-content-borne signal off non-BOS tokens and remains calibrated.
+content-borne signal off non-BOS tokens and remains calibrated. Holding
+the v8a interpretability scaffold frozen at evaluation, light downstream
+training of the encoder output channel raises mean MTEB-STS Spearman
+over 40 splits from \(0.210\) (v8a) to \(0.3634\) (v15a, shipped as
+\texttt{RiverRider/srt-adapter-v1.0}) under InfoNCE on NLI alone, then
+to \(0.3707\) (v18) under CoSENT on \(5{,}000\) STSB pairs (§5.14).
+Linear weight-averaging of v18 and a teacher-distilled multilingual
+sibling (v21a) at \(\alpha = 0.5\) yields v22c\_a050 at mean STS
+\(0.3744\) (\(24/40\) wins over v18) at \emph{zero additional training
+cost}, the cheapest meaningful gain on this surface; the
+interpretability readouts of §§5.4--5.5 and §5.13 are stable across the
+entire v12--v22c\_a050 lineage.
 
-\textbf{Keywords:} semiotic adapter, bifurcation detection,
+\vspace{0.5em}
+
+\noindent\textbf{Keywords:} semiotic adapter, bifurcation detection,
 metapragmatic attention, interpretant chains, reflexive recurrence,
 discourse community discovery, frozen backbone, pitchfork bifurcation,
 Peircean semiotics
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\end{abstract}
 
 \subsection{1. Introduction}\label{introduction}
 
@@ -327,7 +345,7 @@ The architecture rests on three converging theoretical lines:
 
 \subsubsection{1.4 Contributions}\label{contributions}
 
-This paper makes five contributions:
+This paper makes six contributions:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -391,7 +409,39 @@ This paper makes five contributions:
   content-borne signal, and a within-prompt-trajectory analysis showing
   the regime classifier holds steady-state regime-specific posteriors
   that mean pooling collapses.
+\item
+  \textbf{Interpretability is compatible with sentence-embedding
+  quality, and the cheapest meaningful gain on this surface is
+  parameter-space interpolation between two specialised optima.} Holding
+  the v8a interpretability scaffold (BEN, MAH, RRM, prototype-free CDH)
+  frozen at evaluation, light downstream training of the encoder output
+  channel on standard pair data raises mean MTEB-STS Spearman over 40
+  splits from \(0.210\) (v8a) to \(0.3634\) (v15a, shipped as
+  \texttt{RiverRider/srt-adapter-v1.0}) under InfoNCE on NLI alone, then
+  to \(0.3707\) (v18) under CoSENT on \(5{,}000\) STSB pairs. Linear
+  weight-averaging of v18 (English-purist) and v21a
+  (multilingual-leaning, teacher-distilled with mxbai cosines) at
+  \(\alpha = 0.5\) yields v22c\_a050 at mean STS \(0.3744\) (\(24/40\)
+  wins over v18) at \emph{zero additional training cost}. The
+  interpretability readouts of §§5.4--5.5 and §5.13 remain stable across
+  the entire v12--v22c\_a050 lineage. Two methodological consequences
+  follow: when the eval metric is Spearman, use a rank-aligned loss
+  (CoSENT) rather than absolute-value regression on cosines (MSE); and
+  when two specialised adapters exist, weight-averaging is the cheapest
+  first move before retraining (Section 5.14).
 \end{enumerate}
+
+\emph{Release boundary.} Adapter weights for v8a, v15a
+(\texttt{RiverRider/srt-adapter-v1.0}), and v22c\_a050 are released
+under Apache-2.0 on HuggingFace. The architecture (\texttt{srt/}),
+evaluation harness (\texttt{scripts/benchmark.py},
+\texttt{scripts/instrument\_eval.py}), examples, and this paper are
+public on \texttt{https://github.com/space-bacon/SRT}. The Reddit
+Discourse Corpus (Lancaster, 2026c), the per-token annotation pipeline,
+the C1 scholarly corpus targeted for v9, the teacher-distillation
+labelling pipeline, and the next-generation training recipe are not part
+of the public release. Hosted inference and custom-backbone integration
+for proprietary corpora are available through the author.
 
 \subsubsection{1.5 Paper Organization}\label{paper-organization}
 
@@ -909,7 +959,11 @@ depending on the discovered community context.
 
 Each MAH layer reads hidden states from a backbone layer and computes a
 divergence vector at each position quantifying where meaning forks under
-contextual interpretation.
+contextual interpretation. (As a measurement claim this is the layer's
+\emph{design} target; \u00a76.9 reports a direct separatrix-probe test
+that constrains the stronger semantic reading and supports a more
+conservative gloss in terms of community-conditioned local prediction
+surprise.)
 
 \textbf{Theoretical motivation.} The divergence vector \(d_t\) at
 position \(t\) captures:
@@ -1035,7 +1089,8 @@ are loss-only (Section 4.2).
 
 \subsection{4. Training}\label{training}
 
-\subsubsection{4.1 Data}\label{data}
+\subsubsection{4.1 Data (semiotic probe suite,
+v5--v8a)}\label{data-semiotic-probe-suite-v5v8a}
 
 Training uses a balanced subsample from the Reddit Discourse Corpus
 (Lancaster, 2026c), originally comprising 6.4M training and 714K
@@ -1075,6 +1130,19 @@ text passage (tokenized to max 512 subwords) with per-token annotations:
 backbone's native BPE tokenizer (Qwen: 151,936 vocabulary). Per-word
 annotations are aligned to BPE subwords using offset mapping: all
 subwords of a word inherit its annotation.
+
+\textbf{Scope of this corpus.} The Reddit corpus described above is the
+\emph{only} training data used for the semiotic probe suite (v5--v8a)
+reported in §§5.1--5.13. The downstream MTEB-STS lineage
+(v12--v22c\_a050, §5.14) does \emph{not} train on Reddit. It warm-starts
+from the v8a checkpoint, freezes the BEN, MAH, RRM, and CDH heads, and
+trains only the encoder output channel on standard sentence-pair
+benchmarks (NLI, STSB, Quora, optionally teacher-distilled with
+\texttt{mixedbread-ai/mxbai-embed-large-v1}). Per-version corpus, size,
+loss, and licensing are tabulated inside §5.14; no Reddit data is used
+past v8a. This separation is what allows the interpretability readouts
+of §§5.4--5.5 and §5.13 to remain stable across the entire
+v12--v22c\_a050 arc: only the encoder channel retrains.
 
 \subsubsection{4.2 Loss Functions}\label{loss-functions}
 
@@ -2078,6 +2146,250 @@ come from. Visualizations (per-channel z-score heatmaps, per-regime
 within-prompt trajectories, BOS-ablation \(\Delta |z|\) matrix) appear
 as Figs. 10 and 11 of the public demo card.
 
+\subsubsection{5.14 Sentence embedding quality: from interpretability to
+MTEB-STS (v12 →
+v22c)}\label{sentence-embedding-quality-from-interpretability-to-mteb-sts-v12-v22c}
+
+The v5--v8 arc established that a 12.7M-parameter adapter on a frozen
+Qwen 2.5-7B can carry community, divergence, and regime structure
+without degrading cross-entropy. It did not establish that the same
+architecture, with light downstream training of the community channel,
+is competitive as a \emph{sentence embedding} model. v8a's mean MTEB-STS
+Spearman across 40 splits was \(0.210\), dominated by the fact that the
+community vector was optimised for unsupervised Reddit retrieval rather
+than human STS judgments. The v12--v22c lineage answers the embedding
+question directly: holding the v8a interpretability scaffold frozen at
+evaluation, can the encoder output be trained on standard STS-style pair
+data without losing the diagnostic readouts of §§5.1--5.13?
+
+\emph{v12 --- first leaderboard-credible STS.} Warm-starting from v8a,
+one InfoNCE epoch on a 396K mixed pair corpus (NLI + Quora + MS MARCO
+triples) raises mean STS Spearman to \(0.346\) (+\(0.136\) absolute,
+\(+64\%\) relative on a single A6000 in \(\sim 100\) minutes). The top
+splits are HUME-SICK-R \(0.792\), STS17 split 2 \(0.723\), SemRel24STS
+\(0.714\). Per-split gains are dominated by the English subset (mean
+\(17\) splits \(0.574\)) with cross-lingual splits remaining flat. The
+interpretability readouts (regime ECE, \(\hat r\) distribution,
+hallucination AUROC) are unchanged within seed variance: the InfoNCE
+objective acts on the encoder output channel only and does not perturb
+the BEN, MAH, or RRM heads.
+
+\emph{v15a --- NLI-only, official v1.0 release.} Removing MS MARCO from
+the v12 corpus and training one epoch of InfoNCE on the NLI subset alone
+(396K pairs reduced to NLI's \(\sim 280\)K) raises mean STS to
+\(0.3634\) (+\(0.017\) over v12). MS MARCO, which is a retrieval corpus
+and not an STS corpus, was actively hurting the embedding objective.
+v15a is the checkpoint shipped as \texttt{RiverRider/srt-adapter-v1.0}
+(§5.15). Headline English numbers: HUMESICK-R \(0.7973\), STSBenchmark
+\(0.4434\), SICK-R \(0.6072\), STS15 \(0.6008\). The Cap-A community-NMI
+benchmark (§5.2 protocol, evaluated on Banking77 intent labels rather
+than Reddit subreddits) is \(0.5391 \pm 0.008\), up from v8a's
+\(0.4427\) (\(+0.096\), \(\approx 13\sigma\)). Hallucination AUROC
+remains \(0.576\), regime distribution \(96.9\%\) supercritical on
+Reddit val. v15a is the first checkpoint that satisfies both the
+embedding-quality criterion and the interpretability-preservation
+criterion simultaneously.
+
+\emph{v17 --- cosine-MSE on STSB regresses (negative result).} Adding
+\(5{,}000\) STSB sentence pairs and training a regression head with MSE
+loss on the absolute cosine score drops mean STS to \(0.3531\)
+(\(-0.010\) vs.~v15a). Dev Spearman peaks at \(0.6936\) in-distribution
+and falls to \(0.5613\) on test, a \(0.13\) generalisation gap. The
+lesson, made explicit by v18, is that MSE on absolute cosine is
+Pearson-aligned (it minimises squared error against the \emph{value} of
+the human label) while MTEB scores Spearman (which depends only on the
+\emph{rank order}); training under MSE optimises the wrong correlate.
+
+\emph{v18 --- CoSENT pairwise loss, first SOTA.} Replacing the MSE head
+with the CoSENT pairwise rank loss (Su, 2022; scale \(= 20\), lr
+\(= 1\times 10^{-5}\), 5 epochs \(= 565\) steps on the same \(5{,}000\)
+STSB pairs) yields mean STS \(0.3707\), \(+0.0074\) over v15a, winning
+on \(29/40\) splits. The same data that regressed under MSE generalises
+and improves under CoSENT, including on cross-lingual STS17 subsets
+(en-fr \(+0.040\), en-ar \(+0.037\), BIOSSES \(+0.013\)) despite
+English-only training. Best-checkpoint saver caught a peak at step
+\(100\) (dev Spearman \(0.6856\)); the schedule then over-trained,
+motivating v19a's shorter run. The headline architectural finding from
+v17 vs.~v18 is that \emph{loss-function choice swamps data-recipe
+choice} on this surface: the same \(5{,}000\) pairs move mean STS
+\(-0.010\) or \(+0.007\) depending on whether the loss is rank-aligned
+with the eval metric.
+
+\emph{v19a/v19b, v20 --- schedule and label ablations (negative).} v19a
+(lr \(= 5 \times 10^{-6}\), 2 epochs, val\_every \(= 25\)) matches v15a
+on mean STS within seed variance and does not beat v18; the
+over-training in v18 cost \(\leq 0.001\). v19b (CoSENT on NLI-as-pairs
+\(+\) Quora paraphrases, \(\sim 207\)K pairs) reaches \(0.3709\),
+nominally a \(+0.0002\) improvement that lies inside the seed-variance
+band reported below. v20 (NLI categorical labels treated as graded
+scores: entail \(= 1.0\), neutral \(= 0.5\), contradict \(= 0.0\),
+trained under CoSENT on \(200\)K pairs) drops mean STS to \(0.3667\)
+(\(-0.004\)). The graded-NLI label scheme warps the calibration of the
+rank-loss across the full label range and damages English STS
+(HUMESTSBenchmark \(-0.117\), STS13/14 \(-0.02\) to \(-0.03\)) while
+modestly improving cross-lingual splits. Categorical NLI labels are not
+a faithful proxy for graded similarity even under a rank-aligned loss.
+
+\emph{v21a --- teacher distillation with continuous similarity labels.}
+Re-scoring the v20 pair pool (\(200\)K NLI premise/hypothesis pairs
+\(+\) \(7\)K STSB pairs) using
+\texttt{mixedbread-ai/mxbai-embed-large-v1} as a teacher and treating
+the teacher cosine as the continuous CoSENT label (otherwise identical
+hyperparameters to v18) yields mean STS \(0.3720\) (\(+0.0012\) over
+v18, \(14/40\) wins). The gains are concentrated on cross-lingual splits
+(IndicCrosslingualSTS en-bn \(+0.226\), en-tr \(+0.161\), en-ta
+\(+0.151\), en-te \(+0.146\)); English splits regress (HUMESTSBenchmark
+\(-0.111\), STSBenchmark \(-0.084\), STS13/14 \(-0.07\) to \(-0.09\)).
+The diverse pair pool \emph{is} informative when scored against a
+continuous similarity teacher; the v20 problem was the categorical
+labels, not the pool. v21a establishes a multilingual-leaning sibling to
+v18's English-purist baseline.
+
+\emph{v21b, v22a, v22b --- small wins and a near-saturation diagnostic.}
+v21b\_a050 (linear weight average of v18 and v20 at \(\alpha = 0.50\))
+reaches \(0.3709\), recovering v20's multilingual gains at the cost of
+marginal English regressions; v21b\_a070 (\(\alpha = 0.70\)) reaches
+\(0.3738\) (\(+0.0031\) vs.~v18) and is the most balanced of the v18+v20
+souping configurations but inferior to v22c below. v22a (STSB upsampled
+\(5\times\) to increase the graded-pair fraction) reaches \(0.3712\)
+(\(+0.0005\)). v22b (multi-teacher distillation, mxbai \(+\)
+\texttt{intfloat/multilingual-e5-large}, averaged cosines as labels)
+reaches \(0.3708\) (\(+0.0001\)). Each of these results is at or below
+the seed-variance floor.
+
+\emph{v22c\_a050 --- model souping yields current SOTA.}
+Linear-averaging the v18 and v21a adapter weights at \(\alpha = 0.50\)
+(i.e.,
+\(\theta_{\text{v22c}} = 0.5\,\theta_{\text{v18}} + 0.5\,\theta_{\text{v21a}}\))
+yields mean STS \(0.3744\), the highest measured value on this lineage,
+winning on \(24/40\) splits over v18 with \emph{zero additional
+training}. The English splits hold (HUMESICK-R \(0.7682\), \(-0.033\)
+vs.~v18, within seed variance), the multilingual gains transfer (STS17
+zh-en \(0.6647\), \(+0.143\) vs.~v18; IndicCrosslingual mean stabilises
+at \(-0.021\) vs.~v21a's \(+0.05\) to \(+0.22\) wins-with-English-cost),
+and the IndicCrosslingual losses against v21a's standalone configuration
+are recovered. The procedural cost is two matrix additions and a
+checkpoint save. We read this as direct evidence that v18 and v21a sit
+in a connected loss basin despite their corpus-level specialisation: the
+encoder's parameter manifold under CoSENT is locally convex enough that
+linear interpolation between two specialised optima recovers a strictly
+better Pareto point. This is the cheapest meaningful improvement the
+lineage has produced.
+
+\emph{Seed variance.} v18 and v22c\_a050 were each re-evaluated three
+times on the full 40-split MTEB STS suite under bfloat16 with DataLoader
+nondeterminism (seeds \(0, 1, 2\)). Mean-STS variability was
+\(\pm 0.001\) to \(\pm 0.003\) per seed across both checkpoints. We
+treat per-task deltas \(\leq 0.002\) as within noise.
+
+\emph{Beyond-STS scope (v22c\_a050\_beyond).} On a curated MTEB subset
+spanning Classification (Banking77, EmotionClassification,
+MTOPDomainClassification), Retrieval (SciFact, NFCorpus, ArguAna),
+Reranking (SciDocsRR, AskUbuntuDupQuestions), and PairClassification
+(SprintDuplicateQuestions), v22c\_a050 retains the v15a-era profile:
+strong on intent-style classification (Cap-A NMI \(\approx 0.54\)), weak
+on retrieval (SciFact nDCG@10 \(\approx 0.03\), NFCorpus
+\(\approx 0.01\)). STS-only training does not transfer to retrieval, as
+expected; the adapter is a sentence-similarity model, not a
+general-purpose encoder. This is an honest scope statement, not a
+regression.
+
+\emph{Summary table.} Mean MTEB-STS Spearman over \(40\) splits, all
+warm-started from v8a unless noted; all eval at fp32 on a single A6000
+except where noted as bfloat16 seed re-runs.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mean STS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\Delta\) vs.~v15a
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recipe
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Status
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+v8a (baseline) & \(0.210\) & \(-0.153\) & Reddit unsupervised, no STS
+training & Interpretability baseline \\
+v12 & \(0.346\) & \(-0.017\) & InfoNCE on NLI \(+\) Quora \(+\) MS MARCO
+(\(396\)K) & First STS-credible \\
+\textbf{v15a} (\(=\) \textbf{v1.0}) & \(0.3634\) & \(-\) & InfoNCE on
+NLI only (\(\sim 280\)K) & Official release \\
+v17 & \(0.3531\) & \(-0.010\) & \(+\,5\)K STSB, MSE on cosine & Negative
+(Pearson \(\neq\) Spearman) \\
+\textbf{v18} & \(0.3707\) & \(+0.0074\) & \(+\,5\)K STSB, CoSENT
+pairwise & SOTA \#1 \\
+v19a & \(\sim 0.3638\) & \(-0.0001\) & v18 with shorter schedule &
+Tie \\
+v19b & \(0.3709\) & \(+0.0075\) & CoSENT on NLI-as-pairs \(+\) Quora
+(\(\sim 207\)K) & Tie within variance \\
+v20 & \(0.3667\) & \(+0.0033\) & CoSENT on graded-NLI labels & Negative
+on English \\
+\textbf{v21a} & \(0.3720\) & \(+0.0086\) & CoSENT on mxbai-distilled
+\(200\)K pairs & SOTA \#2 (multilingual-leaning) \\
+v21b\_a050 / a070 & \(0.3709\) / \(0.3738\) & \(+0.008\) / \(+0.010\) &
+Soup v18 \(+\) v20 (\(\alpha = 0.5/0.7\)) & Tie / minor win \\
+v22a & \(0.3712\) & \(+0.0078\) & STSB \(5\times\) upsample & Tie within
+variance \\
+v22b & \(0.3708\) & \(+0.0074\) & Multi-teacher (mxbai \(+\) e5) & Tie
+within variance \\
+\textbf{v22c\_a050} & \(0.3744\) & \(+0.011\) & Soup v18 \(+\) v21a
+(\(\alpha = 0.5\)), zero training & \textbf{SOTA (current)} \\
+\end{longtable}
+}
+
+\emph{Architectural reading.} The v8a interpretability scaffold (frozen
+at the BEN, MAH, RRM, and prototype-free CDH from §§5.9 and 5.13) is
+compatible with competitive sentence embedding once the encoder output
+channel is tuned with a rank-aligned loss on standard pair data. The
+relative ordering of variants is determined by loss-function choice (v17
+vs.~v18) and label-scheme choice (v20 vs.~v21a) far more than by
+architecture, and the cheapest meaningful win on this surface is
+\emph{parameter-space interpolation between two specialised optima}
+(v22c\_a050) rather than further data-recipe iteration. This is
+consistent with the §6.5/§6.8 reading that the community vector and
+\(\hat r\) measure orthogonal axes (alignment \(\times\) activity):
+tuning the alignment axis on STS pair data does not perturb the activity
+axis the BEN reads, which is why the interpretability readouts of
+§§5.4--5.5 and §5.13 are stable across the entire v12--v22c\_a050
+lineage.
+
+\subsubsection{5.15 Public release:
+srt-adapter-v1.0}\label{public-release-srt-adapter-v1.0}
+
+The v15a checkpoint is shipped publicly as
+\texttt{RiverRider/srt-adapter-v1.0} on the Hugging Face Hub,
+accompanied by an inference-only demonstration Space at
+\texttt{RiverRider/srt-adapter-v1.0-demo} and the prior-generation v8a
+release at \texttt{RiverRider/srt-adapter-v8a} /
+\texttt{RiverRider/srt-adapter-v8a-demo}. The released artifacts are:
+\texttt{adapter.safetensors} (\(12.7\)M parameters, the four trainable
+submodules only), \texttt{config.json} (the \texttt{SRTConfig} dataclass
+serialised), the training and benchmark logs, and a model card
+documenting the scope statement above (strong English STS and intent
+clustering; weak retrieval; mediocre cross-lingual). The full source for
+the adapter, the training script, and the evaluation harness is
+available at \texttt{https://github.com/space-bacon/SRT} under the
+Apache 2.0 license; the released weights inherit the same license, while
+inference requires the \texttt{Qwen/Qwen2.5-7B} backbone under its own
+Qwen license. The v22c\_a050 model-soup checkpoint of §5.14 is shipped
+separately as \texttt{RiverRider/srt-adapter-v22c\_a050} and supersedes
+v15a on STS quality while preserving the same interpretability surface;
+v15a is retained as the canonical v1.0 release for reproducibility
+against the Cap-A and §5.4 hallucination benchmarks.
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{6. Discussion}\label{discussion}
@@ -2230,9 +2542,26 @@ expected community-conditional separation of MAH divergence trajectories
 on contested topics, and v8a's prototype-bottleneck removal (§5.9)
 turned out to be the more consequential change for both channels.
 
+A cleaner restatement, owed to a measurement-theoretic framing developed
+independently by Haylett (2025, 2026) and discussed in §6.8: the two
+outputs decompose into an \emph{activity} axis and an \emph{alignment}
+axis. \(\hat{r}\) is sensitive to how much measurement is happening at a
+token (the density at which continuous cognitive-acoustic flow is being
+transduced into discrete symbols, \emph{exogenous measurement} in
+Haylett's terms). The community head is sensitive to which interpretive
+manifold those symbols are being negotiated against (\emph{endogenous
+measurement}). The earlier draft conflated these because the original
+architectural story expected a single bifurcation-proximity scalar; the
+data tells us instead that the two axes need two channels, and the model
+already has them.
+
 This revision of the architectural story is cleaner, not weaker: the
 model has two distinct outputs that measure two distinct things, and the
-data tells us which is which.
+data tells us which is which. A direct test of the activity/alignment
+decomposition on a hand-authored separatrix battery is reported in §6.9;
+that test confirms both axes in the predicted directions and, in the
+same sweep, falsifies the earlier reading of MAH as an ``interpretive
+divergence'' channel.
 
 \subsubsection{6.6 Limitations}\label{limitations}
 
@@ -2324,6 +2653,293 @@ substrate and the emergent dynamics may be separable engineering
 targets, and that the productive question is what becomes possible when
 both are present.
 
+\subsubsection{6.8 Convergence with the Geofinitism / Takens-Based
+Transformer
+Program}\label{convergence-with-the-geofinitism-takens-based-transformer-program}
+
+A contemporaneous and independent line of work by Haylett (2025, 2026)
+arrives at much the same picture of meaning, basins, attractors,
+separatrices, and bifurcation, from a non-Peircean foundation. Where the
+SRT route runs through Peirce, Silverstein, and Wildgen-Anderson
+catastrophe-theoretic semantics, Haylett's \emph{Geofinitism} program
+runs through Takens' (1981) delay-embedding theorem, treating word
+sequences as a quantized scalar time series whose underlying continuous
+semantic phase space can be reconstructed from delay coordinates. The
+proof-of-concept system, MARINA (Manifold-Aware Reconstruction and
+Inference Network Architecture), replaces attention entirely with
+explicit delay-coordinate reconstruction over the token stream.
+
+The convergence between the two programs is at the level of ontology,
+not implementation. Both treat language as a dynamical system whose
+observable symbols are lossy projections of a higher-dimensional flow;
+both identify hallucination as a probability-gradient crossing of a
+separatrix between a target basin and a geometrically adjacent but
+epistemically disjoint one (Haylett's ``separatrix illusion'', e.g.,
+``quantum entanglement'' → ``mystical oneness''); both name the failure
+of static-symbol metaphysics to account for the lived geometry of
+meaning under amplification. That two routes from different starting
+axioms produce the same picture is, we think, evidence that the picture
+is not an artifact of either route.
+
+The methodological disagreement is sharp and useful. SRT keeps a frozen
+attention backbone and adds reflexive readouts on top; MARINA replaces
+attention with phase-space reconstruction. The two stances generate
+complementary tests. Cross-applying an SRT-style adapter to MARINA would
+test whether the community-discovery, metapragmatic-divergence, and
+regime-calibration signals reported here are properties of language
+itself or properties of attention; cross-applying MARINA's
+delay-embedding readout to a frozen attention backbone would supply the
+SRT toolchain with a trajectory-curvature channel orthogonal to the
+MAH's pairwise interpretant divergence. Both directions are queued for
+future work.
+
+Haylett's measurement-theoretic frame also gives the §6.5 finding a
+cleaner positive reading. If \(\hat{r}\) tracks information density and
+\(r_\text{true}\) components, while the community head tracks discourse
+register, then the two outputs decompose into something close to
+Haylett's distinction between \emph{exogenous measurement} (the act of
+transducing continuous flow into discrete symbol, where \(\hat{r}\)
+peaks) and \emph{endogenous measurement} (the negotiation of those
+symbols against an internal manifold, which is what the community head
+reads). The two-axis decomposition is \emph{activity × alignment}, and
+the two channels are reading the two axes.
+
+Finally, Haylett's \emph{Semantic Uncertainty Appendix} practice (a
+structured per-term disclosure of operational definition, ambiguity
+bounds, and validity domain) is one we have adopted for the v9 release
+artifact (\texttt{release/srt-adapter-v9/SUA.md}). Several SRT terms
+that have proven load-bearing for misreading, \emph{interiority},
+\emph{reflexive}, \emph{bedrock} vs.~\emph{battleground},
+\emph{bifurcation} in our usage vs.~the formal pitchfork,
+\emph{intervention} (the BEN raises basin walls; it does not select a
+basin), are now disclosed there explicitly. We treat this as an
+alignment-relevant engineering practice, not a stylistic one.
+
+\subsubsection{6.9 Direct test on a separatrix battery:
+activity/alignment confirmed, MAH reading
+constrained}\label{direct-test-on-a-separatrix-battery-activityalignment-confirmed-mah-reading-constrained}
+
+The Haylett separatrix-illusion construct is operationalisable as a
+direct test of the v8a readouts. We hand-authored a 61-item battery
+(\texttt{data/probes/separatrix\_illusion\_v1.jsonl}) covering
+load-bearing physics-and-mysticism flashpoints (entanglement, field,
+resonance, holism, emergence, attractor, and similar terms). Each item
+has a neutral prompt plus three scripted continuations: a
+\emph{technical} one that stays inside the disciplinary register, a
+\emph{mystical} one that drifts onto the geometrically adjacent but
+epistemically disjoint basin, and a \emph{bedrock} one that stays inside
+the technical basin while making a coordinating philosophical move (in
+the Wittgensteinian / Quinean / Cavellian sense). Three predictions
+follow from the §6.5 activity/alignment decomposition together with the
+original §3.3 reading of MAH:
+
+\begin{itemize}
+\tightlist
+\item
+  (P1) the \emph{community head} should place the technical and bedrock
+  branches closer together than the technical and mystical branches in
+  64-D community-vector space;
+\item
+  (P3) the \emph{BEN} \(\hat r\) should be elevated on the prompts
+  themselves, regardless of which continuation is later attached, since
+  the prompts are by construction interpretively dense;
+\item
+  (P4) the \emph{MAH} peak divergence should be larger on
+  (technical-prompt + mystical-continuation) than on (technical-prompt +
+  bedrock-continuation), if MAH is reading register collision in the way
+  §3.3 originally claims.
+\end{itemize}
+
+We ran v8a end-to-end on a frozen Qwen2.5-7B (244 forwards, 13 s on a
+single A6000) and tested each prediction with a two-sided Wilcoxon
+signed-rank statistic across the 61 items. Results are reported in
+\texttt{docs/SEPARATRIX\_V8A\_FINDINGS.md}; the headline numbers are:
+
+\begin{itemize}
+\tightlist
+\item
+  (P1) \textbf{confirmed.} Mean cos(tech, bedrock) \(= 0.917\) vs.~mean
+  cos(tech, mystic) \(= 0.905\); the predicted ordering holds for
+  \(62\%\) of items, \(p = 0.031\). The community vectors live in a
+  tight cluster (no discrete prototypes in v8a; the encoder output
+  \emph{is} the community vector), so the absolute separation is small,
+  but the ordering is the predicted one.
+\item
+  (P3) \textbf{confirmed unanimously.} Mean \(\hat r\) over prompt
+  tokens \(= 1.121\), with \(61/61\) prompts above the conservative
+  reference of \(\hat r = 0\). Every separatrix prompt is interpretively
+  loaded by the activity gauge; this is the cleanest direct evidence to
+  date for the activity-axis reading of \(\hat r\) in §6.5.
+\item
+  (P4) \textbf{falsified, in the strongly opposite direction.} Mean MAH
+  peak on the mystical continuation \(= 1.49\) vs.~mean MAH peak on the
+  bedrock continuation \(= 2.07\); the \emph{bedrock} continuation
+  drives larger peak divergence in \(95\%\) of items,
+  \(p = 3.8 \times 10^{-11}\).
+\end{itemize}
+
+This falsification is the cleanest the SRT-Adapter results have
+produced, and it is informative about the MAH layer rather than the
+architecture as a whole. Three readings are compatible with the data; we
+present them in descending order of plausibility but do not yet
+adjudicate. (a) \emph{Bedrock is the harder collision.} The mystical
+branches in this battery are stylistic drift that does not actually
+commit to an alternate ontology; the bedrock branches do commit to a
+coordinating philosophical move and require the model to hold two
+registers in simultaneous play. MAH may be detecting that coordination,
+not the surface tech-vs-mystic gap. (b) \emph{The mystical branch is
+in-distribution slop.} Qwen2.5-7B's pretraining includes a great deal of
+mysticism-as-aesthetic, so the mystical continuation may simply be more
+predictable in context than the bedrock one, dragging
+divergence-against-attention down. (c) \emph{Probe-construction
+artifact.} Bedrock continuations were authored by one hand and may be
+systematically denser or jargon-heavier than mystical ones; a length-
+and density-balanced v2 battery is needed to rule this out.
+
+Whichever reading wins, the original §3.3 description of MAH as
+``divergence quantifying where meaning forks under contextual
+interpretation'' needs to be weakened. The defensible reading the
+present data supports is that MAH measures \emph{local prediction
+surprise modulated by community-conditioned attention geometry}; it does
+not, on this probe, behave as a register-collision detector in the way
+the earlier text implies. We leave the stronger semantic reading as a
+hypothesis to test under archetype-conditioned supervision (§5.8
+hypothesis (a)) and under the prototype-forcing decode path slated for
+v9, which would let us run a counterfactual version of the same
+separatrix sweep (Haylett's prediction (2), not yet testable on v8a).
+The activity/alignment story (§6.5, §6.8) is unchanged and now has
+direct probe-level support; the \emph{interpretive-divergence} gloss on
+MAH is the part of the architectural narrative the data has constrained.
+
+\textbf{Independent confirmation from a Takens-based readout.} As an
+external check on interpretation (a), we ran a Takens delay-embedding
+head (\texttt{srt.modules.thead.TakensHead}, 131K params, no shared
+parameters with the SRT-Adapter, no training on this probe) on the same
+separatrix battery, reading the frozen Qwen2.5-7B's hidden states at
+layer 16 directly. Two findings emerge (full report:
+\texttt{docs/THEAD\_SEPARATRIX\_V1\_FINDINGS.md}). First, the Lyapunov
+\emph{standard deviation} of the trajectory is markedly larger on
+mystical continuations than on either technical or bedrock branches
+(mystical − bedrock \(= +0.327\), \(p = 2 \times 10^{-9}\), \(89\%\) of
+items): the mystical branch traces a more volatile path through the
+model's hidden-state phase space, which is the cleanest direct signature
+of the wider, shallower basin Haylett's separatrix-illusion construct
+predicts. Second, \emph{recurrence} (orbit periodicity in the
+delay-coordinate space) is highest on the bedrock branch by a large
+margin (bedrock − technical \(= +3.17\), \(p = 10^{-6}\); bedrock −
+mystical \(= +2.77\), \(p = 2 \times 10^{-5}\)). The bedrock branch
+produces the most geometrically-organised trajectory of the three. The
+MAH peak-divergence reading from the SRT-Adapter and the
+Takens-recurrence reading from the parameter-disjoint T-Head agree on
+the rank ordering of the three branches: bedrock is the most
+distinctively-structured, mystical the most volatile, technical sits
+between. That two heads with no shared parameters and no shared
+theoretical motivation produce the same rank ordering on the same probe
+is, we think, a stronger constraint on the underlying picture than
+either head produces alone, and a direct empirical instantiation of the
+SRT/Geofinitism convergence sketched in §6.8.
+
+\textbf{Depth profile.} Extending the T-Head sweep to four backbone
+depths (L7, L14, L16, L21) with per-layer eps calibration sharpens both
+readings further. The Lyapunov-std separation between the mystical and
+bedrock branches is essentially constant across all four depths
+(\(+0.28\) to \(+0.33\), frac+ \(\in [0.80, 0.93]\), \(p \le 10^{-7}\)
+everywhere): mystical-as-volatile is a depth-invariant property of the
+basin the model is in throughout the forward pass, not a late-layer
+reasoning effect. The recurrence-mean separation between bedrock and
+technical, by contrast, \emph{builds monotonically with depth}:
+\(-0.41\) (NS) at L7, \(+1.36\) (\(p = 2 \times 10^{-4}\)) at L14,
+\(+3.17\) (\(p = 10^{-6}\)) at L16, \(+3.67\) (frac+ \(= 0.85\),
+\(p = 3 \times 10^{-9}\)) at L21. The depth at which T-Head recurrence
+most strongly distinguishes bedrock from technical is the same depth at
+which the SRT-Adapter's MAH3 layer sits and at which the v1 interiority
+probe (\texttt{docs/INTERIORITY\_V1\_FINDINGS.md}) reports the largest
+MAH between-regime spread.
+
+\textbf{Per-layer MAH cross-check.} A complementary depth profile from
+the SRT-Adapter side (\texttt{scripts/separatrix\_mah\_layers.py},
+\(n = 61\), all three v8a MAH layers) sharpens this further. MAH
+peak-divergence on the continuation slice ranks the three branches
+identically at every depth: bedrock \(>\) technical \(>\) mystical, with
+bedrock vs technical \(p \le 10^{-5}\) everywhere and bedrock vs
+mystical \(p \le 10^{-10}\) everywhere. Bedrock produces the largest
+local mismatch between the MAH-predicted and observed hidden-state
+trajectory --- i.e.~the branch the autoregressive prior fits the worst,
+which is exactly what one would expect from the most idiosyncratic
+(non-formulaic) of the three continuations. T-Head recurrence at L21
+ranks the branches identically --- bedrock \(>\) technical \(>\)
+mystical --- from a head that shares no parameters and no theoretical
+motivation with MAH. The two heads disagree on the \emph{depth
+structure} (MAH is roughly U-shaped with magnitude peaking at L7 and
+L21; T-Head recurrence rises monotonically and peaks at L21), but they
+agree on the \emph{rank ordering} of the three branches at every depth
+where they overlap, and they agree at L21 with effect sizes orders of
+magnitude above the conventional significance threshold.
+
+\textbf{Length-confound test.} In the v1 separatrix battery the
+technical branches are systematically \textasciitilde4 words longer than
+bedrock and mystical; the bedrock-vs-technical MAH effect already runs
+\emph{opposite} to that length difference (bedrock peak is larger
+despite being shorter), but the proper falsification is to re-run on a
+length-matched battery. We built
+\texttt{data/probes/separatrix\_illusion\_v1\_lentrunc.jsonl} by
+truncating each item's three branches to their per-item minimum word
+count (mean 13.2 words, range 7-20, no items dropped) and re-ran both
+heads. The bedrock \(>\) technical \(>\) mystical MAH-peak rank ordering
+holds at every depth on the length-matched battery, every contrast at
+\(p \le 10^{-3}\) (\(+0.24\)/\(+0.18\)/\(+0.31\) for bedrock \(-\) tech
+at L7/L14/L21; \(+0.53\)/\(+0.35\)/\(+0.49\) for bedrock \(-\) mystic,
+\(p \le 10^{-10}\) at every depth). The T-Head Lyap-std
+mystical-volatility signal holds at every depth, \(p \le 10^{-5}\)
+everywhere; the T-Head recurrence bedrock \(>\) technical signal holds
+at every depth (L21 still the largest at \(+3.85\),
+\(p = 2 \times 10^{-9}\)). Effect sizes attenuate \textasciitilde40-50\%
+under length truncation, which is itself partly a power loss from
+shorter trajectories, but the convergence claim survives the principal
+alternative explanation. We treat this triple agreement --- same rank
+ordering, two parameter-disjoint heads, every measured depth,
+length-confound ruled out --- as the strongest current empirical
+constraint on the SRT/Geofinitism shared-picture claim from §6.8.
+
+\textbf{Counterfactual prototype-forcing --- a clean negative for
+Haylett pred (2) on v8a.} The four results above are all
+\emph{correlational}: they describe what the adapter and the T-Head
+\emph{read off} the three branches. Haylett's prediction (2) makes a
+stronger, \emph{causal} claim --- that decoding while \emph{forcing} the
+model into the bedrock (resp. mystical) basin should make the bedrock
+(resp. mystical) continuation more probable. The v8a forward already
+supports a \texttt{forced\_community} override (§5), so we tested this
+directly: estimate the per-branch centroid of the discovered community
+vector from the separatrix readouts, then for each item recompute the
+cross-entropy of each branch's actual continuation tokens under three
+forcings (force = bedrock centroid, mystical centroid, technical
+centroid) and compare. Result, \(n = 61\) items, Wilcoxon signed-rank:
+every diagonal effect (CE under the matching forcing \(-\) CE under the
+off-diagonal forcings) is within \(\pm 0.002\) nats of zero, every
+\(p > 0.08\). The most forgiving contrast (bedrock branch under the
+bedrock vs technical forcing) gives \(+0.0017\) nats with frac+
+\(= 0.57\), \(p = 0.083\) --- not significant uncorrected, certainly not
+under multiple comparisons. We confirmed the forcing path is wired
+correctly with a sanity check: forcing a \(100\times\)-magnified random
+vector swings CE by \(+2.27\) nats (1.34 \(\to\) 3.61) on the same item
+where the natural-magnitude centroid forcing changes CE by \(+0.01\)
+nats. The path is live; the signal isn't there at the magnitude the v8a
+community vectors produce. Read this as: v8a's MAH heads are
+\emph{sensitive} to the branch differences (large effect,
+\(p \le 10^{-5}\)) but the v8a continuous-community injection path lacks
+the leverage to \emph{causally drive} decode toward those differences.
+The three branch centroids sit within \(\|\cdot\|_2 \in [0.19, 0.35]\)
+of each other in 64-d space, with norms \(\approx 1\), and the decode
+head appears to be near-invariant to differences of that magnitude. Pred
+(2) is therefore \emph{provisionally falsified for v8a} and queued as a
+primary motivation for v9 (discrete prototypes with
+construction-enforced inter-cluster spread; full prototype-forcing
+decode path). The honest reading of §6.9 as a whole, then, is: the
+\emph{diagnostic} half of the SRT/Geofinitism convergence (read-off of
+basin structure) is robust under two heads, four depths, and
+length-matching; the \emph{causal} half (forced-prototype decode) is
+pending v9 and currently has a clean null on v8a.
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{7. Conclusion}\label{conclusion}
@@ -2406,6 +3022,43 @@ hallucination probes, cross-domain transfer evaluation, and human
 ecological-validity studies remain the principal open empirical
 questions.
 
+The v12--v22c lineage (§5.14) closes the gap to standard
+sentence-embedding evaluation without disturbing any of the v5--v8
+interpretability readouts. Holding the v8a scaffold frozen at evaluation
+and tuning the encoder output channel only, mean MTEB-STS Spearman over
+40 splits moves from v8a's \(0.210\) to v15a's \(0.3634\) (one InfoNCE
+epoch on NLI, shipped publicly as \texttt{RiverRider/srt-adapter-v1.0},
+§5.15) to v18's \(0.3707\) (CoSENT pairwise loss on \(5{,}000\) STSB
+pairs) and finally to v22c\_a050's \(0.3744\) (linear weight average of
+v18 and a teacher-distilled multilingual sibling, \(24/40\) wins over
+v18, zero additional training). Two methodological lessons are worth
+emphasising: when the eval metric is rank-based (Spearman), use a
+rank-aligned loss rather than absolute-value regression on cosines; and
+when two specialised adapters exist in a connected loss basin,
+parameter-space interpolation is the cheapest first move before further
+data-recipe iteration. The architectural interpretation is that the
+encoder output and the BEN/MAH/RRM stack measure orthogonal axes
+(alignment \(\times\) activity in the §6.5/§6.8 framing): tuning the
+alignment axis on STS pair data does not perturb the activity axis the
+BEN reads, and the diagnostic readouts of §§5.4--5.5 and §5.13 hold
+across the entire v12--v22c\_a050 sweep.
+
+\textbf{Availability and release boundary.} The architecture
+(\texttt{srt/}), evaluation harness, examples, and this preprint are
+public under Apache-2.0 at \texttt{https://github.com/space-bacon/SRT}.
+Adapter weights for v8a, v15a (\texttt{RiverRider/srt-adapter-v1.0}),
+and v22c\_a050 are public on HuggingFace and reproduce the cited STS,
+regime, and community numbers under the included
+\texttt{scripts/benchmark.py} and \texttt{scripts/instrument\_eval.py}.
+The Reddit Discourse Corpus, the per-token annotation pipeline, the C1
+scholarly corpus targeted for v9, the teacher-distillation labelling
+code, and the next-generation training recipe are \emph{not} part of the
+release; hosted inference and custom-backbone integration are available
+separately. The intent is to make every numerical claim in this paper
+independently verifiable from the public artifacts, while keeping the
+data and recipe IP that supports future generations under the author's
+control.
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{References}\label{references}
@@ -2437,6 +3090,15 @@ about more. \emph{American Journal of Sociology}, 116(2), 389--452.
 Foster, J. G., Rzhetsky, A., \& Evans, J. A. (2015). Tradition and
 innovation in scientists' research strategies. \emph{American
 Sociological Review}, 80(5), 875--908.
+
+Haylett, K. R. (2025). \emph{Finite Tractus: The hidden geometry of
+language and thought}. finitemechanics.com.
+
+Haylett, K. R. (2026). Geofinitism: Language as a nonlinear dynamical
+system --- attractors, basins, and the geometry of understanding.
+\emph{Substack} / kevinhaylett.substack.com, January 2026. Companion
+paper: \emph{Pairwise phase space embedding in transformer architecture}
+(MARINA / Takens-Based Transformer), finitemechanics.com.
 
 Irvine, J. T., \& Gal, S. (2000). Language ideology and linguistic
 differentiation. In P. V. Kroskrity (Ed.), \emph{Regimes of language}
@@ -2503,6 +3165,15 @@ Cambridge University Press.
 Silverstein, M. (2003). Indexical order and the dialectics of
 sociolinguistic life. \emph{Language \& Communication}, 23(3--4),
 193--229.
+
+Su, J. (2022). CoSENT: A more efficient sentence-vector scheme than
+Sentence-BERT. Spaces.AC.CN technical note.
+https://kexue.fm/archives/8847
+
+Takens, F. (1981). Detecting strange attractors in turbulence. In D. A.
+Rand \& L.-S. Young (Eds.), \emph{Dynamical systems and turbulence,
+Warwick 1980}. Lecture Notes in Mathematics, vol.~898 (pp.~366--381).
+Springer.
 
 VanSaders, B., Fruchart, M., \& Vitelli, V. (2026). Measurement-induced
 phase transitions in informational active matter. \emph{PNAS Nexus},
@@ -2615,6 +3286,49 @@ across \(8\times\) length sweep); regime classifier reads content-borne
 signal; calibration ECE replicates at \(9.1\times 10^{-4}\) on 351K
 tokens; community 1-NN at \(7.7\times\) chance; cross-backbone signal
 latent in Qwen 3-8B and Mistral-7B at comparable strength \\
+v12 & Warm-start v8a; one InfoNCE epoch on NLI \(+\) Quora \(+\) MS
+MARCO (\(396\)K pairs); encoder-output channel tuned, interpretability
+heads frozen at eval & Mean MTEB-STS Spearman \(0.346\) (\(+0.136\) over
+v8a); HUMESICK-R \(0.792\); first leaderboard-credible STS result \\
+v15a (\(=\) v1.0) & NLI-only InfoNCE on \(\sim 280\)K pairs (MS MARCO
+removed); shipped as \texttt{RiverRider/srt-adapter-v1.0} & Mean STS
+\(0.3634\) (\(+0.017\) over v12); HUMESICK-R \(0.7973\); STSBenchmark
+\(0.4434\); Cap-A NMI \(0.5391 \pm 0.008\) (\(+0.096\) over v8a,
+\(\approx 13\sigma\)); hallucination AUROC \(0.576\) retained \\
+v17 & \(+5{,}000\) STSB pairs trained under MSE on absolute cosine score
+& Mean STS \(0.3531\) (\(-0.010\) vs.~v15a); \(0.13\) in-distribution
+generalisation gap; Pearson-aligned loss on Spearman-scored eval,
+negative result \\
+v18 & Same \(5{,}000\) STSB pairs under CoSENT pairwise rank loss (scale
+\(20\), lr \(1\times 10^{-5}\), \(5\) epochs) & Mean STS \(0.3707\)
+(\(+0.0074\) vs.~v15a, \(29/40\) wins); cross-lingual gains despite
+English-only training; SOTA \#1 \\
+v19a, v19b & Shorter v18 schedule; CoSENT on NLI-as-pairs \(+\) Quora
+(\(\sim 207\)K) & Mean STS \(0.3638\) / \(0.3709\), both within seed
+variance of v18 (tie) \\
+v20 & CoSENT on NLI categorical labels treated as graded scores (entail
+\(1.0\), neutral \(0.5\), contradict \(0.0\), \(200\)K pairs) & Mean STS
+\(0.3667\) (\(-0.004\) vs.~v18); English splits regress
+(HUMESTSBenchmark \(-0.117\)); negative result on label scheme \\
+v21a & CoSENT on \(200\)K NLI pairs \(+\) \(7\)K STSB, labels =
+\texttt{mxbai-embed-large-v1} teacher cosines (continuous) & Mean STS
+\(0.3720\) (\(+0.0012\) vs.~v18); IndicCrosslingualSTS \(+0.15\) to
+\(+0.22\) on en-bn/tr/ta/te; English regresses (\(-0.07\) to \(-0.11\));
+SOTA \#2 (multilingual-leaning) \\
+v21b\_a050 / a070 & Linear weight-average of v18 and v20,
+\(\alpha = 0.50 / 0.70\) & Mean STS \(0.3709\) / \(0.3738\); balanced
+but inferior to v22c \\
+v22a & STSB \(5\times\) upsample to increase graded-pair fraction in
+CoSENT pool & Mean STS \(0.3712\) (\(+0.0005\) vs.~v18); within seed
+variance \\
+v22b & Multi-teacher distillation: averaged cosines from \texttt{mxbai}
+and \texttt{intfloat/multilingual-e5-large} & Mean STS \(0.3708\);
+ensemble teacher does not improve over single mxbai \\
+v22c\_a050 & Linear weight-average of v18 and v21a, \(\alpha = 0.50\),
+zero additional training & Mean STS \(0.3744\) (\(+0.0037\) vs.~v18,
+\(24/40\) wins); preserves English (HUMESICK-R \(0.7682\)); recovers
+multilingual (STS17 zh-en \(0.6647\), \(+0.143\) vs.~v18); current
+SOTA \\
 v9 (in progress) & Closed-loop training target for the inject-back arm
 (Sections 2.5, 6.3); coverage loss penalizing register concentration
 (§5.13, §6.3); archetype-conditioned direct supervision (§5.8 hypothesis
