@@ -187,7 +187,9 @@ If you are integrating SRT into a product (including [`RiverRider/zooL4nD3r-v0.1
 |---|---|---|
 | [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) | **Stable release** | First semver release. Use this for downstream pinning. (Internal lineage: v15a.) |
 | [`RiverRider/srt-adapter-v8a`](https://huggingface.co/RiverRider/srt-adapter-v8a) | Research checkpoint | Encoder-as-community headline result (Reddit recall@1 0.484). Paper §5.9. |
-| `RiverRider/srt-adapter-v18` ... `v22c_a050` | Research checkpoints | MTEB-STS lineage; v22c_a050 is the souping result. Paper §5.14. |
+| [`RiverRider/srt-adapter-v18`](https://huggingface.co/RiverRider/srt-adapter-v18) | Research checkpoint | CoSENT supervised STS, English-purist tier. Paper §5.14. |
+| [`RiverRider/srt-adapter-v21a`](https://huggingface.co/RiverRider/srt-adapter-v21a) | Research checkpoint | mxbai-distilled CoSENT, multilingual-leaning. Paper §5.14. |
+| [`RiverRider/srt-adapter-v22c_a050`](https://huggingface.co/RiverRider/srt-adapter-v22c_a050) | Research checkpoint | Souping `v18 + v21a` at α=0.5; MTEB-STS SOTA (mean 0.3744). Paper §5.14. |
 
 ## Citation
 
