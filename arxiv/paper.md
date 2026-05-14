@@ -80,6 +80,8 @@ This paper makes six contributions:
 
 *Release boundary.* Adapter weights for v8a, v15a (`RiverRider/srt-adapter-v1.0`), and v22c\_a050 are released under Apache-2.0 on HuggingFace. The architecture (`srt/`), evaluation harness (`scripts/benchmark.py`, `scripts/instrument_eval.py`), examples, and this paper are public on `https://github.com/space-bacon/SRT`. The Reddit Discourse Corpus (Lancaster, 2026c), the per-token annotation pipeline, the C1 scholarly corpus targeted for v9, the teacher-distillation labelling pipeline, and the next-generation training recipe are not part of the public release. Hosted inference and custom-backbone integration for proprietary corpora are available through the author.
 
+*Versioning policy.* The internal labels `v5`, `v6`, `v7`, `v8a`, `v8b`, `v12`–`v22c\_a050`, `v23` used throughout this paper denote *research generations* of the architecture, not consumer-facing semver versions. The only stable, semver-versioned release is `RiverRider/srt-adapter-v1.0` (corresponding to the v15a research generation). Other open-weight checkpoints on HuggingFace (`v8a`, `v18`, `v21*`, `v22*`, etc.) are released under Apache-2.0 to make the paper's empirical claims reproducible; they should be read as `v0.8a`, `v0.18`, `v0.22c\_a050`, ... in product terms. Downstream products (including `RiverRider/zooL4nD3r-v0.1`) pin `srt-adapter-v1.0`.
+
 ### 1.5 Paper Organization
 
 Section 2 develops the theoretical framework connecting Peircean semiotics to the adapter architecture. Section 3 specifies the full architecture with formal detail. Section 4 describes the training methodology and data pipeline. Section 5 presents preliminary experimental results. Section 6 discusses implications and limitations. Section 7 concludes.

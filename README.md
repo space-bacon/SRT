@@ -59,7 +59,7 @@ tokens ──► Backbone Embeddings (native, frozen)
    labels. As of v8a the encoder output is the community vector directly
    (continuous trajectory mode); earlier checkpoints used a 32-prototype
    soft-argmax readout that turned out to be a discriminability bottleneck
-   (see `paper.md` §5.8–§5.9).
+   (see `arxiv/paper.md` §5.8–§5.9).
 
 4. **Backbone-agnostic** — Works with any HuggingFace `AutoModelForCausalLM`:
    Qwen, LLaMA, Mistral, Phi, Gemma, etc.
@@ -169,15 +169,25 @@ means different things to different communities. SRT makes the model
 - **BEN** estimates the bifurcation point: where a sign tips from stable
   (subcritical) to contested (supercritical) interpretation.
 
-See [Lancaster (2025)](paper.md) — the full paper and arXiv source live in this
-repository (`paper.md`, `paper.pdf`, `arxiv/`).
+See [Lancaster (2025)](arxiv/paper.md) — the full paper and arXiv source live
+under [`arxiv/`](arxiv/) (`paper.md`, `paper.tex`, `paper.pdf`).
+
+## Versioning policy
+
+Two tiers exist on Hugging Face:
+
+- **Stable product release.** [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) is the only checkpoint we recommend pinning from external code, papers, or downstream products. Semver applies to this lineage going forward (`v1.0`, `v1.1`, `v2.0`, ...).
+- **Research checkpoints.** Every other repo of the form `RiverRider/srt-adapter-vNNx*` (e.g. `v8a`, `v18`, `v21b_a070`, `v22c_a050`, `v23*`) is an internal research-iteration release. Weights are open under Apache-2.0 for reproducibility of paper results, but the labels are research generations, not versions in the semver sense — mentally, these are `v0.8a`, `v0.18`, `v0.22c_a050`, etc. They may be moved, retired, or renamed without notice.
+
+If you are integrating SRT into a product (including [`RiverRider/zooL4nD3r-v0.1`](https://huggingface.co/RiverRider/zooL4nD3r-v0.1)), pin `srt-adapter-v1.0`.
 
 ## Released checkpoints
 
-| Repo | Generation | Notes |
+| Repo | Tier | Notes |
 |---|---|---|
-| [`RiverRider/srt-adapter-v8a`](https://huggingface.co/RiverRider/srt-adapter-v8a) | v8a | Encoder-as-community headline result (Reddit recall@1 0.484). |
-| [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) | v15a → v1.0 | First versioned release. |
+| [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) | **Stable release** | First semver release. Use this for downstream pinning. (Internal lineage: v15a.) |
+| [`RiverRider/srt-adapter-v8a`](https://huggingface.co/RiverRider/srt-adapter-v8a) | Research checkpoint | Encoder-as-community headline result (Reddit recall@1 0.484). Paper §5.9. |
+| `RiverRider/srt-adapter-v18` ... `v22c_a050` | Research checkpoints | MTEB-STS lineage; v22c_a050 is the souping result. Paper §5.14. |
 
 ## Citation
 
