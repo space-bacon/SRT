@@ -55,6 +55,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--val-every", type=int, default=200)
     p.add_argument("--val-vectors", type=int, default=64)
     p.add_argument("--seed", type=int, default=0)
+    # Direct loss-term weights (NOT reward weights — these flow gradient
+    # straight through AV's logp, bypassing the REINFORCE baseline.)
+    p.add_argument("--beta-kl", type=float, default=0.05,
+                   help="KL(av || base) coefficient added to loss.")
+    p.add_argument("--gamma-entropy", type=float, default=0.5,
+                   help="Entropy bonus coefficient (subtracted from loss).")
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
 
@@ -166,52 +172,62 @@ def main() -> None:
         # for global scale control.
         seq_logp = (tok_logp * attn).sum(dim=1)
 
-        # ── per-sample auxiliary signals for the reward ──────────────
-        # Token-level entropy of AV's policy, averaged over valid positions.
-        # Without this floor the policy collapses to a deterministic fixed
-        # point (advantage becomes identically zero → no gradient).
-        with torch.no_grad():
-            valid = attn.float()
-            valid_counts = valid.sum(dim=1).clamp(min=1.0)
-            p_av = logp.exp()
-            H_tok = -(p_av * logp).sum(dim=-1)  # (B, T_gen) nats
-            token_entropy = (H_tok * valid).sum(dim=1) / valid_counts  # (B,)
+        # ── per-sample auxiliary signals (DIFFERENTIABLE) ────────────
+        # Both go into the loss as direct policy-gradient regularisers,
+        # NOT into the reward. Reason: REINFORCE-with-batch-baseline
+        # produces a gradient proportional to (r - r.mean()) * ∇log π.
+        # At a deterministic fixed point every sample yields the same
+        # reward → advantage ≡ 0 → no gradient regardless of how harsh
+        # the entropy/KL penalties are inside the reward. Putting them
+        # directly in the loss (with grad through AV's logp) gives them
+        # an escape gradient that survives collapse. Prior smoke run
+        # (commit 5fa6e09) confirmed this failure mode: H dropped to
+        # 0.002, reward bit-identical across 200 steps, fve stuck at
+        # 0.604. See N1a-second-attempt notes.
+        valid = attn.float()
+        valid_counts = valid.sum(dim=1).clamp(min=1.0)
+        p_av = logp.exp()
+        H_tok = -(p_av * logp).sum(dim=-1)  # (B, T_gen) nats
+        token_entropy = (H_tok * valid).sum(dim=1) / valid_counts  # (B,)
 
-            # KL(p_av(·|prefix, ctx) || p_base(·|ctx)) per token, averaged.
-            # Computed at positions 1..T-1 where both AV and base have at
-            # least one real conditioning token (predicting gen_ids[i] from
-            # gen_ids[:i]). Keeps AV anchored to the backbone's prior.
+        # KL(p_av(·|prefix, ctx) || p_base(·|ctx)) per token, averaged.
+        # Base forward stays no_grad — we only want gradient through AV.
+        # Aligned at positions 1..T-1 where both predict the same token
+        # from at least one real conditioning token.
+        with torch.no_grad():
             base_out = backbone(
                 input_ids=gen_ids, attention_mask=attn, use_cache=False
             )
             base_logp_full = F.log_softmax(base_out.logits.float(), dim=-1)
-            av_logp_kl = logp[:, 1:, :]  # predict gen_ids[1:T]
-            base_logp_kl = base_logp_full[:, :-1, :]  # base predicts same tokens
-            p_kl = av_logp_kl.exp()
-            kl_tok = (p_kl * (av_logp_kl - base_logp_kl)).sum(dim=-1)  # (B, T-1)
-            kl_mask = valid[:, 1:]
-            kl_counts = kl_mask.sum(dim=1).clamp(min=1.0)
-            kl_per_sample = (kl_tok * kl_mask).sum(dim=1) / kl_counts  # (B,)
+            base_logp_kl = base_logp_full[:, :-1, :].detach()
+        av_logp_kl = logp[:, 1:, :]  # predict gen_ids[1:T]
+        p_kl = av_logp_kl.exp()
+        kl_tok = (p_kl * (av_logp_kl - base_logp_kl)).sum(dim=-1)  # (B, T-1)
+        kl_mask = valid[:, 1:]
+        kl_counts = kl_mask.sum(dim=1).clamp(min=1.0)
+        kl_per_sample = (kl_tok * kl_mask).sum(dim=1) / kl_counts  # (B,)
 
-        # Per-sample reward (reduce=False) — required for a meaningful
-        # REINFORCE baseline. With reduce=True every component collapses to
-        # a scalar and advantage = r - r.mean() is identically zero.
+        # Reward = pure task signal (mse + mag). Keeps per-sample
+        # variance in the advantage even when entropy/KL converge.
         reward = nla_reward(
             v_hat.float(),
             v_target.float(),
-            kl_av_vs_base=kl_per_sample,
-            token_entropy=token_entropy,
             lambda_mag=cfg.lambda_mag,
-            beta_kl=cfg.beta_kl,
-            gamma_entropy=cfg.gamma_entropy,
-            h_min=cfg.h_min,
             reduce=False,
         )
 
         with torch.no_grad():
             advantage = reward.total - reward.total.mean()
 
-        loss = -(advantage * seq_logp).mean()
+        # Direct loss terms:
+        #   beta_kl * KL  → minimise drift from base (anchor legibility)
+        #   -gamma_entropy * H → maximise entropy (anti-collapse pressure)
+        # Both gradients flow through AV's logp directly, independent of
+        # the REINFORCE baseline.
+        pg_loss = -(advantage * seq_logp).mean()
+        kl_loss = args.beta_kl * kl_per_sample.mean()
+        ent_loss = -args.gamma_entropy * token_entropy.mean()
+        loss = pg_loss + kl_loss + ent_loss
 
         opt.zero_grad(set_to_none=True)
         loss.backward()
@@ -221,13 +237,17 @@ def main() -> None:
         if step % args.log_every == 0:
             dt = time.time() - t0
             logger.info(
-                "step %d  loss=%.4f  reward=%.4f  mse=%.4f  mag=%.4f  kl=%.4f  H=%.4f  fve=%.4f  (%.1fs)",
+                "step %d  loss=%.4f  pg=%.4f  kl_l=%.4f  ent_l=%.4f  "
+                "reward=%.4f  mse=%.4f  mag=%.4f  KL=%.4f  H=%.4f  fve=%.4f  (%.1fs)",
                 step,
                 loss.item(),
+                pg_loss.item(),
+                kl_loss.item(),
+                ent_loss.item(),
                 reward.total.mean().item(),
                 reward.mse.mean().item(),
                 reward.mag.mean().item(),
-                reward.kl.mean().item(),
+                kl_per_sample.mean().item(),
                 token_entropy.mean().item(),
                 fraction_variance_explained(v_hat.float(), v_target.float()).item(),
                 dt,
