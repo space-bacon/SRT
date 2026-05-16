@@ -176,13 +176,6 @@ def main() -> None:
         attn = _first_eos_mask(gen_ids, tok.eos_token_id)
         v_hat = ar.reconstruct(gen_ids, attention_mask=attn)
 
-        prefix = av._inject_prefix(v_target)  # (B, P, d)
-        tok_embeds = backbone.get_input_embeddings()(gen_ids)
-        inputs_embeds = torch.cat([prefix, tok_embeds], dim=1)
-        full_attn = torch.cat(
-            [torch.ones(prefix.shape[:2], dtype=attn.dtype, device=device), attn], dim=1
-        )
-        P = prefix.size(1)
         valid = attn.float()
         valid_counts = valid.sum(dim=1).clamp(min=1.0)
 
@@ -213,8 +206,16 @@ def main() -> None:
         # for plain REINFORCE (--ppo-clip=0 and --ppo-epochs=1) the ratio
         # is identically 1 and this is a no-op.
         with torch.no_grad():
+            prefix_old = av._inject_prefix(v_target)
+            tok_embeds_old = backbone.get_input_embeddings()(gen_ids)
+            inputs_embeds_old = torch.cat([prefix_old, tok_embeds_old], dim=1)
+            full_attn = torch.cat(
+                [torch.ones(prefix_old.shape[:2], dtype=attn.dtype, device=device), attn],
+                dim=1,
+            )
+            P = prefix_old.size(1)
             out_old = backbone(
-                inputs_embeds=inputs_embeds, attention_mask=full_attn,
+                inputs_embeds=inputs_embeds_old, attention_mask=full_attn,
                 use_cache=False,
             )
             logits_old = out_old.logits[:, P - 1 : -1].float()
@@ -227,7 +228,15 @@ def main() -> None:
             seq_logp_old = (tok_logp_old * attn).sum(dim=1) / valid_counts
 
         # ── inner PPO epochs over the same sampled batch ──────────
+        # Rebuild inputs_embeds *inside* the loop: the prefix is produced by
+        # av._inject_prefix which has trainable parameters, so its graph is
+        # consumed by the first .backward(). Re-running the projection each
+        # iteration with the same v_target/gen_ids gives a fresh graph that
+        # reflects the latest AV weights (correct PPO semantics).
         for inner in range(max(1, args.ppo_epochs)):
+            prefix = av._inject_prefix(v_target)
+            tok_embeds = backbone.get_input_embeddings()(gen_ids)
+            inputs_embeds = torch.cat([prefix, tok_embeds], dim=1)
             out = backbone(
                 inputs_embeds=inputs_embeds, attention_mask=full_attn,
                 use_cache=False,
