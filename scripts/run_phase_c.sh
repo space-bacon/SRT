@@ -11,6 +11,11 @@
 # BoN curates *verified* discrete gold; SFT teaches AV to emit them.
 set -euo pipefail
 
+cd "$(dirname "$0")/.."
+if [ -f .venv/bin/activate ]; then source .venv/bin/activate; fi
+export PYTHONUNBUFFERED=1
+export HF_HOME=${HF_HOME:-/workspace/.cache/huggingface}
+
 ITER="${ITER:-1}"
 WARM="${WARM:-artifacts/nla/n1i_v2_best/av_step002500.pt}"
 TARGETS="${TARGETS:-artifacts/nla/targets_q7b_L20_10k.pt}"
