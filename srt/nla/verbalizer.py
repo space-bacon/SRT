@@ -87,9 +87,9 @@ class ActivationVerbalizer(nn.Module):
                 or 0
             )
             with torch.no_grad():
+                embed = self.backbone.get_input_embeddings()
                 bos_embed = (
-                    self.backbone.get_input_embeddings()
-                    (torch.tensor([bos_id]))
+                    embed(torch.tensor([bos_id], device=embed.weight.device))
                     .detach()
                     .clone()
                     .float()
