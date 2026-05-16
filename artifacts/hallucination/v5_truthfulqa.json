@@ -1,0 +1,32 @@
+{
+  "n_pairs": 1476,
+  "n_positive_hallucinated": 824,
+  "n_negative_truthful": 652,
+  "aurocs": {
+    "max_r_hat": 0.534021531955447,
+    "mean_r_hat": 0.5733813806659122,
+    "max_chain": 0.528243939484186,
+    "mean_chain": 0.5311113303353386,
+    "max_div_norm": 0.530815377628209,
+    "mean_div_norm": 0.5281815846685329,
+    "mean_ce": 0.4160359833819763
+  },
+  "feature_means_positive": {
+    "max_r_hat": 1.4849675743325244,
+    "mean_r_hat": 0.763444494926235,
+    "max_chain": 0.0073366350340611725,
+    "mean_chain": 0.003116253450076611,
+    "max_div_norm": 1.2806669068567962,
+    "mean_div_norm": 0.7916584181988123,
+    "mean_ce": 1.6622207789745145
+  },
+  "feature_means_negative": {
+    "max_r_hat": 1.421653326303681,
+    "mean_r_hat": 0.7071275016738593,
+    "max_chain": 0.007127960766751342,
+    "mean_chain": 0.0030801005117263806,
+    "max_div_norm": 1.2560271280674846,
+    "mean_div_norm": 0.788117314865984,
+    "mean_ce": 1.9327939273389572
+  }
+}

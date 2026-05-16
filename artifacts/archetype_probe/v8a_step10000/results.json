@@ -1,0 +1,19 @@
+{
+  "tag": "v8a_step10000",
+  "mode": "trajectory",
+  "n_generations": 986,
+  "n_archetypes": 33,
+  "K_prototypes": null,
+  "D_community": 64,
+  "random_baseline_recall_at_1": 0.0303,
+  "recall_at_1": 0.2302,
+  "recall_at_5": 0.4878,
+  "recall_at_10": 0.6207,
+  "separation_ratio_weights_32": null,
+  "separation_ratio_vectors_64": 0.0418,
+  "mean_offdiag_cosine_weights": null,
+  "mean_offdiag_cosine_vectors": 0.8729,
+  "n_unique_top_prototypes": null,
+  "top_prototype_per_archetype": null,
+  "archetypes_per_top_prototype": null
+}

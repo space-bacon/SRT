@@ -1,0 +1,256 @@
+{
+  "tag": "v8a_step10000",
+  "n_sentences": 986,
+  "n_archetypes": 33,
+  "ridge": 0.0001,
+  "aggregate_per_archetype": {
+    "mean_path_length": 32.677404923872515,
+    "std_path_length": 15.448617557560668,
+    "mean_mean_curvature": 2.065152038227428,
+    "std_mean_curvature": 0.03188769004067005,
+    "mean_log_det_cov": -476.16621554135673,
+    "std_log_det_cov": 6.763237740714794,
+    "mean_anisotropy": 23332.818967079977,
+    "std_anisotropy": 55338.01503457772
+  },
+  "global_trajectory": {
+    "path_length": 1108.17724609375,
+    "mean_curvature": 2.0634963512420654,
+    "log_det_cov": -336.59697800873636,
+    "anisotropy": 3756.6631296112414,
+    "n_points": 986
+  },
+  "per_archetype": {
+    "1": {
+      "path_length": 53.95149230957031,
+      "mean_curvature": 2.0172784328460693,
+      "log_det_cov": -468.293933161406,
+      "anisotropy": 41833.13668019459,
+      "n_points": 29
+    },
+    "2": {
+      "path_length": 43.148860931396484,
+      "mean_curvature": 2.0231661796569824,
+      "log_det_cov": -464.01174377761,
+      "anisotropy": 17445.488927706774,
+      "n_points": 30
+    },
+    "3": {
+      "path_length": 23.409963607788086,
+      "mean_curvature": 2.0882503986358643,
+      "log_det_cov": -479.38846845418556,
+      "anisotropy": 1861.6898501712335,
+      "n_points": 30
+    },
+    "4": {
+      "path_length": 82.53250122070312,
+      "mean_curvature": 2.0603368282318115,
+      "log_det_cov": -472.2044863673202,
+      "anisotropy": 293461.7866245797,
+      "n_points": 30
+    },
+    "5": {
+      "path_length": 20.331382751464844,
+      "mean_curvature": 2.047738790512085,
+      "log_det_cov": -478.7427996784277,
+      "anisotropy": 631.6637010141652,
+      "n_points": 30
+    },
+    "6": {
+      "path_length": 25.122095108032227,
+      "mean_curvature": 2.1158130168914795,
+      "log_det_cov": -478.1819353323814,
+      "anisotropy": 2711.9559162349774,
+      "n_points": 30
+    },
+    "7": {
+      "path_length": 35.02119064331055,
+      "mean_curvature": 2.0732922554016113,
+      "log_det_cov": -463.3513029368877,
+      "anisotropy": 9276.202625530654,
+      "n_points": 30
+    },
+    "8": {
+      "path_length": 18.779067993164062,
+      "mean_curvature": 2.046342611312866,
+      "log_det_cov": -482.3204472132919,
+      "anisotropy": 748.3969267061586,
+      "n_points": 30
+    },
+    "9": {
+      "path_length": 26.15946388244629,
+      "mean_curvature": 2.124661684036255,
+      "log_det_cov": -474.98630335790097,
+      "anisotropy": 2144.884214512004,
+      "n_points": 30
+    },
+    "10": {
+      "path_length": 37.83819580078125,
+      "mean_curvature": 2.045909881591797,
+      "log_det_cov": -466.8794976467655,
+      "anisotropy": 14691.13296803895,
+      "n_points": 30
+    },
+    "11": {
+      "path_length": 27.043230056762695,
+      "mean_curvature": 2.0685908794403076,
+      "log_det_cov": -472.0130615363333,
+      "anisotropy": 6989.882368651593,
+      "n_points": 30
+    },
+    "12": {
+      "path_length": 29.77838134765625,
+      "mean_curvature": 2.0757768154144287,
+      "log_det_cov": -481.24791701719937,
+      "anisotropy": 16432.821566990136,
+      "n_points": 30
+    },
+    "13": {
+      "path_length": 19.157472610473633,
+      "mean_curvature": 2.101614236831665,
+      "log_det_cov": -484.7382541426073,
+      "anisotropy": 579.1612378278652,
+      "n_points": 29
+    },
+    "14": {
+      "path_length": 74.15953063964844,
+      "mean_curvature": 2.0481021404266357,
+      "log_det_cov": -475.5528534067319,
+      "anisotropy": 93351.22113947113,
+      "n_points": 30
+    },
+    "15": {
+      "path_length": 29.467561721801758,
+      "mean_curvature": 2.0465033054351807,
+      "log_det_cov": -467.4325555626275,
+      "anisotropy": 3408.1898818903537,
+      "n_points": 30
+    },
+    "16": {
+      "path_length": 31.363798141479492,
+      "mean_curvature": 2.0984537601470947,
+      "log_det_cov": -470.8676950780744,
+      "anisotropy": 5696.416072381568,
+      "n_points": 30
+    },
+    "17": {
+      "path_length": 22.857982635498047,
+      "mean_curvature": 2.0705974102020264,
+      "log_det_cov": -480.6384116961174,
+      "anisotropy": 1166.7537340863396,
+      "n_points": 30
+    },
+    "18": {
+      "path_length": 31.283672332763672,
+      "mean_curvature": 2.1127803325653076,
+      "log_det_cov": -476.1718972605245,
+      "anisotropy": 12914.408152938433,
+      "n_points": 30
+    },
+    "19": {
+      "path_length": 20.577861785888672,
+      "mean_curvature": 2.0251402854919434,
+      "log_det_cov": -483.14515880263457,
+      "anisotropy": 2015.1338032202216,
+      "n_points": 30
+    },
+    "20": {
+      "path_length": 35.596717834472656,
+      "mean_curvature": 2.1117300987243652,
+      "log_det_cov": -468.96613179512354,
+      "anisotropy": 17056.23097714539,
+      "n_points": 30
+    },
+    "21": {
+      "path_length": 27.591880798339844,
+      "mean_curvature": 2.033501148223877,
+      "log_det_cov": -478.4173127307211,
+      "anisotropy": 4498.213511850745,
+      "n_points": 30
+    },
+    "22": {
+      "path_length": 25.78508186340332,
+      "mean_curvature": 2.0678601264953613,
+      "log_det_cov": -475.5833260420044,
+      "anisotropy": 3682.0002735971025,
+      "n_points": 30
+    },
+    "23": {
+      "path_length": 19.658260345458984,
+      "mean_curvature": 2.0655159950256348,
+      "log_det_cov": -481.5589905236862,
+      "anisotropy": 441.28340286785823,
+      "n_points": 30
+    },
+    "24": {
+      "path_length": 33.88749313354492,
+      "mean_curvature": 2.0900962352752686,
+      "log_det_cov": -473.53285699152445,
+      "anisotropy": 9574.25898270368,
+      "n_points": 30
+    },
+    "25": {
+      "path_length": 22.96152114868164,
+      "mean_curvature": 2.0938518047332764,
+      "log_det_cov": -490.0825470082787,
+      "anisotropy": 6805.609552263433,
+      "n_points": 29
+    },
+    "26": {
+      "path_length": 24.80405044555664,
+      "mean_curvature": 2.039839506149292,
+      "log_det_cov": -480.6145568498356,
+      "anisotropy": 4235.046859799289,
+      "n_points": 30
+    },
+    "27": {
+      "path_length": 59.12355041503906,
+      "mean_curvature": 2.036428689956665,
+      "log_det_cov": -475.3523117873943,
+      "anisotropy": 139992.2236567989,
+      "n_points": 29
+    },
+    "28": {
+      "path_length": 24.504291534423828,
+      "mean_curvature": 2.02831768989563,
+      "log_det_cov": -476.5876890702161,
+      "anisotropy": 2497.788032783484,
+      "n_points": 30
+    },
+    "29": {
+      "path_length": 30.50682258605957,
+      "mean_curvature": 2.079827308654785,
+      "log_det_cov": -476.80618888091436,
+      "anisotropy": 12677.954661216754,
+      "n_points": 30
+    },
+    "30": {
+      "path_length": 21.163097381591797,
+      "mean_curvature": 2.0854125022888184,
+      "log_det_cov": -484.9385234845097,
+      "anisotropy": 2422.2643616257296,
+      "n_points": 30
+    },
+    "31": {
+      "path_length": 18.979997634887695,
+      "mean_curvature": 2.0990450382232666,
+      "log_det_cov": -489.1780156420077,
+      "anisotropy": 536.1881301166393,
+      "n_points": 30
+    },
+    "32": {
+      "path_length": 26.264225006103516,
+      "mean_curvature": 2.0038375854492188,
+      "log_det_cov": -476.86938042853023,
+      "anisotropy": 6900.808731718781,
+      "n_points": 30
+    },
+    "33": {
+      "path_length": 55.54366683959961,
+      "mean_curvature": 2.024404287338257,
+      "log_det_cov": -464.82855920099706,
+      "anisotropy": 31302.82838700469,
+      "n_points": 30
+    }
+  }
+}

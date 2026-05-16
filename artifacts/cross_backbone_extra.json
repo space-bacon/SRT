@@ -1,0 +1,36 @@
+{
+  "n_samples": 200,
+  "n_classes": 35,
+  "chance_recall_at_1": 0.02857142857142857,
+  "backbones": {
+    "Qwen/Qwen3-8B": {
+      "per_layer": {
+        "4": {
+          "recall_at_1": 0.22,
+          "x_chance": 7.7,
+          "feature_dim": 4096
+        },
+        "8": {
+          "recall_at_1": 0.15,
+          "x_chance": 5.25,
+          "feature_dim": 4096
+        },
+        "12": {
+          "recall_at_1": 0.21,
+          "x_chance": 7.35,
+          "feature_dim": 4096
+        },
+        "16": {
+          "recall_at_1": 0.19,
+          "x_chance": 6.65,
+          "feature_dim": 4096
+        },
+        "20": {
+          "recall_at_1": 0.195,
+          "x_chance": 6.825,
+          "feature_dim": 4096
+        }
+      }
+    }
+  }
+}

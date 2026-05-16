@@ -1,0 +1,95 @@
+10:36:47 srt.bench INFO Device: cuda, dtype: bfloat16
+10:36:47 srt.bench INFO Adapter: checkpoints/adapter_v3/best_adapter.pt
+10:36:47 srt.bench INFO Val data: data/all_val.jsonl
+10:36:47 srt.bench INFO Building model...
+10:36:47 srt.adapter INFO Loading backbone: Qwen/Qwen2.5-7B in bfloat16
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  5.40it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  5.98it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  6.00it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  6.09it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  6.00it/s]
+10:36:49 srt.adapter INFO Backbone: d=3584, L=28, MAH@[7, 14, 21], inject@[14, 21], community@4
+10:36:49 srt.adapter INFO SRT Adapter: 12,720,964 trainable, 7,615,616,512 frozen (backbone)
+10:36:54 srt.bench INFO Loaded adapter. missing=678 unexpected=0
+10:36:54 srt.data.dataset INFO Loading dataset from data/all_val.jsonl
+10:36:54 srt.data.dataset INFO Loaded 5000 samples from data/all_val.jsonl
+10:36:54 srt.bench INFO Running benchmark on 5000 samples...
+10:37:00 srt.bench INFO batch 10  samples=80  rate=13.93 samp/s
+10:37:05 srt.bench INFO batch 20  samples=160  rate=15.95 samp/s
+10:37:09 srt.bench INFO batch 30  samples=240  rate=16.28 samp/s
+10:37:14 srt.bench INFO batch 40  samples=320  rate=16.13 samp/s
+10:37:20 srt.bench INFO batch 50  samples=400  rate=15.81 samp/s
+10:37:24 srt.bench INFO batch 60  samples=480  rate=16.04 samp/s
+10:37:29 srt.bench INFO batch 70  samples=560  rate=16.22 samp/s
+10:37:34 srt.bench INFO batch 80  samples=640  rate=16.13 samp/s
+10:37:39 srt.bench INFO batch 90  samples=720  rate=16.35 samp/s
+10:37:43 srt.bench INFO batch 100  samples=800  rate=16.34 samp/s
+10:37:49 srt.bench INFO batch 110  samples=880  rate=16.28 samp/s
+10:37:54 srt.bench INFO batch 120  samples=960  rate=16.17 samp/s
+10:37:59 srt.bench INFO batch 130  samples=1040  rate=16.20 samp/s
+10:38:04 srt.bench INFO batch 140  samples=1120  rate=16.21 samp/s
+10:38:09 srt.bench INFO batch 150  samples=1200  rate=16.14 samp/s
+10:38:14 srt.bench INFO batch 160  samples=1280  rate=16.13 samp/s
+10:38:18 srt.bench INFO batch 170  samples=1360  rate=16.20 samp/s
+10:38:23 srt.bench INFO batch 180  samples=1440  rate=16.21 samp/s
+10:38:28 srt.bench INFO batch 190  samples=1520  rate=16.21 samp/s
+10:38:33 srt.bench INFO batch 200  samples=1600  rate=16.25 samp/s
+10:38:37 srt.bench INFO batch 210  samples=1680  rate=16.32 samp/s
+10:38:42 srt.bench INFO batch 220  samples=1760  rate=16.36 samp/s
+10:38:47 srt.bench INFO batch 230  samples=1840  rate=16.37 samp/s
+10:38:52 srt.bench INFO batch 240  samples=1920  rate=16.40 samp/s
+10:38:57 srt.bench INFO batch 250  samples=2000  rate=16.35 samp/s
+10:39:02 srt.bench INFO batch 260  samples=2080  rate=16.26 samp/s
+10:39:06 srt.bench INFO batch 270  samples=2160  rate=16.40 samp/s
+10:39:11 srt.bench INFO batch 280  samples=2240  rate=16.37 samp/s
+10:39:16 srt.bench INFO batch 290  samples=2320  rate=16.40 samp/s
+10:39:20 srt.bench INFO batch 300  samples=2400  rate=16.46 samp/s
+10:39:25 srt.bench INFO batch 310  samples=2480  rate=16.46 samp/s
+10:39:30 srt.bench INFO batch 320  samples=2560  rate=16.44 samp/s
+10:39:35 srt.bench INFO batch 330  samples=2640  rate=16.44 samp/s
+10:39:40 srt.bench INFO batch 340  samples=2720  rate=16.45 samp/s
+10:39:44 srt.bench INFO batch 350  samples=2800  rate=16.52 samp/s
+10:39:49 srt.bench INFO batch 360  samples=2880  rate=16.52 samp/s
+10:39:54 srt.bench INFO batch 370  samples=2960  rate=16.53 samp/s
+10:39:58 srt.bench INFO batch 380  samples=3040  rate=16.53 samp/s
+10:40:03 srt.bench INFO batch 390  samples=3120  rate=16.55 samp/s
+10:40:08 srt.bench INFO batch 400  samples=3200  rate=16.58 samp/s
+10:40:12 srt.bench INFO batch 410  samples=3280  rate=16.60 samp/s
+10:40:17 srt.bench INFO batch 420  samples=3360  rate=16.58 samp/s
+10:40:22 srt.bench INFO batch 430  samples=3440  rate=16.55 samp/s
+10:40:28 srt.bench INFO batch 440  samples=3520  rate=16.52 samp/s
+10:40:33 srt.bench INFO batch 450  samples=3600  rate=16.51 samp/s
+10:40:37 srt.bench INFO batch 460  samples=3680  rate=16.52 samp/s
+10:40:42 srt.bench INFO batch 470  samples=3760  rate=16.51 samp/s
+10:40:46 srt.bench INFO batch 480  samples=3840  rate=16.57 samp/s
+10:40:52 srt.bench INFO batch 490  samples=3920  rate=16.53 samp/s
+10:40:56 srt.bench INFO batch 500  samples=4000  rate=16.56 samp/s
+10:41:01 srt.bench INFO batch 510  samples=4080  rate=16.54 samp/s
+10:41:06 srt.bench INFO batch 520  samples=4160  rate=16.57 samp/s
+10:41:10 srt.bench INFO batch 530  samples=4240  rate=16.58 samp/s
+10:41:15 srt.bench INFO batch 540  samples=4320  rate=16.60 samp/s
+10:41:19 srt.bench INFO batch 550  samples=4400  rate=16.61 samp/s
+10:41:24 srt.bench INFO batch 560  samples=4480  rate=16.64 samp/s
+10:41:28 srt.bench INFO batch 570  samples=4560  rate=16.70 samp/s
+10:41:33 srt.bench INFO batch 580  samples=4640  rate=16.67 samp/s
+10:41:38 srt.bench INFO batch 590  samples=4720  rate=16.63 samp/s
+10:41:44 srt.bench INFO batch 600  samples=4800  rate=16.61 samp/s
+10:41:48 srt.bench INFO batch 610  samples=4880  rate=16.62 samp/s
+10:41:52 srt.bench INFO batch 620  samples=4960  rate=16.68 samp/s
+10:41:54 srt.bench INFO Wrote artifacts/benchmark_step94k/metrics.json
+10:41:54 srt.bench INFO Wrote artifacts/benchmark_step94k/traces.json
+
+============================================================
+HEADLINE METRICS
+============================================================
+Samples evaluated:   5000
+Tokens with r_true:  858954
+Mean CE:             2.7832
+Pearson r̂ vs r_true (raw):        0.6439
+Pearson r̂ vs r_true (compressed): 0.8253
+Regime accuracy (overall):        0.9880
+  subcritical:                    0.8340
+  supercritical:                  0.9968
+  true supercritical fraction:    0.9459
+r̂ distribution: mean=0.488 std=0.326 min=-0.328 max=1.000
+  saturated +1: 0.1744  saturated -1: 0.0000
+Community top-prototype mass:     0.0401
+Community pairwise cos sim:       0.9993
+============================================================
+Wall time: 299.6s

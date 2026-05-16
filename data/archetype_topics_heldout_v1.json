@@ -1,0 +1,22 @@
+{
+  "version": "heldout_v1",
+  "seed": 137,
+  "note": "Held-out topics for v9 archetype recall@1 replication. Disjoint from the 15 topics in scripts/archetype_generate.py SEED_TOPICS used to train v9 archetype-supcon. Same contemplative register, different subjects.",
+  "topics": [
+    "the first frost",
+    "an unanswered letter",
+    "the tools left on the bench",
+    "what the door allowed",
+    "the hour before dawn",
+    "a name half-remembered",
+    "the path through the orchard",
+    "what the mirror returned",
+    "the kindness of strangers",
+    "the long table after dinner",
+    "what the rain explained",
+    "a borrowed coat",
+    "the count that did not balance",
+    "what the photograph kept",
+    "the road that was not taken"
+  ]
+}

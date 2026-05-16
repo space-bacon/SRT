@@ -1,0 +1,14 @@
+{
+  "n_subsample": 2000,
+  "n_classes": 35,
+  "within_class_cos_mean": 0.9905676245689392,
+  "between_class_cos_mean": 0.9902982711791992,
+  "within_over_between_ratio": 1.000271992184152,
+  "recall@1": 0.0535,
+  "recall@5": 0.048799999999999996,
+  "recall@10": 0.04525,
+  "random_baseline_recall": 0.02857142857142857,
+  "n_samples": 2000,
+  "n_traced": 60,
+  "wall_time_sec": 123.41
+}

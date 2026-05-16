@@ -1,0 +1,269 @@
+{
+  "n_topics_evaluated": 10,
+  "mean_delta_r_hat_at_target": 0.001953125,
+  "mean_delta_r_hat_mean_seq": -0.25053015649318694,
+  "n_positive_delta_at_target": 5,
+  "n_positive_delta_mean_seq": 1,
+  "rows": [
+    {
+      "topic": "vaccine",
+      "target": "vaccine",
+      "factual": {
+        "tok_at_target": " vaccine",
+        "pos": 1,
+        "seq_len": 15,
+        "r_hat_at_target": 0.9921875,
+        "r_hat_mean_seq": 0.5904622673988342,
+        "r_hat_max_seq": 1.515625,
+        "div_norm_at_target": 7.625,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": " vaccine",
+        "pos": 1,
+        "seq_len": 20,
+        "r_hat_at_target": 0.98828125,
+        "r_hat_mean_seq": 0.3760742247104645,
+        "r_hat_max_seq": 0.98828125,
+        "div_norm_at_target": 7.65625,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": -0.00390625,
+      "delta_r_hat_mean_seq": -0.21438804268836975
+    },
+    {
+      "topic": "border",
+      "target": "border",
+      "factual": {
+        "tok_at_target": " border",
+        "pos": 1,
+        "seq_len": 19,
+        "r_hat_at_target": 0.97265625,
+        "r_hat_mean_seq": 0.8238589763641357,
+        "r_hat_max_seq": 2.078125,
+        "div_norm_at_target": 7.5,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": " border",
+        "pos": 1,
+        "seq_len": 16,
+        "r_hat_at_target": 0.98046875,
+        "r_hat_mean_seq": 0.4486236572265625,
+        "r_hat_max_seq": 1.0703125,
+        "div_norm_at_target": 7.4375,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": 0.0078125,
+      "delta_r_hat_mean_seq": -0.37523531913757324
+    },
+    {
+      "topic": "trans",
+      "target": "Trans",
+      "factual": {
+        "tok_at_target": "Trans",
+        "pos": 0,
+        "seq_len": 16,
+        "r_hat_at_target": 1.2578125,
+        "r_hat_mean_seq": 0.787353515625,
+        "r_hat_max_seq": 1.9375,
+        "div_norm_at_target": 9.6875,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": "Trans",
+        "pos": 0,
+        "seq_len": 15,
+        "r_hat_at_target": 1.25,
+        "r_hat_mean_seq": 0.611328125,
+        "r_hat_max_seq": 1.25,
+        "div_norm_at_target": 9.75,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": -0.0078125,
+      "delta_r_hat_mean_seq": -0.176025390625
+    },
+    {
+      "topic": "freedom",
+      "target": "Freedom",
+      "factual": {
+        "tok_at_target": "Freedom",
+        "pos": 0,
+        "seq_len": 17,
+        "r_hat_at_target": 0.94921875,
+        "r_hat_mean_seq": 0.5752850770950317,
+        "r_hat_max_seq": 1.21875,
+        "div_norm_at_target": 8.25,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": "Freedom",
+        "pos": 0,
+        "seq_len": 21,
+        "r_hat_at_target": 0.9453125,
+        "r_hat_mean_seq": 0.4301525354385376,
+        "r_hat_max_seq": 0.9453125,
+        "div_norm_at_target": 8.25,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": -0.00390625,
+      "delta_r_hat_mean_seq": -0.14513254165649414
+    },
+    {
+      "topic": "climate",
+      "target": "Climate",
+      "factual": {
+        "tok_at_target": "Climate",
+        "pos": 0,
+        "seq_len": 18,
+        "r_hat_at_target": 1.1796875,
+        "r_hat_mean_seq": 0.75872802734375,
+        "r_hat_max_seq": 1.8359375,
+        "div_norm_at_target": 8.625,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": "Climate",
+        "pos": 0,
+        "seq_len": 17,
+        "r_hat_at_target": 1.1796875,
+        "r_hat_mean_seq": 0.7794691920280457,
+        "r_hat_max_seq": 1.65625,
+        "div_norm_at_target": 8.625,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": 0.0,
+      "delta_r_hat_mean_seq": 0.020741164684295654
+    },
+    {
+      "topic": "CRT",
+      "target": "Critical",
+      "factual": {
+        "tok_at_target": "Critical",
+        "pos": 0,
+        "seq_len": 22,
+        "r_hat_at_target": 0.9375,
+        "r_hat_mean_seq": 0.7913707494735718,
+        "r_hat_max_seq": 1.3125,
+        "div_norm_at_target": 8.1875,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": "Critical",
+        "pos": 0,
+        "seq_len": 17,
+        "r_hat_at_target": 0.94140625,
+        "r_hat_mean_seq": 0.5470868349075317,
+        "r_hat_max_seq": 1.171875,
+        "div_norm_at_target": 8.1875,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": 0.00390625,
+      "delta_r_hat_mean_seq": -0.24428391456604004
+    },
+    {
+      "topic": "election",
+      "target": "election",
+      "factual": {
+        "tok_at_target": " election",
+        "pos": 1,
+        "seq_len": 20,
+        "r_hat_at_target": 0.69140625,
+        "r_hat_mean_seq": 0.6944335699081421,
+        "r_hat_max_seq": 1.1953125,
+        "div_norm_at_target": 7.6875,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": " election",
+        "pos": 1,
+        "seq_len": 16,
+        "r_hat_at_target": 0.70703125,
+        "r_hat_mean_seq": 0.3460693359375,
+        "r_hat_max_seq": 0.796875,
+        "div_norm_at_target": 7.65625,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": 0.015625,
+      "delta_r_hat_mean_seq": -0.3483642339706421
+    },
+    {
+      "topic": "gender",
+      "target": "Gender",
+      "factual": {
+        "tok_at_target": "Gender",
+        "pos": 0,
+        "seq_len": 19,
+        "r_hat_at_target": 1.1015625,
+        "r_hat_mean_seq": 0.9458136558532715,
+        "r_hat_max_seq": 1.984375,
+        "div_norm_at_target": 9.3125,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": "Gender",
+        "pos": 0,
+        "seq_len": 14,
+        "r_hat_at_target": 1.109375,
+        "r_hat_mean_seq": 0.6159319281578064,
+        "r_hat_max_seq": 1.171875,
+        "div_norm_at_target": 9.375,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": 0.0078125,
+      "delta_r_hat_mean_seq": -0.3298817276954651
+    },
+    {
+      "topic": "Israel",
+      "target": "Israel",
+      "factual": {
+        "tok_at_target": "Israel",
+        "pos": 0,
+        "seq_len": 21,
+        "r_hat_at_target": 1.3125,
+        "r_hat_mean_seq": 0.9715401530265808,
+        "r_hat_max_seq": 1.6796875,
+        "div_norm_at_target": 8.3125,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": "Israel",
+        "pos": 0,
+        "seq_len": 16,
+        "r_hat_at_target": 1.3359375,
+        "r_hat_mean_seq": 0.5020751953125,
+        "r_hat_max_seq": 1.3359375,
+        "div_norm_at_target": 8.1875,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": 0.0234375,
+      "delta_r_hat_mean_seq": -0.4694649577140808
+    },
+    {
+      "topic": "Fed",
+      "target": "Federal",
+      "factual": {
+        "tok_at_target": " Federal",
+        "pos": 1,
+        "seq_len": 15,
+        "r_hat_at_target": 1.328125,
+        "r_hat_mean_seq": 0.781445324420929,
+        "r_hat_max_seq": 1.328125,
+        "div_norm_at_target": 9.75,
+        "community_pred": null
+      },
+      "charged": {
+        "tok_at_target": " Federal",
+        "pos": 1,
+        "seq_len": 20,
+        "r_hat_at_target": 1.3046875,
+        "r_hat_mean_seq": 0.558178722858429,
+        "r_hat_max_seq": 1.328125,
+        "div_norm_at_target": 9.8125,
+        "community_pred": null
+      },
+      "delta_r_hat_at_target": -0.0234375,
+      "delta_r_hat_mean_seq": -0.2232666015625
+    }
+  ]
+}
