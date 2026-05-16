@@ -144,19 +144,6 @@ def main() -> None:
         attn = _first_eos_mask(gen_ids, tok.eos_token_id)
         v_hat = ar.reconstruct(gen_ids, attention_mask=attn)
 
-        # Per-sample reward (reduce=False) — required for a meaningful
-        # REINFORCE baseline. With reduce=True every component collapses to
-        # a scalar and advantage = r - r.mean() is identically zero.
-        reward = nla_reward(
-            v_hat.float(),
-            v_target.float(),
-            lambda_mag=cfg.lambda_mag,
-            reduce=False,
-        )
-
-        with torch.no_grad():
-            advantage = reward.total - reward.total.mean()
-
         prefix = av._inject_prefix(v_target)  # (B, P, d)
         tok_embeds = backbone.get_input_embeddings()(gen_ids)
         inputs_embeds = torch.cat([prefix, tok_embeds], dim=1)
@@ -178,6 +165,52 @@ def main() -> None:
         # the actual sample log-probability. Rely on clip_grad_norm_ below
         # for global scale control.
         seq_logp = (tok_logp * attn).sum(dim=1)
+
+        # ── per-sample auxiliary signals for the reward ──────────────
+        # Token-level entropy of AV's policy, averaged over valid positions.
+        # Without this floor the policy collapses to a deterministic fixed
+        # point (advantage becomes identically zero → no gradient).
+        with torch.no_grad():
+            valid = attn.float()
+            valid_counts = valid.sum(dim=1).clamp(min=1.0)
+            p_av = logp.exp()
+            H_tok = -(p_av * logp).sum(dim=-1)  # (B, T_gen) nats
+            token_entropy = (H_tok * valid).sum(dim=1) / valid_counts  # (B,)
+
+            # KL(p_av(·|prefix, ctx) || p_base(·|ctx)) per token, averaged.
+            # Computed at positions 1..T-1 where both AV and base have at
+            # least one real conditioning token (predicting gen_ids[i] from
+            # gen_ids[:i]). Keeps AV anchored to the backbone's prior.
+            base_out = backbone(
+                input_ids=gen_ids, attention_mask=attn, use_cache=False
+            )
+            base_logp_full = F.log_softmax(base_out.logits.float(), dim=-1)
+            av_logp_kl = logp[:, 1:, :]  # predict gen_ids[1:T]
+            base_logp_kl = base_logp_full[:, :-1, :]  # base predicts same tokens
+            p_kl = av_logp_kl.exp()
+            kl_tok = (p_kl * (av_logp_kl - base_logp_kl)).sum(dim=-1)  # (B, T-1)
+            kl_mask = valid[:, 1:]
+            kl_counts = kl_mask.sum(dim=1).clamp(min=1.0)
+            kl_per_sample = (kl_tok * kl_mask).sum(dim=1) / kl_counts  # (B,)
+
+        # Per-sample reward (reduce=False) — required for a meaningful
+        # REINFORCE baseline. With reduce=True every component collapses to
+        # a scalar and advantage = r - r.mean() is identically zero.
+        reward = nla_reward(
+            v_hat.float(),
+            v_target.float(),
+            kl_av_vs_base=kl_per_sample,
+            token_entropy=token_entropy,
+            lambda_mag=cfg.lambda_mag,
+            beta_kl=cfg.beta_kl,
+            gamma_entropy=cfg.gamma_entropy,
+            h_min=cfg.h_min,
+            reduce=False,
+        )
+
+        with torch.no_grad():
+            advantage = reward.total - reward.total.mean()
+
         loss = -(advantage * seq_logp).mean()
 
         opt.zero_grad(set_to_none=True)
@@ -188,12 +221,14 @@ def main() -> None:
         if step % args.log_every == 0:
             dt = time.time() - t0
             logger.info(
-                "step %d  loss=%.4f  reward=%.4f  mse=%.4f  mag=%.4f  fve=%.4f  (%.1fs)",
+                "step %d  loss=%.4f  reward=%.4f  mse=%.4f  mag=%.4f  kl=%.4f  H=%.4f  fve=%.4f  (%.1fs)",
                 step,
                 loss.item(),
                 reward.total.mean().item(),
                 reward.mse.mean().item(),
                 reward.mag.mean().item(),
+                reward.kl.mean().item(),
+                token_entropy.mean().item(),
                 fraction_variance_explained(v_hat.float(), v_target.float()).item(),
                 dt,
             )

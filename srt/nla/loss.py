@@ -49,8 +49,21 @@ def fraction_variance_explained(
 def magnitude_penalty(
     v_hat: torch.Tensor, v_target: torch.Tensor, *, reduce: bool = True
 ) -> torch.Tensor:
-    """Squared difference of L2 norms. Penalises systematic over/under-shoot."""
-    per_sample = (v_hat.norm(dim=-1) - v_target.norm(dim=-1)).pow(2)
+    """Scale-invariant magnitude mismatch.
+
+    Returns the squared *relative* error of the L2 norms:
+
+        ((||v_hat|| - ||v_target||) / ||v_target||) ** 2
+
+    Hidden states at deep layers of large LMs can have L2 norms in the
+    1e3-1e4 range; the previous formulation ``(||v_hat|| - ||v_target||)^2``
+    produced reward magnitudes of order 1e8, swamping ``mse_nrm`` (which is
+    bounded in [0, 4]) by 8 orders of magnitude regardless of
+    ``lambda_mag``. The relative form is bounded in roughly [0, 1] for
+    sensible predictions, matching ``mse_nrm``'s scale.
+    """
+    target_norm = v_target.norm(dim=-1).clamp(min=1e-6)
+    per_sample = ((v_hat.norm(dim=-1) - v_target.norm(dim=-1)) / target_norm).pow(2)
     return per_sample.mean() if reduce else per_sample
 
 
