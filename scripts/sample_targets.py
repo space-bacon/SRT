@@ -61,7 +61,7 @@ def main() -> None:
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tok = AutoTokenizer.from_pretrained(args.backbone)
-    model = AutoModelForCausalLM.from_pretrained(args.backbone, torch_dtype=_dtype(args.dtype))
+    model = AutoModelForCausalLM.from_pretrained(args.backbone, dtype=_dtype(args.dtype))
     model.to(device)
     model.eval()
 
@@ -69,10 +69,12 @@ def main() -> None:
         raise SystemExit(f"--layer {args.layer} out of range for {args.backbone}")
 
     bos = tok.bos_token_id or model.config.bos_token_id or 0
+    eos_id = tok.eos_token_id if tok.eos_token_id is not None else model.config.eos_token_id
+    pad_id = tok.pad_token_id if tok.pad_token_id is not None else eos_id
     args.out.parent.mkdir(parents=True, exist_ok=True)
 
     sequences: list[str] = []
-    activations: list[torch.Tensor] = []  # each (T, d) on CPU
+    activations: list[torch.Tensor] = []  # each (T_valid, d) on CPU, trimmed to first EOS
 
     todo = args.num_sequences
     while todo > 0:
@@ -85,14 +87,35 @@ def main() -> None:
                 do_sample=True,
                 temperature=args.temperature,
                 top_p=args.top_p,
-                pad_token_id=tok.pad_token_id or tok.eos_token_id,
+                pad_token_id=pad_id,
+                eos_token_id=eos_id,
             )
-            fwd = model(input_ids=out_ids, output_hidden_states=True, use_cache=False)
+            # Build attention mask that keeps every token up to and including the
+            # first EOS per row. Required because pad_token_id == eos_token_id for
+            # Qwen, so naive `ids != pad_id` would drop the legitimate EOS *and*
+            # leave true pad positions unmasked when no EOS was emitted.
+            B, T = out_ids.shape
+            is_eos = out_ids == eos_id
+            pos = torch.arange(T, device=out_ids.device).unsqueeze(0).expand(B, T)
+            first_eos = torch.where(
+                is_eos.any(dim=-1, keepdim=True),
+                is_eos.float().argmax(dim=-1, keepdim=True).long(),
+                torch.full((B, 1), T, device=out_ids.device, dtype=torch.long),
+            )
+            attn_mask = (pos <= first_eos).long()
+            valid_len = attn_mask.sum(dim=-1)  # (B,)
+            fwd = model(
+                input_ids=out_ids,
+                attention_mask=attn_mask,
+                output_hidden_states=True,
+                use_cache=False,
+            )
             h = fwd.hidden_states[args.layer].detach().to(torch.float32).cpu()  # (B, T, d)
 
         for i in range(bs):
-            sequences.append(tok.decode(out_ids[i], skip_special_tokens=True))
-            activations.append(h[i])
+            n = int(valid_len[i].item())
+            sequences.append(tok.decode(out_ids[i, :n], skip_special_tokens=True))
+            activations.append(h[i, :n].clone())
         todo -= bs
         logger.info("sampled %d / %d", args.num_sequences - todo, args.num_sequences)
 
