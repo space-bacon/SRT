@@ -95,7 +95,14 @@ def main() -> None:
             # Qwen, so naive `ids != pad_id` would drop the legitimate EOS *and*
             # leave true pad positions unmasked when no EOS was emitted.
             B, T = out_ids.shape
+            prompt_len = input_ids.shape[1]
             is_eos = out_ids == eos_id
+            # For Qwen2.5 the bos token id equals the eos token id (151643 ==
+            # ``<|endoftext|>``), so the prompt token itself looks like an EOS.
+            # Exclude prompt positions from EOS detection so we only stop at
+            # *generated* EOS tokens.
+            if prompt_len > 0:
+                is_eos[:, :prompt_len] = False
             pos = torch.arange(T, device=out_ids.device).unsqueeze(0).expand(B, T)
             first_eos = torch.where(
                 is_eos.any(dim=-1, keepdim=True),
