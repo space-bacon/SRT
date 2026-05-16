@@ -72,6 +72,26 @@ def _load_targets(path: Path) -> tuple[list[str], torch.Tensor]:
     return seqs, pooled
 
 
+def _first_eos_mask(gen_ids: torch.Tensor, eos_id: int) -> torch.Tensor:
+    """Attention mask that keeps every token up to and including the first EOS.
+
+    With Qwen's ``pad_token_id = eos_token_id`` convention, masking via
+    ``ids != pad_id`` silently drops the legitimate sentence-ending EOS,
+    which (a) shifts AR's last-token pool one token earlier and (b) zeroes
+    out the EOS slot in REINFORCE so the model never learns to stop.
+    """
+    B, T = gen_ids.shape
+    is_eos = gen_ids == eos_id
+    pos = torch.arange(T, device=gen_ids.device).unsqueeze(0).expand(B, T)
+    # first EOS index per row; T (out of range) if no EOS produced.
+    first_eos = torch.where(
+        is_eos.any(dim=-1, keepdim=True),
+        is_eos.float().argmax(dim=-1, keepdim=True).long(),
+        torch.full((B, 1), T, device=gen_ids.device, dtype=torch.long),
+    )
+    return (pos <= first_eos).long()
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     args = parse_args()
@@ -121,19 +141,19 @@ def main() -> None:
         gen_ids = av.generate(
             v_target, max_new_tokens=args.max_new_tokens, do_sample=True
         )
-        attn = (gen_ids != tok.pad_token_id).long()
+        attn = _first_eos_mask(gen_ids, tok.eos_token_id)
         v_hat = ar.reconstruct(gen_ids, attention_mask=attn)
 
+        # Per-sample reward (reduce=False) — required for a meaningful
+        # REINFORCE baseline. With reduce=True every component collapses to
+        # a scalar and advantage = r - r.mean() is identically zero.
         reward = nla_reward(
             v_hat.float(),
             v_target.float(),
             lambda_mag=cfg.lambda_mag,
+            reduce=False,
         )
 
-        # REINFORCE surrogate: differentiable proxy on proj/prefix is the
-        # negative MSE between v_hat (no grad — sampling cuts) and v_target.
-        # For N1 we use a teacher-forced surrogate: re-run AV with the
-        # generated ids as labels and weight log-prob by advantage.
         with torch.no_grad():
             advantage = reward.total - reward.total.mean()
 
@@ -153,7 +173,11 @@ def main() -> None:
         logits = out.logits[:, P - 1 : -1].float()  # (B, T_gen, V)
         logp = F.log_softmax(logits, dim=-1)
         tok_logp = logp.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)  # (B, T_gen)
-        seq_logp = (tok_logp * attn).sum(dim=1) / attn.sum(dim=1).clamp(min=1)
+        # Sum (not mean) of token log-probs: averaging shrinks the gradient
+        # scale with sequence length and decouples the policy gradient from
+        # the actual sample log-probability. Rely on clip_grad_norm_ below
+        # for global scale control.
+        seq_logp = (tok_logp * attn).sum(dim=1)
         loss = -(advantage * seq_logp).mean()
 
         opt.zero_grad(set_to_none=True)
@@ -167,9 +191,9 @@ def main() -> None:
                 "step %d  loss=%.4f  reward=%.4f  mse=%.4f  mag=%.4f  fve=%.4f  (%.1fs)",
                 step,
                 loss.item(),
-                reward.total.item(),
-                reward.mse.item(),
-                reward.mag.item(),
+                reward.total.mean().item(),
+                reward.mse.mean().item(),
+                reward.mag.mean().item(),
                 fraction_variance_explained(v_hat.float(), v_target.float()).item(),
                 dt,
             )
@@ -178,13 +202,18 @@ def main() -> None:
             av.eval()
             with torch.no_grad():
                 v_ids = av.generate(val_targets, max_new_tokens=args.max_new_tokens, do_sample=False)
-                v_attn = (v_ids != tok.pad_token_id).long()
+                v_attn = _first_eos_mask(v_ids, tok.eos_token_id)
                 v_hat_val = ar.reconstruct(v_ids, attention_mask=v_attn)
                 fve_val = fraction_variance_explained(v_hat_val.float(), val_targets.float()).item()
             av.train()
             logger.info("val @ %d  fve_nrm=%.4f", step, fve_val)
             ckpt = args.out / f"av_step{step:06d}.pt"
-            torch.save({"proj": av.proj.state_dict(), "prefix_embeds": av.prefix_embeds.detach().cpu() if av.prefix_embeds is not None else None}, ckpt)
+            trainable_state = {
+                n: p.detach().cpu()
+                for n, p in av.named_parameters()
+                if p.requires_grad
+            }
+            torch.save({"trainable": trainable_state, "step": step}, ckpt)
             save_meta(
                 NLAMeta(
                     backbone_id=args.backbone,

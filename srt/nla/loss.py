@@ -13,14 +13,20 @@ import torch
 import torch.nn.functional as F
 
 
-def mse_nrm(v_hat: torch.Tensor, v_target: torch.Tensor) -> torch.Tensor:
+def mse_nrm(
+    v_hat: torch.Tensor, v_target: torch.Tensor, *, reduce: bool = True
+) -> torch.Tensor:
     """Squared L2 distance between unit-normalised vectors. Lower is better.
 
-    Both tensors are ``(..., d)``. Returns a scalar (mean over batch).
+    Both tensors are ``(..., d)``. With ``reduce=True`` (default) returns a
+    scalar (mean over leading dims); with ``reduce=False`` returns ``(...,)``
+    per-sample values — needed by REINFORCE so the advantage baseline
+    ``r - r.mean()`` is not identically zero.
     """
     a = F.normalize(v_hat, dim=-1)
     b = F.normalize(v_target, dim=-1)
-    return ((a - b) ** 2).sum(dim=-1).mean()
+    per_sample = ((a - b) ** 2).sum(dim=-1)
+    return per_sample.mean() if reduce else per_sample
 
 
 def cosine_similarity(v_hat: torch.Tensor, v_target: torch.Tensor) -> torch.Tensor:
@@ -41,17 +47,19 @@ def fraction_variance_explained(
 
 
 def magnitude_penalty(
-    v_hat: torch.Tensor, v_target: torch.Tensor
+    v_hat: torch.Tensor, v_target: torch.Tensor, *, reduce: bool = True
 ) -> torch.Tensor:
     """Squared difference of L2 norms. Penalises systematic over/under-shoot."""
-    return (v_hat.norm(dim=-1) - v_target.norm(dim=-1)).pow(2).mean()
+    per_sample = (v_hat.norm(dim=-1) - v_target.norm(dim=-1)).pow(2)
+    return per_sample.mean() if reduce else per_sample
 
 
 def entropy_floor_hinge(
-    token_entropy: torch.Tensor, h_min: float
+    token_entropy: torch.Tensor, h_min: float, *, reduce: bool = True
 ) -> torch.Tensor:
     """Hinge that fires when per-token entropy drops below ``h_min`` nats."""
-    return torch.clamp(h_min - token_entropy, min=0.0).mean()
+    per_sample = torch.clamp(h_min - token_entropy, min=0.0)
+    return per_sample.mean() if reduce else per_sample
 
 
 @dataclass
@@ -76,6 +84,7 @@ def nla_reward(
     gamma_entropy: float = 0.05,
     delta_community: float = 0.2,
     h_min: float = 1.5,
+    reduce: bool = True,
 ) -> RewardComponents:
     """5-term NLA reward (higher is better).
 
@@ -84,19 +93,36 @@ def nla_reward(
     Any optional term left as ``None`` is treated as zero (so N0/N1 can
     compose the reward incrementally as the surrounding modules come
     online).
+
+    With ``reduce=False`` every component is per-sample ``(B,)``; with
+    ``reduce=True`` (default) every component is a scalar. REINFORCE must
+    use ``reduce=False`` so ``advantage = r - r.mean()`` is non-degenerate.
     """
     device = v_hat.device
-    zero = torch.zeros((), device=device, dtype=v_hat.dtype)
+    dtype = v_hat.dtype
+    B = v_hat.shape[0] if v_hat.dim() >= 1 else 1
+    zero_shape = () if reduce else (B,)
+    zero = torch.zeros(zero_shape, device=device, dtype=dtype)
 
-    mse = mse_nrm(v_hat, v_target)
-    mag = magnitude_penalty(v_hat, v_target)
-    kl = kl_av_vs_base if kl_av_vs_base is not None else zero
+    def _maybe_per_sample(x: torch.Tensor) -> torch.Tensor:
+        if reduce:
+            return x.mean() if x.dim() > 0 else x
+        # caller passed a scalar but we want per-sample → broadcast.
+        return x.expand(B) if x.dim() == 0 else x
+
+    mse = mse_nrm(v_hat, v_target, reduce=reduce)
+    mag = magnitude_penalty(v_hat, v_target, reduce=reduce)
+    kl = _maybe_per_sample(kl_av_vs_base) if kl_av_vs_base is not None else zero
     ent = (
-        entropy_floor_hinge(token_entropy, h_min)
+        entropy_floor_hinge(token_entropy, h_min, reduce=reduce)
         if token_entropy is not None
         else zero
     )
-    comm = community_consistency if community_consistency is not None else zero
+    comm = (
+        _maybe_per_sample(community_consistency)
+        if community_consistency is not None
+        else zero
+    )
 
     total = -mse - lambda_mag * mag - beta_kl * kl - gamma_entropy * ent + delta_community * comm
     return RewardComponents(

@@ -84,13 +84,27 @@ def main() -> None:
     g = torch.Generator(device="cpu").manual_seed(args.seed)
     v_all = F.normalize(torch.randn(args.n, d, generator=g), dim=-1).to(device)
 
+    if device == "cuda":
+        torch.cuda.manual_seed_all(args.seed)
+
     mses, fves, coss = [], [], []
     samples: list[str] = []
     t0 = time.time()
     for i in range(0, args.n, args.batch_size):
         v = v_all[i : i + args.batch_size]
         ids = av.generate(v, max_new_tokens=args.max_new_tokens, do_sample=False)
-        attn = (ids != tok.pad_token_id).long()
+        # Keep up to and including the first EOS so AR's last-token pool
+        # reads the natural sentence terminator rather than the token
+        # before it (Qwen sets pad_token_id == eos_token_id).
+        B, T = ids.shape
+        is_eos = ids == tok.eos_token_id
+        pos = torch.arange(T, device=ids.device).unsqueeze(0).expand(B, T)
+        first_eos = torch.where(
+            is_eos.any(dim=-1, keepdim=True),
+            is_eos.float().argmax(dim=-1, keepdim=True).long(),
+            torch.full((B, 1), T, device=ids.device, dtype=torch.long),
+        )
+        attn = (pos <= first_eos).long()
         v_hat = ar.reconstruct(ids, attention_mask=attn).float()
         v_f = v.float()
         mses.append(mse_nrm(v_hat, v_f).item())
