@@ -81,12 +81,15 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--adv-clip", type=float, default=2.0,
                    help="Symmetric clip on the per-sequence advantage. "
                         "Set to 0 to disable.")
-    p.add_argument("--ppo-clip", type=float, default=0.2,
-                   help="PPO importance-ratio clip epsilon. Set to 0 to fall "
-                        "back to plain REINFORCE.")
-    p.add_argument("--ppo-epochs", type=int, default=2,
+    p.add_argument("--ppo-clip", type=float, default=0.0,
+                   help="PPO importance-ratio clip epsilon. 0 = plain "
+                        "REINFORCE (default; PPO clip only helps when "
+                        "ppo-epochs > 1).")
+    p.add_argument("--ppo-epochs", type=int, default=1,
                    help="Inner gradient steps per sampled batch (PPO-style "
-                        "sample reuse). 1 = no reuse.")
+                        "sample reuse). 1 = no reuse. N1i-v1 showed that at "
+                        "lr=3e-5 the ratio between inner epochs is ~1.0 so "
+                        "inner epochs were wasted compute.")
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
 
@@ -221,11 +224,13 @@ def main() -> None:
             logits_old = out_old.logits[:, P - 1 : -1].float()
             logp_old_all = F.log_softmax(logits_old, dim=-1)
             tok_logp_old = logp_old_all.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)
-            # Token-mean (not sum) so |seq_logp| stays in [0, log|V|] roughly,
-            # not in [0, T*log|V|]. Combined with the PPO ratio clip this
-            # bounds the per-sample loss contribution to ~adv_clip * (1+ε)
-            # regardless of sequence length.
-            seq_logp_old = (tok_logp_old * attn).sum(dim=1) / valid_counts
+            # Sum-over-valid-tokens (the unbiased REINFORCE estimator).
+            # Mean-over-tokens was tried in N1i-v1 and silently killed the
+            # signal: dividing by ~T=32 made the effective gradient ~32x
+            # smaller at the same lr, and it implicitly upweights short
+            # sequences. Variance control happens via adv_clip below, not
+            # by shrinking the logp scale.
+            seq_logp_old = (tok_logp_old * attn).sum(dim=1)
 
         # ── inner PPO epochs over the same sampled batch ──────────
         # Rebuild inputs_embeds *inside* the loop: the prefix is produced by
@@ -244,7 +249,7 @@ def main() -> None:
             logits = out.logits[:, P - 1 : -1].float()  # (B, T_gen, V)
             logp = F.log_softmax(logits, dim=-1)
             tok_logp = logp.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)
-            seq_logp = (tok_logp * attn).sum(dim=1) / valid_counts
+            seq_logp = (tok_logp * attn).sum(dim=1)
 
             # Per-token entropy (used by the two-sided hinge).
             p_av = logp.exp()
