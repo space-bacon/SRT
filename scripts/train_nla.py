@@ -36,7 +36,7 @@ from srt.nla import (
     nla_reward,
     save_meta,
 )
-from srt.nla.loss import fraction_variance_explained
+from srt.nla.loss import fraction_variance_explained, mse_nrm
 
 logger = logging.getLogger("train_nla")
 
@@ -90,6 +90,30 @@ def parse_args() -> argparse.Namespace:
                         "sample reuse). 1 = no reuse. N1i-v1 showed that at "
                         "lr=3e-5 the ratio between inner epochs is ~1.0 so "
                         "inner epochs were wasted compute.")
+    # Phase-2 soft-embedding bridge. REINFORCE alone (N1a..N1i) plateaus at
+    # fve_nrm=0.62: one scalar reward per sequence is information-bottlenecked
+    # against a 3584-dim reconstruction target. The soft bridge runs AR on
+    # softmax(av_logits/tau) @ E_token instead of the sampled token ids,
+    # giving a per-token-per-dim dense gradient w.r.t. AV. Loss is blended:
+    # loss = alpha * mse_nrm(v_hat_soft, v_target) + (1-alpha)*(pg+kl+ent).
+    # alpha is linearly annealed from soft_alpha_init to soft_alpha_final
+    # over the first soft_warmup_frac of steps, then held constant. Still
+    # corpus-free (no text dataset used).
+    p.add_argument("--soft-bridge", action="store_true",
+                   help="Enable Phase-2 soft-embedding bridge.")
+    p.add_argument("--soft-tau", type=float, default=1.0,
+                   help="Softmax temperature for the soft-embedding bridge.")
+    p.add_argument("--soft-alpha-init", type=float, default=1.0,
+                   help="Initial weight on the soft-bridge MSE term.")
+    p.add_argument("--soft-alpha-final", type=float, default=0.5,
+                   help="Final weight on the soft-bridge MSE term (held "
+                        "after warmup so dense gradient stays available).")
+    p.add_argument("--soft-warmup-frac", type=float, default=0.5,
+                   help="Fraction of total steps over which alpha is "
+                        "linearly annealed from init to final.")
+    p.add_argument("--init-from", type=Path, default=None,
+                   help="Path to a saved AV trainable-state dict to warm-start "
+                        "from (e.g. the N1i-v2 step-2500 checkpoint).")
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
 
@@ -127,6 +151,17 @@ def _first_eos_mask(gen_ids: torch.Tensor, eos_id: int) -> torch.Tensor:
     return (pos <= first_eos).long()
 
 
+def _alpha_schedule(step: int, args: argparse.Namespace) -> float:
+    """Linear anneal of soft-bridge weight from init to final."""
+    if not args.soft_bridge:
+        return 0.0
+    warmup = max(1, int(args.steps * args.soft_warmup_frac))
+    if step >= warmup:
+        return args.soft_alpha_final
+    frac = step / warmup
+    return args.soft_alpha_init + frac * (args.soft_alpha_final - args.soft_alpha_init)
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     args = parse_args()
@@ -158,6 +193,14 @@ def main() -> None:
     n_trainable = sum(p.numel() for p in trainable)
     logger.info("trainable params: %s", f"{n_trainable:,}")
     opt = torch.optim.AdamW(trainable, lr=args.lr)
+
+    if args.init_from is not None:
+        logger.info("warm-starting AV from %s", args.init_from)
+        ckpt = torch.load(args.init_from, map_location=device, weights_only=False)
+        state = ckpt["trainable"] if isinstance(ckpt, dict) and "trainable" in ckpt else ckpt
+        missing, unexpected = av.load_state_dict(state, strict=False)
+        logger.info("warm-start: loaded %d params; missing=%s unexpected=%s",
+                    len(state), list(missing), list(unexpected))
 
     logger.info("loading targets from %s", args.targets)
     _, target_pool = _load_targets(args.targets)
@@ -282,7 +325,34 @@ def main() -> None:
             ent_lo = torch.clamp(args.h_min - H_mean, min=0.0)
             ent_hi = torch.clamp(H_mean - args.h_max, min=0.0)
             ent_loss = args.gamma_entropy * (ent_lo + ent_hi)
-            loss = pg_loss + kl_loss + ent_loss
+
+            # Phase-2 soft-embedding bridge. AR re-encodes
+            # softmax(av_logits/tau) @ E_token instead of the sampled ids,
+            # so AV gets a per-token-per-dim gradient from mse_nrm. The
+            # sampled rollout (gen_ids) is what AV's logits are conditioned
+            # on; the gradient flows through the *probabilities* assigned
+            # to that rollout, not through a re-sample.
+            alpha = _alpha_schedule(step, args)
+            if args.soft_bridge and alpha > 0.0:
+                # Matmul in backbone dtype (bf16) to avoid allocating a
+                # float32 copy of the 152K x 3584 embedding table every
+                # step (~2.2 GB). Some precision is lost in soft_probs but
+                # the bridge target is direction, not magnitude — empirically
+                # tolerable.
+                E_tok = backbone.get_input_embeddings().weight  # (V, d) bf16
+                soft_probs = F.softmax(logits / args.soft_tau, dim=-1).to(E_tok.dtype)
+                soft_embeds = soft_probs @ E_tok  # (B, T_gen, d) bf16
+                v_hat_soft = ar.reconstruct_from_embeds(
+                    soft_embeds, attention_mask=attn
+                )
+                soft_loss = mse_nrm(v_hat_soft.float(), v_target.float())
+                loss = (
+                    alpha * soft_loss
+                    + (1.0 - alpha) * (pg_loss + kl_loss + ent_loss)
+                )
+            else:
+                soft_loss = torch.tensor(0.0, device=device)
+                loss = pg_loss + kl_loss + ent_loss
 
             opt.zero_grad(set_to_none=True)
             loss.backward()
@@ -293,12 +363,15 @@ def main() -> None:
             dt = time.time() - t0
             logger.info(
                 "step %d  loss=%.4f  pg=%.4f  kl_l=%.4f  ent_l=%.4f  "
+                "soft=%.4f a=%.2f  "
                 "reward=%.4f  mse=%.4f  mag=%.4f  KL=%.4f  H=%.4f  fve=%.4f  (%.1fs)",
                 step,
                 loss.item(),
                 pg_loss.item(),
                 kl_loss.item(),
                 ent_loss.item(),
+                soft_loss.item(),
+                alpha,
                 reward.total.mean().item(),
                 reward.mse.mean().item(),
                 reward.mag.mean().item(),

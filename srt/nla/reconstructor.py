@@ -97,3 +97,26 @@ class ActivationReconstructor(nn.Module):
         # hidden_states is a tuple of length num_hidden_layers + 1
         h_layer = out.hidden_states[self.cfg.extraction_layer]
         return self._pool(h_layer, attention_mask, pool or self.cfg.pool)  # type: ignore[arg-type]
+
+    def reconstruct_from_embeds(
+        self,
+        inputs_embeds: torch.Tensor,
+        attention_mask: torch.Tensor | None = None,
+        pool: str | None = None,
+    ) -> torch.Tensor:
+        """Differentiable AR forward from soft input embeddings.
+
+        Used by the Phase-2 soft-embedding bridge. Caller passes
+        ``softmax(logits / tau) @ E_token`` as ``inputs_embeds`` so that
+        the entire pipeline (AV -> soft embeds -> backbone -> pool) has
+        a per-token-per-dim gradient w.r.t. AV parameters. Backbone
+        weights stay frozen (requires_grad=False set in __init__).
+        """
+        out = self.backbone(
+            inputs_embeds=inputs_embeds,
+            attention_mask=attention_mask,
+            output_hidden_states=True,
+            use_cache=False,
+        )
+        h_layer = out.hidden_states[self.cfg.extraction_layer]
+        return self._pool(h_layer, attention_mask, pool or self.cfg.pool)  # type: ignore[arg-type]
