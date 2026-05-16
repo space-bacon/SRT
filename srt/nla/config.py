@@ -34,9 +34,10 @@ class NLAConfig:
     # Reward weights (see docs/SRT_NLA_PLAN.md §5)
     lambda_mag: float = 0.1  # magnitude-match penalty
     beta_kl: float = 0.05  # legibility KL vs base
-    gamma_entropy: float = 0.05  # entropy floor hinge
+    gamma_entropy: float = 0.05  # entropy hinge coefficient (both sides)
     delta_community: float = 0.2  # community-consistency bonus
     h_min: float = 1.5  # minimum acceptable token-level entropy (nats)
+    h_max: float = 3.0  # maximum acceptable token-level entropy (nats); above this the upper hinge pulls H back down to prevent uniform-noise runaway
 
     # Injection layout — number of learned prefix tokens after the injected
     # vector. The injected vector occupies slot 0; this many extra learned

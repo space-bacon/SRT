@@ -60,13 +60,19 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--beta-kl", type=float, default=0.05,
                    help="KL(av || base) coefficient added to loss.")
     p.add_argument("--gamma-entropy", type=float, default=0.5,
-                   help="Entropy-floor hinge coefficient. Loss contribution "
-                        "is gamma * max(0, h_min - H_mean) so once H clears "
-                        "the floor the term goes silent and the task signal "
-                        "dominates. A plain -gamma*H bonus drives H runaway "
-                        "to several nats (seen at N1c step 160: H=5.9).")
+                   help="Entropy hinge coefficient. Loss contribution is "
+                        "gamma * (max(0, h_min - H_mean) + max(0, H_mean - h_max)) "
+                        "so the term is silent inside [h_min, h_max] and the task "
+                        "signal dominates. A plain -gamma*H bonus drives H runaway "
+                        "to several nats (seen at N1c step 160: H=5.9). A one-sided "
+                        "floor-only hinge still allows runaway (N1e: bimodal regime, "
+                        "H spikes 5-9 nats causing pg_loss to blow up to -87).")
     p.add_argument("--h-min", type=float, default=1.5,
-                   help="Entropy floor in nats. Hinge activates below this.")
+                   help="Entropy floor in nats. Lower hinge activates below this.")
+    p.add_argument("--h-max", type=float, default=3.0,
+                   help="Entropy ceiling in nats. Upper hinge activates above this. "
+                        "Natural-language token entropy is typically 1-2 nats; 3.0 "
+                        "leaves headroom while bounding runaway.")
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
 
@@ -227,18 +233,22 @@ def main() -> None:
 
         # Direct loss terms:
         #   beta_kl * KL  → minimise drift from base (anchor legibility)
-        #   gamma_entropy * max(0, h_min - H) → hinge anti-collapse pressure
+        #   gamma_entropy * (max(0, h_min - H) + max(0, H - h_max))
+        #       → two-sided hinge: anti-collapse below h_min, anti-runaway above h_max.
         # Both gradients flow through AV's logp directly, independent of
         # the REINFORCE baseline. The entropy term is a *hinge* (not a
         # raw -H bonus); a raw bonus drives H to several nats (vocab is
         # ~152K tokens so theoretical max is ~12 nats, but natural-
         # language H is 1-2 nats — runaway H means uniform-noise output,
-        # not legible descriptions). Hinge silences once H clears h_min.
+        # not legible descriptions). Floor-only hinge (N1e) still allowed
+        # bimodal regime where H spiked 5-9 nats and pg_loss exploded to -87;
+        # the upper hinge plus stronger beta_kl pulls those excursions back.
         pg_loss = -(advantage * seq_logp).mean()
         kl_loss = args.beta_kl * kl_per_sample.mean()
         H_mean = token_entropy.mean()
-        ent_hinge = torch.clamp(args.h_min - H_mean, min=0.0)
-        ent_loss = args.gamma_entropy * ent_hinge
+        ent_lo = torch.clamp(args.h_min - H_mean, min=0.0)
+        ent_hi = torch.clamp(H_mean - args.h_max, min=0.0)
+        ent_loss = args.gamma_entropy * (ent_lo + ent_hi)
         loss = pg_loss + kl_loss + ent_loss
 
         opt.zero_grad(set_to_none=True)
