@@ -1,0 +1,10 @@
+backbone_id: Qwen/Qwen2.5-7B
+backbone_revision: null
+extraction_layer: 20
+d_vector: 3584
+pool: last
+norm_convention: raw
+pair: av
+phase: N1
+notes: step=2000 fve_nrm=0.6149
+extra: {}

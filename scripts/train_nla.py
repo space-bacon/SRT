@@ -332,6 +332,17 @@ def main() -> None:
             # sampled rollout (gen_ids) is what AV's logits are conditioned
             # on; the gradient flows through the *probabilities* assigned
             # to that rollout, not through a re-sample.
+            #
+            # NOTE on regularizer weighting: kl_loss and ent_loss are added
+            # with FULL weight regardless of alpha. N2-v2 tried
+            #   loss = alpha*soft + (1-alpha)*(pg+kl+ent)
+            # which silenced the entropy hinge at alpha=1.0; the policy
+            # raced to uniform (H=9.2 nats by step 200) because uniform
+            # softmax @ E_token = constant embedding = a degenerate minimum
+            # of the bridge loss that's totally divorced from discrete
+            # eval. val crashed warm-start 0.62 -> 0.31. The hinge MUST
+            # always brake. alpha only blends the two policy-objective
+            # terms (soft bridge vs REINFORCE pg).
             alpha = _alpha_schedule(step, args)
             if args.soft_bridge and alpha > 0.0:
                 # Matmul in backbone dtype (bf16) to avoid allocating a
@@ -348,7 +359,9 @@ def main() -> None:
                 soft_loss = mse_nrm(v_hat_soft.float(), v_target.float())
                 loss = (
                     alpha * soft_loss
-                    + (1.0 - alpha) * (pg_loss + kl_loss + ent_loss)
+                    + (1.0 - alpha) * pg_loss
+                    + kl_loss
+                    + ent_loss
                 )
             else:
                 soft_loss = torch.tensor(0.0, device=device)
