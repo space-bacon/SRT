@@ -37,11 +37,13 @@ NLA = Natural Language Autoencoder. Prior work required paired data (activations
 
 ## Open problems (in order)
 
-1. **Magnitude pinned at 0.98.** Predictions are ~2× over-norm vs targets; the scale-invariant `mag` penalty is bounded and not biting. Likely need an additive norm-matching loss term once base fve clears 0.65.
-2. **High-H exploration regime is the actual learning signal.** β=0.3 KL is the sweet spot; β=0.5 over-anchors and collapses (see N1f). The "bimodal H" oscillation between explore (H~2) and exploit (H~0.3) is a feature, not a bug. Two-sided hinge `h_max=999` disables the high-H cap intentionally.
-3. **Run-to-run variance.** No `--seed` pinning yet; reproducibility currently anecdotal across runs.
-4. **Single layer, single model.** Need L{12,20,27} × {Qwen, Llama} ablation.
-5. **Neuralese audit unmeasured.** Need a readability metric + samples.
+1. **REINFORCE gradient variance is the active bottleneck.** Per-batch `pg_loss` spikes of -50 (advantage * summed-token-logp) let a few outlier sequences dominate every update; `clip_grad_norm` then drowns the signal from the rest. PPO-style ratio clipping + per-sequence advantage clipping is the next experiment (N1i, May 2026).
+2. **fve_nrm is direction-only.** `fraction_variance_explained` calls `mse_nrm` which L2-normalises both vectors first. So the magnitude penalty (mag=0.98 plateau) is *not* the bound on the metric we track — it's only a regulariser. Earlier framing of "the mag fix is the next priority" was wrong; correcting that here.
+3. **REINFORCE has no dense gradient.** With a sample step in the middle of the pipeline, AV gets one scalar per sequence per step. Phase 2 plan: add a soft-embedding bridge (forward AR on `softmax(logits)·E` instead of sampled token ids) so AV gets a per-token-per-dim direction signal, at least during warmup. Standard differentiable-prompt technique.
+4. **High-H exploration regime is the actual RL learning signal.** β=0.3 KL is the sweet spot; β=0.5 over-anchors and collapses (see N1f). The "bimodal H" oscillation between explore (H~2) and exploit (H~0.3) is a feature, not a bug. Two-sided hinge `h_max=999` disables the high-H cap intentionally.
+5. **Run-to-run variance.** No `--seed` pinning yet; reproducibility currently anecdotal across runs.
+6. **Single layer, single model.** Need L{12,20,27} × {Qwen, Llama} ablation.
+7. **Neuralese audit unmeasured.** Need a readability metric + samples.
 
 ## The framing for the paper
 
@@ -51,6 +53,16 @@ If X ≥ 65 corpus-free, that paper is publishable. If X ≥ 85 corpus-free, it'
 
 ## Honest expectations
 
-- N1g/N1h plateau near 0.62 is the current ceiling at this recipe. Clearing 0.65 likely requires the magnitude fix.
-- Clearing 0.85 likely requires *all* of: magnitude fix, longer rollouts (more tokens = more bits), larger AV, possibly architectural changes. Not a continuation of the current curve.
-- "Corpus-free" is the defended-to-the-death property. A supervised warmup would still produce a useful tool but would weaken the claim from "we discovered REINFORCE-only NLA works" to "we improved NLA with a novel REINFORCE refinement stage." Both are wins, only the first is historic.
+- N1g/N1h plateau near 0.62 is the current ceiling at this recipe. Clearing 0.65 likely requires PPO-lite (Phase 1).
+- Clearing 0.75 likely requires the soft-embedding bridge for dense gradient (Phase 2).
+- Clearing 0.85 likely requires *all* of: PPO-lite, soft-embedding bridge, longer rollouts (more tokens = more bits), larger AV (12.8M → ~40M), curriculum, possibly multi-position AR pooling. Not a continuation of the current curve.
+- "Corpus-free" is the defended-to-the-death property. A supervised warmup would still produce a useful tool but would weaken the claim from "we discovered REINFORCE-only NLA works" to "we improved NLA with a novel REINFORCE refinement stage." Both are wins, only the first is historic. The soft-embedding bridge is *still corpus-free* — it uses no text data, only the round-trip reconstruction objective with a differentiable forward path.
+
+## Phased plan to 0.85
+
+- **Phase 1 (N1i)**: PPO-lite. Adv-clip + ratio-clip + 2 inner epochs + token-mean logp. P(≥0.65) ≈ 70%.
+- **Phase 2 (N2)**: Soft-embedding bridge. New `reconstruct_from_embeds` path; hybrid loss `α*MSE(soft) + (1-α)*PG` with α annealed 1→0. P(≥0.75) ≈ 70%.
+- **Phase 3**: Scale (AV 40M, tokens 64→96, multi-position AR pool, curriculum). P(≥0.85) ≈ 50%.
+- **Phase 4**: Readability audit + neuralese mitigation.
+
+Pre-mortem failures (most likely): neuralese collapse at high fve; AR/L20 representational limit; AV capacity ceiling; frozen-Qwen fundamental cap. See chat log around N1h post-mortem (May 2026) for full premortem.

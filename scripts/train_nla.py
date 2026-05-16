@@ -73,6 +73,20 @@ def parse_args() -> argparse.Namespace:
                    help="Entropy ceiling in nats. Upper hinge activates above this. "
                         "Natural-language token entropy is typically 1-2 nats; 3.0 "
                         "leaves headroom while bounding runaway.")
+    # PPO-lite knobs. Pure REINFORCE-with-batch-baseline (N1a..N1h) plateaus
+    # around fve_nrm=0.62 because a small fraction of sequences with large
+    # |seq_logp| dominate every batch and clip_grad_norm then drowns the
+    # signal from the rest. PPO clipping bounds the per-sequence importance
+    # ratio so no single sample can dominate. See docs/nla_mission.md.
+    p.add_argument("--adv-clip", type=float, default=2.0,
+                   help="Symmetric clip on the per-sequence advantage. "
+                        "Set to 0 to disable.")
+    p.add_argument("--ppo-clip", type=float, default=0.2,
+                   help="PPO importance-ratio clip epsilon. Set to 0 to fall "
+                        "back to plain REINFORCE.")
+    p.add_argument("--ppo-epochs", type=int, default=2,
+                   help="Inner gradient steps per sampled batch (PPO-style "
+                        "sample reuse). 1 = no reuse.")
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
 
@@ -168,93 +182,98 @@ def main() -> None:
         full_attn = torch.cat(
             [torch.ones(prefix.shape[:2], dtype=attn.dtype, device=device), attn], dim=1
         )
-        out = backbone(
-            inputs_embeds=inputs_embeds, attention_mask=full_attn, use_cache=False
-        )
-        # Shift: predict gen_ids from prefix + earlier gen_ids.
-        # Cast logits to float32 for log_softmax — bf16 log_softmax loses
-        # ~3 digits of precision in the tails and biases REINFORCE grads.
         P = prefix.size(1)
-        logits = out.logits[:, P - 1 : -1].float()  # (B, T_gen, V)
-        logp = F.log_softmax(logits, dim=-1)
-        tok_logp = logp.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)  # (B, T_gen)
-        # Sum (not mean) of token log-probs: averaging shrinks the gradient
-        # scale with sequence length and decouples the policy gradient from
-        # the actual sample log-probability. Rely on clip_grad_norm_ below
-        # for global scale control.
-        seq_logp = (tok_logp * attn).sum(dim=1)
-
-        # ── per-sample auxiliary signals (DIFFERENTIABLE) ────────────
-        # Both go into the loss as direct policy-gradient regularisers,
-        # NOT into the reward. Reason: REINFORCE-with-batch-baseline
-        # produces a gradient proportional to (r - r.mean()) * ∇log π.
-        # At a deterministic fixed point every sample yields the same
-        # reward → advantage ≡ 0 → no gradient regardless of how harsh
-        # the entropy/KL penalties are inside the reward. Putting them
-        # directly in the loss (with grad through AV's logp) gives them
-        # an escape gradient that survives collapse. Prior smoke run
-        # (commit 5fa6e09) confirmed this failure mode: H dropped to
-        # 0.002, reward bit-identical across 200 steps, fve stuck at
-        # 0.604. See N1a-second-attempt notes.
         valid = attn.float()
         valid_counts = valid.sum(dim=1).clamp(min=1.0)
-        p_av = logp.exp()
-        H_tok = -(p_av * logp).sum(dim=-1)  # (B, T_gen) nats
-        token_entropy = (H_tok * valid).sum(dim=1) / valid_counts  # (B,)
 
-        # KL(p_av(·|prefix, ctx) || p_base(·|ctx)) per token, averaged.
-        # Base forward stays no_grad — we only want gradient through AV.
-        # Aligned at positions 1..T-1 where both predict the same token
-        # from at least one real conditioning token.
+        # Base policy logp for KL anchor — computed once per sampled batch
+        # (the base model is frozen so this never changes across inner epochs).
         with torch.no_grad():
             base_out = backbone(
                 input_ids=gen_ids, attention_mask=attn, use_cache=False
             )
             base_logp_full = F.log_softmax(base_out.logits.float(), dim=-1)
             base_logp_kl = base_logp_full[:, :-1, :].detach()
-        av_logp_kl = logp[:, 1:, :]  # predict gen_ids[1:T]
-        p_kl = av_logp_kl.exp()
-        kl_tok = (p_kl * (av_logp_kl - base_logp_kl)).sum(dim=-1)  # (B, T-1)
-        kl_mask = valid[:, 1:]
-        kl_counts = kl_mask.sum(dim=1).clamp(min=1.0)
-        kl_per_sample = (kl_tok * kl_mask).sum(dim=1) / kl_counts  # (B,)
 
-        # Reward = pure task signal (mse + mag). Keeps per-sample
-        # variance in the advantage even when entropy/KL converge.
+        # Reward depends only on (sampled tokens, target) — both fixed across
+        # inner epochs — so we compute it once outside the loop.
         reward = nla_reward(
             v_hat.float(),
             v_target.float(),
             lambda_mag=cfg.lambda_mag,
             reduce=False,
         )
-
         with torch.no_grad():
             advantage = reward.total - reward.total.mean()
+            if args.adv_clip > 0:
+                advantage = advantage.clamp(-args.adv_clip, args.adv_clip)
 
-        # Direct loss terms:
-        #   beta_kl * KL  → minimise drift from base (anchor legibility)
-        #   gamma_entropy * (max(0, h_min - H) + max(0, H - h_max))
-        #       → two-sided hinge: anti-collapse below h_min, anti-runaway above h_max.
-        # Both gradients flow through AV's logp directly, independent of
-        # the REINFORCE baseline. The entropy term is a *hinge* (not a
-        # raw -H bonus); a raw bonus drives H to several nats (vocab is
-        # ~152K tokens so theoretical max is ~12 nats, but natural-
-        # language H is 1-2 nats — runaway H means uniform-noise output,
-        # not legible descriptions). Floor-only hinge (N1e) still allowed
-        # bimodal regime where H spiked 5-9 nats and pg_loss exploded to -87;
-        # the upper hinge plus stronger beta_kl pulls those excursions back.
-        pg_loss = -(advantage * seq_logp).mean()
-        kl_loss = args.beta_kl * kl_per_sample.mean()
-        H_mean = token_entropy.mean()
-        ent_lo = torch.clamp(args.h_min - H_mean, min=0.0)
-        ent_hi = torch.clamp(H_mean - args.h_max, min=0.0)
-        ent_loss = args.gamma_entropy * (ent_lo + ent_hi)
-        loss = pg_loss + kl_loss + ent_loss
+        # Snapshot the behaviour-policy log-prob (the policy that actually
+        # produced these tokens). Required for the PPO importance ratio;
+        # for plain REINFORCE (--ppo-clip=0 and --ppo-epochs=1) the ratio
+        # is identically 1 and this is a no-op.
+        with torch.no_grad():
+            out_old = backbone(
+                inputs_embeds=inputs_embeds, attention_mask=full_attn,
+                use_cache=False,
+            )
+            logits_old = out_old.logits[:, P - 1 : -1].float()
+            logp_old_all = F.log_softmax(logits_old, dim=-1)
+            tok_logp_old = logp_old_all.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)
+            # Token-mean (not sum) so |seq_logp| stays in [0, log|V|] roughly,
+            # not in [0, T*log|V|]. Combined with the PPO ratio clip this
+            # bounds the per-sample loss contribution to ~adv_clip * (1+ε)
+            # regardless of sequence length.
+            seq_logp_old = (tok_logp_old * attn).sum(dim=1) / valid_counts
 
-        opt.zero_grad(set_to_none=True)
-        loss.backward()
-        torch.nn.utils.clip_grad_norm_(trainable, 1.0)
-        opt.step()
+        # ── inner PPO epochs over the same sampled batch ──────────
+        for inner in range(max(1, args.ppo_epochs)):
+            out = backbone(
+                inputs_embeds=inputs_embeds, attention_mask=full_attn,
+                use_cache=False,
+            )
+            logits = out.logits[:, P - 1 : -1].float()  # (B, T_gen, V)
+            logp = F.log_softmax(logits, dim=-1)
+            tok_logp = logp.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)
+            seq_logp = (tok_logp * attn).sum(dim=1) / valid_counts
+
+            # Per-token entropy (used by the two-sided hinge).
+            p_av = logp.exp()
+            H_tok = -(p_av * logp).sum(dim=-1)
+            token_entropy = (H_tok * valid).sum(dim=1) / valid_counts
+
+            # KL(av || base) at positions 1..T-1.
+            av_logp_kl = logp[:, 1:, :]
+            p_kl = av_logp_kl.exp()
+            kl_tok = (p_kl * (av_logp_kl - base_logp_kl)).sum(dim=-1)
+            kl_mask = valid[:, 1:]
+            kl_counts = kl_mask.sum(dim=1).clamp(min=1.0)
+            kl_per_sample = (kl_tok * kl_mask).sum(dim=1) / kl_counts
+
+            # PPO clipped surrogate. Maximise min(r*A, clip(r, 1±ε)*A) is
+            # equivalent to minimising -that quantity. With ε=0 the clip
+            # is degenerate (r forced to 1) so we fall back to plain PG.
+            ratio = (seq_logp - seq_logp_old).exp()
+            if args.ppo_clip > 0:
+                ratio_clipped = ratio.clamp(
+                    1.0 - args.ppo_clip, 1.0 + args.ppo_clip
+                )
+                surrogate = torch.min(ratio * advantage, ratio_clipped * advantage)
+                pg_loss = -surrogate.mean()
+            else:
+                pg_loss = -(advantage * seq_logp).mean()
+
+            kl_loss = args.beta_kl * kl_per_sample.mean()
+            H_mean = token_entropy.mean()
+            ent_lo = torch.clamp(args.h_min - H_mean, min=0.0)
+            ent_hi = torch.clamp(H_mean - args.h_max, min=0.0)
+            ent_loss = args.gamma_entropy * (ent_lo + ent_hi)
+            loss = pg_loss + kl_loss + ent_loss
+
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(trainable, 1.0)
+            opt.step()
 
         if step % args.log_every == 0:
             dt = time.time() - t0
