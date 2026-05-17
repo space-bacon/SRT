@@ -204,6 +204,8 @@ def main() -> None:
 
     logger.info("loading targets from %s", args.targets)
     _, target_pool = _load_targets(args.targets)
+    from srt.nla.targets_check import assert_targets_healthy
+    assert_targets_healthy(args.targets, target_pool)
     target_pool = target_pool.to(device)
     N = target_pool.size(0)
     logger.info("targets: N=%d d=%d", N, target_pool.size(1))

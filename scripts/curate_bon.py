@@ -36,6 +36,7 @@ import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from srt.nla import ActivationReconstructor, ActivationVerbalizer, NLAConfig
+from srt.nla.targets_check import assert_targets_healthy
 
 logger = logging.getLogger("curate_bon")
 
@@ -127,7 +128,9 @@ def main() -> None:
         logger.info("loaded %d params; missing=%d unexpected=%d",
                     len(state), len(missing), len(unexpected))
 
-    pool = _load_targets(args.targets).to(device)
+    pool = _load_targets(args.targets)
+    assert_targets_healthy(args.targets, pool)
+    pool = pool.to(device)
     N = pool.size(0)
     if args.limit:
         N = min(N, args.limit)
