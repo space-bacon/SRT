@@ -69,6 +69,10 @@ def parse_args() -> argparse.Namespace:
                    help="Number of held-out targets sampled for discrete eval.")
     p.add_argument("--log-every", type=int, default=20)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--lr-schedule", choices=["constant", "cosine"], default="constant")
+    p.add_argument("--warmup-steps", type=int, default=0)
+    p.add_argument("--patience", type=int, default=0,
+                   help="Early-stop after this many val checks without improvement. 0=disabled.")
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
 
@@ -178,6 +182,10 @@ def main() -> None:
     logger.info("trainable params: %s", f"{n_trainable:,}")
     opt = torch.optim.AdamW(trainable, lr=args.lr, weight_decay=args.weight_decay)
 
+    # Estimate total optimizer steps for cosine schedule.
+    # (Recomputed after pairs load; placeholder None until then.)
+    sched = None
+
     if args.init_from is not None:
         logger.info("warm-start AV from %s", args.init_from)
         ckpt = torch.load(args.init_from, map_location=device, weights_only=False)
@@ -204,8 +212,28 @@ def main() -> None:
     pad_id = tok.pad_token_id
     eos_id = tok.eos_token_id
 
+    # Build LR scheduler now that we know dataset size.
+    steps_per_epoch = max(1, (len(train_idx) + args.batch_size - 1) // args.batch_size)
+    total_steps = steps_per_epoch * args.epochs
+    if args.lr_schedule == "cosine":
+        import math
+        warmup = max(0, args.warmup_steps)
+
+        def _lr_lambda(s: int) -> float:
+            if warmup > 0 and s < warmup:
+                return (s + 1) / float(warmup)
+            progress = (s - warmup) / max(1, total_steps - warmup)
+            progress = min(max(progress, 0.0), 1.0)
+            return 0.5 * (1.0 + math.cos(math.pi * progress))
+
+        sched = torch.optim.lr_scheduler.LambdaLR(opt, _lr_lambda)
+        logger.info("cosine LR: total_steps=%d warmup=%d peak_lr=%g",
+                    total_steps, warmup, args.lr)
+
     best_val = -1.0
     best_path = args.out / "best_av.pt"
+    bad_vals = 0
+    stop_training = False
 
     step = 0
     t0 = time.time()
@@ -251,6 +279,8 @@ def main() -> None:
             if args.grad_clip > 0:
                 torch.nn.utils.clip_grad_norm_(trainable, args.grad_clip)
             opt.step()
+            if sched is not None:
+                sched.step()
 
             step += 1
             log_loss += float(loss.item()) * v.size(0)
@@ -274,6 +304,7 @@ def main() -> None:
                 logger.info("val @ %d  fve_nrm=%.4f", step, val_fve)
                 if val_fve > best_val:
                     best_val = val_fve
+                    bad_vals = 0
                     trainable_state = {
                         n: p.detach().cpu()
                         for n, p in av.named_parameters() if p.requires_grad
@@ -283,6 +314,15 @@ def main() -> None:
                         best_path,
                     )
                     logger.info("  new best val=%.4f  saved %s", best_val, best_path)
+                else:
+                    bad_vals += 1
+                    logger.info("  no improvement (%d/%d)", bad_vals, args.patience)
+                    if args.patience > 0 and bad_vals >= args.patience:
+                        logger.info("early stop: %d val checks without improvement", bad_vals)
+                        stop_training = True
+                        break
+        if stop_training:
+            break
 
     # Final val.
     av.eval()
