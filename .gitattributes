@@ -1,0 +1,12 @@
+# Exclude generated artifacts and large data files from GitHub language stats.
+# These directories contain build outputs, plots, and curated traces — not source.
+# See https://github.com/github-linguist/linguist/blob/main/docs/overrides.md
+
+artifacts/**        linguist-generated=true
+arxiv/**            linguist-generated=true
+data/**             linguist-generated=true
+checkpoints/**      linguist-generated=true
+docs/**             linguist-documentation=true
+*.svg               linguist-generated=true
+*.pdf               linguist-generated=true
+*.jsonl             linguist-generated=true
