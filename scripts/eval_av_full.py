@@ -10,7 +10,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from srt.nla.config import NLAConfig
 from srt.nla.verbalizer import ActivationVerbalizer
 from srt.nla.reconstructor import ActivationReconstructor
-from scripts.train_nla_sft import _val_fve, _load_targets
+
+
+def _load_targets(path: Path) -> torch.Tensor:
+    obj = torch.load(path, map_location="cpu", weights_only=False)
+    acts = obj["activations"]
+    return torch.stack([a[-1] for a in acts])
 
 
 def main() -> None:
