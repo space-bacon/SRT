@@ -329,6 +329,17 @@ def main() -> None:
     val_fve = _val_fve(
         av, ar, val_targets, pad_id, eos_id, args.max_new_tokens, args.batch_size,
     )
+    if val_fve > best_val:
+        best_val = val_fve
+        trainable_state = {
+            n: p.detach().cpu()
+            for n, p in av.named_parameters() if p.requires_grad
+        }
+        torch.save(
+            {"trainable": trainable_state, "val_fve_nrm": val_fve, "step": step},
+            best_path,
+        )
+        logger.info("  final is new best=%.4f  saved %s", best_val, best_path)
     logger.info("final val fve_nrm=%.4f  best=%.4f", val_fve, best_val)
 
 
