@@ -2,6 +2,9 @@
 
 Quick-reference doc for "why are we doing this and what does success look like." Written mid-N1h run, May 2026.
 
+> **2026-05-16 UPDATE — every quantitative number in this document is provisional.**
+> A bug in `scripts/sample_targets.py` (Qwen2.5 `bos_token_id == eos_token_id == 151643`) caused the 10K target file to be one constant vector repeated 10000 times. All measured `fve_nrm` values from N1a–N2-v3 — including the "0.6181 plateau" cited below — were AV memorising the best constant text for that single repeated target, not a real reconstruction ceiling. The bug is fixed (commit `902b746`) and data is being regenerated. See [`nla_status_2026_05_16.md`](nla_status_2026_05_16.md) for the full post-mortem, updated capability inventory, use cases, and pre-mortem of the next push.
+
 ## The system in one paragraph
 
 A frozen Qwen2.5-7B has a hidden state at layer 20 (3584-dim fp16). We train a small (~12.8M-param) **Activation Verbalizer (AV)** that, given such a target vector, produces a short text sequence. That text is re-encoded by the same frozen Qwen; we read its L20 hidden state back out; we measure how close that reconstruction is to the original target. The round-trip metric is `fve_nrm = 1 - ||v_tgt - v_hat||² / ||v_tgt||²`. AV is trained by REINFORCE on this MSE reward — **no paired (activation, text) corpus, ever**. That's the "corpus-free" part, and it's the novel claim.

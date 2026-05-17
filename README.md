@@ -155,6 +155,18 @@ The training script saves:
 - `final_adapter.pt` — adapter weights at end of training
 - `train_log.jsonl` — all metrics + diagnostics in structured format
 
+## SRT-NLA (research branch `nla`)
+
+**Activation verbalization — read any hidden state of a frozen backbone as a sentence, trained with no labelled corpus.**
+
+SRT-NLA is the natural-language-autoencoder line of work: a small (~12.8M-param) Activation Verbalizer (AV) is trained so that the round-trip `vector → text → vector` minimises reconstruction error at a chosen layer of the *same frozen backbone*. No paired (activation, text) data is ever used; the reverse model is the frozen backbone itself.
+
+- Mission & headline thresholds: [`docs/nla_mission.md`](docs/nla_mission.md)
+- Architecture & phased plan: [`docs/SRT_NLA_PLAN.md`](docs/SRT_NLA_PLAN.md)
+- **Current status, capabilities, use cases, and pre-mortem**: [`docs/nla_status_2026_05_16.md`](docs/nla_status_2026_05_16.md)
+
+A bug in `scripts/sample_targets.py` (Qwen2.5 sets `bos_token_id == eos_token_id == 151643`, which caused the BOS prompt to register as the first EOS and collapsed every target activation into one constant vector) was fixed on `2026-05-16` (commit `902b746` on branch `nla`). All NLA-branch results before that date are invalidated; the released v1.0 / v8a / v18 / v21a / v22c_a050 adapter checkpoints are on a separate codepath and are unaffected.
+
 ## Theoretical Foundation
 
 SRT is grounded in C.S. Peirce's semiotics. Language models process signs
