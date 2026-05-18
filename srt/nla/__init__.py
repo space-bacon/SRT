@@ -24,6 +24,13 @@ from srt.nla.loss import (
     mse_nrm,
     nla_reward,
 )
+from srt.nla.metrics import (
+    Anchors,
+    anisotropy_mu,
+    fve_nrm,
+    fve_nrm_centered,
+    rho_norm,
+)
 from srt.nla.reconstructor import ActivationReconstructor
 from srt.nla.sidecar import NLAMeta, load_meta, save_meta
 from srt.nla.verbalizer import ActivationVerbalizer
@@ -31,12 +38,17 @@ from srt.nla.verbalizer import ActivationVerbalizer
 __all__ = [
     "ActivationReconstructor",
     "ActivationVerbalizer",
+    "Anchors",
     "NLAConfig",
     "NLAMeta",
+    "anisotropy_mu",
     "cosine_similarity",
     "fraction_variance_explained",
+    "fve_nrm",
+    "fve_nrm_centered",
     "load_meta",
     "mse_nrm",
     "nla_reward",
+    "rho_norm",
     "save_meta",
 ]

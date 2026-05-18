@@ -120,7 +120,44 @@ Three observations:
    $\rho_{\text{cen}}(\text{NN}) \approx 0.71 \gg 0.28$. The trained model
    does not even reach the retrieval baseline on its deterministic decode.
 
-## 5. Implications
+## 5. The K-curve and the death of logp reranking
+
+A finer-grained sweep of $K \in \{1, 2, 4, 8, 16, 32, 64\}$ on the same
+30k checkpoint and 200-target slice (`scripts/rerank_eval.py`, two
+independent runs averaged) gives:
+
+| $K$ | centered fve_nrm | $\rho_{\text{cen}}$ |
+|---|---|---|
+| 1 | 0.577 | 0.23 |
+| 2 | 0.613 | 0.36 |
+| 4 | 0.644 | 0.46 |
+| 8 | 0.678 | 0.58 |
+| 16 | 0.706 | 0.68 |
+| 32 | 0.736 | 0.78 |
+| 64 | 0.766 | **0.88** |
+
+The curve is **log-linear**: $+0.030$ raw / $+0.10$ $\rho_{\text{cen}}$ per
+doubling of $K$. Extrapolating, $K \approx 256$ reaches the paraphrase
+ceiling. The same script confirms two negative results that constrain the
+design space for any "cheap" reranker:
+
+- **logp-rerank actively hurts.** Choosing the candidate with highest
+  mean per-token log-prob from the same $K=64$ pool gives centered
+  $0.561$, $0.025$ *below* greedy ($0.586$). The policy's own sequence
+  probability has no useful correlation with reconstruction quality.
+- **Per-target Spearman$(\text{mean-logp}, \text{oracle-cen}) \approx
+  0.04$** (mean over 200 targets, $p_{50}=0.05$, $p_{05}=-0.31$,
+  $p_{95}=0.38$). Any value head whose features are restricted to the
+  policy's own logp trajectory cannot beat greedy. The reranker must
+  consume the rollout's hidden activation at layer $\ell$ — which is the
+  same compute path as just scoring against $v$ directly.
+
+Conversely, **NN-anchor rerank** (score each candidate by its centered
+cosine to the nearest pool point of $v$, no access to $v$ itself) gives
+$0.722$, beating greedy by $+0.14$. This shows the reranking surface is
+not flat; it is logp specifically that is useless.
+
+## 6. Implications
 
 - **Verbalization is sampling-bound, not capacity-bound on this backbone.**
   Under a meaningful metric, 12.7M trainable parameters suffice to make the
@@ -137,18 +174,21 @@ Three observations:
   best-of-K into greedy, length-conditioned decoding, or contrastive
   fine-tuning against retrieved hard negatives.
 
-## 6. Artifacts
+## 7. Artifacts
 
 - `scripts/oracle_ceiling.py` — replay / random / NN / paraphrase, raw + centered.
   Output: `artifacts/nla/oracle_ceiling_30k_v2.json`.
 - `scripts/centered_eval.py` — adapter greedy / sampled / best-of-K and
   NN-retrieval, raw + centered, on M target vectors with a held-out pool.
   Outputs: `artifacts/nla/centered_eval_{10k,30k}_M200.json`.
-- Checkpoints: `artifacts/nla/ce_seq64_np16/best_av.pt`,
-  `artifacts/nla/ce_seq64_np16_30k/best_av.pt`.
+- `scripts/rerank_eval.py` — K-curve, logp-rerank, NN-anchor-rerank,
+  Spearman(logp, oracle-cen). Output:
+  `artifacts/nla/rerank_eval_ce_seq64_np16_v2.json`.
+- HF release: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) (model),
+  [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) (dataset).
 - Targets: `artifacts/nla/targets_q7b_L20_seq64_{10k,30k_seed1}.pt`.
 
-## 7. Limitations
+## 8. Limitations
 
 - Single backbone (Qwen-2.5-7B), single layer ($\ell=20$), single target
   type (64-token continuations). The anisotropy magnitude $\|\mu\| \approx 55$

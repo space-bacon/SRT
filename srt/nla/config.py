@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+from dataclasses import asdict, dataclass, fields
+from pathlib import Path
 
 
 @dataclass
@@ -58,3 +60,17 @@ class NLAConfig:
     # design. >1 gives the backbone several independent views of v before the
     # learned prefix; intended to break the single-slot information bottleneck.
     num_inject_slots: int = 1
+
+    # ---- (de)serialization helpers --------------------------------------
+
+    def to_json(self, path: str | Path) -> None:
+        """Write this config to a JSON file (used by HF model cards)."""
+        Path(path).write_text(json.dumps(asdict(self), indent=2, sort_keys=True))
+
+    @classmethod
+    def from_json(cls, path: str | Path) -> "NLAConfig":
+        """Load a config from JSON. Unknown keys are ignored for
+        forward-compatibility with newer checkpoints."""
+        data = json.loads(Path(path).read_text())
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in data.items() if k in known})

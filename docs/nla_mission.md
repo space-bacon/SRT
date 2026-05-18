@@ -2,6 +2,15 @@
 
 Quick-reference doc for "why are we doing this and what does success look like." Written mid-N1h run, May 2026.
 
+> **2026-05-18 SUPERSEDED HEADLINE NUMBERS.** The thresholds and "N1g/N1h
+> ≈ 0.618" plateau cited in this document are reported on the *raw*
+> (uncentered) `fve_nrm` metric, which is dominated by Qwen2.5-7B L20
+> anisotropy (`‖μ‖ ≈ 55`, random-floor raw ≈ 0.62). Current canonical
+> units are **centered** `fve_nrm_cen` and normalized `ρ_norm = (cen −
+> 0.510) / 0.289`. See [`../paper_nla.md`](../paper_nla.md) for the
+> reframed framing and [`../RELEASE_NOTES_NLA_v1.md`](../RELEASE_NOTES_NLA_v1.md)
+> for the v1 anchor table.
+>
 > **2026-05-16 UPDATE — every quantitative number in this document is provisional.**
 > A bug in `scripts/sample_targets.py` (Qwen2.5 `bos_token_id == eos_token_id == 151643`) caused the 10K target file to be one constant vector repeated 10000 times. All measured `fve_nrm` values from N1a–N2-v3 — including the "0.6181 plateau" cited below — were AV memorising the best constant text for that single repeated target, not a real reconstruction ceiling. The bug is fixed (commit `902b746`) and data is being regenerated. See [`nla_status_2026_05_16.md`](nla_status_2026_05_16.md) for the full post-mortem, updated capability inventory, use cases, and pre-mortem of the next push.
 
