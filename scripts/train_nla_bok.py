@@ -169,14 +169,15 @@ def build_hardneg_index(
     Uses up to `cap` candidate rows to keep the sim matrix tractable.
     """
     P = pair_target_idx.numel()
-    # candidate set = the same pair rows (we draw negs from the train set)
-    cand = pair_target_idx.to(device)
+    # candidate set = the same pair rows (we draw negs from the train set).
+    # Keep `cand` on CPU because pool_cen is on CPU; only the dense sim
+    # matmul moves to the GPU.
     cand_cap = min(cap, P)
-    cand = cand[:cand_cap]                       # (C,)
-    Vc = pool_cen[pair_target_idx]               # (P, d)
-    Cc = pool_cen[cand]                          # (C, d)
+    cand = pair_target_idx[:cand_cap]            # (C,) cpu long
+    Vc = pool_cen[pair_target_idx]               # (P, d) cpu
+    Cc = pool_cen[cand]                          # (C, d) cpu
     Vn = F.normalize(Vc.to(device).float(), dim=-1)
-    Cn = F.normalize(Cc.float(), dim=-1)
+    Cn = F.normalize(Cc.to(device).float(), dim=-1)
     # cosine (P, C); chunk over P for memory
     out = torch.empty((P, J), dtype=torch.long)
     chunk = 256
