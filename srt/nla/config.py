@@ -43,3 +43,18 @@ class NLAConfig:
     # vector. The injected vector occupies slot 0; this many extra learned
     # embeddings (BOS-like) follow before the model autoregresses.
     num_prefix_tokens: int = 1
+
+    # Prefix mode:
+    #   "static" — `prefix_embeds` is a (P, d_embed) learned tensor shared
+    #              across all inputs (original design).
+    #   "mlp"    — a 2-layer MLP maps v → (P, d_embed) per-input, so the
+    #              prefix is conditioned on the target vector. Strictly
+    #              more expressive; same trainable shape elsewhere.
+    prefix_mode: str = "static"
+    prefix_mlp_hidden: int = 256
+
+    # Multi-position injection: number of slots at which proj(v) is injected
+    # (with independent linear projections per slot). 1 = original single-slot
+    # design. >1 gives the backbone several independent views of v before the
+    # learned prefix; intended to break the single-slot information bottleneck.
+    num_inject_slots: int = 1

@@ -75,11 +75,37 @@ class ActivationVerbalizer(nn.Module):
             else:
                 nn.init.xavier_uniform_(self.proj.weight)
 
+        # Multi-position injection: M independent projections of v placed at
+        # the first M slots of the prefix. proj_extra holds slots 1..M-1
+        # (proj covers slot 0). Initialised small so the model starts near
+        # the single-slot baseline and the extra slots add information as
+        # training progresses.
+        n_inject = max(1, getattr(cfg, "num_inject_slots", 1))
+        self._n_inject = n_inject
+        if n_inject > 1:
+            self.proj_extra = nn.ModuleList(
+                [nn.Linear(d_vec, self._d_embed, bias=False) for _ in range(n_inject - 1)]
+            )
+            with torch.no_grad():
+                for lin in self.proj_extra:
+                    nn.init.xavier_uniform_(lin.weight, gain=0.1)
+        else:
+            self.proj_extra = None
+
         # Trainable extra prefix embeddings that follow the injected vector.
         # These give the model a small "header" before it starts generating
-        # describing text. Initialised from the backbone's BOS embedding
-        # (cast back to float32 for optimizer stability — see note above).
+        # describing text.
+        #
+        # Two modes:
+        #   "static" — learned (P, d_embed) tensor, shared across inputs.
+        #              Initialised from the backbone's BOS embedding.
+        #   "mlp"    — 2-layer MLP maps v → (P, d_embed) per-input. Init
+        #              second layer to zeros so prefix starts equal to the
+        #              BOS embedding (the bias of layer 2), then drifts.
+        # Adapter params are float32 (see note above).
         n_pref = max(0, cfg.num_prefix_tokens)
+        self._n_pref = n_pref
+        self._prefix_mode = getattr(cfg, "prefix_mode", "static")
         if n_pref > 0:
             bos_id = (
                 self.backbone.config.bos_token_id
@@ -94,10 +120,31 @@ class ActivationVerbalizer(nn.Module):
                     .clone()
                     .float()
                 )  # (1, d) float32
-            init = bos_embed.expand(n_pref, -1).clone()
-            self.prefix_embeds = nn.Parameter(init)
+            if self._prefix_mode == "mlp":
+                hidden = getattr(cfg, "prefix_mlp_hidden", 256)
+                out_dim = n_pref * self._d_embed
+                self.prefix_mlp = nn.Sequential(
+                    nn.Linear(d_vec, hidden),
+                    nn.GELU(),
+                    nn.Linear(hidden, out_dim),
+                )
+                with torch.no_grad():
+                    # Zero output weights so prefix = bias (set to tiled BOS)
+                    # — preserves warm-start behaviour at init.
+                    nn.init.xavier_uniform_(self.prefix_mlp[0].weight)
+                    nn.init.zeros_(self.prefix_mlp[0].bias)
+                    nn.init.zeros_(self.prefix_mlp[2].weight)
+                    self.prefix_mlp[2].bias.copy_(
+                        bos_embed.expand(n_pref, -1).reshape(-1)
+                    )
+                self.register_parameter("prefix_embeds", None)
+            else:
+                init = bos_embed.expand(n_pref, -1).clone()
+                self.prefix_embeds = nn.Parameter(init)
+                self.prefix_mlp = None
         else:
             self.register_parameter("prefix_embeds", None)
+            self.prefix_mlp = None
 
     # ─────────────────────────── helpers ────────────────────────────
 
@@ -111,15 +158,23 @@ class ActivationVerbalizer(nn.Module):
         if v.dim() == 1:
             v = v.unsqueeze(0)
         v32 = v.float()
-        inject = self.proj(v32).unsqueeze(1)  # (B, 1, d) float32
-        if self.prefix_embeds is None:
+        # Slot 0 always uses self.proj; slots 1..M-1 use proj_extra.
+        inject_list = [self.proj(v32).unsqueeze(1)]
+        if self.proj_extra is not None:
+            for lin in self.proj_extra:
+                inject_list.append(lin(v32).unsqueeze(1))
+        inject = torch.cat(inject_list, dim=1)  # (B, M, d) float32
+        if self._n_pref == 0:
             return inject.to(self._backbone_dtype)
-        extra = self.prefix_embeds.unsqueeze(0).expand(v.size(0), -1, -1)
+        if self.prefix_mlp is not None:
+            extra = self.prefix_mlp(v32).view(v.size(0), self._n_pref, self._d_embed)
+        else:
+            extra = self.prefix_embeds.unsqueeze(0).expand(v.size(0), -1, -1)
         return torch.cat([inject, extra], dim=1).to(self._backbone_dtype)
 
     @property
     def prefix_length(self) -> int:
-        return 1 + (0 if self.prefix_embeds is None else self.prefix_embeds.size(0))
+        return self._n_inject + self._n_pref
 
     # ───────────────────────── generation ───────────────────────────
 
