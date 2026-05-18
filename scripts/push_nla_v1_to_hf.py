@@ -4,18 +4,19 @@ Usage (after `huggingface-cli login`):
 
     # 1) Model repo (RiverRider/srt-nla-av-v1)
     python scripts/push_nla_v1_to_hf.py model \
-        --ckpt /workspace/srt-adapter/artifacts/nla/ce_seq64_np16_30k/best_av.pt \
-        --release-dir release/nla_v1
+        --ckpt /workspace/srt-adapter/artifacts/nla/ce_seq64_np16_30k/best_av.pt
 
     # 2) Dataset repo (RiverRider/srt-nla-targets-v1)
     python scripts/push_nla_v1_to_hf.py dataset \
-        --targets /workspace/srt-adapter/artifacts/nla/targets_q7b_L20_seq64_30k_seed1.pt \
-        --release-dir release/nla_v1
+        --targets /workspace/srt-adapter/artifacts/nla/targets_q7b_L20_seq64_30k_seed1.pt
 
-    # 3) Both, in one go (defaults assume the standard remote paths)
+    # 3) Both, in one go
     python scripts/push_nla_v1_to_hf.py all \
         --ckpt   .../ce_seq64_np16_30k/best_av.pt \
         --targets .../targets_q7b_L20_seq64_30k_seed1.pt
+
+Card / config sources default to docs/hf/nla_v1/ (tracked in git), so a
+fresh \`git pull\` on the vast box is sufficient — no rsync needed.
 
 Notes
 -----
@@ -123,7 +124,12 @@ def main() -> None:
     ap.add_argument("mode", choices=["model", "dataset", "all"])
     ap.add_argument("--ckpt", type=Path, help="path to best_av.pt")
     ap.add_argument("--targets", type=Path, help="path to targets_q7b_L20_seq64_30k_seed1.pt")
-    ap.add_argument("--release-dir", type=Path, default=Path("release/nla_v1"))
+    ap.add_argument(
+        "--release-dir",
+        type=Path,
+        default=Path("docs/hf/nla_v1"),
+        help="directory holding MODEL_CARD.md, DATASET_CARD.md, config.json",
+    )
     ap.add_argument("--private", action="store_true", help="create repos as private")
     args = ap.parse_args()
 

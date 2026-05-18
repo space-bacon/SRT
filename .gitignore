@@ -26,7 +26,8 @@ release/
 .env
 .env.*
 !.env.example
-hf
+# top-level local HF working dir; tracked HF release artifacts live in docs/hf/
+/hf/
 
 # IDE / OS / local tooling
 .DS_Store
