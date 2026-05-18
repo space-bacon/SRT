@@ -1,0 +1,42 @@
+{
+  "backbone": "Qwen/Qwen2.5-7B",
+  "layer": 20,
+  "av_ckpt": "artifacts/nla/ce_seq64_np16/best_av.pt",
+  "M": 200,
+  "K": 64,
+  "T": 64,
+  "temperature": 1.0,
+  "pool_size": 2000,
+  "anisotropy_mu_norm": 55.17763900756836,
+  "greedy_cen_mean": 0.5837922692298889,
+  "greedy_raw_mean": 0.682873547077179,
+  "sampled_cen_mean": 0.5782223343849182,
+  "sampled_raw_mean": 0.6791396141052246,
+  "kcurve_oracle_top1_cen": {
+    "1": 0.5799860954284668,
+    "2": 0.6091462969779968,
+    "4": 0.6374099850654602,
+    "8": 0.6696681976318359,
+    "16": 0.6967707872390747,
+    "32": 0.7242259979248047,
+    "64": 0.7551939487457275
+  },
+  "kcurve_oracle_top1_raw": {
+    "1": 0.6832872033119202,
+    "2": 0.7056598663330078,
+    "4": 0.7267523407936096,
+    "8": 0.7498994469642639,
+    "16": 0.770993173122406,
+    "32": 0.7907810807228088,
+    "64": 0.8126853108406067
+  },
+  "logp_rerank_cen_mean": 0.5668176412582397,
+  "logp_rerank_raw_mean": 0.6562165021896362,
+  "logp_rerank_vs_greedy": -0.01697462797164917,
+  "nn_anchor_rerank_cen_mean": 0.6938599348068237,
+  "nn_anchor_baseline_cen_mean": 0.7847595810890198,
+  "spearman_logp_vs_oracle_cen_mean": 0.04449015483260155,
+  "spearman_logp_vs_oracle_cen_p50": 0.05091574788093567,
+  "spearman_logp_vs_oracle_cen_p05": -0.30611950159072876,
+  "spearman_logp_vs_oracle_cen_p95": 0.37615156173706055
+}

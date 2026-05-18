@@ -1,0 +1,145 @@
+# SRT-Adapter NLA — Session Handoff (2026-05-17, end of day)
+
+Vast.ai A6000/Blackwell instance is being **spun down** tonight. All committed
+code is on `origin/nla`. All eval artifacts/logs from today are mirrored to
+local `artifacts/nla/` and `logs/`. Large checkpoints (`.pt`) remain only on
+remote — see "If you spin up a fresh instance" below.
+
+---
+
+## What got done today
+
+1. **BoK distillation trainer (`scripts/train_nla_bok.py`)** — written, smoke-
+   ran, **diagnosed as inadequate at K=4**. Teacher signal (win-of-4) ≈ greedy
+   baseline → CE on teacher = noise → val regressed (greedy_cen 0.28 → 0.17 in
+   normalized units). Committed `f8e34a4`, device-fix `892b6b9`.
+2. **K-curve / cheap-rerank eval (`scripts/rerank_eval.py`)** — built and ran
+   on warm-start `ce_seq64_np16/best_av.pt`, M=200, K=64. Committed `8cfb357`
+   (with h_last extraction fix).
+3. **Methodology reconciled** with `scripts/centered_eval.py`. Both scripts now
+   agree to within sampling noise on the same ckpt:
+   `greedy_cen ≈ 0.59`, `best-of-64_cen ≈ 0.78`, `nn_baseline_cen ≈ 0.72`.
+
+## Today's results in normalized `ρ_norm` units (the paper's units)
+
+`ρ_norm = (cen − 0.510) / 0.289`, where 0.510 = random_cen floor and
+0.799 = paraphrase_cen ceiling.
+
+| quantity | raw `cen` | `ρ_norm` |
+| --- | --- | --- |
+| greedy (T=0) | 0.586 | **0.26** |
+| sampled (T=1) | 0.582 | 0.25 |
+| best-of-2 (oracle) | 0.617 | 0.37 |
+| best-of-4 | 0.652 | 0.49 |
+| best-of-8 | 0.686 | 0.61 |
+| best-of-16 | 0.716 | 0.71 |
+| best-of-32 | 0.747 | 0.82 |
+| best-of-64 | 0.777 | **0.92** |
+| NN-retrieval baseline | 0.715 | 0.71 |
+| logp-rerank (cheap) | 0.561 | 0.18  (HURTS greedy by −0.08) |
+| nn-anchor-rerank | 0.722 | 0.73 |
+| paraphrase ceiling | 0.799 | 1.00 |
+
+**Key diagnostics:**
+
+- **K-curve is log-linear**, +0.030 raw / +0.10 norm per doubling of K. K=64
+  reaches `ρ_norm = 0.92`; extrapolation suggests K≈256 needed to hit ceiling.
+- **Spearman(mean-logp, oracle-cen) per target: mean 0.04, p50 0.05.**
+  The policy's own sequence log-prob has essentially **zero ranking power**
+  over centered-fve. Logp-rerank actively hurts greedy. *Any value-head
+  reranker using logp features is dead on arrival.*
+
+## Tomorrow's open question
+
+**How do we close the greedy → best-of-K gap (`ρ_norm` 0.26 → 0.92)?**
+The four levers that survive today's evidence, ranked by promise:
+
+### A. Best-of-K with oracle scoring at deploy time *(the trivial answer)*
+- `v` is provided at inference, so we can compute centered-fve cheaply
+  (one batched backbone forward over K candidate rollouts, same compute as
+  K-way sampling). This **already gives `ρ_norm` 0.92** today, no retraining.
+- Cost: K× sampling + 1× batched scoring forward.
+- **Recommendation**: report this in the paper as the deployable decoding
+  method. The "greedy" number is a misleading metric when oracle reranking
+  is free in our setup.
+
+### B. Policy improvement via BoK distillation — **needs K≫4**
+- Today's smoke ran K=4 → teacher = noise. We need K such that
+  `E[best-of-K_cen] ≫ greedy_cen` by enough to be a real teacher.
+- From the K-curve: K=8 gives +0.10 raw over greedy, K=16 gives +0.13. So
+  **launch at K=16 minimum, K=32 preferred**.
+- Memory budget: K=32 × seq_len=64 × batch=16 = 32k rollout tokens per
+  step. On Blackwell 96GB with bf16 frozen 7B this is borderline tight; may
+  need `--batch=8` and `--samples-per-v=32`. **Profile first.**
+- Add temp annealing 1.5 → 0.7 over training.
+- Hard-neg InfoNCE term (J=8 NN from pool) is cheap to keep; α_bok=1.0,
+  β_ctr=0.3, γ_act=0 to start.
+
+### C. Process-reward / value-guided beam search
+- Train a head that predicts `final ρ_cen` given a partial prefix +
+  `v`. Beam-search with `score = logp + λ · V(prefix, v)`.
+- **Caveat**: cheap features (logp trajectory only) won't work — Spearman
+  ≈ 0.04 already proves this. Head MUST consume the prefix's hidden state
+  at layer L, which is the same compute path as just sampling + scoring.
+  So this is no cheaper than (A). Skip unless we find a feature with real
+  signal.
+
+### D. Direct activation matching on greedy rollouts
+- Currently γ_act=0 (no L2 between rollout h_last and v). Cranking
+  γ_act ≈ 0.5 with greedy decoding (no sampling) might pull greedy h_last
+  toward v directly. Cheap to try; risks collapse.
+
+**My recommendation for the first run tomorrow**: pure Option A as the paper's
+headline decoding result, then launch Option B with K=32 as the policy
+improvement experiment.
+
+---
+
+## If you spin up a fresh instance
+
+Remote state to recreate on a new vast.ai box (`/workspace/srt-adapter`):
+
+1. `git clone https://github.com/space-bacon/SRT.git && cd SRT && git checkout nla`
+2. `python -m venv .venv && source .venv/bin/activate && pip install -e .`
+3. Re-generate (or pull from S3 / re-upload from another box) the targets file:
+   `artifacts/nla/targets_q7b_L20_seq64_30k_seed1.pt` (~2GB).
+   Producer: `scripts/build_targets.py` (or whichever; check repo).
+4. Warm-start checkpoint to use: `artifacts/nla/ce_seq64_np16/best_av.pt`
+   (12.7M params). **This was only on the spun-down box.** Either:
+   - retrain from scratch via `scripts/train_nla_ce.py --num-prefix-tokens 16
+     --seq-len 64 --steps ~30k` (~6h on Blackwell), OR
+   - if you saved it to S3 / scp'd locally before spindown, restore.
+5. Standing flag rule: **always pass `--max-val-samples 5000`** to any
+   `scripts/train.py` invocation (5k is fine; 100k wastes hours/pass).
+
+## Files of interest
+
+- `scripts/rerank_eval.py` — today's K-curve / logp-rerank / NN-rerank script.
+- `scripts/train_nla_bok.py` — BoK trainer (untuned; relaunch with K≥16).
+- `scripts/centered_eval.py` — canonical eval (greedy / best-of-K / NN /
+  random, raw + centered).
+- `paper_nla.md` — current paper draft. Numbers in §3-§4 are correct in
+  `ρ_norm` units; check that no claim implies "ceiling reached at greedy".
+- `artifacts/nla/rerank_eval_ce_seq64_np16_v2.json` — today's full result.
+- `artifacts/nla/centered_eval_30k_M200.json` — sibling result on `_30k` ckpt,
+  matches within noise.
+- `logs/rerank_eval_v2.log`, `logs/bok_smoke.log` — today's run logs.
+
+## What NOT to do tomorrow
+
+- **Don't** rerun K=4 BoK. It demonstrably noises out the teacher.
+- **Don't** build a value head whose features are logp only. Spearman 0.04.
+- **Don't** retrain just to re-measure greedy on the same ckpt — the
+  rerank_eval ≡ centered_eval numbers are now triangulated and trustworthy.
+
+---
+
+## Last commits on `nla`
+
+```
+8cfb357 nla: rerank_eval — fix h_last extraction (prefix-free forward...)
+05c3b4c nla: rerank_eval.py — K-curve + logp-rerank + NN-anchor-rerank...
+892b6b9 nla: fix build_hardneg_index device mismatch
+f8e34a4 nla: train_nla_bok.py — best-of-K self-distill + NN hard-neg...
+573f51e nla: reframe — centered metric, oracle baselines, paper draft
+```

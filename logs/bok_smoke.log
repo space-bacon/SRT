@@ -1,0 +1,34 @@
+2026-05-18 00:45:39,297 train_nla_bok loading backbone Qwen/Qwen2.5-7B
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 231.75it/s]
+2026-05-18 00:45:48,674 train_nla_bok AV num_prefix=16 num_inject=1 trainable=12,902,400
+2026-05-18 00:45:48,675 train_nla_bok warm-start AV from artifacts/nla/ce_seq64_np16/best_av.pt
+2026-05-18 00:45:48,754 train_nla_bok warm-start: 2/2 keys (missing=339 unexpected=0)
+2026-05-18 00:46:18,924 train_nla_bok loaded 9984 pairs; target pool N=30000
+2026-05-18 00:46:19,478 train_nla_bok anisotropy ||mu||=55.1831  (pool_size=2000)
+2026-05-18 00:46:19,479 train_nla_bok train=9485  val=256
+2026-05-18 00:46:19,484 train_nla_bok building NN hard-neg index J=4 cap=8192 ...
+2026-05-18 00:46:20,204 train_nla_bok hard-neg index: (9485, 4)
+2026-05-18 00:46:20,205 train_nla_bok cosine LR: total_steps=2372 warmup=50 peak=3e-05
+2026-05-18 00:46:34,720 train_nla_bok ep1 step 10  T=1.000  L_bok=1.1978  L_ctr=1.7131  L_act=0.0000  win_cen=0.2879  (14.5s)
+2026-05-18 00:46:47,933 train_nla_bok ep1 step 20  T=1.000  L_bok=0.9987  L_ctr=1.7569  L_act=0.0000  win_cen=0.3065  (27.7s)
+2026-05-18 00:47:01,176 train_nla_bok ep1 step 30  T=1.000  L_bok=1.0116  L_ctr=1.7547  L_act=0.0000  win_cen=0.2813  (41.0s)
+2026-05-18 00:47:14,384 train_nla_bok ep1 step 40  T=1.000  L_bok=1.1232  L_ctr=1.8309  L_act=0.0000  win_cen=0.2689  (54.2s)
+2026-05-18 00:47:27,329 train_nla_bok ep1 step 50  T=0.999  L_bok=1.2849  L_ctr=1.6996  L_act=0.0000  win_cen=0.3018  (67.1s)
+2026-05-18 00:47:40,362 train_nla_bok ep1 step 60  T=0.999  L_bok=1.0492  L_ctr=1.7020  L_act=0.0000  win_cen=0.2552  (80.2s)
+2026-05-18 00:47:53,381 train_nla_bok ep1 step 70  T=0.999  L_bok=1.0302  L_ctr=1.8090  L_act=0.0000  win_cen=0.2947  (93.2s)
+2026-05-18 00:48:06,799 train_nla_bok ep1 step 80  T=0.998  L_bok=1.1552  L_ctr=1.7439  L_act=0.0000  win_cen=0.3120  (106.6s)
+2026-05-18 00:48:20,096 train_nla_bok ep1 step 90  T=0.998  L_bok=1.0286  L_ctr=1.7942  L_act=0.0000  win_cen=0.3284  (119.9s)
+2026-05-18 00:48:33,116 train_nla_bok ep1 step 100  T=0.997  L_bok=1.0775  L_ctr=1.7660  L_act=0.0000  win_cen=0.3127  (132.9s)
+2026-05-18 00:49:37,773 train_nla_bok val @ 100  greedy_cen=0.1736  greedy_raw=0.3708
+2026-05-18 00:49:37,965 train_nla_bok   new best greedy_cen=0.1736  saved artifacts/nla/bok_smoke_np16/best_av.pt
+2026-05-18 00:49:50,888 train_nla_bok ep1 step 110  T=0.996  L_bok=1.1016  L_ctr=1.6561  L_act=0.0000  win_cen=0.2940  (210.7s)
+2026-05-18 00:50:03,865 train_nla_bok ep1 step 120  T=0.996  L_bok=1.0302  L_ctr=1.9144  L_act=0.0000  win_cen=0.3287  (223.7s)
+2026-05-18 00:50:16,817 train_nla_bok ep1 step 130  T=0.995  L_bok=1.1039  L_ctr=1.8673  L_act=0.0000  win_cen=0.3033  (236.6s)
+2026-05-18 00:50:29,711 train_nla_bok ep1 step 140  T=0.994  L_bok=1.2117  L_ctr=1.9133  L_act=0.0000  win_cen=0.3590  (249.5s)
+2026-05-18 00:50:42,540 train_nla_bok ep1 step 150  T=0.993  L_bok=1.1659  L_ctr=1.7343  L_act=0.0000  win_cen=0.3170  (262.3s)
+2026-05-18 00:50:55,416 train_nla_bok ep1 step 160  T=0.992  L_bok=1.0437  L_ctr=1.6054  L_act=0.0000  win_cen=0.3016  (275.2s)
+2026-05-18 00:51:09,057 train_nla_bok ep1 step 170  T=0.991  L_bok=1.1379  L_ctr=1.7415  L_act=0.0000  win_cen=0.2685  (288.9s)
+2026-05-18 00:51:22,177 train_nla_bok ep1 step 180  T=0.990  L_bok=0.9411  L_ctr=1.6582  L_act=0.0000  win_cen=0.3503  (302.0s)
+2026-05-18 00:51:35,376 train_nla_bok ep1 step 190  T=0.989  L_bok=0.9738  L_ctr=1.8419  L_act=0.0000  win_cen=0.3533  (315.2s)
+2026-05-18 00:51:48,435 train_nla_bok ep1 step 200  T=0.988  L_bok=0.8907  L_ctr=1.6930  L_act=0.0000  win_cen=0.2561  (328.2s)

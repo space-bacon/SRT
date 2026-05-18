@@ -51,3 +51,7 @@ private/
 docs/substack_*
 **/*newsletter*
 *.eml
+
+# Local scratch / one-shot experiments
+/script.py
+
