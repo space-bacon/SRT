@@ -1,11 +1,14 @@
 # SRT-NLA v1 — Release Notes
 
-**Date:** 2026-05-18
+**Date:** 2026-05-18 (shipped to HF same day)
 **Branch:** `nla`
 **Last commit at release:** `7b53130`
-**HF artifacts:**
-- Model: `RiverRider/srt-nla-av-v1` (`best_av.pt`, config.json, eval_results.json)
-- Dataset: `RiverRider/srt-nla-targets-v1` (`targets_q7b_L20_seq64_30k_seed1.pt`)
+**HF artifacts (live):**
+- Model: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1)
+  — `best_av.pt` (51.6 MB), `config.json`, `README.md` (= model card),
+  `eval/{centered_eval_30k_M200, oracle_ceiling_30k_v2, rerank_eval_ce_seq64_np16_v2}.json`.
+- Dataset: [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1)
+  — `targets_q7b_L20_seq64_30k_seed1.pt` (27.6 GB), `README.md` (= dataset card).
 
 ## What this release is
 

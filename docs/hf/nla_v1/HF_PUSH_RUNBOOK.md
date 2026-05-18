@@ -1,15 +1,19 @@
 # SRT-NLA v1 — HF push runbook
 
-**Status as of 2026-05-18:** the HF repos exist and the card / config /
-eval JSONs are live. Only the two heavy artifacts remain to be uploaded
-from the vast box:
+**Status as of 2026-05-18 (end of day):** ✓ fully shipped.
 
-- [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) — needs `best_av.pt` (~50 MB)
-- [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) — needs `targets_q7b_L20_seq64_30k_seed1.pt` (~26 GB)
+| Repo | Contents | Status |
+|---|---|---|
+| [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) | `README.md`, `config.json`, `best_av.pt` (51.6 MB), `eval/*.json` (3) | ✓ live |
+| [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) | `README.md`, `targets_q7b_L20_seq64_30k_seed1.pt` (27.6 GB) | ✓ live |
 
-Run the commands below from the vast box that holds those files
-(`ssh -p 17091 root@ssh8.vast.ai` as of 2026-05-18). The push script will
-harmlessly re-upload the cards + config; that's fine.
+End-to-end smoke test verified `NLAConfig.from_json(hf_hub_download(...))`
+resolves correctly (backbone=Qwen/Qwen2.5-7B, L=20, np=16, slots=1).
+
+Nothing further to push for v1. The instructions below are retained for
+future v2 / v3 releases following the same pattern.
+
+---
 
 The cards + `config.json` live in this directory (`docs/hf/nla_v1/`), which
 is tracked in git, so `git pull` brings everything the push script needs.
