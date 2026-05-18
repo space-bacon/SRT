@@ -90,9 +90,33 @@ def _h_last_and_logp(
     layer: int,
     embed_matrix: torch.Tensor,
 ):
-    """Single batched forward over [proj(v), gen_ids[:-1]] → returns
-    (h_last (B,d) at layer L on the *last gen token*, mean_logp (B,))."""
+    """Returns (h_last (B,d), mean_logp (B,)).
+
+    IMPORTANT: scoring uses two SEPARATE forwards:
+
+      (a) h_last  ← backbone(input_ids=gen_ids)              [NO prefix]
+          Matches scripts/centered_eval.py and the
+          deployment-realistic measurement (text → embed →
+          read activation). Critically, prefix slots contain
+          proj(v) and would leak v directly into h_last if
+          we extracted from the prefix-inclusive forward.
+
+      (b) mean_logp ← AV([proj(v), gen_ids[:-1]])            [prefix-inclusive]
+          This is the policy's actual generation distribution,
+          so logp must include the prefix.
+    """
     B_, T_ = gen_ids.shape
+
+    # ── (a) h_last via prefix-free re-forward of the generated text ──
+    h_out = backbone(input_ids=gen_ids, attention_mask=gen_attn,
+                     output_hidden_states=True, use_cache=False)
+    full_h = h_out.hidden_states[layer]                            # (B, T, d)
+    lengths = gen_attn.sum(-1)
+    last_idx = (lengths - 1).clamp(min=0).long()
+    rows = torch.arange(B_, device=full_h.device)
+    h_last = full_h[rows, last_idx].float()                        # (B, d)
+
+    # ── (b) mean_logp via prefix-inclusive AV forward ──
     prefix = av._inject_prefix(v_rep)                              # (B, P, d) bf16
     P_ = prefix.size(1)
     gen_in = gen_ids[:, :-1]
@@ -100,22 +124,14 @@ def _h_last_and_logp(
     full_in = torch.cat([prefix, tok_emb], dim=1)
     prefix_attn = torch.ones(B_, P_, dtype=torch.long, device=prefix.device)
     full_attn   = torch.cat([prefix_attn, gen_attn[:, :-1]], dim=1)
-    out = backbone(inputs_embeds=full_in, attention_mask=full_attn,
-                   output_hidden_states=True, use_cache=False)
-    # h_last at the last valid generated token. The hidden over gen positions
-    # lives at indices [P-1 : P-1+T) of full_h (matches the gen_ids slice).
-    full_h = out.hidden_states[layer]
-    gen_h  = full_h[:, P_ - 1 : P_ - 1 + T_, :]                    # (B, T, d)
-    lengths = gen_attn.sum(-1)
-    last_idx = (lengths - 1).clamp(min=0).long()
-    rows = torch.arange(B_, device=prefix.device)
-    h_last = gen_h[rows, last_idx].float()                         # (B, d)
-    # mean per-token logp under this AV
-    logits = out.logits[:, P_ - 1 : P_ - 1 + T_, :]
+    lp_out = backbone(inputs_embeds=full_in, attention_mask=full_attn,
+                      output_hidden_states=False, use_cache=False)
+    logits = lp_out.logits[:, P_ - 1 : P_ - 1 + T_, :]
     log_probs = F.log_softmax(logits.float(), dim=-1)
     tok_logp = log_probs.gather(-1, gen_ids.unsqueeze(-1)).squeeze(-1)  # (B, T)
     m = gen_attn.float()
     mean_logp = (tok_logp * m).sum(-1) / m.sum(-1).clamp(min=1.0)
+
     return h_last, mean_logp
 
 
