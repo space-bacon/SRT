@@ -26,7 +26,8 @@ release/
 .env
 .env.*
 !.env.example
-hf
+# top-level local HF working dir; tracked HF release artifacts live in docs/hf/
+/hf/
 
 # IDE / OS / local tooling
 .DS_Store
@@ -51,3 +52,7 @@ private/
 docs/substack_*
 **/*newsletter*
 *.eml
+
+# Local scratch / one-shot experiments
+/script.py
+

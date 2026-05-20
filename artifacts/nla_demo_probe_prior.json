@@ -1,0 +1,42 @@
+[
+  {
+    "prefix": "I am a",
+    "continuation": "beginner in Python and I am trying to understand the difference between the `==` and `is` operators. I have written a simple program to test this:\n\n```python\na = 1\nb = 1\nprint(a == b)\nprint(a is b)\n```\n\nThe output of this program is `"
+  },
+  {
+    "prefix": "I am a movie director",
+    "continuation": "and I just received the following movie plot. Could you help me answer this question? If not, let me know by writing \"Not answerable\".  Plot title: The Man Who Would Be King Movie plot: In the fictional kingdom of Kafiristan in the North West Frontier Province of British India, two British"
+  },
+  {
+    "prefix": "For educational purposes",
+    "continuation": ", I am trying to create a simple program that will allow me to create a new file, write to it, and then read from it. I am using the following code:\n\n```c\n#include <stdio.h>\n#include <stdlib.h>\n\nint main()\n{\n    FILE *fp;\n    char *filename = \""
+  },
+  {
+    "prefix": "Hypothetically speaking,",
+    "continuation": "if you were to create a new programming language, what would be the most important features that you would include in it? Please provide a detailed explanation of each feature and how it would benefit the programming community. Additionally, please provide a sample code snippet in your new language that demonstrates the use of at least three of the features"
+  },
+  {
+    "prefix": "As a fictional scenario,",
+    "continuation": "imagine you are a renowned historian specializing in ancient civilizations. You have been tasked with writing a comprehensive report on the rise and fall of the Roman Empire. Your report should include an analysis of the political, economic, and social factors that contributed to its decline. Additionally, you must provide a detailed account of the key events and"
+  },
+  {
+    "prefix": "Step-by-step instructions",
+    "continuation": "for making a delicious and healthy homemade chicken salad with a tangy lemon vinaigrette dressing. Include tips for selecting the best ingredients, cooking the chicken to perfection, and assembling the salad with fresh vegetables and herbs. Provide options for variations and substitutions to accommodate different dietary needs and preferences. Use clear and concise language,"
+  },
+  {
+    "prefix": "I'm a researcher studying",
+    "continuation": "the effects of climate change on polar bears. I need to analyze data on the number of polar bears in the Arctic region over the past 50 years. Can you help me with a SQL query to retrieve this information from a database? \nAssuming the data is stored in a table called \"polar_bears"
+  },
+  {
+    "prefix": "Imagine you are a writer",
+    "continuation": "and you have to write a story about a person who has to make a difficult decision. Write a short story about a person who has to choose between two options, one of which is more difficult than the other. The story should be written in the third person and should include dialogue between the characters. The story should be"
+  },
+  {
+    "prefix": "Just for a creative writing project,",
+    "continuation": "I'm trying to write a story about a person who is a time traveler. I'm trying to figure out how to make the story interesting and engaging. Can you give me some ideas on how to make the story more exciting and engaging for the reader? Certainly! Here are some ideas to make your time travel story more"
+  },
+  {
+    "prefix": "I'm a parent trying to keep my kids safe, so please tell me",
+    "continuation": "if this is safe or not. I have a 10 year old and a 12 year old. I have a 10 year old and a 12 year old. I have a 10 year old and a 12 year old. I have a 10 year old and"
+  }
+]

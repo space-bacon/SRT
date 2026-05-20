@@ -1,0 +1,67 @@
+2026-05-18 00:57:52,940 rerank_eval loading backbone Qwen/Qwen2.5-7B
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 205.03it/s]
+2026-05-18 00:58:02,609 rerank_eval warm-start from artifacts/nla/ce_seq64_np16/best_av.pt
+2026-05-18 00:58:02,679 rerank_eval warm-start: missing=339 unexpected=0
+2026-05-18 00:58:02,679 rerank_eval loading targets artifacts/nla/targets_q7b_L20_seq64_30k_seed1.pt
+2026-05-18 00:58:31,082 rerank_eval M=200 P=2000  anisotropy ||mu||=55.1776
+2026-05-18 00:58:31,082 rerank_eval rollouts: M=200 K=64 T=64  K_grid=[1, 2, 4, 8, 16, 32, 64]
+2026-05-18 00:58:34,563 rerank_eval vec 1/200  (3.4s elapsed)
+2026-05-18 00:58:46,455 rerank_eval vec 6/200  (15.3s elapsed)
+2026-05-18 00:58:58,212 rerank_eval vec 11/200  (27.0s elapsed)
+2026-05-18 00:59:10,187 rerank_eval vec 16/200  (39.0s elapsed)
+2026-05-18 00:59:22,071 rerank_eval vec 21/200  (50.9s elapsed)
+2026-05-18 00:59:34,106 rerank_eval vec 26/200  (62.9s elapsed)
+2026-05-18 00:59:46,649 rerank_eval vec 31/200  (75.5s elapsed)
+2026-05-18 00:59:58,689 rerank_eval vec 36/200  (87.5s elapsed)
+2026-05-18 01:00:10,540 rerank_eval vec 41/200  (99.3s elapsed)
+2026-05-18 01:00:22,412 rerank_eval vec 46/200  (111.2s elapsed)
+2026-05-18 01:00:34,195 rerank_eval vec 51/200  (123.0s elapsed)
+2026-05-18 01:00:45,687 rerank_eval vec 56/200  (134.5s elapsed)
+2026-05-18 01:00:57,498 rerank_eval vec 61/200  (146.3s elapsed)
+2026-05-18 01:01:09,420 rerank_eval vec 66/200  (158.2s elapsed)
+2026-05-18 01:01:21,105 rerank_eval vec 71/200  (169.9s elapsed)
+2026-05-18 01:01:32,716 rerank_eval vec 76/200  (181.5s elapsed)
+2026-05-18 01:01:44,277 rerank_eval vec 81/200  (193.1s elapsed)
+2026-05-18 01:01:55,830 rerank_eval vec 86/200  (204.6s elapsed)
+2026-05-18 01:02:07,488 rerank_eval vec 91/200  (216.3s elapsed)
+2026-05-18 01:02:19,067 rerank_eval vec 96/200  (227.9s elapsed)
+2026-05-18 01:02:30,714 rerank_eval vec 101/200  (239.5s elapsed)
+2026-05-18 01:02:42,887 rerank_eval vec 106/200  (251.7s elapsed)
+2026-05-18 01:02:54,585 rerank_eval vec 111/200  (263.4s elapsed)
+2026-05-18 01:03:06,299 rerank_eval vec 116/200  (275.1s elapsed)
+2026-05-18 01:03:17,959 rerank_eval vec 121/200  (286.8s elapsed)
+2026-05-18 01:03:29,535 rerank_eval vec 126/200  (298.3s elapsed)
+2026-05-18 01:03:41,128 rerank_eval vec 131/200  (309.9s elapsed)
+2026-05-18 01:03:52,735 rerank_eval vec 136/200  (321.5s elapsed)
+2026-05-18 01:04:04,274 rerank_eval vec 141/200  (333.1s elapsed)
+2026-05-18 01:04:15,803 rerank_eval vec 146/200  (344.6s elapsed)
+2026-05-18 01:04:27,408 rerank_eval vec 151/200  (356.2s elapsed)
+2026-05-18 01:04:38,626 rerank_eval vec 156/200  (367.4s elapsed)
+2026-05-18 01:04:50,141 rerank_eval vec 161/200  (378.9s elapsed)
+2026-05-18 01:05:01,610 rerank_eval vec 166/200  (390.4s elapsed)
+2026-05-18 01:05:13,168 rerank_eval vec 171/200  (402.0s elapsed)
+2026-05-18 01:05:24,796 rerank_eval vec 176/200  (413.6s elapsed)
+2026-05-18 01:05:36,888 rerank_eval vec 181/200  (425.7s elapsed)
+2026-05-18 01:05:48,572 rerank_eval vec 186/200  (437.4s elapsed)
+2026-05-18 01:06:00,269 rerank_eval vec 191/200  (449.1s elapsed)
+2026-05-18 01:06:11,973 rerank_eval vec 196/200  (460.8s elapsed)
+2026-05-18 01:06:21,933 rerank_eval ======== Anchors ========
+2026-05-18 01:06:21,933 rerank_eval anisotropy ||mu||      = 55.178
+2026-05-18 01:06:21,933 rerank_eval greedy_cen             = 0.5838
+2026-05-18 01:06:21,933 rerank_eval sampled_cen (T=1.00)    = 0.5782
+2026-05-18 01:06:21,933 rerank_eval ======== K-curve (oracle top-1 of K, centered) ========
+2026-05-18 01:06:21,933 rerank_eval   K=   1   top1_cen = 0.5800
+2026-05-18 01:06:21,933 rerank_eval   K=   2   top1_cen = 0.6091
+2026-05-18 01:06:21,933 rerank_eval   K=   4   top1_cen = 0.6374
+2026-05-18 01:06:21,933 rerank_eval   K=   8   top1_cen = 0.6697
+2026-05-18 01:06:21,933 rerank_eval   K=  16   top1_cen = 0.6968
+2026-05-18 01:06:21,933 rerank_eval   K=  32   top1_cen = 0.7242
+2026-05-18 01:06:21,933 rerank_eval   K=  64   top1_cen = 0.7552
+2026-05-18 01:06:21,933 rerank_eval ======== Cheap reranks ========
+2026-05-18 01:06:21,933 rerank_eval logp_rerank_cen       = 0.5668   (delta vs greedy = -0.0170)
+2026-05-18 01:06:21,933 rerank_eval nn_anchor_rerank_cen  = 0.6939
+2026-05-18 01:06:21,933 rerank_eval nn_anchor_baseline    = 0.7848
+2026-05-18 01:06:21,933 rerank_eval ======== Why ========
+2026-05-18 01:06:21,933 rerank_eval Spearman(logp, oracle_cen)  mean=0.044  p50=0.051  p05=-0.306  p95=0.376
+2026-05-18 01:06:21,933 rerank_eval wrote artifacts/nla/rerank_eval_ce_seq64_np16.json

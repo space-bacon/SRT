@@ -155,6 +155,60 @@ The training script saves:
 - `final_adapter.pt` — adapter weights at end of training
 - `train_log.jsonl` — all metrics + diagnostics in structured format
 
+## SRT-NLA (research branch `nla`)
+
+**Activation verbalization — read any hidden state of a frozen backbone as a sentence.**
+
+SRT-NLA is the natural-language-autoencoder line of work: a small
+(~12.7M-param) Activation Verbalizer (AV) is trained so that given a target
+layer-20 hidden vector `v` from a fully frozen `Qwen/Qwen2.5-7B`, it
+generates text whose own re-encoded L20 activation `h` matches `v` under
+an anisotropy-corrected metric `fve_nrm_cen = ½(1 + cos(h−μ, v−μ))`.
+
+- **Paper draft**: [`paper_nla.md`](paper_nla.md)
+- **Release notes**: [`RELEASE_NOTES_NLA_v1.md`](RELEASE_NOTES_NLA_v1.md)
+- **Forward plan**: [`FORWARD_PLAN.md`](FORWARD_PLAN.md)
+- **Mission & stakes**: [`docs/nla_mission.md`](docs/nla_mission.md)
+- **Architecture & phased plan**: [`docs/SRT_NLA_PLAN.md`](docs/SRT_NLA_PLAN.md)
+
+**v1 headline (best-of-64 on 200-target held-out slice, pool=2000):**
+`ρ_norm = 0.92`, saturating the Qwen paraphrase ceiling. Greedy decoding
+is the open problem (`ρ_norm = 0.26`, beaten by zero-training NN-retrieval).
+HF artifacts: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1)
+(model) and [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1)
+(dataset).
+
+### What this means in plain English
+
+The 7B backbone has a "thought" mid-sentence — a 3584-dim hidden vector at
+layer 20 that nobody can read directly. SRT-NLA trains a small
+(~12.7M-param) verbalizer that writes English which, when fed back through
+the same frozen backbone, **re-creates that hidden vector**. We score how
+close on a 0–1 scale anchored at two reference points: 0 = random unrelated
+text, 1 = a human paraphrase of the source.
+
+- **Single best guess (greedy decoding):** `ρ_norm ≈ 0.29` — better than
+  random, well short of paraphrase quality.
+- **Sample 64 candidates and auto-pick the closest (oracle rerank, "Lever A"):**
+  `ρ_norm ≈ 1.0` — matches human paraphrases.
+
+The K=64 result is the **deployable headline**: no extra training, just
+sampling + a cheap reranker the verbalizer already provides. It also
+proves the verbalizer *can* express paraphrase-quality outputs — argmax
+just doesn't surface them on the first try.
+
+Closing that gap with a single greedy pass (so you don't pay K× compute) is
+the open "Lever B" problem. We tried the obvious move — bag-of-$K$
+self-distillation, training the verbalizer to imitate whichever rollout
+the oracle reranker liked best — under both aggressive and conservative
+hyperparams (`scripts/train_nla_bok_v2.py`). Aggressive collapses sampling
+diversity; conservative plateaus at greedy `ρ ≈ 0.32` and oracle
+`ρ ≈ 0.85`, essentially indistinguishable from the warm-start. Negative
+result written up in `paper_nla.md` §6. Lever A (deploy-time best-of-K
+rerank) remains the only mechanism that closes the gap on this backbone.
+
+A bug in `scripts/sample_targets.py` (Qwen2.5 sets `bos_token_id == eos_token_id == 151643`, which caused the BOS prompt to register as the first EOS and collapsed every target activation into one constant vector) was fixed on `2026-05-16` (commit `902b746` on branch `nla`). All NLA-branch results before that date are invalidated; the released v1.0 / v8a / v18 / v21a / v22c_a050 adapter checkpoints are on a separate codepath and are unaffected.
+
 ## Theoretical Foundation
 
 SRT is grounded in C.S. Peirce's semiotics. Language models process signs

@@ -48,3 +48,6 @@ include = ["srt*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "slow: tests that download or instantiate real (tiny) HF models",
+]
