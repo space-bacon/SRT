@@ -5,11 +5,12 @@ colorFrom: indigo
 colorTo: green
 sdk: gradio
 sdk_version: 4.44.1
+python_version: "3.10.13"
 app_file: app.py
 pinned: false
 license: apache-2.0
 hardware: zero-a10g
-short_description: Round-trip a passage through Qwen2.5-7B's residual stream at L20
+short_description: Latent autoencoder over Qwen2.5-7B L20
 models:
   - RiverRider/srt-nla-av-v1
   - Qwen/Qwen2.5-7B

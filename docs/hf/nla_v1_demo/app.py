@@ -25,10 +25,13 @@ import os
 from pathlib import Path
 from typing import Any
 
-import gradio as gr
+# `spaces` must be imported BEFORE torch (and before gradio, which imports torch)
+# so its fake-CUDA patches install. Otherwise `.to("cuda")` at module level
+# triggers a real `torch._C._cuda_init()` which fails outside the GPU slot.
 import spaces
 import torch
 import torch.nn.functional as F
+import gradio as gr
 from huggingface_hub import hf_hub_download
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -43,7 +46,8 @@ PARAPHRASE_CEILING_CEN = 0.799
 RHO_DENOM = PARAPHRASE_CEILING_CEN - RANDOM_FLOOR_CEN
 
 MAX_INPUT_TOKENS = 256
-MAX_NEW_TOKENS_DEFAULT = 64
+MAX_NEW_TOKENS_DEFAULT = 128
+MAX_NEW_TOKENS_LIMIT = 512  # ZeroGPU 180s budget: ~512 tok × BoN=16 fits
 
 _state: dict[str, Any] = {}
 
@@ -56,26 +60,61 @@ def _strip_adapter_state(sd: Any) -> dict:
     return sd
 
 
-def _setup(device: torch.device) -> None:
-    if _state.get("ready"):
-        return
-    print("[nla] downloading model assets")
-    cfg_path = hf_hub_download(MODEL_REPO, "config.json")
-    weights_path = hf_hub_download(MODEL_REPO, "best_av.pt")
-    mu_path = hf_hub_download(MODEL_REPO, "mu_l20.pt")
+_paths: dict[str, str] = {}
 
-    cfg = NLAConfig.from_json(cfg_path)
+
+def _prefetch() -> None:
+    """Download every needed asset to disk at module import (no GPU needed).
+
+    This is the ZeroGPU-friendly part of setup: pulls the AV adapter, μ, NLA
+    config and the full Qwen2.5-7B snapshot into the HF hub cache so that the
+    in-GPU-slot load is just shard mmap + .to('cuda') (~10s) instead of a 14GB
+    download (~3 min, which previously consumed the entire 180s GPU budget).
+    """
+    if _paths:
+        return
+    from huggingface_hub import snapshot_download
+    print("[nla] prefetching AV adapter + μ + config")
+    _paths["cfg"] = hf_hub_download(MODEL_REPO, "config.json")
+    _paths["weights"] = hf_hub_download(MODEL_REPO, "best_av.pt")
+    _paths["mu"] = hf_hub_download(MODEL_REPO, "mu_l20.pt")
+    cfg = NLAConfig.from_json(_paths["cfg"])
+    _paths["backbone_id"] = cfg.backbone_id
+    print(f"[nla] prefetching backbone {cfg.backbone_id} (this is the slow part)")
+    snapshot_download(
+        cfg.backbone_id,
+        allow_patterns=[
+            "*.json",
+            "*.txt",
+            "tokenizer*",
+            "*.safetensors",
+            "*.safetensors.index.json",
+        ],
+    )
+    print("[nla] prefetch complete")
+
+
+def _setup_cpu() -> None:
+    """Build model graph + load weights on CPU at module import.
+
+    ZeroGPU does NOT intercept ``torch._C._cuda_init`` at module load, so any
+    ``.to('cuda')`` outside an ``@spaces.GPU`` function raises ``Found no NVIDIA
+    driver``. We therefore keep everything on CPU here, and move to GPU on the
+    first request inside :func:`_ensure_gpu`.
+    """
+    if _state.get("cpu_ready"):
+        return
+    cfg = NLAConfig.from_json(_paths["cfg"])
     print(f"[nla] backbone={cfg.backbone_id} L={cfg.extraction_layer} "
           f"np={cfg.num_prefix_tokens} slots={cfg.num_inject_slots}")
 
-    print("[nla] loading backbone")
+    print("[nla] loading backbone on CPU (cached on disk)")
     tok = AutoTokenizer.from_pretrained(cfg.backbone_id)
     if tok.pad_token_id is None:
         tok.pad_token = tok.eos_token
     backbone = AutoModelForCausalLM.from_pretrained(
         cfg.backbone_id,
         torch_dtype=torch.bfloat16,
-        device_map={"": device},
     )
     backbone.eval()
     for p in backbone.parameters():
@@ -83,27 +122,42 @@ def _setup(device: torch.device) -> None:
     if backbone.config.pad_token_id is None:
         backbone.config.pad_token_id = tok.pad_token_id
 
-    print("[nla] loading adapter")
-    av = ActivationVerbalizer(cfg, backbone, tok).to(device).eval()
-    sd = torch.load(weights_path, map_location="cpu", weights_only=False)
+    print("[nla] loading adapter on CPU")
+    av = ActivationVerbalizer(cfg, backbone, tok).eval()
+    sd = torch.load(_paths["weights"], map_location="cpu", weights_only=False)
     sd = _strip_adapter_state(sd)
     missing, unexpected = av.load_state_dict(sd, strict=False)
     print(f"[nla] adapter loaded: missing={len(missing)} unexpected={len(unexpected)}")
 
-    mu_blob = torch.load(mu_path, map_location="cpu", weights_only=False)
-    mu = mu_blob["mu"].float().to(device)
+    mu_blob = torch.load(_paths["mu"], map_location="cpu", weights_only=False)
+    mu = mu_blob["mu"].float()
     print(f"[nla] mu loaded: ||mu||={float(mu.norm()):.4f}")
 
     _state.update({
-        "ready": True,
-        "device": device,
+        "cpu_ready": True,
+        "gpu_ready": False,
+        "device": torch.device("cpu"),
         "cfg": cfg,
         "tok": tok,
         "backbone": backbone,
         "av": av,
         "mu": mu,
     })
-    print("[nla] ready")
+    print("[nla] cpu-ready (GPU move deferred to first request)")
+
+
+def _ensure_gpu() -> None:
+    """Move model + μ to CUDA. MUST be called from inside @spaces.GPU."""
+    if _state.get("gpu_ready"):
+        return
+    device = torch.device("cuda")
+    print("[nla] moving model to GPU (first request)")
+    _state["backbone"] = _state["backbone"].to(device)
+    _state["av"] = _state["av"].to(device)
+    _state["mu"] = _state["mu"].to(device)
+    _state["device"] = device
+    _state["gpu_ready"] = True
+    print("[nla] gpu-ready")
 
 
 @torch.no_grad()
@@ -184,8 +238,7 @@ def _score_band(rho: float) -> str:
 def roundtrip(passage: str, n_samples: int, max_new: int, temperature: float):
     if not passage or not passage.strip():
         return "", "", "Enter a passage."
-    device = torch.device("cuda")
-    _setup(device)
+    _ensure_gpu()
 
     v = _encode_text(passage.strip())  # (1, d)
 
@@ -231,8 +284,7 @@ def roundtrip(passage: str, n_samples: int, max_new: int, temperature: float):
 def arithmetic(text_a: str, text_b: str, alpha: float, max_new: int):
     if not (text_a and text_a.strip() and text_b and text_b.strip()):
         return "", "Provide both texts."
-    device = torch.device("cuda")
-    _setup(device)
+    _ensure_gpu()
 
     v_a = _encode_text(text_a.strip())
     v_b = _encode_text(text_b.strip())
@@ -308,7 +360,7 @@ def build_app() -> gr.Blocks:
                         with gr.Row():
                             n_samples = gr.Slider(1, 16, value=4, step=1,
                                                   label="Best-of-N samples")
-                            max_new = gr.Slider(16, 128, value=MAX_NEW_TOKENS_DEFAULT,
+                            max_new = gr.Slider(16, MAX_NEW_TOKENS_LIMIT, value=MAX_NEW_TOKENS_DEFAULT,
                                                 step=16, label="Max new tokens")
                             temperature = gr.Slider(0.3, 1.5, value=0.9, step=0.05,
                                                     label="Temperature")
@@ -338,7 +390,7 @@ def build_app() -> gr.Blocks:
                         text_b = gr.Textbox(label="Passage B", lines=4)
                         alpha = gr.Slider(0.0, 1.0, value=0.5, step=0.05,
                                           label="α  (0 = A, 1 = B)")
-                        max_new_a = gr.Slider(16, 128, value=MAX_NEW_TOKENS_DEFAULT,
+                        max_new_a = gr.Slider(16, MAX_NEW_TOKENS_LIMIT, value=MAX_NEW_TOKENS_DEFAULT,
                                               step=16, label="Max new tokens")
                         go_a = gr.Button("Verbalize mix", variant="primary")
                     with gr.Column():
@@ -364,6 +416,12 @@ def build_app() -> gr.Blocks:
 
     return demo
 
+
+# Pre-download all assets + build the model graph on CPU at import. The
+# CUDA move is deferred until the first @spaces.GPU call (see _ensure_gpu),
+# because ZeroGPU does not stub out torch._C._cuda_init at module-load time.
+_prefetch()
+_setup_cpu()
 
 if __name__ == "__main__":
     app = build_app()
