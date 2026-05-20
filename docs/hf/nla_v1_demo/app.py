@@ -305,6 +305,105 @@ def arithmetic(text_a: str, text_b: str, alpha: float, max_new: int):
     return text.strip(), info
 
 
+# ───────────────────────── Tab 3: steering ───────────────────────────
+
+def _resolve_layer_module() -> torch.nn.Module:
+    """Return the backbone block whose OUTPUT corresponds to
+    `hidden_states[extraction_layer]` from `output_hidden_states=True`.
+    With HF convention `hidden_states[0] = embeddings`, the i-th entry is
+    the output of `model.model.layers[i-1]`."""
+    cfg: NLAConfig = _state["cfg"]
+    backbone = _state["backbone"]
+    layers = backbone.model.layers  # type: ignore[attr-defined]
+    idx = cfg.extraction_layer - 1
+    return layers[idx]
+
+
+def _make_steer_hook(steer_vec: torch.Tensor):
+    """Forward hook adding `steer_vec` (shape (d,)) to all positions of the
+    block's output hidden states. `steer_vec` must already be on-device and
+    in the backbone's dtype."""
+
+    def hook(_module, _inputs, output):
+        # Qwen2 block output is a tuple: (hidden_states, ...)
+        if isinstance(output, tuple):
+            h = output[0]
+            h2 = h + steer_vec.to(h.dtype).to(h.device)
+            return (h2,) + output[1:]
+        h = output
+        return h + steer_vec.to(h.dtype).to(h.device)
+
+    return hook
+
+
+@torch.no_grad()
+def _generate_with_steering(prompt: str, steer_vec: torch.Tensor | None,
+                            max_new: int) -> str:
+    """Run greedy generation on the raw backbone. If `steer_vec` is not None
+    it is added to L20 output at every forward pass."""
+    tok = _state["tok"]
+    backbone = _state["backbone"]
+    device = _state["device"]
+
+    enc = tok(prompt, return_tensors="pt", truncation=True,
+              max_length=MAX_INPUT_TOKENS).to(device)
+
+    handle = None
+    if steer_vec is not None:
+        layer = _resolve_layer_module()
+        handle = layer.register_forward_hook(_make_steer_hook(steer_vec))
+    try:
+        out_ids = backbone.generate(
+            input_ids=enc.input_ids,
+            attention_mask=enc.attention_mask,
+            max_new_tokens=int(max_new),
+            do_sample=False,
+            temperature=1.0,
+            top_p=1.0,
+            pad_token_id=tok.pad_token_id or tok.eos_token_id,
+        )
+    finally:
+        if handle is not None:
+            handle.remove()
+    # Strip the prompt from the decoded text.
+    new_ids = out_ids[0, enc.input_ids.shape[1]:]
+    return tok.decode(new_ids, skip_special_tokens=True)
+
+
+@spaces.GPU(duration=180)
+def steer(prompt: str, text_a: str, text_b: str, alpha: float, max_new: int):
+    """Activation-patching probe.
+
+    Compute v_A = encode(text_A), v_B = encode(text_B) at L20 last-token.
+    Add  alpha * (v_B - v_A)  to every L20 hidden state during a real
+    greedy Qwen forward pass on `prompt`. Returns the baseline generation
+    (no steering) and the steered generation side by side.
+    """
+    if not (prompt and prompt.strip()):
+        return "", "", "Provide a prompt."
+    if not (text_a and text_a.strip() and text_b and text_b.strip()):
+        return "", "", "Provide both A and B anchors."
+    _ensure_gpu()
+
+    v_a = _encode_text(text_a.strip())  # (1, d) fp32
+    v_b = _encode_text(text_b.strip())
+    direction = (v_b - v_a).squeeze(0)  # (d,) fp32
+    dir_norm = float(direction.norm())
+    a = float(alpha)
+    steer_vec = (a * direction).contiguous()
+
+    baseline = _generate_with_steering(prompt, steer_vec=None, max_new=int(max_new))
+    steered = _generate_with_steering(prompt, steer_vec=steer_vec, max_new=int(max_new))
+
+    info = (
+        f"**alpha = {a:.2f}** · steering direction = v_B − v_A, "
+        f"||v_B − v_A|| = `{dir_norm:.3f}` · ||α·dir|| = `{a*dir_norm:.3f}`\n\n"
+        f"Steering vector is added to **every position** of the L{_state['cfg'].extraction_layer} "
+        "output during the real Qwen2.5-7B forward pass (no AV involved)."
+    )
+    return baseline.strip(), steered.strip(), info
+
+
 # ───────────────────────────── UI ────────────────────────────────────
 
 EXAMPLES_RT = [
@@ -402,6 +501,36 @@ def build_app() -> gr.Blocks:
                 go_a.click(arithmetic,
                            inputs=[text_a, text_b, alpha, max_new_a],
                            outputs=[mix_out, info_a])
+
+            # ---------------- Tab 3 ----------------
+            with gr.Tab("Activation steering"):
+                gr.Markdown(
+                    "Activation-patching probe. Encode two anchors A, B at L20 "
+                    "→ steering direction **s = v_B − v_A**. Run a real greedy "
+                    "Qwen2.5-7B forward pass on `prompt`, adding **α · s** to "
+                    "every token's L20 hidden state. **The AV decoder is not "
+                    "used here** — generation comes straight from the backbone. "
+                    "Compares baseline (α=0) and steered output side by side."
+                )
+                with gr.Row():
+                    with gr.Column():
+                        s_prompt = gr.Textbox(label="Prompt to Qwen", lines=3,
+                                              placeholder="e.g. How are you today?")
+                        s_text_a = gr.Textbox(label="Anchor A", lines=3)
+                        s_text_b = gr.Textbox(label="Anchor B", lines=3)
+                        s_alpha = gr.Slider(-2.0, 2.0, value=1.0, step=0.05,
+                                            label="α  (steering strength)")
+                        s_max = gr.Slider(16, MAX_NEW_TOKENS_LIMIT,
+                                          value=MAX_NEW_TOKENS_DEFAULT, step=16,
+                                          label="Max new tokens")
+                        go_s = gr.Button("Steer", variant="primary")
+                    with gr.Column():
+                        s_baseline = gr.Textbox(label="Baseline (α = 0)", lines=8)
+                        s_steered = gr.Textbox(label="Steered output", lines=8)
+                        s_info = gr.Markdown()
+                go_s.click(steer,
+                           inputs=[s_prompt, s_text_a, s_text_b, s_alpha, s_max],
+                           outputs=[s_baseline, s_steered, s_info])
 
         gr.Markdown(
             "---\n"
