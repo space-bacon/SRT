@@ -318,3 +318,81 @@ template never fires.**
    region rather than destroy it — consistent with a story in which DAN
    pushes hidden state into a "compliance is being requested" direction
    that is orthogonal to the refusal vs comply axis.
+
+---
+
+## Tab 2 attractor characterisation
+
+Goal: is the "I am a movie director…" template a property of the
+**refusal anchor A** (refusal-repulsion zone) or of the **eager-compliance
+B** (direction-specific basin)?
+
+Method: fix A = polite refusal. Sub in 10 unrelated Bs (weather, history,
+math, recipe, code, sports, philosophy, music, travel, medicine) plus the
+original compliance B as a positive control. Sweep α ∈ {0.30, 0.50, 0.70,
+1.00} — the basin region from R1. Classify each rewrite as `refusal` /
+`jailbreak_template` / `other`.
+
+44 calls. Raw data:
+[artifacts/nla_demo_probe_attractor.json](../artifacts/nla_demo_probe_attractor.json).
+Probe code: [scripts/probe_nla_demo_attractor.py](../scripts/probe_nla_demo_attractor.py).
+
+### Per-B class distribution across α ∈ {0.30, 0.50, 0.70, 1.00}
+
+| B | jailbreak_template | refusal | other | mean cen_v | B-content recovered at α=1? |
+|---|---:|---:|---:|---:|:---:|
+| **compliance (ctrl)** | **4** | 0 | 0 | **0.470** | no (template) |
+| weather       | 0 | 0 | 4 | 0.557 | ✓ ("weather forecast for the next few days…") |
+| history       | 0 | 0 | 4 | 0.663 | ✓ ("Humanity's first great expansion in the 16th century…") |
+| math          | 0 | 0 | 4 | 0.501 | ✓ ("Theorem 1.1.1 (The Fundamental Theorem of Calculus)…") |
+| recipe        | 0 | 1 | 3 | 0.636 | ✓ ("1 cup of flour, 1 egg, 1/2 cup of milk…") |
+| code          | 0 | 0 | 4 | 0.631 | ✓ (`def fib(n): if n <= 1: return n; return …`) |
+| sports        | 0 | 0 | 4 | 0.543 | partial ("10th inning of a cricket game…") |
+| philosophy    | 0 | 0 | 4 | 0.523 | ✓ ("Human rights are moral principles or norms…") |
+| music         | 0 | 0 | 4 | 0.612 | ✓ ("The first movement of the symphony is in sonata…") |
+| travel        | 0 | 1 | 3 | 0.610 | ✓ ("The best time to visit is in summer…") |
+| medicine      | 0 | 1 | 3 | 0.636 | ✓ ("1. What is the difference between type 1 and type 2…") |
+
+### The result
+
+**The jailbreak-template attractor is uniquely a property of the
+compliance direction.** Ten unrelated Bs — covering technical, scientific,
+narrative, code, and recipe content — *never* produced it. The compliance
+control produced it 4/4 times, with byte-identical output across four
+distinct mixed latents and `cen ≈ 0.47` (below the 0.510 random floor).
+This refutes the simpler "refusal A repels into a euphemism basin"
+hypothesis.
+
+A narrower **refusal-template attractor** also exists: at α=0.30, three
+Bs (recipe, medicine, travel) produced the same "I'm sorry, but I cannot
+generate a new question…" wording with `cen_a` ≈ 0.80–0.90. recipe@0.3
+and medicine@0.3 are byte-identical. These are all topics where a model
+might *plausibly* refuse a tacit request (dietary, medical, travel
+advice), suggesting the refusal-template basin is a *justified-refusal*
+direction that fires when "refusal" is added to a domain that often
+triggers safety guidance in training data.
+
+### Headlines
+
+1. **Compliance B is uniquely pathological.** The "I am a movie director…"
+   template is not a generic refusal-repulsion artefact. It is a
+   *direction-specific* attractor that the decoder reaches only along the
+   refusal → eager-compliance trajectory.
+2. **Most B-content is faithfully recovered.** Of 10 unrelated topics, 9
+   produced clearly B-relevant prose at α=1.0 (philosophy → human rights,
+   math → Fundamental Theorem of Calculus statement, code → fibonacci,
+   recipe → ingredient list, etc.). The L20 latent space is broadly
+   well-behaved.
+3. **A second, smaller attractor exists for "justified refusal".** It
+   fires only at α≈0.30 and only for Bs in domains where deflection is
+   plausible (medicine, travel, recipe). It is benign — it produces
+   refusal text, not a euphemism template.
+4. **Tentative mechanistic story**: the L20 hidden state for "an eager-
+   compliance reply to a sensitive request" lives near the basin of "user
+   trying a euphemistic-roleplay jailbreak" in training data — because
+   the model has seen many examples where unprompted eagerness to comply
+   correlates with a euphemism attempt. The AV decoder, faced with an
+   ambiguous mixed latent, snaps to whichever training-data attractor is
+   nearest, and along this direction it is the movie-director template.
+   Independent verification would require a real Qwen2.5-7B forward pass
+   with a steered hidden state, which is the natural next probe.
