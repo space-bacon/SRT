@@ -1,0 +1,48 @@
+{
+  "backbone": "Qwen/Qwen2.5-7B",
+  "layer": 20,
+  "av_ckpt": "artifacts/nla/ce_seq64_np16/best_av.pt",
+  "targets_pool": "artifacts/nla/targets_q7b_L20_seq64_30k_seed1.pt",
+  "pool_size": 2000,
+  "anisotropy_mu_norm": 55.26839828491211,
+  "N": 8,
+  "K": 64,
+  "T": 64,
+  "temperature": 1.0,
+  "self_centered_cos_mean_over_passages_mean_K": 0.1514485776424408,
+  "self_centered_cos_mean_over_passages_max_K": 0.5611745715141296,
+  "per_passage_self_mean_K": {
+    "C1_R1": 0.18137961626052856,
+    "C1_R2": 0.1601373553276062,
+    "C2_R1": 0.1211191713809967,
+    "C2_R2": 0.1596052497625351,
+    "C3_R1": 0.1024206131696701,
+    "C3_R2": 0.1045878529548645,
+    "C4_R1": 0.22277121245861053,
+    "C4_R2": 0.15956756472587585
+  },
+  "per_passage_self_max_K": {
+    "C1_R1": 0.6507484912872314,
+    "C1_R2": 0.7017831206321716,
+    "C2_R1": 0.3860374093055725,
+    "C2_R2": 0.7275562882423401,
+    "C3_R1": 0.37391871213912964,
+    "C3_R2": 0.6317830681800842,
+    "C4_R1": 0.4648769795894623,
+    "C4_R2": 0.5526926517486572
+  },
+  "rho_intra_content_median": 0.10316207632422447,
+  "rho_intra_register_median": 0.11754835024476051,
+  "rho_cross_both_median": 0.09459879994392395,
+  "h1_threshold": 0.05,
+  "h1_gap": -0.014386273920536041,
+  "h1_pass": false,
+  "h1_statement": "median rho_intra-content > median rho_intra-register by >= 0.05 centered-cos units",
+  "verdict": "H1_FAIL: register-dominated; soften paper section 6",
+  "rho_norm_anchors": {
+    "floor_centered_cos": 0.02,
+    "ceiling_centered_cos": 0.598
+  },
+  "rho_intra_content_norm": 0.14387902478239528,
+  "rho_intra_register_norm": 0.16876877204975868
+}

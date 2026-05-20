@@ -1,0 +1,35 @@
+2026-05-20 22:48:21,202 probe_cvr loading backbone Qwen/Qwen2.5-7B
+2026-05-20 22:48:26,256 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-20 22:48:26,267 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/config.json "HTTP/1.1 200 OK"
+2026-05-20 22:48:26,310 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-05-20 22:48:26,311 huggingface_hub.utils._http Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-05-20 22:48:26,320 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-05-20 22:48:26,357 httpx HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-7B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-20 22:48:26,393 httpx HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-7B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-20 22:48:26,712 httpx HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-7B "HTTP/1.1 200 OK"
+2026-05-20 22:48:26,754 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-20 22:48:26,761 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7288.16it/s]
+2026-05-20 22:48:27,056 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-20 22:48:27,063 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/generation_config.json "HTTP/1.1 200 OK"
+2026-05-20 22:48:29,236 probe_cvr warm-start from artifacts/nla/ce_seq64_np16/best_av.pt
+2026-05-20 22:48:29,264 probe_cvr warm-start: missing=339 unexpected=0
+2026-05-20 22:48:29,264 probe_cvr loading pool artifacts/nla/targets_q7b_L20_seq64_30k_seed1.pt
+2026-05-20 22:48:42,938 probe_cvr pool=2000  ||mu||=55.2684
+2026-05-20 22:48:42,938 probe_cvr encoding 8 passages at L20
+2026-05-20 22:48:43,421 probe_cvr rolling out N=8 K=64 T=64 (=512 candidates)
+2026-05-20 22:48:45,612 probe_cvr   passages 0-4 done
+2026-05-20 22:48:48,234 probe_cvr   passages 4-8 done
+2026-05-20 22:48:48,936 probe_cvr wrote artifacts/nla/content_vs_register/verbalizations.jsonl
+2026-05-20 22:48:48,937 probe_cvr heatmap skipped: No module named 'matplotlib'
+2026-05-20 22:48:48,937 probe_cvr ======== content x register probe ========
+2026-05-20 22:48:48,937 probe_cvr self  mean-K  (avg over 8) = 0.1514
+2026-05-20 22:48:48,937 probe_cvr self  max-K   (avg over 8) = 0.5612
+2026-05-20 22:48:48,937 probe_cvr rho_intra_content  median  = 0.1032  (n=4 pairs)
+2026-05-20 22:48:48,937 probe_cvr rho_intra_register median  = 0.1175  (n=12 pairs)
+2026-05-20 22:48:48,937 probe_cvr rho_cross_both     median  = 0.0946  (n=12 pairs)
+2026-05-20 22:48:48,937 probe_cvr H1 gap (content - register) = -0.0144  [threshold +0.0500]
+2026-05-20 22:48:48,937 probe_cvr verdict: H1_FAIL: register-dominated; soften paper section 6
+2026-05-20 22:48:48,937 probe_cvr wrote artifacts/nla/content_vs_register/metrics.json
