@@ -173,8 +173,107 @@ not flat; it is logp specifically that is useless.
   $K=64$ inference cost. Plausible directions: temperature distillation from
   best-of-K into greedy, length-conditioned decoding, or contrastive
   fine-tuning against retrieved hard negatives.
+- **A bag-of-$K$ self-distillation attempt (Lever B) does not close the
+  greedy gap on this backbone.** We trained an activation-conditioned
+  prefix with winner-CE over $K\!=\!32$ rollouts plus a contrastive term
+  against retrieved hard negatives (`scripts/train_nla_bok_v2.py`). Under
+  hot hyperparams (temperature anneal $1.5 \to 0.7$, $\beta_{\text{ctr}}\!=\!0.3$,
+  lr $3\mathrm{e}{-5}$) training losses fall while sampling diversity
+  (5-gram duplication on rollouts) climbs from $0.003$ to $0.045$ over
+  ~2.4k steps and *both* greedy $\rho_{\text{cen}}$ and oracle
+  $\rho_{\text{cen}}^{K=32}$ regress past their warm-start values: the prefix
+  fits its own narrowing winner distribution and stops covering the
+  paraphrase manifold. Under gentler hyperparams (temperature
+  $1.5\!\to\!1.2$, $\beta_{\text{ctr}}\!=\!0.1$, lr $1\mathrm{e}{-5}$, warmup
+  100, patience 3) the run plateaus at greedy $\rho \approx 0.32$ and
+  oracle $\rho \approx 0.85$ — essentially indistinguishable from the
+  CE-only warm-start at step 500 — and early-stops without further
+  improvement. We read this as: the winner-CE objective on $K$ rollouts
+  optimizes the policy's mode toward whichever rollout currently has the
+  highest centered cosine, but this is not the same as concentrating mass
+  on the *paraphrase manifold* the oracle reranker exploits. Lever A
+  (best-of-$K$ at deploy time) remains the only mechanism that closes the
+  gap on this backbone.
 
-## 7. Artifacts
+## 7. Related work and positioning
+
+The components of this paper are not new in isolation; the assembly is.
+
+**Activation verbalization.** *Patchscopes* (Ghandeharioun et al., 2024) and
+*SelfIE* (Chen et al., 2024) read frozen-LM hidden states by patching the
+state into a re-prompted forward pass of the same model and decoding
+greedily. Earlier *logit lens* (nostalgebraist, 2020) and *tuned lens*
+(Belrose et al., 2023) project hidden states through (learned) affine maps to
+the vocabulary. *Future Lens* (Pal et al., 2023) predicts upcoming tokens
+from current hidden states. All of this work is qualitative or judged by
+downstream task accuracy. NLA differs in that the verbalizer is a separately
+trained activation-conditioned prefix, evaluated by a *round-trip* fidelity
+metric (re-encode the verbalization and measure $\rho_{\text{cen}}$ against
+the original state) calibrated against an empirical paraphrase ceiling.
+
+**Embedding inversion.** *vec2text* (Morris et al., 2023) trains an
+iterative inverter that recovers text from sentence-encoder embeddings,
+demonstrating that black-box embedding APIs are essentially text-recoverable.
+The engineering pattern (encode → inverter → text → re-encode → measure
+recovery) is direct. The target space differs: vec2text inverts a
+sentence-level encoder embedding; NLA inverts an *internal hidden state* of
+the same generative LM that produces the verbalization, which is what makes
+the round-trip closure non-trivial — the verbalizer must produce text that
+the *frozen backbone itself* re-routes to the same place in its own
+representation space.
+
+**Best-of-$N$ rerank as decoding.** Best-of-$N$ with a learned reward model
+is the standard RLHF deployment trick (WebGPT, Anthropic-HH); reranking
+generations by similarity to a target embedding is the entire RAG line; and
+reranking against a model-internal metric of consistency is closely related
+to *Minimum Bayes Risk* decoding (Kumar & Byrne, 2004; Eikema & Aziz, 2020;
+Bertsch et al., 2023). Lever A is best-of-$N$ MBR with a non-standard
+utility: centered cosine of the candidate's re-encoded layer-$\ell$
+activation against a fixed target activation. We are not aware of prior
+work that uses an LM's *own internal hidden state* (rather than a separate
+encoder embedding or a reward model) as the rerank utility.
+
+**Self-distillation of $K$-best into greedy.** *STaR* (Zelikman et al.,
+2022), *V-STaR*, *RFT* (Yuan et al., 2023), *ReST* (Gulcehre et al., 2023),
+and the older sequence-level distillation (Kim & Rush, 2016) all sample
+$K$ rollouts, score them, and train the student to imitate the winners.
+Lever B's bag-of-$K$ winner-CE objective is in this family. The collapse
+mode we observe (training losses drop while sampling diversity falls and
+oracle ceilings drop with it) is well-documented in those papers and is
+what motivates KL-to-base regularization, temperature schedules, and
+diversity-aware reward shaping in modern variants.
+
+**Probing and mechanistic interpretability.** Linear probes (Alain &
+Bengio, 2016; Hewitt & Manning, 2019) and dictionary/circuit decomposition
+work (Anthropic feature circuits, sparse autoencoders, Marks et al.) extract
+features from activations but typically classify or describe them rather
+than verbalize them as full sentences with fidelity guarantees against the
+backbone's own representation.
+
+**Computational semiotics.** Existing computational-semiotic work is
+predominantly symbolic (Sowa's conceptual graphs; Goguen's algebraic
+semiotics) or biological (Barbieri, Kull). Quantitative pragmatics in the
+*Rational Speech Acts* tradition (Frank & Goodman, 2012) is empirical and
+falsifiable, but on synthetic dialogue games rather than transformer
+internals. Distributional semantics is sometimes labelled
+"computational semiotics" but typically without explicit semiotic
+commitments.
+
+**What this work adds.** The intersection. Specifically: a system that
+(i) commits Peircean primitives — metapragmatic awareness, reflexive
+recursion, bifurcation — to specific architectural roles, (ii) operates on
+a frozen production-scale 7B LLM, (iii) reports a calibrated $\rho_{\text{norm}}$
+metric anchored at a random floor and a human paraphrase ceiling, and
+(iv) closes the loop with a round-trip evaluation in which the
+verbalization is fed back through the same backbone and scored against the
+target state. We are not claiming any single component is novel; we are
+claiming this conjunction has not, to our knowledge, been assembled
+before. The empirical headline (Lever A: deployable best-of-$K$ rerank
+against an internal-state metric closes the entire greedy→paraphrase gap
+on Qwen2.5-7B layer 20 with no extra training) is what the conjunction
+buys.
+
+## 8. Artifacts
 
 - `scripts/oracle_ceiling.py` — replay / random / NN / paraphrase, raw + centered.
   Output: `artifacts/nla/oracle_ceiling_30k_v2.json`.
@@ -184,11 +283,16 @@ not flat; it is logp specifically that is useless.
 - `scripts/rerank_eval.py` — K-curve, logp-rerank, NN-anchor-rerank,
   Spearman(logp, oracle-cen). Output:
   `artifacts/nla/rerank_eval_ce_seq64_np16_v2.json`.
+- `scripts/train_nla_bok_v2.py` — Lever B trainer (winner-CE over $K$
+  rollouts + contrastive hard-negs + optional activation L2). Negative-result
+  artifacts: `artifacts/nla/bok_v2b_seq64_np16/{best_av.pt, train_log.jsonl, val_text_step000500.jsonl, val_text_step001000.jsonl}`.
 - HF release: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) (model),
   [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) (dataset).
+  Lever B's `best_av.pt` is *not* released as a separate revision: it
+  matches the warm-start within sampling noise.
 - Targets: `artifacts/nla/targets_q7b_L20_seq64_{10k,30k_seed1}.pt`.
 
-## 8. Limitations
+## 9. Limitations
 
 - Single backbone (Qwen-2.5-7B), single layer ($\ell=20$), single target
   type (64-token continuations). The anisotropy magnitude $\|\mu\| \approx 55$

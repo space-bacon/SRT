@@ -28,6 +28,32 @@ Two interactive views of the `RiverRider/srt-nla-av-v1` verbalizer.
 2. **Latent arithmetic.** Encode two passages, slide an interpolation `α`, and
    verbalize the mixture vector.
 
+## Plain-English summary
+
+The big language model (frozen 7B Qwen2.5) has a "thought" sitting in the
+middle of its forward pass — a 3584-dim hidden vector at layer 20 that
+nobody can read directly. The NLA verbalizer is a tiny (12.7M-param) module
+trained to write English text that, when fed back through the same frozen
+model, re-creates that hidden vector.
+
+We measure success on a 0–1 scale calibrated against:
+- **0** = a random unrelated sentence
+- **1** = a human-written paraphrase of the original
+
+If you let the verbalizer write its single best guess (greedy decoding), it
+scores around **0.29** — better than random, but well short of paraphrase
+quality. If you let it write 64 candidates and automatically pick the one
+whose hidden state lands closest to the target ("best-of-N rerank" in the
+demo), it scores around **1.0** — i.e. matches a human paraphrase. That's
+the headline result: paraphrase-quality activation reconstruction with no
+extra training, just sampling + a cheap reranker.
+
+We also tried to close the greedy gap by *training* the verbalizer to
+imitate the best-of-K rollout (paper §6, "Lever B"). It didn't help: the
+objective either collapses sampling diversity or plateaus at the
+warm-start. So best-of-N rerank at inference time isn't a stopgap, it's
+the answer.
+
 ## Anchors (paper §3)
 
 | Anchor | centered fve_nrm |

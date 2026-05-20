@@ -1,3 +1,77 @@
+# SRT-Adapter NLA — Session Handoff (2026-05-20, end of day)
+
+Vast.ai Blackwell instance still up at `ssh -p 37853 root@ssh8.vast.ai`
+(decide whether to spin down — no active jobs). All v2b artifacts pulled
+to local `artifacts/nla/bok_v2b_seq64_np16/`. Lever A remains the
+deployable headline; Lever B is now a documented negative result.
+
+## What got done today
+
+1. **Lever A validation pass** confirmed greedy `ρ=0.290`, oracle K=64
+   `ρ=1.000` on the warm-start `ce_seq64_np16/best_av.pt`. This is the
+   paper headline.
+2. **Lever B v1 (hot hyperparams)**: temperature `1.5→0.7`, β_ctr=0.3,
+   lr=3e-5. Launched as a full run; **collapsed**. Over ~2.4k steps the
+   5-gram duplication on rollouts climbed `0.003 → 0.045` while training
+   losses fell, and *both* greedy and oracle `ρ_cen` regressed past their
+   warm-start values. Killed at step 2450.
+3. **Lever B v2b (gentle hyperparams)**: temperature `1.5→1.2`,
+   β_ctr=0.1, lr=1e-5, warmup=100, val-every=500, val-vectors=200,
+   val-K=32, patience=3, batch=8, samples-per-v=32, hard-negs=8,
+   `expandable_segments:True`, `out=artifacts/nla/bok_v2b_seq64_np16`.
+   Two vals before kill:
+   - step 500: greedy `ρ=0.321`, oracle `ρ=0.854`, 5gram_dup=0.002 →
+     locked as `best_av.pt`.
+   - step 1000: greedy `ρ=0.312`, oracle `ρ=0.803` (no improvement, 1/3).
+   Killed at ~step 1040 to lock step-500 best. Plateau, no collapse.
+4. **Negative result documented** in:
+   - `paper_nla.md` §6 Implications (last bullet) — writes up both v1 and
+     v2b regimes and the "winner-CE on K rollouts ≠ paraphrase manifold"
+     reading.
+   - `paper_nla.md` §8 Artifacts — adds bok_v2b paths, notes no separate
+     HF revision is being released.
+   - `README.md` plain-English block — short Lever B addendum.
+   - `docs/hf/nla_v1_demo/README.md` plain-English block — same addendum.
+5. **Paper §7 "Related work and positioning" added** — Patchscopes/SelfIE,
+   vec2text, MBR best-of-N, STaR/ReST/RFT/seq-KD, probing/mech-interp,
+   computational semiotics. Defensible narrow claim: first system to
+   commit Peircean primitives to measurement on a frozen production-scale
+   LLM with a calibrated round-trip metric. Old §7/§8 renumbered to §8/§9.
+6. **Local artifacts pulled** via scp from Blackwell:
+   `artifacts/nla/bok_v2b_seq64_np16/{best_av.pt (51.6MB), train_log.jsonl,
+   val_text_step000500.jsonl, val_text_step001000.jsonl}`.
+
+## Open items
+
+- **HF release decision**: skip a v2b revision. `RiverRider/srt-nla-av-v1`
+  (warm-start) remains canonical. v2b's `best_av.pt` is within sampling
+  noise of v1.
+- **Instance teardown**: Blackwell box can be killed any time now. No
+  jobs running. (`pgrep -f train_nla` returns nothing as of kill.)
+- **Branch state**: all changes from today are local working-tree edits,
+  not yet committed. Files modified:
+  - `paper_nla.md` (§6 Lever B, §7 added, §8/§9 renumbered)
+  - `README.md` (plain-English block extended)
+  - `docs/hf/nla_v1_demo/README.md` (plain-English block extended)
+  - `SESSION_HANDOFF.md` (this file)
+  - `artifacts/nla/bok_v2b_seq64_np16/*` (new, untracked)
+- **Merge `nla → main`**: hold until paper finalization.
+
+## Numbers (current, post-Lever-B)
+
+| Decoding | greedy ρ_norm | oracle K=32 ρ_norm | oracle K=64 ρ_norm |
+| --- | --- | --- | --- |
+| CE-only warm-start (v1) | 0.29 | ~0.85 | **1.00** |
+| BoK v1 (hot, collapsed) | regressed | regressed | n/a |
+| BoK v2b step 500 (best) | 0.32 | 0.85 | n/a |
+| BoK v2b step 1000 | 0.31 | 0.80 | n/a |
+| Paraphrase ceiling | 1.00 | 1.00 | 1.00 |
+
+Lever A (oracle K=64) stays the deployable headline. Lever B yields
++0.03 greedy ρ over the warm-start at best, no oracle benefit.
+
+---
+
 # SRT-Adapter NLA — Session Handoff (2026-05-17, end of day)
 
 Vast.ai A6000/Blackwell instance is being **spun down** tonight. All committed
