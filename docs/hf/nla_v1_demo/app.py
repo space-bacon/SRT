@@ -540,6 +540,160 @@ def steer_layer(prompt: str, texts_a: str, texts_b: str, alpha: float,
     return baseline.strip(), steered.strip(), info
 
 
+# ───────────────── Tab 5: geometry (direction quality) ───────────────
+
+@torch.no_grad()
+def _all_layer_last_token(text: str, layers: list[int]) -> dict[int, torch.Tensor]:
+    """One forward pass → last-token hidden at each requested layer."""
+    tok = _state["tok"]
+    backbone = _state["backbone"]
+    device = _state["device"]
+    enc = tok(text, truncation=True, max_length=MAX_INPUT_TOKENS,
+              return_tensors="pt").to(device)
+    out = backbone(
+        input_ids=enc.input_ids, attention_mask=enc.attention_mask,
+        output_hidden_states=True, use_cache=False,
+    )
+    last = (enc.attention_mask.sum(-1) - 1).clamp(min=0).long()
+    rows = torch.arange(enc.input_ids.size(0), device=device)
+    return {L: out.hidden_states[L][rows, last, :].detach().to(torch.float32).squeeze(0)
+            for L in layers}
+
+
+@torch.no_grad()
+def _all_layer_all_tokens(text: str, layers: list[int]) -> tuple[dict[int, torch.Tensor], int]:
+    """One forward pass → (T, d) hidden at each layer; returns (dict, T)."""
+    tok = _state["tok"]
+    backbone = _state["backbone"]
+    device = _state["device"]
+    enc = tok(text, truncation=True, max_length=MAX_INPUT_TOKENS,
+              return_tensors="pt").to(device)
+    out = backbone(
+        input_ids=enc.input_ids, attention_mask=enc.attention_mask,
+        output_hidden_states=True, use_cache=False,
+    )
+    T = int(enc.attention_mask.sum().item())
+    # hidden_states[L] is (1, T_full, d). Use attention_mask to take valid tokens.
+    mask = enc.attention_mask[0].bool()
+    return ({L: out.hidden_states[L][0, mask, :].detach().to(torch.float32)
+             for L in layers}, T)
+
+
+@spaces.GPU(duration=180)
+def geometry(prompt: str, texts_a: str, texts_b: str, layers_str: str):
+    """Per-layer geometric report on the (μ_B − μ_A) direction.
+
+    For each requested layer L:
+      - compute μ_A, μ_B over the A/B anchor banks, d_L = μ_B − μ_A
+      - report ||d_L||, ||μ_A||, ||μ_B||
+      - run `prompt` forward, get (T, d) at L
+      - report mean_t |h_t · d̂_L| (alignment magnitude of residual stream
+        with the direction, averaged over the prompt's tokens) and
+        ||h_last||
+    Also report the cosine matrix between d̂_L across the requested layers.
+    """
+    if not (prompt and prompt.strip()):
+        return "Provide a prompt."
+    _ensure_gpu()
+    backbone = _state["backbone"]
+    n_layers = backbone.config.num_hidden_layers  # type: ignore[attr-defined]
+
+    try:
+        layers = sorted({int(x.strip()) for x in layers_str.split(",") if x.strip()})
+    except Exception:
+        return "layers must be a comma-separated list of ints."
+    layers = [L for L in layers if 1 <= L <= n_layers]
+    if not layers:
+        return f"no valid layers (allowed 1..{n_layers})"
+
+    A = [t.strip() for t in (texts_a or "").split("|") if t.strip()]
+    B = [t.strip() for t in (texts_b or "").split("|") if t.strip()]
+    if not A or not B:
+        return "Provide at least one A and one B anchor (pipe-separated)."
+
+    # Compute μ_A, μ_B at each layer via individual forward passes (small N).
+    a_stacks: dict[int, list[torch.Tensor]] = {L: [] for L in layers}
+    b_stacks: dict[int, list[torch.Tensor]] = {L: [] for L in layers}
+    for t in A:
+        d = _all_layer_last_token(t, layers)
+        for L in layers: a_stacks[L].append(d[L])
+    for t in B:
+        d = _all_layer_last_token(t, layers)
+        for L in layers: b_stacks[L].append(d[L])
+
+    mu_A = {L: torch.stack(a_stacks[L]).mean(0) for L in layers}
+    mu_B = {L: torch.stack(b_stacks[L]).mean(0) for L in layers}
+    d    = {L: (mu_B[L] - mu_A[L]) for L in layers}
+    d_norm = {L: float(d[L].norm()) for L in layers}
+    d_hat  = {L: (d[L] / (d_norm[L] + 1e-9)) for L in layers}
+
+    # Prompt residual stream at each layer.
+    h_dict, T = _all_layer_all_tokens(prompt.strip(), layers)
+    per_layer = []
+    for L in layers:
+        h = h_dict[L]                # (T, d) fp32
+        # projection scalars per token
+        proj = (h * d_hat[L]).sum(dim=-1)        # (T,)
+        proj_abs_mean = float(proj.abs().mean())
+        proj_signed_mean = float(proj.mean())
+        h_norms = h.norm(dim=-1)                 # (T,)
+        h_norm_mean = float(h_norms.mean())
+        # cosine of last-token h with d_hat
+        h_last = h[-1]
+        cos_last = float(F.cosine_similarity(h_last.unsqueeze(0),
+                                             d_hat[L].unsqueeze(0), dim=-1))
+        per_layer.append({
+            "L": L,
+            "d_norm": d_norm[L],
+            "mu_A_norm": float(mu_A[L].norm()),
+            "mu_B_norm": float(mu_B[L].norm()),
+            "h_norm_mean": h_norm_mean,
+            "proj_abs_mean": proj_abs_mean,
+            "proj_signed_mean": proj_signed_mean,
+            "frac_of_hnorm": proj_abs_mean / max(h_norm_mean, 1e-9),
+            "cos_last_token": cos_last,
+        })
+
+    # Cross-layer cosine matrix on d_hat.
+    cos_matrix = []
+    for L1 in layers:
+        row = []
+        for L2 in layers:
+            row.append(float(F.cosine_similarity(d_hat[L1].unsqueeze(0),
+                                                 d_hat[L2].unsqueeze(0), dim=-1)))
+        cos_matrix.append(row)
+
+    # Render markdown.
+    lines = [
+        f"**Prompt tokens:** T = {T} · **|A|** = {len(A)} · **|B|** = {len(B)}",
+        "",
+        "### Per-layer direction quality & residual stream alignment",
+        "",
+        "| L | ‖d_L‖ | ‖μ_A‖ | ‖μ_B‖ | mean‖h_t‖ | mean<sub>t</sub>|h·d̂| | as frac of ‖h‖ | cos(h_last, d̂) |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for r in per_layer:
+        lines.append(
+            f"| {r['L']} | `{r['d_norm']:.2f}` | `{r['mu_A_norm']:.2f}` | "
+            f"`{r['mu_B_norm']:.2f}` | `{r['h_norm_mean']:.2f}` | "
+            f"`{r['proj_abs_mean']:.3f}` | `{r['frac_of_hnorm']*100:.2f}%` | "
+            f"`{r['cos_last_token']:+.4f}` |"
+        )
+    lines += [
+        "",
+        "### Cross-layer direction cosine matrix · cos(d̂_L, d̂_L′)",
+        "",
+        "| L \\ L' | " + " | ".join(str(L) for L in layers) + " |",
+        "|" + "---|" * (len(layers) + 1),
+    ]
+    for L1, row in zip(layers, cos_matrix):
+        lines.append(
+            "| **" + str(L1) + "** | " +
+            " | ".join(f"`{v:+.3f}`" for v in row) + " |"
+        )
+    return "\n".join(lines)
+
+
 # ───────────────────────────── UI ────────────────────────────────────
 
 EXAMPLES_RT = [
@@ -710,6 +864,36 @@ def build_app() -> gr.Blocks:
                            inputs=[l_prompt, l_texts_a, l_texts_b,
                                    l_alpha, l_layer, l_mode, l_max],
                            outputs=[l_baseline, l_steered, l_info])
+
+            # ---------------- Tab 5 ----------------
+            with gr.Tab("Geometry"):
+                gr.Markdown(
+                    "**Geometric report on the (μ_B − μ_A) direction.** "
+                    "For each requested layer L this computes "
+                    "‖d_L‖, the mean magnitude of the prompt's residual-stream "
+                    "projection onto d̂_L (averaged over tokens), and the "
+                    "cosine matrix between d̂_L across layers (does the "
+                    "direction stay fixed through the network?).\n\n"
+                    "_If `mean|h·d̂|` is near zero, the model isn't using "
+                    "the direction at that layer — which is exactly why "
+                    "ablation does nothing._"
+                )
+                with gr.Row():
+                    with gr.Column():
+                        g_prompt = gr.Textbox(label="Prompt", lines=3)
+                        g_texts_a = gr.Textbox(
+                            label="Anchors A (pipe-separated)", lines=4)
+                        g_texts_b = gr.Textbox(
+                            label="Anchors B (pipe-separated)", lines=4)
+                        g_layers = gr.Textbox(
+                            label="Layers (comma-separated, 1..28)",
+                            value="4, 8, 12, 16, 20, 24, 28")
+                        go_g = gr.Button("Measure", variant="primary")
+                    with gr.Column():
+                        g_report = gr.Markdown()
+                go_g.click(geometry,
+                           inputs=[g_prompt, g_texts_a, g_texts_b, g_layers],
+                           outputs=[g_report])
 
         gr.Markdown(
             "---\n"
