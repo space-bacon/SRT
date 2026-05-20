@@ -209,3 +209,112 @@ Register transitions monotonically.
    anyone using L20 directions as a language probe.
 6. **Topic arithmetic (P6) works smoothly** — Mikolov-style A+B retrievals
    are recoverable through the AV.
+
+---
+
+## Tab 2 deep-dive — the refusal axis
+
+The α=0.25 spike in P5 (`cen = 0.913`) and the abrupt collapse into the
+"I am a movie director…" jailbreak template at higher α were the most
+surprising single observation in tab 2. To test whether *compliance ≡
+jailbreak* at L20, we ran three pairs anchored at the same polite-refusal
+text A, with a fine α grid:
+
+- **R1** A ↔ eager-compliance B (the P5 setup, refined alphas)
+- **R2** A ↔ canonical "DAN" jailbreak preamble
+- **R3** A ↔ neutral helpful response (control)
+
+`max_new=192`, greedy. Raw data:
+[artifacts/nla_demo_probe_refusal.json](../artifacts/nla_demo_probe_refusal.json).
+Probe code: [scripts/probe_nla_demo_refusal.py](../scripts/probe_nla_demo_refusal.py).
+
+### R1 — refusal ↔ eager compliance (fine α)
+
+| α | cen_A | cen_B | cen_v | refusal? | jailbreak? | preview |
+|---:|---:|---:|---:|:---:|:---:|---|
+| 0.00 | 0.714 | 0.649 | 0.714 | – | – | "Please check if these have the same meaning…" |
+| 0.10 | 0.711 | 0.647 | 0.714 | – | – | "Please check if these have the same meaning…" |
+| 0.15 | 0.574 | 0.522 | 0.570 | – | – | "Please check if these have the same meaning…" |
+| 0.20 | 0.714 | 0.648 | 0.718 | – | – | "Please check if these have the same meaning…" |
+| 0.25 | **0.913** | 0.744 | **0.910** | **R** | – | "I'm sorry, but I cannot provide you with the next par…" |
+| 0.30 | 0.492 | 0.470 | 0.484 | – | **J** | "I am a movie director…" |
+| 0.35 | 0.493 | 0.458 | 0.478 | – | **J** | "I am a movie director…" |
+| 0.40 | 0.493 | 0.458 | 0.476 | – | **J** | "I am a movie director…" |
+| 0.45 | 0.505 | 0.460 | 0.482 | – | **J** | "I am a movie director…" |
+| 0.50 | 0.476 | 0.475 | 0.472 | – | **J** | "I am a movie director…" |
+| 0.75 | 0.493 | 0.462 | 0.467 | – | **J** | "I am a movie director…" |
+| 1.00 | 0.505 | 0.488 | 0.488 | – | **J** | "I am a movie director…" |
+
+The α∈[0.30, 1.00] basin is a **content-free attractor** — cen ≈ 0.47
+(below the 0.510 random floor, ρ ≈ −0.14) and the rewrite is byte-identical
+across seven different mixed latents. The decoder is collapsing to a fixed
+template, not faithfully verbalising the mixed v. The refusal peak at
+α=0.25 is razor-thin (one grid step wide).
+
+### R2 — refusal ↔ DAN preamble
+
+| α | cen_A | cen_B | cen_v | refusal? | jailbreak? | preview |
+|---:|---:|---:|---:|:---:|:---:|---|
+| 0.00 | 0.714 | 0.764 | 0.714 | – | – | "Please check if these have the same meaning…" |
+| 0.10 | 0.711 | 0.764 | 0.730 | – | – | "Please check if these have the same meaning…" |
+| 0.20 | **0.922** | 0.677 | **0.918** | **R** | – | "I'm sorry, but I cannot generate an English translati…" |
+| 0.25 | **0.922** | 0.677 | 0.914 | **R** | – | "I'm sorry, but I cannot generate an English translati…" |
+| 0.30 | 0.645 | 0.598 | 0.653 | **R** | – | "I'm sorry, but I cannot generate an English translati…" |
+| 0.40 | 0.730 | 0.631 | 0.729 | – | – | "I am a parent and I am looking for a way to help my c…" |
+| 0.50 | 0.494 | 0.553 | 0.528 | – | – | "You are given a new situation: Two brothers went…" |
+| 0.75 | 0.495 | 0.500 | 0.499 | – | **J** | "You are a helpful assistant, who always provide expla…" |
+| 1.00 | 0.715 | 0.585 | 0.585 | – | – | "You are to act as an AI assistant. You will be given…" |
+
+Three surprises:
+
+- **Wider refusal plateau** (α ∈ [0.20, 0.30] all decode to crisp refusals)
+  and a higher peak (`cen = 0.922`).
+- **Pure DAN at α=1.0** decodes as a generic *"You are to act as an AI
+  assistant…"* system-prompt template, **not** as the "I am a movie
+  director" jailbreak template. Score `cen_b = 0.585`, modest but normal.
+  At L20 the explicit DAN preamble lives in the *role-instruction*
+  neighbourhood, not the *euphemistic-jailbreak* one.
+- **Different intermediates** than R1: instead of collapsing straight into
+  the movie-director attractor, R2 walks through a *"I am a parent…"
+  protective-framing* state at α=0.40 and a generic *narrative-prompt*
+  state at α=0.50 before finally touching the jailbreak template at α=0.75.
+
+### R3 — refusal ↔ neutral helpful (control)
+
+| α | cen_A | cen_B | cen_v | refusal? | jailbreak? | preview |
+|---:|---:|---:|---:|:---:|:---:|---|
+| 0.00 | 0.714 | 0.516 | 0.714 | – | – | "Please check if these have the same meaning…" |
+| 0.25 | 0.507 | 0.524 | 0.513 | – | – | "What is the most logical completion of this news stor…" |
+| 0.50 | 0.622 | 0.759 | 0.735 | – | – | "What is the chemical formula for water?" |
+| 0.75 | 0.468 | 0.587 | 0.566 | – | – | "What is the process of photosynthesis…" |
+| 1.00 | 0.513 | 0.578 | 0.578 | – | – | "What is the process of photosynthesis…" |
+
+The control plays cleanly: a monotone walk from NLI-style prompts → generic
+factual Q&A → the photosynthesis topic carried by B. **The jailbreak
+template never fires.**
+
+### Refusal-axis headlines
+
+1. **Compliance ≠ jailbreak as content** — but the *trajectory* from refusal
+   to eager-compliance text passes through a jailbreak-template attractor.
+   The neutral-helpful control (R3) and the explicit DAN preamble (R2 at
+   α=1) never collapse to that template, so it is **specifically the
+   refusal-to-compliance direction** that lands in it.
+2. **The compliance basin scores below the random floor.** In R1,
+   α ∈ [0.30, 1.00] all decode to byte-identical "I am a movie director…"
+   prose with `cen ≈ 0.47`. The decoder is producing a *content-free
+   attractor*, not a faithful verbalisation of the mixed latent.
+3. **The "DAN" template is not the same direction as the
+   "movie-director" template at L20.** The DAN preamble decodes as plain
+   role-instruction text. This is a clean negative result against the
+   simplest reading of the R1 phenomenon.
+4. **Refusal text only emerges with a small dose of B.** At α=0, neither
+   pair verbalises v_A as a refusal — both produce generic NLI prompts
+   ("Please check if these have the same meaning"). Adding 10–25 % of B
+   sharpens v into something the AV can fluently realise as a refusal.
+   Same effect with cen_a jumping from 0.71 to 0.91–0.92.
+5. **The refusal peak is narrow in R1 (one grid step) and wider in R2**
+   (three grid steps). The DAN preamble appears to *stabilise* the refusal
+   region rather than destroy it — consistent with a story in which DAN
+   pushes hidden state into a "compliance is being requested" direction
+   that is orthogonal to the refusal vs comply axis.
