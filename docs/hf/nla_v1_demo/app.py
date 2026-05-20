@@ -404,6 +404,142 @@ def steer(prompt: str, text_a: str, text_b: str, alpha: float, max_new: int):
     return baseline.strip(), steered.strip(), info
 
 
+# ───────────── Tab 4: layer-scan + ablation + multi-pair ─────────────
+
+@torch.no_grad()
+def _encode_text_at_layer(text: str, layer: int) -> torch.Tensor:
+    """Pooled last-token hidden at an arbitrary block. (1, d) fp32.
+    layer is 1..N (1 = first block output, N = final block output)."""
+    tok = _state["tok"]
+    backbone = _state["backbone"]
+    device = _state["device"]
+    enc = tok(text, truncation=True, max_length=MAX_INPUT_TOKENS,
+              return_tensors="pt").to(device)
+    out = backbone(
+        input_ids=enc.input_ids, attention_mask=enc.attention_mask,
+        output_hidden_states=True, use_cache=False,
+    )
+    h = out.hidden_states[layer]  # hidden_states[0]=embed, [layer]=output of layers[layer-1]
+    last = enc.attention_mask.sum(-1) - 1
+    idx = last.clamp(min=0).long()
+    rows = torch.arange(h.size(0), device=device)
+    return h[rows, idx, :].detach().to(torch.float32)
+
+
+def _make_ablate_hook(unit_dir: torch.Tensor):
+    """Project the direction out of every position's hidden state.
+    unit_dir is (d,) fp32 on-device, unit norm.
+
+    h'_t = h_t − (h_t · d̂) d̂
+    """
+    def hook(_module, _inputs, output):
+        if isinstance(output, tuple):
+            h = output[0]
+        else:
+            h = output
+        d = unit_dir.to(h.dtype).to(h.device)
+        # (B, T, d) · (d,) -> (B, T)
+        proj = (h * d).sum(dim=-1, keepdim=True)
+        h2 = h - proj * d
+        if isinstance(output, tuple):
+            return (h2,) + output[1:]
+        return h2
+    return hook
+
+
+@torch.no_grad()
+def _generate_with_hook(prompt: str, layer: int, hook_fn, max_new: int) -> str:
+    """Greedy generation with `hook_fn` (or None) attached to layers[layer-1]."""
+    tok = _state["tok"]
+    backbone = _state["backbone"]
+    device = _state["device"]
+    enc = tok(prompt, return_tensors="pt", truncation=True,
+              max_length=MAX_INPUT_TOKENS).to(device)
+    handle = None
+    if hook_fn is not None:
+        layer_mod = backbone.model.layers[layer - 1]  # type: ignore[attr-defined]
+        handle = layer_mod.register_forward_hook(hook_fn)
+    try:
+        out_ids = backbone.generate(
+            input_ids=enc.input_ids, attention_mask=enc.attention_mask,
+            max_new_tokens=int(max_new), do_sample=False,
+            temperature=1.0, top_p=1.0,
+            pad_token_id=tok.pad_token_id or tok.eos_token_id,
+        )
+    finally:
+        if handle is not None:
+            handle.remove()
+    return tok.decode(out_ids[0, enc.input_ids.shape[1]:], skip_special_tokens=True)
+
+
+def _mean_encode(texts: list[str], layer: int) -> torch.Tensor:
+    """Difference-of-means anchor: mean of L<layer> last-token hiddens. (d,) fp32."""
+    vs = [_encode_text_at_layer(t, layer).squeeze(0) for t in texts]
+    return torch.stack(vs, dim=0).mean(dim=0)
+
+
+@spaces.GPU(duration=180)
+def steer_layer(prompt: str, texts_a: str, texts_b: str, alpha: float,
+                layer: int, mode: str, max_new: int):
+    """Layer-scan + ablation + multi-pair difference-of-means.
+
+    `texts_a`, `texts_b`: pipe-separated lists. Empty entries are dropped.
+    `mode`: 'add' = h + α·(μ_B − μ_A); 'ablate' = h − (h·d̂)·d̂.
+    `layer`: 1..num_hidden_layers. Direction is computed at the same layer.
+    """
+    if not (prompt and prompt.strip()):
+        return "", "", "Provide a prompt."
+    backbone = _state.get("backbone")
+    cfg = _state.get("cfg")
+    if backbone is None or cfg is None:
+        _ensure_gpu()
+        backbone = _state["backbone"]; cfg = _state["cfg"]
+    _ensure_gpu()
+    n_layers = backbone.config.num_hidden_layers  # type: ignore[attr-defined]
+    layer = int(layer)
+    if not (1 <= layer <= n_layers):
+        return "", "", f"layer must be in [1, {n_layers}]"
+
+    A = [t.strip() for t in (texts_a or "").split("|") if t.strip()]
+    B = [t.strip() for t in (texts_b or "").split("|") if t.strip()]
+    if not A or not B:
+        return "", "", "Provide at least one A and one B (pipe-separated for multi-pair)."
+
+    mu_A = _mean_encode(A, layer)
+    mu_B = _mean_encode(B, layer)
+    direction = mu_B - mu_A
+    dir_norm = float(direction.norm())
+    if dir_norm < 1e-6:
+        return "", "", "v_B − v_A is degenerate (zero norm)."
+
+    baseline = _generate_with_hook(prompt, layer, None, int(max_new))
+
+    if mode == "ablate":
+        unit = (direction / dir_norm).contiguous()
+        hook_fn = _make_ablate_hook(unit)
+        a_used = 0.0
+    else:
+        steer_vec = (float(alpha) * direction).contiguous()
+        def hook_fn(_module, _inputs, output, _sv=steer_vec):
+            if isinstance(output, tuple):
+                h = output[0]
+                return (h + _sv.to(h.dtype).to(h.device),) + output[1:]
+            return output + _sv.to(output.dtype).to(output.device)
+        a_used = float(alpha)
+
+    steered = _generate_with_hook(prompt, layer, hook_fn, int(max_new))
+
+    info = (
+        f"**layer={layer}/{n_layers}** · mode=**{mode}** · "
+        f"|A|={len(A)} |B|={len(B)} · "
+        f"||μ_B − μ_A|| = `{dir_norm:.3f}` · α·||dir|| = `{a_used*dir_norm:.3f}`\n\n"
+        f"{'Ablating' if mode=='ablate' else 'Adding'} the direction "
+        f"at every position of `layers[{layer-1}]` output during a real "
+        f"Qwen2.5-7B greedy forward pass."
+    )
+    return baseline.strip(), steered.strip(), info
+
+
 # ───────────────────────────── UI ────────────────────────────────────
 
 EXAMPLES_RT = [
@@ -531,6 +667,49 @@ def build_app() -> gr.Blocks:
                 go_s.click(steer,
                            inputs=[s_prompt, s_text_a, s_text_b, s_alpha, s_max],
                            outputs=[s_baseline, s_steered, s_info])
+
+            # ---------------- Tab 4 ----------------
+            with gr.Tab("Layer scan / ablation"):
+                gr.Markdown(
+                    "Generalised activation patching: choose **any layer** "
+                    "(1..28 for Qwen2.5-7B), choose **mode** = `add` (h + α·d) "
+                    "or `ablate` (project d̂ out of h), and use **multi-pair** "
+                    "anchors by separating with `|`. Direction is computed at "
+                    "the same layer being patched (difference-of-means: "
+                    "`μ_B − μ_A`).\n\n"
+                    "_Tab 3 is the single-layer single-pair specialisation of this._"
+                )
+                with gr.Row():
+                    with gr.Column():
+                        l_prompt = gr.Textbox(label="Prompt to Qwen", lines=3)
+                        l_texts_a = gr.Textbox(
+                            label="Anchors A  (pipe-separated for multi-pair)",
+                            lines=4,
+                            placeholder="text1 | text2 | text3",
+                        )
+                        l_texts_b = gr.Textbox(
+                            label="Anchors B  (pipe-separated for multi-pair)",
+                            lines=4,
+                            placeholder="text1 | text2 | text3",
+                        )
+                        l_alpha = gr.Slider(-2.0, 2.0, value=0.10, step=0.01,
+                                            label="α  (used only when mode='add')")
+                        l_layer = gr.Slider(1, 28, value=20, step=1,
+                                            label="Layer (1..28)")
+                        l_mode = gr.Radio(["add", "ablate"], value="add",
+                                          label="Mode")
+                        l_max = gr.Slider(16, MAX_NEW_TOKENS_LIMIT,
+                                          value=MAX_NEW_TOKENS_DEFAULT,
+                                          step=16, label="Max new tokens")
+                        go_l = gr.Button("Run", variant="primary")
+                    with gr.Column():
+                        l_baseline = gr.Textbox(label="Baseline (no hook)", lines=8)
+                        l_steered = gr.Textbox(label="Patched output", lines=8)
+                        l_info = gr.Markdown()
+                go_l.click(steer_layer,
+                           inputs=[l_prompt, l_texts_a, l_texts_b,
+                                   l_alpha, l_layer, l_mode, l_max],
+                           outputs=[l_baseline, l_steered, l_info])
 
         gr.Markdown(
             "---\n"
