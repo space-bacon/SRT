@@ -1,7 +1,13 @@
-# arXiv Submission Package
+# arXiv Submission Package (staging)
 
-Source for the arXiv preprint of *Semiotic Taps: Lightweight Adapter Modules
-for Bifurcation Detection in Frozen Language Models*.
+Staged source for a planned arXiv submission of *Semiotic Taps:
+Lightweight Adapter Modules for Bifurcation Detection in Frozen Language
+Models*.
+
+> **Status: not yet submitted.** This folder is forward-looking. The
+> manuscript is currently repository-hosted only. The only Lancaster
+> preprints actually posted at the time of writing are the two SSRN
+> entries (SSRN 5987495 and SSRN 6349978); see `../paper_nla.md` §14.
 
 ## Contents
 

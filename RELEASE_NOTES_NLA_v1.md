@@ -3,6 +3,19 @@
 **Date:** 2026-05-18 (shipped to HF same day)
 **Branch:** `nla`
 **Last commit at release:** `7b53130`
+
+> **2026-05-20 update.** v1 is the Qwen2.5-7B L20 anchor of what is
+> now the **Stage 4** workstream of the SRT program (see
+> [`paper_nla.md`](paper_nla.md) §0 for staging and §1.5 / §12 for the
+> theoretical framing). Cross-backbone replications on Llama-3.2-3B
+> (`paper_nla.md` §10, HF: `RiverRider/srt-nla-av-llama32-3b` and
+> `RiverRider/srt-nla-targets-llama32-3b-v1`) and Gemma-2-2B
+> (`paper_nla.md` §11, in progress) live on top of this v1 anchor.
+> "arxiv/" in this repo is *staged source for a planned arXiv
+> submission of the SRT-Adapter manuscript*; the SRT-Adapter paper is
+> not yet on arXiv. The only currently-posted Lancaster preprints are
+> SSRN 5987495 and SSRN 6349978.
+
 **HF artifacts (live):**
 - Model: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1)
   — `best_av.pt` (51.6 MB), `config.json`, `README.md` (= model card),

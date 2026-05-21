@@ -2,6 +2,24 @@
 
 Quick-reference doc for "why are we doing this and what does success look like." Written mid-N1h run, May 2026.
 
+> **2026-05-20 SUPERSEDED FRAMING.** This document predates the
+> Stage-4 reframing of NLA inside the SRT program. The current
+> canonical framing — NLA as Stage 4 (after the SSRN papers and the
+> SRT-Adapter manuscript), Peircean / Kockelman / Silverstein
+> theoretical grounding, substrate-asymmetry hypothesis — lives in
+> [`../paper_nla.md`](../paper_nla.md) §0, §1.5, and §12. The
+> single-backbone (Qwen2.5-7B L20) phrasing below has been generalised
+> to a cross-backbone story (Qwen, Llama-3.2-3B, Gemma-2-2B in
+> progress); see `paper_nla.md` §10–§11.
+>
+> **Note on citations.** This repo's "arxiv/" folder is staged source
+> for a planned arXiv submission of the SRT-Adapter manuscript; **the
+> SRT-Adapter paper is not yet on arXiv.** The only Lancaster
+> preprints actually posted are the SSRN entries
+> [SSRN 5987495](https://papers.ssrn.com/abstract=5987495) (Lancaster,
+> 2025) and [SSRN 6349978](https://papers.ssrn.com/abstract=6349978)
+> (Lancaster, 2026a).
+>
 > **2026-05-18 SUPERSEDED HEADLINE NUMBERS.** The thresholds and "N1g/N1h
 > ≈ 0.618" plateau cited in this document are reported on the *raw*
 > (uncentered) `fve_nrm` metric, which is dominated by Qwen2.5-7B L20

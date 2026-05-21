@@ -155,59 +155,73 @@ The training script saves:
 - `final_adapter.pt` — adapter weights at end of training
 - `train_log.jsonl` — all metrics + diagnostics in structured format
 
-## SRT-NLA (research branch `nla`)
+## SRT-NLA — Stage 4 of the SRT program
 
 **Activation verbalization — read any hidden state of a frozen backbone as a sentence.**
 
-SRT-NLA is the natural-language-autoencoder line of work: a small
-(~12.7M-param) Activation Verbalizer (AV) is trained so that given a target
-layer-20 hidden vector `v` from a fully frozen `Qwen/Qwen2.5-7B`, it
-generates text whose own re-encoded L20 activation `h` matches `v` under
-an anisotropy-corrected metric `fve_nrm_cen = ½(1 + cos(h−μ, v−μ))`.
+SRT-NLA is the **fourth stage** of the SRT program:
 
-- **Paper draft**: [`paper_nla.md`](paper_nla.md)
-- **Release notes**: [`RELEASE_NOTES_NLA_v1.md`](RELEASE_NOTES_NLA_v1.md)
+1. *Stages 1–2* — semiotic theory and pretraining-time architecture
+   (Lancaster, 2025 [SSRN 5987495]; Lancaster, 2026a [SSRN 6349978]).
+2. *Stage 3* — frozen-backbone bolt-on adapter (the SRT-Adapter
+   manuscript under [`arxiv/`](arxiv/); repository-hosted, not yet on
+   arXiv).
+3. *Stage 4* — **NLA**: a small (~12.7M-param) Activation Verbalizer
+   (AV) is trained so that given a target mid-layer hidden vector `v`
+   from a fully frozen backbone, it generates text whose own
+   re-encoded activation `h` matches `v` under an anisotropy-corrected
+   metric `fve_nrm_cen = ½(1 + cos(h−μ, v−μ))`, normalised against a
+   random-text floor and a same-source paraphrase ceiling to give a
+   backbone-agnostic `ρ_norm ∈ [0, 1]`.
+
+The full Stage-4 framing — Peircean interpretant completion, Kockelman
+sieving, Silverstein metapragmatic awareness as decoding capacity, and
+the substrate-asymmetry hypothesis (text port strong / hidden-state
+port weak) — lives in [`paper_nla.md`](paper_nla.md) §1.5 and §12.
+
+- **Paper (Stage 4)**: [`paper_nla.md`](paper_nla.md)
+- **Release notes (Qwen v1)**: [`RELEASE_NOTES_NLA_v1.md`](RELEASE_NOTES_NLA_v1.md)
 - **Forward plan**: [`FORWARD_PLAN.md`](FORWARD_PLAN.md)
-- **Mission & stakes**: [`docs/nla_mission.md`](docs/nla_mission.md)
+- **Mission & stakes (historical, superseded units)**: [`docs/nla_mission.md`](docs/nla_mission.md)
 - **Architecture & phased plan**: [`docs/SRT_NLA_PLAN.md`](docs/SRT_NLA_PLAN.md)
 
-**v1 headline (best-of-64 on 200-target held-out slice, pool=2000):**
-`ρ_norm = 0.92`, saturating the Qwen paraphrase ceiling. Greedy decoding
-is the open problem (`ρ_norm = 0.26`, beaten by zero-training NN-retrieval).
-HF artifacts: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1)
-(model) and [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1)
-(dataset).
+### Headline numbers
 
-### What this means in plain English
+`ρ_norm` is anchored at 0 = random unrelated text, 1 = a same-source
+paraphrase. Best-of-K is oracle rerank against the target `v`, which is
+available at deploy time.
 
-The 7B backbone has a "thought" mid-sentence — a 3584-dim hidden vector at
-layer 20 that nobody can read directly. SRT-NLA trains a small
-(~12.7M-param) verbalizer that writes English which, when fed back through
-the same frozen backbone, **re-creates that hidden vector**. We score how
-close on a 0–1 scale anchored at two reference points: 0 = random unrelated
-text, 1 = a human paraphrase of the source.
+| Backbone | Layer | Greedy `ρ_norm` | Best-of-64 `ρ_norm` |
+|---|---|---|---|
+| Qwen2.5-7B | L20 | 0.26 | **0.92** |
+| Llama-3.2-3B | L19 (73% depth) | reported in [`paper_nla.md`](paper_nla.md) §10 | reported in §10 |
+| Gemma-2-2B | L19 (73% depth) | *in progress* — see [`paper_nla.md`](paper_nla.md) §11 | *in progress* |
 
-- **Single best guess (greedy decoding):** `ρ_norm ≈ 0.29` — better than
-  random, well short of paraphrase quality.
-- **Sample 64 candidates and auto-pick the closest (oracle rerank, "Lever A"):**
-  `ρ_norm ≈ 1.0` — matches human paraphrases.
+The greedy-vs-rerank gap is the central artifact of the program: the
+verbalizer *can* express paraphrase-quality outputs, but argmax does
+not surface them on the first try. The bag-of-K self-distillation
+attempt to close that gap (Lever B) returned a clean negative result
+(`paper_nla.md` §6); deploy-time best-of-K oracle rerank (Lever A)
+remains the only mechanism that closes the gap on this backbone.
 
-The K=64 result is the **deployable headline**: no extra training, just
-sampling + a cheap reranker the verbalizer already provides. It also
-proves the verbalizer *can* express paraphrase-quality outputs — argmax
-just doesn't surface them on the first try.
+### HF artifacts
 
-Closing that gap with a single greedy pass (so you don't pay K× compute) is
-the open "Lever B" problem. We tried the obvious move — bag-of-$K$
-self-distillation, training the verbalizer to imitate whichever rollout
-the oracle reranker liked best — under both aggressive and conservative
-hyperparams (`scripts/train_nla_bok_v2.py`). Aggressive collapses sampling
-diversity; conservative plateaus at greedy `ρ ≈ 0.32` and oracle
-`ρ ≈ 0.85`, essentially indistinguishable from the warm-start. Negative
-result written up in `paper_nla.md` §6. Lever A (deploy-time best-of-K
-rerank) remains the only mechanism that closes the gap on this backbone.
+| Backbone | Model | Targets dataset |
+|---|---|---|
+| Qwen2.5-7B | [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) | [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) |
+| Llama-3.2-3B | [`RiverRider/srt-nla-av-llama32-3b`](https://huggingface.co/RiverRider/srt-nla-av-llama32-3b) | [`RiverRider/srt-nla-targets-llama32-3b-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-llama32-3b-v1) |
+| Gemma-2-2B | *forthcoming* | *forthcoming* |
 
-A bug in `scripts/sample_targets.py` (Qwen2.5 sets `bos_token_id == eos_token_id == 151643`, which caused the BOS prompt to register as the first EOS and collapsed every target activation into one constant vector) was fixed on `2026-05-16` (commit `902b746` on branch `nla`). All NLA-branch results before that date are invalidated; the released v1.0 / v8a / v18 / v21a / v22c_a050 adapter checkpoints are on a separate codepath and are unaffected.
+### Reproducibility caveat
+
+A bug in `scripts/sample_targets.py` (Qwen2.5 sets
+`bos_token_id == eos_token_id == 151643`, which caused the BOS prompt
+to register as the first EOS and collapsed every target activation into
+one constant vector) was fixed on `2026-05-16` (commit `902b746`). All
+NLA-branch results before that date are invalidated. The Llama-3.2-3B
+and Gemma-2-2B sample paths do not have this trap. The released
+SRT-Adapter checkpoints (`v1.0` / `v8a` / `v18` / `v21a` / `v22c_a050`)
+are on a separate codepath and are unaffected.
 
 ## Theoretical Foundation
 
@@ -223,8 +237,13 @@ means different things to different communities. SRT makes the model
 - **BEN** estimates the bifurcation point: where a sign tips from stable
   (subcritical) to contested (supercritical) interpretation.
 
-See [Lancaster (2025)](arxiv/paper.md) — the full paper and arXiv source live
-under [`arxiv/`](arxiv/) (`paper.md`, `paper.tex`, `paper.pdf`).
+See [Lancaster (2025)](arxiv/paper.md) — the full SRT-Adapter manuscript
+and its LaTeX source live under [`arxiv/`](arxiv/) (`paper.md`, `paper.tex`,
+`paper.pdf`). The folder name is forward-looking: this manuscript is
+**not yet on arXiv**. The only currently posted Lancaster preprints are
+the two SSRN entries cited from [`paper_nla.md`](paper_nla.md) §14
+(SSRN 5987495, SSRN 6349978); the SRT-Adapter and SRT-NLA manuscripts
+are repository-hosted at the time of writing.
 
 ## Versioning policy
 

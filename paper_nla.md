@@ -8,7 +8,7 @@
 ## Abstract
 
 The Semiotic-Reflexive Transformer program (Lancaster, 2025; Lancaster, 2026a;
-Lancaster, 2026 [SRT-Adapter, arXiv]) treats a frozen large language model as
+Lancaster, 2026 [SRT-Adapter MS]) treats a frozen large language model as
 a semiotic substrate on which interpretant divergence, metapragmatic
 awareness, and bifurcation dynamics are *measurable* phenomena. Stages 1 and 2
 established the four-module decomposition (community, metapragmatic
@@ -62,7 +62,7 @@ both (i) an anisotropy-centred metric and (ii) a retrieval baseline is
 not interpretable: the raw metric is a thin film over the substrate's own
 geometry. *Third*, NLA closes a loop the SRT-Adapter left half-open:
 where the adapter's inject-back path through the RRM did not yet carry
-measurable signal (Lancaster, 2026 [arXiv] §6.3), the verbalizer carries
+measurable signal (Lancaster, 2026 [SRT-Adapter MS] §6.3), the verbalizer carries
 information *out* of an interior state and into a sequence of tokens that
 the same backbone routes back to itself, instantiating the second-order-
 cybernetic loop in a different topology — the observer reports, the
@@ -96,7 +96,7 @@ reported separately. The order is logical, not strictly chronological:
    polarisation index, and 85\% regime-classification accuracy on
    held-out curated passages.
 
-3. **Stage 3 — frozen 7B backbone; SRT-Adapter** (Lancaster, 2026 [arXiv]).
+3. **Stage 3 — frozen 7B backbone; SRT-Adapter** (Lancaster, 2026 [SRT-Adapter MS]).
    The validated decomposition was reduced to a 14.5M-parameter adapter
    ($0.19\%$ of a 7B backbone) on a frozen Qwen-2.5-7B. v8a removed the
    discrete prototype layer, raising Reddit recall@1 from $0.413$ to
@@ -169,7 +169,7 @@ and adds a second-order-cybernetic reading of the round-trip itself
 
 Four commitments motivate the round-trip and its metric. They are the
 same commitments that motivate the SRT-Adapter (Lancaster, 2026
-[arXiv], §2), specialised to the verbalisation problem.
+[SRT-Adapter MS], §2), specialised to the verbalisation problem.
 
 *Peircean interpretant completion as the apparatus.* In Peirce
 (1931–1958, CP 2.228, 2.303), every sign process is triadic: a
@@ -227,7 +227,7 @@ indexicality gap inside the decoding distribution.
 half-open.* Von Foerster's (1981, 2003) account of self-organisation
 in observed systems insists that the observer participates in the
 phenomenon being observed; circular causality is the architectural
-shape of this participation. The SRT-Adapter (Lancaster, 2026 [arXiv],
+shape of this participation. The SRT-Adapter (Lancaster, 2026 [SRT-Adapter MS],
 §2.5) is a *partial* second-order system: the observation arm
 (Community Discovery, MAH, BEN) reads structure off the substrate
 cleanly, while the intervention arm (RRM inject-back via FiLM)
@@ -710,7 +710,7 @@ visible from two close-cousin runs.
 ## 12. NLA as Stage 4 of the SRT program
 
 We now connect Stage 4 explicitly to Stages 1–3 (Lancaster, 2025;
-2026a; 2026 [arXiv]). Three threads run through the program; we
+2026a; 2026 [SRT-Adapter MS]). Three threads run through the program; we
 record where each stands at the close of this paper.
 
 *Substrate claim.* The core empirical claim of the SRT program is
@@ -718,7 +718,7 @@ that a frozen production-scale LLM is a substrate on which semiotic
 phenomena are measurable rather than a target requiring custom
 architectures. Stage 3 supported this for *community* and *regime*
 on Qwen-2.5-7B and showed the substrate claim survives a 1-NN probe
-on Qwen3-8B and Mistral-7B-v0.3 (Lancaster, 2026 [arXiv], §5.12).
+on Qwen3-8B and Mistral-7B-v0.3 (Lancaster, 2026 [SRT-Adapter MS], §5.12).
 Stage 4 strengthens it: under a calibrated round-trip the same
 frozen Qwen-2.5-7B layer-20 state is *recoverable as text* up to
 the empirical paraphrase ceiling at $K=64$, *and* the result
@@ -749,7 +749,7 @@ between an attractor at the policy's high-mass mode and a higher-
 fidelity attractor that is reachable but not modal. We do not claim
 to have *measured* a pitchfork in the sampling distribution — that
 would require a probabilistic separatrix probe of the kind the
-SRT-Adapter applies to MAH divergence (Lancaster, 2026 [arXiv],
+SRT-Adapter applies to MAH divergence (Lancaster, 2026 [SRT-Adapter MS],
 §6.9). We claim that the qualitative shape of the failure (modal
 attractor below the paraphrase manifold; sampling moves probability
 mass between the two; logp does not separate them) is the shape the
@@ -782,7 +782,7 @@ to have built that interface. We claim Stage 4 demonstrates the
 component on which it would rest.
 
 *Reification, honestly.* Anderson (personal communication; see
-Lancaster, 2026 [arXiv], §2.7) notes that any computational
+Lancaster, 2026 [SRT-Adapter MS], §2.7) notes that any computational
 semiotic instrument participates in the meaning-field it measures.
 The verbalizer is no exception. The "paraphrase ceiling" is itself
 a stochastic object: $k=8$ paraphrase samples per source under a
@@ -842,7 +842,7 @@ uncertainties sit.
    theoretical positioning, not an experimental result. A direct
    test would require a probabilistic separatrix probe over the
    sampling distribution at fixed $v$, of the kind the SRT-Adapter
-   applies to MAH divergence (Lancaster, 2026 [arXiv], §6.9).
+   applies to MAH divergence (Lancaster, 2026 [SRT-Adapter MS], §6.9).
    This is on the v9-onward horizon for the program, not for this
    paper.
 
@@ -928,10 +928,15 @@ training: Bridging interpretive bifurcations through metapragmatic
 chain architectures and embodied grounding. *SSRN*.
 <https://papers.ssrn.com/abstract=6349978>
 
-Lancaster, J. B. (2026 [arXiv]). The Semiotic-Reflexive Transformer
-Adapter: Lightweight semiotic awareness for frozen causal language
-models. <https://github.com/space-bacon/SRT/blob/main/arxiv/paper.md>
-(arXiv preprint forthcoming).
+Lancaster, J. B. (2026, manuscript). The Semiotic-Reflexive
+Transformer Adapter: Lightweight semiotic awareness for frozen causal
+language models. GitHub manuscript (Stage 3 of the SRT program; not
+yet a preprint), <https://github.com/space-bacon/SRT/blob/main/arxiv/paper.md>.
+Cited in this paper as *Lancaster, 2026 [SRT-Adapter MS]*. The two
+Lancaster preprints in this bibliography are the SSRN entries above
+(Lancaster, 2025; 2026a); the SRT-Adapter manuscript is repository-
+hosted only at the time of writing, with arXiv submission planned but
+not yet executed.
 
 Lancaster, J. B. (2026c). Reddit Discourse Corpus: A multi-community
 dataset for semiotic analysis. Manuscript.

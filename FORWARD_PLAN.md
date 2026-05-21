@@ -1,11 +1,21 @@
 # Forward Plan — SRT / SRT-NLA
 
-**Date:** 2026-05-18
+**Date:** 2026-05-18 (Stage-4 framing addendum 2026-05-20)
 **Author of last edit:** end-of-cleanup pass after NLA v1 release.
 
 This is the single source of truth for "what is the next thing to work on"
 across both workstreams in this repo. Supersedes the per-day handoff in
 `SESSION_HANDOFF.md` (which remains a snapshot of 2026-05-17).
+
+> **2026-05-20 framing addendum.** NLA is **Stage 4** of the SRT
+> program (Stages 1–2 = Lancaster 2025 / 2026a SSRN; Stage 3 = the
+> SRT-Adapter manuscript under [`arxiv/`](arxiv/), repository-hosted,
+> *not yet on arXiv*). See [`paper_nla.md`](paper_nla.md) §0, §1.5,
+> §12 for the canonical framing. Cross-backbone work since the v1
+> release: Llama-3.2-3B replication shipped (HF
+> `RiverRider/srt-nla-av-llama32-3b`,
+> `RiverRider/srt-nla-targets-llama32-3b-v1`); Gemma-2-2B replication
+> in progress on Blackwell (placeholder in `paper_nla.md` §11).
 
 ---
 
