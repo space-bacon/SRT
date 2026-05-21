@@ -189,13 +189,13 @@ html, body, gradio-app, .gradio-container {
 """
 
 with gr.Blocks(
-    title="SRT-NLA: ask the model what it is thinking",
+    title="MindReader-NLA: ask the model what it is thinking",
     theme=gr.themes.Default(),
     js=_FORCE_DARK_JS,
     css=_DARK_CSS,
 ) as app:
     gr.Markdown(
-        """# SRT-NLA Demo
+        """# MindReader-NLA
 
 Ask a frozen language model what is in its own internal hidden state, in
 plain English, in three different ways. The trained Activation
