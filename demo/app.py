@@ -155,7 +155,7 @@ def cb_steer(
 # UI
 # ---------------------------------------------------------------------------
 
-with gr.Blocks(title="SRT-NLA: ask the model what it is thinking") as app:
+with gr.Blocks(title="SRT-NLA: ask the model what it is thinking", theme=gr.themes.Soft()) as app:
     gr.Markdown(
         """# SRT-NLA Demo
 
