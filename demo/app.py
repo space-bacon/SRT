@@ -233,9 +233,15 @@ unchanged from the public release. Companion paper:
                 pl_summary = gr.Markdown()
                 pl_table = gr.Markdown()
         pl_btn.click(
+            lambda: ("⏳ Running on ZeroGPU — first call also downloads weights, expect 30–90 s. Please keep this tab in the foreground.", ""),
+            inputs=None,
+            outputs=[pl_summary, pl_table],
+            queue=False,
+        ).then(
             cb_playground,
             inputs=[backbone_key, pl_prompt, pl_K, pl_temp],
             outputs=[pl_summary, pl_table],
+            show_progress="full",
         )
 
     with gr.Tab("2 - Live thought trace"):
@@ -258,9 +264,15 @@ unchanged from the public release. Companion paper:
             with gr.Column():
                 tt_out = gr.Markdown()
         tt_btn.click(
+            lambda: "⏳ Tracing on ZeroGPU — first call also downloads weights, expect 30–90 s. Tokens will stream in below as they are generated.",
+            inputs=None,
+            outputs=tt_out,
+            queue=False,
+        ).then(
             cb_thought_trace,
             inputs=[backbone_key, tt_prompt, tt_max, tt_every],
             outputs=tt_out,
+            show_progress="full",
         )
 
     with gr.Tab("3 - Steer by editing"):
@@ -292,9 +304,15 @@ unchanged from the public release. Companion paper:
                 st_base_cont = gr.Textbox(label="Unsteered continuation", lines=4)
                 st_steered = gr.Textbox(label="Steered continuation", lines=4)
         st_btn.click(
+            lambda: ("⏳ running…", "⏳ running…", "⏳ running…"),
+            inputs=None,
+            outputs=[st_base_verb, st_base_cont, st_steered],
+            queue=False,
+        ).then(
             cb_steer,
             inputs=[backbone_key, st_prompt, st_replacement, st_alpha, st_max],
             outputs=[st_base_verb, st_base_cont, st_steered],
+            show_progress="full",
         )
 
     gr.Markdown(
