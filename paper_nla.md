@@ -1180,3 +1180,361 @@ NLA inherits.
 
 ![**Figure A3. When the probe says "80% confident," it is right about $80\%$ of the time.** A standard reliability diagram for the Stage 3 regime-classification head, evaluated on $351{,}000$ tokens. The horizontal axis bins predictions by the probability the head emitted; the vertical axis is the fraction that actually turned out true in each bin. A perfect probe sits on the diagonal; this one does, almost exactly. Summary numbers: AUROC $0.99$ (it ranks positives above negatives almost perfectly), Brier $0.010$ (its raw probability errors are tiny), ECE $0.0009$ (its confidence is calibrated to four decimal places). We include this figure so the reader can see that the internal-state probe sitting under §5's reranker is not a hand-wavy classifier, it is calibrated to production grade, and the §§4–5 fidelity numbers are not artifacts of a miscalibrated scorer.](artifacts/nla/figures/figA3_regime_calibration.png)
 
+---
+
+## Appendix B. Comprehensive Glossary
+
+A consolidated reference for the terms, symbols, scripts, artifacts,
+and abbreviated citations used throughout this paper. Cross-references
+to the sections in which each item is introduced or used substantively
+are given in parentheses.
+
+### B.1 Symbols and notation
+
+- **$v$** — the *target* hidden activation at layer $\ell$: the
+  frozen backbone's last-valid-token residual-stream vector after
+  consuming a $64$-token continuation. Shape $v \in \mathbb{R}^{d}$
+  with $d = 3584$ (Qwen-2.5-7B), $3072$ (Llama-3.2-3B), or $2304$
+  (Gemma-2-2B). The round-trip starts here. (§1, §1.5)
+- **$\hat{x}$** — the *verbalisation*: the short natural-language
+  text the AV emits conditioned on $v$. The round-trip's middle
+  term. (§1.5)
+- **$h$** — the *re-encoded* hidden state: the frozen backbone's
+  last-valid-token residual at layer $\ell$ after consuming
+  $\hat{x}$ in a second forward pass. The round-trip's third term.
+  Closure of the chain is measured by the similarity of $h$ to $v$.
+  (§1.5)
+- **$\ell$ (probe layer)** — the single transformer layer at which
+  both $v$ and $h$ are read. $\ell = 20$ for Qwen ($20/28 \approx
+  71\%$ depth), $\ell = 20$ for Llama-3.2-3B ($20/28$), $\ell = 19$
+  for Gemma-2-2B ($19/26 \approx 73\%$). No per-model tuning beyond
+  the fractional-depth rule of Figure A1. (§1, §10, §11, App. A)
+- **$\mu$** — the *anisotropy mean*: the empirical mean of $v$
+  over a pool of unrelated inputs at the same backbone and layer.
+  Per-backbone $\|\mu\|$: $\approx 55$ (Qwen-7B L20),
+  $\approx 7.2$ (Llama-3B L20), $\approx 156$ (Gemma-2B L19).
+  Subtracting $\mu$ from both $v$ and $h$ before cosine is what
+  makes the metric portable across backbones. (§3, §4, §10, §11)
+- **$d$, $d_{\text{embed}}$** — the residual-stream width of the
+  backbone; sets the AV's input projection size. (§1, §10, §11)
+- **$L$** — total number of transformer layers in the backbone:
+  $28$ (Qwen-7B, Llama-3B), $26$ (Gemma-2B). (§10, §11)
+- **$T$ (token budget)** — generation length for both the original
+  continuation $x$ that produced $v$ and the verbalisation
+  $\hat{x}$. Fixed at $T=64$ tokens throughout. (§1, §10)
+- **$K$** — the number of candidate verbalisations sampled per
+  target. Best-of-$K$ picks the highest-scoring candidate under the
+  rerank utility. Swept over $\{1, 2, 4, 8, 16, 32, 64\}$ in the
+  K-curves. (§5, §10, §11)
+- **$M$** — the number of held-out target vectors used for an
+  evaluation. $M=200$ for the headline numbers, $M=32$ for the
+  smaller Llama eval slice. (§4, §5, §10, §11)
+- **$P$ (prefix length)** — number of static soft-prefix tokens
+  the AV prepends before the inject slot. $P=16$ on Qwen, $P=1$
+  on Llama and Gemma. (§1, §10, §11)
+- **pool size** — the size of the candidate pool used by NN-style
+  reranks and the random-floor estimator (default $2000$). (§3, §4)
+- **$\alpha$** — the strength of an activation edit in the
+  steering demo: $v_{\text{used}} = v + \alpha (v_{\text{new}} -
+  v_{\text{orig}})$. Not a paper symbol; defined for the
+  MindReader-NLA demo glossary. (demo only)
+
+### B.2 Metrics
+
+- **$\mathrm{fve\_nrm}(h, v)$ — fraction-of-variance-explained,
+  normalised.** Defined as $\tfrac{1}{2}(1 + \cos(h, v))$; the
+  unique affine map of $\cos \in [-1, 1]$ into $[0, 1]$. The
+  per-target score throughout training, evaluation, and
+  best-of-$K$. "fve" = *fraction of variance explained* by an
+  optimal scaling of $h$ along $v$. (§1)
+- **raw fve_nrm.** $\mathrm{fve\_nrm}(h, v)$ computed without
+  subtracting $\mu$. Dominated by the rotation-into-$\mu$
+  component on high-anisotropy backbones and therefore *not* a
+  faithful indicator of content fidelity. The "0.689 wall" of §2
+  is an artefact of this metric. (§2, §3)
+- **centred fve_nrm.** $\mathrm{fve\_nrm}(h - \mu, v - \mu)$. The
+  metric used for all headline numbers. Random-floor maps to
+  $\approx 0.50$ on all three backbones despite a $22\times$
+  spread in $\|\mu\|$. (§3, §4, §10, §11)
+- **$\rho_{\text{cen}}$ — normalised progress.** Linear rescaling
+  of centred fve into a unit interval whose $0$ is the centred
+  random floor and whose $1$ is the centred ceiling (paraphrase on
+  Qwen and Gemma; NN-in-pool on Llama). Values $>1$ mean the
+  adapter overshoots the binding ceiling. (§3, §4, §10, §11)
+- **Spearman$(\log p, \mathrm{cen})$.** Per-target rank correlation
+  between the AV's mean per-token log-probability of a candidate
+  and that candidate's centred fve. Mean over $M$ targets is the
+  test statistic for whether logp-rerank can work. $\approx 0.04$
+  on Qwen, $0.06$ on Llama, $0.03$ on Gemma; effectively zero.
+  (§5, §10, §11)
+- **5-gram duplication.** Diagnostic of sampling diversity: the
+  fraction of $5$-token windows in a rollout that also appear in
+  another rollout for the same $v$. Used in §6 to diagnose the
+  Lever B collapse ($0.003 \to 0.045$). (§6)
+
+### B.3 Reference anchors (the four ceilings/floors)
+
+- **replay (oracle re-encode).** Re-encode the *original* text $x$
+  that produced $v$; the resulting $h$ matches $v$ up to numerical
+  noise. Upper bound on what any text-mediated reconstruction can
+  achieve. Centred fve $\approx 0.97$ (Qwen). (§3)
+- **paraphrase ceiling.** Best-of-$k{=}8$ over paraphrases of $x$
+  produced by the base model under a fixed instruction prompt.
+  *Semantic* ceiling: what a model of this class can express in
+  different words. Binding ceiling on Qwen and Gemma; loose on
+  Llama (where the base is a weaker zero-shot paraphraser).
+  (§3, §10, §11)
+- **NN-in-pool.** Nearest neighbour (by raw cosine) to $v$ within
+  a held-out pool of $v$'s from the same distribution; the
+  candidate text is then the source text of that neighbour.
+  Zero-training retrieval baseline. Binding ceiling on Llama.
+  (§3, §10, §11)
+- **random floor.** Off-diagonal cosine: $\mathrm{fve\_nrm}(v_i,
+  v_j)$ averaged over unrelated $(i, j)$ pairs from the same pool.
+  Maps to $\approx 0.62$ raw on Qwen, $\approx 0.50$ centred on all
+  three backbones. (§3, §10, §11)
+
+### B.4 Decoding strategies
+
+- **greedy.** Deterministic, temperature-$0$ argmax decoding from
+  the AV. The "headline gap" is the gap between greedy and best-
+  of-$K$. (§4, §5)
+- **sampled (mean).** Stochastic decoding at $T=1.0$, mean
+  centred fve over the $K$ samples per target. Roughly equal to
+  greedy. (§4)
+- **best-of-$K$.** Sample $K$ candidates, score each by oracle
+  centred cosine to $v$, take the max. Closes (and on Llama and
+  Gemma overshoots) the binding ceiling at $K=64$. The mechanism
+  of §4–5's headline result. (§4, §5, §10, §11)
+- **logp-rerank.** Score the same $K$ candidates by the AV's mean
+  per-token log-probability and take the max. Fails on all three
+  backbones; statistically indistinguishable from greedy. (§5,
+  §10, §11)
+- **NN-anchor rerank.** Score each candidate by centred cosine
+  *not* to $v$ (which is unobserved at deploy time in the realistic
+  setting) but to $v$'s nearest pool neighbour. Beats greedy
+  substantially on both Qwen and Llama. (§5, §10)
+- **MBR (minimum Bayes risk).** Decoding paradigm in which the
+  selected output minimises an expected loss over a candidate
+  pool; best-of-$K$ under our centred-cosine utility is the
+  $\mathrm{argmax}_k \mathrm{util}(\hat{x}_k, v)$ instance of MBR
+  with the oracle utility. (§1.5, §5; cf. Eikema & Aziz, 2020;
+  Bertsch et al., 2023; Kumar & Byrne, 2004)
+
+### B.5 Architecture and training terms
+
+- **Backbone.** The frozen pretrained causal LM (Qwen-2.5-7B,
+  Llama-3.2-3B, or Gemma-2-2B). Weights never updated. (§1)
+- **Activation Verbalizer (AV).** The trained adapter: $\sim 5$M
+  (Gemma) / $9.4$M (Llama) / $12.7$M (Qwen) parameters. Consists
+  of a hidden-state→soft-token projection, $P$ static prefix
+  tokens, and one inject slot. Trained with token-level CE on
+  $(v, x)$ pairs. (§1, §10, §11)
+- **inject slot.** The single token position into which the
+  projected $v$ is written. Distinct from the static prefix
+  tokens. The L14 channel of Figure A2 is direct evidence that
+  this kind of slot is structurally stable. (§1, App. A)
+- **prefix tokens.** $P$ learned soft tokens prepended before the
+  inject slot. Function as a "community-of-one" sieve in the
+  Kockelman sense: they bias the backbone's sampling distribution
+  toward $\hat{x}$ that re-encodes back to $v$. (§1.5)
+- **multi-inject ($M=4$).** Variant in which $v$ is projected into
+  $M$ inject slots rather than one. Lever 1 in the §2 table; no
+  improvement on raw metric. (§2)
+- **MLP-conditioned prefix.** Variant in which the static prefix
+  is replaced by an MLP whose input is $v$. Lever 2 in §2. (§2)
+- **PG + KL.** Policy-gradient fine-tune with KL regularisation
+  against the CE-trained warm-start. Lever 3 in §2. (§2)
+- **Lever A / Lever B.** Naming convention for the two routes to
+  closing the greedy gap. Lever A: best-of-$K$ at deploy time
+  (works). Lever B: bag-of-$K$ self-distillation
+  (`train_nla_bok_v2.py`), winner-CE over $K$ rollouts plus
+  contrastive hard-negatives (does not close the gap; collapses
+  sampling diversity). (§6)
+- **winner-CE.** Lever B's loss: standard token cross-entropy
+  computed against the rollout with the highest centred cosine to
+  $v$ within the current bag of $K$. (§6)
+- **contrastive hard-negatives ($\beta_{\text{ctr}}$).** Auxiliary
+  term in Lever B that pushes the policy away from retrieved
+  hard-negative texts. (§6)
+- **gold pair.** A $(x, v_x)$ training example: a sampled
+  continuation $x$ together with the $v_x$ it produced at layer
+  $\ell$ in the backbone. (§1, §10, §11)
+- **token CE.** Standard left-to-right token-level cross-entropy
+  on $(v, \text{text})$ pairs. The CE-only training objective for
+  the headline AV checkpoints. (§1)
+
+### B.6 Frozen-decoder interpretability concepts
+
+- **frozen-decoder verbalisation problem.** The class of problems
+  in which a frozen LM is asked to emit text *about* one of its
+  own hidden states under a metric that is grounded in the same
+  model's re-encoding behaviour. The object of study of this
+  paper. (§1.5, §10)
+- **round trip.** The composition $v \to \hat{x} \to h$, scored
+  by the similarity of $h$ to $v$. The paper's apparatus. (§1.5)
+- **interpretant completion.** Peircean framing of the round trip:
+  $\hat{x}$ is a sign whose interpretant, *with respect to the
+  backbone itself*, is $h$. The chain closes iff $h \approx v$.
+  (§1.5; cf. Peirce, 1931–1958; Kockelman, 2017)
+- **sieving.** Kockelman's term for the actualisation of a subset
+  of possible interpretants by an interpreter's prior commitments.
+  The prefix is a sieve that conditions the backbone to land on
+  paraphrase-manifold $\hat{x}$. (§1.5; cf. Kockelman, 2017, 2025)
+- **community-of-one.** A *discourse community* (Stage 3) of size
+  one: the configuration of the backbone that re-arrives at $v$.
+  The prefix simulates this community as a sampling bias. (§1.5)
+- **metapragmatic awareness (first/second/third-order
+  indexicality).** Silverstein's hierarchy of sign-usage capacities.
+  Mapped onto decoding in §1.5: first-order = produce any text from
+  $v$; second-order = produce text in the right dialect (≈ NN
+  retrieval); third-order = produce text whose paraphrase-manifold
+  position the substrate certifies under re-encoding (≈ best-of-$K$
+  MBR). (§1.5; cf. Silverstein, 1993, 2003)
+- **second-order cybernetics.** Von Foerster's framing of
+  self-organisation in systems whose observation is internal to the
+  system. NLA closes the *inter-pass* loop on a frozen backbone in
+  the topology where the substrate is strongest (text). (§1.5; cf.
+  von Foerster, 1981, 2003)
+- **intra-pass vs inter-pass loop.** Two topologies for closing a
+  loop on a frozen LM. *Intra-pass*: read layer $\ell_1$, modify
+  layer $\ell_2 > \ell_1$ in the *same* forward pass (the
+  SRT-Adapter RRM topology). *Inter-pass*: read $\ell$, emit text,
+  re-encode the text in a *second* forward pass and read $\ell$
+  again (NLA's topology). (§1.5, §12)
+- **substrate claim.** The SRT program's core empirical claim:
+  semiotic phenomena (community, regime, divergence, now round-trip
+  fidelity) are *measurable* on a frozen production-scale LM
+  without architectural modification. (§12)
+- **greedy gap.** The gap between the AV's greedy-decode centred
+  fve and the binding ceiling. The real open problem of the paper.
+  (§4, §6, §12)
+- **bifurcation reading of the greedy gap.** Interpretation of the
+  gap as a two-attractor structure in the sampling distribution: a
+  high-mass modal basin below the paraphrase manifold and a
+  reachable-but-not-modal paraphrase-manifold attractor that
+  sampling but not logp-rerank can access. Connects to the
+  pitchfork dynamics of Lancaster (2025). (§12)
+
+### B.7 SRT program stages
+
+- **Stage 1.** Synthetic and news-domain demonstration of the
+  four-module decomposition (community, MAH, RRM, BEN). Lancaster
+  (2025, 2026a). (§0, §12)
+- **Stage 2.** Interiority-probe / regime-classification head on
+  Qwen-2.5-7B; calibrated to AUROC $0.99$, Brier $0.010$, ECE
+  $0.0009$ over $351{,}000$ tokens. (App. A, Fig. A3)
+- **Stage 3 (SRT-Adapter).** Lightweight semiotic adapter on
+  frozen Qwen-2.5-7B, $0.19\%$ parameter overhead, with
+  Community/MAH/BEN reading and RRM intervention. The "half-open
+  loop" reference point of §1.5. Lancaster, 2026 [SRT-Adapter MS].
+  (§0, §1.5, §12)
+- **Stage 4 (this paper, SRT-NLA).** Round-trip verbalisation of
+  frozen hidden states; closes the *inter-pass* loop on three
+  backbones. (entire paper)
+- **four-module decomposition.** Stage-1 architecture:
+  - **community / Community Discovery** — discourse-community
+    manifold inherited from pretraining;
+  - **MAH (metapragmatic-attention head)** — divergence-amplifying
+    attention component;
+  - **RRM (reflexive-recurrence module)** — gated intra-pass
+    hidden-state inject-back via FiLM;
+  - **BEN (bifurcation-estimation network)** — control-parameter
+    $\hat{r}$ estimator. (§1.5, §12)
+- **FiLM.** Feature-wise Linear Modulation: gating mechanism RRM
+  uses for hidden-state injection. (§1.5)
+- **anisotropy.** Property of a representation space in which the
+  empirical mean $\mu$ has non-trivial norm, biasing all cosines
+  toward $\cos(v, \mu) > 0$. The reason centring is necessary.
+  (§2, §3, §10, §11)
+
+### B.8 Models, datasets, and HF artifacts
+
+- **Qwen/Qwen2.5-7B.** Alibaba; $L=28$, $d=3584$; probe layer $20$;
+  $\|\mu\| \approx 55$. (§1, §10, §11)
+- **meta-llama/Llama-3.2-3B.** Meta; $L=28$, $d=3072$; probe layer
+  $20$; $\|\mu\| \approx 7.2$. (§10)
+- **google/gemma-2-2b.** Google; $L=26$, $d=2304$; probe layer
+  $19$; $\|\mu\| \approx 156$; $\mathrm{bos\_token\_id}=2$,
+  $\mathrm{eos\_token\_id}=1$. (§11)
+- **`RiverRider/srt-nla-av-v1`** — released Qwen AV checkpoint. (§8)
+- **`RiverRider/srt-nla-av-llama32-3b`** — released Llama AV. (§10)
+- **`RiverRider/srt-nla-av-gemma2-2b-v1`** — released Gemma AV.
+  (§11)
+- **`RiverRider/srt-nla-targets-v1`** — released Qwen targets
+  dataset. (§8)
+- **`targets_q7b_L20_seq64_*.pt`** — Qwen target activation
+  tensors. (§8)
+- **`targets_L20_seq64_30k_seed1.pt`** — Llama target tensors
+  ($22.7$ GB; sha256 `db5c9d22…1981fa`). (§10)
+
+### B.9 Scripts and code artifacts
+
+- **`scripts/oracle_ceiling.py`.** Computes the four anchors
+  (replay, paraphrase, NN-in-pool, random floor), raw and centred.
+  (§3, §8)
+- **`scripts/centered_eval.py`.** Adapter greedy / sampled /
+  best-of-$K$ + NN-retrieval, raw and centred. (§2, §4, §8)
+- **`scripts/rerank_eval.py`.** $K$-curve, logp-rerank,
+  NN-anchor-rerank, $\mathrm{Spearman}(\log p, \mathrm{oracle\,cen})$.
+  (§5, §8)
+- **`scripts/train_nla_bok_v2.py`.** Lever B trainer (winner-CE +
+  contrastive). (§6, §8)
+- **`scripts/sample_targets.py`.** Generates the $(x, v_x)$
+  target activations from a backbone. (§10)
+- **`probe_bestofn.py`** (legacy). Original best-of-$N$ script that
+  reported the misleading $0.689$ number. Replaced by
+  `centered_eval.py`. (§2)
+- **`ActivationVerbalizer`.** The AV module class; takes
+  `d_embed = backbone.config.hidden_size` and is therefore
+  backbone-agnostic. (§1, §10)
+- **commit `902b746`.** Fix for the constant-target bug that
+  Gemma's distinct `bos`/`eos` token ids exposed. (§11)
+
+### B.10 Abbreviated citation index
+
+References are cited in shortened form throughout. Full
+bibliographic entries are in §14.
+
+- **Lancaster, 2025** — pitchfork bifurcation / polarisation paper
+  (SSRN 5987495). Stage 1 of the SRT program.
+- **Lancaster, 2026a** — semiotic-reflexive LM training (SSRN
+  6349978). Stage 1/2 program statement.
+- **Lancaster, 2026 [SRT-Adapter MS]** — Stage 3 manuscript,
+  GitHub-hosted, not yet on arXiv at the time of writing.
+- **Peirce, 1931–1958** — *Collected Papers*; CP 2.228 and 2.303
+  for the triadic sign / interpretant definitions.
+- **Kockelman, 2017; 2025** — interpretant chains as sieving
+  trajectories.
+- **Silverstein, 1993; 2003** — orders of indexicality.
+- **von Foerster, 1981; 2003** — second-order cybernetics.
+- **Anderson, 2014** — catastrophe-theoretic modelling of cultural
+  systems; reification critique.
+- **Leighton, 2026** — Maxwell-demon bound in random multipartite
+  stochastic systems.
+- **VanSaders, Fruchart, & Vitelli, 2026** — measurement-induced
+  phase transitions; analogy for the $\log K$ information
+  acquisition picture.
+- **Belrose et al., 2023 (tuned lens); nostalgebraist, 2020 (logit
+  lens); Pal et al., 2023 (Future Lens); Ghandeharioun et al.,
+  2024 (Patchscopes); Chen, Vondrick, & Mao, 2024 (SelfIE);
+  Morris et al., 2023 (text embedding inversion)** — frozen-decoder
+  interpretability lineage NLA sits in. (§7)
+- **Eikema & Aziz, 2020; Kumar & Byrne, 2004; Bertsch et al.,
+  2023** — MBR / mode-inadequacy literature behind §5. (§5, §7)
+- **Frank & Goodman, 2012** — RSA pragmatics; relevant to §1.5's
+  third-order indexicality reading.
+- **Hewitt & Manning, 2019; Marks et al., 2024** — structural
+  probes / sparse feature circuits; the side-channel readout
+  paradigm NLA contrasts itself with. (§7)
+- **Kim & Rush, 2016; Gulcehre et al., 2023 (ReST); Yuan et al.,
+  2023 (RFT); Zelikman et al., 2022 (STaR)** — sequence-level
+  distillation and self-training; design space Lever B sits in.
+  (§6, §7)
+- **Lancaster, 2026c** — Reddit Discourse Corpus; Stage-3 dataset
+  reference.
+- **Wildgen, 1982** — catastrophe-theoretic semantics; cited as
+  background to the pitchfork reading of the greedy gap. (§12)
+
+---
+
