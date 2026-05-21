@@ -71,6 +71,7 @@ BACKBONES: dict[str, BackboneSpec] = {
         av_filename="best_av.pt",
         targets_repo="RiverRider/srt-nla-targets-v1",
         targets_filename="targets_q7b_L20_seq64_30k_seed1.pt",
+        num_prefix_tokens=16,
     ),
     "llama-3.2-3b": BackboneSpec(
         label="Llama 3.2-3B (L20)",
@@ -131,9 +132,15 @@ class NLAPipeline:
 
         log.info("Downloading AV checkpoint from %s", spec.av_repo)
         ckpt_path = hf_hub_download(spec.av_repo, spec.av_filename)
-        sd = torch.load(ckpt_path, map_location="cpu")
-        if isinstance(sd, dict) and "state_dict" in sd:
-            sd = sd["state_dict"]
+        sd = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+        # Released checkpoints are wrapped as {'trainable': {...}, 'step': int,
+        # 'val_fve_nrm': float}; older checkpoints used 'state_dict' or were
+        # raw state dicts.
+        if isinstance(sd, dict):
+            for wrap_key in ("trainable", "state_dict", "av_state_dict"):
+                if wrap_key in sd and isinstance(sd[wrap_key], dict):
+                    sd = sd[wrap_key]
+                    break
         # Filter to AV-only keys (proj, prefix_embeds, etc.). The frozen
         # backbone weights live under `backbone.*` in `av.state_dict()` but
         # are not in the saved AV checkpoint, so we ignore those when
@@ -167,7 +174,17 @@ class NLAPipeline:
                             pool_obj = pool_obj[key]
                             break
                 if isinstance(pool_obj, list):
-                    pool_obj = torch.stack([t.flatten() for t in pool_obj[:pool_size]])
+                    # Items are per-sequence (T_i, d) hidden tensors saved
+                    # flat as (T_i*d,). Reshape and keep the last-token
+                    # row of each, since the AV is trained on last-token
+                    # last-token hiddens.
+                    d = self.backbone.config.hidden_size
+                    last_rows = []
+                    for t in pool_obj[:pool_size]:
+                        flat = t.flatten()
+                        T = flat.numel() // d
+                        last_rows.append(flat[(T - 1) * d : T * d])
+                    pool_obj = torch.stack(last_rows)
                 else:
                     pool_obj = pool_obj[:pool_size]
                 self.mu = pool_obj.float().mean(0).to(self.device)
