@@ -335,20 +335,46 @@ portable.
 
 **Centered eval (M=32 targets, K=64, pool=2000).**
 
-| condition | raw fve_nrm | centered fve_nrm | $\rho_{\text{cen}}$ vs NN |
-|---|---|---|---|
-| random floor | 0.569 | 0.500 | 0.00 |
-| greedy | 0.672 | 0.633 | 0.41 |
-| sampled (mean) | 0.684 | 0.637 | 0.43 |
-| **best-of-64** | **0.873** | **0.858** | **1.12** |
-| NN-retrieval (pool=2000) | 0.837 | 0.820 | 1.00 |
+| condition | raw fve_nrm | centered fve_nrm |
+|---|---|---|
+| random floor | 0.569 | 0.500 |
+| greedy | 0.672 | 0.633 |
+| sampled (mean) | 0.684 | 0.637 |
+| **best-of-64** | **0.873** | **0.858** |
+| NN-retrieval (pool=2000) | 0.837 | 0.820 |
 
-We define $\rho_{\text{cen}}$ here against the NN-retrieval baseline
-rather than a paraphrase ceiling (we did not run a Llama paraphrase
-sweep). On this smaller M=32 slice the adapter's best-of-64
-**exceeds the retrieval baseline** ($0.858 > 0.820$ centered): adapter
-generations are a better readback for $v$ than the nearest of 2,000
-real Llama samples. This is the same qualitative outcome as on Qwen.
+**Oracle ceiling (M=200, paraphrase k=8, pool=2000).**
+
+`scripts/oracle_ceiling.py --backbone meta-llama/Llama-3.2-3B`:
+
+| condition | raw fve_nrm | centered fve_nrm |
+|---|---|---|
+| replay (sanity) | 0.904 | 0.881 |
+| random floor | 0.569 | 0.498 |
+| NN-in-pool | 0.785 | **0.756** |
+| paraphrase (best-of-8) | 0.764 | 0.720 |
+
+Two notable points relative to the Qwen ceiling table (§3):
+
+1. **NN > paraphrase on Llama.** The bare paraphrase prompt
+   (`"Paraphrase the following text using different words but the same
+   meaning. Text: ... Paraphrase:"`) underperforms simple nearest-pool
+   retrieval on Llama-3.2-3B base ($0.720 < 0.756$ centered). On
+   Qwen-2.5-7B base the same prompt zero-shots cleanly and produces
+   $0.799$ centered, above NN's $0.714$ — i.e., Qwen-2.5-7B base is a
+   noticeably better in-context paraphraser than Llama-3.2-3B base.
+   The "paraphrase ceiling" is therefore an *instruction-following
+   ceiling* of the base model, not a property of the verbalization
+   problem; on a weaker zero-shot follower it underestimates the true
+   ceiling. We use **NN-in-pool as the headline ceiling for Llama**.
+2. **Adapter best-of-64 exceeds both ceilings.** With NN-in-pool
+   ($0.756$) as the denominator, $\rho_{\text{cen}}=
+   (0.858 - 0.498)/(0.756 - 0.498) = 1.40$ — the adapter saturates the
+   retrieval baseline at $K=64$ and overshoots it. This is the same
+   qualitative result as Qwen (best-of-64 saturates the paraphrase
+   ceiling at $\rho_{\text{cen}} \approx 0.99$), with the difference
+   that on Llama the *NN* baseline is the binding ceiling, not the
+   paraphrase one.
 
 **K-curve (M=200 targets, K=32).**
 
@@ -397,9 +423,9 @@ not of any one model's geometry.
 
 **Llama artifacts.** `artifacts/nla/llama32_3B/`:
 - `sft/best_av.pt` — best SFT checkpoint (val fve_nrm 0.332 at step 5000/5337).
-- `centered_eval.json`, `rerank_eval.json` — eval JSON used for the tables above.
+- `centered_eval.json`, `rerank_eval.json`, `oracle_ceiling.json` — eval JSON used for the tables above.
 - `gold_pairs_seq64.jsonl` — 29,963 train pairs.
-- `sft.log`, `sample.log`, `centered_eval.log`, `rerank.log` — full run logs.
+- `sft.log`, `sample.log`, `centered_eval.log`, `rerank.log`, `oracle_ceiling.log` — full run logs.
 
 The 22.7 GB activations file (`targets_L20_seq64_30k_seed1.pt`,
 sha256 `db5c9d22…1981fa`) is reproducible from

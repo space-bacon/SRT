@@ -1,0 +1,143 @@
+2026-05-21 00:19:50,054 oracle_ceiling loading backbone meta-llama/Llama-3.2-3B
+2026-05-21 00:19:55,132 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+2026-05-21 00:19:55,272 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-05-21 00:19:55,319 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-21 00:19:55,362 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-21 00:19:56,193 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B "HTTP/1.1 200 OK"
+2026-05-21 00:19:56,259 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/254 [00:00<?, ?it/s]Loading weights: 100%|██████████| 254/254 [00:00<00:00, 8161.06it/s]
+2026-05-21 00:19:56,468 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/generation_config.json "HTTP/1.1 200 OK"
+2026-05-21 00:19:57,321 oracle_ceiling loading targets artifacts/nla/llama32_3B/targets_L20_seq64_30k_seed1.pt
+2026-05-21 00:20:08,324 oracle_ceiling evaluating first 200 / 30000 targets
+2026-05-21 00:20:08,441 oracle_ceiling anisotropy ||mu||=7.1637 over 200 targets
+2026-05-21 00:20:08,441 oracle_ceiling computing REPLAY (oracle re-encoding) ...
+2026-05-21 00:20:08,989 oracle_ceiling   replay encode 16/200
+2026-05-21 00:20:09,020 oracle_ceiling   replay encode 32/200
+2026-05-21 00:20:09,050 oracle_ceiling   replay encode 48/200
+2026-05-21 00:20:09,080 oracle_ceiling   replay encode 64/200
+2026-05-21 00:20:09,110 oracle_ceiling   replay encode 80/200
+2026-05-21 00:20:09,141 oracle_ceiling   replay encode 96/200
+2026-05-21 00:20:09,171 oracle_ceiling   replay encode 112/200
+2026-05-21 00:20:09,201 oracle_ceiling   replay encode 128/200
+2026-05-21 00:20:09,232 oracle_ceiling   replay encode 144/200
+2026-05-21 00:20:09,262 oracle_ceiling   replay encode 160/200
+2026-05-21 00:20:09,297 oracle_ceiling   replay encode 176/200
+2026-05-21 00:20:09,327 oracle_ceiling   replay encode 192/200
+2026-05-21 00:20:09,362 oracle_ceiling   replay encode 200/200
+2026-05-21 00:20:09,932 oracle_ceiling REPLAY raw fve=0.9044   centered fve=0.8806
+2026-05-21 00:20:09,932 oracle_ceiling computing RANDOM-FLOOR (off-diagonal pairwise cos in pool) ...
+2026-05-21 00:20:10,422 oracle_ceiling RANDOM-FLOOR raw fve=0.5688   centered fve=0.4982
+2026-05-21 00:20:10,422 oracle_ceiling computing NN-IN-POOL ...
+2026-05-21 00:20:10,423 oracle_ceiling NN-IN-POOL raw fve=0.7852   centered fve=0.7556
+2026-05-21 00:20:10,423 oracle_ceiling computing PARAPHRASE ceiling (k=8, max_new=64) ...
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer TokenizersBackend. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+2026-05-21 00:20:11,888 oracle_ceiling   paraphrase 4/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:13,156 oracle_ceiling   paraphrase 8/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:14,619 oracle_ceiling   paraphrase 12/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:15,932 oracle_ceiling   paraphrase 16/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:17,421 oracle_ceiling   paraphrase 20/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:18,699 oracle_ceiling   paraphrase 24/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:19,971 oracle_ceiling   paraphrase 28/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:21,239 oracle_ceiling   paraphrase 32/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:22,505 oracle_ceiling   paraphrase 36/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:23,770 oracle_ceiling   paraphrase 40/200
+2026-05-21 00:20:24,894 oracle_ceiling   paraphrase 44/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:26,159 oracle_ceiling   paraphrase 48/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:27,432 oracle_ceiling   paraphrase 52/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:28,692 oracle_ceiling   paraphrase 56/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:29,953 oracle_ceiling   paraphrase 60/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:31,221 oracle_ceiling   paraphrase 64/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:32,486 oracle_ceiling   paraphrase 68/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:33,747 oracle_ceiling   paraphrase 72/200
+2026-05-21 00:20:34,870 oracle_ceiling   paraphrase 76/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:36,131 oracle_ceiling   paraphrase 80/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:37,393 oracle_ceiling   paraphrase 84/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:38,660 oracle_ceiling   paraphrase 88/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:39,926 oracle_ceiling   paraphrase 92/200
+2026-05-21 00:20:41,053 oracle_ceiling   paraphrase 96/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:42,326 oracle_ceiling   paraphrase 100/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:43,592 oracle_ceiling   paraphrase 104/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:44,861 oracle_ceiling   paraphrase 108/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:46,128 oracle_ceiling   paraphrase 112/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:47,396 oracle_ceiling   paraphrase 116/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:48,663 oracle_ceiling   paraphrase 120/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:49,938 oracle_ceiling   paraphrase 124/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:51,218 oracle_ceiling   paraphrase 128/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:52,500 oracle_ceiling   paraphrase 132/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:53,784 oracle_ceiling   paraphrase 136/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:55,053 oracle_ceiling   paraphrase 140/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:56,329 oracle_ceiling   paraphrase 144/200
+2026-05-21 00:20:57,451 oracle_ceiling   paraphrase 148/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:20:58,710 oracle_ceiling   paraphrase 152/200
+2026-05-21 00:20:59,825 oracle_ceiling   paraphrase 156/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:01,089 oracle_ceiling   paraphrase 160/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:02,352 oracle_ceiling   paraphrase 164/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:03,611 oracle_ceiling   paraphrase 168/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:04,871 oracle_ceiling   paraphrase 172/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:06,131 oracle_ceiling   paraphrase 176/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:07,388 oracle_ceiling   paraphrase 180/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:08,647 oracle_ceiling   paraphrase 184/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:09,905 oracle_ceiling   paraphrase 188/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:11,162 oracle_ceiling   paraphrase 192/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:12,419 oracle_ceiling   paraphrase 196/200
+[transformers] A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
+2026-05-21 00:21:13,681 oracle_ceiling   paraphrase 200/200
+2026-05-21 00:21:13,683 oracle_ceiling PARAPHRASE all   raw fve=0.6405  centered fve=0.5751
+2026-05-21 00:21:13,683 oracle_ceiling PARAPHRASE best  raw fve=0.7637  centered fve=0.7204
+2026-05-21 00:21:13,683 oracle_ceiling wrote artifacts/nla/llama32_3B/oracle_ceiling.json
+2026-05-21 00:21:13,683 oracle_ceiling === headline (RAW fve_nrm) ===
+2026-05-21 00:21:13,683 oracle_ceiling replay      fve_mean=0.9044  (oracle, should be ~1.0)
+2026-05-21 00:21:13,684 oracle_ceiling random_flr  fve_mean=0.5688  (cos between unrelated samples)
+2026-05-21 00:21:13,684 oracle_ceiling nn_in_pool  fve_mean=0.7852  (best other real Qwen text)
+2026-05-21 00:21:13,684 oracle_ceiling paraphrase  fve_mean=0.7637 (best-of-8 Qwen paraphrase)
+2026-05-21 00:21:13,684 oracle_ceiling === headline (CENTERED fve_nrm) ===
+2026-05-21 00:21:13,684 oracle_ceiling replay      fve_mean=0.8806
+2026-05-21 00:21:13,684 oracle_ceiling random_flr  fve_mean=0.4982
+2026-05-21 00:21:13,684 oracle_ceiling nn_in_pool  fve_mean=0.7556
+2026-05-21 00:21:13,684 oracle_ceiling paraphrase  fve_mean=0.7204 (best-of-8 Qwen paraphrase)
+2026-05-21 00:21:13,684 oracle_ceiling adapter best-of-64 from prior probe was 0.6750 (30k) / 0.6890 (10k ceiling); see centered_eval_*.json for centered numbers.
