@@ -134,12 +134,16 @@ class NLAPipeline:
         sd = torch.load(ckpt_path, map_location="cpu")
         if isinstance(sd, dict) and "state_dict" in sd:
             sd = sd["state_dict"]
-        # Filter to AV-only keys (proj, prefix_embeds, etc.)
+        # Filter to AV-only keys (proj, prefix_embeds, etc.). The frozen
+        # backbone weights live under `backbone.*` in `av.state_dict()` but
+        # are not in the saved AV checkpoint, so we ignore those when
+        # checking for missing keys.
         own = self.av.state_dict()
         filtered = {k: v for k, v in sd.items() if k in own and own[k].shape == v.shape}
-        missing = set(own) - set(filtered)
+        adapter_only = {k for k in own if not k.startswith("backbone.")}
+        missing = adapter_only - set(filtered)
         if missing:
-            log.warning("AV checkpoint missing keys: %s", sorted(missing)[:10])
+            log.warning("AV checkpoint missing adapter keys: %s", sorted(missing))
         self.av.load_state_dict(filtered, strict=False)
         self.av.to(self.device)
         self.av.eval()
@@ -152,11 +156,21 @@ class NLAPipeline:
                 pool_path = hf_hub_download(
                     spec.targets_repo, spec.targets_filename, repo_type="dataset"
                 )
-                pool = torch.load(pool_path, map_location="cpu")
-                if isinstance(pool, dict):
-                    pool = pool.get("hiddens", pool.get("targets", next(iter(pool.values()))))
-                pool = pool[: pool_size]
-                self.mu = pool.float().mean(0).to(self.device)
+                pool_obj = torch.load(pool_path, map_location="cpu", weights_only=False)
+                # The released targets file is a dict
+                # {'sequences': [...str], 'activations': [...Tensor], 'meta': {...}}
+                # but earlier shards were saved as a flat tensor or as a dict
+                # with a 'hiddens'/'targets' key.  Normalise to (N, d).
+                if isinstance(pool_obj, dict):
+                    for key in ("activations", "hiddens", "targets"):
+                        if key in pool_obj:
+                            pool_obj = pool_obj[key]
+                            break
+                if isinstance(pool_obj, list):
+                    pool_obj = torch.stack([t.flatten() for t in pool_obj[:pool_size]])
+                else:
+                    pool_obj = pool_obj[:pool_size]
+                self.mu = pool_obj.float().mean(0).to(self.device)
                 log.info("Centring pool ||mu|| = %.2f", self.mu.norm().item())
             except Exception as e:  # noqa: BLE001
                 log.warning("Could not load centring pool (%s); centred fve disabled", e)
