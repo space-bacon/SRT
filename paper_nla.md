@@ -5,6 +5,10 @@
 
 ---
 
+![Figure 1: Three-backbone K-curve overlay (Qwen-2.5-7B L20, Llama-3.2-3B L20, Gemma-2-2B L19). Solid lines: best-of-$K$ centred fve_nrm against $\log_2 K$. Dashed lines: per-backbone paraphrase ceiling. Dotted lines: per-backbone random floor. The three random floors collapse onto a single horizontal band at $\approx\!0.50$ despite a $22\times$ spread in $\|\mu\|$; each K-curve is log-linear and crosses its own paraphrase ceiling at a backbone-specific $K$ ($K\!\approx\!4$ for Llama, $\approx\!16$ for Gemma, $\approx\!64$ for Qwen). One-figure summary of §§4–5 and §§10–11.](artifacts/nla/figures/fig1_cross_backbone_kcurve.png)
+
+---
+
 ## Abstract
 
 The Semiotic-Reflexive Transformer program (Lancaster, 2025; Lancaster, 2026a;
@@ -329,6 +333,8 @@ $$
 
 ## 4. Adapter results, properly anchored
 
+![Figure 2: SRT-Adapter (Stage 3) optimization trace on Qwen-2.5-7B over 94k steps. Top-left: total loss. Top-right: cross-entropy on the LM head against the frozen-backbone CE floor — the AV head learns the substrate's own text distribution without drifting from the floor, ruling out an LM-corruption confound for the §4 raw-vs-centred discussion. Bottom: bifurcation and chain auxiliary losses converging cleanly. The optimisation behind the M=200 numbers below is well-behaved.](artifacts/nla/figures/fig2_loss_curves.png)
+
 `centered_eval.py` on the M=200 target slice, K=64 samples, pool=2000:
 
 | condition | raw fve_nrm | centered fve_nrm | $\rho_{\text{cen}}$ |
@@ -356,6 +362,8 @@ Three observations:
    does not even reach the retrieval baseline on its deterministic decode.
 
 ## 5. The K-curve and the death of logp reranking
+
+![Figure 3: Per-target predicted-vs-true bifurcation/regime calibration scatter from the SRT-Adapter Stage 3 reranker (Pearson $0.825$ on val, $0.778$ on the curated traced subset; tanh saturation visible at the band edges). The reranker that powers the §4 best-of-$K$ result is internally calibrated against an *internal-state* target — the same property that makes it deployable without held-out gold.](artifacts/nla/figures/fig3_calibration_scatter.png)
 
 A finer-grained sweep of $K \in \{1, 2, 4, 8, 16, 32, 64\}$ on the same
 30k checkpoint and 200-target slice (`scripts/rerank_eval.py`, two
@@ -743,10 +751,11 @@ $\approx\!0.020$ per doubling between $K{=}1$ and $K{=}32$, so the
 log-linear shape replicates qualitatively across all three
 backbones; the slope itself tracks the centred denominator.
 
-The three K-curves are overlaid in
-[`artifacts/nla/plots/cross_backbone_kcurve.png`](artifacts/nla/plots/cross_backbone_kcurve.png)
-(dashed lines = per-backbone paraphrase ceiling, dotted lines =
-per-backbone random floor). The three random floors collapse onto a
+The three K-curves are overlaid in **Figure 1** (the banner figure on
+page 1; source
+[`artifacts/nla/figures/fig1_cross_backbone_kcurve.png`](artifacts/nla/figures/fig1_cross_backbone_kcurve.png),
+dashed = per-backbone paraphrase ceiling, dotted = per-backbone
+random floor). The three random floors collapse onto a
 single horizontal band at $\approx\!0.50$ despite a $22\times$ spread
 in $\|\mu\|$, the three K-curves all rise log-linearly, and each
 curve crosses its own paraphrase ceiling at a backbone-specific $K$:
@@ -1085,3 +1094,21 @@ preprint arXiv:2308.01825.
 Zelikman, E., Wu, Y., Mu, J., & Goodman, N. (2022). STaR:
 Self-taught reasoner — bootstrapping reasoning with reasoning.
 *NeurIPS 2022*.
+
+---
+
+## Appendix A. Substrate diagnostics from prior SRT stages
+
+The figures in this appendix are not new measurements for Stage 4; they
+are reproduced from the SRT-Adapter (Stage 3) and interiority-probe
+(Stage 2) artifact sets to give the reader the substrate-level context
+in which the §§4–5 numbers should be read. All three are on
+Qwen-2.5-7B; they illustrate properties of the frozen backbone that
+NLA inherits.
+
+![Figure A1: Layer-as-organ heatmap from the v8a interiority probe (Qwen-2.5-7B, 11 prompt classes × 10 channel summaries, z-scored within column). Mid-layers (≈ L18–L22, the band that contains the L20 NLA extraction layer) carry the most class-discriminative variance across the channel summaries. The figure motivates the depth-percentile heuristic (≈ 73 % of total depth) that we used to pick L20 (Qwen), L20 (Llama), and L19 (Gemma) without per-backbone tuning.](artifacts/nla/figures/figA1_layer_heatmap.png)
+
+![Figure A2: BOS-sink share vs prompt length for nine internal channels (Qwen-2.5-7B). Most channels' attention-to-BOS share decays as $\approx 1/T$ with prompt length, consistent with the standard attention-sink finding. The injection channel at L14 is the exception: its BOS-share holds at $\approx 0.8$ across the full length sweep. Read against §1.5: the NLA verbalizer's single-token injection slot lives in this kind of structurally-stable position, not in the diffuse downstream activations.](artifacts/nla/figures/figA2_length_scaling_share.png)
+
+![Figure A3: Reliability diagram for the SRT-Adapter Stage 3 regime head at step 17,000 (351K-token evaluation; AUROC 0.99, Brier 0.010, ECE 0.0009). Reproduced here to show that the Stage 3 internal-state heads on which the §5 reranker rests are calibrated to production grade — the centred-fve numbers in §§4–5 are not relying on a miscalibrated probe to do their work.](artifacts/nla/figures/figA3_regime_calibration.png)
+
