@@ -1,14 +1,14 @@
 # Natural-Language Activation (NLA) Verbalization:
 ## A Round-Trip Test of Frozen Hidden States, in the Idiom of the SRT Program
 
-*Burton Lancaster — Draft, May 2026*
+*Burton Lancaster, Draft, May 2026*
 
 ---
 
 ## Foreword (for the reader who is new to this program)
 
 Modern large language models are, internally, sequences of high-
-dimensional numerical vectors — one such vector for every token, at
+dimensional numerical vectors, one such vector for every token, at
 every layer. These vectors are what the model actually "thinks in."
 They are not, on their face, human-readable: a vector of $3{,}584$
 numbers does not look like a sentence. A natural question, and the
@@ -19,8 +19,8 @@ internal vectors is *about*.
 We test this directly. We pick a frozen, off-the-shelf language model
 (no retraining of the underlying weights), grab one specific hidden
 vector from somewhere about three-quarters of the way through its
-stack, and train a very small add-on module — about the size of a
-rounding error compared to the base model — whose only job is to
+stack, and train a very small add-on module, about the size of a
+rounding error compared to the base model, whose only job is to
 generate a short piece of text such that, when that text is fed back
 into the same frozen model, the model's *own* internal vector at the
 same layer matches the original we started from. The text is the
@@ -37,7 +37,7 @@ content of the paper:
    built-in bias in the direction it pushes everything. You have to
    subtract that bias out before any number means anything. Once you
    do, the apparent ceiling our trained model was hitting turns out
-   not to be a wall — it is the metric itself, and the same model,
+   not to be a wall, it is the metric itself, and the same model,
    under proper measurement, *saturates the human-paraphrase ceiling*.
 
 2. **The greedy answer is not the best answer.** If you ask the
@@ -48,7 +48,7 @@ content of the paper:
    not where the answer lives.
 
 3. **It works on three different model families.** We replicate the
-   whole story on Qwen-2.5-7B, Llama-3.2-3B, and Gemma-2-2B — three
+   whole story on Qwen-2.5-7B, Llama-3.2-3B, and Gemma-2-2B, three
    models trained by three different organisations on different data
    with different built-in biases (the "anisotropy" $\|\mu\|$ in the
    technical sections varies by $22\times$ across them). The same
@@ -73,7 +73,7 @@ be self-contained at its own level of abstraction.
 
 ---
 
-![**Figure 1. The same story on three different language models.** The horizontal axis is how many guesses the verbalizer is allowed to make per hidden state ($K = 1, 2, 4, …, 64$, on a log scale). The vertical axis is how well the best of those $K$ guesses recovers the original hidden state, after we subtract out each model's built-in bias (the "centred" score, where $0$ means random and $1$ means as good as a human paraphrase of the source text). Solid lines are the three frozen backbones we tested: Qwen-2.5-7B (blue circles), Llama-3.2-3B (green squares), Gemma-2-2B (red triangles). Each model has its own dashed line for its paraphrase ceiling and its own dotted line for its random-guess floor. Three things to notice: (1) all three random floors land on top of each other at about $0.50$, even though Gemma's raw bias is roughly $22\times$ Llama's, which is what "centring" is meant to do; (2) every curve is a clean straight line on this log-x plot, so each doubling of $K$ buys a fixed amount of fidelity; (3) each model crosses its own paraphrase ceiling at a different $K$ — Llama at about $4$ guesses, Gemma at about $16$, Qwen at about $64$ — which means the verbalizer's argmax is not where the answer lives, but a small amount of search reliably finds it. This single panel is the whole three-backbone replication story (see §§4–5 and §§10–11 for the numbers).](artifacts/nla/figures/fig1_cross_backbone_kcurve.png)
+![**Figure 1. The same story on three different language models.** The horizontal axis is how many guesses the verbalizer is allowed to make per hidden state ($K = 1, 2, 4, …, 64$, on a log scale). The vertical axis is how well the best of those $K$ guesses recovers the original hidden state, after we subtract out each model's built-in bias (the "centred" score, where $0$ means random and $1$ means as good as a human paraphrase of the source text). Solid lines are the three frozen backbones we tested: Qwen-2.5-7B (blue circles), Llama-3.2-3B (green squares), Gemma-2-2B (red triangles). Each model has its own dashed line for its paraphrase ceiling and its own dotted line for its random-guess floor. Three things to notice: (1) all three random floors land on top of each other at about $0.50$, even though Gemma's raw bias is roughly $22\times$ Llama's, which is what "centring" is meant to do; (2) every curve is a clean straight line on this log-x plot, so each doubling of $K$ buys a fixed amount of fidelity; (3) each model crosses its own paraphrase ceiling at a different $K$, Llama at about $4$ guesses, Gemma at about $16$, Qwen at about $64$, which means the verbalizer's argmax is not where the answer lives, but a small amount of search reliably finds it. This single panel is the whole three-backbone replication story (see §§4–5 and §§10–11 for the numbers).](artifacts/nla/figures/fig1_cross_backbone_kcurve.png)
 
 ---
 
@@ -126,7 +126,7 @@ raw, log-linear $K$-curve, logp-rerank dead, best-of-$64$ saturating the
 binding ceiling) and report a third-backbone replication on
 **google/gemma-2-2b** in §11 of the canonical record (centred random
 floor $0.498$, paraphrase ceiling $0.598$, best-of-$64$ centred fve
-$0.631$, $\rho_{\text{cen}} = 1.33$, $\|\mu\| \approx 156$ — the most
+$0.631$, $\rho_{\text{cen}} = 1.33$, $\|\mu\| \approx 156$, the most
 anisotropic backbone we have tested, and the cleanest case for the
 centring claim of §§4–5). Three readings
 follow. *First*, hidden-state verbalisation on a frozen mid-scale decoder
@@ -141,7 +141,7 @@ where the adapter's inject-back path through the RRM did not yet carry
 measurable signal (Lancaster, 2026 [SRT-Adapter MS] §6.3), the verbalizer carries
 information *out* of an interior state and into a sequence of tokens that
 the same backbone routes back to itself, instantiating the second-order-
-cybernetic loop in a different topology — the observer reports, the
+cybernetic loop in a different topology, the observer reports, the
 substrate listens, and we measure the round trip.
 
 \noindent\textbf{Keywords:} natural-language activation, activation
@@ -157,14 +157,14 @@ transformer.
 This paper is Stage 4 of a research program whose prior stages have been
 reported separately. The order is logical, not strictly chronological:
 
-1. **Stage 1 — synthetic data; four core architectural claims** (Lancaster,
+1. **Stage 1, synthetic data; four core architectural claims** (Lancaster,
    2026a). Subspace specialisation, community differentiation, divergence
    tracking, and bifurcation detection were tested on controlled synthetic
    corpora with planted divergence. All four passed at the required
    thresholds, establishing that the four-module decomposition (community,
    metapragmatic, reflexive, bifurcation) learns the intended functions.
 
-2. **Stage 2 — natural language; five-test validation** (Lancaster, 2026a).
+2. **Stage 2, natural language; five-test validation** (Lancaster, 2026a).
    The capability set was re-tested on a Supabase news corpus spanning
    five political communities (19K articles, 141K Peircean sign
    annotations). All five tests passed, including a Pearson $r=0.884$
@@ -172,7 +172,7 @@ reported separately. The order is logical, not strictly chronological:
    polarisation index, and 85\% regime-classification accuracy on
    held-out curated passages.
 
-3. **Stage 3 — frozen 7B backbone; SRT-Adapter** (Lancaster, 2026 [SRT-Adapter MS]).
+3. **Stage 3, frozen 7B backbone; SRT-Adapter** (Lancaster, 2026 [SRT-Adapter MS]).
    The validated decomposition was reduced to a 14.5M-parameter adapter
    ($0.19\%$ of a 7B backbone) on a frozen Qwen-2.5-7B. v8a removed the
    discrete prototype layer, raising Reddit recall@1 from $0.413$ to
@@ -189,7 +189,7 @@ reported separately. The order is logical, not strictly chronological:
    observation can modify generation has not yet learnt to carry signal
    under the adopted training regime.
 
-4. **Stage 4 — frozen-decoder verbalisation; SRT-NLA** (this paper). We
+4. **Stage 4, frozen-decoder verbalisation; SRT-NLA** (this paper). We
    pose a complementary question. Stage 3 measured *what* the substrate
    represents about communities, divergence, and regime. Stage 4 asks
    whether a small auxiliary policy can produce a sequence of *tokens* of
@@ -252,7 +252,7 @@ same commitments that motivate the SRT-Adapter (Lancaster, 2026
 *representamen* stands in for an *object* via an *interpretant*, and
 the interpretant is itself a sign that can stand in subsequent triads.
 A frozen LLM's hidden state $v$ at layer $\ell$ is, in this idiom, a
-representamen of whatever the prefix produced — but a representamen
+representamen of whatever the prefix produced, but a representamen
 *to which sign system?* No human reads $v$. The natural choice, and
 the one the round-trip enforces, is to make the backbone its own
 interpreter. The verbalizer produces text $\hat{x}$ from $v$; the
@@ -269,7 +269,7 @@ formalises interpretant chains as dynamical trajectories whose links
 are *sieving* operations: from the space of possible interpretants a
 sign could produce, only some are actualised, conditioned on the
 interpreter's prior exposure and architectural commitments. The
-prefix-tuned AV is a sieve in exactly this sense — it conditions the
+prefix-tuned AV is a sieve in exactly this sense, it conditions the
 backbone's generation distribution on a 16-token (Qwen) or 1-token
 (Llama, Gemma) static prefix that has been trained to make the
 sampling distribution concentrate on $\hat{x}$ such that
@@ -317,7 +317,7 @@ to centred $\rho \approx 0.99$ at best-of-$64$ on Qwen, while the
 adapter's intra-pass loop on the same backbone has not, is itself
 informative: it suggests the backbone is more controllable through
 its own input port (text) than through gated additions to its hidden
-stream — which is unsurprising on reflection, because text is the
+stream, which is unsurprising on reflection, because text is the
 medium the substrate's $\sim\!10^{12}$ pretraining tokens optimised it
 to consume. NLA does not *solve* the closed-loop problem the
 SRT-Adapter posed; it shows that a closed-loop reading on the same
@@ -401,7 +401,7 @@ $$
 
 ## 4. Adapter results, properly anchored
 
-![**Figure 2. The training of the model behind these numbers ran cleanly.** Four panels of training-curve diagnostics from the Stage 3 SRT-Adapter on Qwen-2.5-7B over $94{,}000$ steps. Top-left is the total loss going down and flattening, the way you want it to. Top-right is the most important panel: the orange line is the loss our adapter is hitting on plain language modelling, and the dashed line is the loss the original frozen Qwen achieves on the same text (the "floor"). They sit on top of each other, which means the adapter has *not* damaged Qwen's ability to produce ordinary text — it has only added the verbalizer behaviour on top. The bottom panels show the two auxiliary objectives converging without instability. The takeaway: when you read the headline numbers in §4, you can rule out the alternative explanation "maybe the adapter just broke the language model" — it didn't.](artifacts/nla/figures/fig2_loss_curves.png)
+![**Figure 2. The training of the model behind these numbers ran cleanly.** Four panels of training-curve diagnostics from the Stage 3 SRT-Adapter on Qwen-2.5-7B over $94{,}000$ steps. Top-left is the total loss going down and flattening, the way you want it to. Top-right is the most important panel: the orange line is the loss our adapter is hitting on plain language modelling, and the dashed line is the loss the original frozen Qwen achieves on the same text (the "floor"). They sit on top of each other, which means the adapter has *not* damaged Qwen's ability to produce ordinary text, it has only added the verbalizer behaviour on top. The bottom panels show the two auxiliary objectives converging without instability. The takeaway: when you read the headline numbers in §4, you can rule out the alternative explanation "maybe the adapter just broke the language model", it didn't.](artifacts/nla/figures/fig2_loss_curves.png)
 
 `centered_eval.py` on the M=200 target slice, K=64 samples, pool=2000:
 
@@ -460,7 +460,7 @@ design space for any "cheap" reranker:
   0.04$** (mean over 200 targets, $p_{50}=0.05$, $p_{05}=-0.31$,
   $p_{95}=0.38$). Any value head whose features are restricted to the
   policy's own logp trajectory cannot beat greedy. The reranker must
-  consume the rollout's hidden activation at layer $\ell$ — which is the
+  consume the rollout's hidden activation at layer $\ell$, which is the
   same compute path as just scoring against $v$ directly.
 
 Conversely, **NN-anchor rerank** (score each candidate by its centered
@@ -497,8 +497,8 @@ not flat; it is logp specifically that is useless.
   paraphrase manifold. Under gentler hyperparams (temperature
   $1.5\!\to\!1.2$, $\beta_{\text{ctr}}\!=\!0.1$, lr $1\mathrm{e}{-5}$, warmup
   100, patience 3) the run plateaus at greedy $\rho \approx 0.32$ and
-  oracle $\rho \approx 0.85$ — essentially indistinguishable from the
-  CE-only warm-start at step 500 — and early-stops without further
+  oracle $\rho \approx 0.85$, essentially indistinguishable from the
+  CE-only warm-start at step 500, and early-stops without further
   improvement. We read this as: the winner-CE objective on $K$ rollouts
   optimizes the policy's mode toward whichever rollout currently has the
   highest centered cosine, but this is not the same as concentrating mass
@@ -529,7 +529,7 @@ The engineering pattern (encode → inverter → text → re-encode → measure
 recovery) is direct. The target space differs: vec2text inverts a
 sentence-level encoder embedding; NLA inverts an *internal hidden state* of
 the same generative LM that produces the verbalization, which is what makes
-the round-trip closure non-trivial — the verbalizer must produce text that
+the round-trip closure non-trivial, the verbalizer must produce text that
 the *frozen backbone itself* re-routes to the same place in its own
 representation space.
 
@@ -571,8 +571,8 @@ internals. Distributional semantics is sometimes labelled
 commitments.
 
 **What this work adds.** The intersection. Specifically: a system that
-(i) commits Peircean primitives — metapragmatic awareness, reflexive
-recursion, bifurcation — to specific architectural roles, (ii) operates on
+(i) commits Peircean primitives, metapragmatic awareness, reflexive
+recursion, bifurcation, to specific architectural roles, (ii) operates on
 a frozen production-scale 7B LLM, (iii) reports a calibrated $\rho_{\text{norm}}$
 metric anchored at a random floor and a human paraphrase ceiling, and
 (iv) closes the loop with a round-trip evaluation in which the
@@ -586,15 +586,15 @@ buys.
 
 ## 8. Artifacts
 
-- `scripts/oracle_ceiling.py` — replay / random / NN / paraphrase, raw + centered.
+- `scripts/oracle_ceiling.py`, replay / random / NN / paraphrase, raw + centered.
   Output: `artifacts/nla/oracle_ceiling_30k_v2.json`.
-- `scripts/centered_eval.py` — adapter greedy / sampled / best-of-K and
+- `scripts/centered_eval.py`, adapter greedy / sampled / best-of-K and
   NN-retrieval, raw + centered, on M target vectors with a held-out pool.
   Outputs: `artifacts/nla/centered_eval_{10k,30k}_M200.json`.
-- `scripts/rerank_eval.py` — K-curve, logp-rerank, NN-anchor-rerank,
+- `scripts/rerank_eval.py`, K-curve, logp-rerank, NN-anchor-rerank,
   Spearman(logp, oracle-cen). Output:
   `artifacts/nla/rerank_eval_ce_seq64_np16_v2.json`.
-- `scripts/train_nla_bok_v2.py` — Lever B trainer (winner-CE over $K$
+- `scripts/train_nla_bok_v2.py`, Lever B trainer (winner-CE over $K$
   rollouts + contrastive hard-negs + optional activation L2). Negative-result
   artifacts: `artifacts/nla/bok_v2b_seq64_np16/{best_av.pt, train_log.jsonl, val_text_step000500.jsonl, val_text_step001000.jsonl}`.
 - HF release: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) (model),
@@ -607,10 +607,10 @@ buys.
 
 - Single layer ($\ell=20$), single target type (64-token continuations).
   The anisotropy magnitude $\|\mu\|$ is backbone-specific (Qwen-2.5-7B:
-  $\|\mu\|\!\approx\!55$; Llama-3.2-3B: $\|\mu\|\!\approx\!7.2$ — see §10);
+  $\|\mu\|\!\approx\!55$; Llama-3.2-3B: $\|\mu\|\!\approx\!7.2$, see §10);
   centering is required, but the size of the correction is not universal.
 - Paraphrase ceiling is itself stochastic ($k=8$ samples per source); centered
-  $\rho > 1$ would not be surprising at much higher $k$ — the ceiling is a
+  $\rho > 1$ would not be surprising at much higher $k$, the ceiling is a
   *practical* upper bound on what a Qwen-shaped model can say differently.
 - We did not re-run the four lever experiments under the centered metric; we
   hypothesize they would each show small but non-zero centered improvements
@@ -623,8 +623,8 @@ findings (the 0.689 floor, the boK=ceiling identity, the death of
 logp-rerank, the log-linear K-curve) could in principle be artefacts of
 Qwen-2.5-7B's specific anisotropy $\|\mu\|\approx 55$ rather than
 properties of frozen-decoder verbalization in general. We therefore
-re-ran the entire pipeline — sampling, gold-pair extraction, SFT,
-centered eval, K-curve — on a different model family and a different
+re-ran the entire pipeline, sampling, gold-pair extraction, SFT,
+centered eval, K-curve, on a different model family and a different
 size: **meta-llama/Llama-3.2-3B**, 28 layers, hidden_size 3072, vocab
 128k. The verbalizer is backbone-agnostic by construction
 (`d_embed = backbone.config.hidden_size`); no code changes were needed
@@ -634,7 +634,7 @@ beyond a different `--backbone` flag.
 Qwen-2.5-7B's $\ell=20/28$). 30,000 sampled continuations, $T=64$ tokens,
 seed 1; 29,963 gold pairs survive after re-tokenization with the Llama
 tokenizer. SFT for 3 epochs at batch=16, lr=$3\!\times\!10^{-5}$,
-$P=1$ prefix token, 1 inject slot — identical hyperparameters to the
+$P=1$ prefix token, 1 inject slot, identical hyperparameters to the
 Qwen run except for trainable parameter count (9.44M vs 12.7M, a
 function of the smaller hidden dim and embedding matrix slice).
 
@@ -672,7 +672,7 @@ Two notable points relative to the Qwen ceiling table (§3):
    meaning. Text: ... Paraphrase:"`) underperforms simple nearest-pool
    retrieval on Llama-3.2-3B base ($0.720 < 0.756$ centered). On
    Qwen-2.5-7B base the same prompt zero-shots cleanly and produces
-   $0.799$ centered, above NN's $0.714$ — i.e., Qwen-2.5-7B base is a
+   $0.799$ centered, above NN's $0.714$, i.e., Qwen-2.5-7B base is a
    noticeably better in-context paraphraser than Llama-3.2-3B base.
    The "paraphrase ceiling" is therefore an *instruction-following
    ceiling* of the base model, not a property of the verbalization
@@ -680,7 +680,7 @@ Two notable points relative to the Qwen ceiling table (§3):
    ceiling. We use **NN-in-pool as the headline ceiling for Llama**.
 2. **Adapter best-of-64 exceeds both ceilings.** With NN-in-pool
    ($0.756$) as the denominator, $\rho_{\text{cen}}=
-   (0.858 - 0.498)/(0.756 - 0.498) = 1.40$ — the adapter saturates the
+   (0.858 - 0.498)/(0.756 - 0.498) = 1.40$, the adapter saturates the
    retrieval baseline at $K=64$ and overshoots it. This is the same
    qualitative result as Qwen (best-of-64 saturates the paraphrase
    ceiling at $\rho_{\text{cen}} \approx 0.99$), with the difference
@@ -704,12 +704,12 @@ within sampling noise of Qwen's $+0.030$. Extrapolating from $K=32$
 ceiling near $K \approx 64$, consistent with the M=32 result above.
 
 **Cheap reranks fail the same way.** logp-rerank gives 0.624 centered,
-$+0.005$ over greedy (0.619) — i.e. indistinguishable. Per-target
+$+0.005$ over greedy (0.619), i.e. indistinguishable. Per-target
 Spearman$(\text{mean-logp}, \text{oracle-cen})$: mean 0.055, $p_{50}$
 0.059, $p_{05}$ $-0.40$, $p_{95}$ $0.53$. Identical structure to Qwen
 (mean ~0.04). NN-anchor rerank, by contrast, gives 0.783 centered, well
-above greedy (the NN-anchor *baseline* — score against the ground-truth
-$v$'s nearest pool neighbour, not the candidate — gives 0.836). Both
+above greedy (the NN-anchor *baseline*, score against the ground-truth
+$v$'s nearest pool neighbour, not the candidate, gives 0.836). Both
 the positive (NN works) and negative (logp doesn't) reranking results
 replicate.
 
@@ -718,7 +718,7 @@ Llama-3.2-3B:
 
 1. raw greedy fve_nrm sits in a narrow $\approx 0.66$–$0.69$ band that
    is $\approx 0.10$ above the raw random floor. The "0.689 wall" is
-   not Qwen-specific — it is the anisotropy floor under whatever the
+   not Qwen-specific, it is the anisotropy floor under whatever the
    per-backbone $\|\mu\|$ is.
 2. best-of-64 closes (and slightly overshoots) the retrieval baseline
    in centered fve_nrm, again with no extra training.
@@ -733,10 +733,10 @@ search are properties of the *frozen-decoder verbalization problem*,
 not of any one model's geometry.
 
 **Llama artifacts.** `artifacts/nla/llama32_3B/`:
-- `sft/best_av.pt` — best SFT checkpoint (val fve_nrm 0.332 at step 5000/5337).
-- `centered_eval.json`, `rerank_eval.json`, `oracle_ceiling.json` — eval JSON used for the tables above.
-- `gold_pairs_seq64.jsonl` — 29,963 train pairs.
-- `sft.log`, `sample.log`, `centered_eval.log`, `rerank.log`, `oracle_ceiling.log` — full run logs.
+- `sft/best_av.pt`, best SFT checkpoint (val fve_nrm 0.332 at step 5000/5337).
+- `centered_eval.json`, `rerank_eval.json`, `oracle_ceiling.json`, eval JSON used for the tables above.
+- `gold_pairs_seq64.jsonl`, 29,963 train pairs.
+- `sft.log`, `sample.log`, `centered_eval.log`, `rerank.log`, `oracle_ceiling.log`, full run logs.
 
 The 22.7 GB activations file (`targets_L20_seq64_30k_seed1.pt`,
 sha256 `db5c9d22…1981fa`) is reproducible from
@@ -754,7 +754,7 @@ narrowest "this is a Qwen artefact" reading but does not yet exclude
 therefore run the same pipeline a third time on a third lab's
 backbone of a third generation: **google/gemma-2-2b**
 ($d_{\text{embed}}=2304$, $L=26$ layers, vocabulary $256{,}000$,
-distinct `bos_token_id=2`, `eos_token_id=1` — explicitly *not* the
+distinct `bos_token_id=2`, `eos_token_id=1`, explicitly *not* the
 Qwen-style trap that produced the constant-target bug fixed at commit
 `902b746`). Probe layer $\ell=19$ (19/26 $= 73.1\%$ depth, the
 closest fractional match to Qwen and Llama at $20/28 = 71.4\%$). All
@@ -765,10 +765,10 @@ shrinks as $d_{\text{embed}}$ does, and prefix/inject default to
 $P{=}1$ token slots).
 
 **Pipeline timing.** On a remote RTX PRO 6000 (Blackwell), the full
-Stage-4 chain — sample $30{,}000$ activation targets at
+Stage-4 chain, sample $30{,}000$ activation targets at
 $L{=}19$ ($\sim\!17$ GB cache), build $29{,}952$ gold $(x, v_x)$
 pairs (48 token-budget skips), SFT the AV for $3$ epochs
-($5{,}337$ steps), and the centred / rerank / oracle eval triad —
+($5{,}337$ steps), and the centred / rerank / oracle eval triad,
 completes in $\approx\!90$ minutes wall-clock. Best validation
 $\text{fve}_{\text{nrm}} = 0.3334$ at SFT step $4{,}500$ (CE
 $1.760 \to 1.602$ cleanly, no plateau).
@@ -776,7 +776,7 @@ $1.760 \to 1.602$ cleanly, no plateau).
 **Anisotropy.** The centred-eval estimate of the L19 mean activation
 norm is $\|\mu\| = 156.3$ (oracle subsample $\|\mu\| = 164.2$). This
 is *substantially larger* than Qwen's L20 ($\|\mu\| \approx 55$) and
-Llama's L20 (§10) — almost a factor of three. Gemma-2 layer-19
+Llama's L20 (§10), almost a factor of three. Gemma-2 layer-19
 representation space is the most anisotropic of the three backbones
 we have tested, and is the cleanest case for the centring claim of
 §§4–5: any evaluation that ignores $\mu$ on this backbone is
@@ -797,8 +797,8 @@ dominated by the rotation-into-$\mu$ component.
 The centred denominator $0.5978 - 0.4976 = 0.1002$ is markedly
 smaller than Qwen's; this is a substantive cross-backbone fact, not a
 measurement artefact. Gemma-2-2B's base distribution is sharper in
-the centred geometry — paraphrases of a given $x$ produce more
-peaked sampling distributions than on Qwen — so the ceiling sits
+the centred geometry, paraphrases of a given $x$ produce more
+peaked sampling distributions than on Qwen, so the ceiling sits
 closer to the floor in centred fve units. Despite this, **best-of-64
 overshoots the paraphrase ceiling by a factor of $1.33\times$**,
 mirroring the Qwen and Llama results. NN-in-pool sits *above*
@@ -812,7 +812,7 @@ oracle, not by base-model paraphrase quality.
 |-----|------|------|------|------|------|------|
 | centred fve | 0.511 | 0.534 | 0.555 | 0.572 | 0.593 | 0.618 |
 
-The curve is monotonic with slope $\approx\!0.021$ per doubling —
+The curve is monotonic with slope $\approx\!0.021$ per doubling,
 shallower than Qwen's $\approx\!0.030$, consistent with the smaller
 ceiling-floor gap. Reading the same curve in raw fve gives slope
 $\approx\!0.020$ per doubling between $K{=}1$ and $K{=}32$, so the
@@ -847,7 +847,7 @@ under the oracle utility.
 of §§2–6 holds on Gemma-2-2B:
 
 1. The raw greedy band ($0.664$) sits below the raw random floor
-   ($0.675$) — the strongest possible illustration of why raw fve
+   ($0.675$), the strongest possible illustration of why raw fve
    is not a usable scoring rule on a high-anisotropy backbone, and a
    numerical confirmation that the centring move of §4 is not
    optional.
@@ -872,8 +872,8 @@ HF dataset/model pair under
 `RiverRider/srt-nla-{av,targets}-gemma2-2b-v1`. Together with §10,
 this closes the three-backbone replication condition for Stage 4:
 the SRT-NLA effect is reproducible on Qwen-2.5-7B, Llama-3.2-3B and
-Gemma-2-2B — three labs, three architectural lineages, three
-anisotropy regimes — at a uniform $\sim\!90$ minute training cost
+Gemma-2-2B, three labs, three architectural lineages, three
+anisotropy regimes, at a uniform $\sim\!90$ minute training cost
 per backbone with no per-backbone hyperparameter tuning beyond
 choice of probe layer.
 
@@ -910,7 +910,7 @@ sampling distribution of a prefix-tuned AV. Each candidate $\hat{x}_k$
 re-encodes to a point $h_k$ in the layer-$\ell$ representation
 space; the distribution of $\{h_k\}_{k=1}^{K}$ around $v$ is what
 the rerank utility integrates over. At small $K$ and at the policy's
-argmax mode, this distribution sits in a *single basin* — typically
+argmax mode, this distribution sits in a *single basin*, typically
 the centred-cosine $\approx\!0.59$–$0.63$ basin we observe as the
 greedy band on Qwen and Llama. At $K \gtrsim 16$ the distribution
 develops a thin but heavy upper tail extending to the paraphrase
@@ -919,7 +919,7 @@ the gap between the *modal* $\hat{x}$ and the *paraphrase-manifold*
 $\hat{x}$, which on the canonical pitchfork reading is the gap
 between an attractor at the policy's high-mass mode and a higher-
 fidelity attractor that is reachable but not modal. We do not claim
-to have *measured* a pitchfork in the sampling distribution — that
+to have *measured* a pitchfork in the sampling distribution, that
 would require a probabilistic separatrix probe of the kind the
 SRT-Adapter applies to MAH divergence (Lancaster, 2026 [SRT-Adapter MS],
 §6.9). We claim that the qualitative shape of the failure (modal
@@ -933,8 +933,8 @@ within-basin quantity, cosine to a retrieved anchor crosses basins.
 SRT-Adapter's central open question is whether a closed circular-
 causal loop on a frozen backbone is reachable through gated hidden-
 state injection. NLA does not answer that question. It closes a
-*different* loop — text-mediated rather than hidden-state-mediated,
-inter-pass rather than intra-pass — on the same substrate, and
+*different* loop, text-mediated rather than hidden-state-mediated,
+inter-pass rather than intra-pass, on the same substrate, and
 shows that the closed loop in this topology saturates a
 non-trivial ceiling without further training. Two consequences for
 the broader program follow. *First*, the controllability of a
@@ -961,7 +961,7 @@ a stochastic object: $k=8$ paraphrase samples per source under a
 prompt of our choosing, scored under our centred metric, anchored
 against our random-floor. A different prompt (Llama paraphrases
 clean less well than Qwen on the bare instruction we used; §10),
-a different random-floor pool, a different choice of $\ell$ —
+a different random-floor pool, a different choice of $\ell$,
 each shifts the denominator of $\rho_{\text{cen}}$. The headline
 result that best-of-$64$ "saturates the paraphrase ceiling" should
 be read with this in mind: it saturates *the empirical paraphrase
@@ -980,9 +980,9 @@ next phase to deliver, what we do not, and where the load-bearing
 uncertainties sit.
 
 1. **Greedy gap closure is the headline open problem.** A
-   verbalizer that closes the greedy gap on this backbone — i.e.,
+   verbalizer that closes the greedy gap on this backbone, i.e.,
    single-pass deterministic decoding at $\rho_{\text{cen}} \gtrsim 0.9$
-   without K-fold inference — is the next-stage goal. Lever B
+   without K-fold inference, is the next-stage goal. Lever B
    (bag-of-$K$ self-distillation) does not close it on Qwen and is
    not expected to on Llama or Gemma; the diversity collapse is
    inherent to winner-CE on a frozen substrate. Plausible
@@ -1003,8 +1003,8 @@ uncertainties sit.
    model under whatever prompt is used; this varies across
    backbones (Qwen $\approx\!0.80$ centred, Llama $\approx\!0.72$
    under the same prompt; §3, §10). Reporting in
-   $\rho_{\text{cen}}$ — normalised to the binding ceiling for
-   that backbone — preserves portability. Anyone reporting an
+   $\rho_{\text{cen}}$, normalised to the binding ceiling for
+   that backbone, preserves portability. Anyone reporting an
    $\mathrm{fve\_nrm}$ result without these two anchors is
    reporting an uninterpretable number.
 
@@ -1019,7 +1019,7 @@ uncertainties sit.
    paper.
 
 4. **Single layer, single target type, single ceiling protocol.**
-   $\ell$ is fixed at $20$ on Qwen, $20$ on Llama, $19$ on Gemma —
+   $\ell$ is fixed at $20$ on Qwen, $20$ on Llama, $19$ on Gemma,
    roughly $71$–$73\%$ depth in each case. Targets are last-valid-
    token hidden states of $T=64$-token continuations. The
    paraphrase ceiling is computed at $k=8$. None of these are
@@ -1160,7 +1160,7 @@ Yuan, Z., Yuan, H., Tan, C., Wang, W., Huang, S., & Huang, F.
 preprint arXiv:2308.01825.
 
 Zelikman, E., Wu, Y., Mu, J., & Goodman, N. (2022). STaR:
-Self-taught reasoner — bootstrapping reasoning with reasoning.
+Self-taught reasoner, bootstrapping reasoning with reasoning.
 *NeurIPS 2022*.
 
 ---
@@ -1174,9 +1174,9 @@ in which the §§4–5 numbers should be read. All three are on
 Qwen-2.5-7B; they illustrate properties of the frozen backbone that
 NLA inherits.
 
-![**Figure A1. Why we read the model at roughly three-quarters of the way through.** A heatmap of how strongly each of $10$ internal probe-channels (rows) responds to each of $11$ different prompt categories (columns), measured at every layer of frozen Qwen-2.5-7B. Brighter cells mean "this layer's channel is unusually informative for this kind of prompt." The bright band sits in the middle-to-late layers, roughly L18–L22 — right where layer L20 is. Earlier layers are still doing word-level processing; the very last layers have already collapsed everything into next-token logits. The middle-late band is where the model has built up a rich, abstract picture of *what the prompt is about*. We use this as the rule for picking the readout layer in every backbone we test: $\approx 73\%$ of the way through the stack — L20 in Qwen, L20 in Llama, L19 in Gemma — with no per-model tuning.](artifacts/nla/figures/figA1_layer_heatmap.png)
+![**Figure A1. Why we read the model at roughly three-quarters of the way through.** A heatmap of how strongly each of $10$ internal probe-channels (rows) responds to each of $11$ different prompt categories (columns), measured at every layer of frozen Qwen-2.5-7B. Brighter cells mean "this layer's channel is unusually informative for this kind of prompt." The bright band sits in the middle-to-late layers, roughly L18–L22, right where layer L20 is. Earlier layers are still doing word-level processing; the very last layers have already collapsed everything into next-token logits. The middle-late band is where the model has built up a rich, abstract picture of *what the prompt is about*. We use this as the rule for picking the readout layer in every backbone we test: $\approx 73\%$ of the way through the stack, L20 in Qwen, L20 in Llama, L19 in Gemma, with no per-model tuning.](artifacts/nla/figures/figA1_layer_heatmap.png)
 
-![**Figure A2. One token slot keeps its grip even as the context grows.** Transformers have a known quirk: a lot of their attention gets dumped into the very first token of the input (the "BOS sink"). The horizontal axis here is how long the prompt is; the vertical axis is the fraction of attention each of $9$ different internal channels still routes to that first-token slot. For most channels the fraction shrinks roughly like $1/T$ as the prompt gets longer — the sink dilutes. One channel does not: the L14 injection channel (top curve) holds at about $80\%$ across the full length sweep. This matters because our verbalizer puts its hidden-state "injection" into exactly one token position; this figure is direct evidence that *that kind of slot* is structurally stable in the transformer and not just a transient feature of short prompts.](artifacts/nla/figures/figA2_length_scaling_share.png)
+![**Figure A2. One token slot keeps its grip even as the context grows.** Transformers have a known quirk: a lot of their attention gets dumped into the very first token of the input (the "BOS sink"). The horizontal axis here is how long the prompt is; the vertical axis is the fraction of attention each of $9$ different internal channels still routes to that first-token slot. For most channels the fraction shrinks roughly like $1/T$ as the prompt gets longer, the sink dilutes. One channel does not: the L14 injection channel (top curve) holds at about $80\%$ across the full length sweep. This matters because our verbalizer puts its hidden-state "injection" into exactly one token position; this figure is direct evidence that *that kind of slot* is structurally stable in the transformer and not just a transient feature of short prompts.](artifacts/nla/figures/figA2_length_scaling_share.png)
 
-![**Figure A3. When the probe says "80% confident," it is right about $80\%$ of the time.** A standard reliability diagram for the Stage 3 regime-classification head, evaluated on $351{,}000$ tokens. The horizontal axis bins predictions by the probability the head emitted; the vertical axis is the fraction that actually turned out true in each bin. A perfect probe sits on the diagonal; this one does, almost exactly. Summary numbers: AUROC $0.99$ (it ranks positives above negatives almost perfectly), Brier $0.010$ (its raw probability errors are tiny), ECE $0.0009$ (its confidence is calibrated to four decimal places). We include this figure so the reader can see that the internal-state probe sitting under §5's reranker is not a hand-wavy classifier — it is calibrated to production grade, and the §§4–5 fidelity numbers are not artifacts of a miscalibrated scorer.](artifacts/nla/figures/figA3_regime_calibration.png)
+![**Figure A3. When the probe says "80% confident," it is right about $80\%$ of the time.** A standard reliability diagram for the Stage 3 regime-classification head, evaluated on $351{,}000$ tokens. The horizontal axis bins predictions by the probability the head emitted; the vertical axis is the fraction that actually turned out true in each bin. A perfect probe sits on the diagonal; this one does, almost exactly. Summary numbers: AUROC $0.99$ (it ranks positives above negatives almost perfectly), Brier $0.010$ (its raw probability errors are tiny), ECE $0.0009$ (its confidence is calibrated to four decimal places). We include this figure so the reader can see that the internal-state probe sitting under §5's reranker is not a hand-wavy classifier, it is calibrated to production grade, and the §§4–5 fidelity numbers are not artifacts of a miscalibrated scorer.](artifacts/nla/figures/figA3_regime_calibration.png)
 
