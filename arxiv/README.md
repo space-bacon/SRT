@@ -1,8 +1,21 @@
-# arXiv Submission Package (staging)
+# arXiv Submission Package (staging), Stage 3 (SRT-Adapter) only
 
 Staged source for a planned arXiv submission of *Semiotic Taps:
 Lightweight Adapter Modules for Bifurcation Detection in Frozen Language
 Models*.
+
+> **Scope of this folder.** Everything under `arxiv/` is the **Stage 3
+> SRT-Adapter** manuscript only (v5 through v22c\_a050 on a frozen
+> Qwen-2.5-7B backbone, with a Stage 3 Phase 1 prelude on TinyLlama-1.1B).
+> It does **not** cover the Stage 4 NLA work, hidden-state verbalisation,
+> or the Llama-3.2-3B / Gemma-2-2B cross-backbone replications. Those
+> live in [`../paper_nla.md`](../paper_nla.md) and will, when prepared
+> for submission, be staged in a sibling folder (`arxiv_nla/`), not
+> merged here. Mentions of "LLaMA" and "Gemma" inside `paper.md` /
+> `paper.tex` refer either to TinyLlama (the Stage 3 Phase 1 backbone)
+> or to the boilerplate "the adapter works with any HuggingFace
+> `AutoModelForCausalLM` (LLaMA, Qwen, Mistral, Phi, Gemma)" sentence,
+> not to the Stage 4 NLA evaluations on those backbones.
 
 > **Status: not yet submitted.** This folder is forward-looking. The
 > manuscript is currently repository-hosted only. The only Lancaster
