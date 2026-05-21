@@ -272,10 +272,8 @@ in bf16; less for Llama-3B and Gemma-2B.
 
 
 if __name__ == "__main__":
-    # On HF Spaces (including ZeroGPU) the platform proxies the app and sets
-    # SPACE_ID; gradio picks up server_name=0.0.0.0 from the environment.
-    if os.environ.get("SPACE_ID"):
-        os.environ.setdefault("GRADIO_SERVER_NAME", "0.0.0.0")
-        app.queue().launch()
+    on_space = bool(os.environ.get("SPACE_ID"))
+    if on_space:
+        app.queue().launch(server_name="0.0.0.0", server_port=7860)
     else:
-        app.queue().launch(server_name="127.0.0.1", share=False)
+        app.queue().launch()
