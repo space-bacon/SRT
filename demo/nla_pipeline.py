@@ -55,7 +55,7 @@ class BackboneSpec:
     backbone_id: str          # HF model ID for the frozen LM
     extraction_layer: int     # layer to read hidden states from
     av_repo: str              # HF repo with best_av.pt
-    av_filename: str = "best_adapter.pt"
+    av_filename: str = "best_av.pt"
     targets_repo: str | None = None   # HF dataset for centring pool
     targets_filename: str | None = None
     num_prefix_tokens: int = 1
@@ -68,7 +68,7 @@ BACKBONES: dict[str, BackboneSpec] = {
         backbone_id="Qwen/Qwen2.5-7B",
         extraction_layer=20,
         av_repo="RiverRider/srt-nla-av-v1",
-        av_filename="best_adapter.pt",
+        av_filename="best_av.pt",
         targets_repo="RiverRider/srt-nla-targets-v1",
         targets_filename="targets_q7b_L20_seq64_30k_seed1.pt",
     ),
@@ -76,9 +76,9 @@ BACKBONES: dict[str, BackboneSpec] = {
         label="Llama 3.2-3B (L20)",
         backbone_id="meta-llama/Llama-3.2-3B",
         extraction_layer=20,
-        av_repo="RiverRider/srt-nla-av-llama3.2-3b-v1",
-        av_filename="best_adapter.pt",
-        targets_repo="RiverRider/srt-nla-targets-llama3.2-3b-v1",
+        av_repo="RiverRider/srt-nla-av-llama32-3b",
+        av_filename="best_av.pt",
+        targets_repo="RiverRider/srt-nla-targets-llama32-3b-v1",
         targets_filename="targets_L20_seq64_30k_seed1.pt",
     ),
     "gemma-2-2b": BackboneSpec(
@@ -86,7 +86,7 @@ BACKBONES: dict[str, BackboneSpec] = {
         backbone_id="google/gemma-2-2b",
         extraction_layer=19,
         av_repo="RiverRider/srt-nla-av-gemma2-2b-v1",
-        av_filename="best_adapter.pt",
+        av_filename="best_av.pt",
         targets_repo="RiverRider/srt-nla-targets-gemma2-2b-v1",
         targets_filename="targets_L19_seq64_30k_seed1.pt",
     ),
