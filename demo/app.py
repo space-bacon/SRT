@@ -214,6 +214,49 @@ unchanged from the public release. Companion paper:
 [`paper_nla.md`](https://github.com/space-bacon/SRT/blob/main/paper_nla.md).
 """
     )
+    with gr.Accordion("ℹ️ Glossary & how to read this demo", open=False):
+        gr.Markdown(
+            """
+**Backbone.** The frozen pretrained language model (Qwen-2.5-7B,
+Llama-3.2-3B, or Gemma-2-2B). Its weights are *never* updated — only the
+small AV adapter on top is trained.
+
+**Layer L.** The transformer layer whose residual-stream activation is
+read out and verbalised. Picked once per backbone during AV training:
+L20 for Qwen, L20 for Llama-3B, L19 for Gemma-2B.
+
+**Hidden state / activation `v`.** The model's last-token residual
+vector at layer L. This is *what the model is currently thinking about*,
+expressed as a `d`-dimensional vector (`d` = 3584 for Qwen, 3072 Llama,
+2304 Gemma).
+
+**Activation Verbalizer (AV).** A small adapter (~5–13M params,
+depending on `d`) that maps `v` to a short prefix of soft tokens, then
+asks the same frozen backbone to *describe `v` in plain English*.
+
+**Verbalisation.** The natural-language sentence the AV produces for
+`v`. Multiple candidates are sampled at temperature `T` and ranked.
+
+**raw fve.** *Fraction of variance explained.* We re-encode the
+verbalised sentence back into a hidden state `v_hat` through the same
+frozen model, then measure how close `v_hat` is to the original `v`
+under cosine similarity, normalised. **Higher is better; 1.0 is perfect.**
+
+**centred fve.** Same as raw fve, but after subtracting the mean
+activation `μ` (the *anisotropy pool*) from both `v` and `v_hat`. This
+removes the trivial "all activations are similar in direction" baseline
+and is the metric that actually reflects content fidelity.
+
+**μ / centring pool norm.** The norm of the anisotropy mean μ. Large μ
+means the model has a strong constant component in its activations at
+this layer; centred fve corrects for it.
+
+**alpha (steering tab).** Strength of the activation edit:
+`v_used = v + alpha · (v_new − v_orig)`, applied as a single forward
+hook on layer L. `alpha = 0` is the unsteered baseline; `alpha = 1`
+fully replaces the original direction with the edited one.
+"""
+        )
     backbone_key = gr.Radio(
         choices=[(spec.label, key) for key, spec in BACKBONES.items()],
         value=DEFAULT_BACKBONE,
