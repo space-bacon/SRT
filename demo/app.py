@@ -155,7 +155,21 @@ def cb_steer(
 # UI
 # ---------------------------------------------------------------------------
 
-with gr.Blocks(title="SRT-NLA: ask the model what it is thinking", theme=gr.themes.Soft()) as app:
+_FORCE_DARK_JS = """
+() => {
+  const url = new URL(window.location);
+  if (url.searchParams.get('__theme') !== 'dark') {
+    url.searchParams.set('__theme', 'dark');
+    window.location.href = url.href;
+  }
+}
+"""
+
+with gr.Blocks(
+    title="SRT-NLA: ask the model what it is thinking",
+    theme=gr.themes.Default(),
+    js=_FORCE_DARK_JS,
+) as app:
     gr.Markdown(
         """# SRT-NLA Demo
 
