@@ -165,10 +165,34 @@ _FORCE_DARK_JS = """
 }
 """
 
+_DARK_CSS = """
+html, body, gradio-app, .gradio-container {
+    background: #0b0f19 !important;
+    color: #e5e7eb !important;
+}
+.gradio-container .prose,
+.gradio-container .prose *,
+.gradio-container .markdown,
+.gradio-container .markdown *,
+.gradio-container p,
+.gradio-container li,
+.gradio-container h1,
+.gradio-container h2,
+.gradio-container h3,
+.gradio-container h4,
+.gradio-container span,
+.gradio-container label {
+    color: #e5e7eb !important;
+}
+.gradio-container a { color: #fb923c !important; }
+.gradio-container code { color: #fde68a !important; background: #1f2937 !important; }
+"""
+
 with gr.Blocks(
     title="SRT-NLA: ask the model what it is thinking",
     theme=gr.themes.Default(),
     js=_FORCE_DARK_JS,
+    css=_DARK_CSS,
 ) as app:
     gr.Markdown(
         """# SRT-NLA Demo
