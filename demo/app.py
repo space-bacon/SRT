@@ -48,7 +48,7 @@ except ImportError:  # pragma: no cover - local dev path
         return lambda fn: fn
 
 
-DEFAULT_BACKBONE = os.environ.get("NLA_DEFAULT_BACKBONE", "gemma-2-2b")
+DEFAULT_BACKBONE = os.environ.get("NLA_DEFAULT_BACKBONE", "qwen2.5-7b")
 # On ZeroGPU torch.cuda.is_available() is False at import time but becomes
 # True inside @spaces.GPU functions. Pin device to cuda when we know the
 # Space has a GPU slice.
