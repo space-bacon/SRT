@@ -5,6 +5,74 @@
 
 ---
 
+## Foreword (for the reader who is new to this program)
+
+Modern large language models are, internally, sequences of high-
+dimensional numerical vectors — one such vector for every token, at
+every layer. These vectors are what the model actually "thinks in."
+They are not, on their face, human-readable: a vector of $3{,}584$
+numbers does not look like a sentence. A natural question, and the
+one this paper is built around, is whether the model itself can be
+asked to say, in its own ordinary output text, what one of those
+internal vectors is *about*.
+
+We test this directly. We pick a frozen, off-the-shelf language model
+(no retraining of the underlying weights), grab one specific hidden
+vector from somewhere about three-quarters of the way through its
+stack, and train a very small add-on module — about the size of a
+rounding error compared to the base model — whose only job is to
+generate a short piece of text such that, when that text is fed back
+into the same frozen model, the model's *own* internal vector at the
+same layer matches the original we started from. The text is the
+"verbalization" of the activation. The match score is how we know
+whether the verbalization is faithful. The whole loop is a round
+trip: hidden state → words → hidden state.
+
+Three things made this harder than it sounds, and they are the actual
+content of the paper:
+
+1. **The obvious match score is misleading.** Two completely
+   unrelated vectors from the same model already look about $62\%$
+   similar by the naive metric, just because the model has a strong
+   built-in bias in the direction it pushes everything. You have to
+   subtract that bias out before any number means anything. Once you
+   do, the apparent ceiling our trained model was hitting turns out
+   not to be a wall — it is the metric itself, and the same model,
+   under proper measurement, *saturates the human-paraphrase ceiling*.
+
+2. **The greedy answer is not the best answer.** If you ask the
+   verbalizer for its single most-likely output, you get a mediocre
+   match. If you let it propose a handful of candidates and pick the
+   best one against an internal-state target, you suddenly get
+   excellent matches. The model knows the answer; its argmax is just
+   not where the answer lives.
+
+3. **It works on three different model families.** We replicate the
+   whole story on Qwen-2.5-7B, Llama-3.2-3B, and Gemma-2-2B — three
+   models trained by three different organisations on different data
+   with different built-in biases (the "anisotropy" $\|\mu\|$ in the
+   technical sections varies by $22\times$ across them). The same
+   shape of curve, the same gap between greedy and best-of-$K$, the
+   same crossing of the paraphrase ceiling. That is what Figure 1
+   below summarises in a single panel.
+
+Why bother? Because if a frozen language model can be made to talk
+*about its own internal states in its own native output channel*,
+that is a different, and arguably more honest, kind of
+interpretability than reading probes off the side. The model is not
+being decoded by us; it is being asked to describe itself, and we are
+checking the description against itself. The body of the paper sets
+this up rigorously, working in the idiom of the broader Semiotic-
+Reflexive Transformer (SRT) program, of which this is "Stage 4."
+A reader who only wants the bottom-line empirical claim can stop
+after Figure 1's caption and the abstract. A reader who wants the
+machinery should read on through §§3–7. A reader who wants the
+philosophical framing (Peircean interpretant chains, second-order
+cybernetics) should look at §§0, 1.5, and 12. Each layer is meant to
+be self-contained at its own level of abstraction.
+
+---
+
 ![**Figure 1. The same story on three different language models.** The horizontal axis is how many guesses the verbalizer is allowed to make per hidden state ($K = 1, 2, 4, …, 64$, on a log scale). The vertical axis is how well the best of those $K$ guesses recovers the original hidden state, after we subtract out each model's built-in bias (the "centred" score, where $0$ means random and $1$ means as good as a human paraphrase of the source text). Solid lines are the three frozen backbones we tested: Qwen-2.5-7B (blue circles), Llama-3.2-3B (green squares), Gemma-2-2B (red triangles). Each model has its own dashed line for its paraphrase ceiling and its own dotted line for its random-guess floor. Three things to notice: (1) all three random floors land on top of each other at about $0.50$, even though Gemma's raw bias is roughly $22\times$ Llama's, which is what "centring" is meant to do; (2) every curve is a clean straight line on this log-x plot, so each doubling of $K$ buys a fixed amount of fidelity; (3) each model crosses its own paraphrase ceiling at a different $K$ — Llama at about $4$ guesses, Gemma at about $16$, Qwen at about $64$ — which means the verbalizer's argmax is not where the answer lives, but a small amount of search reliably finds it. This single panel is the whole three-backbone replication story (see §§4–5 and §§10–11 for the numbers).](artifacts/nla/figures/fig1_cross_backbone_kcurve.png)
 
 ---
