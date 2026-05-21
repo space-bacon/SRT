@@ -29,9 +29,31 @@ from nla_pipeline import BACKBONES, NLAPipeline
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 log = logging.getLogger("nla_demo_app")
 
+# Optional ZeroGPU support. On HF Spaces with `hardware: zero-*`, `spaces`
+# is preinstalled and exposes the @spaces.GPU decorator that grants the
+# decorated function ephemeral CUDA access. Off-Spaces it is a no-op.
+try:
+    import spaces  # type: ignore
+
+    _ON_ZEROGPU = bool(os.environ.get("SPACES_ZERO_GPU")) or hasattr(spaces, "GPU")
+
+    def _gpu(duration: int = 120):
+        if _ON_ZEROGPU:
+            return spaces.GPU(duration=duration)
+        return lambda fn: fn
+except ImportError:  # pragma: no cover - local dev path
+    _ON_ZEROGPU = False
+
+    def _gpu(duration: int = 120):
+        return lambda fn: fn
+
 
 DEFAULT_BACKBONE = os.environ.get("NLA_DEFAULT_BACKBONE", "gemma-2-2b")
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# On ZeroGPU torch.cuda.is_available() is False at import time but becomes
+# True inside @spaces.GPU functions. Pin device to cuda when we know the
+# Space has a GPU slice.
+DEVICE = "cuda" if (torch.cuda.is_available() or _ON_ZEROGPU) else "cpu"
+log.info("device=%s zero_gpu=%s", DEVICE, _ON_ZEROGPU)
 
 # Lazy cache: load each backbone the first time it's selected.
 _PIPES: dict[str, NLAPipeline] = {}
@@ -48,6 +70,7 @@ def get_pipe(key: str) -> NLAPipeline:
 # Tab callbacks
 # ---------------------------------------------------------------------------
 
+@_gpu(duration=120)
 def cb_playground(backbone_key: str, prompt: str, K: int, temperature: float):
     if not prompt.strip():
         return "_(enter a prompt)_", ""
@@ -68,6 +91,7 @@ def cb_playground(backbone_key: str, prompt: str, K: int, temperature: float):
     return summary, table
 
 
+@_gpu(duration=180)
 def cb_thought_trace(backbone_key: str, prompt: str, max_new: int, every: int):
     if not prompt.strip():
         yield "_(enter a prompt)_"
@@ -89,6 +113,7 @@ def cb_thought_trace(backbone_key: str, prompt: str, max_new: int, every: int):
     yield "\n".join(rows)
 
 
+@_gpu(duration=180)
 def cb_steer(
     backbone_key: str,
     prompt: str,

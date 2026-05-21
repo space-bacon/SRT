@@ -6,3 +6,4 @@ accelerate>=0.33
 sentencepiece
 safetensors
 numpy
+spaces>=0.30 ; sys_platform == "linux"

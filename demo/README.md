@@ -39,14 +39,29 @@ Hardware (bf16):
 
 ## Deploy as an HF Space
 
-1. Create a new Space (Gradio template) with hardware tier *A10G* or
-   higher if you want the Qwen backbone available.
+The app supports both standard GPU Spaces and **ZeroGPU**. When the
+`spaces` package is importable and `SPACES_ZERO_GPU` is set in the
+environment (HF Spaces does this automatically on a ZeroGPU tier), the
+three callbacks are wrapped with `@spaces.GPU` and request CUDA on
+demand. Otherwise they run on whatever device `torch.cuda.is_available()`
+reports.
+
+1. Create a new Space (Gradio template). For ZeroGPU pick the
+   *zero-a10g* tier (free); otherwise pick *A10G* or larger.
 2. Mirror this `demo/` directory and the `srt/` package into the Space
    repo (the app imports `srt.nla.verbalizer`).
 3. Add `HF_TOKEN` as a secret if any of the backbones is gated for your
    account (Llama-3.2-3B is gated).
-4. The Space's `app.py` is `demo/app.py`; rename or set
-   `app_file: demo/app.py` in the Space `README.md` frontmatter.
+4. Set `app_file: demo/app.py` in the Space `README.md` frontmatter.
+
+Notes on ZeroGPU:
+
+- First call on a backbone loads weights from HuggingFace; the duration
+  budget on each call is 120s (180s for the steer/trace tabs). Qwen-7B
+  cold-start can saturate this — prefer Gemma-2-2B as the default and
+  only switch to Qwen on Pro hardware.
+- Models stay resident in the persistent control process between calls,
+  so subsequent invocations only pay the GPU-attach overhead.
 
 ## How it works
 
