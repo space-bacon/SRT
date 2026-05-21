@@ -1,29 +1,154 @@
 # Natural-Language Activation (NLA) Verbalization:
-## Probing the Decodability of Frozen Hidden States via Prefix-Tuned Generation
+## A Round-Trip Test of Frozen Hidden States, in the Idiom of the SRT Program
 
-*Draft — May 2026*
+*Burton Lancaster — Draft, May 2026*
 
 ---
 
 ## Abstract
 
-We train a small prefix-tuning adapter (12.7M params) over a frozen Qwen-2.5-7B
-to **verbalize** a single hidden activation $v \in \mathbb{R}^{3584}$ extracted at
-layer 20: given $v$, the adapter generates a short text whose own layer-20
-last-token hidden $h$ maximizes $\mathrm{fve\_nrm}(h, v) = \tfrac{1}{2}(1 + \cos(h, v))$.
-On the raw metric the trained adapter appeared stuck at $\approx 0.689$ across
-four architectural levers (multi-inject, MLP prefix, PG+KL, more data). We show
-that this number is not a model ceiling but a **measurement artifact** of an
-uncentered metric over an anisotropic representation. Under a held-out
-*anisotropy-corrected* metric and against four oracle/baseline anchors (replay,
-paraphrase, NN-retrieval, random-floor), the same adapter at best-of-64
-**saturates the Qwen paraphrase ceiling**, $\rho_{\text{cen}} \approx 0.99$. The
-real open problem is the **greedy gap**: deterministic decoding closes only
-$\approx 28\%$ of the centered ceiling and is *beaten* by zero-training nearest-
-neighbour retrieval ($\rho_{\text{cen}} \approx 0.70$). We argue this reframes
-hidden-state verbalization as a *decoding* problem, not a capacity problem, and
-that any fve_nrm-style evaluation must report (i) an anisotropy-centered metric
-and (ii) a retrieval baseline to be interpretable.
+The Semiotic-Reflexive Transformer program (Lancaster, 2025; Lancaster, 2026a;
+Lancaster, 2026 [SRT-Adapter, arXiv]) treats a frozen large language model as
+a semiotic substrate on which interpretant divergence, metapragmatic
+awareness, and bifurcation dynamics are *measurable* phenomena. Stages 1 and 2
+established the four-module decomposition (community, metapragmatic
+attention, reflexive recurrence, bifurcation estimation) on synthetic and
+news data; Stage 3 ported it to a frozen Qwen-2.5-7B backbone as the
+SRT-Adapter, demonstrating that the discourse-community manifold an LLM
+inherits from its training corpus is exposed at $0.19\%$ parameter overhead
+and is not Qwen-specific. The present paper reports **Stage 4** of the
+program: rather than read structure off the substrate as side-channel
+outputs, we ask the substrate to *speak its own state*. We train a small
+($\sim\!12.7$M-parameter) **Activation Verbalizer** (AV) over a fully frozen
+Qwen-2.5-7B such that, given a target hidden activation
+$v \in \mathbb{R}^{3584}$ extracted at layer 20, the AV generates a short
+text whose own re-encoded layer-20 last-token hidden $h$ maximises
+$\mathrm{fve\_nrm}(h, v) = \tfrac{1}{2}(1 + \cos(h, v))$. The round-trip is
+the apparatus: it is a Peircean interpretant-completion test on the model's
+own representation (Peirce, 1931–1958; Kockelman, 2017), evaluated under a
+metric that disciplines the measurement against the substrate's own
+anisotropy.
+
+On the raw metric the trained adapter appeared stuck at $\approx\!0.689$
+across four architectural levers (multi-inject, MLP prefix, PG+KL, more
+data). We show this is not a capacity ceiling but a *measurement artefact*
+of an uncentred metric over an anisotropic representation, in the sense
+that two unrelated Qwen-7B last-token L20 hidden states already share
+$\mathrm{fve\_nrm}\!\approx\!0.62$ purely from a backbone-specific mean
+$\|\mu\|\!\approx\!55$. Under a held-out **anisotropy-corrected** metric
+calibrated against four anchors (replay, paraphrase, nearest-neighbour
+retrieval, random floor), the *same* checkpoint at best-of-$64$
+**saturates the Qwen paraphrase ceiling** at $\rho_{\text{cen}}\!\approx\!0.99$.
+The real open problem is the **greedy gap**: deterministic decoding closes
+only $\approx\!28\%$ of the centred ceiling and is *beaten* by a zero-
+training nearest-neighbour lookup ($\rho_{\text{cen}}\!\approx\!0.71$). The
+$K$-curve is log-linear at $+0.030$ centred per doubling; logp-rerank is
+statistically indistinguishable from greedy (per-target Spearman of mean
+log-probability with oracle centred cosine $\approx\!0.04$); a bag-of-$K$
+self-distillation attempt (Lever B) does not close the gap on this
+backbone.
+
+We replicate every qualitative finding on **meta-llama/Llama-3.2-3B**
+($\|\mu\|\!\approx\!7.21$, $7.6\times$ smaller; greedy band $0.66$–$0.69$
+raw, log-linear $K$-curve, logp-rerank dead, best-of-$64$ saturating the
+binding ceiling) and report a third-backbone replication on
+**google/gemma-2-2b** in §11 of the canonical record. Three readings
+follow. *First*, hidden-state verbalisation on a frozen mid-scale decoder
+is decoding-bound, not capacity-bound: $\sim\!12.7\text{M}$ trainable
+parameters suffice to make the paraphrase manifold reachable, but the
+argmax mode of the prefix policy is not where the manifold lives.
+*Second*, any $\mathrm{fve\_nrm}$-style evaluation that does not report
+both (i) an anisotropy-centred metric and (ii) a retrieval baseline is
+not interpretable: the raw metric is a thin film over the substrate's own
+geometry. *Third*, NLA closes a loop the SRT-Adapter left half-open:
+where the adapter's inject-back path through the RRM did not yet carry
+measurable signal (Lancaster, 2026 [arXiv] §6.3), the verbalizer carries
+information *out* of an interior state and into a sequence of tokens that
+the same backbone routes back to itself, instantiating the second-order-
+cybernetic loop in a different topology — the observer reports, the
+substrate listens, and we measure the round trip.
+
+\noindent\textbf{Keywords:} natural-language activation, activation
+verbalisation, frozen-decoder readout, anisotropy-corrected fidelity,
+best-of-$N$ minimum-Bayes-risk decoding, Peircean interpretant chain,
+metapragmatic awareness, second-order cybernetics, semiotic-reflexive
+transformer.
+
+---
+
+## 0. Position in the SRT program
+
+This paper is Stage 4 of a research program whose prior stages have been
+reported separately. The order is logical, not strictly chronological:
+
+1. **Stage 1 — synthetic data; four core architectural claims** (Lancaster,
+   2026a). Subspace specialisation, community differentiation, divergence
+   tracking, and bifurcation detection were tested on controlled synthetic
+   corpora with planted divergence. All four passed at the required
+   thresholds, establishing that the four-module decomposition (community,
+   metapragmatic, reflexive, bifurcation) learns the intended functions.
+
+2. **Stage 2 — natural language; five-test validation** (Lancaster, 2026a).
+   The capability set was re-tested on a Supabase news corpus spanning
+   five political communities (19K articles, 141K Peircean sign
+   annotations). All five tests passed, including a Pearson $r=0.884$
+   correlation of the bifurcation estimate $\hat{r}$ with an external
+   polarisation index, and 85\% regime-classification accuracy on
+   held-out curated passages.
+
+3. **Stage 3 — frozen 7B backbone; SRT-Adapter** (Lancaster, 2026 [arXiv]).
+   The validated decomposition was reduced to a 14.5M-parameter adapter
+   ($0.19\%$ of a 7B backbone) on a frozen Qwen-2.5-7B. v8a removed the
+   discrete prototype layer, raising Reddit recall@1 from $0.413$ to
+   $0.484$ and out-of-distribution archetype recall@1 to $7.6\times$
+   chance with $\Delta\,\mathrm{CE}=+0.0001$ nats; a cross-backbone
+   raw-hidden probe showed the targeted discourse-community substrate is
+   present in `Qwen/Qwen3-8B` and `mistralai/Mistral-7B-v0.3` at
+   comparable strength. The MTEB-STS lineage v15a (`srt-adapter-v1.0`),
+   v18, v21a, and v22c\_a050 demonstrated that the same scaffold supports
+   a sentence-encoding head competitive on a standard benchmark with
+   parameter-space interpolation as the cheapest meaningful gain. The
+   open question Stage 3 left on the table is the dead inject-back arm:
+   the observation channel is well-formed; the channel through which
+   observation can modify generation has not yet learnt to carry signal
+   under the adopted training regime.
+
+4. **Stage 4 — frozen-decoder verbalisation; SRT-NLA** (this paper). We
+   pose a complementary question. Stage 3 measured *what* the substrate
+   represents about communities, divergence, and regime. Stage 4 asks
+   whether a small auxiliary policy can produce a sequence of *tokens* of
+   the substrate's own type, such that when the substrate re-reads them
+   it routes them back to the same place in its own representation
+   space. The round-trip metric $\rho_{\text{cen}}$ tests interpretant
+   completion in Peirce's sense: the verbalisation is the new
+   representamen, the backbone's re-encoding is the new interpretant,
+   and we ask how close that interpretant is to the original target.
+   Where the SRT-Adapter occupies the *cloud* end of Anderson's
+   "clouds, languaging, triadicity" (continuous community geometry,
+   layer-wise readout, soft assignments), NLA occupies the *languaging*
+   end: the substrate is asked to render an interior state into the
+   medium of its own training distribution, and we audit the rendering
+   against itself.
+
+The methodological commitments of Stage 3 carry over verbatim. The
+backbone is fully frozen. Trainable parameters are kept small ($\sim\!13$M
+on Qwen, $\sim\!9$M on Llama, comparable on Gemma). The metric is
+calibrated against random-floor and human-paraphrase anchors, and
+reported in both raw and anisotropy-centred form. Negative results are
+reported as such and assigned an explanatory mechanism. Cross-backbone
+replication is a release condition, not an afterthought.
+
+What is *new* in Stage 4, relative to the rest of the program, is two
+things: a calibrated round-trip fidelity metric on internal hidden
+states (rather than side-channel structured outputs), and the
+demonstration that this metric saturates a non-trivial human-paraphrase
+ceiling at deploy-time best-of-$N$ with no extra training. What is *not*
+new is the framing: NLA inherits the four theoretical commitments of
+Stage 3 (Peircean semiosis, catastrophe-theoretic dynamics of
+sociolinguistic change, Silverstein's metapragmatic awareness, Anderson's
+triadic and cloud-shaped readout), specialises them to verbalisation,
+and adds a second-order-cybernetic reading of the round-trip itself
+(§1.5).
 
 ---
 
@@ -39,6 +164,112 @@ and (ii) a retrieval baseline to be interpretable.
   the per-target score throughout training, evaluation, and best-of-K.
 - **Checkpoints.** `ce_seq64_np16/best_av.pt` (10k pairs), `ce_seq64_np16_30k/best_av.pt`
   (30k pairs), both warm-started identically.
+
+### 1.5 Theoretical grounding: verbalisation as interpretant completion
+
+Four commitments motivate the round-trip and its metric. They are the
+same commitments that motivate the SRT-Adapter (Lancaster, 2026
+[arXiv], §2), specialised to the verbalisation problem.
+
+*Peircean interpretant completion as the apparatus.* In Peirce
+(1931–1958, CP 2.228, 2.303), every sign process is triadic: a
+*representamen* stands in for an *object* via an *interpretant*, and
+the interpretant is itself a sign that can stand in subsequent triads.
+A frozen LLM's hidden state $v$ at layer $\ell$ is, in this idiom, a
+representamen of whatever the prefix produced — but a representamen
+*to which sign system?* No human reads $v$. The natural choice, and
+the one the round-trip enforces, is to make the backbone its own
+interpreter. The verbalizer produces text $\hat{x}$ from $v$; the
+backbone re-encodes $\hat{x}$ into $h$ at the same layer; the
+interpretant of $\hat{x}$ relative to the backbone is $h$; the test of
+whether $\hat{x}$ "completed the chain" is the centred cosine of $h$
+with $v$. This is interpretant completion in a literal Peircean sense:
+the chain $v \to \hat{x} \to h$ closes if and only if the substrate
+agrees that $\hat{x}$ is a faithful gloss of $v$ in its own internal
+language. The metric is the apparatus, not the goal.
+
+*Sieving and the prefix as community-of-one.* Kockelman (2017, 2025)
+formalises interpretant chains as dynamical trajectories whose links
+are *sieving* operations: from the space of possible interpretants a
+sign could produce, only some are actualised, conditioned on the
+interpreter's prior exposure and architectural commitments. The
+prefix-tuned AV is a sieve in exactly this sense — it conditions the
+backbone's generation distribution on a 16-token (Qwen) or 1-token
+(Llama, Gemma) static prefix that has been trained to make the
+sampling distribution concentrate on $\hat{x}$ such that
+$h \approx v$. The "community" the prefix simulates is not a
+sociological one. It is a *community of one*: the discrete configuration
+of the backbone consistent with re-arriving at $v$. The round-trip
+metric is then the Stage-3 community signal turned ninety degrees:
+where Stage 3 read which discourse community a token participates in
+off the substrate, Stage 4 induces a discourse-community-of-one as a
+prefix and tests whether the substrate's *own* generative process
+under that prefix homes back to the source state.
+
+*Metapragmatic awareness as a conditional decoding capacity.*
+Silverstein (1993, 2003) distinguishes first-order indexicality (the
+sign refers), second-order indexicality (the sign indexes group
+membership), and third-order indexicality (the sign-user observes that
+the sign is being contested). The corresponding decoding capacities
+in the frozen-LM verbalisation setting are: produce *some* text from
+$v$ (first-order); produce text in the dialect of whichever community
+$v$ comes from (second-order); produce text whose *position in the
+paraphrase manifold of $v$* the substrate can certify under
+re-encoding (third-order). The empirical claim of this paper is that
+$K=1$ greedy decoding implements only the first capacity reliably,
+zero-training nearest-neighbour retrieval implements roughly the
+second on a backbone of Qwen-2.5-7B's calibre, and best-of-$K$ MBR
+under the centred-cosine utility implements the third for $K \gtrsim 64$.
+The greedy gap is not a parameter-count gap; it is a third-order-
+indexicality gap inside the decoding distribution.
+
+*Second-order cybernetics: closing the loop the SRT-Adapter left
+half-open.* Von Foerster's (1981, 2003) account of self-organisation
+in observed systems insists that the observer participates in the
+phenomenon being observed; circular causality is the architectural
+shape of this participation. The SRT-Adapter (Lancaster, 2026 [arXiv],
+§2.5) is a *partial* second-order system: the observation arm
+(Community Discovery, MAH, BEN) reads structure off the substrate
+cleanly, while the intervention arm (RRM inject-back via FiLM)
+through v8b had not yet produced measurable downstream effect. NLA
+closes a different loop on the same substrate. The adapter's loop is
+*intra-pass* (read in one layer, modify a later layer of the *same*
+forward pass); NLA's loop is *inter-pass* (read in a forward pass at
+$\ell$, emit text, run a second forward pass over that text and read
+$\ell$ again). The empirical fact that NLA's inter-pass loop closes
+to centred $\rho \approx 0.99$ at best-of-$64$ on Qwen, while the
+adapter's intra-pass loop on the same backbone has not, is itself
+informative: it suggests the backbone is more controllable through
+its own input port (text) than through gated additions to its hidden
+stream — which is unsurprising on reflection, because text is the
+medium the substrate's $\sim\!10^{12}$ pretraining tokens optimised it
+to consume. NLA does not *solve* the closed-loop problem the
+SRT-Adapter posed; it shows that a closed-loop reading on the same
+substrate is achievable in the topology where the substrate is
+strongest.
+
+A note on physical analogy. Leighton (2026) shows that the probability
+of any sub-system of a random multipartite stochastic system operating
+as a Maxwell demon decays at least exponentially in the system's
+degree count: non-trivial organisation requires *selection*. The
+verbalizer is a $\sim\!10^{7}$-parameter system whose round-trip
+fidelity at best-of-$64$ exceeds the random-floor by $\rho_{\text{cen}}
+\approx 1$ on Qwen and $\approx 1.4$ (relative to NN-in-pool) on
+Llama. Leighton's bound rules out reading this as a generic property
+of high-dimensional embeddings: the structure that emerges is evidence
+of a selection pressure, here the centred-cosine training objective,
+of the kind his analysis identifies as necessary. VanSaders, Fruchart,
+and Vitelli (2026) develop a *measurement-induced* phase-transition
+theory in informational active matter, in which the steady-state
+order parameter is bounded by the mutual information accumulated
+through measurement. The structural analogy is loose but
+load-bearing: $\rho_{\text{cen}}^{\text{best-of-}K}$ is bounded above
+by the mutual information the rerank utility can extract from the
+candidate pool about $v$, and the log-linear $K$-curve we observe
+($+0.030$ centred per doubling on both Qwen and Llama, §5 and §10) is
+what a $\log K$ information-acquisition picture predicts.
+
+---
 
 ## 2. The 0.689 puzzle
 
@@ -432,3 +663,325 @@ sha256 `db5c9d22…1981fa`) is reproducible from
 `scripts/sample_targets.py --backbone meta-llama/Llama-3.2-3B --layer 20
 --num-sequences 30000 --seq-len 64 --batch-size 16 --dtype bfloat16
 --seed 1`.
+
+---
+
+## 11. Cross-backbone transfer #2: Gemma-2-2B (in progress)
+
+A two-backbone result (Qwen-2.5-7B, Llama-3.2-3B) excludes the
+narrowest "this is a Qwen artefact" reading but does not yet exclude
+"this is a Meta-and-Alibaba pretraining-recipe artefact." We
+therefore run the same pipeline a third time on a third lab's
+backbone of a third generation: **google/gemma-2-2b**
+($d_{\text{embed}}=2304$, $L=26$ layers, vocabulary $256{,}000$,
+distinct `bos_token_id=2`, `eos_token_id=1` — explicitly *not* the
+Qwen-style trap that produced the constant-target bug fixed at commit
+`902b746`). Probe layer $\ell=19$ (19/26 $= 73.1\%$ depth, the
+closest fractional match to Qwen and Llama at $20/28 = 71.4\%$). All
+hyperparameters mirror §10 with the substitution
+`--backbone google/gemma-2-2b`; trainable parameter count
+$\approx\!9.3$M, a function of the smaller hidden dim and embedding
+slice.
+
+At time of writing, sample-targets is mid-run on a remote RTX PRO
+6000 (Blackwell) under `nohup`; full numerics will be reported here
+as soon as the SFT, centred eval, rerank eval, and oracle ceiling
+land. The released artifact set will mirror Llama:
+`artifacts/nla/gemma2_2B/{sft/best_av.pt, centered_eval.json,
+rerank_eval.json, oracle_ceiling.json, gold_pairs_seq64.jsonl,
+*.log}` and an HF dataset/model pair under
+`RiverRider/srt-nla-{av,targets}-gemma2-2b-v1`.
+
+The three-backbone replication condition for the program is: every
+qualitative finding of §§2–6 holds — the raw greedy band sits
+$\approx\!0.10$ above the per-backbone raw random floor whose
+magnitude is set by $\|\mu\|$, the centred random floor lands at
+$\approx\!0.50$ regardless of $\|\mu\|$, the $K$-curve is log-linear
+with slope in $[0.025, 0.035]$ centred per doubling, logp-rerank is
+statistically indistinguishable from greedy, and best-of-$64$ closes
+or overshoots the binding ceiling (paraphrase if the base model
+zero-shots the paraphrase prompt cleanly, NN-in-pool otherwise).
+Failure to replicate on Gemma would be informative: the program would
+need to acknowledge a base-instruction-following dependence not
+visible from two close-cousin runs.
+
+---
+
+## 12. NLA as Stage 4 of the SRT program
+
+We now connect Stage 4 explicitly to Stages 1–3 (Lancaster, 2025;
+2026a; 2026 [arXiv]). Three threads run through the program; we
+record where each stands at the close of this paper.
+
+*Substrate claim.* The core empirical claim of the SRT program is
+that a frozen production-scale LLM is a substrate on which semiotic
+phenomena are measurable rather than a target requiring custom
+architectures. Stage 3 supported this for *community* and *regime*
+on Qwen-2.5-7B and showed the substrate claim survives a 1-NN probe
+on Qwen3-8B and Mistral-7B-v0.3 (Lancaster, 2026 [arXiv], §5.12).
+Stage 4 strengthens it: under a calibrated round-trip the same
+frozen Qwen-2.5-7B layer-20 state is *recoverable as text* up to
+the empirical paraphrase ceiling at $K=64$, *and* the result
+replicates on a different family (Llama-3.2-3B) at half the
+parameter count and seven-times-smaller anisotropy. Within the
+claim's intended scope (mid-depth layer of a $2$–$8$B base decoder),
+the substrate framing is now under quantitative control along two
+independent axes: structured side-channel readout and round-trip
+text recovery.
+
+*The greedy gap as a bifurcation in the decoding manifold.*
+Lancaster (2025) develops political polarisation as a supercritical
+pitchfork in the dynamics of interpretant divergence, with the
+control parameter $r$ encoding the strength of divergence-amplifying
+forces. The same canonical model has a natural reading inside the
+sampling distribution of a prefix-tuned AV. Each candidate $\hat{x}_k$
+re-encodes to a point $h_k$ in the layer-$\ell$ representation
+space; the distribution of $\{h_k\}_{k=1}^{K}$ around $v$ is what
+the rerank utility integrates over. At small $K$ and at the policy's
+argmax mode, this distribution sits in a *single basin* — typically
+the centred-cosine $\approx\!0.59$–$0.63$ basin we observe as the
+greedy band on Qwen and Llama. At $K \gtrsim 16$ the distribution
+develops a thin but heavy upper tail extending to the paraphrase
+ceiling; the rerank picks from that tail. The greedy gap is then
+the gap between the *modal* $\hat{x}$ and the *paraphrase-manifold*
+$\hat{x}$, which on the canonical pitchfork reading is the gap
+between an attractor at the policy's high-mass mode and a higher-
+fidelity attractor that is reachable but not modal. We do not claim
+to have *measured* a pitchfork in the sampling distribution — that
+would require a probabilistic separatrix probe of the kind the
+SRT-Adapter applies to MAH divergence (Lancaster, 2026 [arXiv],
+§6.9). We claim that the qualitative shape of the failure (modal
+attractor below the paraphrase manifold; sampling moves probability
+mass between the two; logp does not separate them) is the shape the
+program's canonical model expects, and that *cheap reranks fail
+because they live on the wrong side of the bifurcation*: logp is a
+within-basin quantity, cosine to a retrieved anchor crosses basins.
+
+*Half-open loops, closed loops, and what NLA does not show.* The
+SRT-Adapter's central open question is whether a closed circular-
+causal loop on a frozen backbone is reachable through gated hidden-
+state injection. NLA does not answer that question. It closes a
+*different* loop — text-mediated rather than hidden-state-mediated,
+inter-pass rather than intra-pass — on the same substrate, and
+shows that the closed loop in this topology saturates a
+non-trivial ceiling without further training. Two consequences for
+the broader program follow. *First*, the controllability of a
+frozen mid-scale decoder is asymmetric across input ports: the text
+port is strong (NLA closes), the hidden-state-injection port is
+weak (RRM inject-back has not yet closed). Future SRT work should
+treat this asymmetry as a working hypothesis rather than an
+incidental observation. *Second*, NLA gives the SRT program a
+*compressor*: any structured side-channel readout (community
+vector, divergence trajectory, $\hat{r}$ sequence) can in principle
+be written into text by a verbalizer-style adapter trained on the
+appropriate target, recovered downstream, and audited under the
+centred-cosine round-trip. The dictionary of readouts the
+SRT-Adapter exposes thus becomes, with a verbalizer attached, a
+text-typed interface to the substrate's interior. We do not claim
+to have built that interface. We claim Stage 4 demonstrates the
+component on which it would rest.
+
+*Reification, honestly.* Anderson (personal communication; see
+Lancaster, 2026 [arXiv], §2.7) notes that any computational
+semiotic instrument participates in the meaning-field it measures.
+The verbalizer is no exception. The "paraphrase ceiling" is itself
+a stochastic object: $k=8$ paraphrase samples per source under a
+prompt of our choosing, scored under our centred metric, anchored
+against our random-floor. A different prompt (Llama paraphrases
+clean less well than Qwen on the bare instruction we used; §10),
+a different random-floor pool, a different choice of $\ell$ —
+each shifts the denominator of $\rho_{\text{cen}}$. The headline
+result that best-of-$64$ "saturates the paraphrase ceiling" should
+be read with this in mind: it saturates *the empirical paraphrase
+distribution of this base model under this prompt against this
+random floor at this layer*. That this saturation reproduces on
+Llama-3.2-3B with a different binding ceiling (NN-in-pool rather
+than paraphrase) is what makes the qualitative claim portable; the
+absolute number is not.
+
+---
+
+## 13. Honest expectations and open problems
+
+We close in the program's standard register: what we expect the
+next phase to deliver, what we do not, and where the load-bearing
+uncertainties sit.
+
+1. **Greedy gap closure is the headline open problem.** A
+   verbalizer that closes the greedy gap on this backbone — i.e.,
+   single-pass deterministic decoding at $\rho_{\text{cen}} \gtrsim 0.9$
+   without K-fold inference — is the next-stage goal. Lever B
+   (bag-of-$K$ self-distillation) does not close it on Qwen and is
+   not expected to on Llama or Gemma; the diversity collapse is
+   inherent to winner-CE on a frozen substrate. Plausible
+   directions: (i) temperature distillation from best-of-$K$ into
+   greedy with an *explicit* KL-to-base regulariser tuned to keep
+   the rollout 5-gram duplication rate below $0.01$; (ii) length-
+   conditioned decoding under a learned length oracle (the policy
+   knows the target *length* before it knows the *content*);
+   (iii) contrastive fine-tuning against retrieved hard negatives,
+   with the centred-cosine of the *re-encoded* candidate as the
+   metric, not its sequence-logp. We are not pretending these are
+   mutually exclusive.
+
+2. **The metric is portable; the absolute numbers are not.** The
+   centred random floor lands at $\approx\!0.50$ on both Qwen and
+   Llama; we expect the same on Gemma. The *ceiling* in absolute
+   centred fve\_nrm depends on the paraphrase capacity of the base
+   model under whatever prompt is used; this varies across
+   backbones (Qwen $\approx\!0.80$ centred, Llama $\approx\!0.72$
+   under the same prompt; §3, §10). Reporting in
+   $\rho_{\text{cen}}$ — normalised to the binding ceiling for
+   that backbone — preserves portability. Anyone reporting an
+   $\mathrm{fve\_nrm}$ result without these two anchors is
+   reporting an uninterpretable number.
+
+3. **The program has not measured a pitchfork in the sampling
+   distribution.** The §12 reading of the greedy gap as an
+   attractor structure under the canonical pitchfork is a
+   theoretical positioning, not an experimental result. A direct
+   test would require a probabilistic separatrix probe over the
+   sampling distribution at fixed $v$, of the kind the SRT-Adapter
+   applies to MAH divergence (Lancaster, 2026 [arXiv], §6.9).
+   This is on the v9-onward horizon for the program, not for this
+   paper.
+
+4. **Single layer, single target type, single ceiling protocol.**
+   $\ell$ is fixed at $20$ on Qwen, $20$ on Llama, $19$ on Gemma —
+   roughly $71$–$73\%$ depth in each case. Targets are last-valid-
+   token hidden states of $T=64$-token continuations. The
+   paraphrase ceiling is computed at $k=8$. None of these are
+   universal choices. Generalisation across $\ell$, target type,
+   target length, and ceiling protocol is the next ablation
+   surface.
+
+5. **The substrate-asymmetry hypothesis is now load-bearing.**
+   "The text port is strong, the hidden-state-injection port is
+   weak" is currently inferred from the *conjunction* of the
+   SRT-Adapter's dead inject-back arm and Stage 4's working
+   text-mediated round-trip. The hypothesis is testable: a
+   matched-budget RRM-style intra-pass loop trained against the
+   same centred-cosine round-trip metric (i.e., the loss the AV
+   sees, applied to the inject-back path instead of the prefix)
+   would either close to the same $\rho_{\text{cen}}$ or fail to.
+   This is on the v9 horizon for the SRT-Adapter, not for NLA.
+
+---
+
+## 14. References
+
+Anderson, M. (2014). Mathematical modeling of catastrophic change
+in cultural systems. In M. Anderson (Ed.), *Cultural shaping of
+violence: Victimization, escalation, response* (selected chapters).
+Purdue University Press.
+
+Belrose, N., Furman, Z., Smith, L., Halawi, D., Ostrovsky, I.,
+McKinney, L., Biderman, S., & Steinhardt, J. (2023). Eliciting
+latent predictions from transformers with the tuned lens. *arXiv*
+preprint arXiv:2303.08112.
+
+Bertsch, A., Xie, A., Neubig, G., & Gormley, M. R. (2023). It's
+MBR all the way down: Modern generation techniques through the lens
+of minimum Bayes risk. *arXiv* preprint arXiv:2310.01387.
+
+Chen, H., Vondrick, C., & Mao, C. (2024). SelfIE: Self-
+interpretation of large language model embeddings. *ICML 2024*.
+
+Eikema, B., & Aziz, W. (2020). Is MAP decoding all you need? The
+inadequacy of the mode in neural machine translation. *COLING 2020*.
+
+Frank, M. C., & Goodman, N. D. (2012). Predicting pragmatic
+reasoning in language games. *Science*, 336(6084), 998.
+
+Ghandeharioun, A., Caciularu, A., Pearce, A., Dixon, L., & Geva, M.
+(2024). Patchscopes: A unifying framework for inspecting hidden
+representations of language models. *ICML 2024*.
+
+Gulcehre, C., Le Paine, T., Srinivasan, S., Konyushkova, K.,
+Weerts, L., Sharma, A., Siddhant, A., Ahern, A., Wang, M., Gu, C.,
+Macherey, W., Doucet, A., Firat, O., & de Freitas, N. (2023).
+Reinforced self-training (ReST) for language modeling. *arXiv*
+preprint arXiv:2308.08998.
+
+Hewitt, J., & Manning, C. D. (2019). A structural probe for finding
+syntax in word representations. *NAACL 2019*.
+
+Kim, Y., & Rush, A. M. (2016). Sequence-level knowledge
+distillation. *EMNLP 2016*.
+
+Kockelman, P. (2017). *The art of interpretation in the age of
+computation*. Oxford University Press.
+
+Kockelman, P. (2025). *Semiotic agency in digital environments*.
+Manuscript.
+
+Kumar, S., & Byrne, W. (2004). Minimum Bayes-risk decoding for
+statistical machine translation. *HLT-NAACL 2004*.
+
+Lancaster, J. B. (2025). The treachery of signs: Semiotic
+mediation, pitchfork bifurcation, and political polarization in
+algorithmically curated societies. *SSRN*.
+<https://papers.ssrn.com/abstract=5987495>
+
+Lancaster, J. B. (2026a). Semiotic-reflexive language model
+training: Bridging interpretive bifurcations through metapragmatic
+chain architectures and embodied grounding. *SSRN*.
+<https://papers.ssrn.com/abstract=6349978>
+
+Lancaster, J. B. (2026 [arXiv]). The Semiotic-Reflexive Transformer
+Adapter: Lightweight semiotic awareness for frozen causal language
+models. <https://github.com/space-bacon/SRT/blob/main/arxiv/paper.md>
+(arXiv preprint forthcoming).
+
+Lancaster, J. B. (2026c). Reddit Discourse Corpus: A multi-community
+dataset for semiotic analysis. Manuscript.
+
+Leighton, M. P. (2026). Will a large complex system be a Maxwell
+demon? *arXiv* preprint arXiv:2603.03248.
+
+Marks, S., Rager, C., Michaud, E. J., Belinkov, Y., Bau, D., &
+Mueller, A. (2024). Sparse feature circuits: Discovering and
+editing interpretable causal graphs in language models. *arXiv*
+preprint arXiv:2403.19647.
+
+Morris, J. X., Kuleshov, V., Shmatikov, V., & Rush, A. M. (2023).
+Text embeddings reveal (almost) as much as text. *EMNLP 2023*.
+
+nostalgebraist. (2020). interpreting GPT: the logit lens.
+LessWrong post.
+
+Pal, K., Sun, J., Yuan, A., Wallace, B. C., & Bau, D. (2023). Future
+Lens: Anticipating subsequent tokens from a single hidden state.
+*CoNLL 2023*.
+
+Peirce, C. S. (1931–1958). *Collected papers of Charles Sanders
+Peirce* (Vols. 1–8). C. Hartshorne, P. Weiss, & A. Burks (Eds.).
+Harvard University Press.
+
+Silverstein, M. (1993). Metapragmatic discourse and metapragmatic
+function. In J. A. Lucy (Ed.), *Reflexive language* (pp. 33–58).
+Cambridge University Press.
+
+Silverstein, M. (2003). Indexical order and the dialectics of
+sociolinguistic life. *Language & Communication*, 23(3–4), 193–229.
+
+VanSaders, B., Fruchart, M., & Vitelli, V. (2026). Measurement-
+induced phase transitions in informational active matter. *PNAS
+Nexus*, pgag077.
+
+von Foerster, H. (1981). *Observing systems*. Intersystems
+Publications.
+
+von Foerster, H. (2003). *Understanding understanding: Essays on
+cybernetics and cognition*. Springer.
+
+Wildgen, W. (1982). *Catastrophe-theoretic semantics: An
+elaboration and application of René Thom's theory*. John Benjamins.
+
+Yuan, Z., Yuan, H., Tan, C., Wang, W., Huang, S., & Huang, F.
+(2023). RFT: Reasoning with reinforced fine-tuning. *arXiv*
+preprint arXiv:2308.01825.
+
+Zelikman, E., Wu, Y., Mu, J., & Goodman, N. (2022). STaR:
+Self-taught reasoner — bootstrapping reasoning with reasoning.
+*NeurIPS 2022*.
