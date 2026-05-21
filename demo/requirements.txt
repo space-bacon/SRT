@@ -1,0 +1,8 @@
+gradio>=4.40
+torch>=2.2
+transformers>=4.44
+huggingface_hub>=0.24
+accelerate>=0.33
+sentencepiece
+safetensors
+numpy
