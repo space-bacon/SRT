@@ -10,11 +10,30 @@
 > theoretical framing). Cross-backbone replications on Llama-3.2-3B
 > (`paper_nla.md` §10, HF: `RiverRider/srt-nla-av-llama32-3b` and
 > `RiverRider/srt-nla-targets-llama32-3b-v1`) and Gemma-2-2B
-> (`paper_nla.md` §11, in progress) live on top of this v1 anchor.
-> "arxiv/" in this repo is *staged source for a planned arXiv
-> submission of the SRT-Adapter manuscript*; the SRT-Adapter paper is
-> not yet on arXiv. The only currently-posted Lancaster preprints are
-> SSRN 5987495 and SSRN 6349978.
+> (`paper_nla.md` §11, HF: `RiverRider/srt-nla-av-gemma2-2b-v1` and
+> `RiverRider/srt-nla-targets-gemma2-2b-v1`) live on top of this v1
+> anchor. The three-backbone replication condition for Stage 4 is now
+> closed (Qwen-2.5-7B / Llama-3.2-3B / Gemma-2-2B; three labs, three
+> architectural lineages, three anisotropy regimes from $\|\mu\|=7.2$
+> to $\|\mu\|=156$, all qualitative findings reproduced at
+> $\sim\!90$ minutes wall per backbone). "arxiv/" in this repo is
+> *staged source for a planned arXiv submission of the SRT-Adapter
+> manuscript*; the SRT-Adapter paper is not yet on arXiv. The only
+> currently-posted Lancaster preprints are SSRN 5987495 and SSRN
+> 6349978.
+
+### Three-backbone summary (centred fve_nrm, M=200, K=64)
+
+| backbone | layer | $\|\mu\|$ | random floor | greedy | best-of-64 | paraphrase ceiling | $\rho_{\text{cen}}$ best-of-64 |
+|---|---|---|---|---|---|---|---|
+| Qwen2.5-7B | L20 | 55 | 0.510 | 0.586 | 0.777 | 0.799 | **0.92** |
+| Llama-3.2-3B | L20 | 7.2 | 0.498 | 0.633 | 0.858 | 0.720 (NN: 0.756 used) | **1.40** |
+| Gemma-2-2B | L19 | 156 | 0.498 | 0.528 | 0.631 | 0.598 | **1.33** |
+
+Centred random floor lands at $\approx\!0.50$ on all three backbones
+despite a $22\times$ spread in $\|\mu\|$ — empirical confirmation that
+the centring move of `paper_nla.md` §4 produces a backbone-invariant
+geometry up to the resolution of $200$-vector means.
 
 **HF artifacts (live):**
 - Model: [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1)

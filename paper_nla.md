@@ -136,7 +136,7 @@ reported separately. The order is logical, not strictly chronological:
 
 The methodological commitments of Stage 3 carry over verbatim. The
 backbone is fully frozen. Trainable parameters are kept small ($\sim\!13$M
-on Qwen, $\sim\!9$M on Llama, comparable on Gemma). The metric is
+on Qwen, $\sim\!9$M on Llama, $\sim\!5$M on Gemma). The metric is
 calibrated against random-floor and human-paraphrase anchors, and
 reported in both raw and anisotropy-centred form. Negative results are
 reported as such and assigned an explanatory mechanism. Cross-backbone
@@ -742,6 +742,17 @@ ceiling-floor gap. Reading the same curve in raw fve gives slope
 $\approx\!0.020$ per doubling between $K{=}1$ and $K{=}32$, so the
 log-linear shape replicates qualitatively across all three
 backbones; the slope itself tracks the centred denominator.
+
+The three K-curves are overlaid in
+[`artifacts/nla/plots/cross_backbone_kcurve.png`](artifacts/nla/plots/cross_backbone_kcurve.png)
+(dashed lines = per-backbone paraphrase ceiling, dotted lines =
+per-backbone random floor). The three random floors collapse onto a
+single horizontal band at $\approx\!0.50$ despite a $22\times$ spread
+in $\|\mu\|$, the three K-curves all rise log-linearly, and each
+curve crosses its own paraphrase ceiling at a backbone-specific $K$:
+$K \approx 16$ for Gemma, $K \approx 4$ for Llama, $K \approx 64$ for
+Qwen. The visual is a one-figure summary of the three-backbone
+replication condition.
 
 **Self-rerank by adapter logp does not work.** Spearman correlation
 between adapter $\log p(\hat{x} \mid v)$ and the oracle centred

@@ -1,0 +1,40 @@
+{
+  "backbone": "google/gemma-2-2b",
+  "layer": 19,
+  "av_ckpt": "artifacts/nla/gemma2_2B/sft/best_av.pt",
+  "M": 200,
+  "K": 32,
+  "T": 64,
+  "temperature": 1.0,
+  "pool_size": 2000,
+  "anisotropy_mu_norm": 156.28793334960938,
+  "greedy_cen_mean": 0.5265880227088928,
+  "greedy_raw_mean": 0.6602932810783386,
+  "sampled_cen_mean": 0.5143120288848877,
+  "sampled_raw_mean": 0.642927885055542,
+  "kcurve_oracle_top1_cen": {
+    "1": 0.5107001662254333,
+    "2": 0.5335500836372375,
+    "4": 0.555496335029602,
+    "8": 0.5716498494148254,
+    "16": 0.5933403372764587,
+    "32": 0.6175837516784668
+  },
+  "kcurve_oracle_top1_raw": {
+    "1": 0.6386452317237854,
+    "2": 0.6688384413719177,
+    "4": 0.6888974905014038,
+    "8": 0.7061693072319031,
+    "16": 0.722846269607544,
+    "32": 0.7390134334564209
+  },
+  "logp_rerank_cen_mean": 0.512165367603302,
+  "logp_rerank_raw_mean": 0.6423523426055908,
+  "logp_rerank_vs_greedy": -0.01442265510559082,
+  "nn_anchor_rerank_cen_mean": 0.6003902554512024,
+  "nn_anchor_baseline_cen_mean": 0.8084166049957275,
+  "spearman_logp_vs_oracle_cen_mean": 0.03006964735686779,
+  "spearman_logp_vs_oracle_cen_p50": 0.047653958201408386,
+  "spearman_logp_vs_oracle_cen_p05": -0.43476906418800354,
+  "spearman_logp_vs_oracle_cen_p95": 0.42219579219818115
+}
