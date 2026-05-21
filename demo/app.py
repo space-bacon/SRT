@@ -272,4 +272,10 @@ in bf16; less for Llama-3B and Gemma-2B.
 
 
 if __name__ == "__main__":
-    app.queue().launch(share=False)
+    # On HF Spaces (including ZeroGPU) the platform sets SPACE_ID and proxies
+    # the app for us; share=False breaks if localhost isn't reachable.
+    on_space = bool(os.environ.get("SPACE_ID"))
+    app.queue().launch(
+        server_name="0.0.0.0" if on_space else "127.0.0.1",
+        share=False,
+    )
