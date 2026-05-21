@@ -1,0 +1,20 @@
+{
+  "backbone_id": "meta-llama/Llama-3.2-3B",
+  "backbone_dtype": "bfloat16",
+  "extraction_layer": 20,
+  "d_vector": null,
+  "max_new_tokens": 64,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "pool": "last",
+  "lambda_mag": 0.1,
+  "beta_kl": 0.05,
+  "gamma_entropy": 0.05,
+  "delta_community": 0.2,
+  "h_min": 1.5,
+  "h_max": 3.0,
+  "num_prefix_tokens": 1,
+  "prefix_mode": "static",
+  "prefix_mlp_hidden": 256,
+  "num_inject_slots": 1
+}
