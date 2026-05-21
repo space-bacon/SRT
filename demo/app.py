@@ -77,11 +77,20 @@ def cb_playground(backbone_key: str, prompt: str, K: int, temperature: float):
     pipe = get_pipe(backbone_key)
     v = pipe.extract_hidden(prompt, token_index=-1)
     ranked = pipe.verbalize(v, K=int(K), temperature=float(temperature))
-    rows = [
-        f"| {i+1} | {cen:.3f} | {raw:.3f} | {txt[:160].replace(chr(10), ' ')} |"
+    metric_rows = [
+        f"| {i+1} | {cen:.3f} | {raw:.3f} |"
+        for i, (_txt, raw, cen) in enumerate(ranked)
+    ]
+    metric_table = (
+        "| rank | centred fve | raw fve |\n|---|---|---|\n"
+        + "\n".join(metric_rows)
+    )
+    full_blocks = [
+        f"**rank {i+1}** — centred fve {cen:.3f}, raw fve {raw:.3f}\n\n> "
+        + txt.replace("\n", "\n> ")
         for i, (txt, raw, cen) in enumerate(ranked)
     ]
-    table = "| rank | centred fve | raw fve | verbalisation |\n|---|---|---|---|\n" + "\n".join(rows)
+    table = metric_table + "\n\n---\n\n" + "\n\n".join(full_blocks)
     mu_str = f"{pipe.mu.norm().item():.2f}" if pipe.mu is not None else "n/a"
     summary = (
         f"**Backbone:** {pipe.spec.label}  "
@@ -105,7 +114,7 @@ def cb_thought_trace(backbone_key: str, prompt: str, max_new: int, every: int):
         if verb is None:
             rows.append(f"| {step} | `{tok}` | _(skipped, not at every-{every} step)_ |")
         else:
-            rows.append(f"| {step} | `{tok}` | {verb[:140].replace(chr(10), ' ')} |")
+            rows.append(f"| {step} | `{tok}` | {verb.replace(chr(10), ' ')} |")
         yielded += 1
         # Stream every few rows
         if yielded % 4 == 0 or yielded == int(max_new):
