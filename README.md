@@ -195,7 +195,7 @@ available at deploy time.
 |---|---|---|---|
 | Qwen2.5-7B | L20 | 0.26 | **0.92** |
 | Llama-3.2-3B | L19 (73% depth) | reported in [`paper_nla.md`](paper_nla.md) §10 | reported in §10 |
-| Gemma-2-2B | L19 (73% depth) | *in progress* — see [`paper_nla.md`](paper_nla.md) §11 | *in progress* |
+| Gemma-2-2B | L19 (73% depth) | 0.30 | **1.33** (overshoots paraphrase ceiling) |
 
 The greedy-vs-rerank gap is the central artifact of the program: the
 verbalizer *can* express paraphrase-quality outputs, but argmax does
@@ -210,7 +210,7 @@ remains the only mechanism that closes the gap on this backbone.
 |---|---|---|
 | Qwen2.5-7B | [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) | [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) |
 | Llama-3.2-3B | [`RiverRider/srt-nla-av-llama32-3b`](https://huggingface.co/RiverRider/srt-nla-av-llama32-3b) | [`RiverRider/srt-nla-targets-llama32-3b-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-llama32-3b-v1) |
-| Gemma-2-2B | *forthcoming* | *forthcoming* |
+| Gemma-2-2B | [`RiverRider/srt-nla-av-gemma2-2b-v1`](https://huggingface.co/RiverRider/srt-nla-av-gemma2-2b-v1) *(release pending)* | [`RiverRider/srt-nla-targets-gemma2-2b-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-gemma2-2b-v1) *(release pending)* |
 
 ### Reproducibility caveat
 
