@@ -1,0 +1,73 @@
+2026-05-21 00:03:09,066 rerank_eval loading backbone meta-llama/Llama-3.2-3B
+2026-05-21 00:03:14,135 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+2026-05-21 00:03:14,287 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-05-21 00:03:14,330 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-21 00:03:14,371 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-21 00:03:15,149 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B "HTTP/1.1 200 OK"
+2026-05-21 00:03:15,204 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/254 [00:00<?, ?it/s]Loading weights: 100%|██████████| 254/254 [00:00<00:00, 9629.70it/s]
+2026-05-21 00:03:15,416 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/generation_config.json "HTTP/1.1 200 OK"
+2026-05-21 00:03:16,426 rerank_eval warm-start from artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-21 00:03:16,448 rerank_eval warm-start: missing=255 unexpected=0
+2026-05-21 00:03:16,448 rerank_eval loading targets artifacts/nla/llama32_3B/targets_L20_seq64_30k_seed1.pt
+2026-05-21 00:03:27,787 rerank_eval M=200 P=2000  anisotropy ||mu||=7.2114
+2026-05-21 00:03:27,788 rerank_eval rollouts: M=200 K=32 T=64  K_grid=[1, 2, 4, 8, 16, 32]
+2026-05-21 00:03:30,383 rerank_eval vec 1/200  (2.6s elapsed)
+2026-05-21 00:03:40,421 rerank_eval vec 6/200  (12.6s elapsed)
+2026-05-21 00:03:50,002 rerank_eval vec 11/200  (22.2s elapsed)
+2026-05-21 00:04:00,221 rerank_eval vec 16/200  (32.4s elapsed)
+2026-05-21 00:04:10,456 rerank_eval vec 21/200  (42.7s elapsed)
+2026-05-21 00:04:20,677 rerank_eval vec 26/200  (52.9s elapsed)
+2026-05-21 00:04:30,770 rerank_eval vec 31/200  (63.0s elapsed)
+2026-05-21 00:04:40,940 rerank_eval vec 36/200  (73.1s elapsed)
+2026-05-21 00:04:51,115 rerank_eval vec 41/200  (83.3s elapsed)
+2026-05-21 00:05:01,282 rerank_eval vec 46/200  (93.5s elapsed)
+2026-05-21 00:05:11,458 rerank_eval vec 51/200  (103.7s elapsed)
+2026-05-21 00:05:20,838 rerank_eval vec 56/200  (113.0s elapsed)
+2026-05-21 00:05:31,015 rerank_eval vec 61/200  (123.2s elapsed)
+2026-05-21 00:05:41,183 rerank_eval vec 66/200  (133.4s elapsed)
+2026-05-21 00:05:51,348 rerank_eval vec 71/200  (143.6s elapsed)
+2026-05-21 00:06:01,505 rerank_eval vec 76/200  (153.7s elapsed)
+2026-05-21 00:06:11,668 rerank_eval vec 81/200  (163.9s elapsed)
+2026-05-21 00:06:21,842 rerank_eval vec 86/200  (174.0s elapsed)
+2026-05-21 00:06:32,001 rerank_eval vec 91/200  (184.2s elapsed)
+2026-05-21 00:06:42,165 rerank_eval vec 96/200  (194.4s elapsed)
+2026-05-21 00:06:52,070 rerank_eval vec 101/200  (204.3s elapsed)
+2026-05-21 00:07:02,224 rerank_eval vec 106/200  (214.4s elapsed)
+2026-05-21 00:07:12,364 rerank_eval vec 111/200  (224.6s elapsed)
+2026-05-21 00:07:22,538 rerank_eval vec 116/200  (234.7s elapsed)
+2026-05-21 00:07:32,643 rerank_eval vec 121/200  (244.8s elapsed)
+2026-05-21 00:07:42,810 rerank_eval vec 126/200  (255.0s elapsed)
+2026-05-21 00:07:51,815 rerank_eval vec 131/200  (264.0s elapsed)
+2026-05-21 00:08:01,983 rerank_eval vec 136/200  (274.2s elapsed)
+2026-05-21 00:08:12,159 rerank_eval vec 141/200  (284.4s elapsed)
+2026-05-21 00:08:22,324 rerank_eval vec 146/200  (294.5s elapsed)
+2026-05-21 00:08:32,502 rerank_eval vec 151/200  (304.7s elapsed)
+2026-05-21 00:08:42,679 rerank_eval vec 156/200  (314.9s elapsed)
+2026-05-21 00:08:52,029 rerank_eval vec 161/200  (324.2s elapsed)
+2026-05-21 00:09:02,219 rerank_eval vec 166/200  (334.4s elapsed)
+2026-05-21 00:09:11,887 rerank_eval vec 171/200  (344.1s elapsed)
+2026-05-21 00:09:22,062 rerank_eval vec 176/200  (354.3s elapsed)
+2026-05-21 00:09:32,230 rerank_eval vec 181/200  (364.4s elapsed)
+2026-05-21 00:09:42,403 rerank_eval vec 186/200  (374.6s elapsed)
+2026-05-21 00:09:52,573 rerank_eval vec 191/200  (384.8s elapsed)
+2026-05-21 00:10:02,582 rerank_eval vec 196/200  (394.8s elapsed)
+2026-05-21 00:10:10,832 rerank_eval ======== Anchors ========
+2026-05-21 00:10:10,832 rerank_eval anisotropy ||mu||      = 7.211
+2026-05-21 00:10:10,832 rerank_eval greedy_cen             = 0.6191
+2026-05-21 00:10:10,833 rerank_eval sampled_cen (T=1.00)    = 0.6248
+2026-05-21 00:10:10,833 rerank_eval ======== K-curve (oracle top-1 of K, centered) ========
+2026-05-21 00:10:10,833 rerank_eval   K=   1   top1_cen = 0.6356
+2026-05-21 00:10:10,833 rerank_eval   K=   2   top1_cen = 0.6775
+2026-05-21 00:10:10,833 rerank_eval   K=   4   top1_cen = 0.7162
+2026-05-21 00:10:10,833 rerank_eval   K=   8   top1_cen = 0.7475
+2026-05-21 00:10:10,833 rerank_eval   K=  16   top1_cen = 0.7802
+2026-05-21 00:10:10,833 rerank_eval   K=  32   top1_cen = 0.8092
+2026-05-21 00:10:10,833 rerank_eval ======== Cheap reranks ========
+2026-05-21 00:10:10,833 rerank_eval logp_rerank_cen       = 0.6240   (delta vs greedy = +0.0049)
+2026-05-21 00:10:10,833 rerank_eval nn_anchor_rerank_cen  = 0.7833
+2026-05-21 00:10:10,833 rerank_eval nn_anchor_baseline    = 0.8357
+2026-05-21 00:10:10,833 rerank_eval ======== Why ========
+2026-05-21 00:10:10,833 rerank_eval Spearman(logp, oracle_cen)  mean=0.055  p50=0.059  p05=-0.403  p95=0.531
+2026-05-21 00:10:10,833 rerank_eval wrote artifacts/nla/llama32_3B/rerank_eval.json

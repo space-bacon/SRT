@@ -1,0 +1,141 @@
+2026-05-20 23:38:55,686 train_nla_sft loading backbone meta-llama/Llama-3.2-3B on cuda
+2026-05-20 23:39:00,749 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/254 [00:00<?, ?it/s]Loading weights: 100%|██████████| 254/254 [00:00<00:00, 9461.73it/s]
+2026-05-20 23:39:01,065 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/generation_config.json "HTTP/1.1 200 OK"
+2026-05-20 23:39:02,048 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+2026-05-20 23:39:02,088 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-05-20 23:39:02,137 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-20 23:39:02,195 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-20 23:39:02,963 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B "HTTP/1.1 200 OK"
+2026-05-20 23:39:03,121 train_nla_sft trainable params: 9,440,256
+2026-05-20 23:39:28,834 nla.targets_check TARGETS sha=db5c9d225a1981fa N=30000 d=3072 per_elem_std=0.3012 norm=19.290±2.694
+2026-05-20 23:39:29,235 train_nla_sft loaded 29963 pairs; target pool N=30000
+2026-05-20 23:39:29,237 train_nla_sft train pairs=28465  val targets=512
+2026-05-20 23:39:33,139 train_nla_sft ep1 step 50  ce=1.3213  (3.9s)
+2026-05-20 23:39:36,816 train_nla_sft ep1 step 100  ce=1.2582  (7.6s)
+2026-05-20 23:39:40,487 train_nla_sft ep1 step 150  ce=1.2484  (11.3s)
+2026-05-20 23:39:44,169 train_nla_sft ep1 step 200  ce=1.2071  (14.9s)
+2026-05-20 23:39:47,847 train_nla_sft ep1 step 250  ce=1.2255  (18.6s)
+2026-05-20 23:39:51,533 train_nla_sft ep1 step 300  ce=1.2186  (22.3s)
+2026-05-20 23:39:55,217 train_nla_sft ep1 step 350  ce=1.2471  (26.0s)
+2026-05-20 23:39:58,893 train_nla_sft ep1 step 400  ce=1.1960  (29.7s)
+2026-05-20 23:40:02,579 train_nla_sft ep1 step 450  ce=1.2312  (33.3s)
+2026-05-20 23:40:06,264 train_nla_sft ep1 step 500  ce=1.1861  (37.0s)
+2026-05-20 23:40:37,098 train_nla_sft val @ 500  fve_nrm=0.1684
+2026-05-20 23:40:37,119 train_nla_sft   new best val=0.1684  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:40:40,799 train_nla_sft ep1 step 550  ce=1.2128  (71.6s)
+2026-05-20 23:40:44,484 train_nla_sft ep1 step 600  ce=1.1746  (75.2s)
+2026-05-20 23:40:48,160 train_nla_sft ep1 step 650  ce=1.1698  (78.9s)
+2026-05-20 23:40:51,834 train_nla_sft ep1 step 700  ce=1.2377  (82.6s)
+2026-05-20 23:40:55,518 train_nla_sft ep1 step 750  ce=1.2063  (86.3s)
+2026-05-20 23:40:59,203 train_nla_sft ep1 step 800  ce=1.2390  (90.0s)
+2026-05-20 23:41:02,888 train_nla_sft ep1 step 850  ce=1.1894  (93.7s)
+2026-05-20 23:41:06,573 train_nla_sft ep1 step 900  ce=1.2138  (97.3s)
+2026-05-20 23:41:10,258 train_nla_sft ep1 step 950  ce=1.1984  (101.0s)
+2026-05-20 23:41:13,950 train_nla_sft ep1 step 1000  ce=1.1821  (104.7s)
+2026-05-20 23:41:44,897 train_nla_sft val @ 1000  fve_nrm=0.1847
+2026-05-20 23:41:44,924 train_nla_sft   new best val=0.1847  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:41:48,610 train_nla_sft ep1 step 1050  ce=1.1684  (139.4s)
+2026-05-20 23:41:52,284 train_nla_sft ep1 step 1100  ce=1.2164  (143.0s)
+2026-05-20 23:41:55,967 train_nla_sft ep1 step 1150  ce=1.1587  (146.7s)
+2026-05-20 23:41:59,644 train_nla_sft ep1 step 1200  ce=1.2137  (150.4s)
+2026-05-20 23:42:03,322 train_nla_sft ep1 step 1250  ce=1.1624  (154.1s)
+2026-05-20 23:42:07,007 train_nla_sft ep1 step 1300  ce=1.1549  (157.8s)
+2026-05-20 23:42:10,693 train_nla_sft ep1 step 1350  ce=1.1640  (161.5s)
+2026-05-20 23:42:14,379 train_nla_sft ep1 step 1400  ce=1.1767  (165.1s)
+2026-05-20 23:42:18,055 train_nla_sft ep1 step 1450  ce=1.1817  (168.8s)
+2026-05-20 23:42:21,743 train_nla_sft ep1 step 1500  ce=1.1679  (172.5s)
+2026-05-20 23:42:52,561 train_nla_sft val @ 1500  fve_nrm=0.2121
+2026-05-20 23:42:52,587 train_nla_sft   new best val=0.2121  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:42:56,271 train_nla_sft ep1 step 1550  ce=1.1655  (207.0s)
+2026-05-20 23:42:59,953 train_nla_sft ep1 step 1600  ce=1.1836  (210.7s)
+2026-05-20 23:43:03,634 train_nla_sft ep1 step 1650  ce=1.2092  (214.4s)
+2026-05-20 23:43:07,319 train_nla_sft ep1 step 1700  ce=1.1652  (218.1s)
+2026-05-20 23:43:10,997 train_nla_sft ep1 step 1750  ce=1.1285  (221.8s)
+2026-05-20 23:43:14,665 train_nla_sft ep2 step 1800  ce=1.1494  (225.4s)
+2026-05-20 23:43:18,340 train_nla_sft ep2 step 1850  ce=1.1523  (229.1s)
+2026-05-20 23:43:22,030 train_nla_sft ep2 step 1900  ce=1.1345  (232.8s)
+2026-05-20 23:43:25,714 train_nla_sft ep2 step 1950  ce=1.1104  (236.5s)
+2026-05-20 23:43:29,396 train_nla_sft ep2 step 2000  ce=1.1500  (240.2s)
+2026-05-20 23:44:00,370 train_nla_sft val @ 2000  fve_nrm=0.2267
+2026-05-20 23:44:00,397 train_nla_sft   new best val=0.2267  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:44:04,088 train_nla_sft ep2 step 2050  ce=1.1282  (274.9s)
+2026-05-20 23:44:07,770 train_nla_sft ep2 step 2100  ce=1.1629  (278.5s)
+2026-05-20 23:44:11,446 train_nla_sft ep2 step 2150  ce=1.1816  (282.2s)
+2026-05-20 23:44:15,132 train_nla_sft ep2 step 2200  ce=1.1607  (285.9s)
+2026-05-20 23:44:18,813 train_nla_sft ep2 step 2250  ce=1.1655  (289.6s)
+2026-05-20 23:44:22,500 train_nla_sft ep2 step 2300  ce=1.1767  (293.3s)
+2026-05-20 23:44:26,184 train_nla_sft ep2 step 2350  ce=1.1780  (296.9s)
+2026-05-20 23:44:29,876 train_nla_sft ep2 step 2400  ce=1.1425  (300.6s)
+2026-05-20 23:44:33,553 train_nla_sft ep2 step 2450  ce=1.1444  (304.3s)
+2026-05-20 23:44:37,243 train_nla_sft ep2 step 2500  ce=1.1247  (308.0s)
+2026-05-20 23:45:08,113 train_nla_sft val @ 2500  fve_nrm=0.2302
+2026-05-20 23:45:08,139 train_nla_sft   new best val=0.2302  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:45:11,846 train_nla_sft ep2 step 2550  ce=1.1388  (342.6s)
+2026-05-20 23:45:15,556 train_nla_sft ep2 step 2600  ce=1.1383  (346.3s)
+2026-05-20 23:45:19,252 train_nla_sft ep2 step 2650  ce=1.1547  (350.0s)
+2026-05-20 23:45:22,960 train_nla_sft ep2 step 2700  ce=1.1304  (353.7s)
+2026-05-20 23:45:26,651 train_nla_sft ep2 step 2750  ce=1.1543  (357.4s)
+2026-05-20 23:45:30,354 train_nla_sft ep2 step 2800  ce=1.1269  (361.1s)
+2026-05-20 23:45:34,058 train_nla_sft ep2 step 2850  ce=1.1757  (364.8s)
+2026-05-20 23:45:37,753 train_nla_sft ep2 step 2900  ce=1.1595  (368.5s)
+2026-05-20 23:45:41,460 train_nla_sft ep2 step 2950  ce=1.1037  (372.2s)
+2026-05-20 23:45:45,168 train_nla_sft ep2 step 3000  ce=1.1403  (375.9s)
+2026-05-20 23:46:16,109 train_nla_sft val @ 3000  fve_nrm=0.2482
+2026-05-20 23:46:16,135 train_nla_sft   new best val=0.2482  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:46:19,828 train_nla_sft ep2 step 3050  ce=1.1415  (410.6s)
+2026-05-20 23:46:23,501 train_nla_sft ep2 step 3100  ce=1.1314  (414.3s)
+2026-05-20 23:46:27,177 train_nla_sft ep2 step 3150  ce=1.1573  (417.9s)
+2026-05-20 23:46:30,858 train_nla_sft ep2 step 3200  ce=1.1281  (421.6s)
+2026-05-20 23:46:34,536 train_nla_sft ep2 step 3250  ce=1.1442  (425.3s)
+2026-05-20 23:46:38,217 train_nla_sft ep2 step 3300  ce=1.1838  (429.0s)
+2026-05-20 23:46:41,890 train_nla_sft ep2 step 3350  ce=1.1035  (432.7s)
+2026-05-20 23:46:45,562 train_nla_sft ep2 step 3400  ce=1.1544  (436.3s)
+2026-05-20 23:46:49,245 train_nla_sft ep2 step 3450  ce=1.1082  (440.0s)
+2026-05-20 23:46:52,922 train_nla_sft ep2 step 3500  ce=1.0925  (443.7s)
+2026-05-20 23:47:23,867 train_nla_sft val @ 3500  fve_nrm=0.2755
+2026-05-20 23:47:23,893 train_nla_sft   new best val=0.2755  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:47:27,582 train_nla_sft ep2 step 3550  ce=1.1671  (478.3s)
+2026-05-20 23:47:31,239 train_nla_sft ep3 step 3600  ce=1.0768  (482.0s)
+2026-05-20 23:47:34,935 train_nla_sft ep3 step 3650  ce=1.0986  (485.7s)
+2026-05-20 23:47:38,624 train_nla_sft ep3 step 3700  ce=1.1025  (489.4s)
+2026-05-20 23:47:42,311 train_nla_sft ep3 step 3750  ce=1.1225  (493.1s)
+2026-05-20 23:47:46,005 train_nla_sft ep3 step 3800  ce=1.0639  (496.8s)
+2026-05-20 23:47:49,702 train_nla_sft ep3 step 3850  ce=1.0723  (500.5s)
+2026-05-20 23:47:53,399 train_nla_sft ep3 step 3900  ce=1.1139  (504.2s)
+2026-05-20 23:47:57,089 train_nla_sft ep3 step 3950  ce=1.1144  (507.9s)
+2026-05-20 23:48:00,782 train_nla_sft ep3 step 4000  ce=1.0866  (511.5s)
+2026-05-20 23:48:31,625 train_nla_sft val @ 4000  fve_nrm=0.2858
+2026-05-20 23:48:31,652 train_nla_sft   new best val=0.2858  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:48:35,329 train_nla_sft ep3 step 4050  ce=1.0666  (546.1s)
+2026-05-20 23:48:38,991 train_nla_sft ep3 step 4100  ce=1.1036  (549.8s)
+2026-05-20 23:48:42,659 train_nla_sft ep3 step 4150  ce=1.1214  (553.4s)
+2026-05-20 23:48:46,329 train_nla_sft ep3 step 4200  ce=1.1596  (557.1s)
+2026-05-20 23:48:50,011 train_nla_sft ep3 step 4250  ce=1.1299  (560.8s)
+2026-05-20 23:48:53,675 train_nla_sft ep3 step 4300  ce=1.1038  (564.4s)
+2026-05-20 23:48:57,351 train_nla_sft ep3 step 4350  ce=1.1295  (568.1s)
+2026-05-20 23:49:01,024 train_nla_sft ep3 step 4400  ce=1.1121  (571.8s)
+2026-05-20 23:49:04,692 train_nla_sft ep3 step 4450  ce=1.0972  (575.5s)
+2026-05-20 23:49:08,372 train_nla_sft ep3 step 4500  ce=1.1429  (579.1s)
+2026-05-20 23:49:39,410 train_nla_sft val @ 4500  fve_nrm=0.2998
+2026-05-20 23:49:39,436 train_nla_sft   new best val=0.2998  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:49:43,111 train_nla_sft ep3 step 4550  ce=1.0841  (613.9s)
+2026-05-20 23:49:46,778 train_nla_sft ep3 step 4600  ce=1.1137  (617.5s)
+2026-05-20 23:49:50,459 train_nla_sft ep3 step 4650  ce=1.1426  (621.2s)
+2026-05-20 23:49:54,136 train_nla_sft ep3 step 4700  ce=1.0984  (624.9s)
+2026-05-20 23:49:57,813 train_nla_sft ep3 step 4750  ce=1.0961  (628.6s)
+2026-05-20 23:50:01,485 train_nla_sft ep3 step 4800  ce=1.1051  (632.2s)
+2026-05-20 23:50:05,157 train_nla_sft ep3 step 4850  ce=1.0724  (635.9s)
+2026-05-20 23:50:08,831 train_nla_sft ep3 step 4900  ce=1.0850  (639.6s)
+2026-05-20 23:50:12,512 train_nla_sft ep3 step 4950  ce=1.1089  (643.3s)
+2026-05-20 23:50:16,194 train_nla_sft ep3 step 5000  ce=1.1125  (647.0s)
+2026-05-20 23:50:47,129 train_nla_sft val @ 5000  fve_nrm=0.3322
+2026-05-20 23:50:47,155 train_nla_sft   new best val=0.3322  saved artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-20 23:50:50,831 train_nla_sft ep3 step 5050  ce=1.1449  (681.6s)
+2026-05-20 23:50:54,509 train_nla_sft ep3 step 5100  ce=1.1243  (685.3s)
+2026-05-20 23:50:58,172 train_nla_sft ep3 step 5150  ce=1.1542  (688.9s)
+2026-05-20 23:51:01,846 train_nla_sft ep3 step 5200  ce=1.1124  (692.6s)
+2026-05-20 23:51:05,517 train_nla_sft ep3 step 5250  ce=1.0289  (696.3s)
+2026-05-20 23:51:09,196 train_nla_sft ep3 step 5300  ce=1.1203  (700.0s)
+2026-05-20 23:51:43,049 train_nla_sft final val fve_nrm=0.2919  best=0.3322

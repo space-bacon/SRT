@@ -1,0 +1,47 @@
+2026-05-21 00:01:54,234 centered_eval loading backbone meta-llama/Llama-3.2-3B
+2026-05-21 00:01:59,300 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+2026-05-21 00:01:59,444 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-05-21 00:01:59,489 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-21 00:01:59,528 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-21 00:02:00,335 httpx HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-3.2-3B "HTTP/1.1 200 OK"
+2026-05-21 00:02:00,394 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/254 [00:00<?, ?it/s]Loading weights: 100%|██████████| 254/254 [00:00<00:00, 8029.86it/s]
+2026-05-21 00:02:00,613 httpx HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-3.2-3B/resolve/main/generation_config.json "HTTP/1.1 200 OK"
+2026-05-21 00:02:01,851 centered_eval warm-start from artifacts/nla/llama32_3B/sft/best_av.pt
+2026-05-21 00:02:01,875 centered_eval warm-start: missing=255 unexpected=0
+2026-05-21 00:02:01,875 centered_eval loading targets artifacts/nla/llama32_3B/targets_L20_seq64_30k_seed1.pt
+2026-05-21 00:02:13,253 centered_eval pool_all=(30000, 3072)
+2026-05-21 00:02:13,255 centered_eval M=32 targets   pool=2000 for anisotropy mean & NN
+2026-05-21 00:02:13,303 centered_eval anisotropy mean ||mu||=7.2103
+2026-05-21 00:02:13,303 centered_eval adapter rollouts M=32 K=64 T=64
+[transformers] The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+2026-05-21 00:02:15,853 centered_eval   vec 0-2 done
+2026-05-21 00:02:18,033 centered_eval   vec 2-4 done
+2026-05-21 00:02:20,204 centered_eval   vec 4-6 done
+2026-05-21 00:02:22,373 centered_eval   vec 6-8 done
+2026-05-21 00:02:24,550 centered_eval   vec 8-10 done
+2026-05-21 00:02:26,714 centered_eval   vec 10-12 done
+2026-05-21 00:02:28,905 centered_eval   vec 12-14 done
+2026-05-21 00:02:31,076 centered_eval   vec 14-16 done
+2026-05-21 00:02:33,258 centered_eval   vec 16-18 done
+2026-05-21 00:02:35,427 centered_eval   vec 18-20 done
+2026-05-21 00:02:37,594 centered_eval   vec 20-22 done
+2026-05-21 00:02:39,788 centered_eval   vec 22-24 done
+2026-05-21 00:02:41,948 centered_eval   vec 24-26 done
+2026-05-21 00:02:44,135 centered_eval   vec 26-28 done
+2026-05-21 00:02:46,314 centered_eval   vec 28-30 done
+2026-05-21 00:02:48,489 centered_eval   vec 30-32 done
+2026-05-21 00:02:48,669 centered_eval ======== RAW (anisotropy-uncorrected) ========
+2026-05-21 00:02:48,669 centered_eval random_floor   = 0.5686
+2026-05-21 00:02:48,669 centered_eval adapter greedy = 0.6720
+2026-05-21 00:02:48,669 centered_eval adapter sampl  = 0.6836
+2026-05-21 00:02:48,669 centered_eval adapter boK    = 0.8725
+2026-05-21 00:02:48,669 centered_eval NN-retrieval   = 0.8369
+2026-05-21 00:02:48,669 centered_eval ======== CENTERED (anisotropy-corrected) ========
+2026-05-21 00:02:48,669 centered_eval random_floor   = 0.5002
+2026-05-21 00:02:48,669 centered_eval adapter greedy = 0.6333
+2026-05-21 00:02:48,669 centered_eval adapter sampl  = 0.6374
+2026-05-21 00:02:48,669 centered_eval adapter boK    = 0.8585
+2026-05-21 00:02:48,669 centered_eval NN-retrieval   = 0.8195
+2026-05-21 00:02:48,669 centered_eval wrote artifacts/nla/llama32_3B/centered_eval.json

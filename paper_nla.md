@@ -294,13 +294,115 @@ buys.
 
 ## 9. Limitations
 
-- Single backbone (Qwen-2.5-7B), single layer ($\ell=20$), single target
-  type (64-token continuations). The anisotropy magnitude $\|\mu\| \approx 55$
-  is backbone-specific; centering is required, but the size of the correction
-  is not universal.
+- Single layer ($\ell=20$), single target type (64-token continuations).
+  The anisotropy magnitude $\|\mu\|$ is backbone-specific (Qwen-2.5-7B:
+  $\|\mu\|\!\approx\!55$; Llama-3.2-3B: $\|\mu\|\!\approx\!7.2$ — see §10);
+  centering is required, but the size of the correction is not universal.
 - Paraphrase ceiling is itself stochastic ($k=8$ samples per source); centered
   $\rho > 1$ would not be surprising at much higher $k$ — the ceiling is a
   *practical* upper bound on what a Qwen-shaped model can say differently.
 - We did not re-run the four lever experiments under the centered metric; we
   hypothesize they would each show small but non-zero centered improvements
   that were invisible on the raw metric.
+
+## 10. Cross-backbone transfer: Llama-3.2-3B
+
+A single-backbone result is hard to interpret: any of the four core
+findings (the 0.689 floor, the boK=ceiling identity, the death of
+logp-rerank, the log-linear K-curve) could in principle be artefacts of
+Qwen-2.5-7B's specific anisotropy $\|\mu\|\approx 55$ rather than
+properties of frozen-decoder verbalization in general. We therefore
+re-ran the entire pipeline — sampling, gold-pair extraction, SFT,
+centered eval, K-curve — on a different model family and a different
+size: **meta-llama/Llama-3.2-3B**, 28 layers, hidden_size 3072, vocab
+128k. The verbalizer is backbone-agnostic by construction
+(`d_embed = backbone.config.hidden_size`); no code changes were needed
+beyond a different `--backbone` flag.
+
+**Setup.** Layer $\ell=20$ (71% depth, the same fractional depth as
+Qwen-2.5-7B's $\ell=20/28$). 30,000 sampled continuations, $T=64$ tokens,
+seed 1; 29,963 gold pairs survive after re-tokenization with the Llama
+tokenizer. SFT for 3 epochs at batch=16, lr=$3\!\times\!10^{-5}$,
+$P=1$ prefix token, 1 inject slot — identical hyperparameters to the
+Qwen run except for trainable parameter count (9.44M vs 12.7M, a
+function of the smaller hidden dim and embedding matrix slice).
+
+**Anisotropy.** $\|\mu\|=7.21$, ~7.6× smaller than Qwen's 55. The raw
+random floor drops accordingly: 0.569 vs Qwen's 0.622. *Centering
+removes the bulk of the per-backbone offset:* both random floors map to
+$\approx 0.50$ centered, which is what makes the centered metric
+portable.
+
+**Centered eval (M=32 targets, K=64, pool=2000).**
+
+| condition | raw fve_nrm | centered fve_nrm | $\rho_{\text{cen}}$ vs NN |
+|---|---|---|---|
+| random floor | 0.569 | 0.500 | 0.00 |
+| greedy | 0.672 | 0.633 | 0.41 |
+| sampled (mean) | 0.684 | 0.637 | 0.43 |
+| **best-of-64** | **0.873** | **0.858** | **1.12** |
+| NN-retrieval (pool=2000) | 0.837 | 0.820 | 1.00 |
+
+We define $\rho_{\text{cen}}$ here against the NN-retrieval baseline
+rather than a paraphrase ceiling (we did not run a Llama paraphrase
+sweep). On this smaller M=32 slice the adapter's best-of-64
+**exceeds the retrieval baseline** ($0.858 > 0.820$ centered): adapter
+generations are a better readback for $v$ than the nearest of 2,000
+real Llama samples. This is the same qualitative outcome as on Qwen.
+
+**K-curve (M=200 targets, K=32).**
+
+| $K$ | centered fve_nrm |
+|---|---|
+| 1  | 0.636 |
+| 2  | 0.678 |
+| 4  | 0.716 |
+| 8  | 0.748 |
+| 16 | 0.780 |
+| 32 | 0.809 |
+
+The curve is again log-linear: $+0.034$ centered per doubling of $K$,
+within sampling noise of Qwen's $+0.030$. Extrapolating from $K=32$
+(centered 0.809) at the same slope reaches the M=32-measured boK
+ceiling near $K \approx 64$, consistent with the M=32 result above.
+
+**Cheap reranks fail the same way.** logp-rerank gives 0.624 centered,
+$+0.005$ over greedy (0.619) — i.e. indistinguishable. Per-target
+Spearman$(\text{mean-logp}, \text{oracle-cen})$: mean 0.055, $p_{50}$
+0.059, $p_{05}$ $-0.40$, $p_{95}$ $0.53$. Identical structure to Qwen
+(mean ~0.04). NN-anchor rerank, by contrast, gives 0.783 centered, well
+above greedy (the NN-anchor *baseline* — score against the ground-truth
+$v$'s nearest pool neighbour, not the candidate — gives 0.836). Both
+the positive (NN works) and negative (logp doesn't) reranking results
+replicate.
+
+**Summary.** Every qualitative finding of §§2–6 reproduces on
+Llama-3.2-3B:
+
+1. raw greedy fve_nrm sits in a narrow $\approx 0.66$–$0.69$ band that
+   is $\approx 0.10$ above the raw random floor. The "0.689 wall" is
+   not Qwen-specific — it is the anisotropy floor under whatever the
+   per-backbone $\|\mu\|$ is.
+2. best-of-64 closes (and slightly overshoots) the retrieval baseline
+   in centered fve_nrm, again with no extra training.
+3. the K-curve is log-linear with slope ~0.03 centered per doubling.
+4. logp-rerank is statistically indistinguishable from greedy; the
+   policy's sequence probability is uncorrelated with reconstruction
+   quality.
+
+The pipeline is therefore not a Qwen-specific artefact. The
+prefix-tuned verbalizer, the centered metric, and the K-fold sampling
+search are properties of the *frozen-decoder verbalization problem*,
+not of any one model's geometry.
+
+**Llama artifacts.** `artifacts/nla/llama32_3B/`:
+- `sft/best_av.pt` — best SFT checkpoint (val fve_nrm 0.332 at step 5000/5337).
+- `centered_eval.json`, `rerank_eval.json` — eval JSON used for the tables above.
+- `gold_pairs_seq64.jsonl` — 29,963 train pairs.
+- `sft.log`, `sample.log`, `centered_eval.log`, `rerank.log` — full run logs.
+
+The 22.7 GB activations file (`targets_L20_seq64_30k_seed1.pt`,
+sha256 `db5c9d22…1981fa`) is reproducible from
+`scripts/sample_targets.py --backbone meta-llama/Llama-3.2-3B --layer 20
+--num-sequences 30000 --seq-len 64 --batch-size 16 --dtype bfloat16
+--seed 1`.
