@@ -911,31 +911,34 @@ fully replaces the original direction with the edited one.
                         "toward the edited thought._"
                     )
                     chat_summary_md = gr.Markdown()
-                    chat_align_plot = gr.BarPlot(
-                        x="turn",
-                        y="value",
-                        color="metric",
-                        group="metric",
-                        y_lim=[0.0, 1.0],
-                        height=200,
-                        title="Confidence vs lexical alignment",
-                        show_label=False,
-                    )
-                    chat_drift_plot = gr.BarPlot(
-                        x="turn",
-                        y="drift",
-                        color="kind",
-                        height=180,
-                        title="Residual drift while speaking (1 − cos(pre, post))",
-                        show_label=False,
-                    )
-                    chat_pull_plot = gr.BarPlot(
-                        x="turn",
-                        y="pull",
-                        height=160,
-                        title="Steer pull — Δcos toward edit (steered turns only)",
-                        show_label=False,
-                    )
+                    with gr.Tabs():
+                        with gr.Tab("Alignment"):
+                            chat_align_plot = gr.BarPlot(
+                                x="turn",
+                                y="value",
+                                color="metric",
+                                y_lim=[0.0, 1.0],
+                                height=220,
+                                title="Confidence vs lexical alignment",
+                                show_label=False,
+                            )
+                        with gr.Tab("Residual drift"):
+                            chat_drift_plot = gr.BarPlot(
+                                x="turn",
+                                y="drift",
+                                color="kind",
+                                height=220,
+                                title="Residual drift while speaking (1 − cos(pre, post))",
+                                show_label=False,
+                            )
+                        with gr.Tab("Steer pull"):
+                            chat_pull_plot = gr.BarPlot(
+                                x="turn",
+                                y="pull",
+                                height=220,
+                                title="Steer pull — Δcos toward edit (steered turns only)",
+                                show_label=False,
+                            )
 
         chat_metrics_state = gr.State([])
 
