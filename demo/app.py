@@ -911,34 +911,30 @@ fully replaces the original direction with the edited one.
                         "toward the edited thought._"
                     )
                     chat_summary_md = gr.Markdown()
-                    with gr.Tabs():
-                        with gr.Tab("Alignment"):
-                            chat_align_plot = gr.BarPlot(
-                                x="turn",
-                                y="value",
-                                color="metric",
-                                y_lim=[0.0, 1.0],
-                                height=220,
-                                title="Confidence vs lexical alignment",
-                                show_label=False,
-                            )
-                        with gr.Tab("Residual drift"):
-                            chat_drift_plot = gr.BarPlot(
-                                x="turn",
-                                y="drift",
-                                color="kind",
-                                height=220,
-                                title="Residual drift while speaking (1 − cos(pre, post))",
-                                show_label=False,
-                            )
-                        with gr.Tab("Steer pull"):
-                            chat_pull_plot = gr.BarPlot(
-                                x="turn",
-                                y="pull",
-                                height=220,
-                                title="Steer pull — Δcos toward edit (steered turns only)",
-                                show_label=False,
-                            )
+                    with gr.Accordion("📊 Confidence vs lexical alignment", open=True):
+                        chat_align_plot = gr.BarPlot(
+                            x="turn",
+                            y="value",
+                            color="metric",
+                            y_lim=[0.0, 1.0],
+                            height=200,
+                            show_label=False,
+                        )
+                    with gr.Accordion("📉 Residual drift while speaking", open=False):
+                        chat_drift_plot = gr.BarPlot(
+                            x="turn",
+                            y="drift",
+                            color="kind",
+                            height=200,
+                            show_label=False,
+                        )
+                    with gr.Accordion("🎯 Steer pull (steered turns only)", open=False):
+                        chat_pull_plot = gr.BarPlot(
+                            x="turn",
+                            y="pull",
+                            height=200,
+                            show_label=False,
+                        )
 
         chat_metrics_state = gr.State([])
 
