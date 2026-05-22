@@ -293,6 +293,9 @@ def cb_chat(
     thought_edit: str,
     alpha: float,
     max_new: int,
+    av_K: int = 8,
+    av_max_new: int = 48,
+    av_temp: float = 1.0,
 ):
     empty_topk = ""
     empty_plot_df = pd.DataFrame(columns=["turn", "metric", "value"])
@@ -312,7 +315,12 @@ def cb_chat(
 
     # 1. Read the model's pre-response state and verbalise it.
     v = pipe.extract_hidden(prompt, token_index=-1)
-    ranked = pipe.verbalize(v, K=4, temperature=1.0, max_new_tokens=32)
+    ranked = pipe.verbalize(
+        v,
+        K=int(av_K),
+        temperature=float(av_temp),
+        max_new_tokens=int(av_max_new),
+    )
     thought, raw, cen = (ranked[0] if ranked else ("(none)", 0.0, 0.0))
 
     # 2. Generate the assistant reply, optionally steered by `thought_edit`.
@@ -756,9 +764,29 @@ fully replaces the original direction with the edited one.
                     chat_alpha = gr.Slider(
                         -2.0, 2.0, value=1.0, step=0.05, label="alpha"
                     )
+                with gr.Accordion("Glass-box controls (advanced)", open=False):
+                    gr.Markdown(
+                        "_Tune how aggressively the AV verbalises the "
+                        "hidden state — more samples surface more "
+                        "competing attractors, longer AV tokens let "
+                        "multi-clause thoughts emerge, higher temperature "
+                        "broadens the search._"
+                    )
+                    with gr.Row():
+                        chat_K = gr.Slider(
+                            2, 16, value=8, step=1, label="AV samples (K)"
+                        )
+                        chat_av_max = gr.Slider(
+                            16, 128, value=48, step=8,
+                            label="AV thought tokens",
+                        )
+                        chat_av_temp = gr.Slider(
+                            0.3, 1.5, value=1.0, step=0.05,
+                            label="AV temperature",
+                        )
                 with gr.Row():
                     chat_max = gr.Slider(
-                        16, 256, value=96, step=16, label="Max new tokens"
+                        16, 512, value=192, step=16, label="Reply max new tokens"
                     )
                     chat_btn = gr.Button("Send", variant="primary")
                     chat_clear = gr.Button("Clear")
@@ -818,6 +846,9 @@ fully replaces the original direction with the edited one.
             chat_edit,
             chat_alpha,
             chat_max,
+            chat_K,
+            chat_av_max,
+            chat_av_temp,
         ]
         _chat_outputs = [
             chat_state,
