@@ -23,7 +23,9 @@ import os
 import re
 
 import gradio as gr
+import pandas as pd
 import torch
+import torch.nn.functional as F
 
 from nla_pipeline import BACKBONES, NLAPipeline
 
@@ -286,13 +288,25 @@ def cb_chat(
     backbone_key: str,
     history: list[dict],
     rail: str,
+    metrics_state: list[dict],
     user_msg: str,
     thought_edit: str,
     alpha: float,
     max_new: int,
 ):
+    empty_topk = ""
+    empty_plot_df = pd.DataFrame(columns=["turn", "metric", "value"])
     if not user_msg.strip():
-        return history, rail, "", thought_edit
+        return (
+            history,
+            rail,
+            metrics_state or [],
+            empty_topk,
+            "",
+            empty_plot_df,
+            "",
+            thought_edit,
+        )
     pipe = get_pipe(backbone_key)
     prompt = _build_chat_prompt(pipe, history or [], user_msg)
 
@@ -331,11 +345,36 @@ def cb_chat(
             reply = reply.split(stop, 1)[0]
     reply = reply.strip()
 
+    # 2b. Extra geometry — how much did the residual move while speaking,
+    # and (when steered) did it actually move toward the edit?
+    cos_pre_post = float("nan")
+    cos_edit_post = float("nan")
+    if reply:
+        try:
+            v_post = pipe.extract_hidden(prompt + " " + reply, token_index=-1)
+            cos_pre_post = float(
+                F.cosine_similarity(v.unsqueeze(0), v_post.unsqueeze(0)).item()
+            )
+            if steered:
+                v_edit = pipe.extract_hidden(thought_edit.strip(), token_index=-1)
+                cos_edit_post = float(
+                    F.cosine_similarity(
+                        v_edit.unsqueeze(0), v_post.unsqueeze(0)
+                    ).item()
+                )
+        except Exception:  # noqa: BLE001 - extra metrics are best-effort
+            pass
+
+    # 2c. Lexical Jaccard between AV-read thought and actual reply.
+    t_w, r_w = _content_words(thought), _content_words(reply)
+    jaccard = (len(t_w & r_w) / max(len(t_w | r_w), 1)) if (t_w or r_w) else 0.0
+
     # 3. Update history (messages-format) and rail (latest turn on top).
     new_history = list(history or []) + [
         {"role": "user", "content": user_msg},
         {"role": "assistant", "content": reply},
     ]
+    turn_no = len(new_history) // 2
     badge = " · _(steered)_" if steered else ""
     interp = _interpret_turn(
         thought=thought,
@@ -345,16 +384,76 @@ def cb_chat(
         edit_text=thought_edit,
     )
     rail_entry = (
-        f"**turn {len(new_history) // 2}**{badge} — centred fve `{cen:.3f}`, raw `{raw:.3f}`\n\n"
+        f"**turn {turn_no}**{badge} — centred fve `{cen:.3f}`, raw `{raw:.3f}`\n\n"
         f"> {thought.strip().replace(chr(10), ' ')}\n\n"
         f"{interp}\n"
     )
     new_rail = rail_entry + ("\n---\n\n" + rail if rail else "")
-    return new_history, new_rail, "", ""
+
+    # 4. Top-K alternative thoughts table (competing attractors the AV saw).
+    topk_lines = [
+        "**Top-K verbalisation candidates** (what *else* the AV considered):",
+        "",
+        "| rank | centred | raw | thought |",
+        "|---:|---:|---:|---|",
+    ]
+    for i, (txt, r_, c_) in enumerate(ranked, 1):
+        clean = txt.strip().replace("|", "/").replace("\n", " ")[:160]
+        topk_lines.append(f"| {i} | `{c_:.3f}` | `{r_:.3f}` | {clean} |")
+    new_topk = "\n".join(topk_lines)
+
+    # 5. Per-turn metrics block.
+    metric_lines = [f"**Turn {turn_no} geometry**", ""]
+    metric_lines.append(f"- centred fve of rail thought: `{cen:.3f}`")
+    metric_lines.append(f"- lexical Jaccard(thought, reply): `{jaccard:.3f}`")
+    if cos_pre_post == cos_pre_post:  # not nan
+        metric_lines.append(
+            f"- cos(v_pre, v_post) = `{cos_pre_post:.3f}` "
+            f"_(how much the residual moved while speaking; 1.0 = no motion)_"
+        )
+    if steered and cos_edit_post == cos_edit_post:
+        delta = cos_edit_post - cos_pre_post if cos_pre_post == cos_pre_post else float("nan")
+        metric_lines.append(
+            f"- cos(v_edit, v_post) = `{cos_edit_post:.3f}` "
+            f"_(how close the post-reply state is to the edited thought; "
+            f"Δ vs v_pre = `{delta:+.3f}`)_"
+        )
+    new_metrics_md = "\n".join(metric_lines)
+
+    # 6. Accumulated history for the line plot.
+    metrics_state = list(metrics_state or [])
+    metrics_state.append({
+        "turn": turn_no,
+        "centred_fve": cen,
+        "lexical_jaccard": jaccard,
+        "cos_pre_post": cos_pre_post if cos_pre_post == cos_pre_post else None,
+        "cos_edit_post": cos_edit_post if cos_edit_post == cos_edit_post else None,
+        "steered": steered,
+    })
+    plot_rows = []
+    for m in metrics_state:
+        plot_rows.append({"turn": m["turn"], "metric": "centred_fve", "value": m["centred_fve"]})
+        plot_rows.append({"turn": m["turn"], "metric": "lexical_jaccard", "value": m["lexical_jaccard"]})
+        if m["cos_pre_post"] is not None:
+            plot_rows.append({"turn": m["turn"], "metric": "cos(pre, post)", "value": m["cos_pre_post"]})
+        if m["cos_edit_post"] is not None:
+            plot_rows.append({"turn": m["turn"], "metric": "cos(edit, post)", "value": m["cos_edit_post"]})
+    plot_df = pd.DataFrame(plot_rows)
+
+    return (
+        new_history,
+        new_rail,
+        metrics_state,
+        new_topk,
+        new_metrics_md,
+        plot_df,
+        "",
+        "",
+    )
 
 
 def cb_chat_clear():
-    return [], "", "", ""
+    return [], "", [], "", "", pd.DataFrame(columns=["turn", "metric", "value"]), "", ""
 
 
 # ---------------------------------------------------------------------------
@@ -674,18 +773,67 @@ fully replaces the original direction with the edited one.
                 )
                 chat_rail = gr.Markdown()
 
+                with gr.Accordion("Top-K alternative thoughts", open=False):
+                    gr.Markdown(
+                        "_The AV samples K=4 candidate verbalisations and "
+                        "scores each by round-trip fve. The winner appears "
+                        "in the rail; the rest reveal **competing "
+                        "attractors** the residual could have resolved to._"
+                    )
+                    chat_topk_md = gr.Markdown()
+
+                with gr.Accordion("Latest-turn geometry", open=True):
+                    gr.Markdown(
+                        "_Quantitative readout for the most recent turn — "
+                        "rail confidence, lexical alignment to the reply, "
+                        "and how far the residual stream moved while the "
+                        "model was speaking._"
+                    )
+                    chat_metrics_md = gr.Markdown()
+
+                with gr.Accordion("Per-turn history (chart)", open=True):
+                    gr.Markdown(
+                        "_Tracks **centred fve** (rail confidence), "
+                        "**lexical Jaccard** (thought↔speech overlap), and "
+                        "**cosine drift** of the residual stream from "
+                        "before→after the model spoke, across every turn._"
+                    )
+                    chat_plot = gr.LinePlot(
+                        x="turn",
+                        y="value",
+                        color="metric",
+                        y_lim=[0.0, 1.0],
+                        height=240,
+                        show_label=False,
+                    )
+
+        chat_metrics_state = gr.State([])
+
+        _chat_inputs = [
+            backbone_key,
+            chat_state,
+            chat_rail,
+            chat_metrics_state,
+            chat_user,
+            chat_edit,
+            chat_alpha,
+            chat_max,
+        ]
+        _chat_outputs = [
+            chat_state,
+            chat_rail,
+            chat_metrics_state,
+            chat_topk_md,
+            chat_metrics_md,
+            chat_plot,
+            chat_user,
+            chat_edit,
+        ]
+
         chat_btn.click(
             cb_chat,
-            inputs=[
-                backbone_key,
-                chat_state,
-                chat_rail,
-                chat_user,
-                chat_edit,
-                chat_alpha,
-                chat_max,
-            ],
-            outputs=[chat_state, chat_rail, chat_user, chat_edit],
+            inputs=_chat_inputs,
+            outputs=_chat_outputs,
             show_progress="full",
             api_name=False,
         ).then(
@@ -697,16 +845,8 @@ fully replaces the original direction with the edited one.
         )
         chat_user.submit(
             cb_chat,
-            inputs=[
-                backbone_key,
-                chat_state,
-                chat_rail,
-                chat_user,
-                chat_edit,
-                chat_alpha,
-                chat_max,
-            ],
-            outputs=[chat_state, chat_rail, chat_user, chat_edit],
+            inputs=_chat_inputs,
+            outputs=_chat_outputs,
             show_progress="full",
             api_name=False,
         ).then(
@@ -719,7 +859,7 @@ fully replaces the original direction with the edited one.
         chat_clear.click(
             cb_chat_clear,
             inputs=None,
-            outputs=[chat_state, chat_rail, chat_user, chat_edit],
+            outputs=_chat_outputs,
             queue=False,
             api_name=False,
         ).then(
