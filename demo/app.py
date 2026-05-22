@@ -497,19 +497,59 @@ fully replaces the original direction with the edited one.
                     placeholder="The capital of France is",
                     lines=2,
                 )
+                gr.Markdown(
+                    "**Mind-reading** — the answer is encoded in the "
+                    "hidden state *before* it's spoken. Watch the rail "
+                    "match the reply."
+                )
                 gr.Examples(
                     examples=[
                         ["The capital of France is"],
-                        ["Two plus two equals"],
-                        ["The Mona Lisa was painted by"],
-                        ['"Good morning" in French is'],
                         ["The chemical symbol for gold is"],
-                        ["Roses are red, violets are"],
-                        ["Once upon a time, there was a"],
+                        ["The fastest land animal is the"],
                         ["The largest planet in our solar system is"],
+                        ['"Good morning" in French is'],
+                        ["Two plus two equals"],
+                        ["17 × 24 = let me work it out. 17 × 24 = 17 × (20 + 4) = 340 + 68 ="],
                     ],
                     inputs=chat_user,
-                    label="Example prompts (completion-style)",
+                    label="① Mind-reading prompts",
+                )
+                gr.Markdown(
+                    "**Causal steering** — open *Steer this reply* and "
+                    "type a replacement thought (e.g. `Lyon`, `green`, "
+                    "`a spaceship`). The reply flips, *coherently*, "
+                    "because we patched the residual — not the prompt."
+                )
+                gr.Examples(
+                    examples=[
+                        ["The capital of France is"],            # steer: Lyon
+                        ["Roses are red, violets are"],          # steer: green
+                        ["Once upon a time, there was a"],       # steer: spaceship
+                        ["The Mona Lisa was painted by"],        # steer: a child
+                        ["In a surprising twist, the hero"],     # steer: gave up
+                        ["The CEO of Apple is"],                 # steer: a robot
+                    ],
+                    inputs=chat_user,
+                    label="② Best for steering",
+                )
+                gr.Markdown(
+                    "**Priors & biases** — the rail surfaces what the "
+                    "model *thinks* before any hedging or politeness "
+                    "kicks in. Often more revealing than the reply."
+                )
+                gr.Examples(
+                    examples=[
+                        ["My honest opinion is that pineapple on pizza"],
+                        ["The most underrated programming language is"],
+                        ["She was furious because"],
+                        ["If you put a metal spoon in a microwave, it will"],
+                        ["The meaning of life is"],
+                        ["Dear diary, today I felt"],
+                        ["The murderer was actually"],
+                    ],
+                    inputs=chat_user,
+                    label="③ Reveal the model's priors",
                 )
                 with gr.Accordion("Steer this reply (optional)", open=False):
                     chat_edit = gr.Textbox(
