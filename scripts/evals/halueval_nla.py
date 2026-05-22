@@ -125,23 +125,42 @@ def features_for(
 ) -> dict:
     v_pre = pipe.extract_hidden(pre_prompt, token_index=-1)
     v_post = pipe.extract_hidden(full_prompt, token_index=-1)
-    ranked = pipe.verbalize(
+    ranked_pre = pipe.verbalize(
         v_pre, K=av_K, temperature=av_temp, max_new_tokens=av_max_new
     )
-    thought, raw, cen = ranked[0] if ranked else ("", 0.0, 0.0)
-    t_w = _content_words(thought)
+    thought_pre, raw_pre, cen_pre = (
+        ranked_pre[0] if ranked_pre else ("", 0.0, 0.0)
+    )
+    # Round-trip AV on the POST-answer state too. A hallucinated answer
+    # should produce a v_post that the AV cannot cleanly verbalise back —
+    # i.e. lower fve — because the assertion is inconsistent with the
+    # frozen LM's knowledge geometry.
+    ranked_post = pipe.verbalize(
+        v_post, K=av_K, temperature=av_temp, max_new_tokens=av_max_new
+    )
+    thought_post, raw_post, cen_post = (
+        ranked_post[0] if ranked_post else ("", 0.0, 0.0)
+    )
     a_w = _content_words(answer)
-    jacc = len(t_w & a_w) / max(len(t_w | a_w), 1) if (t_w or a_w) else 0.0
+    tp_w = _content_words(thought_pre)
+    tq_w = _content_words(thought_post)
+    jacc_pre = len(tp_w & a_w) / max(len(tp_w | a_w), 1) if (tp_w or a_w) else 0.0
+    jacc_post = len(tq_w & a_w) / max(len(tq_w | a_w), 1) if (tq_w or a_w) else 0.0
     drift = 1.0 - F.cosine_similarity(
         v_pre.unsqueeze(0), v_post.unsqueeze(0)
     ).item()
     drift = max(0.0, drift)
     return {
-        "pre_fve_raw": float(raw),
-        "pre_fve_centred": float(cen),
-        "jaccard": float(jacc),
+        "pre_fve_raw": float(raw_pre),
+        "pre_fve_centred": float(cen_pre),
+        "post_fve_raw": float(raw_post),
+        "post_fve_centred": float(cen_post),
+        "jaccard_pre": float(jacc_pre),
+        "jaccard_post": float(jacc_post),
         "drift": float(drift),
-        "thought": thought.strip().replace("\n", " ")[:240],
+        "answer_len": float(len(answer.split())),
+        "thought_pre": thought_pre.strip().replace("\n", " ")[:240],
+        "thought_post": thought_post.strip().replace("\n", " ")[:240],
     }
 
 
@@ -211,12 +230,24 @@ def main() -> int:
         from sklearn.metrics import roc_auc_score
         from sklearn.model_selection import StratifiedKFold
 
-        X = df[["pre_fve_centred", "jaccard", "drift"]].to_numpy()
+        X = df[
+            ["post_fve_centred", "jaccard_pre", "jaccard_post", "drift", "answer_len"]
+        ].to_numpy()
         y = df["label"].to_numpy()
 
-        # Single-feature baselines.
-        for col in ("pre_fve_centred", "jaccard", "drift"):
-            s = -df[col].to_numpy() if col != "drift" else df[col].to_numpy()
+        # Single-feature baselines. For "lower means hallucinated" features
+        # (fve, jaccard) we flip sign so AUC>0.5 means the feature is useful.
+        for col in (
+            "pre_fve_centred",
+            "post_fve_centred",
+            "jaccard_pre",
+            "jaccard_post",
+            "drift",
+            "answer_len",
+        ):
+            vals = df[col].to_numpy()
+            s = -vals if col in {"pre_fve_centred", "post_fve_centred",
+                                 "jaccard_pre", "jaccard_post"} else vals
             try:
                 auc = roc_auc_score(y, s)
                 print(f"[halueval-nla] AUC single-feature {col:<18s} = {auc:.3f}")
@@ -230,7 +261,7 @@ def main() -> int:
             clf = LogisticRegression(max_iter=200)
             clf.fit(X[tr], y[tr])
             aucs.append(roc_auc_score(y[te], clf.predict_proba(X[te])[:, 1]))
-        print(f"[halueval-nla] AUC logistic(3 feats) 5-fold = "
+        print(f"[halueval-nla] AUC logistic(5 feats) 5-fold = "
               f"{np.mean(aucs):.3f} ± {np.std(aucs):.3f}")
 
         out_json = Path(args.out).with_suffix(".metrics.json")
