@@ -1,0 +1,5 @@
+{
+  "backbone": "qwen2.5-7b",
+  "n_questions": 200,
+  "n_choices": 1476
+}
