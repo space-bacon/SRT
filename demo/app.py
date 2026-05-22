@@ -161,6 +161,99 @@ def cb_steer(
 
 
 # ---------------------------------------------------------------------------
+# Glass-box chat
+# ---------------------------------------------------------------------------
+
+def _build_chat_prompt(pipe: NLAPipeline, history: list[dict], user_msg: str) -> str:
+    """Render `history + user_msg` into a single prompt string. Use the
+    tokenizer's chat template if available; otherwise fall back to a
+    plain `User: ... \\nAssistant: ...` schema. Returns the prompt with
+    no trailing assistant text (so the model's next-token state is the
+    "about to respond" state we want to verbalise)."""
+    messages = list(history) + [{"role": "user", "content": user_msg}]
+    tok = pipe.tokenizer
+    if getattr(tok, "chat_template", None):
+        try:
+            return tok.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+        except Exception:  # noqa: BLE001 - some base tokenizers lack templates
+            pass
+    parts = []
+    for m in messages:
+        role = "User" if m["role"] == "user" else "Assistant"
+        parts.append(f"{role}: {m['content']}")
+    parts.append("Assistant:")
+    return "\n".join(parts)
+
+
+@_gpu(duration=180)
+def cb_chat(
+    backbone_key: str,
+    history: list[dict],
+    rail: str,
+    user_msg: str,
+    thought_edit: str,
+    alpha: float,
+    max_new: int,
+):
+    if not user_msg.strip():
+        return history, rail, "", thought_edit
+    pipe = get_pipe(backbone_key)
+    prompt = _build_chat_prompt(pipe, history or [], user_msg)
+
+    # 1. Read the model's pre-response state and verbalise it.
+    v = pipe.extract_hidden(prompt, token_index=-1)
+    ranked = pipe.verbalize(v, K=4, temperature=1.0, max_new_tokens=32)
+    thought, raw, cen = (ranked[0] if ranked else ("(none)", 0.0, 0.0))
+
+    # 2. Generate the assistant reply, optionally steered by `thought_edit`.
+    steered = bool(thought_edit.strip())
+    if steered:
+        reply = pipe.steer_with_text(
+            prompt,
+            thought_edit.strip(),
+            alpha=float(alpha),
+            max_new_tokens=int(max_new),
+        )
+    else:
+        ids = pipe.tokenizer(prompt, return_tensors="pt").to(pipe.device)
+        with torch.no_grad():
+            gen = pipe.backbone.generate(
+                **ids,
+                max_new_tokens=int(max_new),
+                do_sample=False,
+                pad_token_id=pipe.tokenizer.pad_token_id,
+            )
+        reply = pipe.tokenizer.decode(
+            gen[0, ids.input_ids.shape[1]:], skip_special_tokens=True
+        )
+
+    # Trim trailing user/assistant tags some chat templates leak.
+    for stop in ("\nUser:", "\nuser:", "<|im_end|>", "<|eot_id|>"):
+        if stop in reply:
+            reply = reply.split(stop, 1)[0]
+    reply = reply.strip()
+
+    # 3. Update history (messages-format) and rail (latest turn on top).
+    new_history = list(history or []) + [
+        {"role": "user", "content": user_msg},
+        {"role": "assistant", "content": reply},
+    ]
+    badge = " · _(steered)_" if steered else ""
+    rail_entry = (
+        f"**turn {len(new_history) // 2}**{badge} — centred fve `{cen:.3f}`, raw `{raw:.3f}`\n\n"
+        f"> {thought.strip().replace(chr(10), ' ')}\n"
+    )
+    new_rail = rail_entry + ("\n---\n\n" + rail if rail else "")
+    return new_history, new_rail, "", ""
+
+
+def cb_chat_clear():
+    return [], "", "", ""
+
+
+# ---------------------------------------------------------------------------
 # UI
 # ---------------------------------------------------------------------------
 
@@ -365,6 +458,104 @@ fully replaces the original direction with the edited one.
             inputs=[backbone_key, st_prompt, st_replacement, st_alpha, st_max],
             outputs=[st_base_verb, st_base_cont, st_steered],
             show_progress="full",
+        )
+
+    with gr.Tab("4 - Glass-box chat"):
+        gr.Markdown(
+            "A normal chat, plus a live right-rail showing the AV's "
+            "verbalisation of the model's hidden state *immediately before "
+            "it responds to each of your messages* (layer L, last token of "
+            "the assembled chat prompt). Optionally edit that thought before "
+            "you send: the edited text is re-encoded, and `alpha · "
+            "(v_edited − v_original)` is patched into layer L while the "
+            "reply is generated. This is *steering by editing what the "
+            "model is thinking about*, mid-conversation."
+        )
+        chat_state = gr.State([])
+        with gr.Row():
+            with gr.Column(scale=3):
+                chat_box = gr.Chatbot(
+                    label="Conversation",
+                    type="messages",
+                    height=420,
+                )
+                chat_user = gr.Textbox(
+                    label="Your message",
+                    placeholder="Ask anything…",
+                    lines=2,
+                )
+                with gr.Accordion("Steer this reply (optional)", open=False):
+                    chat_edit = gr.Textbox(
+                        label="Replacement thought (leave blank for unsteered reply)",
+                        placeholder="e.g. 'a careful, hedged answer about uncertainty'",
+                        lines=2,
+                    )
+                    chat_alpha = gr.Slider(
+                        -2.0, 2.0, value=1.0, step=0.05, label="alpha"
+                    )
+                with gr.Row():
+                    chat_max = gr.Slider(
+                        16, 256, value=96, step=16, label="Max new tokens"
+                    )
+                    chat_btn = gr.Button("Send", variant="primary")
+                    chat_clear = gr.Button("Clear")
+            with gr.Column(scale=2):
+                gr.Markdown("### 🧠 Thought rail")
+                gr.Markdown(
+                    "_The AV's best verbalisation of the model's hidden "
+                    "state at the moment it was about to respond to each "
+                    "of your messages, latest turn on top._"
+                )
+                chat_rail = gr.Markdown()
+
+        chat_btn.click(
+            cb_chat,
+            inputs=[
+                backbone_key,
+                chat_state,
+                chat_rail,
+                chat_user,
+                chat_edit,
+                chat_alpha,
+                chat_max,
+            ],
+            outputs=[chat_state, chat_rail, chat_user, chat_edit],
+            show_progress="full",
+        ).then(
+            lambda h: h,
+            inputs=chat_state,
+            outputs=chat_box,
+            queue=False,
+        )
+        chat_user.submit(
+            cb_chat,
+            inputs=[
+                backbone_key,
+                chat_state,
+                chat_rail,
+                chat_user,
+                chat_edit,
+                chat_alpha,
+                chat_max,
+            ],
+            outputs=[chat_state, chat_rail, chat_user, chat_edit],
+            show_progress="full",
+        ).then(
+            lambda h: h,
+            inputs=chat_state,
+            outputs=chat_box,
+            queue=False,
+        )
+        chat_clear.click(
+            cb_chat_clear,
+            inputs=None,
+            outputs=[chat_state, chat_rail, chat_user, chat_edit],
+            queue=False,
+        ).then(
+            lambda: [],
+            inputs=None,
+            outputs=chat_box,
+            queue=False,
         )
 
     gr.Markdown(
