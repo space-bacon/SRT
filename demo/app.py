@@ -903,38 +903,32 @@ fully replaces the original direction with the edited one.
 
                 with gr.Accordion("Per-turn history (dashboard)", open=True):
                     gr.Markdown(
-                        "_Three views of how the model evolved across the "
-                        "conversation: alignment (does it think what it "
-                        "says?), residual drift (how much its hidden state "
-                        "moved while speaking), and — when steering — "
-                        "whether the patch actually pulled the trajectory "
-                        "toward the edited thought._"
+                        "_Tracks alignment, residual drift, and (when "
+                        "steering) how strongly the patch pulled the "
+                        "trajectory toward the edited thought._"
                     )
                     chat_summary_md = gr.Markdown()
-                    with gr.Accordion("📊 Confidence vs lexical alignment", open=True):
-                        chat_align_plot = gr.BarPlot(
-                            x="turn",
-                            y="value",
-                            color="metric",
-                            y_lim=[0.0, 1.0],
-                            height=200,
-                            show_label=False,
-                        )
-                    with gr.Accordion("📉 Residual drift while speaking", open=False):
-                        chat_drift_plot = gr.BarPlot(
-                            x="turn",
-                            y="drift",
-                            color="kind",
-                            height=200,
-                            show_label=False,
-                        )
-                    with gr.Accordion("🎯 Steer pull (steered turns only)", open=False):
-                        chat_pull_plot = gr.BarPlot(
-                            x="turn",
-                            y="pull",
-                            height=200,
-                            show_label=False,
-                        )
+                    chat_align_plot = gr.LinePlot(
+                        x="turn",
+                        y="value",
+                        color="metric",
+                        y_lim=[0.0, 1.0],
+                        height=220,
+                        show_label=False,
+                    )
+                    chat_drift_plot = gr.LinePlot(
+                        x="turn",
+                        y="drift",
+                        color="kind",
+                        height=180,
+                        show_label=False,
+                    )
+                    chat_pull_plot = gr.LinePlot(
+                        x="turn",
+                        y="pull",
+                        height=160,
+                        show_label=False,
+                    )
 
         chat_metrics_state = gr.State([])
 
