@@ -521,11 +521,13 @@ fully replaces the original direction with the edited one.
             ],
             outputs=[chat_state, chat_rail, chat_user, chat_edit],
             show_progress="full",
+            api_name=False,
         ).then(
             lambda h: h,
             inputs=chat_state,
             outputs=chat_box,
             queue=False,
+            api_name=False,
         )
         chat_user.submit(
             cb_chat,
@@ -540,22 +542,26 @@ fully replaces the original direction with the edited one.
             ],
             outputs=[chat_state, chat_rail, chat_user, chat_edit],
             show_progress="full",
+            api_name=False,
         ).then(
             lambda h: h,
             inputs=chat_state,
             outputs=chat_box,
             queue=False,
+            api_name=False,
         )
         chat_clear.click(
             cb_chat_clear,
             inputs=None,
             outputs=[chat_state, chat_rail, chat_user, chat_edit],
             queue=False,
+            api_name=False,
         ).then(
             lambda: [],
             inputs=None,
             outputs=chat_box,
             queue=False,
+            api_name=False,
         )
 
     gr.Markdown(
