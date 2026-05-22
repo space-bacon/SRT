@@ -165,26 +165,31 @@ def cb_steer(
 # ---------------------------------------------------------------------------
 
 def _build_chat_prompt(pipe: NLAPipeline, history: list[dict], user_msg: str) -> str:
-    """Render `history + user_msg` into a single prompt string. Use the
-    tokenizer's chat template if available; otherwise fall back to a
-    plain `User: ... \\nAssistant: ...` schema. Returns the prompt with
-    no trailing assistant text (so the model's next-token state is the
-    "about to respond" state we want to verbalise)."""
-    messages = list(history) + [{"role": "user", "content": user_msg}]
-    tok = pipe.tokenizer
-    if getattr(tok, "chat_template", None):
-        try:
-            return tok.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
-        except Exception:  # noqa: BLE001 - some base tokenizers lack templates
-            pass
-    parts = []
-    for m in messages:
-        role = "User" if m["role"] == "user" else "Assistant"
-        parts.append(f"{role}: {m['content']}")
-    parts.append("Assistant:")
-    return "\n".join(parts)
+    """Render `history + user_msg` into a single prompt string.
+
+    These are *base* models (no instruct/RLHF), so the chat template
+    wraps the input in `<|im_start|>user … <|im_start|>assistant` and
+    the base model — never having seen that pattern — emits another
+    Q/A pair instead of an answer.  Instead, we treat each user turn
+    as a **completion prompt**: prior turns are stitched as
+    "user_text reply_text\\n\\n" pairs (no role labels), and the
+    current `user_msg` is appended verbatim with no trailing assistant
+    primer.  The model then simply continues writing — which is
+    exactly what base LMs are good at.
+    """
+    parts: list[str] = []
+    pending_user: str | None = None
+    for m in history or []:
+        if m["role"] == "user":
+            pending_user = m["content"]
+        else:  # assistant
+            if pending_user is not None:
+                parts.append(f"{pending_user} {m['content']}")
+                pending_user = None
+            else:
+                parts.append(m["content"])
+    parts.append(user_msg)
+    return "\n\n".join(parts)
 
 
 @_gpu(duration=180)
@@ -229,8 +234,10 @@ def cb_chat(
             gen[0, ids.input_ids.shape[1]:], skip_special_tokens=True
         )
 
-    # Trim trailing user/assistant tags some chat templates leak.
-    for stop in ("\nUser:", "\nuser:", "<|im_end|>", "<|eot_id|>"):
+    # Trim trailing user/assistant tags some chat templates leak, and
+    # cut at the first paragraph break so completion-style replies
+    # don't ramble into a new topic.
+    for stop in ("\n\n", "\nUser:", "\nuser:", "\nQ:", "<|im_end|>", "<|eot_id|>", "<end_of_turn>"):
         if stop in reply:
             reply = reply.split(stop, 1)[0]
     reply = reply.strip()
@@ -469,7 +476,12 @@ fully replaces the original direction with the edited one.
             "you send: the edited text is re-encoded, and `alpha · "
             "(v_edited − v_original)` is patched into layer L while the "
             "reply is generated. This is *steering by editing what the "
-            "model is thinking about*, mid-conversation."
+            "model is thinking about*, mid-conversation.\n\n"
+            "> **Tip.** These are *base* models (no RLHF), so phrase your "
+            "turn as the **start of the answer**, not as a question. "
+            "Write `The capital of France is` — not `What is the capital "
+            "of France?`. The examples below are pre-formatted; click any "
+            "one to try it."
         )
         chat_state = gr.State([])
         with gr.Row():
@@ -480,9 +492,24 @@ fully replaces the original direction with the edited one.
                     height=420,
                 )
                 chat_user = gr.Textbox(
-                    label="Your message",
-                    placeholder="Ask anything…",
+                    label="Your message  (write the *start of the answer*, "
+                    "e.g. 'The capital of France is')",
+                    placeholder="The capital of France is",
                     lines=2,
+                )
+                gr.Examples(
+                    examples=[
+                        ["The capital of France is"],
+                        ["Two plus two equals"],
+                        ["The Mona Lisa was painted by"],
+                        ['"Good morning" in French is'],
+                        ["The chemical symbol for gold is"],
+                        ["Roses are red, violets are"],
+                        ["Once upon a time, there was a"],
+                        ["The largest planet in our solar system is"],
+                    ],
+                    inputs=chat_user,
+                    label="Example prompts (completion-style)",
                 )
                 with gr.Accordion("Steer this reply (optional)", open=False):
                     chat_edit = gr.Textbox(
