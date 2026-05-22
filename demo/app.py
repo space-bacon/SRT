@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 
 import gradio as gr
 import torch
@@ -192,6 +193,94 @@ def _build_chat_prompt(pipe: NLAPipeline, history: list[dict], user_msg: str) ->
     return "\n\n".join(parts)
 
 
+_STOPWORDS = {
+    "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+    "of", "to", "in", "on", "at", "by", "for", "with", "and", "or", "but",
+    "it", "this", "that", "these", "those", "i", "you", "he", "she", "we",
+    "they", "as", "from", "into", "about", "than", "then", "so", "if",
+    "not", "no", "do", "does", "did", "has", "have", "had", "will", "would",
+    "can", "could", "should", "may", "might", "one", "two",
+}
+
+
+def _content_words(text: str) -> set[str]:
+    """Lowercase content tokens, stop-words removed, length ≥ 2."""
+    return {
+        w for w in re.findall(r"[A-Za-z0-9']+", text.lower())
+        if w not in _STOPWORDS and len(w) > 1
+    }
+
+
+def _interpret_turn(
+    thought: str,
+    reply: str,
+    centred_fve: float,
+    steered: bool,
+    edit_text: str,
+) -> str:
+    """Render a one-line plain-English interpretation of the relationship
+    between the AV's read of the model's pre-response state (`thought`)
+    and what the model actually emitted (`reply`)."""
+    t_words = _content_words(thought)
+    r_words = _content_words(reply)
+    e_words = _content_words(edit_text or "")
+
+    # Confidence band on the rail itself.
+    if centred_fve >= 0.5:
+        conf = "high-confidence"
+    elif centred_fve >= 0.2:
+        conf = "medium-confidence"
+    else:
+        conf = "diffuse / low-confidence"
+
+    if steered:
+        steer_hit = bool(e_words & r_words)
+        original_leak = bool((t_words & r_words) - e_words)
+        if steer_hit and not original_leak:
+            verdict = (
+                "✅ **Steer succeeded.** Reply tracks the *edited* "
+                f"thought (`{', '.join(sorted(e_words & r_words))[:80]}`) "
+                "rather than the AV's original read."
+            )
+        elif steer_hit and original_leak:
+            verdict = (
+                "🟡 **Partial steer.** Reply contains both edited-thought "
+                "tokens and original-thought tokens — the steer pulled the "
+                "trajectory but did not overwrite it. Try a larger `alpha`."
+            )
+        elif original_leak:
+            verdict = (
+                "⚠️ **Steer ignored.** Reply still echoes the AV's "
+                "original read; the patched residual didn't dominate. "
+                "Try a larger `alpha` or a thought-edit that's more "
+                "semantically distant from the original."
+            )
+        else:
+            verdict = (
+                "❓ **Off-distribution reply.** Neither the edited "
+                "thought nor the original rail tokens appear; the patch "
+                "may have pushed the residual into a low-density region."
+            )
+    else:
+        overlap = t_words & r_words
+        if overlap:
+            verdict = (
+                f"✅ **Thought → speech aligned.** Reply contains rail "
+                f"tokens (`{', '.join(sorted(overlap))[:80]}`) — the AV "
+                "correctly read the answer *before* it was spoken."
+            )
+        elif t_words and r_words:
+            verdict = (
+                "⚠️ **Divergence.** The reply doesn't echo the rail's "
+                "tokens — the AV may have decoded a competing attractor, "
+                "or the model hedged between thinking and speaking."
+            )
+        else:
+            verdict = "_(no overlap measurable)_"
+
+    return f"_{conf} read._  {verdict}"
+
+
 @_gpu(duration=180)
 def cb_chat(
     backbone_key: str,
@@ -248,9 +337,17 @@ def cb_chat(
         {"role": "assistant", "content": reply},
     ]
     badge = " · _(steered)_" if steered else ""
+    interp = _interpret_turn(
+        thought=thought,
+        reply=reply,
+        centred_fve=cen,
+        steered=steered,
+        edit_text=thought_edit,
+    )
     rail_entry = (
         f"**turn {len(new_history) // 2}**{badge} — centred fve `{cen:.3f}`, raw `{raw:.3f}`\n\n"
-        f"> {thought.strip().replace(chr(10), ' ')}\n"
+        f"> {thought.strip().replace(chr(10), ' ')}\n\n"
+        f"{interp}\n"
     )
     new_rail = rail_entry + ("\n---\n\n" + rail if rail else "")
     return new_history, new_rail, "", ""
@@ -569,9 +666,11 @@ fully replaces the original direction with the edited one.
             with gr.Column(scale=2):
                 gr.Markdown("### 🧠 Thought rail")
                 gr.Markdown(
-                    "_The AV's best verbalisation of the model's hidden "
-                    "state at the moment it was about to respond to each "
-                    "of your messages, latest turn on top._"
+                    "_For each turn: the AV's verbalisation of the model's "
+                    "hidden state **before** it replied, plus an automatic "
+                    "**verdict** comparing that thought to what the model "
+                    "actually said (or — when steered — whether the patch "
+                    "took effect)._"
                 )
                 chat_rail = gr.Markdown()
 
