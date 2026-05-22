@@ -1,0 +1,77 @@
+{
+  "single_feature": {
+    "pre_fve_centred": {
+      "auc": 0.5382,
+      "direction": "\u2193\u2192hallu"
+    },
+    "post_fve_centred": {
+      "auc": 0.5539499999999999,
+      "direction": "\u2193\u2192hallu"
+    },
+    "jaccard_pre": {
+      "auc": 0.581075,
+      "direction": "\u2191\u2192hallu"
+    },
+    "jaccard_post": {
+      "auc": 0.5390375000000001,
+      "direction": "\u2191\u2192hallu"
+    },
+    "drift": {
+      "auc": 0.71005,
+      "direction": "\u2193\u2192hallu"
+    },
+    "answer_len": {
+      "auc": 0.986075,
+      "direction": "\u2191\u2192hallu"
+    }
+  },
+  "NLA-only (5 feats, no length)": {
+    "mean": 0.7228749999999999,
+    "std": 0.04692180996082739,
+    "cols": [
+      "pre_fve_centred",
+      "post_fve_centred",
+      "jaccard_pre",
+      "jaccard_post",
+      "drift"
+    ]
+  },
+  "length-only": {
+    "mean": 0.985125,
+    "std": 0.013250294808041102,
+    "cols": [
+      "answer_len"
+    ]
+  },
+  "NLA + length (6 feats)": {
+    "mean": 0.9855,
+    "std": 0.016029270101910464,
+    "cols": [
+      "pre_fve_centred",
+      "post_fve_centred",
+      "jaccard_pre",
+      "jaccard_post",
+      "drift",
+      "answer_len"
+    ]
+  },
+  "drift-only": {
+    "mean": 0.7143750000000001,
+    "std": 0.03661881347067385,
+    "cols": [
+      "drift"
+    ]
+  },
+  "drift + post_fve": {
+    "mean": 0.71175,
+    "std": 0.0427097763983845,
+    "cols": [
+      "drift",
+      "post_fve_centred"
+    ]
+  },
+  "length_matched": {
+    "n_pairs": 5
+  },
+  "drift_within_bucket_mean_auc": 0.8479164152220028
+}
