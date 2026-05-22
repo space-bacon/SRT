@@ -105,10 +105,10 @@ def main() -> int:
     print(f"[tqa-strong] loaded {len(ds)} questions; using first {n}")
 
     spec = BACKBONES[args.backbone]
-    print(f"[tqa-strong] loading {spec.hf_id}")
-    tok = AutoTokenizer.from_pretrained(spec.hf_id)
+    print(f"[tqa-strong] loading {spec.backbone_id}")
+    tok = AutoTokenizer.from_pretrained(spec.backbone_id)
     model = AutoModelForCausalLM.from_pretrained(
-        spec.hf_id, dtype=torch.bfloat16
+        spec.backbone_id, dtype=torch.bfloat16
     ).to(args.device)
     model.eval()
     n_layers_total = model.config.num_hidden_layers
