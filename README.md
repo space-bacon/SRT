@@ -67,6 +67,20 @@ tokens ──► Backbone Embeddings (native, frozen)
 5. **Portable** — Save/load just the 44MB adapter weights. Attach to any
    compatible backbone at inference time.
 
+## TruthfulQA-MC2 detector — 0.866 ± 0.011 AUC
+
+Using features extracted from a single forward pass of a **frozen
+Qwen-2.5-7B** (no adapter, no fine-tuning) plus LightGBM, this repo
+hits **AUC 0.866 ± 0.011** on TruthfulQA-MC2, group-CV by question
+(n=817, 5882 paired choices). That sits at the top of the published
+hidden-state detector band (SAPLMA ≈ 0.72, SAR ≈ 0.75–0.83, INSIDE
+≈ 0.78–0.85, EigenScore ≈ 0.80–0.85).
+
+Full protocol, ablations, and reproduction command in
+[docs/TRUTHFULQA_RESULTS.md](docs/TRUTHFULQA_RESULTS.md). Evaluator:
+[scripts/evals/truthfulqa_v3.py](scripts/evals/truthfulqa_v3.py).
+Artifacts: [artifacts/truthfulqa/v3_qwen_n817.metrics.json](artifacts/truthfulqa/v3_qwen_n817.metrics.json).
+
 ## Modules
 
 | Module | Purpose | Parameters |
