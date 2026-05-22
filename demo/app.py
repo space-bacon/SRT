@@ -298,7 +298,9 @@ def cb_chat(
     av_temp: float = 1.0,
 ):
     empty_topk = ""
-    empty_plot_df = pd.DataFrame(columns=["turn", "metric", "value"])
+    empty_align = pd.DataFrame(columns=["turn", "metric", "value"])
+    empty_drift = pd.DataFrame(columns=["turn", "drift", "kind"])
+    empty_pull = pd.DataFrame(columns=["turn", "pull"])
     if not user_msg.strip():
         return (
             history,
@@ -306,7 +308,10 @@ def cb_chat(
             metrics_state or [],
             empty_topk,
             "",
-            empty_plot_df,
+            "",
+            empty_align,
+            empty_drift,
+            empty_pull,
             "",
             thought_edit,
         )
@@ -438,15 +443,83 @@ def cb_chat(
         "cos_edit_post": cos_edit_post if cos_edit_post == cos_edit_post else None,
         "steered": steered,
     })
-    plot_rows = []
+    # --- Small-multiples dataframes -------------------------------------
+    align_rows: list[dict] = []     # plot A: confidence + alignment
+    drift_rows: list[dict] = []     # plot B: residual motion while speaking
+    pull_rows: list[dict] = []      # plot C: steer pull (steered turns only)
     for m in metrics_state:
-        plot_rows.append({"turn": m["turn"], "metric": "centred_fve", "value": m["centred_fve"]})
-        plot_rows.append({"turn": m["turn"], "metric": "lexical_jaccard", "value": m["lexical_jaccard"]})
+        align_rows.append({"turn": m["turn"], "metric": "centred fve",
+                           "value": float(m["centred_fve"])})
+        align_rows.append({"turn": m["turn"], "metric": "lexical Jaccard",
+                           "value": float(m["lexical_jaccard"])})
         if m["cos_pre_post"] is not None:
-            plot_rows.append({"turn": m["turn"], "metric": "cos(pre, post)", "value": m["cos_pre_post"]})
-        if m["cos_edit_post"] is not None:
-            plot_rows.append({"turn": m["turn"], "metric": "cos(edit, post)", "value": m["cos_edit_post"]})
-    plot_df = pd.DataFrame(plot_rows)
+            drift_rows.append({
+                "turn": m["turn"],
+                "drift": max(0.0, 1.0 - float(m["cos_pre_post"])),
+                "kind": "steered" if m["steered"] else "unsteered",
+            })
+        if m["steered"] and m["cos_edit_post"] is not None and m["cos_pre_post"] is not None:
+            pull_rows.append({
+                "turn": m["turn"],
+                "pull": float(m["cos_edit_post"]) - float(m["cos_pre_post"]),
+            })
+
+    align_df = pd.DataFrame(align_rows) if align_rows else pd.DataFrame(
+        columns=["turn", "metric", "value"])
+    drift_df = pd.DataFrame(drift_rows) if drift_rows else pd.DataFrame(
+        columns=["turn", "drift", "kind"])
+    pull_df = pd.DataFrame(pull_rows) if pull_rows else pd.DataFrame(
+        columns=["turn", "pull"])
+
+    # --- Session summary card -------------------------------------------
+    def _spark(vals: list[float]) -> str:
+        if not vals:
+            return ""
+        bars = "▁▂▃▄▅▆▇█"
+        lo, hi = min(vals), max(vals)
+        rng = hi - lo if hi > lo else 1.0
+        return "".join(bars[min(7, int((v - lo) / rng * 7))] for v in vals)
+
+    fves = [m["centred_fve"] for m in metrics_state]
+    jacs = [m["lexical_jaccard"] for m in metrics_state]
+    drifts = [1.0 - m["cos_pre_post"] for m in metrics_state
+              if m["cos_pre_post"] is not None]
+    aligned_frac = sum(1 for j in jacs if j > 0) / max(len(jacs), 1)
+    steered_turns = [m for m in metrics_state if m["steered"]]
+    pull_vals = [
+        m["cos_edit_post"] - m["cos_pre_post"]
+        for m in steered_turns
+        if m["cos_edit_post"] is not None and m["cos_pre_post"] is not None
+    ]
+    pull_pos = sum(1 for p in pull_vals if p > 0)
+
+    def _avg(xs):
+        return sum(xs) / len(xs) if xs else float("nan")
+
+    summary_lines = [
+        f"**Session summary** ({len(metrics_state)} turn{'s' if len(metrics_state) != 1 else ''})",
+        "",
+        f"| metric | mean | range | trend |",
+        f"|---|---:|---:|---|",
+        f"| centred fve | `{_avg(fves):.3f}` | `{min(fves):.2f}–{max(fves):.2f}` | `{_spark(fves)}` |",
+        f"| lexical Jaccard | `{_avg(jacs):.3f}` | `{min(jacs):.2f}–{max(jacs):.2f}` | `{_spark(jacs)}` |",
+    ]
+    if drifts:
+        summary_lines.append(
+            f"| residual drift | `{_avg(drifts):.3f}` | "
+            f"`{min(drifts):.2f}–{max(drifts):.2f}` | `{_spark(drifts)}` |"
+        )
+    summary_lines.append("")
+    summary_lines.append(
+        f"- Thought→speech alignment fired on **{aligned_frac*100:.0f}%** of turns"
+    )
+    if steered_turns:
+        summary_lines.append(
+            f"- Steered **{len(steered_turns)}** turn(s); patch pulled the "
+            f"trajectory toward the edit on **{pull_pos}/{len(pull_vals)}** "
+            f"(mean Δ = `{_avg(pull_vals):+.3f}`)"
+        )
+    summary_md = "\n".join(summary_lines)
 
     return (
         new_history,
@@ -454,14 +527,23 @@ def cb_chat(
         metrics_state,
         new_topk,
         new_metrics_md,
-        plot_df,
+        summary_md,
+        align_df,
+        drift_df,
+        pull_df,
         "",
         "",
     )
 
 
 def cb_chat_clear():
-    return [], "", [], "", "", pd.DataFrame(columns=["turn", "metric", "value"]), "", ""
+    return (
+        [], "", [], "", "", "",
+        pd.DataFrame(columns=["turn", "metric", "value"]),
+        pd.DataFrame(columns=["turn", "drift", "kind"]),
+        pd.DataFrame(columns=["turn", "pull"]),
+        "", "",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -819,19 +901,39 @@ fully replaces the original direction with the edited one.
                     )
                     chat_metrics_md = gr.Markdown()
 
-                with gr.Accordion("Per-turn history (chart)", open=True):
+                with gr.Accordion("Per-turn history (dashboard)", open=True):
                     gr.Markdown(
-                        "_Tracks **centred fve** (rail confidence), "
-                        "**lexical Jaccard** (thought↔speech overlap), and "
-                        "**cosine drift** of the residual stream from "
-                        "before→after the model spoke, across every turn._"
+                        "_Three views of how the model evolved across the "
+                        "conversation: alignment (does it think what it "
+                        "says?), residual drift (how much its hidden state "
+                        "moved while speaking), and — when steering — "
+                        "whether the patch actually pulled the trajectory "
+                        "toward the edited thought._"
                     )
-                    chat_plot = gr.LinePlot(
+                    chat_summary_md = gr.Markdown()
+                    chat_align_plot = gr.BarPlot(
                         x="turn",
                         y="value",
                         color="metric",
+                        group="metric",
                         y_lim=[0.0, 1.0],
-                        height=240,
+                        height=200,
+                        title="Confidence vs lexical alignment",
+                        show_label=False,
+                    )
+                    chat_drift_plot = gr.BarPlot(
+                        x="turn",
+                        y="drift",
+                        color="kind",
+                        height=180,
+                        title="Residual drift while speaking (1 − cos(pre, post))",
+                        show_label=False,
+                    )
+                    chat_pull_plot = gr.BarPlot(
+                        x="turn",
+                        y="pull",
+                        height=160,
+                        title="Steer pull — Δcos toward edit (steered turns only)",
                         show_label=False,
                     )
 
@@ -856,7 +958,10 @@ fully replaces the original direction with the edited one.
             chat_metrics_state,
             chat_topk_md,
             chat_metrics_md,
-            chat_plot,
+            chat_summary_md,
+            chat_align_plot,
+            chat_drift_plot,
+            chat_pull_plot,
             chat_user,
             chat_edit,
         ]
