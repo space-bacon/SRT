@@ -67,19 +67,29 @@ tokens ──► Backbone Embeddings (native, frozen)
 5. **Portable** — Save/load just the 44MB adapter weights. Attach to any
    compatible backbone at inference time.
 
-## TruthfulQA-MC2 detector — 0.866 ± 0.011 AUC
+## TruthfulQA-MC2 detector — top-of-band AUC across three backbones
 
 Using features extracted from a single forward pass of a **frozen
-Qwen-2.5-7B** (no adapter, no fine-tuning) plus LightGBM, this repo
-hits **AUC 0.866 ± 0.011** on TruthfulQA-MC2, group-CV by question
-(n=817, 5882 paired choices). That sits at the top of the published
-hidden-state detector band (SAPLMA ≈ 0.72, SAR ≈ 0.75–0.83, INSIDE
-≈ 0.78–0.85, EigenScore ≈ 0.80–0.85).
+backbone** (no adapter, no fine-tuning) plus LightGBM, this repo hits
+the top of the published hidden-state-detector band on TruthfulQA-MC2,
+group-CV by question (n=817, 5882 paired choices):
+
+| backbone | params | LightGBM AUC |
+|---|---:|---:|
+| Gemma-2-2B | 2B | 0.8563 ± 0.016 |
+| Llama-3.2-3B | 3B | 0.8475 ± 0.013 |
+| **Qwen-2.5-7B** | **7B** | **0.8656 ± 0.011** |
+
+Reference band: SAPLMA ≈ 0.72, SAR ≈ 0.75–0.83, INSIDE ≈ 0.78–0.85,
+EigenScore ≈ 0.80–0.85.
 
 Full protocol, ablations, and reproduction command in
 [docs/TRUTHFULQA_RESULTS.md](docs/TRUTHFULQA_RESULTS.md). Evaluator:
 [scripts/evals/truthfulqa_v3.py](scripts/evals/truthfulqa_v3.py).
-Artifacts: [artifacts/truthfulqa/v3_qwen_n817.metrics.json](artifacts/truthfulqa/v3_qwen_n817.metrics.json).
+Artifacts:
+[Qwen](artifacts/truthfulqa/v3_qwen_n817.metrics.json),
+[Llama](artifacts/truthfulqa/v3_llama32-3b_n817.metrics.json),
+[Gemma](artifacts/truthfulqa/v3_gemma2-2b_n817.metrics.json).
 
 ## Modules
 

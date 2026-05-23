@@ -1,9 +1,16 @@
 # TruthfulQA-MC2 Detector — Results
 
-**Frozen Qwen-2.5-7B + lightweight feature extraction + LightGBM
-classifier achieves group-CV AUC 0.866 ± 0.011 on TruthfulQA-MC2.**
+**Frozen LLM + lightweight feature extraction + LightGBM classifier
+achieves group-CV AUC 0.85–0.87 on TruthfulQA-MC2, validated across
+three backbone families.**
 
-That sits at the top of the published-detector band for hidden-state
+| backbone | params | group-CV AUC (LightGBM) |
+|---|---:|---:|
+| Gemma-2-2B | 2B | 0.8563 ± 0.016 |
+| Llama-3.2-3B | 3B | 0.8475 ± 0.013 |
+| **Qwen-2.5-7B** | **7B** | **0.8656 ± 0.011** |
+
+All three sit at the top of the published-detector band for hidden-state
 hallucination detection on TruthfulQA-MC2:
 
 | method | reported AUC |
@@ -96,11 +103,44 @@ single A6000 / Blackwell GPU) in ~17 minutes.
 * `artifacts/truthfulqa/v3_qwen_n817.metrics.json` — full result block.
 * `scripts/evals/truthfulqa_v3.py` — the evaluator.
 
+## Cross-architecture detail (all three backbones, same harness)
+
+Full ablations using identical group-CV protocol; mid-third of layers
+for attention/interactions per backbone (Qwen blocks 8–20, Llama 9–18,
+Gemma 8–17):
+
+| family / classifier | Qwen-2.5-7B | Llama-3.2-3B | Gemma-2-2B |
+|---|---:|---:|---:|
+| NLL/ent/margin only | 0.681 ± 0.015 | 0.680 ± 0.027 | 0.697 ± 0.023 |
+| drift only | 0.763 ± 0.011 | 0.736 ± 0.017 | 0.756 ± 0.020 |
+| norm only | **0.769** ± 0.013 | 0.675 ± 0.013 | 0.737 ± 0.014 |
+| attention only | 0.725 ± 0.015 | 0.725 ± 0.014 | 0.755 ± 0.024 |
+| interactions only | 0.765 ± 0.018 | 0.709 ± 0.012 | 0.750 ± 0.021 |
+| v2-equiv L2 logit | 0.812 ± 0.010 | 0.789 ± 0.015 | 0.806 ± 0.016 |
+| ALL (320/301/287) L2 logit | 0.829 ± 0.010 | 0.807 ± 0.010 | 0.823 ± 0.019 |
+| ALL sklearn GBM | 0.835 ± 0.011 | 0.811 ± 0.011 | 0.823 ± 0.021 |
+| ALL XGBoost | 0.864 ± 0.011 | 0.846 ± 0.014 | 0.851 ± 0.015 |
+| **ALL LightGBM** | **0.866 ± 0.011** | **0.848 ± 0.013** | **0.856 ± 0.016** |
+
+Observations:
+
+* LightGBM ≈ XGBoost across all three backbones (within 1 std). Modern
+  boosted trees are clearly the right classifier for these features.
+* Boosted trees beat L2 logistic by **+3 to +4 pts** on every backbone
+  — non-linear feature interactions across families matter.
+* The single best feature family is *backbone-dependent* (norms on Qwen,
+  drift on Llama, attention on Gemma) but the union+LGBM ceiling is
+  consistent at 0.85–0.87. The features are partially redundant in
+  different ways per architecture; the union recovers full signal in
+  all three cases.
+
 ## Caveats and honest scoping
 
-* **Single backbone.** Numbers above are on Qwen-2.5-7B only. Cross-arch
-  validation on Llama-3.2-3B and Gemma-2-2B is the next step in the same
-  harness.
+* **Three backbones, one task.** The numbers above are all on
+  TruthfulQA-MC2 across Qwen-2.5-7B, Llama-3.2-3B, and Gemma-2-2B.
+  Cross-task generalisation (e.g. HaluEval-QA, FAVA, HalluLens) is the
+  next step; the v1 HaluEval-QA run in this repo had length-based
+  leakage so is not used as a benchmark.
 * **One dataset.** TruthfulQA-MC2 is a paired-choice multiple-choice
   benchmark by construction — the same-question grouping is what
   prevents trivial cheating. Generalisation to free-form generation is a
