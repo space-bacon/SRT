@@ -10,6 +10,7 @@ All visuals are PNG, 2400 × 1350 @ 150 dpi, dark navy / pastel-neon theme.
 
 | #  | Figure                         | Section                       |
 |----|--------------------------------|-------------------------------|
+| 00 | Architecture (README hero)     | [→](#00--architecture--what-attaches-to-the-frozen-llm) |
 | 01 | Pipeline overview              | [→](#01--how-srt-reads-and-corrects-a-frozen-llm) |
 | 02 | Anisotropy collapse            | [→](#02--anisotropy-collapse--why-raw-cosine-lies) |
 | 03 | MAH — metapragmatic attention  | [→](#03--mah--where-meaning-forks) |
@@ -20,6 +21,24 @@ All visuals are PNG, 2400 × 1350 @ 150 dpi, dark navy / pastel-neon theme.
 | 08 | TruthfulQA ladder              | [→](#08--truthfulqa-ladder) |
 | 09 | Cross-architecture leaderboard | [→](#09--three-backbones-one-harness) |
 | 10 | Demo / script map              | [→](#10--how-the-scripts-connect) |
+
+---
+
+## 00 · Architecture — what attaches to the frozen LLM
+
+![architecture](../artifacts/explainers/00_architecture.png)
+
+**Caption.** The hero diagram (replaces the README ASCII block). The base
+LLM stays fully frozen — native embeddings, native LM head, native
+attention. SRT taps L2 (community), L7, L14, L21 (MAH) and injects FiLM
+corrections back into L14 and L21. The RRM is a single GRU that integrates
+the divergence stream into a meta-state, which also drives BEN.
+
+**Read this when:** you need a single picture of "what is SRT and where
+does it touch the backbone."
+
+**Cross-refs:** [srt/adapter.py](../srt/adapter.py),
+[srt/modules/](../srt/modules/), [srt/config.py](../srt/config.py).
 
 ---
 

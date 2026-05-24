@@ -974,8 +974,246 @@ def fig10_demo_map():
 # ===========================================================================
 # Driver
 # ===========================================================================
+def fig0_architecture():
+    """Replacement for the README's ASCII architecture block.
+
+    Vertical 28-layer backbone tower (center) with hooks at L2/L7/L14/L21
+    going left to MAH/RRM and right to Community/BEN, plus mint FiLM
+    inject arrows curving back into L14 and L21.
+    """
+    fig = plt.figure(figsize=(14.5, 9.6))
+    title_block(fig, "00 · architecture",
+                "SRT-Adapter — what attaches to the frozen LLM",
+                "12 M trainable params · 3 read hooks · 2 FiLM inject points · "
+                "backbone-agnostic (Qwen / Llama / Gemma)")
+
+    ax = fig.add_axes([0.03, 0.08, 0.94, 0.78])
+    hidden_axes(ax)
+
+    # ---- Backbone tower (centered) ---------------------------------------
+    tx0, tx1 = 0.40, 0.60          # tower x-extent
+    ty0, ty1 = 0.12, 0.92          # tower y-extent
+    tw = tx1 - tx0
+    cx = (tx0 + tx1) / 2
+
+    # vertical "rail" behind the tower
+    rail = FancyBboxPatch((tx0 - 0.01, ty0 - 0.005),
+                          tw + 0.02, ty1 - ty0 + 0.01,
+                          boxstyle="round,pad=0,rounding_size=0.018",
+                          fc=PANEL, ec=PANEL_EDGE, lw=1.0)
+    ax.add_patch(rail)
+    ax.text(cx, ty1 + 0.030,
+            "frozen backbone  ·  28 transformer layers",
+            color=DIM, fontsize=8.5, weight="semibold", ha="center",
+            style="italic")
+
+    # slabs (top → bottom)
+    # (label, sublabel, fill, edge, text_color, glow, height_units)
+    slabs = [
+        ("Embeddings",           "native, frozen",     FROZEN, PANEL_EDGE, TEXT,  None, 1.0),
+        ("Layers 0 – 6",         "frozen",             FROZEN, PANEL_EDGE, MUTED, None, 1.6),
+        ("Layer 2",              "tap → community",    "#2a2f6a", VIOLET,  TEXT,  VIOLET, 0.7),
+        ("Layers 3 – 6",         "frozen",             FROZEN, PANEL_EDGE, MUTED, None, 1.2),
+        ("Layer 7",              "tap → MAH₁",         "#2a2f6a", CYAN,    TEXT,  CYAN,  0.8),
+        ("Layers 8 – 13",        "frozen",             FROZEN, PANEL_EDGE, MUTED, None, 1.6),
+        ("Layer 14",             "tap → MAH₂   +   inject γ·h+β", "#2a2f6a", MINT, TEXT, MINT, 0.9),
+        ("Layers 15 – 20",       "frozen (w/ correction)", FROZEN, PANEL_EDGE, MUTED, None, 1.6),
+        ("Layer 21",             "tap → MAH₃   +   inject γ·h+β", "#2a2f6a", MINT, TEXT, MINT, 0.9),
+        ("Layers 22 – 27",       "frozen (w/ correction)", FROZEN, PANEL_EDGE, MUTED, None, 1.6),
+        ("LM head",              "native, frozen  →  logits + CE", FROZEN, PANEL_EDGE, TEXT, None, 1.0),
+    ]
+    # The L0-6 slab is split by the L2 tap; remove the redundant L0-6 row.
+    slabs = [s for s in slabs if s[0] != "Layers 0 – 6"]
+    # Replace it with L0-1 above the L2 tap
+    slabs.insert(1, ("Layers 0 – 1", "frozen", FROZEN, PANEL_EDGE, MUTED, None, 0.7))
+
+    total_units = sum(s[6] for s in slabs)
+    avail = ty1 - ty0 - 0.018 * (len(slabs) - 1)   # gap between slabs
+    unit_h = avail / total_units
+
+    # remember y-centers for hooked layers
+    hooks = {}   # layer label -> y center
+    y_cursor = ty1
+    for (lab, sub, fc, ec, tc, gl, units) in slabs:
+        h = units * unit_h
+        y_cursor -= h
+        y_center = y_cursor + h / 2
+        box = FancyBboxPatch((tx0 + 0.006, y_cursor),
+                             tw - 0.012, h,
+                             boxstyle="round,pad=0,rounding_size=0.010",
+                             fc=fc, ec=ec, lw=1.1, alpha=0.95)
+        if gl:
+            box.set_path_effects(glow(gl, n=3, base_w=2.4, alpha=0.22))
+        ax.add_patch(box)
+        ax.text(cx, y_center + 0.012, lab, color=tc, ha="center",
+                va="center", fontsize=10.5, weight="semibold")
+        ax.text(cx, y_center - 0.018, sub, color=MUTED, ha="center",
+                va="center", fontsize=8.5)
+        hooks[lab] = (y_center, y_cursor, y_cursor + h)
+        y_cursor -= 0.018
+
+    # ---- Tokens in (top) & logits out (bottom) ---------------------------
+    arrow(ax, (cx, ty1 + 0.045), (cx, ty1 + 0.002),
+          color=DIM, lw=1.2)
+    ax.text(cx, ty1 + 0.062, "tokens  (B, T)", color=MUTED, fontsize=10,
+            ha="center", weight="semibold")
+
+    arrow(ax, (cx, ty0 - 0.002), (cx, ty0 - 0.085),
+          color=DIM, lw=1.2)
+    ax.text(cx, ty0 - 0.100, "logits  (B, T, V)", color=MUTED, fontsize=10,
+            ha="center", weight="semibold")
+
+    # ---- Left side: MAH boxes + RRM --------------------------------------
+    # MAH boxes vertically aligned to their hooks
+    mah_x = 0.24
+    mah_w, mah_h = 0.14, 0.070
+    mah_specs = [
+        ("Layer 7",  "MAH₁",  "L7  divergence d₇"),
+        ("Layer 14", "MAH₂",  "L14 divergence d₁₄"),
+        ("Layer 21", "MAH₃",  "L21 divergence d₂₁"),
+    ]
+    mah_centers = []
+    for (layer_lab, name, sub) in mah_specs:
+        y = hooks[layer_lab][0]
+        box = FancyBboxPatch((mah_x - mah_w/2, y - mah_h/2), mah_w, mah_h,
+                             boxstyle="round,pad=0,rounding_size=0.014",
+                             fc=PANEL, ec=CYAN, lw=1.2)
+        box.set_path_effects(glow(CYAN, n=3, base_w=2.6, alpha=0.20))
+        ax.add_patch(box)
+        ax.text(mah_x, y + 0.012, name, color=CYAN, ha="center",
+                va="center", fontsize=11.5, weight="bold")
+        ax.text(mah_x, y - 0.016, sub, color=MUTED, ha="center",
+                va="center", fontsize=8.5)
+        mah_centers.append((mah_x, y))
+        # tap arrow from tower to MAH (cyan)
+        arrow(ax, (tx0, y), (mah_x + mah_w/2, y),
+              color=CYAN, lw=1.6, mutation=14, glow_color=CYAN)
+
+    # RRM box (large, spans the three MAH y-range), positioned further left
+    rrm_x = 0.03
+    rrm_top = mah_centers[0][1] + 0.045
+    rrm_bot = mah_centers[2][1] - 0.045
+    rrm_w   = 0.11
+    rrm_h   = rrm_top - rrm_bot
+    rrm_cx  = rrm_x + rrm_w/2
+    rrm_cy  = (rrm_top + rrm_bot) / 2
+    rrm_box = FancyBboxPatch((rrm_x, rrm_bot), rrm_w, rrm_h,
+                             boxstyle="round,pad=0,rounding_size=0.018",
+                             fc=PANEL, ec=MAGENTA, lw=1.3)
+    rrm_box.set_path_effects(glow(MAGENTA, n=4, base_w=3.0, alpha=0.22))
+    ax.add_patch(rrm_box)
+    ax.text(rrm_cx, rrm_top - 0.040, "RRM", color=MAGENTA,
+            ha="center", fontsize=14, weight="bold")
+    ax.text(rrm_cx, rrm_top - 0.070, "GRU · d_meta=512",
+            color=MUTED, ha="center", fontsize=8.5)
+    ax.text(rrm_cx, rrm_cy - 0.005, "integrate\ndivergence\nstream",
+            color=TEXT, ha="center", va="center", fontsize=9, style="italic")
+    ax.text(rrm_cx, rrm_bot + 0.022,
+            "emits  γ, β\n(FiLM)",
+            color=MINT, ha="center", va="center",
+            fontsize=8.5, weight="semibold")
+
+    # MAH → RRM arrows (cyan into magenta box)
+    for (mx, my) in mah_centers:
+        arrow(ax, (mx - mah_w/2, my), (rrm_x + rrm_w, my),
+              color=CYAN, lw=1.4, mutation=12, alpha=0.85)
+
+    # ---- FiLM inject arrows: RRM → L14 & L21 (mint, curved) --------------
+    inject_targets = ["Layer 14", "Layer 21"]
+    for lab in inject_targets:
+        y_tgt = hooks[lab][0]
+        # exit right edge of RRM, route under MAH column, enter left edge of layer slab
+        p0 = (rrm_x + rrm_w, rrm_bot + 0.015)
+        p1 = (tx0 - 0.002, y_tgt - 0.014)
+        arrow(ax, p0, p1, color=MINT, lw=2.0, mutation=14,
+              curve=-0.45, glow_color=MINT, alpha=0.95)
+
+    # ---- Right side: Community + BEN -------------------------------------
+    comm_y = hooks["Layer 2"][0]
+    comm_x = 0.80
+    comm_w, comm_h = 0.16, 0.082
+    box = FancyBboxPatch((comm_x - comm_w/2, comm_y - comm_h/2), comm_w, comm_h,
+                         boxstyle="round,pad=0,rounding_size=0.014",
+                         fc=PANEL, ec=VIOLET, lw=1.2)
+    box.set_path_effects(glow(VIOLET, n=3, base_w=2.6, alpha=0.20))
+    ax.add_patch(box)
+    ax.text(comm_x, comm_y + 0.016, "Community", color=VIOLET,
+            ha="center", va="center", fontsize=11.5, weight="bold")
+    ax.text(comm_x, comm_y - 0.005, "discourse basin",
+            color=MUTED, ha="center", va="center", fontsize=8.5)
+    ax.text(comm_x, comm_y - 0.024,
+            "v8a: continuous 64-D · v3-v7: 32 prototypes",
+            color=DIM, ha="center", va="center", fontsize=7.5)
+    arrow(ax, (tx1, comm_y), (comm_x - comm_w/2, comm_y),
+          color=VIOLET, lw=1.6, mutation=14, glow_color=VIOLET)
+
+    # BEN box positioned roughly mid-height on the right
+    ben_y = (hooks["Layer 14"][0] + hooks["Layer 21"][0]) / 2
+    ben_x = 0.84
+    ben_w, ben_h = 0.22, 0.13
+    box = FancyBboxPatch((ben_x - ben_w/2, ben_y - ben_h/2), ben_w, ben_h,
+                         boxstyle="round,pad=0,rounding_size=0.018",
+                         fc=PANEL, ec=CORAL, lw=1.3)
+    box.set_path_effects(glow(CORAL, n=3, base_w=2.8, alpha=0.22))
+    ax.add_patch(box)
+    ax.text(ben_x, ben_y + 0.042, "BEN", color=CORAL,
+            ha="center", va="center", fontsize=14, weight="bold")
+    ax.text(ben_x, ben_y + 0.018,
+            "bifurcation-estimation network",
+            color=MUTED, ha="center", va="center", fontsize=8.5)
+    ax.text(ben_x, ben_y - 0.010,
+            r"reflexivity  $\hat r$  (per token)",
+            color=TEXT, ha="center", va="center", fontsize=9.5)
+    ax.text(ben_x, ben_y - 0.034,
+            "regime ∈ {subcritical, supercritical}",
+            color=MUTED, ha="center", va="center", fontsize=8.5,
+            style="italic")
+    # arrow from RRM to BEN: route below the tower to avoid crossing slabs
+    via_y = ty0 - 0.035
+    arrow(ax, (rrm_x + rrm_w/2, rrm_bot - 0.002),
+          (rrm_x + rrm_w/2, via_y),
+          color=MAGENTA, lw=1.2, mutation=10, alpha=0.85)
+    arrow(ax, (rrm_x + rrm_w/2, via_y),
+          (ben_x, via_y),
+          color=MAGENTA, lw=1.2, mutation=10, alpha=0.85)
+    arrow(ax, (ben_x, via_y),
+          (ben_x, ben_y - ben_h/2),
+          color=MAGENTA, lw=1.2, mutation=10, alpha=0.85)
+    ax.text((rrm_x + rrm_w/2 + ben_x) / 2, via_y + 0.015,
+            "meta-state  h_meta", color=MAGENTA, fontsize=8.5,
+            ha="center", style="italic")
+    # FiLM inject equation just under the RRM box, off to the left
+    ax.text(rrm_x + rrm_w/2, rrm_bot - 0.045,
+            r"$h \leftarrow h \cdot (1+\gamma) + \beta$",
+            color=MINT, fontsize=10, ha="center", va="center",
+            style="italic")
+
+    # ---- Legend chips at bottom ------------------------------------------
+    legend_items = [
+        (FROZEN,   "frozen backbone"),
+        (CYAN,     "read hook → MAH"),
+        (MINT,     "FiLM inject (γ, β)"),
+        (MAGENTA,  "RRM · GRU meta-state"),
+        (VIOLET,   "community tap"),
+        (CORAL,    "BEN · reflexivity"),
+    ]
+    lx = 0.05
+    ly = 0.040
+    for (c, lab) in legend_items:
+        ax.add_patch(Rectangle((lx, ly), 0.012, 0.012, fc=c, ec="none",
+                               transform=fig.transFigure, clip_on=False))
+        fig.text(lx + 0.018, ly + 0.006, lab, color=TEXT, fontsize=9,
+                 va="center")
+        lx += 0.155
+
+    footer(fig, y=0.012)
+    fig.savefig(OUT / "00_architecture.png")
+    plt.close(fig)
+
+
 def main():
     apply_style()
+    fig0_architecture()
     fig1_pipeline()
     fig2_anisotropy()
     fig3_mah()

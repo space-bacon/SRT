@@ -10,41 +10,16 @@ divergence from hidden states, **track** reflexive awareness, and optionally
 
 ## Architecture
 
-```
-tokens ──► Backbone Embeddings (native, frozen)
-               │
-         ┌─────┴─────┐
-         │  Layer 0-6 │  (frozen)
-         └─────┬─────┘
-               │
-         ┌─────┴─────┐
-  ┌─────►│  Layer 7   │──────► MAH₁ reads divergence ──► RRM step
-  │      └─────┬─────┘
-  │            │
-  │      ┌─────┴─────┐
-  │      │ Layer 8-13 │  (frozen)
-  │      └─────┬─────┘
-  │            │
-  │      ┌─────┴─────┐
-  ├─────►│  Layer 14  │──────► MAH₂ reads ──► RRM step ──► inject
-  │      └─────┬─────┘                                       │
-  │            │◄────────────────────────────────────────────┘
-  │      ┌─────┴─────┐
-  │      │ Layer 15-20│  (frozen, with semiotic correction)
-  │      └─────┬─────┘
-  │            │
-  │      ┌─────┴─────┐
-  └─────►│  Layer 21  │──────► MAH₃ reads ──► RRM step ──► inject
-         └─────┬─────┘                                       │
-               │◄────────────────────────────────────────────┘
-         ┌─────┴─────┐
-         │ Layer 22-27│  (frozen, with semiotic correction)
-         └─────┬─────┘
-               │
-         Backbone LM Head (native, frozen) ──► logits + CE loss
-               │
-         BEN (from RRM meta-state) ──► r̂, regime, modulation
-```
+![SRT-Adapter architecture](artifacts/explainers/00_architecture.png)
+
+The base LLM stays fully frozen. SRT taps the residual stream at three
+layers (L7 / L14 / L21) into Metapragmatic Attention Heads, the GRU-based
+Reflexive Reasoning Module integrates the divergence stream into a
+meta-state, and a FiLM correction `h ← h·(1+γ) + β` is injected back into
+L14 and L21. A community head taps L2 for discourse basin, and BEN reads
+the RRM meta-state to emit per-token reflexivity `r̂` and a regime label.
+
+> Full visual walkthrough with captions: [docs/EXPLAINERS.md](docs/EXPLAINERS.md).
 
 ## Key Ideas
 
