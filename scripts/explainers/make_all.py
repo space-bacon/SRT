@@ -1854,13 +1854,17 @@ def fig15_lancaster_pitchfork():
                    color=TEXT, fontsize=10.5)
     ax1.set_title("Supercritical pitchfork:   ẋ = μx − x³",
                   color=TEXT, fontsize=12, weight="semibold", loc="left")
+    ax1.text(0.015, 0.955,
+             "(region labels below = sign of  (μ − μ_c),  not pitchfork type)",
+             transform=ax1.transAxes, color=MUTED, fontsize=8.5,
+             style="italic", ha="left", va="top")
 
     mu = np.linspace(-1.0, 1.6, 400)
     # stable branch below critical
     ax1.plot(mu[mu <= 0], np.zeros_like(mu[mu <= 0]),
              color=SUBCRIT, lw=2.4,
              path_effects=glow(SUBCRIT, n=3, base_w=3.2, alpha=0.22),
-             label="stable consensus (subcritical)")
+             label="stable consensus  (μ < μ_c)")
     # unstable middle branch
     ax1.plot(mu[mu > 0], np.zeros_like(mu[mu > 0]),
              color=MUTED, lw=1.4, ls="--", alpha=0.8,
@@ -1869,7 +1873,7 @@ def fig15_lancaster_pitchfork():
     mup = mu[mu > 0]
     ax1.plot(mup,  np.sqrt(mup), color=SUPERCRIT, lw=2.4,
              path_effects=glow(SUPERCRIT, n=3, base_w=3.2, alpha=0.22),
-             label="bifurcated  (supercritical: two camps)")
+             label="bifurcated branches  (μ > μ_c: two camps)")
     ax1.plot(mup, -np.sqrt(mup), color=SUPERCRIT, lw=2.4,
              path_effects=glow(SUPERCRIT, n=3, base_w=3.2, alpha=0.22))
 
@@ -1885,13 +1889,13 @@ def fig15_lancaster_pitchfork():
     # regime shading
     ax1.axvspan(-1.0, 0.0, color=SUBCRIT,   alpha=0.05, zorder=0)
     ax1.axvspan( 0.0, 1.6, color=SUPERCRIT, alpha=0.05, zorder=0)
-    ax1.text(-0.5, 1.25, "SUBCRITICAL", color=SUBCRIT, fontsize=10,
+    ax1.text(-0.5, 1.10, "SUBCRITICAL", color=SUBCRIT, fontsize=10,
              weight="bold", ha="center")
-    ax1.text(-0.5, 1.10, "single attractor", color=MUTED, fontsize=8.5,
+    ax1.text(-0.5, 0.95, "single attractor", color=MUTED, fontsize=8.5,
              ha="center", style="italic")
-    ax1.text( 0.8, 1.25, "SUPERCRITICAL", color=SUPERCRIT, fontsize=10,
+    ax1.text( 0.8, 1.10, "SUPERCRITICAL", color=SUPERCRIT, fontsize=10,
              weight="bold", ha="center")
-    ax1.text( 0.8, 1.10, "two stable camps  ·  contested signs",
+    ax1.text( 0.8, 0.95, "two stable camps  ·  contested signs",
              color=MUTED, fontsize=8.5, ha="center", style="italic")
 
     ax1.set_xlim(-1.0, 1.6); ax1.set_ylim(-1.4, 1.4)
