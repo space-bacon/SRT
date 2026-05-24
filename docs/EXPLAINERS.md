@@ -394,11 +394,11 @@ made explicit in each figure's right-hand panel.
 
 ![peirce triad](../artifacts/explainers/12_peirce_triad.png)
 
-*A sign is irreducibly three things at once: a representamen (the mark), an object (what it stands for), and an interpretant (the reading it produces). Every interpretant becomes the representamen of the next sign — semiosis is recursive. MAH's three orthogonal projection heads are the operational image of this triad.*
+*A sign is irreducibly three things at once: a representamen (the mark), an object (what it stands for), and an interpretant (the reading it produces). Every interpretant becomes the representamen of the next sign — semiosis is recursive. MAH's divergence channel is the operational image of the representamen → interpretant relation; the three Peircean modes (icon / index / symbol) are the *interpretive lens* through which `d_t` is read, not three separate projections in the code.*
 
-**Caption.** Charles Sanders Peirce's triadic sign (CP 2.228) is the philosophical reason MAH is not a single head but three. Each transformer hidden state is projected into an **iconic** (`h_icon`), **indexical** (`h_idx`), and **symbolic** (`h_sym`) subspace; the divergence vector `d_t` is the per-axis gap between a token's direct and contextual reading, so it tells you *on which Peircean axis* meaning is forking. The chain-of-interpretants strip at the bottom is the recursive structure RRM accumulates.
+**Caption.** Charles Sanders Peirce's triadic sign (CP 2.228) is the philosophical motivation behind MAH. Each MAH layer projects the backbone hidden state into a single interpretant subspace (`interp_proj`), attends causally over the past to obtain a contextual reading, and outputs the **divergence vector** `d_t = proj_div(direct − contextual)` — the gap between how the token reads in isolation and how it reads in context. This is Peirce's interpretant made computational: a sign is read in light of another sign. The chain-of-interpretants strip at the bottom is the recursive structure RRM accumulates by integrating successive `d_t` through its GRU. The icon / index / symbol distinction shown on the figure is the interpretive frame for *what kind of divergence* a high ‖d_t‖ represents at a given token — it is not a three-headed split inside MAH.
 
-**Read this when:** you want to know why "divergence" is a 3-vector rather than a scalar.
+**Read this when:** you want to know why divergence is defined as a gap rather than an activation magnitude.
 
 **Skip if:** you only care about the engineering interface to MAH (`srt/modules/mah.py`).
 
@@ -412,7 +412,7 @@ made explicit in each figure's right-hand panel.
 
 *A 1st-order index is mere co-occurrence (this word tends to show up in that context). A 2nd-order index is the noticing of that co-occurrence ("people who say X are signalling Y"). A 3rd-order index is enregistered ideology built on top. RRM is, by design, the 2nd-order channel.*
 
-**Caption.** Michael Silverstein's indexical-order framework (Silverstein 2003) names three distinct things current LLMs collapse into one. SRT separates them: MAH's indexical subspace handles 1st-order (raw co-occurrence); the RRM's GRU meta-state is the 2nd-order channel — it *notices that signs are being read differently* and writes that back as a correction; the community head plus BEN's `r̂` handles 3rd-order enregistered structure across discourse communities. The mint "reflexive ascent" arrows on the figure are the only direction information flows: lower-order can feed higher-order, not vice versa.
+**Caption.** Michael Silverstein's indexical-order framework (Silverstein 2003) names three distinct things current LLMs collapse into one. SRT separates them across modules (not across MAH sub-heads): MAH's divergence channel exposes 1st-order structure (where a sign's contextual reading drifts from its direct reading — the trace of raw co-occurrence); the RRM's GRU meta-state is the 2nd-order channel — it *notices that signs are being read differently over time* and writes that noticing back into the backbone as a FiLM correction; the community head plus BEN's `r̂` exposes 3rd-order enregistered structure across discourse communities. The mint "reflexive ascent" arrows on the figure are the only direction information flows: lower-order can feed higher-order, not vice versa.
 
 **Read this when:** you want to know what "reflexive" in *Semiotic-Reflexive Transformer* technically means.
 
@@ -444,7 +444,7 @@ made explicit in each figure's right-hand panel.
 
 *Under low community-polarization pressure (μ < 0) a sign has one stable reading. Past a critical μ_c the symmetric solution loses stability and two new attractors appear — the same sign now carries two incompatible meanings simultaneously. BEN's `r̂` is the order parameter of exactly this bifurcation.*
 
-**Caption.** This is the dynamical-systems backbone of the whole program. Lancaster (2025), *The Treachery of Signs: Semiotic Mediation, Pitchfork Bifurcations …* (SSRN 5987495) models discourse-community polarization as a supercritical pitchfork in the normal form `ẋ = μx − x³`. BEN does not learn an arbitrary scalar; it regresses the **signed distance from μ_c** of each token's local discourse, and a binary classifier names the regime. On Reddit (35 communities) this gives Pearson r = 0.884 against an external polarization metric — see [paper.md](../paper.md) for the validation receipts.
+**Caption.** This is the dynamical-systems backbone of the whole program. Lancaster (2025), *The Treachery of Signs: Semiotic Mediation, Pitchfork Bifurcations …* (SSRN 5987495) models discourse-community polarization as a supercritical pitchfork in the normal form `ẋ = μx − x³`. BEN does not learn an arbitrary scalar; it regresses the **signed distance from μ_c** of each token's local discourse and a binary classifier names the regime. The Stage-2 validation of this mapping (Lancaster 2026a) was measured on the Supabase political-news corpus spanning **five political communities (19K articles, 141K Peircean sign annotations), Pearson r = 0.884** against an external polarization metric. The current v8a checkpoint is trained on a different corpus (Reddit, 35 discourse communities); on that corpus the per-passage `r̂` probe is null and the contestedness signal has migrated into the community channel (see [arxiv/paper.md](../arxiv/paper.md) §6.5).
 
 **Read this when:** you want to know what BEN's outputs *mean* in the world, not just in the loss.
 
@@ -476,7 +476,7 @@ made explicit in each figure's right-hand panel.
 
 *Three columns of named threads — SEMIOTICS, DYNAMICS & PHASE, OBSERVER & THERMO — each star is a thread, color-coded to the SRT module it feeds. The bottom band lists the two primary Lancaster SSRN sources for the program.*
 
-**Caption.** A single-page bibliographic map for anyone who wants to trace which SRT module came from which intellectual lineage. The full reference list (with editions, page ranges, and any post-2024 updates) lives in the paper PDF and in [paper.md](../paper.md). Star colors match the figure-wide convention: cyan = read-only / structural, coral = dynamical, mint = observer / thermodynamic.
+**Caption.** A single-page bibliographic map for anyone who wants to trace which SRT module came from which intellectual lineage. The full reference list (with editions, page ranges, and any post-2024 updates) lives in [arxiv/paper.md](../arxiv/paper.md). Star colors match the figure-wide convention: cyan = read-only / structural, coral = dynamical, mint = observer / thermodynamic.
 
 **Read this when:** a reviewer asks "where does X come from?" and you need to point at one panel.
 

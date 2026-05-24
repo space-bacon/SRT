@@ -1543,9 +1543,9 @@ def fig11_token_trace():
 def fig12_peirce_triad():
     fig = plt.figure(figsize=(14.0, 8.0))
     title_block(fig, "12 · theory · peirce",
-                "The triadic sign — and why MAH has three subspaces",
+                "The triadic sign — the philosophical motivation for MAH",
                 "Representamen · Object · Interpretant   →   "
-                "iconic / indexical / symbolic projection heads in MAH")
+                "icon / index / symbol as the interpretive lens on  d_t")
     ax = fig.add_axes([0.04, 0.06, 0.92, 0.84]); hidden_axes(ax)
 
     # --- Equilateral triangle of the sign ------------------------------------
@@ -1608,21 +1608,24 @@ def fig12_peirce_triad():
     # --- Right panel: mapping into MAH ---------------------------------------
     px, py, pw, ph = 0.58, 0.16, 0.38, 0.68
     add_panel_bg(fig, (px, py, pw, ph), radius=0.018)
-    ax.text(px + 0.02, py + ph - 0.04,
+    ax.text(px + 0.02, py + ph - 0.035,
             "→  HOW SRT OPERATIONALIZES THIS",
             color=CYAN, fontsize=9.5, weight="bold")
-    ax.text(px + 0.02, py + ph - 0.08,
-            "Multi-Aspect Head (MAH) projects each hidden state\n"
-            "into three orthogonal Peircean subspaces:",
-            color=TEXT, fontsize=10)
+    ax.text(px + 0.02, py + ph - 0.07,
+            "MAH produces ONE divergence channel per layer:\n"
+            "d_t = proj_div( direct − contextual ).\n"
+            "The three Peircean modes below are the\n"
+            "interpretive lens for what a high ‖d_t‖ means\n"
+            "— not three sub-projections inside the head.",
+            color=TEXT, fontsize=9.5, linespacing=1.35, va="top")
 
     rows = [
-        ("ICONIC",     "resemblance-like features  ·  h_icon  ∈ ℝᵈ",   CYAN,    "R"),
-        ("INDEXICAL",  "context / pointing features  ·  h_idx  ∈ ℝᵈ",  VIOLET,  "O"),
-        ("SYMBOLIC",   "conventional / rule features  ·  h_sym  ∈ ℝᵈ", MAGENTA, "I"),
+        ("ICONIC",     "resemblance-like features  ·  e.g.  d_t spikes on a typo / mimicry",   CYAN,    "R"),
+        ("INDEXICAL",  "context / pointing  ·  e.g.  d_t spikes on a pronoun, deictic, register shift",  VIOLET,  "O"),
+        ("SYMBOLIC",   "conventional / rule  ·  e.g.  d_t spikes on a polysemous lemma",       MAGENTA, "I"),
     ]
     for i, (name, body, col, vert) in enumerate(rows):
-        ry = py + ph - 0.20 - i * 0.13
+        ry = py + ph - 0.28 - i * 0.13
         ax.add_patch(Rectangle((px + 0.02, ry - 0.05), pw - 0.04, 0.10,
                                fc=PANEL_EDGE, ec="none", alpha=0.55))
         # vertex chip
@@ -1631,14 +1634,14 @@ def fig12_peirce_triad():
                 fontsize=9, weight="bold")
         ax.text(px + 0.085, ry + 0.020, name, color=col,
                 fontsize=10, weight="bold")
-        ax.text(px + 0.085, ry - 0.018, body, color=MUTED, fontsize=9)
+        ax.text(px + 0.085, ry - 0.018, body, color=MUTED, fontsize=8.5)
 
     ax.text(px + 0.02, py + 0.045,
-            "MAH's divergence vector  d_t  =  ‖ Δh_icon ‖, ‖ Δh_idx ‖, ‖ Δh_sym ‖",
+            "single divergence  d_t  ∈  ℝ^{d_div}   ·   one scalar magnitude  ‖d_t‖",
             color=TEXT, fontsize=10, style="italic")
     ax.text(px + 0.02, py + 0.020,
-            "→ measures where, on the triad, meaning is forking under "
-            "community-conditioned interpretation.",
+            "→ Peirce supplies the vocabulary for what the divergence "
+            "is measuring, not its shape.",
             color=MINT, fontsize=9)
 
     footer(fig)
@@ -1703,7 +1706,7 @@ def fig13_silverstein_orders():
             color=CYAN, fontsize=9.5, weight="bold")
 
     rows = [
-        ("1st", CYAN,   "MAH  ·  indexical subspace",
+        ("1st", CYAN,   "MAH  ·  divergence channel  d_t",
          "raw co-occurrence with context window"),
         ("2nd", VIOLET, "RRM  ·  GRU meta-state h_meta",
          "running record of where reads have diverged\n"
@@ -1932,8 +1935,9 @@ def fig15_lancaster_pitchfork():
             color=MUTED, fontsize=9.5, linespacing=1.45, va="top")
 
     ax.text(0.04, 0.06,
-            "On Reddit (35 communities), Pearson r = 0.884\n"
-            "between r̂ and an external polarization metric.",
+            "Stage-2 (Supabase news, 5 communities):\n"
+            "Pearson r = 0.884  between r̂  and an\n"
+            "external polarization metric.",
             color=MINT, fontsize=9, style="italic",
             linespacing=1.5, va="top")
 
