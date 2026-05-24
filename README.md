@@ -91,6 +91,20 @@ Artifacts:
 [Llama](artifacts/truthfulqa/v3_llama32-3b_n817.metrics.json),
 [Gemma](artifacts/truthfulqa/v3_gemma2-2b_n817.metrics.json).
 
+## Explainer series
+
+A 10-figure visual walkthrough of SRT — pipeline, modules, anisotropy,
+losses, TQA ladder, cross-architecture results, and the demo map — with
+captions kept separate from the visuals so they can be repositioned.
+
+See [docs/EXPLAINERS.md](docs/EXPLAINERS.md). PNGs live in
+[artifacts/explainers/](artifacts/explainers/) and re-render via
+`python scripts/explainers/make_all.py`.
+
+| Overview | MAH | TQA ladder | Cross-arch |
+|---|---|---|---|
+| ![01](artifacts/explainers/01_pipeline.png) | ![03](artifacts/explainers/03_mah.png) | ![08](artifacts/explainers/08_tqa_ladder.png) | ![09](artifacts/explainers/09_crossarch.png) |
+
 ## Modules
 
 | Module | Purpose | Parameters |
