@@ -226,6 +226,8 @@ triadic and cloud-shaped readout), specialises them to verbalisation,
 and adds a second-order-cybernetic reading of the round-trip itself
 (§1.5).
 
+![**Figure 0. The Stage 3 substrate, in one picture.** The frozen 28-layer Qwen-2.5-7B backbone (centre) is observed at four taps: L4 (community), L7/L14/L21 (MAH). The Reflexive Reasoning Module (RRM, magenta) integrates the divergence stream and emits FiLM corrections $\gamma,\beta$ which are written back into L14 and L21 only; everything else is read-only. BEN (coral) reports per-token reflexivity $\hat{r}$ off the GRU meta-state. The adapter is $\approx\!12.7$M trainable parameters ($\approx\!0.18\%$ of the 7B base). Stage 4 (this paper) leaves this entire structure frozen and asks a different question of the same substrate: can the layer-$\ell$ hidden state itself be written back as *text*, and re-encoded to the same place? See §1.5 for the theoretical setup of that question.](artifacts/explainers/00_architecture.png)
+
 ---
 
 ## 1. Setting
@@ -264,6 +266,8 @@ the chain $v \to \hat{x} \to h$ closes if and only if the substrate
 agrees that $\hat{x}$ is a faithful gloss of $v$ in its own internal
 language. The metric is the apparatus, not the goal.
 
+![**Figure 1.5a. The Peircean triad, instantiated as the NLA round-trip.** The left panel shows the canonical sign triangle (Peirce, CP 2.228): a *representamen* stands for an *object* through an *interpretant*, and the interpretant is itself a sign capable of standing in subsequent triads. The right panel reads the round-trip metric in this geometry. The frozen hidden state $v$ is the representamen of whatever the prefix produced; the verbalizer's text $\hat{x}$ is the renewed representamen; the backbone's re-encoding $h$ of $\hat{x}$ is the interpretant of $\hat{x}$ relative to itself; the centred cosine of $h$ with $v$ is the test of whether the chain closes. Crucially, only one divergence channel is being measured per layer in the underlying SRT-Adapter: the three Peircean modes (iconic / indexical / symbolic) are the interpretive lens on what a high $\|d_t\|$ means, not three separate projection heads. NLA inherits this lens by reading the divergence between $v$ and $h$, not by separating it into modes.](artifacts/explainers/12_peirce_triad.png)
+
 *Sieving and the prefix as community-of-one.* Kockelman (2017, 2025)
 formalises interpretant chains as dynamical trajectories whose links
 are *sieving* operations: from the space of possible interpretants a
@@ -299,6 +303,8 @@ under the centred-cosine utility implements the third for $K \gtrsim 64$.
 The greedy gap is not a parameter-count gap; it is a third-order-
 indexicality gap inside the decoding distribution.
 
+![**Figure 1.5b. Silverstein's three indexical orders, mapped onto decoding capacities.** First-order: produce *some* coherent text from $v$ (greedy / $K\!=\!1$ satisfies this). Second-order: produce text in the dialect of whichever community $v$ comes from (zero-training nearest-neighbour retrieval on a strong base reaches this). Third-order: produce text whose *position in the paraphrase manifold of $v$* the substrate can certify under re-encoding (only best-of-$K$ MBR under centred cosine for $K\!\gtrsim\!64$ reaches this). The diagram aligns the orders with the SRT modules that expose them: MAH's per-layer divergence channel $d_t$ exposes 1st-order structure, the RRM's GRU meta-state is the 2nd-order channel that notices signs being read differently over time, and Community $+$ BEN.$\hat{r}$ exposes 3rd-order enregistered structure across discourse communities. NLA reads off the same vertical axis through a different port.](artifacts/explainers/13_silverstein_orders.png)
+
 *Second-order cybernetics: closing the loop the SRT-Adapter left
 half-open.* Von Foerster's (1981, 2003) account of self-organisation
 in observed systems insists that the observer participates in the
@@ -323,6 +329,8 @@ to consume. NLA does not *solve* the closed-loop problem the
 SRT-Adapter posed; it shows that a closed-loop reading on the same
 substrate is achievable in the topology where the substrate is
 strongest.
+
+![**Figure 1.5c. Observer phases of a reflexive system.** Von Foerster's (1981) second-order cybernetics insists that the observer participates in the phenomenon. SRT exposes four observer types on the same substrate: MAH (typing observer), Community (social observer), RRM (historical observer), BEN (phase observer). Each closes a different loop; the metastable wedge in the centre is where small perturbations toggle the reading and where a small correction is maximally informative. NLA closes a *fifth* loop on the same substrate: the substrate is asked to render an interior state into its own native output channel (text) and to re-certify the rendering under re-encoding. The SRT-Adapter's intra-pass loop (read $\ell_i$, modify $\ell_j$ within one forward pass) and NLA's inter-pass loop (read $\ell$, emit text, run a second forward pass, re-read $\ell$) sit at different points on this diagram; the empirical fact that NLA's loop closes while the adapter's RRM-inject arm through v8b had not, tells us which port the substrate is most controllable through.](artifacts/explainers/16_observer_phase.png)
 
 A note on physical analogy. Leighton (2026) shows that the probability
 of any sub-system of a random multipartite stochastic system operating
@@ -928,6 +936,8 @@ mass between the two; logp does not separate them) is the shape the
 program's canonical model expects, and that *cheap reranks fail
 because they live on the wrong side of the bifurcation*: logp is a
 within-basin quantity, cosine to a retrieved anchor crosses basins.
+
+![**Figure 12. The Lancaster pitchfork, read inside the decoding manifold.** The supercritical pitchfork $\dot{x}=\mu x - x^{3}$ is the canonical normal form Lancaster (2025) uses to model interpretant divergence under polarising pressure. Under the *standard* reading (left), $\mu$ is community polarisation pressure on a discourse and the two branches are competing contested readings of a single sign. Under the *decoding-manifold* reading proposed here (this paper, §12), $\mu$ is best-of-$K$ search budget (or any utility-based selection pressure on a candidate pool), the symmetric below-threshold branch is the greedy/modal $\hat{x}$ in its native basin at centred cosine $\approx\!0.59$–$0.63$, and the upper post-threshold branch is the paraphrase-manifold $\hat{x}$ at centred cosine $\approx\!0.99$. Logp is a within-basin quantity and cannot move probability mass across the separatrix; centred cosine to the target $v$ is the order parameter that does. The Stage-2 validation that the same normal form fits political-polarisation data (Pearson $r\!=\!0.884$ on five Supabase communities, 19K articles, 141K Peircean sign annotations; Lancaster, 2026a) is what makes the analogy more than a metaphor.](artifacts/explainers/15_lancaster_pitchfork.png)
 
 *Half-open loops, closed loops, and what NLA does not show.* The
 SRT-Adapter's central open question is whether a closed circular-

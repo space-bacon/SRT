@@ -73,7 +73,7 @@ def fig1_pipeline():
     title_block(fig, "01 · overview",
                 "How SRT reads and corrects a frozen LLM",
                 "Frozen backbone · 3 observation hooks · 2 injection points · "
-                "~12 M trainable params (0.17 % of 7 B)")
+                "~12.7 M trainable params (0.18 % of 7 B)")
 
     ax = fig.add_axes([0.04, 0.10, 0.92, 0.78])
     hidden_axes(ax)
@@ -115,7 +115,7 @@ def fig1_pipeline():
     def layer_x(i):
         return x0 + (i + 0.5) * layer_w
 
-    hooks = [(2, "L2",  "community", VIOLET),
+    hooks = [(4, "L4",  "community", VIOLET),
              (7, "L7",  "MAH₁",      CYAN),
              (14, "L14", "MAH₂ + inj", MINT),
              (21, "L21", "MAH₃ + inj", MINT)]
@@ -133,7 +133,7 @@ def fig1_pipeline():
     # ---- Adapter modules (below strip) ------------------------------------
     mod_y = 0.26
     mods = [
-        (layer_x(2),  "Community",  "discourse basin\nd_community = 64",  VIOLET),
+        (layer_x(4),  "Community",  "discourse basin\nd_community = 64",  VIOLET),
         (layer_x(7),  "MAH",        "meaning fork\nd_div = 256",          CYAN),
         (layer_x(14), "RRM · BEN",  "GRU memory + r̂\nd_meta = 512",      MAGENTA),
         (layer_x(21), "RRM · BEN",  "GRU memory + r̂\nd_meta = 512",      MAGENTA),
@@ -159,12 +159,12 @@ def fig1_pipeline():
 
     # ---- Param breakdown panel (bottom-right) -----------------------------
     pad_x = 0.62
-    ax.text(pad_x, 0.08, "TRAINABLE PARAMS  ·  ≈ 12 M total", color=CYAN,
+    ax.text(pad_x, 0.08, "TRAINABLE PARAMS  ·  ≈ 12.7 M total", color=CYAN,
             fontsize=9, weight="bold")
-    rows = [("community",  "0.06 M"),
-            ("MAH × 3",    "8.10 M"),
-            ("RRM",        "2.20 M"),
-            ("BEN + chain","0.30 M")]
+    rows = [("community",  "0.23 M"),
+            ("MAH × 3",    "9.14 M"),
+            ("RRM",        "3.02 M"),
+            ("BEN + chain","0.33 M")]
     for i, (k, v) in enumerate(rows):
         ax.text(pad_x, 0.05 - i*0.022, k, color=MUTED, fontsize=8.5)
         ax.text(pad_x + 0.14, 0.05 - i*0.022, v, color=TEXT, fontsize=8.5,
@@ -977,14 +977,14 @@ def fig10_demo_map():
 def fig0_architecture():
     """Replacement for the README's ASCII architecture block.
 
-    Vertical 28-layer backbone tower (center) with hooks at L2/L7/L14/L21
+    Vertical 28-layer backbone tower (center) with hooks at L4/L7/L14/L21
     going left to MAH/RRM and right to Community/BEN, plus mint FiLM
     inject arrows curving back into L14 and L21.
     """
     fig = plt.figure(figsize=(14.5, 9.6))
     title_block(fig, "00 · architecture",
                 "SRT-Adapter — what attaches to the frozen LLM",
-                "12 M trainable params · 3 read hooks · 2 FiLM inject points · "
+                "12.7 M trainable params · 3 read hooks · 2 FiLM inject points · "
                 "backbone-agnostic (Qwen / Llama / Gemma)")
 
     ax = fig.add_axes([0.03, 0.08, 0.94, 0.78])
@@ -1012,7 +1012,7 @@ def fig0_architecture():
     slabs = [
         ("Embeddings",           "native, frozen",     FROZEN, PANEL_EDGE, TEXT,  None, 1.0),
         ("Layers 0 – 6",         "frozen",             FROZEN, PANEL_EDGE, MUTED, None, 1.6),
-        ("Layer 2",              "tap → community",    "#2a2f6a", VIOLET,  TEXT,  VIOLET, 0.7),
+        ("Layer 4",              "tap → community",    "#2a2f6a", VIOLET,  TEXT,  VIOLET, 0.7),
         ("Layers 3 – 6",         "frozen",             FROZEN, PANEL_EDGE, MUTED, None, 1.2),
         ("Layer 7",              "tap → MAH₁",         "#2a2f6a", CYAN,    TEXT,  CYAN,  0.8),
         ("Layers 8 – 13",        "frozen",             FROZEN, PANEL_EDGE, MUTED, None, 1.6),
@@ -1022,10 +1022,13 @@ def fig0_architecture():
         ("Layers 22 – 27",       "frozen (w/ correction)", FROZEN, PANEL_EDGE, MUTED, None, 1.6),
         ("LM head",              "native, frozen  →  logits + CE", FROZEN, PANEL_EDGE, TEXT, None, 1.0),
     ]
-    # The L0-6 slab is split by the L2 tap; remove the redundant L0-6 row.
+    # The L0-6 slab is split by the L4 tap; remove the redundant L0-6 row.
     slabs = [s for s in slabs if s[0] != "Layers 0 – 6"]
-    # Replace it with L0-1 above the L2 tap
-    slabs.insert(1, ("Layers 0 – 1", "frozen", FROZEN, PANEL_EDGE, MUTED, None, 0.7))
+    # Replace it with L0-3 above the L4 tap, and L5-6 below
+    slabs.insert(1, ("Layers 0 – 3", "frozen", FROZEN, PANEL_EDGE, MUTED, None, 0.9))
+    # Adjust the post-tap slab label
+    slabs = [("Layers 5 – 6", s[1], s[2], s[3], s[4], s[5], s[6]) if s[0] == "Layers 3 – 6" else s
+             for s in slabs]
 
     total_units = sum(s[6] for s in slabs)
     avail = ty1 - ty0 - 0.018 * (len(slabs) - 1)   # gap between slabs
@@ -1129,7 +1132,7 @@ def fig0_architecture():
               curve=-0.45, glow_color=MINT, alpha=0.95)
 
     # ---- Right side: Community + BEN -------------------------------------
-    comm_y = hooks["Layer 2"][0]
+    comm_y = hooks["Layer 4"][0]
     comm_x = 0.80
     comm_w, comm_h = 0.16, 0.082
     box = FancyBboxPatch((comm_x - comm_w/2, comm_y - comm_h/2), comm_w, comm_h,
@@ -1240,7 +1243,7 @@ def fig0b_legend():
         (MAGENTA, "rect",   "RRM · GRU meta-state",
                             "integrates divergence stream"),
         (VIOLET,  "rect",   "community tap",
-                            "discourse basin from L2"),
+                            "discourse basin from L4"),
         (CORAL,   "rect",   "BEN · reflexivity  r̂",
                             "per-token regime signal"),
     ]

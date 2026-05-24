@@ -1,7 +1,7 @@
 # SRT Explainer Series
 
 A visual walkthrough of the **Semiotic-Reflexive Transformer (SRT)** —
-a ~12 M-parameter adapter that observes a frozen LLM at three layers and
+a ~12.7 M-parameter adapter that observes a frozen LLM at three layers and
 injects a learned correction back into two of them. Each figure is paired
 with a short caption so it can be dropped into the README, the paper, or a
 demo deck without rewriting context.
@@ -14,7 +14,7 @@ demo deck without rewriting context.
 > 2. **Correct.** Stream those divergences into a small GRU (the RRM). It emits `γ, β` and FiLM-injects them back at L14 and L21: `h ← h·(1+γ) + β`. The base model's weights never change.
 > 3. **Report.** BEN reads the GRU's state to emit a per-token **reflexivity** `r̂` and a regime label (sub- vs super-critical). This is the signal we use downstream — e.g. as TruthfulQA features.
 >
-> About 12 M trainable params (≈0.17 % of a 7 B backbone). Works on Qwen-2.5-7B, Llama-3.2-3B, Gemma-2-2B with one harness.
+> About 12.7 M trainable params (≈0.18 % of a 7 B backbone). Works on Qwen-2.5-7B, Llama-3.2-3B, Gemma-2-2B with one harness.
 
 ## Three reading paths
 
@@ -49,7 +49,7 @@ If it is **cyan**, it is read-only. **Magenta** is the RRM / meta-state,
 | **FiLM**           | feature-wise linear modulation: `h ← h·(1+γ) + β`. The only write back into the LLM.   |
 | **BEN**            | Bifurcation-Estimation Network — turns `h_meta` into reflexivity + regime label.       |
 | `r̂`               | reflexivity (per token). `> 0` ⇒ supercritical / forking, `≤ 0` ⇒ subcritical / stable.|
-| **Community**      | a head at L2 that emits a discourse-basin coordinate (topic / register).               |
+| **Community**      | a head at L4 that emits a discourse-basin coordinate (topic / register).               |
 | `μ`                | layer-mean (anisotropy offset). Subtract it before measuring cosine similarity.        |
 | `fve_cen`          | centered cosine similarity — the only honest comparison metric for hidden states.      |
 
@@ -87,7 +87,7 @@ If it is **cyan**, it is read-only. **Magenta** is the RRM / meta-state,
 
 **Caption.** The hero diagram (replaces the README ASCII block). The base
 LLM stays fully frozen — native embeddings, native LM head, native
-attention. SRT taps L2 (community), L7, L14, L21 (MAH) and injects FiLM
+attention. SRT taps L4 (community), L7, L14, L21 (MAH) and injects FiLM
 corrections back into L14 and L21. The RRM is a single GRU that integrates
 the divergence stream into a meta-state, which also drives BEN.
 
@@ -124,10 +124,10 @@ the divergence stream into a meta-state, which also drives BEN.
 
 **Caption.** SRT keeps the base LLM (Qwen-2.5-7B / Llama-3.2-3B / Gemma-2-2B)
 fully frozen — no weight updates, no LoRA. It taps three observation hooks
-(L2 for the discourse basin, L7/L14/L21 for metapragmatic attention) and
+(L4 for the discourse basin, L7/L14/L21 for metapragmatic attention) and
 injects a learned FiLM correction `h ← h·(1+γ) + β` at L14 and L21. The
-entire adapter is ~12 M parameters (≈0.17 % of a 7 B backbone) split across
-Community (0.06 M), MAH ×3 (8.10 M), RRM (2.20 M), and BEN+chain (0.30 M).
+entire adapter is ~12.7 M parameters (≈0.18 % of a 7 B backbone) split across
+Community (0.23 M), MAH ×3 (9.14 M), RRM (3.02 M), and BEN+chain (0.33 M).
 
 **Read this when:** onboarding a new collaborator, or anchoring any
 discussion of "what does SRT actually attach to."
@@ -241,11 +241,11 @@ or why the regime gate dominates the loss weights.
 
 ![community](../artifacts/explainers/06_community.png)
 
-*A second, lower tap (L2) answers a different question: "what kind of text is this?" — news, code, poetry, dialogue. Every other module conditions on it.*
+*A second, lower tap (L4) answers a different question: "what kind of text is this?" — news, code, poetry, dialogue. Every other module conditions on it.*
 
 **Skip if:** you've already absorbed that v8a uses a continuous 64-D community vector (older v3-v7 used 32 prototypes).
 
-**Caption.** A small head reads the L2 pooled hidden state and emits a
+**Caption.** A small head reads the L4 pooled hidden state and emits a
 **discourse coordinate** that captures topic / register (news, code, poetry,
 dialogue, instructions, …). v8a (current) uses a *continuous* 64-D vector
 trained with SupCon; v3-v7 used a soft mixture over 32 learned prototypes
@@ -487,7 +487,7 @@ made explicit in each figure's right-hand panel.
 ## FAQ
 
 **Q: Why a frozen backbone? Doesn't fine-tuning work better?**
-A frozen backbone keeps the base model's general capability intact (CE stays at pretrained quality from step 0), makes the adapter portable across checkpoints, and lets us claim that any measured improvement is *additive* rather than a fine-tune artifact. SRT is ~12 M params on a 7 B base — fine-tuning would be 580× larger and would mask the signal.
+A frozen backbone keeps the base model's general capability intact (CE stays at pretrained quality from step 0), makes the adapter portable across checkpoints, and lets us claim that any measured improvement is *additive* rather than a fine-tune artifact. SRT is ~12.7 M params on a 7 B base — fine-tuning would be ~550× larger and would mask the signal.
 
 **Q: What does "reflexivity" actually mean here?**
 It's a scalar `r̂` per token that estimates how much meaning is *forking* at that position. Positive ⇒ the model has multiple live interpretants competing ("supercritical"); ≤0 ⇒ the reading is stable. It's the output of BEN, trained from the divergence stream's behavior under the GRU.
