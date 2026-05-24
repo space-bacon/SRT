@@ -6,8 +6,6 @@ injects a learned correction back into two of them. Each figure is paired
 with a short caption so it can be dropped into the README, the paper, or a
 demo deck without rewriting context.
 
-All visuals are PNG, 2400 × 1350 @ 150 dpi, dark navy / pastel-neon theme.
-
 ## Read this in 60 seconds
 
 > SRT does three things at every token, in one forward pass:
