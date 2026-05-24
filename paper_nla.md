@@ -87,7 +87,9 @@ established the four-module decomposition (community, metapragmatic
 attention, reflexive recurrence, bifurcation estimation) on synthetic and
 news data; Stage 3 ported it to a frozen Qwen-2.5-7B backbone as the
 SRT-Adapter, demonstrating that the discourse-community manifold an LLM
-inherits from its training corpus is exposed at $0.19\%$ parameter overhead
+inherits from its training corpus is exposed at $\approx\!0.18\%$ parameter overhead
+(v8a checkpoint, $12.72$M trainable parameters; the SRT-Adapter manuscript
+reports $14.5$M / $0.19\%$ for an earlier configuration)
 and is not Qwen-specific. The present paper reports **Stage 4** of the
 program: rather than read structure off the substrate as side-channel
 outputs, we ask the substrate to *speak its own state*. We train a small
@@ -173,8 +175,9 @@ reported separately. The order is logical, not strictly chronological:
    held-out curated passages.
 
 3. **Stage 3, frozen 7B backbone; SRT-Adapter** (Lancaster, 2026 [SRT-Adapter MS]).
-   The validated decomposition was reduced to a 14.5M-parameter adapter
-   ($0.19\%$ of a 7B backbone) on a frozen Qwen-2.5-7B. v8a removed the
+   The validated decomposition was reduced to a $\sim\!12.7$M-parameter
+   adapter ($\approx\!0.18\%$ of a 7B backbone; v8a final checkpoint,
+   $12{,}720{,}964$ trainable parameters) on a frozen Qwen-2.5-7B. v8a removed the
    discrete prototype layer, raising Reddit recall@1 from $0.413$ to
    $0.484$ and out-of-distribution archetype recall@1 to $7.6\times$
    chance with $\Delta\,\mathrm{CE}=+0.0001$ nats; a cross-backbone
@@ -581,7 +584,7 @@ commitments.
 **What this work adds.** The intersection. Specifically: a system that
 (i) commits Peircean primitives, metapragmatic awareness, reflexive
 recursion, bifurcation, to specific architectural roles, (ii) operates on
-a frozen production-scale 7B LLM, (iii) reports a calibrated $\rho_{\text{norm}}$
+a frozen production-scale 7B LLM, (iii) reports a calibrated $\rho_{\text{cen}}$
 metric anchored at a random floor and a human paraphrase ceiling, and
 (iv) closes the loop with a round-trip evaluation in which the
 verbalization is fed back through the same backbone and scored against the
@@ -993,9 +996,10 @@ uncertainties sit.
    verbalizer that closes the greedy gap on this backbone, i.e.,
    single-pass deterministic decoding at $\rho_{\text{cen}} \gtrsim 0.9$
    without K-fold inference, is the next-stage goal. Lever B
-   (bag-of-$K$ self-distillation) does not close it on Qwen and is
-   not expected to on Llama or Gemma; the diversity collapse is
-   inherent to winner-CE on a frozen substrate. Plausible
+   (bag-of-$K$ self-distillation) does not close it on Qwen; we
+   have not yet run it on Llama or Gemma, but the diversity-collapse
+   mechanism documented in §6 is a property of winner-CE on a
+   frozen substrate and is not Qwen-specific. Plausible
    directions: (i) temperature distillation from best-of-$K$ into
    greedy with an *explicit* KL-to-base regulariser tuned to keep
    the rollout 5-gram duplication rate below $0.01$; (ii) length-
@@ -1007,16 +1011,18 @@ uncertainties sit.
    mutually exclusive.
 
 2. **The metric is portable; the absolute numbers are not.** The
-   centred random floor lands at $\approx\!0.50$ on both Qwen and
-   Llama; we expect the same on Gemma. The *ceiling* in absolute
-   centred fve\_nrm depends on the paraphrase capacity of the base
-   model under whatever prompt is used; this varies across
-   backbones (Qwen $\approx\!0.80$ centred, Llama $\approx\!0.72$
-   under the same prompt; §3, §10). Reporting in
-   $\rho_{\text{cen}}$, normalised to the binding ceiling for
-   that backbone, preserves portability. Anyone reporting an
-   $\mathrm{fve\_nrm}$ result without these two anchors is
-   reporting an uninterpretable number.
+   centred random floor lands within $0.003$ of $0.50$ on all
+   three backbones (Qwen $0.510$, Llama $0.498$, Gemma $0.498$;
+   §3, §10, §11), despite a $22\times$ spread in $\|\mu\|$.
+   The *ceiling* in absolute centred fve\_nrm depends on the
+   paraphrase capacity of the base model under whatever prompt is
+   used; this varies across backbones (Qwen $\approx\!0.80$
+   centred, Llama $\approx\!0.72$, Gemma $\approx\!0.60$ under the
+   same prompt; §3, §10, §11). Reporting in $\rho_{\text{cen}}$,
+   normalised to the binding ceiling for that backbone, preserves
+   portability. Anyone reporting an $\mathrm{fve\_nrm}$ result
+   without these two anchors is reporting an uninterpretable
+   number.
 
 3. **The program has not measured a pitchfork in the sampling
    distribution.** The §12 reading of the greedy gap as an
@@ -1435,7 +1441,8 @@ are given in parentheses.
   Qwen-2.5-7B; calibrated to AUROC $0.99$, Brier $0.010$, ECE
   $0.0009$ over $351{,}000$ tokens. (App. A, Fig. A3)
 - **Stage 3 (SRT-Adapter).** Lightweight semiotic adapter on
-  frozen Qwen-2.5-7B, $0.19\%$ parameter overhead, with
+  frozen Qwen-2.5-7B, $\approx\!0.18\%$ parameter overhead
+  ($12.72$M trainable, v8a final checkpoint), with
   Community/MAH/BEN reading and RRM intervention. The "half-open
   loop" reference point of §1.5. Lancaster, 2026 [SRT-Adapter MS].
   (§0, §1.5, §12)
@@ -1468,7 +1475,7 @@ are given in parentheses.
   $19$; $\|\mu\| \approx 156$; $\mathrm{bos\_token\_id}=2$,
   $\mathrm{eos\_token\_id}=1$. (§11)
 - **`RiverRider/srt-nla-av-v1`** — released Qwen AV checkpoint. (§8)
-- **`RiverRider/srt-nla-av-llama32-3b`** — released Llama AV. (§10)
+- **`RiverRider/srt-nla-av-llama32-3b-v1`** — released Llama AV. (§10)
 - **`RiverRider/srt-nla-av-gemma2-2b-v1`** — released Gemma AV.
   (§11)
 - **`RiverRider/srt-nla-targets-v1`** — released Qwen targets
