@@ -24,6 +24,7 @@ All visuals are PNG, 2400 × 1350 @ 150 dpi, dark navy / pastel-neon theme.
 |--------|-------------------------------------------------------------------------------------------------------|---------------------------|
 | 5 min  | [00 → 00b → 11 → 08](#00--architecture--what-attaches-to-the-frozen-llm)                              | curious newcomer          |
 | 15 min | [00 → 00b → 01 → 03 → 04 → 05 → 11 → 08](#00--architecture--what-attaches-to-the-frozen-llm)          | researcher / reviewer     |
+| theory | [12 → 13 → 14 → 15 → 16 → 17](#12--theory--peirces-triadic-sign)                                      | semiotician / theorist    |
 | full   | all sections in order                                                                                 | implementer / contributor |
 
 ## Visual grammar — read once, then every figure parses at a glance
@@ -71,6 +72,12 @@ If it is **cyan**, it is read-only. **Magenta** is the RRM / meta-state,
 | 09  | Cross-architecture leaderboard  | [→](#09--three-backbones-one-harness)                                 |
 | 10  | Demo / script map               | [→](#10--how-the-scripts-connect)                                     |
 | 11  | One-shot token trace            | [→](#11--one-shot-token-trace--follow-one-token-end-to-end)           |
+| 12  | Theory · Peirce triadic sign    | [→](#12--theory--peirces-triadic-sign)                                |
+| 13  | Theory · Silverstein indexical orders | [→](#13--theory--silversteins-indexical-orders)                |
+| 14  | Theory · Kockelman algorithmic sieving | [→](#14--theory--kockelmans-algorithmic-sieving)              |
+| 15  | Theory · Lancaster pitchfork bifurcation | [→](#15--theory--lancasters-pitchfork-bifurcation)          |
+| 16  | Theory · Observer phase transitions | [→](#16--theory--observer-phase-transitions)                      |
+| 17  | Theory · Reference constellation | [→](#17--theory--reference-constellation)                            |
 
 ---
 
@@ -367,6 +374,118 @@ to reproduce a specific number.
 
 ---
 
+# Theory section
+
+The figures above describe **what** SRT does. The six figures below describe
+**why** — the prior literature that motivated each architectural choice. Every
+SRT module is a measurement device for one of these constructs; the mapping is
+made explicit in each figure's right-hand panel.
+
+| if you want to know…                                            | read |
+|-----------------------------------------------------------------|------|
+| why MAH has three subspaces                                     | §12  |
+| what RRM's GRU is actually tracking (vs. "just attention over time") | §13 |
+| why each transformer layer can be read as a selection pressure  | §14  |
+| what `r̂` is regressing — and why it is *one* number, not many  | §15  |
+| how the four SRT modules form a coordinated phase diagram       | §16  |
+| the full intellectual lineage                                   | §17  |
+
+---
+
+## 12 · Theory · Peirce's triadic sign
+
+![peirce triad](../artifacts/explainers/12_peirce_triad.png)
+
+*A sign is irreducibly three things at once: a representamen (the mark), an object (what it stands for), and an interpretant (the reading it produces). Every interpretant becomes the representamen of the next sign — semiosis is recursive. MAH's three orthogonal projection heads are the operational image of this triad.*
+
+**Caption.** Charles Sanders Peirce's triadic sign (CP 2.228) is the philosophical reason MAH is not a single head but three. Each transformer hidden state is projected into an **iconic** (`h_icon`), **indexical** (`h_idx`), and **symbolic** (`h_sym`) subspace; the divergence vector `d_t` is the per-axis gap between a token's direct and contextual reading, so it tells you *on which Peircean axis* meaning is forking. The chain-of-interpretants strip at the bottom is the recursive structure RRM accumulates.
+
+**Read this when:** you want to know why "divergence" is a 3-vector rather than a scalar.
+
+**Skip if:** you only care about the engineering interface to MAH (`srt/modules/mah.py`).
+
+**Cross-refs:** [srt/modules/mah.py](../srt/modules/mah.py); Peirce, *Collected Papers* vols. 2 & 5.
+
+---
+
+## 13 · Theory · Silverstein's indexical orders
+
+![silverstein orders](../artifacts/explainers/13_silverstein_orders.png)
+
+*A 1st-order index is mere co-occurrence (this word tends to show up in that context). A 2nd-order index is the noticing of that co-occurrence ("people who say X are signalling Y"). A 3rd-order index is enregistered ideology built on top. RRM is, by design, the 2nd-order channel.*
+
+**Caption.** Michael Silverstein's indexical-order framework (Silverstein 2003) names three distinct things current LLMs collapse into one. SRT separates them: MAH's indexical subspace handles 1st-order (raw co-occurrence); the RRM's GRU meta-state is the 2nd-order channel — it *notices that signs are being read differently* and writes that back as a correction; the community head plus BEN's `r̂` handles 3rd-order enregistered structure across discourse communities. The mint "reflexive ascent" arrows on the figure are the only direction information flows: lower-order can feed higher-order, not vice versa.
+
+**Read this when:** you want to know what "reflexive" in *Semiotic-Reflexive Transformer* technically means.
+
+**Skip if:** you are happy to treat the GRU as "just a recurrent memory."
+
+**Cross-refs:** [srt/modules/rrm.py](../srt/modules/rrm.py); Silverstein, M. (2003), *Indexical order and the dialectics of sociolinguistic life*, **Language & Communication** 23(3-4): 193-229.
+
+---
+
+## 14 · Theory · Kockelman's algorithmic sieving
+
+![kockelman sieving](../artifacts/explainers/14_kockelman_sieving.png)
+
+*A sieve takes a flux of inputs, applies a typing predicate, and lets only certain kinds through. Cascaded sieves yield ever-finer kinds. The LLM stack already does this for tokens; SRT adds sieves that type each token by its semiotic role and divergence regime.*
+
+**Caption.** Paul Kockelman's algorithmic-sieving framework (Kockelman 2017, 2020) is the right metaphor for the SRT stack as a whole. Each colored bar in the figure is a sieve: BACKBONE selects next-token-plausible kinds; MAH partitions by Peircean axis; the COMMUNITY head selects by discourse basin; RRM accumulates 2nd-order kinds; BEN binds those into a regime label. Surviving grains at the bottom are tokens that have been classed by every layer — exactly the structured output SRT exposes to downstream tasks.
+
+**Read this when:** you want one paragraph that explains why stacking adapters at all makes theoretical sense.
+
+**Skip if:** you already think of transformer layers as filters.
+
+**Cross-refs:** Kockelman, P. (2017), *The Art of Interpretation in the Age of Computation* (Oxford UP); Kockelman, P. (2020), *The Anthropology of Intensity*, **Signs & Society** 8(1).
+
+---
+
+## 15 · Theory · Lancaster's pitchfork bifurcation
+
+![lancaster pitchfork](../artifacts/explainers/15_lancaster_pitchfork.png)
+
+*Under low community-polarization pressure (μ < 0) a sign has one stable reading. Past a critical μ_c the symmetric solution loses stability and two new attractors appear — the same sign now carries two incompatible meanings simultaneously. BEN's `r̂` is the order parameter of exactly this bifurcation.*
+
+**Caption.** This is the dynamical-systems backbone of the whole program. Lancaster (2025), *The Treachery of Signs: Semiotic Mediation, Pitchfork Bifurcations …* (SSRN 5987495) models discourse-community polarization as a supercritical pitchfork in the normal form `ẋ = μx − x³`. BEN does not learn an arbitrary scalar; it regresses the **signed distance from μ_c** of each token's local discourse, and a binary classifier names the regime. On Reddit (35 communities) this gives Pearson r = 0.884 against an external polarization metric — see [paper.md](../paper.md) for the validation receipts.
+
+**Read this when:** you want to know what BEN's outputs *mean* in the world, not just in the loss.
+
+**Skip if:** you already work in dynamical systems and the diagram is familiar — the only novelty here is the mapping to BEN.
+
+**Cross-refs:** [srt/modules/ben.py](../srt/modules/ben.py); Lancaster, J. B. (2025), SSRN [5987495](https://papers.ssrn.com/abstract=5987495); Lancaster, J. B. (2026a), SSRN [6349978](https://papers.ssrn.com/abstract=6349978).
+
+---
+
+## 16 · Theory · Observer phase transitions
+
+![observer phase](../artifacts/explainers/16_observer_phase.png)
+
+*A 2-D phase diagram with semiotic divergence pressure `μ` on the x-axis and the RRM's reflexive channel capacity `T` on the y. The yellow critical line separates CONSENSUS (single interpretant) from BIFURCATED (two camps), with a METASTABLE band along the boundary and a tricritical point. A token's discourse traces a trajectory across this diagram — and crossing the boundary requires work, which is exactly the FiLM correction RRM injects.*
+
+**Caption.** The pitchfork of §15 is the 1-D normal form; this is the 2-D phase picture once you let the observer's capacity vary. *Who is the observer?* Each SRT module: MAH (typing), Community (social), RRM (historical), BEN (phase). The figure's three regimes are the three labels a reflexive system can apply to its own state; the metastable wedge is where small perturbations toggle the reading, which is precisely the regime in which a tiny FiLM correction is maximally informative. Theoretical ancestors are credited on the right panel (von Foerster, Maturana & Varela, Anderson, Bennett, Landauer, Parrondo) — the full lineage map is §17.
+
+**Read this when:** you want a single picture that ties the four SRT modules to a thermodynamic / observer-theoretic frame.
+
+**Skip if:** you are not interested in the second-order-cybernetics framing.
+
+**Cross-refs:** Anderson, P. W. (1972), *More is different*, **Science** 177; von Foerster, *Observing Systems* (1981); Maturana & Varela, *Autopoiesis and Cognition* (1980); Bennett, *Logical Depth and Physical Complexity* (1988); Landauer (1961); Parrondo, Horowitz & Sagawa (2015).
+
+---
+
+## 17 · Theory · Reference constellation
+
+![references](../artifacts/explainers/17_references.png)
+
+*Three columns of named threads — SEMIOTICS, DYNAMICS & PHASE, OBSERVER & THERMO — each star is a thread, color-coded to the SRT module it feeds. The bottom band lists the two primary Lancaster SSRN sources for the program.*
+
+**Caption.** A single-page bibliographic map for anyone who wants to trace which SRT module came from which intellectual lineage. The full reference list (with editions, page ranges, and any post-2024 updates) lives in the paper PDF and in [paper.md](../paper.md). Star colors match the figure-wide convention: cyan = read-only / structural, coral = dynamical, mint = observer / thermodynamic.
+
+**Read this when:** a reviewer asks "where does X come from?" and you need to point at one panel.
+
+**Skip if:** you are reading the paper itself — the same map is on the reference page.
+
+---
+
 ## FAQ
 
 **Q: Why a frozen backbone? Doesn't fine-tuning work better?**
@@ -381,6 +500,9 @@ Two FiLM injections, at L14 and L21: `h ← h·(1+γ) + β`. Nothing else mutate
 **Q: Which backbones?**
 Qwen-2.5-7B, Llama-3.2-3B, Gemma-2-2B, all with the same harness. Any HuggingFace `AutoModelForCausalLM` should work — taps are by layer index, no architecture-specific hooks.
 
+**Q: Where can I read the theory in one place?**
+The extended Theory section (§§12–17) maps each SRT module to its source — Peirce's triadic sign → MAH; Silverstein's indexical orders → RRM; Kockelman's algorithmic sieving → the stack; Lancaster's pitchfork bifurcation → BEN; the observer-phase diagram → the whole adapter; and a reference constellation for everyone else (Anderson, Wildgen, Evans, Leighton, VanSaders, von Foerster, Maturana & Varela, Bennett, Landauer, Parrondo).
+
 **Q: How do I reproduce these figures?**
 See below.
 
@@ -390,7 +512,7 @@ See below.
 
 ```bash
 source .venv-tools/bin/activate          # matplotlib 3.10 + numpy 2.4
-python scripts/explainers/make_all.py    # writes 13 PNGs to artifacts/explainers/
+python scripts/explainers/make_all.py    # writes 19 PNGs to artifacts/explainers/
 ```
 
 All numbers in the figures are hard-coded from the committed artifacts under

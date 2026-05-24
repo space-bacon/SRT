@@ -1537,6 +1537,599 @@ def fig11_token_trace():
     plt.close(fig)
 
 
+# ===========================================================================
+# Fig 12 — Peirce's triadic sign (Representamen · Object · Interpretant)
+# ===========================================================================
+def fig12_peirce_triad():
+    fig = plt.figure(figsize=(14.0, 8.0))
+    title_block(fig, "12 · theory · peirce",
+                "The triadic sign — and why MAH has three subspaces",
+                "Representamen · Object · Interpretant   →   "
+                "iconic / indexical / symbolic projection heads in MAH")
+    ax = fig.add_axes([0.04, 0.06, 0.92, 0.84]); hidden_axes(ax)
+
+    # --- Equilateral triangle of the sign ------------------------------------
+    cx, cy, R = 0.30, 0.50, 0.22
+    pts = {
+        "R": (cx + R*math.cos(math.radians(90)),  cy + R*math.sin(math.radians(90))),
+        "O": (cx + R*math.cos(math.radians(210)), cy + R*math.sin(math.radians(210))),
+        "I": (cx + R*math.cos(math.radians(330)), cy + R*math.sin(math.radians(330))),
+    }
+    colors = {"R": CYAN, "O": VIOLET, "I": MAGENTA}
+    labels = {
+        "R": ("REPRESENTAMEN", "the sign-vehicle\nthe mark, the token"),
+        "O": ("OBJECT", "what the sign\nstands for"),
+        "I": ("INTERPRETANT", "the effect / next-sign\nthe reading"),
+    }
+    # edges
+    for a, b in [("R","O"), ("O","I"), ("I","R")]:
+        ax.plot([pts[a][0], pts[b][0]], [pts[a][1], pts[b][1]],
+                color=DIM, lw=1.2, alpha=0.6, zorder=1)
+    # nodes
+    for k, (x, y) in pts.items():
+        c = Circle((x, y), 0.052, fc=PANEL, ec=colors[k], lw=1.6, zorder=3)
+        c.set_path_effects(glow(colors[k], n=3, base_w=3.0, alpha=0.22))
+        ax.add_patch(c)
+        ax.text(x, y, k, color=colors[k], ha="center", va="center",
+                fontsize=18, weight="bold", zorder=4)
+        head, sub = labels[k]
+        # place text outside each vertex (push well past glow radius)
+        dx = (x - cx); dy = (y - cy)
+        n = math.hypot(dx, dy)
+        ox, oy = x + dx/n * 0.14, y + dy/n * 0.14
+        ha = "center"
+        ax.text(ox, oy + 0.018, head, color=colors[k], ha=ha, va="center",
+                fontsize=10.5, weight="bold")
+        ax.text(ox, oy - 0.022, sub, color=MUTED, ha=ha, va="center",
+                fontsize=8.5)
+
+    ax.text(cx, cy - 0.005, "SIGN", color=TEXT, ha="center", va="center",
+            fontsize=11, weight="bold", alpha=0.85)
+    ax.text(cx, cy - 0.030, "irreducibly triadic",
+            color=MUTED, ha="center", va="center", fontsize=8.5, style="italic")
+
+    # --- Chain of interpretants (semiosis) -----------------------------------
+    chain_y = 0.16
+    ax.text(0.30, chain_y + 0.10, "CHAIN OF INTERPRETANTS  ·  semiosis is recursive",
+            color=CYAN, fontsize=9.5, weight="bold", ha="center")
+    xs = np.linspace(0.10, 0.50, 5)
+    for i, x in enumerate(xs):
+        c = Circle((x, chain_y), 0.018, fc=PANEL, ec=MAGENTA, lw=1.2)
+        ax.add_patch(c)
+        ax.text(x, chain_y, f"I{i}", color=MAGENTA, ha="center", va="center",
+                fontsize=8, weight="bold")
+        if i < len(xs) - 1:
+            arrow(ax, (x + 0.020, chain_y), (xs[i+1] - 0.020, chain_y),
+                  color=DIM, lw=1.0, mutation=8, curve=0)
+    ax.text(0.30, chain_y - 0.05,
+            "each interpretant becomes the representamen of the next sign",
+            color=MUTED, ha="center", fontsize=8.5, style="italic")
+
+    # --- Right panel: mapping into MAH ---------------------------------------
+    px, py, pw, ph = 0.58, 0.16, 0.38, 0.68
+    add_panel_bg(fig, (px, py, pw, ph), radius=0.018)
+    ax.text(px + 0.02, py + ph - 0.04,
+            "→  HOW SRT OPERATIONALIZES THIS",
+            color=CYAN, fontsize=9.5, weight="bold")
+    ax.text(px + 0.02, py + ph - 0.08,
+            "Multi-Aspect Head (MAH) projects each hidden state\n"
+            "into three orthogonal Peircean subspaces:",
+            color=TEXT, fontsize=10)
+
+    rows = [
+        ("ICONIC",     "resemblance-like features  ·  h_icon  ∈ ℝᵈ",   CYAN,    "R"),
+        ("INDEXICAL",  "context / pointing features  ·  h_idx  ∈ ℝᵈ",  VIOLET,  "O"),
+        ("SYMBOLIC",   "conventional / rule features  ·  h_sym  ∈ ℝᵈ", MAGENTA, "I"),
+    ]
+    for i, (name, body, col, vert) in enumerate(rows):
+        ry = py + ph - 0.20 - i * 0.13
+        ax.add_patch(Rectangle((px + 0.02, ry - 0.05), pw - 0.04, 0.10,
+                               fc=PANEL_EDGE, ec="none", alpha=0.55))
+        # vertex chip
+        ax.add_patch(Circle((px + 0.05, ry), 0.018, fc=PANEL, ec=col, lw=1.4))
+        ax.text(px + 0.05, ry, vert, color=col, ha="center", va="center",
+                fontsize=9, weight="bold")
+        ax.text(px + 0.085, ry + 0.020, name, color=col,
+                fontsize=10, weight="bold")
+        ax.text(px + 0.085, ry - 0.018, body, color=MUTED, fontsize=9)
+
+    ax.text(px + 0.02, py + 0.045,
+            "MAH's divergence vector  d_t  =  ‖ Δh_icon ‖, ‖ Δh_idx ‖, ‖ Δh_sym ‖",
+            color=TEXT, fontsize=10, style="italic")
+    ax.text(px + 0.02, py + 0.020,
+            "→ measures where, on the triad, meaning is forking under "
+            "community-conditioned interpretation.",
+            color=MINT, fontsize=9)
+
+    footer(fig)
+    fig.savefig(OUT / "12_peirce_triad.png")
+    plt.close(fig)
+
+
+# ===========================================================================
+# Fig 13 — Silverstein indexical orders (n / n+1 / n+2)
+# ===========================================================================
+def fig13_silverstein_orders():
+    fig = plt.figure(figsize=(14.0, 8.0))
+    title_block(fig, "13 · theory · silverstein",
+                "Indexical orders — what RRM's GRU is actually tracking",
+                "1st-order (presupposing) → 2nd-order (metapragmatic) → "
+                "3rd-order (ideological / enregistered)")
+    ax = fig.add_axes([0.04, 0.06, 0.92, 0.84]); hidden_axes(ax)
+
+    # Three stacked horizontal bands (tiers), with arrows climbing the ladder.
+    tiers = [
+        ("3RD ORDER",
+         "metapragmatic ideology  ·  enregisterment",
+         "Beliefs ABOUT the link between sign and group.\n"
+         "“People who say X are the kind of people who…”",
+         MAGENTA, 0.70),
+        ("2ND ORDER",
+         "metapragmatic  ·  noticing the noticing",
+         "Speakers become reflexively aware that a 1st-order index\n"
+         "carries social meaning, and start deploying it strategically.",
+         VIOLET, 0.46),
+        ("1ST ORDER",
+         "presupposing index  ·  pure co-occurrence",
+         "A linguistic feature statistically co-occurs with a context\n"
+         "(register, region, community). No awareness required.",
+         CYAN, 0.22),
+    ]
+    bx0, bx1 = 0.06, 0.62
+    for name, eyebrow, body, col, y in tiers:
+        add_panel_bg(fig, (bx0, y - 0.085, bx1 - bx0, 0.17), radius=0.016)
+        # left chip
+        ax.add_patch(Rectangle((bx0 + 0.012, y - 0.068), 0.008, 0.135,
+                               fc=col, ec="none"))
+        ax.text(bx0 + 0.034, y + 0.048, name, color=col,
+                fontsize=12, weight="bold")
+        ax.text(bx0 + 0.034, y + 0.020, eyebrow, color=TEXT,
+                fontsize=9.5, style="italic")
+        ax.text(bx0 + 0.034, y - 0.005, body, color=MUTED, fontsize=9,
+                linespacing=1.4, va="top")
+
+    # Climbing arrows on the right side of the tiers (1→2→3)
+    for ya, yb in [(0.22, 0.46), (0.46, 0.70)]:
+        arrow(ax, (bx1 - 0.04, ya + 0.045), (bx1 - 0.04, yb - 0.07),
+              color=MINT, lw=1.6, mutation=14, glow_color=MINT)
+    ax.text(bx1 - 0.020, 0.46, "reflexive\nascent",
+            color=MINT, fontsize=8.5, va="center", style="italic")
+
+    # --- Right panel: mapping to SRT modules --------------------------------
+    px, py, pw, ph = 0.66, 0.14, 0.30, 0.72
+    add_panel_bg(fig, (px, py, pw, ph), radius=0.018)
+    ax.text(px + 0.015, py + ph - 0.04,
+            "→  WHERE EACH ORDER LIVES IN SRT",
+            color=CYAN, fontsize=9.5, weight="bold")
+
+    rows = [
+        ("1st", CYAN,   "MAH  ·  indexical subspace",
+         "raw co-occurrence with context window"),
+        ("2nd", VIOLET, "RRM  ·  GRU meta-state h_meta",
+         "running record of where reads have diverged\n"
+         "→ this is the 'noticing the noticing' channel"),
+        ("3rd", MAGENTA,"Community head  +  BEN.r̂",
+         "ideological / enregistered structure\n"
+         "across discourse communities"),
+    ]
+    y0 = py + ph - 0.10
+    for tag, col, head, body in rows:
+        ax.add_patch(Circle((px + 0.030, y0), 0.020, fc=PANEL, ec=col, lw=1.4))
+        ax.text(px + 0.030, y0, tag, color=col, ha="center", va="center",
+                fontsize=9, weight="bold")
+        ax.text(px + 0.060, y0 + 0.018, head, color=TEXT,
+                fontsize=10, weight="bold")
+        ax.text(px + 0.060, y0 - 0.020, body, color=MUTED, fontsize=8.5)
+        y0 -= 0.18
+
+    ax.text(px + 0.015, py + 0.040,
+            "RRM is, by design, the 2nd-order channel:\n"
+            "it doesn't just see signs, it sees that signs\n"
+            "are being read differently — and writes that\n"
+            "back as a correction.",
+            color=MINT, fontsize=9, style="italic")
+
+    footer(fig)
+    fig.savefig(OUT / "13_silverstein_orders.png")
+    plt.close(fig)
+
+
+# ===========================================================================
+# Fig 14 — Kockelman's algorithmic sieving
+# ===========================================================================
+def fig14_kockelman_sieving():
+    fig = plt.figure(figsize=(14.0, 8.0))
+    title_block(fig, "14 · theory · kockelman",
+                "Algorithmic sieving — every layer is a filter on meaning",
+                "Sieves convert continuous flux into discrete kinds.  "
+                "Stacked sieves = a pipeline of selection pressures.")
+    ax = fig.add_axes([0.04, 0.06, 0.92, 0.84]); hidden_axes(ax)
+
+    # Sieve cascade as widening-then-narrowing trapezoids.
+    sieves = [
+        ("BACKBONE",   "next-token prediction",     FROZEN,  0.05),
+        ("MAH",        "Peircean subspaces",        CYAN,    0.20),
+        ("COMMUNITY",  "discourse-community gating", VIOLET, 0.35),
+        ("RRM",        "reflexive accumulation",     MINT,   0.50),
+        ("BEN",        "regime classifier  r̂",      MAGENTA,0.65),
+    ]
+    sx, sy0 = 0.10, 0.18
+    sh = 0.70
+    sw_top = 0.46
+    sw_bot = 0.10
+    # background funnel
+    funnel_x = [sx, sx + sw_top, sx + (sw_top + sw_bot)/2 + sw_bot/2,
+                sx + (sw_top - sw_bot)/2]
+    funnel_y = [sy0 + sh, sy0 + sh, sy0, sy0]
+    ax.fill(funnel_x, funnel_y, color=PANEL, alpha=0.55, zorder=0)
+    ax.plot(funnel_x + [funnel_x[0]], funnel_y + [funnel_y[0]],
+            color=PANEL_EDGE, lw=1.0, zorder=1)
+
+    # Mesh markers (discrete grains) flowing through the funnel
+    rng = np.random.default_rng(7)
+    grain_xs = rng.uniform(sx + 0.04, sx + sw_top - 0.04, 90)
+    grain_ys = rng.uniform(sy0 + 0.03, sy0 + sh - 0.03, 90)
+    ax.scatter(grain_xs, grain_ys, s=10, c=DIM, alpha=0.55, zorder=2)
+
+    # 5 horizontal sieve bars across the funnel
+    for name, sub, col, t in sieves:
+        # interpolate funnel width at fractional height t
+        width = sw_top * (1 - t) + sw_bot * t
+        cx0 = sx + (sw_top - width) / 2
+        cx1 = cx0 + width
+        yy = sy0 + sh * (1 - t)
+        # the sieve bar
+        ax.plot([cx0, cx1], [yy, yy], color=col, lw=2.6,
+                path_effects=glow(col, n=3, base_w=3.0, alpha=0.22), zorder=4)
+        # mesh dots on the bar
+        for mx in np.linspace(cx0 + 0.006, cx1 - 0.006, max(6, int(width * 70))):
+            ax.plot([mx], [yy], marker="|", color=col, ms=6, alpha=0.6, zorder=5)
+        # label to the right
+        ax.text(cx1 + 0.020, yy + 0.008, name, color=col,
+                fontsize=11, weight="bold")
+        ax.text(cx1 + 0.020, yy - 0.020, sub, color=MUTED, fontsize=9)
+
+    # Out-flow arrow
+    arrow(ax, (sx + sw_top/2, sy0 - 0.005),
+          (sx + sw_top/2, sy0 - 0.05),
+          color=MAGENTA, lw=2.0, mutation=18, glow_color=MAGENTA)
+    ax.text(sx + sw_top/2, sy0 - 0.075,
+            "selected, typed, reflexively-tagged output",
+            color=MAGENTA, ha="center", fontsize=9.5, weight="bold")
+
+    # --- Right panel: Kockelman quote / mapping ----------------------------
+    px, py, pw, ph = 0.66, 0.16, 0.30, 0.66
+    add_panel_bg(fig, (px, py, pw, ph), radius=0.018)
+    pax = fig.add_axes([px, py, pw, ph]); hidden_axes(pax)
+    pax.text(0.05, 0.94, "→  SIEVING, IN PRACTICE",
+             color=CYAN, fontsize=10, weight="bold")
+    pax.text(0.05, 0.86,
+             "A sieve is anything that:\n"
+             "  · takes a flux of inputs,\n"
+             "  · applies a typing predicate,\n"
+             "  · lets only certain kinds through.",
+             color=TEXT, fontsize=10, linespacing=1.6, va="top")
+    pax.text(0.05, 0.55,
+             "Cascaded sieves yield ever-finer kinds.\n"
+             "The LLM stack already does this for tokens;\n"
+             "SRT adds sieves that type each token by its\n"
+             "semiotic role and divergence regime.",
+             color=MUTED, fontsize=9.5, linespacing=1.5, va="top")
+    pax.text(0.05, 0.20,
+             "Each colored bar above is a sieve.\n"
+             "Each surviving grain is a token that\n"
+             "has now been classed by every layer.",
+             color=MINT, fontsize=9, style="italic",
+             linespacing=1.5, va="top")
+
+    footer(fig)
+    fig.savefig(OUT / "14_kockelman_sieving.png")
+    plt.close(fig)
+
+
+# ===========================================================================
+# Fig 15 — Lancaster pitchfork bifurcation (SSRN 5987495)
+# ===========================================================================
+def fig15_lancaster_pitchfork():
+    fig = plt.figure(figsize=(14.0, 8.0))
+    title_block(fig, "15 · theory · lancaster",
+                "The pitchfork bifurcation — what r̂ is estimating",
+                "Lancaster (2025), “The Treachery of Signs.”  "
+                "BEN regresses the order parameter of a polarization phase change.")
+    # Left: classic pitchfork x³ - μx = 0 → x*(μ - x²) = 0 → x=0 or x=±√μ
+    ax1 = fig.add_axes([0.06, 0.13, 0.50, 0.72])
+    ax1.set_facecolor(BG)
+    for s in ax1.spines.values(): s.set_visible(False)
+    ax1.grid(True, color=GRID, alpha=0.30, lw=0.6)
+    ax1.tick_params(colors=MUTED)
+    ax1.set_xlabel("μ   ·   control parameter  (community polarization pressure)",
+                   color=TEXT, fontsize=10.5)
+    ax1.set_ylabel("x*  ·  order parameter   (consensus  ↔  faction split)",
+                   color=TEXT, fontsize=10.5)
+    ax1.set_title("Supercritical pitchfork:   ẋ = μx − x³",
+                  color=TEXT, fontsize=12, weight="semibold", loc="left")
+
+    mu = np.linspace(-1.0, 1.6, 400)
+    # stable branch below critical
+    ax1.plot(mu[mu <= 0], np.zeros_like(mu[mu <= 0]),
+             color=SUBCRIT, lw=2.4,
+             path_effects=glow(SUBCRIT, n=3, base_w=3.2, alpha=0.22),
+             label="stable consensus (subcritical)")
+    # unstable middle branch
+    ax1.plot(mu[mu > 0], np.zeros_like(mu[mu > 0]),
+             color=MUTED, lw=1.4, ls="--", alpha=0.8,
+             label="unstable consensus")
+    # upper / lower stable branches above critical
+    mup = mu[mu > 0]
+    ax1.plot(mup,  np.sqrt(mup), color=SUPERCRIT, lw=2.4,
+             path_effects=glow(SUPERCRIT, n=3, base_w=3.2, alpha=0.22),
+             label="bifurcated  (supercritical: two camps)")
+    ax1.plot(mup, -np.sqrt(mup), color=SUPERCRIT, lw=2.4,
+             path_effects=glow(SUPERCRIT, n=3, base_w=3.2, alpha=0.22))
+
+    # critical point marker
+    ax1.axvline(0, color=DIM, lw=0.8, ls=":")
+    ax1.scatter([0], [0], s=70, fc=PANEL, ec=YELLOW, lw=1.6, zorder=5)
+    ax1.annotate("μ_c   ·   critical point",
+                 xy=(0, 0), xytext=(0.22, 0.45),
+                 color=YELLOW, fontsize=9.5,
+                 arrowprops=dict(arrowstyle="-", color=YELLOW,
+                                 lw=0.8, alpha=0.8))
+
+    # regime shading
+    ax1.axvspan(-1.0, 0.0, color=SUBCRIT,   alpha=0.05, zorder=0)
+    ax1.axvspan( 0.0, 1.6, color=SUPERCRIT, alpha=0.05, zorder=0)
+    ax1.text(-0.5, 1.25, "SUBCRITICAL", color=SUBCRIT, fontsize=10,
+             weight="bold", ha="center")
+    ax1.text(-0.5, 1.10, "single attractor", color=MUTED, fontsize=8.5,
+             ha="center", style="italic")
+    ax1.text( 0.8, 1.25, "SUPERCRITICAL", color=SUPERCRIT, fontsize=10,
+             weight="bold", ha="center")
+    ax1.text( 0.8, 1.10, "two stable camps  ·  contested signs",
+             color=MUTED, fontsize=8.5, ha="center", style="italic")
+
+    ax1.set_xlim(-1.0, 1.6); ax1.set_ylim(-1.4, 1.4)
+    leg = ax1.legend(loc="lower right", framealpha=0.0,
+                     labelcolor=TEXT, fontsize=8.5)
+
+    # --- Right panel: mapping to BEN ---------------------------------------
+    px, py, pw, ph = 0.60, 0.14, 0.36, 0.72
+    add_panel_bg(fig, (px, py, pw, ph), radius=0.018)
+    ax = fig.add_axes([px, py, pw, ph]); hidden_axes(ax)
+    ax.text(0.04, 0.93, "→  WHAT BEN IS DOING",
+            color=CYAN, fontsize=10, weight="bold")
+    ax.text(0.04, 0.85,
+            "BEN treats each token's local discourse as\n"
+            "a sample from this 1-D normal form and\n"
+            "estimates two quantities:",
+            color=TEXT, fontsize=10)
+
+    ax.add_patch(Rectangle((0.04, 0.62), 0.92, 0.13, fc=PANEL_EDGE,
+                           ec="none", alpha=0.55))
+    ax.text(0.06, 0.705, "r̂",   color=MAGENTA, fontsize=14, weight="bold")
+    ax.text(0.13, 0.715, "continuous reflexivity coefficient",
+            color=TEXT, fontsize=10, weight="semibold")
+    ax.text(0.13, 0.680, "regression target  ≈  signed distance from μ_c",
+            color=MUTED, fontsize=9)
+
+    ax.add_patch(Rectangle((0.04, 0.45), 0.92, 0.13, fc=PANEL_EDGE,
+                           ec="none", alpha=0.55))
+    ax.text(0.06, 0.535, "ŷ",   color=CYAN, fontsize=14, weight="bold")
+    ax.text(0.13, 0.545, "binary regime classifier",
+            color=TEXT, fontsize=10, weight="semibold")
+    ax.text(0.13, 0.510, "{ subcritical · supercritical }   ↔   pre / post μ_c",
+            color=MUTED, fontsize=9)
+
+    ax.text(0.04, 0.40,
+            "INTERPRETATION",
+            color=CYAN, fontsize=10, weight="bold")
+    ax.text(0.04, 0.34,
+            "• r̂ ≈ 0   →  consensus regime,\n"
+            "                  single interpretant\n\n"
+            "• r̂  >  0  →  meaning has bifurcated into\n"
+            "                  competing community-\n"
+            "                  conditioned readings",
+            color=MUTED, fontsize=9.5, linespacing=1.45, va="top")
+
+    ax.text(0.04, 0.06,
+            "On Reddit (35 communities), Pearson r = 0.884\n"
+            "between r̂ and an external polarization metric.",
+            color=MINT, fontsize=9, style="italic",
+            linespacing=1.5, va="top")
+
+    footer(fig)
+    fig.savefig(OUT / "15_lancaster_pitchfork.png")
+    plt.close(fig)
+
+
+# ===========================================================================
+# Fig 16 — Observer phase transitions (thermodynamic phase graph)
+# ===========================================================================
+def fig16_observer_phase():
+    fig = plt.figure(figsize=(14.0, 8.0))
+    title_block(fig, "16 · theory · phase",
+                "Observer phase transitions — the phase diagram of an interpreter",
+                "Control axes: divergence pressure  μ   ×   reflexive temperature  T.   "
+                "Three regimes, one critical line, one tricritical point.")
+    ax = fig.add_axes([0.06, 0.10, 0.50, 0.76])
+    ax.set_facecolor(BG)
+    for s in ax.spines.values(): s.set_visible(False)
+    ax.grid(True, color=GRID, alpha=0.30, lw=0.6)
+    ax.tick_params(colors=MUTED)
+    ax.set_xlabel("μ   ·   semiotic divergence pressure",
+                  color=TEXT, fontsize=10.5)
+    ax.set_ylabel("T   ·   reflexive temperature  (channel capacity of RRM)",
+                  color=TEXT, fontsize=10.5)
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+
+    # Phase regions
+    mu_grid = np.linspace(0, 1, 400)
+    # critical line: T = T_c(μ)  =  0.85 - 0.85*μ²  (cartoon)
+    T_c = 0.85 - 0.85 * mu_grid**2
+
+    # region fills
+    ax.fill_between(mu_grid, T_c, 1.0, color=SUBCRIT,   alpha=0.10)
+    ax.fill_between(mu_grid, 0.0, T_c, color=SUPERCRIT, alpha=0.10)
+    # metastable wedge near critical line
+    band = 0.05
+    ax.fill_between(mu_grid, np.clip(T_c - band, 0, 1),
+                    np.clip(T_c + band, 0, 1),
+                    color=YELLOW, alpha=0.10)
+
+    # critical curve
+    ax.plot(mu_grid, T_c, color=YELLOW, lw=2.2,
+            path_effects=glow(YELLOW, n=3, base_w=3.0, alpha=0.22),
+            label="critical line  T_c(μ)")
+
+    # tricritical / triple point cartoon
+    ax.scatter([0.55], [0.85 - 0.85*0.55**2], s=80, fc=PANEL,
+               ec=MAGENTA, lw=1.8, zorder=5)
+    ax.annotate("tricritical\npoint",
+                xy=(0.55, 0.85 - 0.85*0.55**2),
+                xytext=(0.72, 0.78),
+                color=MAGENTA, fontsize=9.5,
+                arrowprops=dict(arrowstyle="-", color=MAGENTA, lw=0.8))
+
+    # regime labels
+    ax.text(0.18, 0.80, "CONSENSUS", color=SUBCRIT,   fontsize=12, weight="bold")
+    ax.text(0.18, 0.74, "single interpretant\nstable across community",
+            color=MUTED, fontsize=8.5, style="italic")
+    ax.text(0.72, 0.22, "BIFURCATED", color=SUPERCRIT, fontsize=12, weight="bold")
+    ax.text(0.72, 0.16, "two attractors\ncontested signs",
+            color=MUTED, fontsize=8.5, style="italic")
+    ax.text(0.05, 0.42, "METASTABLE", color=YELLOW,    fontsize=10.5, weight="bold")
+    ax.text(0.05, 0.37, "small perturbations\ntoggle the reading",
+            color=MUTED, fontsize=8.5, style="italic")
+
+    # An example trajectory: a token's discourse drifts from consensus
+    # → metastable → bifurcated as community pressure rises.
+    tx = np.array([0.05, 0.22, 0.42, 0.62, 0.80])
+    ty = np.array([0.90, 0.78, 0.60, 0.38, 0.18])
+    ax.plot(tx, ty, color=MINT, lw=2.0,
+            path_effects=glow(MINT, n=3, base_w=2.8, alpha=0.22))
+    ax.scatter(tx, ty, s=28, c=MINT, zorder=5)
+    ax.text(tx[0] + 0.01, ty[0] + 0.02, "token trajectory",
+            color=MINT, fontsize=9, style="italic")
+
+    leg = ax.legend(loc="upper right", framealpha=0.0,
+                    labelcolor=TEXT, fontsize=8.5)
+
+    # --- Right panel: mapping & references ---------------------------------
+    px, py, pw, ph = 0.60, 0.12, 0.36, 0.74
+    add_panel_bg(fig, (px, py, pw, ph), radius=0.018)
+    axr = fig.add_axes([px, py, pw, ph]); hidden_axes(axr)
+    axr.text(0.04, 0.94, "→  WHO IS THE OBSERVER?",
+             color=CYAN, fontsize=10, weight="bold")
+    axr.text(0.04, 0.86,
+             "An observer is anything that draws a\n"
+             "distinction.  Each SRT module is a different\n"
+             "observer of the same hidden state:",
+             color=TEXT, fontsize=10)
+    rows = [
+        ("MAH",       CYAN,    "typing observer  ·  R / O / I"),
+        ("Community", VIOLET,  "social observer  ·  which discourse?"),
+        ("RRM",       MINT,    "historical observer  ·  what has diverged?"),
+        ("BEN",       MAGENTA, "phase observer  ·  which regime?"),
+    ]
+    y0 = 0.66
+    for tag, col, body in rows:
+        axr.add_patch(Rectangle((0.04, y0 - 0.025), 0.92, 0.06,
+                                fc=PANEL_EDGE, ec="none", alpha=0.55))
+        axr.text(0.07, y0, tag, color=col, fontsize=10, weight="bold",
+                 va="center")
+        axr.text(0.27, y0, body, color=MUTED, fontsize=9, va="center")
+        y0 -= 0.08
+
+    axr.text(0.04, 0.34, "THEORETICAL ANCESTORS",
+             color=CYAN, fontsize=10, weight="bold")
+    axr.text(0.04, 0.28,
+             "von Foerster  ·  second-order cybernetics\n"
+             "Maturana & Varela  ·  autopoiesis, observer\n"
+             "Anderson  ·  more is different (broken symm.)\n"
+             "Bennett · Landauer · Parrondo  ·  thermo-\n"
+             "                                                dynamics of computation",
+             color=MUTED, fontsize=9, linespacing=1.5, va="top")
+    axr.text(0.04, 0.04,
+             "Crossing a phase boundary requires work —\n"
+             "RRM's correction term is that work.",
+             color=MINT, fontsize=9, style="italic",
+             linespacing=1.5, va="top")
+
+    footer(fig)
+    fig.savefig(OUT / "16_observer_phase.png")
+    plt.close(fig)
+
+
+# ===========================================================================
+# Fig 17 — Reference constellation
+# ===========================================================================
+def fig17_references():
+    fig = plt.figure(figsize=(14.0, 8.0))
+    title_block(fig, "17 · theory · references",
+                "Reference constellation — the lineages SRT draws on",
+                "Each star is a thread; the SRT module each thread feeds is colored to match.")
+    ax = fig.add_axes([0.03, 0.06, 0.94, 0.84]); hidden_axes(ax)
+
+    groups = [
+        ("SEMIOTICS",  CYAN, [
+            ("Peirce",                 "triadic sign  →  MAH",            0.10, 0.80),
+            ("Silverstein",            "indexical orders  →  RRM",        0.10, 0.66),
+            ("Kockelman",              "algorithmic sieving  →  stack",   0.10, 0.52),
+            ("Wildgen",                "catastrophic semantics",          0.10, 0.38),
+            ("Evans",                  "lexical concepts & cognitive models",
+                                                                          0.10, 0.24),
+        ]),
+        ("DYNAMICS  &  PHASE",  CORAL, [
+            ("Lancaster (2025)",       "pitchfork bifurcation  →  BEN",   0.40, 0.80),
+            ("Anderson",               "more is different · broken symmetry",
+                                                                          0.40, 0.62),
+            ("Leighton",               "critical phenomena in collective systems",
+                                                                          0.40, 0.44),
+            ("VanSaders",              "observer-dependent phase structure",
+                                                                          0.40, 0.26),
+        ]),
+        ("OBSERVER  &  THERMO",  MINT, [
+            ("von Foerster",           "second-order cybernetics",        0.70, 0.80),
+            ("Maturana & Varela",      "autopoiesis  ·  observer",        0.70, 0.66),
+            ("Bennett",                "logical depth · thermodynamics of computation",
+                                                                          0.70, 0.52),
+            ("Landauer",               "information is physical",         0.70, 0.38),
+            ("Parrondo et al.",        "thermodynamics of information",   0.70, 0.24),
+        ]),
+    ]
+    for header, col, items in groups:
+        # group header bar
+        gx = items[0][2] - 0.04
+        ax.text(gx, 0.91, header, color=col, fontsize=11, weight="bold")
+        ax.plot([gx, gx + 0.24], [0.895, 0.895], color=col, lw=1.2, alpha=0.7)
+        for name, body, x, y in items:
+            # star
+            c = Circle((x, y), 0.013, fc=PANEL, ec=col, lw=1.4)
+            c.set_path_effects(glow(col, n=3, base_w=2.6, alpha=0.22))
+            ax.add_patch(c)
+            ax.text(x + 0.024, y + 0.022, name, color=TEXT,
+                    fontsize=10, weight="semibold")
+            ax.text(x + 0.024, y - 0.018, body, color=MUTED, fontsize=8.7,
+                    linespacing=1.4, va="top")
+
+    # bottom band: Lancaster SSRN links and present paper
+    add_panel_bg(fig, (0.06, 0.045, 0.88, 0.10), radius=0.014)
+    ax.text(0.08, 0.115, "PRIMARY SOURCES FOR SRT",
+            color=CYAN, fontsize=9.5, weight="bold")
+    ax.text(0.08, 0.085,
+            "Lancaster (2025)  ·  “The Treachery of Signs: Semiotic Mediation, "
+            "Pitchfork Bifurcations …”  ·  SSRN 5987495",
+            color=TEXT, fontsize=9.5)
+    ax.text(0.08, 0.063,
+            "Lancaster (2026a)  ·  Stage-1 + Stage-2 validation of SRT primitives  "
+            "·  SSRN 6349978",
+            color=TEXT, fontsize=9.5)
+
+    footer(fig)
+    fig.savefig(OUT / "17_references.png")
+    plt.close(fig)
+
+
 def main():
     apply_style()
     fig0_architecture()
@@ -1552,6 +2145,12 @@ def main():
     fig9_crossarch()
     fig10_demo_map()
     fig11_token_trace()
+    fig12_peirce_triad()
+    fig13_silverstein_orders()
+    fig14_kockelman_sieving()
+    fig15_lancaster_pitchfork()
+    fig16_observer_phase()
+    fig17_references()
     written = sorted(OUT.glob("*.png"))
     print(f"[explainers] wrote {len(written)} figures →")
     for p in written:
