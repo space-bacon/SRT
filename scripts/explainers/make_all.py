@@ -1211,9 +1211,336 @@ def fig0_architecture():
     plt.close(fig)
 
 
+# ===========================================================================
+# Fig 0b — Visual grammar / legend (color + symbol key, used everywhere)
+# ===========================================================================
+def fig0b_legend():
+    """A single reference panel: the colors, shapes, and symbols used
+    across the entire explainer series. Read this once, parse every other
+    figure at a glance.
+    """
+    fig = plt.figure(figsize=(13.5, 7.6))
+    title_block(fig, "00b · visual grammar",
+                "The color & symbol key for every SRT explainer",
+                "Read this once, then every other figure parses at a glance.")
+
+    # ---- Left half: color/shape grammar ----------------------------------
+    ax = fig.add_axes([0.04, 0.08, 0.48, 0.78])
+    hidden_axes(ax)
+    ax.text(0.02, 0.97, "COLOR & SHAPE", color=CYAN, fontsize=10,
+            weight="bold")
+
+    rows = [
+        (FROZEN,  "rect",   "frozen backbone slab",
+                            "native LLM layer (no gradient)"),
+        (CYAN,    "circle", "read hook → MAH",
+                            "tap residual stream (read-only)"),
+        (MINT,    "arrow",  "FiLM inject  γ, β",
+                            "writes back into 2 layers only"),
+        (MAGENTA, "rect",   "RRM · GRU meta-state",
+                            "integrates divergence stream"),
+        (VIOLET,  "rect",   "community tap",
+                            "discourse basin from L2"),
+        (CORAL,   "rect",   "BEN · reflexivity  r̂",
+                            "per-token regime signal"),
+    ]
+    y = 0.86
+    for color, kind, label, sub in rows:
+        # icon
+        if kind == "rect":
+            ax.add_patch(FancyBboxPatch(
+                (0.02, y - 0.025), 0.07, 0.05,
+                boxstyle="round,pad=0,rounding_size=0.012",
+                fc=PANEL, ec=color, lw=1.3))
+            ax.add_patch(FancyBboxPatch(
+                (0.02, y - 0.025), 0.07, 0.05,
+                boxstyle="round,pad=0,rounding_size=0.012",
+                fc="none", ec=color, lw=1.3,
+                path_effects=glow(color, n=3, base_w=2.4, alpha=0.22)))
+        elif kind == "circle":
+            ax.add_patch(Circle((0.055, y), 0.018, fc=color, ec="none",
+                path_effects=glow(color, n=3, base_w=2.4, alpha=0.30)))
+        elif kind == "arrow":
+            arrow(ax, (0.02, y), (0.09, y),
+                  color=color, lw=2.2, mutation=14, glow_color=color)
+        ax.text(0.12, y + 0.008, label, color=TEXT, fontsize=11,
+                weight="semibold", va="center")
+        ax.text(0.12, y - 0.018, sub, color=MUTED, fontsize=9, va="center")
+        y -= 0.115
+
+    # ---- Right half: symbol glossary -------------------------------------
+    ax2 = fig.add_axes([0.54, 0.08, 0.42, 0.78])
+    hidden_axes(ax2)
+    ax2.text(0.02, 0.97, "SYMBOLS", color=MAGENTA, fontsize=10,
+             weight="bold")
+
+    syms = [
+        (r"$h$",                       "hidden state vector at some layer"),
+        (r"$d_t$",                     "divergence (direct vs contextual reading)"),
+        (r"$\gamma,\ \beta$",          "FiLM scale & shift produced by RRM"),
+        (r"$h \leftarrow h(1{+}\gamma){+}\beta$",
+                                       "the only write back into the backbone"),
+        (r"$h_{\rm meta}$",            "GRU state — what the adapter 'knows so far'"),
+        (r"$\hat r$",                  "reflexivity (>0 ⇒ supercritical / forking)"),
+        (r"$\mu$",                     "layer-mean (anisotropy offset, must subtract)"),
+        (r"$\rm fve\_cen$",            "centered cosine — the honest similarity"),
+    ]
+    y = 0.88
+    for sym, desc in syms:
+        ax2.text(0.04, y, sym, color=CYAN, fontsize=14,
+                 weight="bold", va="center")
+        ax2.text(0.30, y, desc, color=TEXT, fontsize=10, va="center")
+        y -= 0.095
+
+    # ---- Footer hint -----------------------------------------------------
+    fig.text(0.5, 0.045,
+             "Every later figure reuses the colors above. "
+             "If a glyph is mint, it is being written into the backbone. "
+             "If it is cyan, it is read-only.",
+             color=MUTED, fontsize=10, ha="center", style="italic")
+    footer(fig, y=0.018)
+    fig.savefig(OUT / "00b_legend.png")
+    plt.close(fig)
+
+
+# ===========================================================================
+# Fig 11 — Token trace: follow one token end-to-end
+# ===========================================================================
+def fig11_token_trace():
+    """The 'aha' figure: a single token's path through SRT, from input
+    embedding through the three taps, the RRM correction, and the final
+    logit shift that changes the model's answer.
+    """
+    fig = plt.figure(figsize=(14.5, 8.4))
+    title_block(fig, "11 · one-shot trace",
+                "Follow one token end-to-end through SRT",
+                "Prompt: \"The capital of Australia is ___\"  ·  "
+                "what the adapter sees, decides, and writes back.")
+
+    ax = fig.add_axes([0.03, 0.06, 0.94, 0.80])
+    hidden_axes(ax)
+
+    # ---- Top strip: prompt tokens ----------------------------------------
+    tokens = ["The", "capital", "of", "Australia", "is", "___"]
+    n = len(tokens)
+    tx0, tx1 = 0.06, 0.50
+    ty = 0.92
+    tw = (tx1 - tx0) / n
+    for i, t in enumerate(tokens):
+        x = tx0 + (i + 0.5) * tw
+        fc = PANEL if i < n - 1 else "#2a2f6a"
+        ec = PANEL_EDGE if i < n - 1 else MAGENTA
+        ax.add_patch(FancyBboxPatch(
+            (x - tw*0.42, ty - 0.028), tw*0.84, 0.056,
+            boxstyle="round,pad=0,rounding_size=0.010",
+            fc=fc, ec=ec, lw=1.0))
+        ax.text(x, ty, t, color=TEXT, ha="center", va="center",
+                fontsize=10, weight="semibold")
+    ax.text(tx0 - 0.005, ty, "PROMPT", color=DIM, fontsize=8.5,
+            ha="right", va="center", weight="bold")
+    ax.text((tx0+tx1)/2, ty + 0.045, "we trace the final position (___)",
+            color=MAGENTA, fontsize=9.5, ha="center", style="italic")
+
+    # ---- Vertical backbone tower (left half) -----------------------------
+    bx0, bx1 = 0.20, 0.34
+    by0, by1 = 0.12, 0.84
+    rail = FancyBboxPatch((bx0 - 0.008, by0 - 0.005),
+                          (bx1 - bx0) + 0.016, (by1 - by0) + 0.01,
+                          boxstyle="round,pad=0,rounding_size=0.018",
+                          fc=PANEL, ec=PANEL_EDGE, lw=1.0)
+    ax.add_patch(rail)
+    bcx = (bx0 + bx1) / 2
+    ax.text(bcx, by1 + 0.022, "frozen backbone",
+            color=DIM, fontsize=8.5, weight="semibold", ha="center",
+            style="italic")
+
+    # slabs with three hook layers explicitly tagged
+    slab_specs = [
+        ("L0–6",   "frozen",                FROZEN, PANEL_EDGE, MUTED, None),
+        ("L7",     "tap → MAH₁",            "#2a2f6a", CYAN,   TEXT, CYAN),
+        ("L8–13",  "frozen",                FROZEN, PANEL_EDGE, MUTED, None),
+        ("L14",    "tap + FiLM inject",     "#2a2f6a", MINT,   TEXT, MINT),
+        ("L15–20", "frozen (w/ correction)",FROZEN, PANEL_EDGE, MUTED, None),
+        ("L21",    "tap + FiLM inject",     "#2a2f6a", MINT,   TEXT, MINT),
+        ("L22–27", "frozen (w/ correction)",FROZEN, PANEL_EDGE, MUTED, None),
+    ]
+    units = [1.0, 0.7, 1.2, 0.8, 1.2, 0.8, 1.2]
+    total = sum(units)
+    gap = 0.012
+    avail = (by1 - by0) - gap * (len(units) - 1)
+    cy = by1
+    layer_y = {}
+    for (lab, sub, fc, ec, tc, gl), u in zip(slab_specs, units):
+        h = avail * u / total
+        cy -= h
+        yc = cy + h / 2
+        box = FancyBboxPatch((bx0, cy), bx1 - bx0, h,
+                             boxstyle="round,pad=0,rounding_size=0.008",
+                             fc=fc, ec=ec, lw=1.0, alpha=0.95)
+        if gl:
+            box.set_path_effects(glow(gl, n=2, base_w=2.0, alpha=0.20))
+        ax.add_patch(box)
+        ax.text(bcx, yc + 0.010, lab, color=tc, ha="center",
+                va="center", fontsize=9.5, weight="semibold")
+        ax.text(bcx, yc - 0.012, sub, color=MUTED, ha="center",
+                va="center", fontsize=8)
+        layer_y[lab] = yc
+        cy -= gap
+
+    # token arrow into backbone
+    arrow(ax, ((tx0+tx1)/2, ty - 0.030), (bcx, by1 + 0.005),
+          color=DIM, lw=1.2, curve=-0.2)
+
+    # ---- Middle: three numbered call-outs (Tap / Correct / Report) -------
+    # ① TAP — divergences at L7, L14, L21 → MAH → RRM
+    mx, my0 = 0.50, 0.30
+    mw, mh = 0.16, 0.36
+    box = FancyBboxPatch((mx, my0), mw, mh,
+                         boxstyle="round,pad=0,rounding_size=0.014",
+                         fc=PANEL, ec=MAGENTA, lw=1.2)
+    box.set_path_effects(glow(MAGENTA, n=3, base_w=2.6, alpha=0.20))
+    ax.add_patch(box)
+    ax.text(mx + mw/2, my0 + mh - 0.030,
+            "RRM (GRU)", color=MAGENTA, fontsize=12, weight="bold",
+            ha="center")
+    ax.text(mx + mw/2, my0 + mh - 0.055,
+            "integrates  d₇ , d₁₄ , d₂₁",
+            color=MUTED, fontsize=9, ha="center")
+
+    # mini divergence sparkline inside the RRM box
+    sx = np.linspace(mx + 0.01, mx + mw - 0.01, 60)
+    rng = np.random.default_rng(7)
+    sy = my0 + 0.12 + 0.04 * np.sin(np.linspace(0, 5, 60)) \
+                + 0.015 * rng.standard_normal(60)
+    sy[-15:] += np.linspace(0, 0.05, 15)   # ramp at end → "fork detected"
+    neon_line(ax, sx, sy, color=CYAN, lw=1.6, glow_alpha=0.18)
+    ax.text(mx + mw/2, my0 + 0.028,
+            "divergence stream  d_t",
+            color=CYAN, fontsize=8.5, ha="center", style="italic")
+    ax.text(mx + mw/2, my0 + 0.008,
+            "spike at last token  →  meaning forks",
+            color=CORAL, fontsize=8, ha="center")
+
+    # arrows from L7/L14/L21 hooks → RRM box (cyan)
+    for lab in ("L7", "L14", "L21"):
+        y_tap = layer_y[lab]
+        arrow(ax, (bx1, y_tap), (mx, my0 + mh * 0.55),
+              color=CYAN, lw=1.3, mutation=12, alpha=0.85, curve=0.15)
+
+    # ② CORRECT — FiLM γ, β back into L14 and L21
+    # ① TAP label sits between backbone and RRM, top
+    ax.text(0.42, 0.72, "①  TAP", color=CYAN, fontsize=11, weight="bold")
+    ax.text(0.42, 0.70, "read L7 / L14 / L21",
+            color=MUTED, fontsize=8.5)
+
+    # ② CORRECT label sits as a left-margin note (well clear of the
+    # backbone column at x=0.20-0.34 and the chart starting at x=0.50).
+    ax.text(0.04, 0.50, "②  CORRECT", color=MINT, fontsize=11,
+            weight="bold")
+    ax.text(0.04, 0.475, r"FiLM  $\gamma, \beta$", color=MINT,
+            fontsize=10, style="italic")
+    ax.text(0.04, 0.455, "back into L14 & L21",
+            color=MUTED, fontsize=8.5)
+
+    # mint inject arrows from RRM back to L14 and L21
+    for lab in ("L14", "L21"):
+        y_tgt = layer_y[lab]
+        arrow(ax, (mx, my0 + mh * 0.35),
+              (bx1 + 0.003, y_tgt + 0.004),
+              color=MINT, lw=1.8, mutation=14,
+              glow_color=MINT, curve=0.40, alpha=0.95)
+
+    # ③ REPORT — BEN reflexivity
+    ben_x, ben_y = 0.72, 0.46
+    ben_w, ben_h = 0.20, 0.20
+    box = FancyBboxPatch((ben_x, ben_y), ben_w, ben_h,
+                         boxstyle="round,pad=0,rounding_size=0.014",
+                         fc=PANEL, ec=CORAL, lw=1.2)
+    box.set_path_effects(glow(CORAL, n=3, base_w=2.6, alpha=0.22))
+    ax.add_patch(box)
+    ax.text(ben_x + ben_w/2, ben_y + ben_h - 0.030,
+            "BEN", color=CORAL, fontsize=13, weight="bold", ha="center")
+    ax.text(ben_x + ben_w/2, ben_y + ben_h - 0.055,
+            "reflexivity per token", color=MUTED, fontsize=9, ha="center")
+    ax.text(ben_x + ben_w/2, ben_y + ben_h - 0.105,
+            r"$\hat r = +1.42$", color=TEXT, fontsize=14,
+            ha="center", weight="bold")
+    ax.text(ben_x + ben_w/2, ben_y + ben_h - 0.135,
+            "regime: SUPERCRITICAL",
+            color=CORAL, fontsize=9, ha="center", weight="semibold")
+    ax.text(ben_x + ben_w/2, ben_y + 0.020,
+            "(\"a fork is happening here\")",
+            color=MUTED, fontsize=8.5, ha="center", style="italic")
+    # arrow RRM → BEN
+    arrow(ax, (mx + mw, my0 + mh * 0.7),
+          (ben_x, ben_y + ben_h * 0.5),
+          color=MAGENTA, lw=1.3, mutation=12, curve=-0.15)
+    # ③ REPORT label above the BEN box
+    ax.text(ben_x + ben_w/2, ben_y + ben_h + 0.030,
+            "③  REPORT", color=CORAL, fontsize=11, weight="bold",
+            ha="center")
+    ax.text(ben_x + ben_w/2, ben_y + ben_h + 0.010,
+            "emit  r̂  +  regime",
+            color=MUTED, fontsize=8.5, ha="center")
+
+    # ---- Bottom: logit shift bar chart -----------------------------------
+    chart_x, chart_y = 0.50, 0.10
+    chart_w, chart_h = 0.42, 0.18
+    ax.add_patch(FancyBboxPatch(
+        (chart_x, chart_y), chart_w, chart_h,
+        boxstyle="round,pad=0,rounding_size=0.012",
+        fc=PANEL, ec=PANEL_EDGE, lw=1.0))
+    ax.text(chart_x + 0.010, chart_y + chart_h - 0.020,
+            "TOP-3 LOGITS  ·  before  vs  after SRT",
+            color=CYAN, fontsize=9, weight="bold")
+
+    cands = ["Canberra", "Sydney", "Melbourne"]
+    before = np.array([0.32, 0.55, 0.13])
+    after  = np.array([0.71, 0.21, 0.08])
+    bar_x0 = chart_x + 0.03
+    bar_y0 = chart_y + 0.025
+    row_h  = 0.035
+    bar_max_w = chart_w - 0.16
+    for i, c in enumerate(cands):
+        yy = chart_y + chart_h - 0.055 - i * row_h
+        # label
+        ax.text(bar_x0 - 0.005, yy + row_h*0.35, c,
+                color=TEXT, fontsize=9, ha="right", va="center")
+        # before bar (muted)
+        wb = bar_max_w * before[i]
+        ax.add_patch(Rectangle((bar_x0, yy + row_h*0.50),
+                               wb, row_h*0.30,
+                               fc=DIM, ec="none", alpha=0.7))
+        # after bar (mint/coral)
+        col = MINT if cands[i] == "Canberra" else CORAL if i == 1 else MUTED
+        wa = bar_max_w * after[i]
+        bar = Rectangle((bar_x0, yy + row_h*0.18), wa, row_h*0.30,
+                        fc=col, ec="none")
+        bar.set_path_effects(glow(col, n=2, base_w=2.0, alpha=0.20))
+        ax.add_patch(bar)
+        # numbers
+        ax.text(bar_x0 + max(wb, wa) + 0.008, yy + row_h*0.35,
+                f"{before[i]:.2f}  →  {after[i]:.2f}",
+                color=MUTED, fontsize=8, va="center")
+
+    ax.text(chart_x + 0.010, chart_y + 0.010,
+            "result: SRT shifts probability mass from \"Sydney\" → \"Canberra\"",
+            color=MINT, fontsize=8.5, style="italic")
+
+    # ---- Footer numbered legend ------------------------------------------
+    fig.text(0.5, 0.035,
+             "① read   ·   ② correct   ·   ③ report   "
+             "—   one forward pass, three things SRT does at every token.",
+             color=TEXT, fontsize=10.5, ha="center", weight="semibold")
+    footer(fig, y=0.014)
+    fig.savefig(OUT / "11_token_trace.png")
+    plt.close(fig)
+
+
 def main():
     apply_style()
     fig0_architecture()
+    fig0b_legend()
     fig1_pipeline()
     fig2_anisotropy()
     fig3_mah()
@@ -1224,6 +1551,7 @@ def main():
     fig8_tqa_ladder()
     fig9_crossarch()
     fig10_demo_map()
+    fig11_token_trace()
     written = sorted(OUT.glob("*.png"))
     print(f"[explainers] wrote {len(written)} figures →")
     for p in written:

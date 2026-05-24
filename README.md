@@ -8,6 +8,13 @@ its own LM head, its own attention.  SRT modules are small taps that **read**
 divergence from hidden states, **track** reflexive awareness, and optionally
 **inject** semiotic corrections back into the stream.
 
+## 30-second TL;DR
+
+> - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them.
+> - **Why:** moves TruthfulQA-MC2 AUC into the top of the published hidden-state-detector band (**0.866 on Qwen-2.5-7B**) at ≈0.17 % of backbone params, with no weight updates to the base model.
+> - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
+> - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
+
 ## Architecture
 
 ![SRT-Adapter architecture](artifacts/explainers/00_architecture.png)
