@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
+from dataclasses import dataclass, field, fields, is_dataclass
+from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -153,3 +156,58 @@ class SRTConfig:
             self.rrm_inject_indices = self.mah_layer_indices[1:]
         if self.community_layer_idx < 0:
             self.community_layer_idx = max(1, num_layers // 7)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "SRTConfig":
+        """Construct an `SRTConfig` from a (possibly nested) dict.
+
+        Recursively builds nested dataclass fields (e.g. `ben`, `mah`,
+        `community`, `loss`, `training`) from sub-dicts. Unknown keys are
+        ignored so configs saved by newer/older code still load.
+        """
+        return _build_dataclass(cls, data)
+
+    @classmethod
+    def from_json(cls, path: str | Path) -> "SRTConfig":
+        with open(path) as f:
+            return cls.from_dict(json.load(f))
+
+
+def _build_dataclass(dc_cls: type, data: Any) -> Any:
+    """Recursively build a dataclass instance from a dict.
+
+    - Nested dataclass fields whose values are dicts are built recursively.
+    - Unknown keys in `data` are silently dropped (forward/back compat).
+    - Non-dataclass fields are passed through as-is.
+    """
+    if not is_dataclass(dc_cls):
+        return data
+    if not isinstance(data, dict):
+        return data
+    # Map of nested-dataclass field names to their classes. `dataclasses.fields`
+    # exposes `f.type` as a string under `from __future__ import annotations`,
+    # so we can't introspect it directly — use a per-class registry.
+    nested_map = _NESTED_FIELDS.get(dc_cls, {})
+    field_names = {f.name for f in fields(dc_cls)}
+    kwargs: dict[str, Any] = {}
+    for key, value in data.items():
+        if key not in field_names:
+            continue
+        sub_cls = nested_map.get(key)
+        if sub_cls is not None and isinstance(value, dict):
+            kwargs[key] = _build_dataclass(sub_cls, value)
+        else:
+            kwargs[key] = value
+    return dc_cls(**kwargs)
+
+
+_NESTED_FIELDS: dict[type, dict[str, type]] = {
+    SRTConfig: {
+        "mah": MAHConfig,
+        "rrm": RRMConfig,
+        "ben": BENConfig,
+        "community": CommunityConfig,
+        "loss": LossConfig,
+        "training": TrainingConfig,
+    },
+}
