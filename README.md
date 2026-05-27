@@ -243,6 +243,62 @@ and Gemma-2-2B sample paths do not have this trap. The released
 SRT-Adapter checkpoints (`v1.0` / `v8a` / `v18` / `v21a` / `v22c_a050`)
 are on a separate codepath and are unaffected.
 
+## srt_introspect — adaptive-density reasoning trace (Stage 3 + 4 sidecar)
+
+`srt_introspect` is a read-only product wrapper that turns the trained
+adapter (Stage 3) and the activation verbalizer (Stage 4) into a single
+generate-with-trace call. It produces text alongside a *non-uniform*
+trace: dense narration where the model's internal state is moving fast
+(high MAH divergence) and sparse where it's coasting.
+
+```python
+from srt_introspect import Trace
+
+t = Trace.load()  # defaults: RiverRider/srt-adapter-v1.0 + RiverRider/srt-nla-av-v1
+result = t.generate(
+    "Q: What killed the dinosaurs?\nA:",
+    max_new_tokens=200,
+    budget=12,   # adaptive verbalization slots
+    k=8,         # AV samples per slot (consensus)
+)
+print(result.text)
+for s in result.selected():
+    print(s.token_idx, repr(s.token), s.divergence, s.regime, "→", s.verbalization)
+```
+
+Each `Step` carries `token_idx, token, divergence, regime, r_hat,
+verbalization` (the last populated only for scheduler-selected sites).
+The scheduler (`srt_introspect.scheduler.quantile_by_density`) places
+verbalizations at equal-mass quantiles of the per-token divergence series
+so the trace density tracks where the model's metapragmatic state is
+changing.
+
+Throughput on an RTX Pro 6000 Blackwell:
+
+| op | latency |
+|---|---|
+| Trace.load (cold) | ~10s |
+| adapter forward (10-tok prompt) | 21 ms |
+| AV verbalize, K=8 (32 new tok) | 770 ms |
+| 120-token generation + 8 verbalizations | ~7 s |
+
+CLI demo, JSON dump, and self-contained HTML viewer:
+
+```bash
+PYTHONPATH=. python scripts/demos/trace_demo.py \
+    --max-new-tokens 200 --budget 12 --k 8 \
+    --out-json artifacts/trace.json
+PYTHONPATH=. python scripts/demos/render_trace_html.py \
+    artifacts/trace.json --out artifacts/trace.html
+```
+
+Mini benchmark over a small prompt set:
+
+```bash
+PYTHONPATH=. python scripts/evals/trace_bench.py \
+    --out-dir artifacts/trace_bench
+```
+
 ## Theoretical Foundation
 
 SRT is grounded in C.S. Peirce's semiotics. Language models process signs

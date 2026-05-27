@@ -44,7 +44,7 @@ target-version = "py310"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["srt*"]
+include = ["srt*", "srt_introspect*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

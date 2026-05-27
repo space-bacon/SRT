@@ -1,0 +1,450 @@
+{
+  "backbone": "Qwen/Qwen2.5-7B",
+  "layers": [
+    12,
+    16,
+    20,
+    24,
+    28
+  ],
+  "pools": [
+    "last",
+    "mean"
+  ],
+  "dtype": "bfloat16",
+  "max_len": 128,
+  "per_task": [
+    {
+      "task": "biosses",
+      "layer": 12,
+      "pool": "last",
+      "n": 100,
+      "spearman": 0.26640968478322535,
+      "pearson": 0.2007892869697351,
+      "spearman_x100": 26.640968478322534
+    },
+    {
+      "task": "biosses",
+      "layer": 12,
+      "pool": "mean",
+      "n": 100,
+      "spearman": 0.30269966830162415,
+      "pearson": 0.11123051560460892,
+      "spearman_x100": 30.269966830162414
+    },
+    {
+      "task": "biosses",
+      "layer": 16,
+      "pool": "last",
+      "n": 100,
+      "spearman": 0.3078684607748622,
+      "pearson": 0.23286884723714443,
+      "spearman_x100": 30.786846077486217
+    },
+    {
+      "task": "biosses",
+      "layer": 16,
+      "pool": "mean",
+      "n": 100,
+      "spearman": 0.2977778694081096,
+      "pearson": 0.13173825402541678,
+      "spearman_x100": 29.77778694081096
+    },
+    {
+      "task": "biosses",
+      "layer": 20,
+      "pool": "last",
+      "n": 100,
+      "spearman": 0.32331459585805855,
+      "pearson": 0.25837129713303625,
+      "spearman_x100": 32.33145958580585
+    },
+    {
+      "task": "biosses",
+      "layer": 20,
+      "pool": "mean",
+      "n": 100,
+      "spearman": 0.29262714963582687,
+      "pearson": 0.16283338867165817,
+      "spearman_x100": 29.262714963582688
+    },
+    {
+      "task": "biosses",
+      "layer": 24,
+      "pool": "last",
+      "n": 100,
+      "spearman": 0.311796261115831,
+      "pearson": 0.2651824554491219,
+      "spearman_x100": 31.179626111583097
+    },
+    {
+      "task": "biosses",
+      "layer": 24,
+      "pool": "mean",
+      "n": 100,
+      "spearman": 0.4139431669156268,
+      "pearson": 0.3051995575218108,
+      "spearman_x100": 41.39431669156268
+    },
+    {
+      "task": "biosses",
+      "layer": 28,
+      "pool": "last",
+      "n": 100,
+      "spearman": 0.25127680984992223,
+      "pearson": 0.18177881572708762,
+      "spearman_x100": 25.127680984992224
+    },
+    {
+      "task": "biosses",
+      "layer": 28,
+      "pool": "mean",
+      "n": 100,
+      "spearman": 0.570663605367012,
+      "pearson": 0.4388221207948557,
+      "spearman_x100": 57.0663605367012
+    },
+    {
+      "task": "stsb",
+      "layer": 12,
+      "pool": "last",
+      "n": 1379,
+      "spearman": 0.3960568019559617,
+      "pearson": 0.3140465628437582,
+      "spearman_x100": 39.60568019559617
+    },
+    {
+      "task": "stsb",
+      "layer": 12,
+      "pool": "mean",
+      "n": 1379,
+      "spearman": 0.1404117654002757,
+      "pearson": 0.04285455413154973,
+      "spearman_x100": 14.04117654002757
+    },
+    {
+      "task": "stsb",
+      "layer": 16,
+      "pool": "last",
+      "n": 1379,
+      "spearman": 0.38015681763812975,
+      "pearson": 0.3117370201984986,
+      "spearman_x100": 38.01568176381298
+    },
+    {
+      "task": "stsb",
+      "layer": 16,
+      "pool": "mean",
+      "n": 1379,
+      "spearman": 0.13286425802964175,
+      "pearson": 0.044589403609739314,
+      "spearman_x100": 13.286425802964175
+    },
+    {
+      "task": "stsb",
+      "layer": 20,
+      "pool": "last",
+      "n": 1379,
+      "spearman": 0.36490234548456263,
+      "pearson": 0.3258116132602776,
+      "spearman_x100": 36.490234548456264
+    },
+    {
+      "task": "stsb",
+      "layer": 20,
+      "pool": "mean",
+      "n": 1379,
+      "spearman": 0.13267576994197833,
+      "pearson": 0.05754324741142737,
+      "spearman_x100": 13.267576994197833
+    },
+    {
+      "task": "stsb",
+      "layer": 24,
+      "pool": "last",
+      "n": 1379,
+      "spearman": 0.36176737080087484,
+      "pearson": 0.31720356409422623,
+      "spearman_x100": 36.176737080087484
+    },
+    {
+      "task": "stsb",
+      "layer": 24,
+      "pool": "mean",
+      "n": 1379,
+      "spearman": 0.18965311160149648,
+      "pearson": 0.11444405511296188,
+      "spearman_x100": 18.965311160149646
+    },
+    {
+      "task": "stsb",
+      "layer": 28,
+      "pool": "last",
+      "n": 1379,
+      "spearman": 0.35771743396500205,
+      "pearson": 0.2682789804906236,
+      "spearman_x100": 35.771743396500206
+    },
+    {
+      "task": "stsb",
+      "layer": 28,
+      "pool": "mean",
+      "n": 1379,
+      "spearman": 0.34020351271169386,
+      "pearson": 0.2990433857016814,
+      "spearman_x100": 34.02035127116939
+    },
+    {
+      "task": "sts17",
+      "layer": 12,
+      "pool": "last",
+      "n": 250,
+      "spearman": 0.43450110392019664,
+      "pearson": 0.33701038504077385,
+      "spearman_x100": 43.45011039201967
+    },
+    {
+      "task": "sts17",
+      "layer": 12,
+      "pool": "mean",
+      "n": 250,
+      "spearman": 0.5629201354712515,
+      "pearson": 0.21263854510844682,
+      "spearman_x100": 56.29201354712515
+    },
+    {
+      "task": "sts17",
+      "layer": 16,
+      "pool": "last",
+      "n": 250,
+      "spearman": 0.39916852613513554,
+      "pearson": 0.3283353975191657,
+      "spearman_x100": 39.916852613513555
+    },
+    {
+      "task": "sts17",
+      "layer": 16,
+      "pool": "mean",
+      "n": 250,
+      "spearman": 0.5722008171659442,
+      "pearson": 0.21745573960553316,
+      "spearman_x100": 57.220081716594414
+    },
+    {
+      "task": "sts17",
+      "layer": 20,
+      "pool": "last",
+      "n": 250,
+      "spearman": 0.35387969328070884,
+      "pearson": 0.3165294965335383,
+      "spearman_x100": 35.38796932807088
+    },
+    {
+      "task": "sts17",
+      "layer": 20,
+      "pool": "mean",
+      "n": 250,
+      "spearman": 0.5864231106205771,
+      "pearson": 0.22396241007487247,
+      "spearman_x100": 58.64231106205771
+    },
+    {
+      "task": "sts17",
+      "layer": 24,
+      "pool": "last",
+      "n": 250,
+      "spearman": 0.2975479163070308,
+      "pearson": 0.2719532741369366,
+      "spearman_x100": 29.75479163070308
+    },
+    {
+      "task": "sts17",
+      "layer": 24,
+      "pool": "mean",
+      "n": 250,
+      "spearman": 0.6066163137219538,
+      "pearson": 0.27884367700121926,
+      "spearman_x100": 60.66163137219538
+    },
+    {
+      "task": "sts17",
+      "layer": 28,
+      "pool": "last",
+      "n": 250,
+      "spearman": 0.2979192433753682,
+      "pearson": 0.21242716250100718,
+      "spearman_x100": 29.79192433753682
+    },
+    {
+      "task": "sts17",
+      "layer": 28,
+      "pool": "mean",
+      "n": 250,
+      "spearman": 0.42690312169166955,
+      "pearson": 0.38644876605030865,
+      "spearman_x100": 42.69031216916696
+    },
+    {
+      "task": "sts22",
+      "layer": 12,
+      "pool": "last",
+      "n": 197,
+      "spearman": 0.27415276499050634,
+      "pearson": 0.17634585505746747,
+      "spearman_x100": 27.415276499050634
+    },
+    {
+      "task": "sts22",
+      "layer": 12,
+      "pool": "mean",
+      "n": 197,
+      "spearman": 0.554661813269497,
+      "pearson": 0.47141431947490575,
+      "spearman_x100": 55.4661813269497
+    },
+    {
+      "task": "sts22",
+      "layer": 16,
+      "pool": "last",
+      "n": 197,
+      "spearman": 0.24959032841605552,
+      "pearson": 0.17589901466012126,
+      "spearman_x100": 24.959032841605552
+    },
+    {
+      "task": "sts22",
+      "layer": 16,
+      "pool": "mean",
+      "n": 197,
+      "spearman": 0.5347441025244164,
+      "pearson": 0.45049221268189776,
+      "spearman_x100": 53.47441025244164
+    },
+    {
+      "task": "sts22",
+      "layer": 20,
+      "pool": "last",
+      "n": 197,
+      "spearman": 0.2554607344800553,
+      "pearson": 0.1967323054256403,
+      "spearman_x100": 25.54607344800553
+    },
+    {
+      "task": "sts22",
+      "layer": 20,
+      "pool": "mean",
+      "n": 197,
+      "spearman": 0.5233809236161169,
+      "pearson": 0.46272706861067736,
+      "spearman_x100": 52.338092361611686
+    },
+    {
+      "task": "sts22",
+      "layer": 24,
+      "pool": "last",
+      "n": 197,
+      "spearman": 0.14467991343285447,
+      "pearson": 0.13407087752242247,
+      "spearman_x100": 14.467991343285448
+    },
+    {
+      "task": "sts22",
+      "layer": 24,
+      "pool": "mean",
+      "n": 197,
+      "spearman": 0.5619100922665832,
+      "pearson": 0.5076949587668771,
+      "spearman_x100": 56.191009226658316
+    },
+    {
+      "task": "sts22",
+      "layer": 28,
+      "pool": "last",
+      "n": 197,
+      "spearman": -0.011902771202827806,
+      "pearson": -0.04311189885531487,
+      "spearman_x100": -1.1902771202827807
+    },
+    {
+      "task": "sts22",
+      "layer": 28,
+      "pool": "mean",
+      "n": 197,
+      "spearman": 0.5498005994305576,
+      "pearson": 0.3960316574973441,
+      "spearman_x100": 54.98005994305576
+    }
+  ],
+  "per_combo": [
+    {
+      "layer": 12,
+      "pool": "last",
+      "mean_spearman": 0.34278008891247247,
+      "mean_spearman_x100": 34.27800889124725,
+      "n_tasks": 4
+    },
+    {
+      "layer": 12,
+      "pool": "mean",
+      "mean_spearman": 0.3901733456106621,
+      "mean_spearman_x100": 39.01733456106621,
+      "n_tasks": 4
+    },
+    {
+      "layer": 16,
+      "pool": "last",
+      "mean_spearman": 0.3341960332410457,
+      "mean_spearman_x100": 33.41960332410457,
+      "n_tasks": 4
+    },
+    {
+      "layer": 16,
+      "pool": "mean",
+      "mean_spearman": 0.384396761782028,
+      "mean_spearman_x100": 38.439676178202795,
+      "n_tasks": 4
+    },
+    {
+      "layer": 20,
+      "pool": "last",
+      "mean_spearman": 0.3243893422758463,
+      "mean_spearman_x100": 32.43893422758463,
+      "n_tasks": 4
+    },
+    {
+      "layer": 20,
+      "pool": "mean",
+      "mean_spearman": 0.3837767384536248,
+      "mean_spearman_x100": 38.37767384536248,
+      "n_tasks": 4
+    },
+    {
+      "layer": 24,
+      "pool": "last",
+      "mean_spearman": 0.27894786541414773,
+      "mean_spearman_x100": 27.894786541414774,
+      "n_tasks": 4
+    },
+    {
+      "layer": 24,
+      "pool": "mean",
+      "mean_spearman": 0.4430306711264151,
+      "mean_spearman_x100": 44.30306711264151,
+      "n_tasks": 4
+    },
+    {
+      "layer": 28,
+      "pool": "last",
+      "mean_spearman": 0.22375267899686616,
+      "mean_spearman_x100": 22.375267899686616,
+      "n_tasks": 4
+    },
+    {
+      "layer": 28,
+      "pool": "mean",
+      "mean_spearman": 0.47189270980023323,
+      "mean_spearman_x100": 47.18927098002332,
+      "n_tasks": 4
+    }
+  ]
+}

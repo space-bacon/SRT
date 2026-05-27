@@ -14,7 +14,11 @@ from pathlib import Path
 from srt_introspect import Trace
 
 
-DEFAULT_PROMPT = "Q: What killed the dinosaurs?\nA:"
+DEFAULT_PROMPT = (
+    "Q: A retired plumber from Ohio claims he invented a self-cooling beer "
+    "can in 1973. Is this likely true, and what would have to be different "
+    "about thermodynamics for it to work?\nA:"
+)
 
 
 def main() -> None:

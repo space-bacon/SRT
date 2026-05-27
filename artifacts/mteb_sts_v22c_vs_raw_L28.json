@@ -1,0 +1,54 @@
+{
+  "repo": "RiverRider/srt-adapter-v22c_a050",
+  "raw_layer": 28,
+  "backbone": "Qwen/Qwen2.5-7B",
+  "tasks": [
+    {
+      "task": "biosses",
+      "n": 100,
+      "seconds": 43.3381187915802,
+      "v22c_a050_spearman_x100": 55.54102457606731,
+      "v22c_a050_pearson_x100": 58.69199776829747,
+      "raw_L28_mean_spearman_x100": 56.304294979749436,
+      "raw_L28_mean_pearson_x100": 43.87608166983457
+    },
+    {
+      "task": "stsb",
+      "n": 1379,
+      "seconds": 218.98699975013733,
+      "v22c_a050_spearman_x100": 51.36831283007953,
+      "v22c_a050_pearson_x100": 53.43199772401193,
+      "raw_L28_mean_spearman_x100": 33.21988888904744,
+      "raw_L28_mean_pearson_x100": 28.965043887046892
+    },
+    {
+      "task": "sickr",
+      "n": 9927,
+      "seconds": 1153.9955501556396,
+      "v22c_a050_spearman_x100": 62.99625775208531,
+      "v22c_a050_pearson_x100": 67.9454339585571,
+      "raw_L28_mean_spearman_x100": 41.69852155523357,
+      "raw_L28_mean_pearson_x100": 43.377134883474504
+    },
+    {
+      "task": "sts17",
+      "n": 250,
+      "seconds": 33.838146924972534,
+      "v22c_a050_spearman_x100": 73.42969712579077,
+      "v22c_a050_pearson_x100": 70.7575379466065,
+      "raw_L28_mean_spearman_x100": 43.148781935632826,
+      "raw_L28_mean_pearson_x100": 39.249958170592315
+    },
+    {
+      "task": "sts22",
+      "n": 197,
+      "seconds": 152.7962532043457,
+      "v22c_a050_spearman_x100": 58.87716966118367,
+      "v22c_a050_pearson_x100": 51.1977763172184,
+      "raw_L28_mean_spearman_x100": 55.12956688801025,
+      "raw_L28_mean_pearson_x100": 39.93061284799942
+    }
+  ],
+  "mean_v22c_a050_spearman_x100": 60.44249238904132,
+  "mean_raw_spearman_x100": 45.9002108495347
+}

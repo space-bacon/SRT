@@ -1,0 +1,34 @@
+device=mps  torch=2.5.1
+
+--- AV: load ---
+  local AV artifacts not found, pulling from HF: RiverRider/srt-nla-av-v1
+  cfg=/Users/burtron/development/srt-adapter/release/nla_v1/config.json
+  ckpt=/Users/burtron/.cache/huggingface/hub/models--RiverRider--srt-nla-av-v1/snapshots/01351d1ddb770303ede449c491d43af70ec5a917/best_av.pt
+  backbone=Qwen/Qwen2.5-7B L=20 dtype=bfloat16
+  prefix_mode=static num_prefix_tokens=16 num_inject_slots=1
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 32.86it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 32.81it/s]
+  loaded: 0 adapter-missing, 0 unexpected
+  load_time=3.7s  device=mps
+
+--- AV: extract L20 hidden state from prompt ---
+  prompt='What killed the dinosaurs? The leading hypothesis is the'
+  T=10  hidden_size=3584  ||v||=110.07  extract_time=223ms
+
+--- AV: verbalize K=4 samples (max_new_tokens=32) ---
+  total=4.02s  per_sample=1005ms
+  [0] What was the most important event of the 20th century? The most important event of the 20th century was likely the two W
+  [1] Human: What is a question about this article? If the question is unanswerable, say "unanswerable".  The discovery of the
+  [2] Human: **Question**: Was the asteroid that caused the extinction of the dinosaurs caused by a meteorite impact?  **Answe
+  [3] This article is about the Earth. For the other world, see Mars. The Earth is the third planet from the Sun and the fifth
+
+--- SRTAdapter (Stage 3): load ---
+  config keys: ['backbone_dtype', 'backbone_id', 'ben', 'community', 'community_layer_idx', 'loss', 'mah', 'mah_layer_indices']...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00, 28.93it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 29.99it/s]
+  SKIP — SRTAdapter init/load failed: 'dict' object has no attribute 'temperature'
+
+--- Phase 0 verdict ---
+AV extract:    223ms / prompt
+AV verbalize:  1005ms / sample @ 32 tok
+  → K=8 budget: 8.0s per verbalization
+  → K=64 budget: 64.3s per verbalization
+Adapter:       skipped/failed (see above)

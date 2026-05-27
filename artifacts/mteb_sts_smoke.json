@@ -1,0 +1,19 @@
+{
+  "backbone": "Qwen/Qwen2.5-7B",
+  "layer": 20,
+  "pool": "last",
+  "dtype": "bfloat16",
+  "max_len": 128,
+  "tasks": [
+    {
+      "task": "biosses",
+      "n": 100,
+      "spearman": 0.323736292213684,
+      "pearson": 0.25843128137569066,
+      "spearman_x100": 32.3736292213684,
+      "seconds": 25.621301889419556
+    }
+  ],
+  "mean_spearman": 0.323736292213684,
+  "mean_spearman_x100": 32.3736292213684
+}

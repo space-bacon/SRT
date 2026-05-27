@@ -1,0 +1,197 @@
+--- Logging error ---
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 1160, in emit
+    msg = self.format(record)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 999, in format
+    return fmt.format(record)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 703, in format
+    record.message = record.getMessage()
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 392, in getMessage
+    msg = msg % self.args
+          ~~~~^~~~~~~~~~~
+TypeError: %d format: a real number is required, not list
+Call stack:
+  File "/Users/burtron/development/srt-adapter/scripts/evals/mteb_sts_nla_target.py", line 239, in <module>
+    main()
+  File "/Users/burtron/development/srt-adapter/scripts/evals/mteb_sts_nla_target.py", line 187, in main
+    logger.info("device=%s  backbone=%s  layer=%d  pool=%s  dtype=%s",
+Message: 'device=%s  backbone=%s  layer=%d  pool=%s  dtype=%s'
+Arguments: ('mps', 'Qwen/Qwen2.5-7B', [12, 16, 20, 24, 28], ['last', 'mean'], 'bfloat16')
+2026-05-26 15:18:18,616 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-26 15:18:18,633 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/config.json "HTTP/1.1 200 OK"
+2026-05-26 15:18:18,672 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-26 15:18:18,689 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-05-26 15:18:18,723 httpx HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-7B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:18,759 httpx HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-7B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:18:18,994 httpx HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-7B "HTTP/1.1 200 OK"
+2026-05-26 15:18:19,020 httpx HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-7B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-05-26 15:18:19,020 huggingface_hub.utils._http Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-05-26 15:18:19,038 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-7B/d149729398750b98c0af14eb82c78cfe92750796/config.json "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 7948.30it/s]
+[transformers] [1mQwen2Model LOAD REPORT[0m from: Qwen/Qwen2.5-7B
+Key            | Status     |  | 
+---------------+------------+--+-
+lm_head.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+2026-05-26 15:18:23,272 mteb_sts_nla_target [biosses] loading mteb/biosses-sts / - / test
+2026-05-26 15:18:23,309 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/biosses-sts/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-05-26 15:18:23,326 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/mteb/biosses-sts/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed/README.md "HTTP/1.1 200 OK"
+2026-05-26 15:18:23,358 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/biosses-sts/resolve/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed/biosses-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:23,444 httpx HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/mteb/biosses-sts/mteb/biosses-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:23,578 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/biosses-sts/revision/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed "HTTP/1.1 200 OK"
+2026-05-26 15:18:23,610 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/biosses-sts/resolve/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed/.huggingface.yaml "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:23,766 httpx HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=mteb/biosses-sts "HTTP/1.1 200 OK"
+2026-05-26 15:18:23,809 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/biosses-sts/tree/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed/data?recursive=true&expand=false "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:23,865 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/biosses-sts/tree/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed?recursive=false&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:18:23,923 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/biosses-sts/resolve/f4f1265a7a4b0c99e6da09859b887bdb1f36d8ed/dataset_infos.json "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:25,065 mteb_sts_nla_target   encode 8 / 100
+2026-05-26 15:18:33,491 mteb_sts_nla_target   encode 88 / 100
+2026-05-26 15:18:35,267 mteb_sts_nla_target   encode 8 / 100
+2026-05-26 15:18:42,475 mteb_sts_nla_target   encode 88 / 100
+2026-05-26 15:18:43,624 mteb_sts_nla_target [biosses L12 last] n=100  rho=0.2664  pearson=0.2008
+2026-05-26 15:18:43,625 mteb_sts_nla_target [biosses L12 mean] n=100  rho=0.3027  pearson=0.1112
+2026-05-26 15:18:43,626 mteb_sts_nla_target [biosses L16 last] n=100  rho=0.3079  pearson=0.2329
+2026-05-26 15:18:43,627 mteb_sts_nla_target [biosses L16 mean] n=100  rho=0.2978  pearson=0.1317
+2026-05-26 15:18:43,628 mteb_sts_nla_target [biosses L20 last] n=100  rho=0.3233  pearson=0.2584
+2026-05-26 15:18:43,629 mteb_sts_nla_target [biosses L20 mean] n=100  rho=0.2926  pearson=0.1628
+2026-05-26 15:18:43,630 mteb_sts_nla_target [biosses L24 last] n=100  rho=0.3118  pearson=0.2652
+2026-05-26 15:18:43,631 mteb_sts_nla_target [biosses L24 mean] n=100  rho=0.4139  pearson=0.3052
+2026-05-26 15:18:43,632 mteb_sts_nla_target [biosses L28 last] n=100  rho=0.2513  pearson=0.1818
+2026-05-26 15:18:43,633 mteb_sts_nla_target [biosses L28 mean] n=100  rho=0.5707  pearson=0.4388
+2026-05-26 15:18:43,633 mteb_sts_nla_target [biosses] (10 (L,pool) combos) 19.7s total
+2026-05-26 15:18:43,634 mteb_sts_nla_target [stsb] loading mteb/stsbenchmark-sts / - / test
+2026-05-26 15:18:43,698 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/stsbenchmark-sts/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-05-26 15:18:43,715 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/mteb/stsbenchmark-sts/96943a16ea6a35129e253c659081cb59daf81b30/README.md "HTTP/1.1 200 OK"
+2026-05-26 15:18:43,745 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/stsbenchmark-sts/resolve/96943a16ea6a35129e253c659081cb59daf81b30/stsbenchmark-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:43,818 httpx HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/mteb/stsbenchmark-sts/mteb/stsbenchmark-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:43,846 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/stsbenchmark-sts/revision/96943a16ea6a35129e253c659081cb59daf81b30 "HTTP/1.1 200 OK"
+2026-05-26 15:18:43,889 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/stsbenchmark-sts/resolve/96943a16ea6a35129e253c659081cb59daf81b30/.huggingface.yaml "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:43,956 httpx HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=mteb/stsbenchmark-sts "HTTP/1.1 200 OK"
+2026-05-26 15:18:43,993 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/stsbenchmark-sts/tree/96943a16ea6a35129e253c659081cb59daf81b30/data?recursive=true&expand=false "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:44,026 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/stsbenchmark-sts/tree/96943a16ea6a35129e253c659081cb59daf81b30?recursive=false&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:18:44,076 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/stsbenchmark-sts/resolve/96943a16ea6a35129e253c659081cb59daf81b30/dataset_infos.json "HTTP/1.1 404 Not Found"
+2026-05-26 15:18:44,307 mteb_sts_nla_target   encode 8 / 1379
+2026-05-26 15:18:46,220 mteb_sts_nla_target   encode 88 / 1379
+2026-05-26 15:18:48,212 mteb_sts_nla_target   encode 168 / 1379
+2026-05-26 15:18:50,199 mteb_sts_nla_target   encode 248 / 1379
+2026-05-26 15:18:52,744 mteb_sts_nla_target   encode 328 / 1379
+2026-05-26 15:18:55,144 mteb_sts_nla_target   encode 408 / 1379
+2026-05-26 15:18:57,674 mteb_sts_nla_target   encode 488 / 1379
+2026-05-26 15:18:59,904 mteb_sts_nla_target   encode 568 / 1379
+2026-05-26 15:19:02,537 mteb_sts_nla_target   encode 648 / 1379
+2026-05-26 15:19:05,217 mteb_sts_nla_target   encode 728 / 1379
+2026-05-26 15:19:08,055 mteb_sts_nla_target   encode 808 / 1379
+2026-05-26 15:19:11,095 mteb_sts_nla_target   encode 888 / 1379
+2026-05-26 15:19:16,279 mteb_sts_nla_target   encode 968 / 1379
+2026-05-26 15:19:21,757 mteb_sts_nla_target   encode 1048 / 1379
+2026-05-26 15:19:27,280 mteb_sts_nla_target   encode 1128 / 1379
+2026-05-26 15:19:30,199 mteb_sts_nla_target   encode 1208 / 1379
+2026-05-26 15:19:32,333 mteb_sts_nla_target   encode 1288 / 1379
+2026-05-26 15:19:34,929 mteb_sts_nla_target   encode 1368 / 1379
+2026-05-26 15:19:35,499 mteb_sts_nla_target   encode 8 / 1379
+2026-05-26 15:19:37,196 mteb_sts_nla_target   encode 88 / 1379
+2026-05-26 15:19:39,194 mteb_sts_nla_target   encode 168 / 1379
+2026-05-26 15:19:41,140 mteb_sts_nla_target   encode 248 / 1379
+2026-05-26 15:19:43,507 mteb_sts_nla_target   encode 328 / 1379
+2026-05-26 15:19:45,828 mteb_sts_nla_target   encode 408 / 1379
+2026-05-26 15:19:48,621 mteb_sts_nla_target   encode 488 / 1379
+2026-05-26 15:19:50,998 mteb_sts_nla_target   encode 568 / 1379
+2026-05-26 15:19:53,722 mteb_sts_nla_target   encode 648 / 1379
+2026-05-26 15:19:56,258 mteb_sts_nla_target   encode 728 / 1379
+2026-05-26 15:19:58,725 mteb_sts_nla_target   encode 808 / 1379
+2026-05-26 15:20:01,705 mteb_sts_nla_target   encode 888 / 1379
+2026-05-26 15:20:07,027 mteb_sts_nla_target   encode 968 / 1379
+2026-05-26 15:20:12,104 mteb_sts_nla_target   encode 1048 / 1379
+2026-05-26 15:20:17,396 mteb_sts_nla_target   encode 1128 / 1379
+2026-05-26 15:20:19,984 mteb_sts_nla_target   encode 1208 / 1379
+2026-05-26 15:20:22,148 mteb_sts_nla_target   encode 1288 / 1379
+2026-05-26 15:20:24,661 mteb_sts_nla_target   encode 1368 / 1379
+2026-05-26 15:20:25,080 mteb_sts_nla_target [stsb L12 last] n=1379  rho=0.3961  pearson=0.3140
+2026-05-26 15:20:25,089 mteb_sts_nla_target [stsb L12 mean] n=1379  rho=0.1404  pearson=0.0429
+2026-05-26 15:20:25,098 mteb_sts_nla_target [stsb L16 last] n=1379  rho=0.3802  pearson=0.3117
+2026-05-26 15:20:25,107 mteb_sts_nla_target [stsb L16 mean] n=1379  rho=0.1329  pearson=0.0446
+2026-05-26 15:20:25,116 mteb_sts_nla_target [stsb L20 last] n=1379  rho=0.3649  pearson=0.3258
+2026-05-26 15:20:25,125 mteb_sts_nla_target [stsb L20 mean] n=1379  rho=0.1327  pearson=0.0575
+2026-05-26 15:20:25,135 mteb_sts_nla_target [stsb L24 last] n=1379  rho=0.3618  pearson=0.3172
+2026-05-26 15:20:25,145 mteb_sts_nla_target [stsb L24 mean] n=1379  rho=0.1897  pearson=0.1144
+2026-05-26 15:20:25,155 mteb_sts_nla_target [stsb L28 last] n=1379  rho=0.3577  pearson=0.2683
+2026-05-26 15:20:25,165 mteb_sts_nla_target [stsb L28 mean] n=1379  rho=0.3402  pearson=0.2990
+2026-05-26 15:20:25,165 mteb_sts_nla_target [stsb] (10 (L,pool) combos) 101.0s total
+2026-05-26 15:20:25,165 mteb_sts_nla_target [sts17] loading mteb/sts17-crosslingual-sts / en-en / test
+2026-05-26 15:20:25,259 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts17-crosslingual-sts/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-05-26 15:20:25,278 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/mteb/sts17-crosslingual-sts/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887/README.md "HTTP/1.1 200 OK"
+2026-05-26 15:20:25,325 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts17-crosslingual-sts/resolve/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887/sts17-crosslingual-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:25,460 httpx HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/mteb/sts17-crosslingual-sts/mteb/sts17-crosslingual-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:25,540 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts17-crosslingual-sts/revision/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887 "HTTP/1.1 200 OK"
+2026-05-26 15:20:25,591 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts17-crosslingual-sts/resolve/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887/.huggingface.yaml "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:25,713 httpx HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=mteb/sts17-crosslingual-sts "HTTP/1.1 200 OK"
+2026-05-26 15:20:25,754 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts17-crosslingual-sts/tree/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887/test?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:20:25,790 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts17-crosslingual-sts/tree/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887?recursive=false&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:20:25,828 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts17-crosslingual-sts/revision/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887 "HTTP/1.1 200 OK"
+2026-05-26 15:20:25,862 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts17-crosslingual-sts/resolve/bb1de64ee6fd9ccd66e0bdbadcafe990f652d887/dataset_infos.json "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:26,119 mteb_sts_nla_target   encode 8 / 250
+2026-05-26 15:20:28,529 mteb_sts_nla_target   encode 88 / 250
+2026-05-26 15:20:31,074 mteb_sts_nla_target   encode 168 / 250
+2026-05-26 15:20:33,538 mteb_sts_nla_target   encode 248 / 250
+2026-05-26 15:20:33,942 mteb_sts_nla_target   encode 8 / 250
+2026-05-26 15:20:36,527 mteb_sts_nla_target   encode 88 / 250
+2026-05-26 15:20:38,820 mteb_sts_nla_target   encode 168 / 250
+2026-05-26 15:20:41,360 mteb_sts_nla_target   encode 248 / 250
+2026-05-26 15:20:41,447 mteb_sts_nla_target [sts17 L12 last] n=250  rho=0.4345  pearson=0.3370
+2026-05-26 15:20:41,449 mteb_sts_nla_target [sts17 L12 mean] n=250  rho=0.5629  pearson=0.2126
+2026-05-26 15:20:41,451 mteb_sts_nla_target [sts17 L16 last] n=250  rho=0.3992  pearson=0.3283
+2026-05-26 15:20:41,453 mteb_sts_nla_target [sts17 L16 mean] n=250  rho=0.5722  pearson=0.2175
+2026-05-26 15:20:41,455 mteb_sts_nla_target [sts17 L20 last] n=250  rho=0.3539  pearson=0.3165
+2026-05-26 15:20:41,457 mteb_sts_nla_target [sts17 L20 mean] n=250  rho=0.5864  pearson=0.2240
+2026-05-26 15:20:41,459 mteb_sts_nla_target [sts17 L24 last] n=250  rho=0.2975  pearson=0.2720
+2026-05-26 15:20:41,462 mteb_sts_nla_target [sts17 L24 mean] n=250  rho=0.6066  pearson=0.2788
+2026-05-26 15:20:41,464 mteb_sts_nla_target [sts17 L28 last] n=250  rho=0.2979  pearson=0.2124
+2026-05-26 15:20:41,465 mteb_sts_nla_target [sts17 L28 mean] n=250  rho=0.4269  pearson=0.3864
+2026-05-26 15:20:41,465 mteb_sts_nla_target [sts17] (10 (L,pool) combos) 15.6s total
+2026-05-26 15:20:41,466 mteb_sts_nla_target [sts22] loading mteb/sts22-crosslingual-sts / en / test
+2026-05-26 15:20:41,532 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts22-crosslingual-sts/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-05-26 15:20:41,549 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/mteb/sts22-crosslingual-sts/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8/README.md "HTTP/1.1 200 OK"
+2026-05-26 15:20:41,593 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts22-crosslingual-sts/resolve/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8/sts22-crosslingual-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:41,684 httpx HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/mteb/sts22-crosslingual-sts/mteb/sts22-crosslingual-sts.py "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:41,791 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts22-crosslingual-sts/revision/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8 "HTTP/1.1 200 OK"
+2026-05-26 15:20:41,841 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts22-crosslingual-sts/resolve/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8/.huggingface.yaml "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:41,921 httpx HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=mteb/sts22-crosslingual-sts "HTTP/1.1 200 OK"
+2026-05-26 15:20:41,970 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts22-crosslingual-sts/tree/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8/test?recursive=false&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:20:42,007 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts22-crosslingual-sts/revision/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8 "HTTP/1.1 200 OK"
+2026-05-26 15:20:42,054 httpx HTTP Request: GET https://huggingface.co/api/datasets/mteb/sts22-crosslingual-sts/tree/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8/train?recursive=false&expand=false "HTTP/1.1 200 OK"
+2026-05-26 15:20:42,090 httpx HTTP Request: HEAD https://huggingface.co/datasets/mteb/sts22-crosslingual-sts/resolve/91d97a5b9d761e285ac3e1b4f239797bbd21c4b8/dataset_infos.json "HTTP/1.1 404 Not Found"
+2026-05-26 15:20:43,628 mteb_sts_nla_target   encode 8 / 197
+2026-05-26 15:20:58,357 mteb_sts_nla_target   encode 88 / 197
+2026-05-26 15:21:13,070 mteb_sts_nla_target   encode 168 / 197
+2026-05-26 15:21:19,939 mteb_sts_nla_target   encode 8 / 197
+2026-05-26 15:21:34,622 mteb_sts_nla_target   encode 88 / 197
+2026-05-26 15:21:49,282 mteb_sts_nla_target   encode 168 / 197
+2026-05-26 15:21:54,716 mteb_sts_nla_target [sts22 L12 last] n=197  rho=0.2742  pearson=0.1763
+2026-05-26 15:21:54,717 mteb_sts_nla_target [sts22 L12 mean] n=197  rho=0.5547  pearson=0.4714
+2026-05-26 15:21:54,718 mteb_sts_nla_target [sts22 L16 last] n=197  rho=0.2496  pearson=0.1759
+2026-05-26 15:21:54,719 mteb_sts_nla_target [sts22 L16 mean] n=197  rho=0.5347  pearson=0.4505
+2026-05-26 15:21:54,720 mteb_sts_nla_target [sts22 L20 last] n=197  rho=0.2555  pearson=0.1967
+2026-05-26 15:21:54,722 mteb_sts_nla_target [sts22 L20 mean] n=197  rho=0.5234  pearson=0.4627
+2026-05-26 15:21:54,723 mteb_sts_nla_target [sts22 L24 last] n=197  rho=0.1447  pearson=0.1341
+2026-05-26 15:21:54,724 mteb_sts_nla_target [sts22 L24 mean] n=197  rho=0.5619  pearson=0.5077
+2026-05-26 15:21:54,725 mteb_sts_nla_target [sts22 L28 last] n=197  rho=-0.0119  pearson=-0.0431
+2026-05-26 15:21:54,726 mteb_sts_nla_target [sts22 L28 mean] n=197  rho=0.5498  pearson=0.3960
+2026-05-26 15:21:54,726 mteb_sts_nla_target [sts22] (10 (L,pool) combos) 72.6s total
+2026-05-26 15:21:54,727 mteb_sts_nla_target ============================================================
+2026-05-26 15:21:54,727 mteb_sts_nla_target L12 last  mean rho_x100 = 34.28  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L12 mean  mean rho_x100 = 39.02  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L16 last  mean rho_x100 = 33.42  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L16 mean  mean rho_x100 = 38.44  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L20 last  mean rho_x100 = 32.44  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L20 mean  mean rho_x100 = 38.38  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L24 last  mean rho_x100 = 27.89  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L24 mean  mean rho_x100 = 44.30  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L28 last  mean rho_x100 = 22.38  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target L28 mean  mean rho_x100 = 47.19  (over 4 tasks)
+2026-05-26 15:21:54,727 mteb_sts_nla_target wrote artifacts/mteb_sts_layer_sweep.json

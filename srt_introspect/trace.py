@@ -129,6 +129,7 @@ class Trace:
         k: int = 8,
         temperature: float = 0.7,
         top_p: float = 0.95,
+        repetition_penalty: float = 1.15,
         verbalize_max_new_tokens: int = 32,
     ) -> Result:
         """Generate a continuation and an adaptive-density reasoning trace.
@@ -139,6 +140,8 @@ class Trace:
             budget: number of verbalization slots (adaptive density target).
             k: number of verbalization samples per slot (consensus signal).
             temperature/top_p: generation sampling.
+            repetition_penalty: >1.0 suppresses already-generated tokens to
+                discourage degenerate loops on base (non-instruct) backbones.
             verbalize_max_new_tokens: AV decoder length for each slot.
         """
         device = self.device
@@ -154,6 +157,10 @@ class Trace:
         for _ in range(max_new_tokens):
             out = self.adapter(input_ids=input_ids, attention_mask=attn)
             logits = out.logits[:, -1, :].float()
+            # repetition penalty over the whole generated context
+            if repetition_penalty != 1.0:
+                seen = input_ids[0].tolist()
+                _apply_repetition_penalty(logits, seen, repetition_penalty)
             # sample
             next_id = _sample(logits, temperature=temperature, top_p=top_p)
 
@@ -191,9 +198,12 @@ class Trace:
                 )
             )
 
-        # Adaptive-density scheduling over the divergence series
+        # Adaptive-density scheduling over the divergence series, masking
+        # tokens that decode to pure whitespace / empty — verbalizing those
+        # is not informative for the UI.
         div_series = [s.divergence for s in steps]
-        picked = quantile_by_density(div_series, budget=budget)
+        skip = {i for i, s in enumerate(steps) if not s.token.strip()}
+        picked = quantile_by_density(div_series, budget=budget, skip_indices=skip)
 
         if picked:
             verbs = self._verbalize_positions(
@@ -274,6 +284,17 @@ def _div_norm_at(divergences: list[torch.Tensor] | None, pos: int) -> float:
         v = d[0, pos].float()
         total += float(v.norm().item())
     return total
+
+
+def _apply_repetition_penalty(logits: torch.Tensor, seen_ids: list[int], penalty: float) -> None:
+    """In-place repetition penalty (HF-style): for already-seen tokens, divide
+    positive logits and multiply negative logits by `penalty`."""
+    if not seen_ids or penalty == 1.0:
+        return
+    ids = torch.tensor(list(set(seen_ids)), device=logits.device, dtype=torch.long)
+    scores = logits[0, ids]
+    scores = torch.where(scores > 0, scores / penalty, scores * penalty)
+    logits[0, ids] = scores
 
 
 def _sample(logits: torch.Tensor, *, temperature: float, top_p: float) -> torch.Tensor:

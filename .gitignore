@@ -56,3 +56,4 @@ docs/substack_*
 # Local scratch / one-shot experiments
 /script.py
 
+.venv-adapter/

@@ -32,26 +32,32 @@ def quantile_by_density(
     *,
     floor_frac: float = 0.1,
     min_spacing: int = 1,
+    skip_indices: set[int] | None = None,
 ) -> list[int]:
     """Return `budget` distinct token indices weighted by divergence mass.
 
     `min_spacing` rejects consecutive duplicate picks (which can happen on
     very peaky traces) by nudging to the next free index.
+    `skip_indices` are excluded from being picked (use for whitespace /
+    trivial tokens that carry no semantic state worth narrating).
     """
     T = len(divergence)
     if T == 0 or budget <= 0:
         return []
-    if budget >= T:
-        return list(range(T))
+    skip = skip_indices or set()
+    eligible = [t for t in range(T) if t not in skip]
+    if budget >= len(eligible):
+        return eligible
 
-    # build positive mass with a small floor so flat regions still get hit
+    # build positive mass with a small floor so flat regions still get hit;
+    # skipped indices get zero mass so the cumsum naturally walks past them
     if T > 0:
         sorted_d = sorted(divergence)
         median = sorted_d[T // 2]
         floor = max(1e-6, floor_frac * (median if median > 0 else 1e-3))
     else:
         floor = 1e-6
-    mass = [max(d, floor) for d in divergence]
+    mass = [0.0 if t in skip else max(d, floor) for t, d in enumerate(divergence)]
 
     # cumulative
     cum = []
@@ -63,20 +69,20 @@ def quantile_by_density(
 
     picked: list[int] = []
     used: set[int] = set()
+    eligible_set = set(eligible)
     for i in range(budget):
         target = (i + 0.5) / budget * total
         # binary search would be nicer, but T is small (hundreds)
-        idx = min(range(T), key=lambda t: abs(cum[t] - target))
-        # enforce min_spacing
-        while idx in used or any(abs(idx - u) < min_spacing for u in used):
-            idx += 1
-            if idx >= T:
-                idx = 0
-                while idx in used and idx < T:
-                    idx += 1
-                if idx >= T:
-                    break
-        if idx < T:
+        idx = min(eligible, key=lambda t: abs(cum[t] - target))
+        # enforce min_spacing on eligible-only
+        attempts = 0
+        while (idx in used or any(abs(idx - u) < min_spacing for u in used)) and attempts < T:
+            idx = (idx + 1) % T
+            if idx not in eligible_set:
+                attempts += 1
+                continue
+            attempts += 1
+        if idx in eligible_set and idx not in used:
             picked.append(idx)
             used.add(idx)
     picked.sort()
