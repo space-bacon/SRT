@@ -1,0 +1,10 @@
+# Pinned for HF Spaces (ZeroGPU). Mirrors the package's runtime deps plus
+# Gradio. ZeroGPU images ship Python 3.10 + CUDA 12.1, so a default torch
+# wheel is fine here (no Blackwell sm_120 requirement).
+torch>=2.2
+transformers>=4.44,<5.0
+safetensors>=0.4
+huggingface_hub>=0.24
+numpy>=1.24
+gradio>=4.40
+spaces>=0.30 ; sys_platform == "linux"

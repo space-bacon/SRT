@@ -90,7 +90,6 @@ def render(data: dict) -> str:
         display = (
             html.escape(tok)
             .replace("\n", "<br>")
-            .replace(" ", "&nbsp;")
         )
         bg = _color_for(s["divergence"], lo, hi)
         verb = s.get("verbalization")
@@ -213,6 +212,9 @@ h1 .accent {{ color: var(--pink); }}
   background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
   padding: 1.4rem 1.5rem; line-height: 2.05; font-size: 1.02rem;
   color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }}
 .tok {{
   display: inline; padding: 1px 1px; border-radius: 3px; position: relative;

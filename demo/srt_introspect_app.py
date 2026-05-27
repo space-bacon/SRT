@@ -106,7 +106,7 @@ def _render_trace_html(result, prompt: str, elapsed: float) -> str:
 
     spans = []
     for s in steps:
-        disp = _html.escape(s.token).replace("\n", "<br>").replace(" ", "&nbsp;")
+        disp = _html.escape(s.token).replace("\n", "<br>")
         bg = _div_color(s.divergence, lo, hi)
         klass = "tok selected" if s.verbalization else "tok"
         title = f"i={s.token_idx}  ·  d={s.divergence:.2f}  ·  r̂={s.r_hat:.2f}  ·  reg={s.regime}"
@@ -198,6 +198,9 @@ _TRACE_CSS = f"""
   background: {PANEL}; border: 1px solid {RULE}; border-radius: 10px;
   padding: 1.2rem 1.4rem; line-height: 2.0; font-size: 1.0rem;
   color: {INK};
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }}
 .srt-response .tok {{
   display: inline; padding: 1px 1px; border-radius: 3px; position: relative;
@@ -253,11 +256,20 @@ _TRACE_CSS = f"""
 
 # ---------- callbacks ----------
 
-@_gpu(duration=180)
+MAX_PROMPT_CHARS = 1500
+
+
+@_gpu(duration=300)
 def cb_generate(prompt: str, max_new: int, budget: int, k: int,
                 temperature: float, top_p: float, repetition_penalty: float):
     if not prompt.strip():
         return '<div style="color:#8a9bb8;padding:1rem">(enter a prompt above)</div>'
+    # Server-side bounds: prompts are O(N²) since the adapter has no KV cache,
+    # and we don't want a single user to pin the GPU for minutes.
+    prompt = prompt[:MAX_PROMPT_CHARS]
+    max_new = max(8, min(int(max_new), 200))
+    budget = max(1, min(int(budget), 20))
+    k = max(1, min(int(k), 8))
     t = _get_trace()
     t0 = time.perf_counter()
     result = t.generate(
@@ -338,17 +350,26 @@ def build_app() -> gr.Blocks:
                     lines=4,
                 )
             with gr.Column(scale=2):
-                max_new = gr.Slider(32, 320, value=160, step=8, label="max_new_tokens")
-                budget = gr.Slider(2, 24, value=10, step=1, label="verbalization budget (adaptive slots)")
-                k = gr.Slider(1, 12, value=6, step=1, label="AV samples per slot (K)")
+                max_new = gr.Slider(32, 200, value=160, step=8, label="max_new_tokens (capped at 200 on the public demo)")
+                budget = gr.Slider(2, 20, value=10, step=1, label="verbalization budget (adaptive slots)")
+                k = gr.Slider(1, 8, value=6, step=1, label="AV samples per slot (K)")
                 with gr.Accordion("Sampling", open=False):
                     temperature = gr.Slider(0.1, 1.5, value=0.7, step=0.05, label="temperature")
                     top_p = gr.Slider(0.5, 1.0, value=0.95, step=0.01, label="top_p")
                     rep_pen = gr.Slider(1.0, 1.5, value=1.15, step=0.01, label="repetition_penalty")
-                go = gr.Button("Generate trace", variant="primary")
+                with gr.Row():
+                    go = gr.Button("Generate trace", variant="primary")
+                    stop = gr.Button("Stop", variant="secondary")
 
         gr.Markdown("### Trace")
-        out = gr.HTML('<div style="color:#8a9bb8;padding:1rem">Click <b>Generate trace</b> to start. First run loads ~17&nbsp;GB of weights — give it ~15 s.</div>')
+        out = gr.HTML(
+            '<div style="color:#8a9bb8;padding:1rem">'
+            'Click <b>Generate trace</b> to start. First request on a fresh '
+            'ZeroGPU slice loads ~17&nbsp;GB of weights and may take '
+            '60&ndash;90 s; subsequent requests are ~7&ndash;10 s. '
+            'Prompts and outputs are not logged.'
+            '</div>'
+        )
 
         gr.Examples(
             examples=[
@@ -363,11 +384,12 @@ def build_app() -> gr.Blocks:
             label="Try one",
         )
 
-        go.click(
+        gen_event = go.click(
             cb_generate,
             inputs=[prompt, max_new, budget, k, temperature, top_p, rep_pen],
             outputs=[out],
         )
+        stop.click(fn=None, cancels=[gen_event])
 
         gr.Markdown(f"""
 ---
@@ -390,7 +412,15 @@ The AV is honest about its limits: on TruthfulQA-style probes it reaches ρ ≈ 
 
 if __name__ == "__main__":
     app = build_app()
-    app.queue(default_concurrency_limit=1).launch(
+    # Pre-warm weights when we have a persistent GPU. On ZeroGPU we can't
+    # touch CUDA outside an @spaces.GPU function, so skip the warmup there
+    # — the first user request takes the load hit instead.
+    if not _ON_ZEROGPU and DEVICE == "cuda":
+        try:
+            _get_trace()
+        except Exception as e:  # pragma: no cover
+            log.warning("warmup skipped: %s", e)
+    app.queue(default_concurrency_limit=1, max_size=20).launch(
         server_name="0.0.0.0",
         server_port=int(os.environ.get("PORT", 7860)),
         share=False,
