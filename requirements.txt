@@ -6,5 +6,9 @@ transformers>=4.44,<5.0
 safetensors>=0.4
 huggingface_hub>=0.24
 numpy>=1.24
-gradio>=4.40
+gradio==4.44.1
+# Gradio 4.44 calls TemplateResponse with the legacy positional signature;
+# Starlette >= 0.40 reordered that and crashes with
+# `TypeError: unhashable type: 'dict'` in the jinja2 template cache.
+starlette<0.40
 spaces>=0.30 ; sys_platform == "linux"

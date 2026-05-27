@@ -11,7 +11,8 @@ import os
 
 from demo.srt_introspect_app import build_app, _get_trace, _ON_ZEROGPU, DEVICE  # noqa: E402
 
-app = build_app()
+demo = build_app()
+demo.queue(default_concurrency_limit=1, max_size=20)
 
 if DEVICE == "cuda" and not _ON_ZEROGPU:
     try:
@@ -20,7 +21,12 @@ if DEVICE == "cuda" and not _ON_ZEROGPU:
         print(f"warmup skipped: {e}")
 
 if __name__ == "__main__":
-    app.queue(default_concurrency_limit=1, max_size=20).launch(
-        server_name="0.0.0.0",
-        server_port=int(os.environ.get("PORT", 7860)),
-    )
+    # On HF Spaces we let the platform supply server_name/server_port via env;
+    # locally we default to 0.0.0.0:7860.
+    if _ON_ZEROGPU or os.environ.get("SPACE_ID"):
+        demo.launch()
+    else:
+        demo.launch(
+            server_name="0.0.0.0",
+            server_port=int(os.environ.get("PORT", 7860)),
+        )
