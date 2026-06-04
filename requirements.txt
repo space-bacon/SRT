@@ -6,7 +6,7 @@ torch>=2.2
 # in from the top-level model; our srt/adapter.py drives the decoder layers
 # manually and doesn't supply them, which breaks generation. Pin to the
 # version we train with on the vast.ai box.
-transformers==4.53.3
+transformers==5.0.0rc3
 safetensors>=0.4
 huggingface_hub>=0.24
 numpy>=1.24
