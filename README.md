@@ -10,10 +10,11 @@ divergence from hidden states, **track** reflexive awareness, and optionally
 
 ## 30-second TL;DR
 
-> - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them.
-> - **Why:** moves TruthfulQA-MC2 AUC into the top of the published hidden-state-detector band (**0.866 on Qwen-2.5-7B**) at ≈0.17 % of backbone params, with no weight updates to the base model.
+> - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them, exposing per-token semiotic signals (divergence, reflexivity `r̂`, regime) plus a discourse/embedding vector.
+> - **Why:** lightweight, portable instrumentation for a frozen backbone — no base-model weight updates, zero cross-entropy degradation, trains in hours at ≈0.17 % of backbone params. The released `v1.0` checkpoint targets semantic embeddings (MTEB-STS).
 > - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
 > - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
+
 
 ## Architecture
 
@@ -49,12 +50,21 @@ the RRM meta-state to emit per-token reflexivity `r̂` and a regime label.
 5. **Portable** — Save/load just the 44MB adapter weights. Attach to any
    compatible backbone at inference time.
 
-## TruthfulQA-MC2 detector — top-of-band AUC across three backbones
+## Frozen-backbone probe — TruthfulQA-MC2 hidden-state detector
 
-Using features extracted from a single forward pass of a **frozen
-backbone** (no adapter, no fine-tuning) plus LightGBM, this repo hits
-the top of the published hidden-state-detector band on TruthfulQA-MC2,
-group-CV by question (n=817, 5882 paired choices):
+> **Scope note.** This result is a **separate diagnostic probe, not a capability
+> of the SRT adapter.** It trains LightGBM on features extracted from a single
+> forward pass of the **frozen backbone** (no adapter, no fine-tuning) and is
+> reported here only to characterize the backbone's hidden-state geometry. The
+> SRT adapter's own side-channels (`r̂`, regime, divergence) are observational
+> signals; they are **not** a validated hallucination detector, and on free-form
+> generation they do not, on their own, separate hallucinated from faithful
+> answers above chance. Treat hallucination detection as out of scope for the
+> adapter.
+
+Using frozen-backbone features plus LightGBM, this repo reaches the top of the
+published hidden-state-detector band on TruthfulQA-MC2, group-CV by question
+(n=817, 5882 paired choices):
 
 | backbone | params | LightGBM AUC |
 |---|---:|---:|
@@ -64,6 +74,7 @@ group-CV by question (n=817, 5882 paired choices):
 
 Reference band: SAPLMA ≈ 0.72, SAR ≈ 0.75–0.83, INSIDE ≈ 0.78–0.85,
 EigenScore ≈ 0.80–0.85.
+
 
 Full protocol, ablations, and reproduction command in
 [docs/TRUTHFULQA_RESULTS.md](docs/TRUTHFULQA_RESULTS.md). Evaluator:

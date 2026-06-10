@@ -4,6 +4,13 @@
 achieves group-CV AUC 0.85–0.87 on TruthfulQA-MC2, validated across
 three backbone families.**
 
+> **Scope:** this is a probe on **frozen-backbone hidden-state features** and is
+> independent of the SRT adapter (no adapter weights are involved). It
+> characterizes the backbone's geometry on a multiple-choice benchmark; it is
+> not a claim that the SRT adapter detects hallucination. The adapter's own
+> side-channels are observational and are not a validated hallucination detector
+> for free-form generation.
+
 | backbone | params | group-CV AUC (LightGBM) |
 |---|---:|---:|
 | Gemma-2-2B | 2B | 0.8563 ± 0.016 |
