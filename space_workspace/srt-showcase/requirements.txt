@@ -6,7 +6,7 @@ srt-adapter @ git+https://github.com/space-bacon/SRT.git@main
 # HARD PIN: transformers 4.55+ breaks the adapter's manual-decoder generation.
 transformers==4.53.3
 torch>=2.2
-gradio==4.44.1
+gradio==6.7.0
 spaces>=0.30
 huggingface_hub>=0.24
 accelerate>=0.33
