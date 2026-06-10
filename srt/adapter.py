@@ -323,13 +323,22 @@ class SRTAdapter(nn.Module):
         community_vec: torch.Tensor | None,
         start_pos: int,
         disable_injectors: bool,
-    ) -> tuple[torch.Tensor, torch.Tensor | None]:
+        collect_signals: bool = False,
+    ) -> tuple[torch.Tensor, torch.Tensor | None, dict | None]:
         """One cached forward over `T` new tokens (prefill: T>1, decode: T=1).
 
         Mutates `backbone_cache` and `mah_kv` in place. Returns
-        (logits (B, T, V), community_vec) where community_vec is computed on
-        the prefill call (when the incoming one is None) and passed through on
-        decode calls so the discourse basin stays fixed after the prompt.
+        (logits (B, T, V), community_vec, signals) where community_vec is
+        computed on the prefill call (when the incoming one is None) and passed
+        through on decode calls so the discourse basin stays fixed after the
+        prompt. When `collect_signals` is True, `signals` is a dict of the SRT
+        side-channels at the LAST position (the newest token), each a python
+        float, for online hallucination logging / reject-and-resample:
+            r_hat        — BEN reflexivity estimate
+            regime_super — softmax P(supercritical) from BEN
+            div_norm     — L2 norm of the last MAH layer divergence
+            chain        — chain residual (mean over consecutive MAH layers)
+        Otherwise `signals` is None.
         """
         device = input_ids.device
         B, T = input_ids.shape
@@ -353,8 +362,8 @@ class SRTAdapter(nn.Module):
         if T > 1:
             backbone_mask = _make_causal_mask(T, h.dtype, device)
 
-        mah_idx = 0
         meta_state: torch.Tensor | None = None
+        divergences: list[torch.Tensor] = []
 
         for layer_i, layer in enumerate(self._layers):
             layer_kwargs: dict = {
@@ -382,6 +391,7 @@ class SRTAdapter(nn.Module):
                     h, community_vec=community_vec, kv_cache=mah_kv.get(layer_i)
                 )
                 mah_kv[layer_i] = new_kv
+                divergences.append(divergence)
 
                 meta_state = self.rrm.step(divergence, meta_state)
 
@@ -392,7 +402,28 @@ class SRTAdapter(nn.Module):
 
         h = self._final_norm(h)
         logits = self._lm_head(h)
-        return logits, community_vec
+
+        signals = None
+        if collect_signals and meta_state is not None:
+            ben_out = self.ben(meta_state)  # r_hat (B,T), regime_logits (B,T,2)
+            r_hat_last = ben_out.r_hat[0, -1]
+            regime_super = F.softmax(ben_out.regime_logits[0, -1], dim=-1)[1]
+            div_norm_last = divergences[-1][0, -1].norm()
+            chain_last = torch.zeros((), device=device, dtype=h.dtype)
+            if len(divergences) >= 2:
+                acc = torch.zeros((), device=device, dtype=h.dtype)
+                for i in range(len(divergences) - 1):
+                    pred = self.chain_predictor(divergences[i][0, -1])
+                    acc = acc + (pred - divergences[i + 1][0, -1]).pow(2).mean()
+                chain_last = acc / (len(divergences) - 1)
+            signals = {
+                "r_hat": float(r_hat_last),
+                "regime_super": float(regime_super),
+                "div_norm": float(div_norm_last),
+                "chain": float(chain_last),
+            }
+
+        return logits, community_vec, signals
 
     @torch.no_grad()
     def generate(
@@ -403,7 +434,8 @@ class SRTAdapter(nn.Module):
         temperature: float = 0.7,
         top_p: float = 1.0,
         disable_injectors: bool = False,
-    ) -> torch.Tensor:
+        return_signals: bool = False,
+    ) -> torch.Tensor | tuple[torch.Tensor, list[dict]]:
         """KV-cached autoregressive generation through the SRT adapter.
 
         Uses a backbone `DynamicCache` plus a per-MAH-layer K/V cache so each
@@ -417,9 +449,17 @@ class SRTAdapter(nn.Module):
             temperature: 0 (or <=0) means greedy.
             top_p: nucleus sampling cutoff (1.0 disables).
             disable_injectors: True serves the bare frozen backbone (control).
+            return_signals: when True, also return a per-generated-token list of
+                signal dicts for online hallucination analysis. Each dict has:
+                  token_id  — the generated token
+                  ent       — entropy of the predictive distribution it came from
+                  margin    — top-1 minus top-2 probability of that distribution
+                  nll       — negative log-prob of the chosen token
+                  r_hat, regime_super, div_norm, chain — SRT side-channels at the
+                    position where the token is processed (next step)
 
         Returns:
-            (1, n_new) generated token ids (excludes the prompt).
+            (1, n_new) generated token ids, or (ids, signals) if return_signals.
         """
         assert input_ids.shape[0] == 1, "generate() supports batch size 1"
         from transformers.cache_utils import DynamicCache
@@ -431,28 +471,54 @@ class SRTAdapter(nn.Module):
         mah_kv: dict[int, tuple[torch.Tensor, torch.Tensor]] = {}
 
         # Prefill.
-        logits, community_vec = self._cached_step(
+        logits, community_vec, _ = self._cached_step(
             input_ids, backbone_cache, mah_kv,
             community_vec=None, start_pos=0, disable_injectors=disable_injectors,
         )
         cur_pos = input_ids.shape[1]
         new_ids: list[int] = []
+        signal_log: list[dict] = []
 
         for _ in range(max_new_tokens):
             next_logits = logits[:, -1, :].float()
+            # Predictive-uncertainty signals of the distribution we sample from.
+            pred_sig = {}
+            if return_signals:
+                probs = F.softmax(next_logits, dim=-1)[0]
+                logp = torch.log_softmax(next_logits, dim=-1)[0]
+                ent = float(-(probs * logp).sum())
+                top2 = torch.topk(probs, 2).values
+                margin = float(top2[0] - top2[1])
+                pred_sig = {"ent": ent, "margin": margin}
+
             next_id = _sample_token(next_logits, temperature, top_p)
             tok = int(next_id.item())
             new_ids.append(tok)
+            if return_signals:
+                pred_sig["token_id"] = tok
+                pred_sig["nll"] = float(-torch.log_softmax(next_logits, dim=-1)[0, tok])
+
             if tok in eos_token_ids:
+                if return_signals:
+                    signal_log.append(pred_sig)
                 break
-            logits, community_vec = self._cached_step(
+
+            logits, community_vec, srt_sig = self._cached_step(
                 next_id.view(1, 1), backbone_cache, mah_kv,
                 community_vec=community_vec, start_pos=cur_pos,
                 disable_injectors=disable_injectors,
+                collect_signals=return_signals,
             )
             cur_pos += 1
+            if return_signals:
+                if srt_sig:
+                    pred_sig.update(srt_sig)
+                signal_log.append(pred_sig)
 
-        return torch.tensor(new_ids, device=device, dtype=torch.long).view(1, -1)
+        ids = torch.tensor(new_ids, device=device, dtype=torch.long).view(1, -1)
+        if return_signals:
+            return ids, signal_log
+        return ids
 
     # Adapter module prefixes for save/load (everything else is backbone)
     _ADAPTER_PREFIXES = (
