@@ -429,6 +429,7 @@ def cb_generate(prompt, mode, max_new, budget, k, temperature, top_p,
         max_new_tokens=int(max_new), budget=int(budget), k=int(k),
         temperature=float(temperature), top_p=float(top_p),
         repetition_penalty=float(repetition_penalty),
+        verbalize_max_new_tokens=64,
         disable_injectors=(not inject),
     ):
         last = result
