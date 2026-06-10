@@ -159,22 +159,94 @@ def _render_meter(result) -> str:
     steps = result.steps
     if not steps:
         return ""
+    n = len(steps)
     ents = [s.entropy for s in steps]
-    mean_e = sum(ents) / len(ents)
+    mean_e = sum(ents) / n
     max_e = max(ents)
     # Risk bar scaled to a ~3.0-nat practical ceiling.
     frac = max(0.0, min(1.0, mean_e / 3.0))
-    pct = int(frac * 100)
     col = MINT if frac < 0.33 else (AMBER if frac < 0.66 else PINK)
-    return (
-        f"<div class='meter'>"
-        f"<div class='meter-row'><span>mean entropy</span>"
-        f"<b style='color:{col}'>{mean_e:.2f}</b> nats</div>"
-        f"<div class='bar'><div class='fill' style='width:{pct}%;background:{col}'></div></div>"
+
+    # SRT side-channel summaries (observational).
+    divs = [s.divergence for s in steps]
+    mean_d, max_d = sum(divs) / n, max(divs)
+    rhats = [s.r_hat for s in steps]
+    mean_r = sum(rhats) / n
+    super_frac = sum(1 for s in steps if s.regime) / n
+    verbalized = [s for s in steps if s.roundtrip_cos is not None]
+
+    def _bar(label, value, fmt, b_frac, color, unit=""):
+        b_frac = max(0.0, min(1.0, b_frac))
+        return (
+            f"<div class='meter-row'><span>{label}</span>"
+            f"<b style='color:{color}'>{fmt.format(value)}</b>{unit}</div>"
+            f"<div class='bar'><div class='fill' "
+            f"style='width:{int(b_frac * 100)}%;background:{color}'></div></div>"
+        )
+
+    parts = [
+        "<div class='meter'>",
+        _bar("mean entropy", mean_e, "{:.2f}", frac, col, " nats"),
         f"<div class='meter-row'><span>peak entropy</span><b>{max_e:.2f}</b> nats"
-        f" &nbsp;·&nbsp; <span>{len(steps)} tokens</span></div>"
-        f"</div>"
-    )
+        f" &nbsp;·&nbsp; <span>{n} tokens</span></div>",
+        "<div class='meter-sep'></div>",
+        # SRT divergence: how fast the metapragmatic state is moving. Bar
+        # scaled to the run's own peak so the mean reads as a fraction of max.
+        _bar("mean SRT divergence", mean_d, "{:.2f}",
+             (mean_d / max_d) if max_d else 0.0, PINK),
+        # Reflexivity r̂ is already in [0, 1].
+        _bar("mean reflexivity r̂", mean_r, "{:.2f}", mean_r, LAVENDER),
+        # Regime mix: share of tokens the BEN flags supercritical (bifurcating).
+        _bar("supercritical regime", super_frac * 100, "{:.0f}", super_frac, AMBER, "%"),
+    ]
+
+    # Verbalization fidelity: mean round-trip across the verbalized slots,
+    # normalised against the paraphrase ceiling like the per-card badges.
+    if verbalized:
+        fves = [0.5 * (1.0 + s.roundtrip_cos) for s in verbalized]
+        mean_fid = sum((f - RT_FLOOR) / (RT_CEIL - RT_FLOOR) for f in fves) / len(fves)
+        mean_fid = max(0.0, min(1.0, mean_fid))
+        fcol = MINT if mean_fid > 0.66 else (AMBER if mean_fid > 0.33 else PINK)
+        parts.append(_bar(f"verbalization fidelity ({len(verbalized)})",
+                          mean_fid * 100, "{:.0f}", mean_fid, fcol, "%"))
+
+    # Per-layer divergence depth profile: average each MAH layer's divergence
+    # across all tokens to reveal *where* in the stack the model's
+    # metapragmatic state moves most. Unique to SRT.
+    profile = _layer_profile(steps)
+    if profile:
+        parts.append("<div class='meter-sep'></div>")
+        parts.append("<div class='meter-row'><span>divergence by MAH layer (depth profile)</span></div>")
+        parts.append(_layer_bars(profile))
+
+    parts.append("</div>")
+    return "".join(parts)
+
+
+def _layer_profile(steps) -> list[float]:
+    """Mean per-MAH-layer divergence across all tokens (layer order = shallow
+    → deep). Empty if no per-layer data is present."""
+    rows = [s.per_layer_divergence for s in steps if s.per_layer_divergence]
+    if not rows:
+        return []
+    width = min(len(r) for r in rows)
+    if width == 0:
+        return []
+    return [sum(r[i] for r in rows) / len(rows) for i in range(width)]
+
+
+def _layer_bars(profile: list[float]) -> str:
+    """Compact vertical-bar chart of the per-layer divergence profile."""
+    hi = max(profile) or 1.0
+    bars = []
+    for i, v in enumerate(profile):
+        h = int(6 + 46 * (v / hi))
+        bars.append(
+            f"<div class='lbar' title='MAH layer {i}: {v:.2f}'>"
+            f"<div class='lbar-fill' style='height:{h}px'></div>"
+            f"<div class='lbar-idx'>{i}</div></div>"
+        )
+    return f"<div class='lbars'>{''.join(bars)}</div>"
 
 
 def _sparkline(values, color, h=70, w=920):
@@ -266,6 +338,15 @@ _CSS = f"""
 .bar {{ height: 10px; background: {BG}; border-radius: 5px; overflow: hidden;
         margin: 6px 0; }}
 .fill {{ height: 100%; transition: width .3s ease; }}
+.meter-sep {{ height: 1px; background: {PANEL_ALT}; margin: 10px 0 8px; }}
+.lbars {{ display: flex; align-items: flex-end; gap: 3px; height: 60px;
+          margin: 4px 0 2px; }}
+.lbar {{ flex: 1; display: flex; flex-direction: column; align-items: center;
+         justify-content: flex-end; }}
+.lbar-fill {{ width: 100%; background: linear-gradient(to top, {PINK}, {LAVENDER});
+              border-radius: 2px 2px 0 0; min-height: 3px; }}
+.lbar-idx {{ font-size: 9px; color: {MUTED}; font-family: ui-monospace, monospace;
+             margin-top: 2px; }}
 .chart {{ background: {PANEL}; border-radius: 10px; padding: 8px 12px;
           margin: 8px 0; }}
 .chart-label {{ font-size: 12px; font-family: ui-monospace, monospace;
@@ -514,6 +595,23 @@ def build() -> gr.Blocks:
             with gr.Column(scale=1):
                 meter = gr.HTML(label="entropy meter")
 
+        with gr.Tab("Introspection"):
+            tokens = gr.HTML(label="token stream")
+            charts = gr.HTML(label="charts")
+            with gr.Accordion("Verbalizations (expand each) — with round-trip fidelity", open=True):
+                verbs = gr.HTML()
+            final = gr.Textbox(label="Final output", lines=4)
+
+        with gr.Tab("A/B: injection on vs off"):
+            gr.Markdown(
+                "Runs the same prompt twice with the SRT side-channel injection "
+                "**on** and **off** (bare frozen backbone), seeded identically so "
+                "the visible difference is the adapter, not sampling noise."
+            )
+            ab_go = gr.Button("Compare", variant="primary")
+            ab_html = gr.HTML()
+            ab_summary = gr.Markdown()
+
         gr.Markdown(
             "### Curated examples — what to watch for\n"
             "Pick a prompt below, then read the signals as it generates:\n"
@@ -532,23 +630,6 @@ def build() -> gr.Blocks:
             examples=EXAMPLES, inputs=[prompt, mode], label="Curated examples",
             examples_per_page=15,
         )
-
-        with gr.Tab("Introspection"):
-            tokens = gr.HTML(label="token stream")
-            charts = gr.HTML(label="charts")
-            with gr.Accordion("Verbalizations (expand each) — with round-trip fidelity", open=True):
-                verbs = gr.HTML()
-            final = gr.Textbox(label="Final output", lines=4)
-
-        with gr.Tab("A/B: injection on vs off"):
-            gr.Markdown(
-                "Runs the same prompt twice with the SRT side-channel injection "
-                "**on** and **off** (bare frozen backbone), seeded identically so "
-                "the visible difference is the adapter, not sampling noise."
-            )
-            ab_go = gr.Button("Compare", variant="primary")
-            ab_html = gr.HTML()
-            ab_summary = gr.Markdown()
 
         inputs = [prompt, mode, max_new, budget, k, temperature, top_p, rep, tint, inject]
         outputs = [tokens, meter, charts, verbs, final]
