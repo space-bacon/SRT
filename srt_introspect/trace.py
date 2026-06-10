@@ -42,6 +42,8 @@ class _SignalsAtStep:
     divergence: float
     regime: int
     r_hat: float
+    per_layer: list[float]
+    entropy: float
 
 
 def _pick_device(arg: str | None) -> str:
@@ -131,6 +133,7 @@ class Trace:
         top_p: float = 0.95,
         repetition_penalty: float = 1.15,
         verbalize_max_new_tokens: int = 32,
+        disable_injectors: bool = False,
     ) -> Result:
         """Generate a continuation and an adaptive-density reasoning trace.
 
@@ -155,12 +158,21 @@ class Trace:
         eos = self.tok.eos_token_id
 
         for _ in range(max_new_tokens):
-            out = self.adapter(input_ids=input_ids, attention_mask=attn)
+            out = self.adapter(
+                input_ids=input_ids, attention_mask=attn,
+                disable_injectors=disable_injectors,
+            )
             logits = out.logits[:, -1, :].float()
             # repetition penalty over the whole generated context
             if repetition_penalty != 1.0:
                 seen = input_ids[0].tolist()
                 _apply_repetition_penalty(logits, seen, repetition_penalty)
+            # entropy of the (pre-penalty-shaped, post-sampling-temp) raw next-token
+            # distribution gives us a clean predictive-uncertainty signal that
+            # we can compare against the adapter's divergence trace.
+            ent_logits = out.logits[:, -1, :].float()
+            probs = torch.softmax(ent_logits, dim=-1)
+            ent = float(-(probs * (probs.clamp_min(1e-12)).log()).sum().item())
             # sample
             next_id = _sample(logits, temperature=temperature, top_p=top_p)
 
@@ -168,10 +180,14 @@ class Trace:
             # token before we appended — i.e. the position whose hidden state
             # produced these logits)
             last_pos = input_ids.shape[1] - 1
-            div_norm = _div_norm_at(out.divergences, last_pos)
+            per_layer = _div_norms_per_layer(out.divergences, last_pos)
+            div_norm = float(sum(per_layer))
             regime = int(out.ben_output.regime_logits[0, last_pos].argmax().item())
             r_hat = float(out.ben_output.r_hat[0, last_pos].item())
-            per_token.append(_SignalsAtStep(divergence=div_norm, regime=regime, r_hat=r_hat))
+            per_token.append(_SignalsAtStep(
+                divergence=div_norm, regime=regime, r_hat=r_hat,
+                per_layer=per_layer, entropy=ent,
+            ))
 
             generated_tokens.append(int(next_id))
             if eos is not None and int(next_id) == eos:
@@ -187,7 +203,7 @@ class Trace:
         # this?" alignment.
         steps: list[Step] = []
         for i, tid in enumerate(generated_tokens):
-            sig = per_token[i] if i < len(per_token) else _SignalsAtStep(0.0, 0, 0.0)
+            sig = per_token[i] if i < len(per_token) else _SignalsAtStep(0.0, 0, 0.0, [], 0.0)
             steps.append(
                 Step(
                     token_idx=i,
@@ -195,6 +211,8 @@ class Trace:
                     divergence=sig.divergence,
                     regime=sig.regime,
                     r_hat=sig.r_hat,
+                    per_layer_divergence=sig.per_layer,
+                    entropy=sig.entropy,
                 )
             )
 
@@ -213,10 +231,191 @@ class Trace:
                 k=k,
                 max_new_tokens=verbalize_max_new_tokens,
             )
-            for idx, v in zip(picked, verbs):
+            for idx, (v, cos) in zip(picked, verbs):
                 steps[idx].verbalization = v
+                steps[idx].roundtrip_cos = cos
 
         return Result(text=text, steps=steps)
+
+    # ----------------------------------------------------------- stream
+    @torch.no_grad()
+    def stream(
+        self,
+        prompt: str,
+        *,
+        max_new_tokens: int = 200,
+        budget: int = 12,
+        k: int = 8,
+        temperature: float = 0.7,
+        top_p: float = 0.95,
+        repetition_penalty: float = 1.15,
+        verbalize_max_new_tokens: int = 32,
+        disable_injectors: bool = False,
+        fast: bool = True,
+    ):
+        """Streaming variant of `generate`.
+
+        Yields `(result, done)` tuples. While `done` is False, `result` holds
+        the tokens generated so far (each `Step` carries divergence / regime /
+        r_hat / entropy but no verbalization yet) so the UI can render the live
+        token stream, entropy meter, and divergence chart as they build. The
+        final yield has `done=True` and a `result` whose high-effort `Step`s
+        have been verbalized by the adaptive-density scheduler — the same output
+        `generate()` returns.
+
+        `fast=True` (default) uses the adapter's KV-cached decode path (O(1) per
+        token instead of O(T) full re-forwards), so long generations stay live.
+        `fast=False` falls back to the dense forward, kept as a reference/debug
+        path.
+        """
+        gen = self._stream_kv if fast else self._stream_full
+        device = self.device
+        enc = self.tok(prompt, return_tensors="pt").to(device)
+        prompt_ids = enc.input_ids
+        prompt_len = prompt_ids.shape[1]
+
+        per_token: list[_SignalsAtStep] = []
+        generated_tokens: list[int] = []
+
+        def _snapshot() -> Result:
+            steps: list[Step] = []
+            for i, tid in enumerate(generated_tokens):
+                sig = per_token[i]
+                steps.append(Step(
+                    token_idx=i,
+                    token=self.tok.decode([tid], skip_special_tokens=False),
+                    divergence=sig.divergence, regime=sig.regime, r_hat=sig.r_hat,
+                    per_layer_divergence=sig.per_layer, entropy=sig.entropy,
+                ))
+            return Result(text=self.tok.decode(generated_tokens, skip_special_tokens=True),
+                          steps=steps)
+
+        # Drive the chosen decode backend; it appends to per_token /
+        # generated_tokens and yields a snapshot every few steps.
+        for step_i in gen(
+            prompt_ids=prompt_ids, max_new_tokens=max_new_tokens,
+            temperature=temperature, top_p=top_p,
+            repetition_penalty=repetition_penalty,
+            disable_injectors=disable_injectors,
+            per_token=per_token, generated_tokens=generated_tokens,
+        ):
+            if step_i % 3 == 0:
+                yield _snapshot(), False
+
+        # Final pass: adaptive-density scheduling + verbalization (+ round-trip).
+        result = _snapshot()
+        full_input_ids = torch.cat(
+            [prompt_ids, torch.tensor(generated_tokens, device=device).view(1, -1)],
+            dim=1,
+        ) if generated_tokens else prompt_ids
+        div_series = [s.divergence for s in result.steps]
+        skip = {i for i, s in enumerate(result.steps) if not s.token.strip()}
+        picked = quantile_by_density(div_series, budget=budget, skip_indices=skip)
+        if picked:
+            verbs = self._verbalize_positions(
+                full_input_ids=full_input_ids, prompt_len=prompt_len,
+                gen_token_indices=picked, k=k, max_new_tokens=verbalize_max_new_tokens,
+            )
+            for idx, (v, cos) in zip(picked, verbs):
+                result.steps[idx].verbalization = v
+                result.steps[idx].roundtrip_cos = cos
+        yield result, True
+
+    # ----------------------------------------------------- decode backends
+    @torch.no_grad()
+    def _stream_kv(
+        self, *, prompt_ids, max_new_tokens, temperature, top_p,
+        repetition_penalty, disable_injectors, per_token, generated_tokens,
+    ):
+        """KV-cached decode backend. Appends signals/tokens in place and yields
+        the step index after each generated token. Token i's entropy and SRT
+        signals come from the same forward whose logits produced it."""
+        from transformers.cache_utils import DynamicCache
+
+        device = self.device
+        eos = self.tok.eos_token_id
+        backbone_cache = DynamicCache()
+        mah_kv: dict[int, tuple[torch.Tensor, torch.Tensor]] = {}
+
+        # Prefill: produces the logits for token 0 and the SRT signals at the
+        # last prompt position (the state that produces token 0).
+        logits, community_vec, sig = self.adapter._cached_step(
+            prompt_ids, backbone_cache, mah_kv,
+            community_vec=None, start_pos=0,
+            disable_injectors=disable_injectors, collect_signals=True,
+        )
+        cur_pos = prompt_ids.shape[1]
+        context = prompt_ids[0].tolist()
+
+        for step_i in range(max_new_tokens):
+            raw = logits[:, -1, :].float()
+            probs = torch.softmax(raw, dim=-1)
+            ent = float(-(probs * probs.clamp_min(1e-12).log()).sum().item())
+            shaped = raw.clone()
+            if repetition_penalty != 1.0:
+                _apply_repetition_penalty(shaped, context, repetition_penalty)
+            next_id = _sample(shaped, temperature=temperature, top_p=top_p)
+            tid = int(next_id)
+
+            per_layer = list(sig.get("per_layer", [])) if sig else []
+            per_token.append(_SignalsAtStep(
+                divergence=float(sig.get("div_total", sum(per_layer))) if sig else 0.0,
+                regime=int(sig.get("regime", 0)) if sig else 0,
+                r_hat=float(sig.get("r_hat", 0.0)) if sig else 0.0,
+                per_layer=per_layer, entropy=ent,
+            ))
+            generated_tokens.append(tid)
+            yield step_i
+
+            if eos is not None and tid == eos:
+                break
+            context.append(tid)
+            logits, community_vec, sig = self.adapter._cached_step(
+                next_id.view(1, 1), backbone_cache, mah_kv,
+                community_vec=community_vec, start_pos=cur_pos,
+                disable_injectors=disable_injectors, collect_signals=True,
+            )
+            cur_pos += 1
+
+    @torch.no_grad()
+    def _stream_full(
+        self, *, prompt_ids, max_new_tokens, temperature, top_p,
+        repetition_penalty, disable_injectors, per_token, generated_tokens,
+    ):
+        """Dense (non-cached) decode backend — reference/debug path."""
+        device = self.device
+        eos = self.tok.eos_token_id
+        input_ids = prompt_ids
+        attn = torch.ones_like(input_ids)
+
+        for step_i in range(max_new_tokens):
+            out = self.adapter(
+                input_ids=input_ids, attention_mask=attn,
+                disable_injectors=disable_injectors,
+            )
+            logits = out.logits[:, -1, :].float()
+            if repetition_penalty != 1.0:
+                _apply_repetition_penalty(logits, input_ids[0].tolist(), repetition_penalty)
+            ent_logits = out.logits[:, -1, :].float()
+            probs = torch.softmax(ent_logits, dim=-1)
+            ent = float(-(probs * (probs.clamp_min(1e-12)).log()).sum().item())
+            next_id = _sample(logits, temperature=temperature, top_p=top_p)
+
+            last_pos = input_ids.shape[1] - 1
+            per_layer = _div_norms_per_layer(out.divergences, last_pos)
+            regime = int(out.ben_output.regime_logits[0, last_pos].argmax().item())
+            r_hat = float(out.ben_output.r_hat[0, last_pos].item())
+            per_token.append(_SignalsAtStep(
+                divergence=float(sum(per_layer)), regime=regime, r_hat=r_hat,
+                per_layer=per_layer, entropy=ent,
+            ))
+            generated_tokens.append(int(next_id))
+            yield step_i
+
+            if eos is not None and int(next_id) == eos:
+                break
+            input_ids = torch.cat([input_ids, next_id.view(1, 1)], dim=1)
+            attn = torch.cat([attn, torch.ones((1, 1), dtype=attn.dtype, device=device)], dim=1)
 
     # ---------------------------------------------------------- verbalize ops
     @torch.no_grad()
@@ -228,11 +427,16 @@ class Trace:
         gen_token_indices: list[int],
         k: int,
         max_new_tokens: int,
-    ) -> list[str]:
+    ) -> list[tuple[str, float]]:
         """Extract L20 hidden states at the requested generated-token positions
         using the AV's own backbone (separate from the adapter's backbone), then
-        run AV.verbalize on the batch and return one consensus string per
-        position."""
+        run AV.verbalize on the batch and return, per position, a consensus
+        string plus a round-trip fidelity cosine.
+
+        The round-trip cosine re-encodes the consensus verbalization through the
+        AV backbone and measures cosine(L20 last-token of the re-encoding, the
+        original L20 hidden state). It self-validates that the verbalization
+        actually describes the state it was decoded from."""
         # AV.backbone is the frozen verbalizer-backbone copy; one forward over
         # the full sequence captures all L20 states we need.
         out = self.av.backbone(
@@ -250,7 +454,7 @@ class Trace:
         # at absolute position (prompt_len - 1 + i).
         abs_positions = [prompt_len - 1 + g for g in gen_token_indices]
 
-        out_strs: list[str] = []
+        out_pairs: list[tuple[str, float]] = []
         for abs_pos in abs_positions:
             v = h_L[abs_pos].to(torch.float32)
             v_batch = (
@@ -267,23 +471,47 @@ class Trace:
                 temperature=1.0,
                 top_p=0.95,
             )
-            out_strs.append(_consensus(texts))
-        return out_strs
+            text = _consensus(texts)
+            cos = self._roundtrip_cos(text, v) if text else 0.0
+            out_pairs.append((text, cos))
+        return out_pairs
+
+    @torch.no_grad()
+    def _roundtrip_cos(self, text: str, v_orig: torch.Tensor) -> float:
+        """Re-encode `text` through the AV backbone and return the cosine of its
+        last-token L20 hidden state against `v_orig` (the original L20 state)."""
+        enc = self.tok(text, return_tensors="pt").to(self.device)
+        if enc.input_ids.shape[1] == 0:
+            return 0.0
+        out = self.av.backbone(
+            input_ids=enc.input_ids, output_hidden_states=True, use_cache=False,
+        )
+        h_re = out.hidden_states[self.av_extract_layer][0, -1].to(torch.float32)
+        return float(
+            torch.cosine_similarity(
+                h_re.unsqueeze(0), v_orig.float().unsqueeze(0), dim=-1
+            ).item()
+        )
 
 
 # ----------------------------------------------------------------- helpers
 
 
-def _div_norm_at(divergences: list[torch.Tensor] | None, pos: int) -> float:
-    """Sum of L2 norms of MAH divergence vectors at token position `pos`."""
+def _div_norms_per_layer(divergences: list[torch.Tensor] | None, pos: int) -> list[float]:
+    """L2 norm of each MAH layer's divergence vector at token position `pos`.
+
+    Returns one float per MAH layer, in the same order as the adapter's
+    `mah_layer_indices`. Sum of the returned list equals the legacy aggregate
+    divergence used elsewhere in the UI.
+    """
     if not divergences:
-        return 0.0
-    total = 0.0
+        return []
+    out: list[float] = []
     for d in divergences:
         # d: (1, T, d_div)
         v = d[0, pos].float()
-        total += float(v.norm().item())
-    return total
+        out.append(float(v.norm().item()))
+    return out
 
 
 def _apply_repetition_penalty(logits: torch.Tensor, seen_ids: list[int], penalty: float) -> None:

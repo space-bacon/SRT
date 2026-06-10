@@ -422,6 +422,12 @@ class SRTAdapter(nn.Module):
                 "div_norm": float(div_norm_last),
                 "chain": float(chain_last),
             }
+            # Additive fields for introspection/streaming UIs (do not remove the
+            # above keys: online_hallucination.py depends on them).
+            per_layer = [float(d[0, -1].norm()) for d in divergences]
+            signals["per_layer"] = per_layer
+            signals["div_total"] = float(sum(per_layer))
+            signals["regime"] = int(ben_out.regime_logits[0, -1].argmax())
 
         return logits, community_vec, signals
 
