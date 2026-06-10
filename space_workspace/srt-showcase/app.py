@@ -302,11 +302,18 @@ _APP_CSS = f"""
     border-color: {PANEL_ALT} !important;
     color: {INK} !important;
 }}
-.gradio-container input, .gradio-container textarea,
+.gradio-container input[type="text"], .gradio-container input[type="number"],
+.gradio-container input[type="search"], .gradio-container textarea,
 .gradio-container .gr-input, .gradio-container select {{
     background: {PANEL_ALT} !important;
     color: {INK} !important;
     border-color: {PANEL_ALT} !important;
+}}
+/* Keep native radio/checkbox controls interactive and visible — do NOT
+   override their background, only tint the accent so they match the theme. */
+.gradio-container input[type="radio"],
+.gradio-container input[type="checkbox"] {{
+    accent-color: {CYAN};
 }}
 .gradio-container .tab-nav button {{ color: {MUTED} !important; }}
 .gradio-container .tab-nav button.selected {{ color: {CYAN} !important; }}
