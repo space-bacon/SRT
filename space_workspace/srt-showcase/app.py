@@ -314,7 +314,7 @@ _APP_CSS = f"""
 
 
 # ── Generation callback (streaming) ──────────────────────────────────────
-@_gpu(duration=300)
+@_gpu(duration=120)
 def cb_generate(prompt, mode, max_new, budget, k, temperature, top_p,
                 repetition_penalty, tint, inject):
     if not prompt or not prompt.strip():
@@ -409,7 +409,7 @@ EXAMPLES = [
 
 
 # ── A/B compare callback (injection on vs off) ────────────────────────────
-@_gpu(duration=300)
+@_gpu(duration=120)
 def cb_compare(prompt, mode, max_new, budget, k, temperature, top_p,
                repetition_penalty, tint):
     """Run the same prompt twice — SRT injection ON vs OFF — and render the two
@@ -475,8 +475,7 @@ def cb_compare(prompt, mode, max_new, budget, k, temperature, top_p,
 
 
 def build() -> gr.Blocks:
-    theme = gr.themes.Base(primary_hue="blue", neutral_hue="slate")
-    with gr.Blocks(title="SRT Showcase", css=_APP_CSS, theme=theme) as app:
+    with gr.Blocks(title="SRT Showcase", css=_APP_CSS) as app:
         gr.Markdown(
             "## SRT Showcase — watch a frozen model think\n"
             "Live token-by-token introspection of **Qwen-2.5-7B + the SRT adapter**. "
@@ -557,11 +556,10 @@ def build() -> gr.Blocks:
 if __name__ == "__main__":
     app = build()
     app.queue(default_concurrency_limit=1, max_size=20)
-    if _ON_ZEROGPU or os.environ.get("SPACE_ID"):
-        # On HF Spaces the platform supplies host/port.
-        app.launch()
-    else:
-        app.launch(
-            server_name="0.0.0.0",
-            server_port=int(os.environ.get("PORT", "8080")),
-        )
+    # On HF Spaces the server must bind 0.0.0.0:7860 (localhost is not reachable
+    # through the platform proxy).
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", "7860")),
+        theme=gr.themes.Base(primary_hue="blue", neutral_hue="slate"),
+    )

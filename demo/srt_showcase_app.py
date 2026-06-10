@@ -309,7 +309,7 @@ _APP_CSS = f"""
 
 
 # ── Generation callback (streaming) ──────────────────────────────────────
-@_gpu(duration=300)
+@_gpu(duration=120)
 def cb_generate(prompt, mode, max_new, budget, k, temperature, top_p,
                 repetition_penalty, tint, inject):
     if not prompt or not prompt.strip():
@@ -402,7 +402,7 @@ EXAMPLES = [
 
 
 # ── A/B compare callback (injection on vs off) ────────────────────────────
-@_gpu(duration=300)
+@_gpu(duration=120)
 def cb_compare(prompt, mode, max_new, budget, k, temperature, top_p,
                repetition_penalty, tint):
     """Run the same prompt twice — SRT injection ON vs OFF — and render the two

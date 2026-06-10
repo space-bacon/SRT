@@ -4,11 +4,11 @@ emoji: 🧭
 colorFrom: indigo
 colorTo: blue
 sdk: gradio
-sdk_version: "4.44.1"
+sdk_version: "6.17.3"
 app_file: app.py
 python_version: "3.10"
 pinned: false
-hardware: zero-a100
+hardware: zerogpu
 short_description: Watch a frozen Qwen-2.5-7B think — live SRT introspection
 ---
 
