@@ -72,6 +72,11 @@ PINK = "#ff7eb6"
 LAVENDER = "#b69cff"
 AMBER = "#ffcf66"
 
+# Public-Space guards: cap prompt length and generated tokens so a single
+# ZeroGPU request stays within the duration budget.
+MAX_PROMPT_CHARS = 1500
+MAX_TOKENS_CAP = 512
+
 # Round-trip fidelity reference frame (raw fve_nrm on Qwen2.5-7B L20, from the
 # anchored oracle_ceiling study). Unrelated text floors near 0.622; the
 # paraphrase best-of-8 ceiling is ~0.848. We normalise the round-trip cosine
@@ -315,6 +320,8 @@ def cb_generate(prompt, mode, max_new, budget, k, temperature, top_p,
     if not prompt or not prompt.strip():
         yield (_CSS + "<i>Enter a prompt.</i>", "", "", "", "_(enter a prompt)_")
         return
+    prompt = prompt[:MAX_PROMPT_CHARS]
+    max_new = min(int(max_new), MAX_TOKENS_CAP)
 
     trace = _get_trace()
     model_prompt = prompt
@@ -412,6 +419,8 @@ def cb_compare(prompt, mode, max_new, budget, k, temperature, top_p,
     if not prompt or not prompt.strip():
         yield _CSS + "<i>Enter a prompt.</i>", ""
         return
+    prompt = prompt[:MAX_PROMPT_CHARS]
+    max_new = min(int(max_new), MAX_TOKENS_CAP)
 
     trace = _get_trace()
     model_prompt = prompt
@@ -466,7 +475,8 @@ def cb_compare(prompt, mode, max_new, budget, k, temperature, top_p,
 
 
 def build() -> gr.Blocks:
-    with gr.Blocks(title="SRT Showcase", css=_APP_CSS) as app:
+    theme = gr.themes.Base(primary_hue="blue", neutral_hue="slate")
+    with gr.Blocks(title="SRT Showcase", css=_APP_CSS, theme=theme) as app:
         gr.Markdown(
             "## SRT Showcase — watch a frozen model think\n"
             "Live token-by-token introspection of **Qwen-2.5-7B + the SRT adapter**. "
@@ -545,8 +555,13 @@ def build() -> gr.Blocks:
 
 
 if __name__ == "__main__":
-    server_port = int(os.environ.get("PORT", "8080"))
-    build().queue().launch(
-        server_name="0.0.0.0", server_port=server_port,
-        theme=gr.themes.Base(primary_hue="blue", neutral_hue="slate"),
-    )
+    app = build()
+    app.queue(default_concurrency_limit=1, max_size=20)
+    if _ON_ZEROGPU or os.environ.get("SPACE_ID"):
+        # On HF Spaces the platform supplies host/port.
+        app.launch()
+    else:
+        app.launch(
+            server_name="0.0.0.0",
+            server_port=int(os.environ.get("PORT", "8080")),
+        )
