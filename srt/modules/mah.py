@@ -107,3 +107,58 @@ class MetapragmaticAttentionHead(nn.Module):
         divergence = self.div_proj(interp - contextual)  # (B, T, d_divergence)
 
         return MAHOutput(divergence=divergence, attention_weights=attn_weights.detach())
+
+    def forward_step(
+        self,
+        hidden_states: torch.Tensor,
+        community_vec: torch.Tensor | None = None,
+        kv_cache: tuple[torch.Tensor, torch.Tensor] | None = None,
+    ) -> tuple[torch.Tensor, tuple[torch.Tensor, torch.Tensor]]:
+        """Incremental MAH forward with an external K/V cache.
+
+        Computes divergence for the `T` query positions in `hidden_states`
+        (T may be 1 for autoregressive decode, or the full prompt length for
+        prefill) while attending over all cached keys/values plus the new ones.
+
+        This is mathematically identical to `forward()` when called once with
+        the full sequence and `kv_cache=None`; it just additionally returns the
+        per-layer K/V so subsequent single-token steps can attend to the past
+        without recomputing it.
+
+        Args:
+            hidden_states: (B, T, d_backbone) query positions.
+            community_vec: (B, d_community) optional conditioning.
+            kv_cache: optional (k_past, v_past), each (B, H, T_past, head_dim).
+
+        Returns:
+            (divergence (B, T, d_divergence), (k_full, v_full)).
+        """
+        B, T, _ = hidden_states.shape
+
+        interp = self.interp_proj(hidden_states)  # (B, T, d_sub)
+        if community_vec is not None and self.comm_proj is not None:
+            interp = interp + self.comm_proj(community_vec).unsqueeze(1)
+
+        q = self.q_proj(interp).view(B, T, self.num_heads, self.head_dim).transpose(1, 2)
+        k = self.k_proj(interp).view(B, T, self.num_heads, self.head_dim).transpose(1, 2)
+        v = self.v_proj(interp).view(B, T, self.num_heads, self.head_dim).transpose(1, 2)
+
+        if kv_cache is not None:
+            k = torch.cat([kv_cache[0], k], dim=2)
+            v = torch.cat([kv_cache[1], v], dim=2)
+
+        # Use memory-efficient SDPA instead of materializing the full (T, S)
+        # attention matrix. At long prefill lengths (tens of thousands of
+        # tokens) the explicit `q @ k.T` tensor is tens of GB and OOMs; the
+        # fused kernel never materializes it.
+        #   - prefill (T > 1, no cache): standard causal self-attention.
+        #   - decode  (T == 1): the single query attends to every cached key
+        #     (all are in the past), so no causal mask is applied.
+        contextual = F.scaled_dot_product_attention(
+            q, k, v, is_causal=(T > 1),
+        )  # (B, H, T, head_dim)
+        contextual = contextual.transpose(1, 2).reshape(B, T, -1)
+        contextual = self.out_proj(contextual)
+
+        divergence = self.div_proj(interp - contextual)
+        return divergence, (k, v)

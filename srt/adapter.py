@@ -56,6 +56,26 @@ def _make_causal_mask(
     return mask[None, None, :, :]  # (1, 1, T, T)
 
 
+def _sample_token(
+    logits: torch.Tensor, temperature: float, top_p: float
+) -> torch.Tensor:
+    """Sample a single next-token id from (1, V) logits. Greedy if temp<=0."""
+    if not temperature or temperature <= 0:
+        return logits.argmax(dim=-1, keepdim=True)
+    logits = logits / temperature
+    probs = F.softmax(logits, dim=-1)
+    if 0 < top_p < 1.0:
+        sorted_probs, sorted_idx = torch.sort(probs, descending=True, dim=-1)
+        cumsum = torch.cumsum(sorted_probs, dim=-1)
+        # Keep tokens until cumulative prob first exceeds top_p (inclusive).
+        cutoff = cumsum - sorted_probs > top_p
+        sorted_probs[cutoff] = 0.0
+        sorted_probs = sorted_probs / sorted_probs.sum(dim=-1, keepdim=True)
+        choice = torch.multinomial(sorted_probs, 1)
+        return sorted_idx.gather(-1, choice)
+    return torch.multinomial(probs, 1)
+
+
 class SRTAdapter(nn.Module):
     """Semiotic-Reflexive Transformer adapter for any causal LM backbone."""
 
@@ -156,6 +176,7 @@ class SRTAdapter(nn.Module):
         attention_mask: torch.Tensor | None = None,
         labels: torch.Tensor | None = None,
         forced_community: torch.Tensor | None = None,
+        disable_injectors: bool = False,
     ) -> SRTAdapterOutput:
         """Forward pass: backbone with semiotic taps and injections.
 
@@ -166,6 +187,11 @@ class SRTAdapter(nn.Module):
             forced_community: (B, d_community) override community vector. Optional.
                 When provided, uses this instead of CommunityDiscoveryHead output
                 for conditioning MAH heads. Discovery still runs for diagnostics.
+            disable_injectors: when True, the RRM injection step is skipped
+                (h is not updated by `+ inj`). MAH divergences and BEN signals
+                are still computed for inspection, but the logits come from
+                the frozen backbone alone. Used by the demo to render a
+                side-by-side "adapter off" trace.
 
         Returns:
             SRTAdapterOutput with logits, losses, and semiotic intermediates.
@@ -239,7 +265,8 @@ class SRTAdapter(nn.Module):
                 # RRM injection (if this is also an injection layer)
                 if layer_i in self._inject_set:
                     inj = self.rrm.inject(meta_state, h)
-                    h = h + inj
+                    if not disable_injectors:
+                        h = h + inj
                     injections.append(inj)
 
         # 6. Final norm + native LM head
@@ -286,6 +313,146 @@ class SRTAdapter(nn.Module):
             meta_state=meta_state,
             chain_residual_per_token=chain_res,
         )
+
+    @torch.no_grad()
+    def _cached_step(
+        self,
+        input_ids: torch.Tensor,
+        backbone_cache,
+        mah_kv: dict[int, tuple[torch.Tensor, torch.Tensor]],
+        community_vec: torch.Tensor | None,
+        start_pos: int,
+        disable_injectors: bool,
+    ) -> tuple[torch.Tensor, torch.Tensor | None]:
+        """One cached forward over `T` new tokens (prefill: T>1, decode: T=1).
+
+        Mutates `backbone_cache` and `mah_kv` in place. Returns
+        (logits (B, T, V), community_vec) where community_vec is computed on
+        the prefill call (when the incoming one is None) and passed through on
+        decode calls so the discourse basin stays fixed after the prompt.
+        """
+        device = input_ids.device
+        B, T = input_ids.shape
+
+        h = self._embed_tokens(input_ids)
+
+        position_ids = torch.arange(
+            start_pos, start_pos + T, device=device
+        ).unsqueeze(0).expand(B, -1)
+        cache_position = torch.arange(start_pos, start_pos + T, device=device)
+
+        position_embeddings = None
+        if self._rotary_emb is not None:
+            position_embeddings = self._rotary_emb(h, position_ids)
+
+        # MAH attention mask is built per-head inside forward_step; here we only
+        # need the backbone mask. With a KV cache and a single decode token no
+        # mask is required (all cached keys are in the past). For prefill we
+        # build the causal mask over the new block against itself.
+        backbone_mask = None
+        if T > 1:
+            backbone_mask = _make_causal_mask(T, h.dtype, device)
+
+        mah_idx = 0
+        meta_state: torch.Tensor | None = None
+
+        for layer_i, layer in enumerate(self._layers):
+            layer_kwargs: dict = {
+                "position_ids": position_ids,
+                "past_key_value": backbone_cache,
+                "use_cache": True,
+                "cache_position": cache_position,
+            }
+            if position_embeddings is not None:
+                layer_kwargs["position_embeddings"] = position_embeddings
+            if backbone_mask is not None:
+                layer_kwargs["attention_mask"] = backbone_mask
+
+            layer_out = layer(h, **layer_kwargs)
+            h = layer_out[0]
+
+            # Community discovery: compute once during prefill, then freeze.
+            if layer_i == self.config.community_layer_idx and community_vec is None:
+                community_out = self.community_head(h.detach(), None)
+                community_vec = community_out.vector
+
+            if layer_i in self._mah_set:
+                mah_head = self.mah_heads[self._mah_index_map[layer_i]]
+                divergence, new_kv = mah_head.forward_step(
+                    h, community_vec=community_vec, kv_cache=mah_kv.get(layer_i)
+                )
+                mah_kv[layer_i] = new_kv
+
+                meta_state = self.rrm.step(divergence, meta_state)
+
+                if layer_i in self._inject_set:
+                    inj = self.rrm.inject(meta_state, h)
+                    if not disable_injectors:
+                        h = h + inj
+
+        h = self._final_norm(h)
+        logits = self._lm_head(h)
+        return logits, community_vec
+
+    @torch.no_grad()
+    def generate(
+        self,
+        input_ids: torch.Tensor,
+        max_new_tokens: int = 256,
+        eos_token_ids: set[int] | None = None,
+        temperature: float = 0.7,
+        top_p: float = 1.0,
+        disable_injectors: bool = False,
+    ) -> torch.Tensor:
+        """KV-cached autoregressive generation through the SRT adapter.
+
+        Uses a backbone `DynamicCache` plus a per-MAH-layer K/V cache so each
+        decode step is O(1) in sequence length rather than O(T). The community
+        vector is fixed after prefill. Supports batch size 1.
+
+        Args:
+            input_ids: (1, T) prompt token ids.
+            max_new_tokens: cap on generated tokens.
+            eos_token_ids: ids that terminate generation.
+            temperature: 0 (or <=0) means greedy.
+            top_p: nucleus sampling cutoff (1.0 disables).
+            disable_injectors: True serves the bare frozen backbone (control).
+
+        Returns:
+            (1, n_new) generated token ids (excludes the prompt).
+        """
+        assert input_ids.shape[0] == 1, "generate() supports batch size 1"
+        from transformers.cache_utils import DynamicCache
+
+        device = input_ids.device
+        eos_token_ids = eos_token_ids or set()
+
+        backbone_cache = DynamicCache()
+        mah_kv: dict[int, tuple[torch.Tensor, torch.Tensor]] = {}
+
+        # Prefill.
+        logits, community_vec = self._cached_step(
+            input_ids, backbone_cache, mah_kv,
+            community_vec=None, start_pos=0, disable_injectors=disable_injectors,
+        )
+        cur_pos = input_ids.shape[1]
+        new_ids: list[int] = []
+
+        for _ in range(max_new_tokens):
+            next_logits = logits[:, -1, :].float()
+            next_id = _sample_token(next_logits, temperature, top_p)
+            tok = int(next_id.item())
+            new_ids.append(tok)
+            if tok in eos_token_ids:
+                break
+            logits, community_vec = self._cached_step(
+                next_id.view(1, 1), backbone_cache, mah_kv,
+                community_vec=community_vec, start_pos=cur_pos,
+                disable_injectors=disable_injectors,
+            )
+            cur_pos += 1
+
+        return torch.tensor(new_ids, device=device, dtype=torch.long).view(1, -1)
 
     # Adapter module prefixes for save/load (everything else is backbone)
     _ADAPTER_PREFIXES = (
