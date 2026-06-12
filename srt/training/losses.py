@@ -445,19 +445,26 @@ def compute_total_loss(
     Returns:
         (total_loss, metrics_dict) where metrics_dict has per-component values.
     """
-    device = output.logits.device
+    # With a sharded backbone the logits live on the last layer's device
+    # while the SRT-head outputs (divergences, BEN, community) live on the
+    # head device. Anchor the accumulator where the head losses are and move
+    # each scalar term to it — scalar transfers are negligible.
+    if output.divergences:
+        device = output.divergences[-1].device
+    else:
+        device = output.logits.device
     metrics: dict[str, float] = {}
     total = torch.tensor(0.0, device=device)
 
-    # CE loss (from backbone)
+    # CE loss (from backbone — possibly on another device when sharded)
     if output.ce_loss is not None:
-        total = total + config.ce_weight * output.ce_loss
+        total = total + config.ce_weight * output.ce_loss.to(device)
         metrics["ce"] = output.ce_loss.item()
 
     # Chain-of-interpretants loss
     if output.divergences:
         l_chain = chain_loss(output.divergences, chain_predictor, attention_mask)
-        total = total + config.chain_weight * l_chain
+        total = total + config.chain_weight * l_chain.to(device)
         metrics["chain"] = l_chain.item()
 
     # Bifurcation + regime losses
