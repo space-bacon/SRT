@@ -14,6 +14,7 @@ used directly — no bridges, no tied embeddings, no CE degradation.
 
 from __future__ import annotations
 
+import contextlib
 import logging
 from dataclasses import dataclass, field
 
@@ -54,6 +55,18 @@ def _make_causal_mask(
     )
     mask = torch.triu(mask, diagonal=1)
     return mask[None, None, :, :]  # (1, 1, T, T)
+
+
+def _layer_hidden(layer_out) -> torch.Tensor:
+    """Extract hidden states from a decoder layer's return value.
+
+    transformers has returned `tuple(hidden, ...)` historically, but some
+    versions/architectures return the bare tensor. Indexing a tensor with
+    [0] would silently slice the batch dim, so normalize here.
+    """
+    if isinstance(layer_out, torch.Tensor):
+        return layer_out
+    return layer_out[0]
 
 
 def _sample_token(
@@ -177,6 +190,7 @@ class SRTAdapter(nn.Module):
         labels: torch.Tensor | None = None,
         forced_community: torch.Tensor | None = None,
         disable_injectors: bool = False,
+        read_only: bool = False,
     ) -> SRTAdapterOutput:
         """Forward pass: backbone with semiotic taps and injections.
 
@@ -192,9 +206,15 @@ class SRTAdapter(nn.Module):
                 are still computed for inspection, but the logits come from
                 the frozen backbone alone. Used by the demo to render a
                 side-by-side "adapter off" trace.
-
-        Returns:
-            SRTAdapterOutput with logits, losses, and semiotic intermediates.
+            read_only: when True, run the backbone layers (and final
+                norm/LM head) under `torch.no_grad()` so no backbone
+                activation graph is built, while the SRT heads (community,
+                MAH, RRM, BEN) still build their own graph from the detached
+                taps. Injections are applied with `.detach()` so forward
+                behaviour matches deploy time without extending the graph
+                into subsequent backbone layers. This is the Phase-A
+                training mode for very large backbones: memory cost is
+                inference-only regardless of backbone size.
         """
         device = input_ids.device
         B, T = input_ids.shape
@@ -233,6 +253,10 @@ class SRTAdapter(nn.Module):
         community_vec: torch.Tensor | None = None
         mah_idx = 0
 
+        # In read-only mode the backbone runs without building a graph; the
+        # SRT heads operate on detached taps and build their own (tiny) graph.
+        bb_ctx = torch.no_grad() if read_only else contextlib.nullcontext()
+
         for layer_i, layer in enumerate(self._layers):
             # Run backbone layer
             layer_kwargs: dict = {"position_ids": position_ids}
@@ -241,8 +265,10 @@ class SRTAdapter(nn.Module):
             if backbone_mask is not None:
                 layer_kwargs["attention_mask"] = backbone_mask
 
-            layer_out = layer(h, **layer_kwargs)
-            h = layer_out[0]
+            with bb_ctx:
+                layer_out = layer(h, **layer_kwargs)
+            h = _layer_hidden(layer_out)
+            tap = h.detach() if read_only else h
 
             # Community discovery at early layer
             if layer_i == self.config.community_layer_idx and community_out is None:
@@ -256,7 +282,7 @@ class SRTAdapter(nn.Module):
             # MAH hook: extract divergence
             if layer_i in self._mah_set:
                 mah_head = self.mah_heads[self._mah_index_map[layer_i]]
-                mah_out = mah_head(h, community_vec=community_vec, causal_mask=mah_causal_mask)
+                mah_out = mah_head(tap, community_vec=community_vec, causal_mask=mah_causal_mask)
                 divergences.append(mah_out.divergence)
 
                 # Update RRM meta-state
@@ -264,14 +290,18 @@ class SRTAdapter(nn.Module):
 
                 # RRM injection (if this is also an injection layer)
                 if layer_i in self._inject_set:
-                    inj = self.rrm.inject(meta_state, h)
+                    inj = self.rrm.inject(meta_state, tap)
                     if not disable_injectors:
-                        h = h + inj
+                        # In read-only mode the injection is applied detached:
+                        # forward behaviour matches deploy time, but the graph
+                        # does not extend into subsequent backbone layers.
+                        h = h + (inj.detach() if read_only else inj)
                     injections.append(inj)
 
         # 6. Final norm + native LM head
-        h = self._final_norm(h)
-        logits = self._lm_head(h)
+        with bb_ctx:
+            h = self._final_norm(h)
+            logits = self._lm_head(h)
 
         # 7. CE loss (shifted, standard next-token prediction)
         ce_loss = None
