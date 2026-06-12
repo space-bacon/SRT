@@ -51,17 +51,42 @@ def main() -> int:
                    help="float32|bfloat16; default bf16 on cuda, fp32 elsewhere")
     p.add_argument("--seq-len", type=int, default=48)
     p.add_argument("--gen-tokens", type=int, default=12)
+    p.add_argument("--device-map", default=None,
+                   help="e.g. 'auto' to shard the backbone across devices "
+                        "(multi-GPU or CPU offload). Heads pinned to --device.")
+    p.add_argument("--max-gpu-mem", default=None,
+                   help="cap per-GPU memory to force a multi-device split, "
+                        "e.g. '20GiB' (validation of cross-device movement "
+                        "on a single-GPU box via CPU offload)")
     args = p.parse_args()
 
     device = _pick_device(args.device)
     dtype = args.dtype or ("bfloat16" if device == "cuda" else "float32")
-    print(f"== R0 smoke: {args.backbone} on {device} ({dtype}) ==")
+    print(f"== R0 smoke: {args.backbone} on {device} ({dtype})"
+          f"{'  device_map=' + args.device_map if args.device_map else ''} ==")
 
     failures: list[str] = []
 
-    # ── 1. Load ───────────────────────────────────────────────────────
+    # ── 1. Load ───────────────────────────────────────────────
     cfg = SRTConfig(backbone_id=args.backbone, backbone_dtype=dtype)
-    adapter = SRTAdapter(cfg).to(device).eval()
+    if args.device_map:
+        max_memory = None
+        if args.max_gpu_mem:
+            n_gpu = torch.cuda.device_count()
+            max_memory = {i: args.max_gpu_mem for i in range(n_gpu)}
+            max_memory["cpu"] = "200GiB"  # type: ignore[index]
+        adapter = SRTAdapter(cfg, device_map=args.device_map,
+                             max_memory=max_memory).eval()
+        # Sharded: never .to() the whole adapter; pin heads instead.
+        adapter.set_head_device(device)
+        try:
+            dmap = adapter.backbone.hf_device_map
+            devs = sorted({str(v) for v in dmap.values()})
+            print(f"   backbone sharded across: {devs}")
+        except AttributeError:
+            pass
+    else:
+        adapter = SRTAdapter(cfg).to(device).eval()
     for prm in adapter.parameters():
         prm.requires_grad_(False)
     # Re-enable grads on SRT head params only (mirrors training setup).

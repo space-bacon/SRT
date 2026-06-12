@@ -92,7 +92,8 @@ def _sample_token(
 class SRTAdapter(nn.Module):
     """Semiotic-Reflexive Transformer adapter for any causal LM backbone."""
 
-    def __init__(self, config: SRTConfig) -> None:
+    def __init__(self, config: SRTConfig, device_map: str | dict | None = None,
+                 max_memory: dict | None = None) -> None:
         super().__init__()
         self.config = config
 
@@ -104,10 +105,27 @@ class SRTAdapter(nn.Module):
         }
         load_dtype = dtype_map.get(config.backbone_dtype, torch.bfloat16)
 
-        logger.info("Loading backbone: %s in %s", config.backbone_id, config.backbone_dtype)
+        logger.info("Loading backbone: %s in %s%s", config.backbone_id,
+                    config.backbone_dtype,
+                    f" (device_map={device_map})" if device_map else "")
+        load_kwargs: dict = {"torch_dtype": load_dtype}
+        if device_map is not None:
+            # Sharded load (multi-GPU / CPU-offload). accelerate dispatches the
+            # model and attaches AlignDevicesHooks that move each module's
+            # inputs to its execution device, so the manual layer loop works
+            # unchanged; we only have to manage the SRT-head boundary (see
+            # set_head_device + the tap/inject movement in forward).
+            load_kwargs["device_map"] = device_map
+            if max_memory is not None:
+                load_kwargs["max_memory"] = max_memory
         self.backbone = AutoModelForCausalLM.from_pretrained(
-            config.backbone_id, torch_dtype=load_dtype
+            config.backbone_id, **load_kwargs
         )
+        self._sharded = device_map is not None
+        # When set, SRT head modules live on this device and taps are moved
+        # to it (and injections moved back). None = single-device behaviour
+        # (heads follow the adapter's device; no movement).
+        self._head_device: torch.device | None = None
         for p in self.backbone.parameters():
             p.requires_grad = False
         self.backbone.eval()
@@ -183,6 +201,37 @@ class SRTAdapter(nn.Module):
         ]:
             module.to(load_dtype)
 
+    # ------------------------------------------------------- device plumbing
+    def _head_modules(self) -> list[nn.Module]:
+        return [self.community_head, self.mah_heads, self.rrm,
+                self.chain_predictor, self.ben]
+
+    def set_head_device(self, device: str | torch.device) -> None:
+        """Pin the SRT head modules to one device (sharded-backbone mode).
+
+        With a `device_map`-sharded backbone the adapter must NOT be moved
+        wholesale with `.to(device)` (that would yank dispatched backbone
+        weights off their assigned devices). Instead call this once after
+        construction: head modules move to `device`, and forward()/
+        _cached_step() route taps to it and injections back to each layer's
+        device.
+        """
+        device = torch.device(device)
+        for m in self._head_modules():
+            m.to(device)
+        self._head_device = device
+        logger.info("SRT heads pinned to %s", device)
+
+    def _to_head(self, t: torch.Tensor) -> torch.Tensor:
+        """Move a tap to the head device (no-op when not sharded)."""
+        if self._head_device is not None and t.device != self._head_device:
+            return t.to(self._head_device)
+        return t
+
+    @property
+    def _embed_device(self) -> torch.device:
+        return self._embed_tokens.weight.device
+
     def forward(
         self,
         input_ids: torch.Tensor,
@@ -216,6 +265,13 @@ class SRTAdapter(nn.Module):
                 training mode for very large backbones: memory cost is
                 inference-only regardless of backbone size.
         """
+        # With a sharded backbone, route inputs to the embedding's device;
+        # accelerate's AlignDevicesHooks then move per-layer inputs as the
+        # hidden state crosses device boundaries.
+        if self._sharded:
+            input_ids = input_ids.to(self._embed_device)
+            if attention_mask is not None:
+                attention_mask = attention_mask.to(self._embed_device)
         device = input_ids.device
         B, T = input_ids.shape
 
@@ -228,8 +284,11 @@ class SRTAdapter(nn.Module):
         if self._rotary_emb is not None:
             position_embeddings = self._rotary_emb(h, position_ids)
 
-        # 3. Causal mask for MAH attention
-        mah_causal_mask = _make_causal_mask(T, h.dtype, device)
+        # 3. Causal mask for MAH attention (lives on the head device when
+        # the backbone is sharded; MAH heads consume taps there).
+        mah_causal_mask = _make_causal_mask(
+            T, h.dtype, self._head_device or device
+        )
 
         # 4. Prepare 4D causal+padding mask for backbone layers
         # Must combine causal mask (T, T) with padding mask (B, T) into (B, 1, T, T)
@@ -269,15 +328,21 @@ class SRTAdapter(nn.Module):
                 layer_out = layer(h, **layer_kwargs)
             h = _layer_hidden(layer_out)
             tap = h.detach() if read_only else h
+            tap = self._to_head(tap)
 
             # Community discovery at early layer
             if layer_i == self.config.community_layer_idx and community_out is None:
-                community_out = self.community_head(h.detach(), attention_mask)
+                community_out = self.community_head(
+                    self._to_head(h.detach()),
+                    self._to_head(attention_mask) if attention_mask is not None else None,
+                )
                 # Use forced_community override if provided, else discovered
                 community_vec = (
                     forced_community if forced_community is not None
                     else community_out.vector
                 )
+                if community_vec is not None:
+                    community_vec = self._to_head(community_vec)
 
             # MAH hook: extract divergence
             if layer_i in self._mah_set:
@@ -295,7 +360,8 @@ class SRTAdapter(nn.Module):
                         # In read-only mode the injection is applied detached:
                         # forward behaviour matches deploy time, but the graph
                         # does not extend into subsequent backbone layers.
-                        h = h + (inj.detach() if read_only else inj)
+                        inj_h = inj.detach() if read_only else inj
+                        h = h + inj_h.to(h.device)
                     injections.append(inj)
 
         # 6. Final norm + native LM head
@@ -306,6 +372,7 @@ class SRTAdapter(nn.Module):
         # 7. CE loss (shifted, standard next-token prediction)
         ce_loss = None
         if labels is not None:
+            labels = labels.to(logits.device)
             shift_logits = logits[:, :-1].contiguous()
             shift_labels = labels[:, 1:].contiguous()
             ce_loss = F.cross_entropy(
@@ -370,6 +437,8 @@ class SRTAdapter(nn.Module):
             chain        — chain residual (mean over consecutive MAH layers)
         Otherwise `signals` is None.
         """
+        if self._sharded:
+            input_ids = input_ids.to(self._embed_device)
         device = input_ids.device
         B, T = input_ids.shape
 
@@ -408,17 +477,18 @@ class SRTAdapter(nn.Module):
                 layer_kwargs["attention_mask"] = backbone_mask
 
             layer_out = layer(h, **layer_kwargs)
-            h = layer_out[0]
+            h = _layer_hidden(layer_out)
+            tap = self._to_head(h)
 
             # Community discovery: compute once during prefill, then freeze.
             if layer_i == self.config.community_layer_idx and community_vec is None:
-                community_out = self.community_head(h.detach(), None)
+                community_out = self.community_head(tap.detach(), None)
                 community_vec = community_out.vector
 
             if layer_i in self._mah_set:
                 mah_head = self.mah_heads[self._mah_index_map[layer_i]]
                 divergence, new_kv = mah_head.forward_step(
-                    h, community_vec=community_vec, kv_cache=mah_kv.get(layer_i)
+                    tap, community_vec=community_vec, kv_cache=mah_kv.get(layer_i)
                 )
                 mah_kv[layer_i] = new_kv
                 divergences.append(divergence)
@@ -426,9 +496,9 @@ class SRTAdapter(nn.Module):
                 meta_state = self.rrm.step(divergence, meta_state)
 
                 if layer_i in self._inject_set:
-                    inj = self.rrm.inject(meta_state, h)
+                    inj = self.rrm.inject(meta_state, tap)
                     if not disable_injectors:
-                        h = h + inj
+                        h = h + inj.to(h.device)
 
         h = self._final_norm(h)
         logits = self._lm_head(h)
