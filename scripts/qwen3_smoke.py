@@ -119,7 +119,11 @@ def main() -> int:
     with torch.no_grad():
         out = adapter(input_ids=input_ids, disable_injectors=True)
         ref = adapter.backbone(input_ids=input_ids).logits
-    diff = (out.logits.float() - ref.float()).abs().max().item()
+    # With a sharded backbone the manual loop leaves logits on the last
+    # layer's device while accelerate hooks move HF's output to the io
+    # device; compare on a common device.
+    man_logits = out.logits.float().to(ref.device)
+    diff = (man_logits - ref.float()).abs().max().item()
     if dtype == "float32":
         # fp32: both paths must be bit-identical (verified on cpu + cuda).
         tol = 1e-4
@@ -142,9 +146,9 @@ def main() -> int:
         top2 = torch.topk(probs_ref, 2, dim=-1).values
         margin = top2[..., 0] - top2[..., 1]
         decided = margin > 0.05
-        agree_all = (out.logits.argmax(-1) == ref.argmax(-1)).float().mean().item()
+        agree_all = (man_logits.argmax(-1) == ref.argmax(-1)).float().mean().item()
         if decided.any():
-            agree = ((out.logits.argmax(-1) == ref.argmax(-1)) & decided).float().sum().item() \
+            agree = ((man_logits.argmax(-1) == ref.argmax(-1)) & decided).float().sum().item() \
                 / decided.float().sum().item()
         else:
             agree = 1.0
