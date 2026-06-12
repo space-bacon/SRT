@@ -60,6 +60,16 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--warmup-steps", type=int, default=500)
     p.add_argument("--dtype", default="bfloat16", choices=["float32", "float16", "bfloat16"])
     p.add_argument("--device", default=None, help="Device (auto-detected if not set)")
+    p.add_argument(
+        "--read-only",
+        action="store_true",
+        help=(
+            "Phase-A mode for very large backbones: run backbone layers under "
+            "no_grad (no activation graph; memory = inference), train only the "
+            "SRT heads on detached taps. CE loss becomes a constant metric "
+            "(no gradient); inject-CE training requires the default mode."
+        ),
+    )
     p.add_argument("--resume", default=None, help="Path to full training checkpoint to resume from")
     p.add_argument(
         "--warm-start",
@@ -188,7 +198,10 @@ def build_optimizer(
 
 
 @torch.no_grad()
-def validate(model: SRTAdapter, dataloader: DataLoader, config: SRTConfig) -> dict[str, float]:
+def validate(
+    model: SRTAdapter, dataloader: DataLoader, config: SRTConfig,
+    read_only: bool = False,
+) -> dict[str, float]:
     """Run validation and return average metrics."""
     model.eval()
     totals: dict[str, float] = {}
@@ -200,6 +213,7 @@ def validate(model: SRTAdapter, dataloader: DataLoader, config: SRTConfig) -> di
             input_ids=batch["input_ids"],
             attention_mask=batch["attention_mask"],
             labels=batch["labels"],
+            read_only=read_only,
         )
         _, metrics = compute_total_loss(
             output,
@@ -501,6 +515,7 @@ def train(args: argparse.Namespace) -> None:
                 input_ids=batch["input_ids"],
                 attention_mask=batch["attention_mask"],
                 labels=batch["labels"],
+                read_only=args.read_only,
             )
 
             # Compute combined loss
@@ -583,7 +598,8 @@ def train(args: argparse.Namespace) -> None:
 
             # Validation
             if val_loader and global_step % args.val_every == 0:
-                val_metrics = validate(model, val_loader, config)
+                val_metrics = validate(model, val_loader, config,
+                                       read_only=args.read_only)
                 val_loss = val_metrics.get("total", float("inf"))
                 logger.info(
                     "VAL step=%d  total=%.3f  ce=%.3f  bif=%.4f",
