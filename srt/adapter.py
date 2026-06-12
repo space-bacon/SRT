@@ -373,17 +373,31 @@ class SRTAdapter(nn.Module):
             h = self._final_norm(h)
             logits = self._lm_head(h)
 
-        # 7. CE loss (shifted, standard next-token prediction)
+        # 7. CE loss (shifted, standard next-token prediction).
+        # Computed in batch chunks: cross_entropy upcasts logits to fp32, and
+        # at large batch (e.g. 128 x 511 x 151936 vocab) the single allocation
+        # is ~19 GB — OOMs the last shard GPU. Chunking bounds it to ~2.4 GB.
         ce_loss = None
         if labels is not None:
             labels = labels.to(logits.device)
-            shift_logits = logits[:, :-1].contiguous()
-            shift_labels = labels[:, 1:].contiguous()
-            ce_loss = F.cross_entropy(
-                shift_logits.view(-1, shift_logits.size(-1)),
-                shift_labels.view(-1),
-                ignore_index=-100,
-            )
+            shift_logits = logits[:, :-1]
+            shift_labels = labels[:, 1:]
+            chunk = 16
+            losses = []
+            weights = []
+            for i in range(0, shift_logits.shape[0], chunk):
+                lg = shift_logits[i:i + chunk].contiguous()
+                lb = shift_labels[i:i + chunk].contiguous()
+                n_valid = (lb != -100).sum()
+                if n_valid == 0:
+                    continue
+                losses.append(F.cross_entropy(
+                    lg.view(-1, lg.size(-1)), lb.view(-1), ignore_index=-100,
+                ))
+                weights.append(n_valid)
+            if losses:
+                w = torch.stack([x.float() for x in weights])
+                ce_loss = (torch.stack(losses) * w).sum() / w.sum()
 
         # 8. BEN
         ben_out = None

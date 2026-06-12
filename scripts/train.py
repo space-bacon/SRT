@@ -238,6 +238,10 @@ def validate(
         for k, v in metrics.items():
             totals[k] = totals.get(k, 0.0) + v
         count += 1
+        # Free the output (incl. ~20 GB of logits at large batch) before the
+        # next forward; otherwise two logits tensors coexist and OOM the
+        # last shard GPU during validation.
+        del output
 
     model.train()
     model.backbone.eval()  # backbone must stay in eval mode always
