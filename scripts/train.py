@@ -70,6 +70,16 @@ def parse_args() -> argparse.Namespace:
             "(no gradient); inject-CE training requires the default mode."
         ),
     )
+    p.add_argument(
+        "--device-map",
+        default=None,
+        help=(
+            "Shard the frozen backbone across devices via accelerate (e.g. "
+            "'auto' for multi-GPU). SRT heads are pinned to --device (or "
+            "cuda:0). Use with --read-only for Phase-A on backbones larger "
+            "than one GPU (R3 / Qwen3-235B)."
+        ),
+    )
     p.add_argument("--resume", default=None, help="Path to full training checkpoint to resume from")
     p.add_argument(
         "--warm-start",
@@ -291,8 +301,14 @@ def train(args: argparse.Namespace) -> None:
     )
 
     # ── Model ─────────────────────────────────────────────────────────
-    model = SRTAdapter(config)
-    model = model.to(device)
+    if args.device_map:
+        # Sharded backbone: never .to() the whole adapter (would yank
+        # dispatched weights off their devices). Pin SRT heads to `device`.
+        model = SRTAdapter(config, device_map=args.device_map)
+        model.set_head_device(device)
+    else:
+        model = SRTAdapter(config)
+        model = model.to(device)
 
     # Only put adapter params in training mode (backbone stays eval)
     model.train()
