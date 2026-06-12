@@ -290,19 +290,23 @@ class SRTAdapter(nn.Module):
             T, h.dtype, self._head_device or device
         )
 
-        # 4. Prepare 4D causal+padding mask for backbone layers
-        # Must combine causal mask (T, T) with padding mask (B, T) into (B, 1, T, T)
-        # so that SDPA doesn't drop is_causal=True behavior
-        causal_4d = _make_causal_mask(T, h.dtype, device)  # (1, 1, T, T)
+        # 4. Prepare backbone attention mask.
+        # When there is NO padding mask, pass None: transformers' SDPA path
+        # then uses is_causal=True, which is exactly what the backbone's own
+        # forward does. Passing an explicit additive causal mask instead is
+        # mathematically equivalent but takes a different kernel path whose
+        # bf16 rounding differs; on deep MoE backbones (94 layers x discrete
+        # expert routing) that epsilon amplifies into real logit divergence
+        # (seen on Qwen3-235B: 4/34 top-1 flips incl. a 0.885-margin one).
+        # The explicit 4D mask is only needed to combine causal + padding.
         backbone_mask = None
         if attention_mask is not None:
+            causal_4d = _make_causal_mask(T, h.dtype, device)  # (1, 1, T, T)
             # (B, T) → (B, 1, 1, T) padding mask
             pad_mask = (1.0 - attention_mask[:, None, None, :].to(h.dtype)) * torch.finfo(
                 h.dtype
             ).min
             backbone_mask = causal_4d + pad_mask  # (B, 1, T, T)
-        else:
-            backbone_mask = causal_4d  # (1, 1, T, T) — causal only
 
         # 5. Layer-by-layer forward with semiotic taps
         divergences: list[torch.Tensor] = []
@@ -456,10 +460,9 @@ class SRTAdapter(nn.Module):
         # MAH attention mask is built per-head inside forward_step; here we only
         # need the backbone mask. With a KV cache and a single decode token no
         # mask is required (all cached keys are in the past). For prefill we
-        # build the causal mask over the new block against itself.
+        # pass None so SDPA uses its is_causal fast path — numerically
+        # identical to the backbone's own forward (see note in forward()).
         backbone_mask = None
-        if T > 1:
-            backbone_mask = _make_causal_mask(T, h.dtype, device)
 
         meta_state: torch.Tensor | None = None
         divergences: list[torch.Tensor] = []
