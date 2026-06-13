@@ -5,7 +5,7 @@ gradio>=6.7.0
 # unreachable; the floor keeps the validated transformers pin intact.
 torch>=2.6
 # HARD PIN: transformers 4.55+ breaks the adapter's manual-decoder generation.
-transformers==4.53.3
+transformers==5.0.0rc3
 huggingface_hub>=0.24
 accelerate>=0.33
 sentencepiece
