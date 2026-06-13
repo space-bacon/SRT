@@ -1,5 +1,9 @@
 gradio>=6.7.0
-torch>=2.2
+# torch>=2.6 mitigates CVE-2026-1839 (GHSA-69w3-r845-3855): the transformers
+# Trainer torch.load RCE is neutralised because safe_globals() only protects on
+# torch>=2.6. This demo is inference-only (no HF Trainer), so the path is also
+# unreachable; the floor keeps the validated transformers pin intact.
+torch>=2.6
 # HARD PIN: transformers 4.55+ breaks the adapter's manual-decoder generation.
 transformers==4.53.3
 huggingface_hub>=0.24
