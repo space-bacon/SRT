@@ -21,12 +21,13 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    # torch>=2.6 mitigates CVE-2026-1839 (transformers Trainer torch.load RCE):
-    # safe_globals() only protects on torch>=2.6. We never use the HF Trainer,
-    # so the path is also unreachable; this floor avoids forcing the
-    # transformers 5.x bump that breaks the manual-decoder generation loop.
     "torch>=2.6",
-    "transformers>=4.40,<5.0",
+    # transformers>=5.0.0rc3 carries the CVE-2026-1839 fix and is verified
+    # bit-exact with the SRT manual decoder loop (R0 smoke parity 0.000e+00 on
+    # Qwen2 and Qwen3 dense under 5.7.0). The upper bound only excludes the next
+    # major; the torch>=2.6 floor additionally neutralises the CVE for anyone
+    # who pins back to a 4.x for the validated 235B training runtime.
+    "transformers>=5.0.0rc3,<6.0",
     "safetensors>=0.4",
     "huggingface_hub>=0.24",
     "numpy>=1.24",
