@@ -145,6 +145,18 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 - v1.0 demo: <https://huggingface.co/spaces/RiverRider/srt-adapter-v1.0-demo>
 - v8a demo: <https://huggingface.co/spaces/RiverRider/srt-adapter-v8a-demo>
 
+### Released checkpoints
+
+| Checkpoint | Backbone | Notes |
+|---|---|---|
+| [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) | Qwen2.5-7B | Stable release, semantic embeddings (MTEB-STS). |
+| [`RiverRider/srt-adapter-v8a`](https://huggingface.co/RiverRider/srt-adapter-v8a) | Qwen2.5-7B | Encoder-as-community headline run. |
+| [`RiverRider/srt-adapter-qwen3-235b`](https://huggingface.co/RiverRider/srt-adapter-qwen3-235b) | Qwen3-235B-A22B-FP8 | Read-only port to a frozen frontier MoE. Held-out regime ECE 0.0005 / AUROC 0.986, community NMI 0.62. |
+
+The 235B checkpoint shows the SRT read-out transfers across backbone scale and
+architecture (dense 7B → 94-layer, 22B-active MoE): only the ~15.9M side-channel
+heads are trained, on a fully frozen, forward-only backbone.
+
 ### Train from scratch
 
 ```bash

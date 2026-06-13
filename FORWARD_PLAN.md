@@ -33,6 +33,39 @@ activation-verbalizer targets) onto a frozen **Qwen3-235B-A22B** backbone, and
 ship a `srt-adapter-qwen3-235b` checkpoint plus the introspection signals the
 showcase demo already renders.
 
+> ### Status: Phase A DONE (2026-06-13)
+>
+> R0–R3 rungs all green; the read-only adapter is trained, evaluated on a
+> held-out set, and shipped. Checkpoint:
+> [`RiverRider/srt-adapter-qwen3-235b`](https://huggingface.co/RiverRider/srt-adapter-qwen3-235b).
+>
+> - **R0** `Qwen3-8B-Base` (dense): all green, fp32 parity bit-exact.
+> - **R1** `Qwen3-14B-Base` (dense): smoke + 2000-step read-only train,
+>   monotonic val.
+> - **R2** `Qwen3-30B-A3B-Base` (MoE) + FP8 variant: smoke + train; MoE
+>   read-only confirmed memory-bandwidth-bound.
+> - **R3** `Qwen3-235B-A22B-FP8` (94-layer MoE, sharded across 8× RTX PRO 6000):
+>   smoke parity **byte-identical** to HF forward after the SDPA `is_causal`
+>   fix; Phase-A read-only training to step 2000 (best at step 1750).
+>
+> Validation `bif` improved 0.0999 → **0.0666** (~33%) warm-starting bs=16 →
+> bs=128. Held-out probe (3000 rows, [`scripts/phaseA_probe.py`](scripts/phaseA_probe.py)):
+>
+> | Head | Metric | Value |
+> |---|---|---|
+> | Regime | ECE | **0.0005** |
+> | Regime | AUROC | **0.9859** |
+> | Regime | Brier | 0.0123 |
+> | r̂ (bifurcation) | Pearson | 0.751 |
+> | r̂ (bifurcation) | MAE | 0.571 (under-predicts scale; affine rescale halves it) |
+> | Community | NMI | 0.6247 |
+> | Community | ARI | 0.4040 |
+>
+> This **meets the R3 success criterion below** (regime ECE in the 1e-3 range,
+> as on v8a; community beats random on held-out probes). It is the first SRT
+> adapter on a frontier-scale (235B / 22B-active MoE) host, supporting the
+> substrate-generality claim. **Phase B (inject-CE) remains deferred.**
+
 ### What is actually new vs the 7B port
 
 The four SRT modules and the FiLM inject all operate on the **residual stream**
