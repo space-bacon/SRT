@@ -1,5 +1,10 @@
 sentencepiece>=0.2.0
-jinja2<3.1.5
-fastapi<0.115
-starlette<0.40
+# Security floors (were vulnerable upper-bound caps):
+#  - jinja2 sandbox escape CVE-2024-56326 fixed in 3.1.5; indirect-format
+#    escape CVE-2025-27516 fixed in 3.1.6.
+#  - starlette multipart DoS CVE-2024-47874 fixed in 0.40.0, which requires
+#    fastapi>=0.115.
+jinja2>=3.1.6
+fastapi>=0.115
+starlette>=0.40.0
 srt-adapter @ git+https://github.com/space-bacon/SRT.git@fe457486d9e7f58dd71c9f7fed62eda6587a19e2
