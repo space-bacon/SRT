@@ -4,7 +4,7 @@
 srt-adapter @ git+https://github.com/space-bacon/SRT.git@main
 
 # HARD PIN: transformers 4.55+ breaks the adapter's manual-decoder generation.
-transformers==4.53.3
+transformers==5.0.0rc3
 # torch>=2.6 mitigates CVE-2026-1839 (GHSA-69w3-r845-3855): the Trainer RCE via
 # torch.load is neutralised because safe_globals() only protects on torch>=2.6.
 # This Space is inference-only and never uses the HF Trainer, so the path is
