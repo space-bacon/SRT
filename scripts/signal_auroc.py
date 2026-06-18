@@ -59,8 +59,6 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--n", type=int, default=200)
     p.add_argument("--start", type=int, default=0,
                    help="offset into the GSM8K test set (for disjoint held-out slices)")
-    p.add_argument("--start", type=int, default=0,
-                   help="skip the first --start problems (for a disjoint held-out slice)")
     p.add_argument("--max-new-tokens", type=int, default=220)
     p.add_argument("--dtype", default="bfloat16")
     p.add_argument("--device", default="cuda")
