@@ -104,7 +104,7 @@ def main() -> None:
     print(f"   ready in {time.time() - t0:.0f}s")
 
     from datasets import load_dataset
-    ds = load_dataset("gsm8k", "main", split="test")
+    ds = load_dataset("openai/gsm8k", "main", split="test")
 
     def one_gen(ids, temperature, seed=None):
         if seed is not None:

@@ -141,7 +141,7 @@ def main() -> None:
     print(f"   model ready in {time.time() - t0:.0f}s")
 
     from datasets import load_dataset
-    ds = load_dataset("gsm8k", "main", split="test")
+    ds = load_dataset("openai/gsm8k", "main", split="test")
 
     def gen(prompt: str, inject: bool) -> str:
         if args.gen_method == "cached":

@@ -63,7 +63,7 @@ def main() -> None:
     client = Client(args.space, token=hf_token())
 
     from datasets import load_dataset
-    ds = load_dataset("gsm8k", "main", split="test")
+    ds = load_dataset("openai/gsm8k", "main", split="test")
 
     def gen(prompt: str, temperature: float) -> str | None:
         # cb_generate(prompt, mode, max_new, budget, k, temperature, top_p,
