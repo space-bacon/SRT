@@ -695,7 +695,10 @@ def build() -> gr.Blocks:
         with gr.Row():
             with gr.Column(scale=2):
                 prompt = gr.Textbox(label="Prompt", lines=4,
-                                    value="The sky looks blue during the day because")
+                                    value="The sky looks blue during the day because",
+                                    info="In Completion mode, write a prefix the model "
+                                         "finishes. In Chat mode, write a question or "
+                                         "instruction. Pick a curated example below to start.")
                 with gr.Row():
                     mode = gr.Radio(
                         ["Completion", "Chat"], value="Completion", label="Mode",
@@ -705,16 +708,40 @@ def build() -> gr.Blocks:
                              "introspection. Chat: your text is wrapped in the "
                              "instruction template, so it answers as an assistant.")
                     tint = gr.Radio(["entropy", "divergence"], value="entropy",
-                                    label="Tint tokens by")
-                    inject = gr.Checkbox(value=True, label="SRT injection on")
+                                    label="Tint tokens by",
+                                    info="Which signal colours each token. Entropy = "
+                                         "the model\u2019s uncertainty (validated). "
+                                         "Divergence = how fast its internal meaning is "
+                                         "moving (observational).")
+                    inject = gr.Checkbox(value=True, label="SRT injection on",
+                                         info="On: the SRT side-channel feeds its read-out "
+                                              "back into the frozen model. Off: the bare "
+                                              "backbone runs alone. Use the A/B tab to see "
+                                              "the difference side by side.")
                 with gr.Row():
-                    max_new = gr.Slider(16, 1024, value=256, step=16, label="max tokens")
-                    budget = gr.Slider(2, 20, value=10, step=1, label="verbalization slots")
-                    k = gr.Slider(1, 8, value=4, step=1, label="AV samples / slot (K)")
+                    max_new = gr.Slider(16, 1024, value=256, step=16, label="max tokens",
+                                        info="Upper bound on how many tokens to generate. "
+                                             "Higher = longer output and a longer trace to "
+                                             "read, but slower.")
+                    budget = gr.Slider(2, 20, value=10, step=1, label="verbalization slots",
+                                       info="How many tokens get a natural-language "
+                                            "verbalization of their hidden state. More "
+                                            "slots = richer read-out, more compute.")
+                    k = gr.Slider(1, 8, value=4, step=1, label="AV samples / slot (K)",
+                                  info="Samples drawn per verbalization slot; the best "
+                                       "is kept. Higher K = more faithful wording, slower.")
                 with gr.Row():
-                    temperature = gr.Slider(0.0, 1.5, value=0.7, step=0.05, label="temperature")
-                    top_p = gr.Slider(0.1, 1.0, value=0.95, step=0.05, label="top-p")
-                    rep = gr.Slider(1.0, 1.5, value=1.15, step=0.01, label="rep. penalty")
+                    temperature = gr.Slider(0.0, 1.5, value=0.7, step=0.05, label="temperature",
+                                            info="Sampling randomness. 0 = greedy/"
+                                                 "deterministic; higher = more varied, "
+                                                 "higher-entropy output.")
+                    top_p = gr.Slider(0.1, 1.0, value=0.95, step=0.05, label="top-p",
+                                      info="Nucleus sampling: only the most probable tokens "
+                                           "summing to this mass are considered. Lower = "
+                                           "safer, more focused.")
+                    rep = gr.Slider(1.0, 1.5, value=1.15, step=0.01, label="rep. penalty",
+                                    info="Penalises repeating tokens. 1.0 = off; higher "
+                                         "discourages loops and repetition.")
                 with gr.Row():
                     go = gr.Button("Generate", variant="primary")
                     regen = gr.Button("Regenerate")
