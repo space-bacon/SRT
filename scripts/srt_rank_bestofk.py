@@ -153,6 +153,14 @@ def main() -> None:
         rows.append({"i": i, "gold": gold, "answers": answers,
                      "sel": {k: sel.get(k) for k in sel}})
         n = len(rows)
+        # Incremental write every 10 problems so a mid-run stop keeps data.
+        if n % 10 == 0:
+            acc_now = {m: correct[m] / n for m in methods}
+            Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.out).write_text(json.dumps(
+                {"adapter": args.adapter_repo, "n": n, "k": args.k,
+                 "temperature": args.temperature, "partial": True,
+                 "accuracy": acc_now, "rows": rows}, indent=2))
         flags = " ".join(f"{m.replace('srt_','S:')}={'✓' if (sel.get(m)==gold or (m=='oracle_passk' and passk)) else '✗'}"
                          for m in ["greedy", "majority", "srt_mean_div_norm", "oracle_passk"])
         print(f"  [{i + 1}/{args.n}] gold={gold:>7} {flags} ({time.time() - t:.0f}s)")
