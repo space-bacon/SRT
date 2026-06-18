@@ -39,11 +39,28 @@ from scripts.inject_ab_eval import (  # noqa: E402
 SIGNALS = ["mean_entropy", "peak_entropy", "mean_div_norm", "peak_div_norm",
            "regime_super_frac", "mean_r_hat", "mean_chain"]
 
+# Directions PRE-REGISTERED from the first n=200 run (problems 0-199), to be
+# tested on a disjoint held-out slice. value = the direction in which the signal
+# was claimed to predict a WRONG answer. "high" => high value predicts wrong.
+PREREG = {
+    "mean_entropy": "high",      # validated uncertainty: high entropy -> wrong
+    "peak_entropy": "low",       # run1: high peak entropy -> correct
+    "mean_div_norm": "low",      # HYPOTHESIS: confidently-wrong = smooth trajectory
+    "peak_div_norm": "high",
+    "regime_super_frac": "low",
+    "mean_r_hat": "low",
+    "mean_chain": "low",         # HYPOTHESIS: low chain residual -> wrong
+}
+
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--adapter-repo", default="RiverRider/srt-adapter-v1.0")
     p.add_argument("--n", type=int, default=200)
+    p.add_argument("--start", type=int, default=0,
+                   help="offset into the GSM8K test set (for disjoint held-out slices)")
+    p.add_argument("--start", type=int, default=0,
+                   help="skip the first --start problems (for a disjoint held-out slice)")
     p.add_argument("--max-new-tokens", type=int, default=220)
     p.add_argument("--dtype", default="bfloat16")
     p.add_argument("--device", default="cuda")
@@ -107,7 +124,8 @@ def main() -> None:
     feats: list[dict] = []
     wrong: list[int] = []
     n_correct = 0
-    for i in range(min(args.n, len(ds))):
+    idxs = range(args.start, min(args.start + args.n, len(ds)))
+    for i in idxs:
         gold = gold_number(ds[i]["answer"])
         ids = tok(FEWSHOT + f"Question: {ds[i]['question']}\nAnswer:",
                   return_tensors="pt").input_ids.to(args.device)
@@ -120,17 +138,20 @@ def main() -> None:
         n_correct += ok
         feats.append(aggregate(sig))
         wrong.append(0 if ok else 1)
-        if (i + 1) % 20 == 0:
-            print(f"  [{i + 1}/{args.n}] acc so far {n_correct}/{i + 1}")
+        if len(feats) % 20 == 0:
+            print(f"  [{len(feats)}/{args.n}] acc so far {n_correct}/{len(feats)}")
 
     n = len(feats)
     aurocs = {}
     for s in SIGNALS:
         scores = [f[s] for f in feats]
         a = auroc(scores, wrong)
-        # orient so reported value >=0.5 reflects strength in its best direction
+        prereg_dir = PREREG[s]
+        prereg = a if prereg_dir == "high" else (1 - a)
         aurocs[s] = {"auroc_wrong_if_high": round(a, 4),
                      "auroc_oriented": round(max(a, 1 - a), 4),
+                     "prereg_direction": prereg_dir,
+                     "auroc_prereg": round(prereg, 4),
                      "direction": "high=wrong" if a >= 0.5 else "low=wrong"}
 
     result = {"adapter": args.adapter_repo, "n": n,
@@ -142,14 +163,16 @@ def main() -> None:
     out.write_text(json.dumps({**result, "feats": feats, "wrong": wrong}, indent=2))
 
     print("\n" + "=" * 64)
-    print(f"SRT SIGNAL → GSM8K CORRECTNESS  (n={n}, acc={result['accuracy']:.3f})")
+    print(f"SRT SIGNAL → GSM8K CORRECTNESS  (problems {args.start}–{args.start + n - 1}, "
+          f"acc={result['accuracy']:.3f})")
     print("AUROC for predicting a WRONG answer (0.5 = no predictive power)")
+    print("pre-reg = AUROC in the direction fixed BEFORE seeing this slice")
     print("=" * 64)
-    print(f"  {'signal':<20} {'AUROC':>7}  {'oriented':>8}  direction")
+    print(f"  {'signal':<20} {'pre-reg':>8} {'(dir)':>6}  {'post-hoc best':>13}")
     for s in SIGNALS:
         a = aurocs[s]
-        print(f"  {s:<20} {a['auroc_wrong_if_high']:7.3f}  "
-              f"{a['auroc_oriented']:8.3f}  {a['direction']}")
+        print(f"  {s:<20} {a['auroc_prereg']:8.3f} {a['prereg_direction']:>6}  "
+              f"{a['auroc_oriented']:13.3f}")
     print("=" * 64)
     print(f"Wrote {out}")
 
