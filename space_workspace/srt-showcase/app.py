@@ -568,6 +568,18 @@ EXAMPLES = [
 
     # — Plain explainer baseline. —
     ["Explain in two sentences why the sky is blue.", "Chat"],
+
+    # ── Completion mode: the model continues your text directly. Write a
+    #    prefix (no question, no instruction) and watch it carry the thought
+    #    forward token by token. Often the cleanest view of raw introspection. —
+    ["The sky looks blue during the day because", "Completion"],
+    ["The three main causes of the First World War were", "Completion"],
+    ["She opened the letter, and the first line read:", "Completion"],
+    ["In Python, the difference between a list and a tuple is that", "Completion"],
+    ["The capital of Australia is", "Completion"],
+    ["Once the reactor temperature crossed the threshold, the engineers", "Completion"],
+    ["def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number.\"\"\"\n    ", "Completion"],
+    ["The most surprising thing about octopus intelligence is that", "Completion"],
 ]
 
 
@@ -683,9 +695,15 @@ def build() -> gr.Blocks:
         with gr.Row():
             with gr.Column(scale=2):
                 prompt = gr.Textbox(label="Prompt", lines=4,
-                                    value="Explain in two sentences why the sky is blue.")
+                                    value="The sky looks blue during the day because")
                 with gr.Row():
-                    mode = gr.Radio(["Completion", "Chat"], value="Chat", label="Mode")
+                    mode = gr.Radio(
+                        ["Completion", "Chat"], value="Completion", label="Mode",
+                        info="Completion: the model continues your text directly "
+                             "(write a prefix it finishes, e.g. \u201cThe sky is blue "
+                             "because\u201d) \u2014 often the clearest window into raw "
+                             "introspection. Chat: your text is wrapped in the "
+                             "instruction template, so it answers as an assistant.")
                     tint = gr.Radio(["entropy", "divergence"], value="entropy",
                                     label="Tint tokens by")
                     inject = gr.Checkbox(value=True, label="SRT injection on")
@@ -722,6 +740,14 @@ def build() -> gr.Blocks:
 
         gr.Markdown(
             "### Curated examples — what to watch for\n"
+            "**Two modes.** *Completion* (the default) continues whatever text you "
+            "write — give it a **prefix**, not a question (e.g. *“The capital of "
+            "Australia is”* or *“She opened the letter, and the first line read:”*), "
+            "and it carries the thought forward. This is usually the clearest window "
+            "into raw introspection. *Chat* wraps your text in the instruction "
+            "template so the model replies as an assistant — better for questions and "
+            "tasks. Use the **Mode** selector above to switch; each example below is "
+            "tagged with the mode it expects.\n\n"
             "Pick a prompt below, then read the signals as it generates:\n"
             "- **Confident recall** (capital of Australia, *Pride and Prejudice*): "
             "low entropy at the fact; the verbalization names the fact itself.\n"
@@ -732,7 +758,10 @@ def build() -> gr.Blocks:
             "- **Genuine uncertainty** (rain Tuesday, language in 2035): elevated entropy — many valid continuations.\n"
             "- **Safety boundary** (lock picking): a regime shift as it pivots to declining.\n"
             "- **Ambiguity** ('The old man the boats'): the model commits to one parse.\n"
-            "- **Open-ended / creative** (Mars mystery opener): high entropy throughout."
+            "- **Open-ended / creative** (Mars mystery opener): high entropy throughout.\n"
+            "- **Completion prefixes** (sky/blue, WWI causes, Python list-vs-tuple, "
+            "`def fibonacci`): a bare prefix the model finishes — entropy drops as it "
+            "commits to a continuation, and the verbalizations track the unfolding thought."
         )
         gr.Examples(
             examples=EXAMPLES, inputs=[prompt, mode], label="Curated examples",
