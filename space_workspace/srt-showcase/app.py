@@ -456,6 +456,22 @@ _APP_CSS = f"""
 }}
 .gradio-container .tab-nav button {{ color: {MUTED} !important; }}
 .gradio-container .tab-nav button.selected {{ color: {CYAN} !important; }}
+.primer {{ background: {PANEL} !important; border: 1px solid {PANEL_ALT};
+           border-radius: 10px; padding: 10px 14px; margin: 6px 0 2px; }}
+.primer > summary {{ cursor: pointer; color: {CYAN} !important; font-weight: 600;
+                     font-family: ui-monospace, monospace; font-size: 14px;
+                     list-style: none; }}
+.primer > summary::-webkit-details-marker {{ display: none; }}
+.primer > summary::before {{ content: '▸ '; color: {LAVENDER}; }}
+.primer[open] > summary::before {{ content: '▾ '; }}
+.primer-body {{ margin-top: 8px; }}
+.primer-body p {{ color: {INK} !important; font-size: 14px; line-height: 1.5;
+                  margin: 8px 0; }}
+.primer-body ol {{ color: {INK} !important; margin: 6px 0 6px 4px;
+                   padding-left: 18px; }}
+.primer-body li {{ color: {INK} !important; font-size: 14px; line-height: 1.5;
+                   margin: 4px 0; }}
+.primer-body a {{ color: {CYAN} !important; }}
 """
 
 
@@ -624,12 +640,45 @@ def cb_compare(prompt, mode, max_new, budget, k, temperature, top_p,
 def build() -> gr.Blocks:
     with gr.Blocks(title="SRT Showcase", css=_APP_CSS) as app:
         gr.Markdown(
-            "## SRT Showcase — watch a frozen model think\n"
-            "Live token-by-token introspection of **Qwen-2.5-7B + the SRT adapter**. "
-            "Tokens are tinted by **predictive entropy** (validated uncertainty signal). "
-            "SRT divergence, reflexivity `r̂`, regime, and the natural-language "
-            "verbalizations are **observational readouts** of internal state — a window "
-            "into the model, not a hallucination detector."
+            "## SRT Showcase — watch a frozen model think, one token at a time\n"
+            "This is a **live language model** (Qwen-2.5-7B). As it writes an answer, "
+            "a small read-only instrument reads its internal state and shows you how "
+            "confident it is and how its &ldquo;understanding&rdquo; shifts word by word. "
+            "Nothing here is pre-recorded.\n\n"
+            "<details open class='primer'>"
+            "<summary>New here? A 60-second primer</summary>"
+            "<div class='primer-body'>"
+            "<p><b>What am I looking at?</b> A real, full-size language model generating "
+            "text. The right-hand panel and the Introspection tab below are computed live "
+            "from the model&rsquo;s own activations as it runs.</p>"
+            "<p><b>What is the &ldquo;SRT&rdquo; part?</b> SRT (Semiotic-Reflexive "
+            "Transformer) is a theory that a model&rsquo;s understanding is a process that "
+            "keeps folding back on itself as it reads. I trained a small read-only "
+            "side-channel &mdash; the <b>SRT adapter</b> &mdash; that watches the frozen "
+            "model&rsquo;s hidden states and reports on that process. It does not change "
+            "the model&rsquo;s answer. Think microscope, not filter.</p>"
+            "<p><b>How do I read the screen?</b></p>"
+            "<ol>"
+            "<li><b>Tinted tokens</b> &mdash; each word is shaded by how unsure the model "
+            "was about it (bright = uncertain, dim = confident).</li>"
+            "<li><b>The meter</b> summarises the run: uncertainty, how much the internal "
+            "meaning is moving (divergence), how self-referential it is (reflexivity), and "
+            "whether it has &ldquo;locked in&rdquo; one interpretation (regime). Hover any "
+            "row, or open the glossary at its foot.</li>"
+            "<li><b>Verbalizations</b> translate selected hidden states back into English "
+            "&mdash; the adapter&rsquo;s best attempt to say what the model was internally "
+            "representing at that moment. Each carries a round-trip fidelity score so you "
+            "can judge how much to trust that readout.</li>"
+            "</ol>"
+            "<p><b>Honest caveat.</b> These are <i>observational readouts</i> of internal "
+            "state, not a lie detector or hallucination detector. Only entropy is a "
+            "validated confidence signal; the rest is a window for interpretation.</p>"
+            "<p><b>Want the backstory?</b> "
+            "<a href='https://github.com/space-bacon/SRT' target='_blank'>Project &amp; "
+            "method on GitHub</a> &middot; "
+            "<a href='https://huggingface.co/RiverRider/srt-adapter-v1.0' target='_blank'>"
+            "Stable adapter on Hugging Face</a>.</p>"
+            "</div></details>"
         )
         with gr.Row():
             with gr.Column(scale=2):
