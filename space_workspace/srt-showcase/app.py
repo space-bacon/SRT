@@ -473,11 +473,15 @@ _APP_CSS = f"""
                    margin: 4px 0; }}
 .primer-body a {{ color: {CYAN} !important; }}
 /* Compact control help: hide the always-on info text and surface it as a
-   hover-only ⓘ icon next to each control label. */
+   hover-only (i) icon next to each control label. */
 .gradio-container *:has(> [data-testid="block-info"]) {{ position: relative; }}
 .gradio-container *:has(> [data-testid="block-info"])::after {{
-    content: "\24D8"; margin-left: 5px; color: {MUTED};
-    font-size: 11px; cursor: help; font-style: normal; font-weight: 400; }}
+    content: "i"; display: inline-flex; align-items: center;
+    justify-content: center; width: 13px; height: 13px; margin-left: 5px;
+    border: 1px solid {MUTED}; border-radius: 50%; color: {MUTED};
+    font-size: 9px; font-style: italic; font-weight: 700; line-height: 1;
+    font-family: Georgia, "Times New Roman", serif; cursor: help;
+    vertical-align: middle; }}
 .gradio-container [data-testid="block-info"] {{
     position: absolute; left: 0; top: calc(100% + 4px); z-index: 60;
     width: max-content; max-width: 300px; margin: 0;
