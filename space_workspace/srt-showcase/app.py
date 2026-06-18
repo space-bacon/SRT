@@ -423,6 +423,18 @@ _CSS = f"""
 .abcol {{ flex: 1; background: {PANEL}; border-radius: 10px; padding: 10px 12px; }}
 .abhead {{ font-family: ui-monospace, monospace; font-size: 12px;
            margin-bottom: 6px; }}
+@media (max-width: 640px) {{
+  .toks {{ font-size: 14px; line-height: 1.95; }}
+  .tok:hover::after {{ white-space: normal; max-width: 80vw; }}
+  .meter {{ padding: 10px 12px; }}
+  .meter-row {{ font-size: 12px; }}
+  .meter-row b {{ font-size: 15px; }}
+  .abwrap {{ flex-direction: column; gap: 8px; }}
+  .lbars {{ height: 48px; }}
+  /* keep the round-trip badge from overlapping the verbalization label */
+  .rt {{ float: none; display: inline-block; margin: 4px 0 0; }}
+  .vmeta {{ display: block; margin-top: 2px; }}
+}}
 </style>
 """
 
@@ -472,6 +484,16 @@ _APP_CSS = f"""
 .primer-body li {{ color: {INK} !important; font-size: 14px; line-height: 1.5;
                    margin: 4px 0; }}
 .primer-body a {{ color: {CYAN} !important; }}
+/* ── Mobile: stack the side-by-side layout and let widgets use full width.
+   Gradio tags rows/columns with bare 'row'/'column' class tokens (alongside a
+   build-specific svelte hash), so [class~=...] targets them hash-proof. ── */
+@media (max-width: 768px) {{
+    .gradio-container {{ padding-left: 6px !important; padding-right: 6px !important; }}
+    .gradio-container [class~="row"] {{ flex-wrap: wrap !important; gap: 8px !important; }}
+    .gradio-container [class~="column"] {{ flex: 1 1 100% !important; min-width: 0 !important; }}
+    .gradio-container .tab-nav {{ overflow-x: auto !important; }}
+    .gradio-container img, .gradio-container svg {{ max-width: 100% !important; height: auto; }}
+}}
 """
 
 
