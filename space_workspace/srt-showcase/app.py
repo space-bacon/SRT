@@ -155,6 +155,32 @@ def _render_tokens(result, tint: str) -> str:
     return f"<div class='toks'>{''.join(spans)}</div>"
 
 
+_GLOSSARY_HTML = (
+    "<details class='glossary'><summary>What do these numbers mean?</summary>"
+    "<dl>"
+    "<dt>entropy (nats)</dt><dd>The model's uncertainty about the next token. "
+    "0 means it is certain; higher means more words are competing for the slot. "
+    "Peak entropy marks the single most uncertain moment in the answer.</dd>"
+    "<dt>SRT divergence</dt><dd>How fast the model's internal interpretation is "
+    "moving while it processes the token. High divergence = the meaning is actively "
+    "being revised; low = a settled reading.</dd>"
+    "<dt>reflexivity r&#770;</dt><dd>A 0-1 estimate of how self-referential the step "
+    "is: how much the model is looping back on its own representation rather than "
+    "simply tracking the input.</dd>"
+    "<dt>supercritical regime</dt><dd>The share of tokens past the bifurcation tipping "
+    "point, where one interpretation has won and locked in. The rest are subcritical: "
+    "still settling between readings.</dd>"
+    "<dt>verbalization fidelity</dt><dd>For the tokens where the Activation Verbalizer "
+    "put the hidden state into words, those words are re-encoded and compared back to "
+    "the original internal state. High fidelity means the readout faithfully reflects "
+    "what the model was representing.</dd>"
+    "<dt>divergence by MAH layer</dt><dd>The same divergence broken out by network "
+    "depth, shallow (left) to deep (right), showing where in the stack the model's "
+    "interpretation moves the most.</dd>"
+    "</dl></details>"
+)
+
+
 def _render_meter(result) -> str:
     steps = result.steps
     if not steps:
@@ -175,10 +201,15 @@ def _render_meter(result) -> str:
     super_frac = sum(1 for s in steps if s.regime) / n
     verbalized = [s for s in steps if s.roundtrip_cos is not None]
 
-    def _bar(label, value, fmt, b_frac, color, unit=""):
+    def _bar(label, value, fmt, b_frac, color, unit="", tip=""):
         b_frac = max(0.0, min(1.0, b_frac))
+        if tip:
+            lab = (f"<span title=\"{html.escape(tip)}\">{label}"
+                   f"<i class='info'>&#9432;</i></span>")
+        else:
+            lab = f"<span>{label}</span>"
         return (
-            f"<div class='meter-row'><span>{label}</span>"
+            f"<div class='meter-row'>{lab}"
             f"<b style='color:{color}'>{fmt.format(value)}</b>{unit}</div>"
             f"<div class='bar'><div class='fill' "
             f"style='width:{int(b_frac * 100)}%;background:{color}'></div></div>"
@@ -186,18 +217,28 @@ def _render_meter(result) -> str:
 
     parts = [
         "<div class='meter'>",
-        _bar("mean entropy", mean_e, "{:.2f}", frac, col, " nats"),
-        f"<div class='meter-row'><span>peak entropy</span><b>{max_e:.2f}</b> nats"
+        _bar("mean entropy", mean_e, "{:.2f}", frac, col, " nats",
+             tip="The model's uncertainty about the next token, in nats. "
+                 "0 = it is sure; higher = more words are competing."),
+        f"<div class='meter-row'><span title=\"The single most uncertain token in "
+        f"the run, and how many tokens were generated.\">peak entropy<i class='info'>"
+        f"&#9432;</i></span><b>{max_e:.2f}</b> nats"
         f" &nbsp;·&nbsp; <span>{n} tokens</span></div>",
         "<div class='meter-sep'></div>",
         # SRT divergence: how fast the metapragmatic state is moving. Bar
         # scaled to the run's own peak so the mean reads as a fraction of max.
         _bar("mean SRT divergence", mean_d, "{:.2f}",
-             (mean_d / max_d) if max_d else 0.0, PINK),
+             (mean_d / max_d) if max_d else 0.0, PINK,
+             tip="How fast the model's internal interpretation is moving as it "
+                 "reads each token. High = meaning is being revised; low = a settled reading."),
         # Reflexivity r̂ is already in [0, 1].
-        _bar("mean reflexivity r̂", mean_r, "{:.2f}", mean_r, LAVENDER),
+        _bar("mean reflexivity r̂", mean_r, "{:.2f}", mean_r, LAVENDER,
+             tip="A 0-1 estimate of how self-referential the step is: the model "
+                 "looping on its own representation rather than just tracking the input."),
         # Regime mix: share of tokens the BEN flags supercritical (bifurcating).
-        _bar("supercritical regime", super_frac * 100, "{:.0f}", super_frac, AMBER, "%"),
+        _bar("supercritical regime", super_frac * 100, "{:.0f}", super_frac, AMBER, "%",
+             tip="Share of tokens past the bifurcation tipping point, where one "
+                 "interpretation has locked in (vs subcritical: still settling)."),
     ]
 
     # Verbalization fidelity: mean round-trip across the verbalized slots,
@@ -208,7 +249,10 @@ def _render_meter(result) -> str:
         mean_fid = max(0.0, min(1.0, mean_fid))
         fcol = MINT if mean_fid > 0.66 else (AMBER if mean_fid > 0.33 else PINK)
         parts.append(_bar(f"verbalization fidelity ({len(verbalized)})",
-                          mean_fid * 100, "{:.0f}", mean_fid, fcol, "%"))
+                          mean_fid * 100, "{:.0f}", mean_fid, fcol, "%",
+                          tip="For tokens where the hidden state was decoded into "
+                              "words, those words are re-encoded and compared back to "
+                              "the original state. High = a faithful readout."))
 
     # Per-layer divergence depth profile: average each MAH layer's divergence
     # across all tokens to reveal *where* in the stack the model's
@@ -216,9 +260,14 @@ def _render_meter(result) -> str:
     profile = _layer_profile(steps)
     if profile:
         parts.append("<div class='meter-sep'></div>")
-        parts.append("<div class='meter-row'><span>divergence by MAH layer (depth profile)</span></div>")
+        parts.append(
+            "<div class='meter-row'><span title=\"The same divergence broken out by "
+            "network depth, shallow (left) to deep (right), showing where in the stack "
+            "the interpretation moves most.\">divergence by MAH layer (depth profile)"
+            "<i class='info'>&#9432;</i></span></div>")
         parts.append(_layer_bars(profile))
 
+    parts.append(_GLOSSARY_HTML)
     parts.append("</div>")
     return "".join(parts)
 
@@ -339,6 +388,15 @@ _CSS = f"""
         margin: 6px 0; }}
 .fill {{ height: 100%; transition: width .3s ease; }}
 .meter-sep {{ height: 1px; background: {PANEL_ALT}; margin: 10px 0 8px; }}
+.info {{ color: {MUTED}; font-size: 10px; margin-left: 4px; cursor: help;
+         font-style: normal; }}
+.glossary {{ margin-top: 12px; border-top: 1px solid {PANEL_ALT}; padding-top: 8px; }}
+.glossary summary {{ cursor: pointer; color: {LAVENDER}; font-size: 12px;
+                     font-family: ui-monospace, monospace; }}
+.glossary dl {{ margin: 8px 0 2px; }}
+.glossary dt {{ color: {INK}; font-size: 12px; font-weight: 600; margin-top: 7px;
+                font-family: ui-monospace, monospace; }}
+.glossary dd {{ color: {MUTED}; font-size: 12px; margin: 2px 0 0; line-height: 1.45; }}
 .lbars {{ display: flex; align-items: flex-end; gap: 3px; height: 60px;
           margin: 4px 0 2px; }}
 .lbar {{ flex: 1; display: flex; flex-direction: column; align-items: center;
