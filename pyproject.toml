@@ -22,12 +22,11 @@ classifiers = [
 ]
 dependencies = [
     "torch>=2.6",
-    # transformers>=5.0.0rc3 carries the CVE-2026-1839 fix and is verified
-    # bit-exact with the SRT manual decoder loop (R0 smoke parity 0.000e+00 on
-    # Qwen2 and Qwen3 dense under 5.7.0). The upper bound only excludes the next
-    # major; the torch>=2.6 floor additionally neutralises the CVE for anyone
-    # who pins back to a 4.x for the validated 235B training runtime.
-    "transformers>=5.0.0rc3,<6.0",
+    # transformers pinned <5.0: 5.x breaks the KV-cached manual generation path
+    # (verified on Qwen2.5-7B). forward() parity is fine under 5.x but multi-step
+    # cached decoding degenerates. CVE-2026-1839 is mitigated by torch>=2.6 (and
+    # we never use the HF Trainer), so we do not need the 5.x code fix.
+    "transformers>=4.40,<5.0",
     "safetensors>=0.4",
     "huggingface_hub>=0.24",
     "numpy>=1.24",

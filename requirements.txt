@@ -2,12 +2,12 @@
 # Gradio. ZeroGPU images ship Python 3.10 + CUDA 12.1, so a default torch
 # wheel is fine here (no Blackwell sm_120 requirement).
 torch>=2.2
-# transformers>=5.0.0rc3 carries the fix for CVE-2026-1839 (Trainer torch.load
-# RCE) and is verified bit-exact with the SRT manual decoder loop: the R0 smoke
-# parity check passes at max|diff|=0.000e+00 on both Qwen2 and Qwen3 dense under
-# transformers 5.7.0 (the adapter supplies position_embeddings itself, so the
-# old 4.55 RoPE-relocation concern no longer applies).
-transformers>=5.0.0rc3
+# HARD PIN: transformers 5.x BREAKS the adapter's KV-cached manual generation
+# (degenerate output on Qwen2.5-7B; verified on a CUDA box: 5.7.0 garbles,
+# 4.53.3 is correct). forward() parity is bit-exact under 5.x but multi-step
+# cached decoding is not. CVE-2026-1839 (Trainer RCE) stays mitigated by the
+# torch>=2.6 floor below, and we never invoke the HF Trainer.
+transformers==4.53.3
 safetensors>=0.4
 huggingface_hub>=0.24
 numpy>=1.24

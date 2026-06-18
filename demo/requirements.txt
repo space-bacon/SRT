@@ -1,10 +1,9 @@
 gradio>=6.7.0
 torch>=2.6
-# transformers>=5.0.0rc3 carries the CVE-2026-1839 fix (Trainer torch.load RCE)
-# and is verified bit-exact with the SRT manual decoder loop: R0 smoke parity
-# passes at 0.000e+00 on Qwen2 and Qwen3 dense under transformers 5.7.0. This
-# demo is inference-only (Qwen2.5-7B), the exact stack that was verified.
-transformers>=5.0.0rc3
+# HARD PIN: transformers 5.x breaks the adapter's KV-cached manual generation
+# (verified: 5.7.0 garbles on Qwen2.5-7B, 4.53.3 correct). CVE-2026-1839 stays
+# mitigated by torch>=2.6 above; the HF Trainer is never used here.
+transformers==4.53.3
 huggingface_hub>=0.24
 accelerate>=0.33
 sentencepiece
