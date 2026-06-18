@@ -472,6 +472,22 @@ _APP_CSS = f"""
 .primer-body li {{ color: {INK} !important; font-size: 14px; line-height: 1.5;
                    margin: 4px 0; }}
 .primer-body a {{ color: {CYAN} !important; }}
+/* Compact control help: hide the always-on info text and surface it as a
+   hover-only ⓘ icon next to each control label. */
+.gradio-container *:has(> [data-testid="block-info"]) {{ position: relative; }}
+.gradio-container *:has(> [data-testid="block-info"])::after {{
+    content: "\24D8"; margin-left: 5px; color: {MUTED};
+    font-size: 11px; cursor: help; font-style: normal; font-weight: 400; }}
+.gradio-container [data-testid="block-info"] {{
+    position: absolute; left: 0; top: calc(100% + 4px); z-index: 60;
+    width: max-content; max-width: 300px; margin: 0;
+    background: {PANEL_ALT} !important; color: {INK} !important;
+    border: 1px solid {LAVENDER}; border-radius: 7px; padding: 7px 10px;
+    font-size: 11px; line-height: 1.45; font-weight: 400; white-space: normal;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .12s ease; box-shadow: 0 4px 14px rgba(0,0,0,.35); }}
+.gradio-container *:has(> [data-testid="block-info"]):hover > [data-testid="block-info"] {{
+    opacity: 1; visibility: visible; }}
 """
 
 
@@ -657,7 +673,7 @@ def build() -> gr.Blocks:
             "a small read-only instrument reads its internal state and shows you how "
             "confident it is and how its &ldquo;understanding&rdquo; shifts word by word. "
             "Nothing here is pre-recorded.\n\n"
-            "<details open class='primer'>"
+            "<details class='primer'>"
             "<summary>New here? A 60-second primer</summary>"
             "<div class='primer-body'>"
             "<p><b>What am I looking at?</b> A real, full-size language model generating "
