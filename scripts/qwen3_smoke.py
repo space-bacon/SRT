@@ -5,6 +5,8 @@ Run on any box (CPU/MPS for Qwen3-0.6B-Base; CUDA for 8B+):
     python scripts/qwen3_smoke.py --backbone Qwen/Qwen3-0.6B-Base --dtype float32
     python scripts/qwen3_smoke.py --backbone Qwen/Qwen3-8B-Base            # cuda bf16
     python scripts/qwen3_smoke.py --backbone Qwen/Qwen3-30B-A3B-Base       # R2 MoE
+    python scripts/qwen3_smoke.py --backbone openai/gpt-oss-20b            # gpt-oss MoE
+    python scripts/qwen3_smoke.py --backbone openai/gpt-oss-120b --device-map auto
 
 Checks, in order:
   1. Backbone loads through SRTAdapter; layer indices resolve; bos != eos.

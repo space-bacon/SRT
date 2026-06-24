@@ -57,6 +57,44 @@ def _make_causal_mask(
     return mask[None, None, :, :]  # (1, 1, T, T)
 
 
+def _make_sliding_window_mask(
+    seq_len: int, window: int, dtype: torch.dtype, device: torch.device
+) -> torch.Tensor:
+    """Create a 4D additive sliding-window causal mask.
+
+    Position i may attend to position j iff j <= i (causal) AND i - j < window.
+    Used by backbones with alternating sliding/full attention (e.g. gpt-oss),
+    where the sliding layers cannot be expressed by the is_causal fast path.
+    """
+    idx = torch.arange(seq_len, device=device)
+    future = idx[None, :] > idx[:, None]                # j > i      → disallow
+    too_far = (idx[:, None] - idx[None, :]) >= window   # i - j >= w → disallow
+    disallowed = future | too_far
+    mask = torch.zeros(seq_len, seq_len, dtype=dtype, device=device)
+    mask.masked_fill_(disallowed, torch.finfo(dtype).min)
+    return mask[None, None, :, :]  # (1, 1, T, T)
+
+
+def _make_sliding_window_mask_cached(
+    q_start: int, q_len: int, kv_len: int, window: int,
+    dtype: torch.dtype, device: torch.device,
+) -> torch.Tensor:
+    """Sliding-window causal mask over a KV cache (prefill or decode).
+
+    Query absolute positions are [q_start, q_start + q_len); key absolute
+    positions are [0, kv_len). Query q attends to key k iff k <= q AND
+    q - k < window. Returns (1, 1, q_len, kv_len).
+    """
+    q_idx = torch.arange(q_start, q_start + q_len, device=device)
+    k_idx = torch.arange(kv_len, device=device)
+    future = k_idx[None, :] > q_idx[:, None]
+    too_far = (q_idx[:, None] - k_idx[None, :]) >= window
+    disallowed = future | too_far
+    mask = torch.zeros(q_len, kv_len, dtype=dtype, device=device)
+    mask.masked_fill_(disallowed, torch.finfo(dtype).min)
+    return mask[None, None, :, :]  # (1, 1, q_len, kv_len)
+
+
 def _layer_hidden(layer_out) -> torch.Tensor:
     """Extract hidden states from a decoder layer's return value.
 
@@ -138,6 +176,20 @@ class SRTAdapter(nn.Module):
         self._lm_head = self.backbone.lm_head
         self._rotary_emb = getattr(inner, "rotary_emb", None)
 
+        # Alternating sliding-window / full attention (e.g. gpt-oss). When the
+        # backbone declares per-layer attention types with a sliding window,
+        # the manual loop must hand sliding layers an explicit banded mask;
+        # full layers keep the is_causal fast path. All other backbones leave
+        # this disabled, so their mask path is unchanged (byte-identical).
+        bb_config = self.backbone.config
+        self._layer_types: list[str] = list(getattr(bb_config, "layer_types", None) or [])
+        self._sliding_window: int = int(getattr(bb_config, "sliding_window", 0) or 0)
+        self._has_sliding: bool = bool(
+            self._layer_types
+            and self._sliding_window
+            and any(lt == "sliding_attention" for lt in self._layer_types)
+        )
+
         d_backbone = self.backbone.config.hidden_size
         num_layers = self.backbone.config.num_hidden_layers
         self._d_backbone = d_backbone
@@ -154,6 +206,12 @@ class SRTAdapter(nn.Module):
             config.rrm_inject_indices,
             config.community_layer_idx,
         )
+        if self._has_sliding:
+            n_slide = sum(1 for lt in self._layer_types if lt == "sliding_attention")
+            logger.info(
+                "Sliding-window attention: window=%d, %d/%d sliding layers",
+                self._sliding_window, n_slide, len(self._layer_types),
+            )
 
         # ── Community discovery (early layer) ────────────────────────
         self.community_head = CommunityDiscoveryHead(config.community, d_backbone)
@@ -300,6 +358,7 @@ class SRTAdapter(nn.Module):
         # (seen on Qwen3-235B: 4/34 top-1 flips incl. a 0.885-margin one).
         # The explicit 4D mask is only needed to combine causal + padding.
         backbone_mask = None
+        sliding_mask = None
         if attention_mask is not None:
             causal_4d = _make_causal_mask(T, h.dtype, device)  # (1, 1, T, T)
             # (B, T) → (B, 1, 1, T) padding mask
@@ -307,6 +366,20 @@ class SRTAdapter(nn.Module):
                 h.dtype
             ).min
             backbone_mask = causal_4d + pad_mask  # (B, 1, T, T)
+            if self._has_sliding:
+                sliding_mask = _make_sliding_window_mask(
+                    T, self._sliding_window, h.dtype, device
+                ) + pad_mask
+        elif self._has_sliding:
+            # gpt-oss: HF's own forward builds explicit per-layer masks rather
+            # than relying on the is_causal fast path, and full vs sliding
+            # layers need different masks. Match HF exactly: full-attention
+            # layers get a plain causal mask, sliding layers a banded one.
+            # (Plain dense backbones keep backbone_mask=None → is_causal.)
+            backbone_mask = _make_causal_mask(T, h.dtype, device)
+            sliding_mask = _make_sliding_window_mask(
+                T, self._sliding_window, h.dtype, device
+            )
 
         # 5. Layer-by-layer forward with semiotic taps
         divergences: list[torch.Tensor] = []
@@ -325,8 +398,16 @@ class SRTAdapter(nn.Module):
             layer_kwargs: dict = {"position_ids": position_ids}
             if position_embeddings is not None:
                 layer_kwargs["position_embeddings"] = position_embeddings
-            if backbone_mask is not None:
-                layer_kwargs["attention_mask"] = backbone_mask
+            # Per-layer attention mask. On backbones with alternating
+            # sliding/full attention (gpt-oss), sliding layers get the banded
+            # mask while full layers fall back to backbone_mask (None →
+            # is_causal when unpadded). On every other backbone _has_sliding
+            # is False, so this is simply backbone_mask as before.
+            layer_mask = backbone_mask
+            if self._has_sliding and self._layer_types[layer_i] == "sliding_attention":
+                layer_mask = sliding_mask
+            if layer_mask is not None:
+                layer_kwargs["attention_mask"] = layer_mask
 
             with bb_ctx:
                 layer_out = layer(h, **layer_kwargs)
@@ -477,6 +558,18 @@ class SRTAdapter(nn.Module):
         # pass None so SDPA uses its is_causal fast path — numerically
         # identical to the backbone's own forward (see note in forward()).
         backbone_mask = None
+        sliding_mask = None
+        if self._has_sliding:
+            # gpt-oss: match HF's explicit per-layer masks over the KV cache.
+            # Full layers get a causal mask (window == kv_len disables the
+            # band), sliding layers get the banded window mask.
+            kv_len = start_pos + T
+            backbone_mask = _make_sliding_window_mask_cached(
+                start_pos, T, kv_len, kv_len, h.dtype, device,
+            )
+            sliding_mask = _make_sliding_window_mask_cached(
+                start_pos, T, kv_len, self._sliding_window, h.dtype, device,
+            )
 
         meta_state: torch.Tensor | None = None
         divergences: list[torch.Tensor] = []
@@ -490,8 +583,11 @@ class SRTAdapter(nn.Module):
             }
             if position_embeddings is not None:
                 layer_kwargs["position_embeddings"] = position_embeddings
-            if backbone_mask is not None:
-                layer_kwargs["attention_mask"] = backbone_mask
+            layer_mask = backbone_mask
+            if self._has_sliding and self._layer_types[layer_i] == "sliding_attention":
+                layer_mask = sliding_mask
+            if layer_mask is not None:
+                layer_kwargs["attention_mask"] = layer_mask
 
             layer_out = layer(h, **layer_kwargs)
             h = _layer_hidden(layer_out)
