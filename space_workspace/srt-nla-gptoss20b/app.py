@@ -598,7 +598,7 @@ table {border-collapse:separate;}
 """
 
 
-@_gpu(duration=120)
+@_gpu(duration=30)
 def cb_compare(pa: str, pb: str):
     """A vs B: does the model's internal STATE IDENTITY change between two
     prompts? Deterministic (forward passes only). Inspired by an external
