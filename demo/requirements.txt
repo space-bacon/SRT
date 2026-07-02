@@ -1,4 +1,4 @@
-gradio>=6.7.0
+gradio>=6.15.0
 torch>=2.6
 # HARD PIN: transformers 5.x breaks the adapter's KV-cached manual generation
 # (verified: 5.7.0 garbles on Qwen2.5-7B, 4.53.3 correct). CVE-2026-1839 stays

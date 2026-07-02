@@ -11,7 +11,7 @@ transformers==4.53.3
 safetensors>=0.4
 huggingface_hub>=0.24
 numpy>=1.24
-gradio==6.7.0
+gradio==6.15.0
 # Starlette is pulled transitively by gradio; floor at 0.40.0 to avoid the
 # multipart/form-data DoS (CVE-2024-47874, GHSA-f96h-pmfr-66vw). gradio 6.x
 # already requires a modern starlette, so the old <0.40 cap was both stale
