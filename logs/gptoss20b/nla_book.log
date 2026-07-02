@@ -1,0 +1,3 @@
+built vq codebook: {'mode': 'vq', 'n_codes': 4096, 'n_states': 200000, 'n_bits': None, 'k': 4096, 'load_factor': 48.828125, 'with_text': 4096}
+  4096 distinct states out of 200000 (collision/compression 98.0%)
+wrote -> /workspace/srt-adapter/artifacts/nla/gptoss20b/state_codebook_vq.pt

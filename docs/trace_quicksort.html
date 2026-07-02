@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>SRT introspect · quicksort trace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a1429; --panel: #16213d; --panel-alt: #1e2d4f;
+  --ink: #e6ecf5; --dim: #8a9bb8; --rule: #26345a;
+  --cyan: #7ee0ff; --mint: #7eebc0; --pink: #ff7eb9;
+  --orange: #ffb380; --lavender: #b8a4ff;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 15px; line-height: 1.55;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, rgba(126,224,255,0.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(255,126,185,0.07), transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+.eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cyan); font-weight: 600; margin-bottom: 0.5rem;
+}
+h1 {
+  font-size: 1.65rem; margin: 0 0 0.4rem; font-weight: 700; letter-spacing: -0.01em;
+}
+h1 .accent { color: var(--pink); }
+.sub { color: var(--dim); margin: 0 0 1.5rem; font-size: 0.95rem; }
+.explainer {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1rem 1.2rem; margin-bottom: 1.4rem; color: var(--ink);
+  font-size: 0.92rem;
+}
+.explainer p { margin: 0 0 0.55rem; }
+.explainer p:last-child { margin-bottom: 0; }
+.explainer .k { color: var(--cyan); font-weight: 600; }
+.explainer .k.pink { color: var(--pink); }
+.explainer .k.mint { color: var(--mint); }
+.explainer .k.lav { color: var(--lavender); }
+.meta-row {
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; margin-bottom: 1rem;
+  font-size: 0.82rem; color: var(--dim);
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: var(--panel); border: 1px solid var(--rule);
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.78rem;
+  color: var(--ink);
+}
+.chip .label { color: var(--dim); }
+.legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem;
+  font-size: 0.78rem; color: var(--dim); margin-bottom: 1rem;
+}
+.legend .grad {
+  display: inline-block; width: 200px; height: 0.55rem; border-radius: 999px;
+  background: linear-gradient(90deg, #7ee0ff, #7eebc0, #ff7eb9);
+  vertical-align: middle; box-shadow: 0 0 12px rgba(126,235,192,0.25);
+}
+.legend .box {
+  display: inline-block; padding: 0.05rem 0.5rem; border-radius: 4px;
+  outline: 1.5px solid var(--lavender); outline-offset: 1px; color: var(--ink);
+}
+.prompt {
+  background: var(--panel); border-left: 3px solid var(--cyan);
+  padding: 0.75rem 1rem; border-radius: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  white-space: pre-wrap; font-size: 0.84rem; color: var(--ink);
+  margin-bottom: 1rem;
+}
+.section-label {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--dim); margin: 1.4rem 0 0.5rem; font-weight: 600;
+}
+.response {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.4rem 1.5rem; line-height: 2.05; font-size: 1.02rem;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.tok {
+  display: inline; padding: 1px 1px; border-radius: 3px; position: relative;
+  transition: background 80ms ease;
+}
+.tok.selected {
+  outline: 1.5px solid var(--lavender); outline-offset: 1px;
+  cursor: help; box-shadow: 0 0 10px rgba(184,164,255,0.35);
+}
+.tok:hover { background: rgba(184,164,255,0.35) !important; }
+.tok:hover::after {
+  content: attr(data-title);
+  position: absolute; left: 50%; transform: translateX(-50%);
+  top: 1.7em; z-index: 20;
+  background: #1e2d4f; color: var(--ink);
+  padding: 0.55rem 0.75rem; border-radius: 6px;
+  border: 1px solid var(--lavender);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.74rem; line-height: 1.45;
+  white-space: pre-wrap; max-width: 460px; min-width: 220px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+  pointer-events: none;
+}
+table {
+  border-collapse: collapse; width: 100%; margin-top: 0.6rem; font-size: 0.85rem;
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  text-align: left; padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--rule); vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+th {
+  background: var(--panel-alt); font-weight: 600; color: var(--dim);
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+}
+td.num { font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--mint); }
+td code {
+  background: var(--bg); padding: 1px 6px; border-radius: 3px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--cyan);
+  font-size: 0.82rem;
+}
+td.verb { color: var(--ink); }
+footer {
+  margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+  font-size: 0.75rem; color: var(--dim); text-align: center;
+}
+footer a { color: var(--cyan); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">SRT · INTROSPECT</div>
+  <h1>Adaptive-density <span class="accent">reasoning trace</span></h1>
+  <p class="sub">Quicksort example — every token, divergence, regime, and narration from the real demo run.</p>
+  <div class="explainer">
+    <p>Every generated token gets three numbers from the adapter: <span class="k pink">divergence</span> (how hard the metapragmatic heads are working), <span class="k">r̂</span> (the bifurcation network's reflexivity estimate), and a <span class="k">regime</span> label. Token background colour encodes divergence on a <span style="color:#7ee0ff">cyan</span> &rarr; <span style="color:#7eebc0">mint</span> &rarr; <span style="color:#ff7eb9">pink</span> scale: cyan = the model is coasting, pink = its meta-state is forking.</p>
+    <p>A scheduler then picks <strong>10</strong> positions out of 85 so the picks track those divergence peaks (equal-mass quantiles, not equal spacing), and the activation verbalizer decodes the layer-20 hidden state at each pick into English. Hover any <span class="box">boxed token</span> to read what the model was &ldquo;thinking about&rdquo; right there.</p>
+  </div>
+  <div class="meta-row">
+    <span class="chip"><span class="label">tokens</span>85</span>
+    <span class="chip"><span class="label">verbalizations</span>10</span>
+    <span class="chip"><span class="label">div range</span>3.35 → 8.46</span>
+    <span class="chip"><span class="label">elapsed</span>12.2s</span>
+  </div>
+  <div class="legend">
+    <span>divergence</span>
+    <span class="grad" aria-hidden="true"></span>
+    <span style="color:#7ee0ff">low</span>
+    <span>→</span>
+    <span style="color:#ff7eb9">high</span>
+    <span style="opacity:.5">·</span>
+    <span class="box">box</span>
+    <span>= selected for narration (hover)</span>
+  </div>
+  <div class="section-label">Prompt</div>
+  <div class="prompt">def quicksort(arr):
+    if len(arr) &lt;= 1:
+        return arr
+    pivot = arr[len(arr) // 2]</div>
+  <div class="section-label">Continuation · per-token trace</div>
+  <div class="response">
+    <span class="tok">    </span><span class="tok">left</span><span class="tok"> = </span><span class="tok">[</span><span class="tok">x</span><span class="tok"> for </span><span class="tok">x</span><span class="tok"> in </span><span class="tok">arr</span><span class="tok"> if </span><span class="tok">x</span><span class="tok"> &lt; </span><span class="tok">pivot</span><span class="tok">]</span><br>
+    <span class="tok">    </span><span class="tok">middle</span><span class="tok"> = </span><span class="tok">[</span><span class="tok">x</span><span class="tok"> for </span><span class="tok">x</span><span class="tok"> in </span><span class="tok">arr</span><span class="tok"> if </span><span class="tok">x</span><span class="tok"> == </span><span class="tok">pivot</span><span class="tok">]</span><br>
+    <span class="tok">    </span><span class="tok">right</span><span class="tok"> = </span><span class="tok">[</span><span class="tok">x</span><span class="tok"> for </span><span class="tok">x</span><span class="tok"> in </span><span class="tok">arr</span><span class="tok"> if </span><span class="tok">x</span><span class="tok"> &gt; </span><span class="tok">pivot</span><span class="tok">]</span><br>
+    <span class="tok">    </span><span class="tok">return</span><span class="tok"> quicksort</span><span class="tok">(</span><span class="tok">left</span><span class="tok">)</span><span class="tok"> + </span><span class="tok">middle</span><span class="tok"> + </span><span class="tok">quicksort</span><span class="tok">(</span><span class="tok">right</span><span class="tok">)</span><br><br>
+    <span class="tok">arr</span><span class="tok"> = </span><span class="tok">[</span><span class="tok">3</span><span class="tok">,</span><span class="tok">6</span><span class="tok">,</span><span class="tok">8</span><span class="tok">,</span><span class="tok">9</span><span class="tok">,</span><span class="tok">45</span><span class="tok">,</span><span class="tok">70</span><span class="tok">,</span><span class="tok">1</span><span class="tok">,</span><span class="tok">-2</span><span class="tok">,</span><span class="tok">5</span><span class="tok">]</span><br><br>
+    <span class="tok">print</span><span class="tok">(</span><span class="tok">quicksort</span><span class="tok">(</span><span class="tok">arr</span><span class="tok">)</span><span class="tok">)</span>
+  </div>
+  <div class="section-label">Selected verbalizations</div>
+  <table>
+    <thead><tr><th>idx</th><th>token</th><th>div</th><th>r̂</th><th>reg</th><th>verbalization (AV)</th></tr></thead>
+    <tbody>
+      <!-- VERBALIZATIONS WILL BE INSERTED HERE -->
+      <tr><td class="num">4</td><td><code>x</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">class Solution(object): ...</td></tr>
+      <tr><td class="num">15</td><td><code> middle</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb"># The quick sort algorithm ...</td></tr>
+      <tr><td class="num">25</td><td><code> ==</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">#32. Python: Write a Python program ...</td></tr>
+      <tr><td class="num">35</td><td><code> in</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb"># Import necessary modules ...</td></tr>
+      <tr><td class="num">45</td><td><code>sort</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">import operator ...</td></tr>
+      <tr><td class="num">53</td><td><code>(right</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">import numpy as np ...</td></tr>
+      <tr><td class="num">61</td><td><code>,</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">class Heap: ...</td></tr>
+      <tr><td class="num">68</td><td><code>,</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">import random ...</td></tr>
+      <tr><td class="num">74</td><td><code>2</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">#Write a function that takes in a list ...</td></tr>
+      <tr><td class="num">80</td><td><code>icks</code></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="verb">import random ...</td></tr>
+    </tbody>
+  </table>
+  <footer>
+    <a href="https://huggingface.co/spaces/RiverRider/srt-introspect">Live demo</a> &middot; <a href="https://github.com/space-bacon/SRT/blob/main/paper.md">Paper</a>
+  </footer>
+</div>
+</body>
+</html>

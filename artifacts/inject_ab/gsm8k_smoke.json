@@ -1,0 +1,35 @@
+{
+  "adapter": "RiverRider/srt-adapter-v1.0",
+  "backbone": "Qwen/Qwen2.5-7B",
+  "n": 2,
+  "device": "mps",
+  "dtype": "float16",
+  "decoding": "greedy",
+  "acc_on": 0.0,
+  "acc_off": 0.0,
+  "delta": 0.0,
+  "mcnemar": {
+    "both_right": 0,
+    "on_only": 0,
+    "off_only": 0,
+    "neither": 2
+  },
+  "rows": [
+    {
+      "i": 0,
+      "gold": "18",
+      "on": null,
+      "off": null,
+      "ok_on": false,
+      "ok_off": false
+    },
+    {
+      "i": 1,
+      "gold": "3",
+      "on": null,
+      "off": null,
+      "ok_on": false,
+      "ok_off": false
+    }
+  ]
+}

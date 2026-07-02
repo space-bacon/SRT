@@ -1,0 +1,3 @@
+wrote 200000 pairs -> /workspace/srt-adapter/artifacts/nla/gptoss20b/trace_pairs.jsonl
+wrote targets (200000, 2880) -> /workspace/srt-adapter/artifacts/nla/gptoss20b/trace_pairs.jsonl.targets.pt
+pairs per layer: {6: 50157, 12: 49787, 18: 49826, 24: 50230}

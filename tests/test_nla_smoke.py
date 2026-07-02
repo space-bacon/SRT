@@ -96,3 +96,49 @@ def test_nla_config_defaults():
     assert cfg.extraction_layer == 20
     assert cfg.pool == "last"
     assert cfg.num_prefix_tokens >= 1
+    assert cfg.use_layer_embed is False
+
+
+@pytest.mark.slow
+def test_nla_layer_embed_zero_init_is_noop():
+    """A freshly-built layer-embed AV must inject identically to a plain AV.
+
+    The layer embedding is zero-initialised so enabling ``use_layer_embed`` on
+    top of a single-layer warm-start changes nothing until it trains.
+    """
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    from srt.nla import ActivationVerbalizer, NLAConfig
+
+    try:
+        backbone = AutoModelForCausalLM.from_pretrained(TINY, torch_dtype=torch.float32)
+        tok = AutoTokenizer.from_pretrained(TINY)
+    except Exception as e:
+        pytest.skip(f"tiny backbone unavailable: {e}")
+
+    if tok.pad_token_id is None:
+        tok.pad_token_id = tok.eos_token_id or 0
+    for p in backbone.parameters():
+        p.requires_grad = False
+    backbone.eval()
+
+    d = backbone.config.hidden_size
+    n_layers = backbone.config.num_hidden_layers
+    base_cfg = dict(
+        backbone_id=TINY, backbone_dtype="float32",
+        extraction_layer=min(2, n_layers), num_prefix_tokens=1,
+    )
+    plain = ActivationVerbalizer(NLAConfig(**base_cfg), backbone=backbone, tokenizer=tok)
+    withle = ActivationVerbalizer(
+        NLAConfig(**base_cfg, use_layer_embed=True), backbone=backbone, tokenizer=tok
+    )
+    # copy shared params so only the (zero) layer embedding differs
+    withle.load_state_dict(plain.state_dict(), strict=False)
+    withle.layer_embed.weight.data.zero_()
+
+    v = torch.randn(3, d)
+    layers = torch.tensor([0, 1, min(2, n_layers)])
+    a = plain._inject_prefix(v)
+    b = withle._inject_prefix(v, layer=layers)
+    assert torch.allclose(a.float(), b.float(), atol=1e-5)
+

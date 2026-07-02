@@ -1,0 +1,13 @@
+[19:11:21] PHASE 4: sample multi-layer NLA targets (layers=6,12,18,24)
+  launched target sampling (pid 7309) -> tail -f /workspace/srt-adapter/logs/gptoss20b/nla_targets.log
+[20:13:19] PHASE 5: build trace pairs
+wrote 200000 pairs -> /workspace/srt-adapter/artifacts/nla/gptoss20b/trace_pairs.jsonl
+wrote targets (200000, 2880) -> /workspace/srt-adapter/artifacts/nla/gptoss20b/trace_pairs.jsonl.targets.pt
+pairs per layer: {6: 50157, 12: 49787, 18: 49826, 24: 50230}
+[20:13:49] PHASE 6: train AV with layer embedding
+  launched AV train (pid 10978) -> tail -f /workspace/srt-adapter/logs/gptoss20b/nla_av.log
+[20:43:50] PHASE 7: build vq state codebook
+built vq codebook: {'mode': 'vq', 'n_codes': 4096, 'n_states': 200000, 'n_bits': None, 'k': 4096, 'load_factor': 48.828125, 'with_text': 4096}
+  4096 distinct states out of 200000 (collision/compression 98.0%)
+wrote -> /workspace/srt-adapter/artifacts/nla/gptoss20b/state_codebook_vq.pt
+[22:04:40] DONE phases: 4 5 6 7

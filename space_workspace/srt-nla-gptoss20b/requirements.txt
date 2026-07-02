@@ -1,0 +1,11 @@
+# gpt-oss-20b needs transformers>=4.55 (gpt_oss arch) + accelerate for MXFP4.
+# If triton/kernels MXFP4 kernels are unavailable on the Space image,
+# transformers dequantizes to bf16 (~40 GB) — fits ZeroGPU H200.
+transformers>=4.55,<5
+accelerate>=0.34
+kernels>=0.4
+torch>=2.4
+safetensors>=0.4
+huggingface_hub>=0.24
+gradio==6.17.3
+spaces

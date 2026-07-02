@@ -1,0 +1,5220 @@
+{
+  "adapter": "RiverRider/srt-adapter-v1.0",
+  "n": 200,
+  "k": 8,
+  "temperature": 0.8,
+  "accuracy": {
+    "greedy": 0.825,
+    "majority": 0.905,
+    "srt_mean_entropy": 0.775,
+    "srt_mean_div_norm": 0.76,
+    "srt_regime_super_frac": 0.81,
+    "srt_mean_r_hat": 0.805,
+    "srt_mean_chain": 0.785,
+    "srt_mean_nll": 0.76,
+    "oracle_passk": 0.965,
+    "oracle_best": 0.965
+  },
+  "rows": [
+    {
+      "i": 0,
+      "gold": "18",
+      "answers": [
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18"
+      ],
+      "sel": {
+        "greedy": "18",
+        "majority": "18",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "18",
+        "srt_mean_r_hat": "18",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "18",
+        "oracle_passk": "18",
+        "oracle_best": "18"
+      }
+    },
+    {
+      "i": 1,
+      "gold": "3",
+      "answers": [
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3"
+      ],
+      "sel": {
+        "greedy": "3",
+        "majority": "3",
+        "srt_mean_entropy": "3",
+        "srt_mean_div_norm": "3",
+        "srt_regime_super_frac": "3",
+        "srt_mean_r_hat": "3",
+        "srt_mean_chain": "3",
+        "srt_mean_nll": "3",
+        "oracle_passk": "3",
+        "oracle_best": "3"
+      }
+    },
+    {
+      "i": 2,
+      "gold": "70000",
+      "answers": [
+        "70000",
+        "170000",
+        "70000",
+        "70000",
+        "70000",
+        "70000",
+        "15500",
+        "100000"
+      ],
+      "sel": {
+        "greedy": "70000",
+        "majority": "70000",
+        "srt_mean_entropy": "15500",
+        "srt_mean_div_norm": "100000",
+        "srt_regime_super_frac": "70000",
+        "srt_mean_r_hat": "70000",
+        "srt_mean_chain": "100000",
+        "srt_mean_nll": "15500",
+        "oracle_passk": "70000",
+        "oracle_best": "70000"
+      }
+    },
+    {
+      "i": 3,
+      "gold": "540",
+      "answers": [
+        "540",
+        "540",
+        "540",
+        "540",
+        "540",
+        "540",
+        "540",
+        "540"
+      ],
+      "sel": {
+        "greedy": "540",
+        "majority": "540",
+        "srt_mean_entropy": "540",
+        "srt_mean_div_norm": "540",
+        "srt_regime_super_frac": "540",
+        "srt_mean_r_hat": "540",
+        "srt_mean_chain": "540",
+        "srt_mean_nll": "540",
+        "oracle_passk": "540",
+        "oracle_best": "540"
+      }
+    },
+    {
+      "i": 4,
+      "gold": "20",
+      "answers": [
+        "20",
+        "60",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20"
+      ],
+      "sel": {
+        "greedy": "60",
+        "majority": "20",
+        "srt_mean_entropy": "20",
+        "srt_mean_div_norm": "20",
+        "srt_regime_super_frac": "20",
+        "srt_mean_r_hat": "20",
+        "srt_mean_chain": "20",
+        "srt_mean_nll": "20",
+        "oracle_passk": "20",
+        "oracle_best": "20"
+      }
+    },
+    {
+      "i": 5,
+      "gold": "64",
+      "answers": [
+        "64",
+        "64",
+        "64",
+        "64",
+        "64",
+        "64",
+        "104",
+        "64"
+      ],
+      "sel": {
+        "greedy": "64",
+        "majority": "64",
+        "srt_mean_entropy": "64",
+        "srt_mean_div_norm": "64",
+        "srt_regime_super_frac": "64",
+        "srt_mean_r_hat": "64",
+        "srt_mean_chain": "64",
+        "srt_mean_nll": "64",
+        "oracle_passk": "64",
+        "oracle_best": "64"
+      }
+    },
+    {
+      "i": 6,
+      "gold": "260",
+      "answers": [
+        "260",
+        "260",
+        "260",
+        "260",
+        "260",
+        "260",
+        "260",
+        "260"
+      ],
+      "sel": {
+        "greedy": "260",
+        "majority": "260",
+        "srt_mean_entropy": "260",
+        "srt_mean_div_norm": "260",
+        "srt_regime_super_frac": "260",
+        "srt_mean_r_hat": "260",
+        "srt_mean_chain": "260",
+        "srt_mean_nll": "260",
+        "oracle_passk": "260",
+        "oracle_best": "260"
+      }
+    },
+    {
+      "i": 7,
+      "gold": "160",
+      "answers": [
+        "120",
+        "160",
+        "120",
+        "160",
+        "4",
+        "160",
+        "40",
+        "180"
+      ],
+      "sel": {
+        "greedy": "160",
+        "majority": "160",
+        "srt_mean_entropy": "180",
+        "srt_mean_div_norm": "120",
+        "srt_regime_super_frac": "180",
+        "srt_mean_r_hat": "160",
+        "srt_mean_chain": "120",
+        "srt_mean_nll": "180",
+        "oracle_passk": "160",
+        "oracle_best": "160"
+      }
+    },
+    {
+      "i": 8,
+      "gold": "45",
+      "answers": [
+        "31",
+        "180",
+        "315",
+        "45",
+        "1",
+        "315",
+        "1.5",
+        "135"
+      ],
+      "sel": {
+        "greedy": "315",
+        "majority": "315",
+        "srt_mean_entropy": "1.5",
+        "srt_mean_div_norm": "315",
+        "srt_regime_super_frac": "315",
+        "srt_mean_r_hat": "135",
+        "srt_mean_chain": "315",
+        "srt_mean_nll": "1.5",
+        "oracle_passk": "45",
+        "oracle_best": "45"
+      }
+    },
+    {
+      "i": 9,
+      "gold": "460",
+      "answers": [
+        "460",
+        "460",
+        "460",
+        "460",
+        "460",
+        "460",
+        "460",
+        "460"
+      ],
+      "sel": {
+        "greedy": "460",
+        "majority": "460",
+        "srt_mean_entropy": "460",
+        "srt_mean_div_norm": "460",
+        "srt_regime_super_frac": "460",
+        "srt_mean_r_hat": "460",
+        "srt_mean_chain": "460",
+        "srt_mean_nll": "460",
+        "oracle_passk": "460",
+        "oracle_best": "460"
+      }
+    },
+    {
+      "i": 10,
+      "gold": "366",
+      "answers": [
+        "366",
+        "366",
+        "366",
+        "366",
+        "366",
+        "366",
+        "366",
+        "366"
+      ],
+      "sel": {
+        "greedy": "366",
+        "majority": "366",
+        "srt_mean_entropy": "366",
+        "srt_mean_div_norm": "366",
+        "srt_regime_super_frac": "366",
+        "srt_mean_r_hat": "366",
+        "srt_mean_chain": "366",
+        "srt_mean_nll": "366",
+        "oracle_passk": "366",
+        "oracle_best": "366"
+      }
+    },
+    {
+      "i": 11,
+      "gold": "694",
+      "answers": [
+        "694",
+        "694",
+        "694",
+        "694",
+        "694",
+        "694",
+        "694",
+        "694"
+      ],
+      "sel": {
+        "greedy": "694",
+        "majority": "694",
+        "srt_mean_entropy": "694",
+        "srt_mean_div_norm": "694",
+        "srt_regime_super_frac": "694",
+        "srt_mean_r_hat": "694",
+        "srt_mean_chain": "694",
+        "srt_mean_nll": "694",
+        "oracle_passk": "694",
+        "oracle_best": "694"
+      }
+    },
+    {
+      "i": 12,
+      "gold": "13",
+      "answers": [
+        "12",
+        "90",
+        "8",
+        "8.57",
+        "10",
+        "12",
+        "12",
+        "12"
+      ],
+      "sel": {
+        "greedy": "7.5",
+        "majority": "12",
+        "srt_mean_entropy": "12",
+        "srt_mean_div_norm": "10",
+        "srt_regime_super_frac": "12",
+        "srt_mean_r_hat": "12",
+        "srt_mean_chain": "10",
+        "srt_mean_nll": "12",
+        "oracle_passk": null,
+        "oracle_best": "12"
+      }
+    },
+    {
+      "i": 13,
+      "gold": "18",
+      "answers": [
+        "18",
+        "5",
+        "2",
+        "18",
+        "36",
+        "10",
+        "2",
+        "18"
+      ],
+      "sel": {
+        "greedy": "18",
+        "majority": "18",
+        "srt_mean_entropy": "5",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "36",
+        "srt_mean_r_hat": "18",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "5",
+        "oracle_passk": "18",
+        "oracle_best": "18"
+      }
+    },
+    {
+      "i": 14,
+      "gold": "60",
+      "answers": [
+        "60",
+        "60",
+        "60",
+        "60",
+        "100",
+        "60",
+        "12",
+        "60"
+      ],
+      "sel": {
+        "greedy": "60",
+        "majority": "60",
+        "srt_mean_entropy": "60",
+        "srt_mean_div_norm": "60",
+        "srt_regime_super_frac": "100",
+        "srt_mean_r_hat": "60",
+        "srt_mean_chain": "60",
+        "srt_mean_nll": "60",
+        "oracle_passk": "60",
+        "oracle_best": "60"
+      }
+    },
+    {
+      "i": 15,
+      "gold": "125",
+      "answers": [
+        "125",
+        "8000",
+        "125",
+        "125",
+        "29",
+        "29",
+        "96",
+        "29"
+      ],
+      "sel": {
+        "greedy": "29",
+        "majority": "125",
+        "srt_mean_entropy": "29",
+        "srt_mean_div_norm": "29",
+        "srt_regime_super_frac": "29",
+        "srt_mean_r_hat": "29",
+        "srt_mean_chain": "29",
+        "srt_mean_nll": "29",
+        "oracle_passk": "125",
+        "oracle_best": "125"
+      }
+    },
+    {
+      "i": 16,
+      "gold": "230",
+      "answers": [
+        "230",
+        "230",
+        "230",
+        "230",
+        "230",
+        "230",
+        "230",
+        "230"
+      ],
+      "sel": {
+        "greedy": "230",
+        "majority": "230",
+        "srt_mean_entropy": "230",
+        "srt_mean_div_norm": "230",
+        "srt_regime_super_frac": "230",
+        "srt_mean_r_hat": "230",
+        "srt_mean_chain": "230",
+        "srt_mean_nll": "230",
+        "oracle_passk": "230",
+        "oracle_best": "230"
+      }
+    },
+    {
+      "i": 17,
+      "gold": "57500",
+      "answers": [
+        "57500",
+        "11",
+        "57500",
+        "57500",
+        "57500",
+        "5",
+        "57500",
+        "57500"
+      ],
+      "sel": {
+        "greedy": "57500",
+        "majority": "57500",
+        "srt_mean_entropy": "57500",
+        "srt_mean_div_norm": "57500",
+        "srt_regime_super_frac": "11",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "57500",
+        "srt_mean_nll": "57500",
+        "oracle_passk": "57500",
+        "oracle_best": "57500"
+      }
+    },
+    {
+      "i": 18,
+      "gold": "7",
+      "answers": [
+        "7",
+        "7",
+        "7",
+        "7",
+        "7",
+        "7",
+        "7",
+        "7"
+      ],
+      "sel": {
+        "greedy": "7",
+        "majority": "7",
+        "srt_mean_entropy": "7",
+        "srt_mean_div_norm": "7",
+        "srt_regime_super_frac": "7",
+        "srt_mean_r_hat": "7",
+        "srt_mean_chain": "7",
+        "srt_mean_nll": "7",
+        "oracle_passk": "7",
+        "oracle_best": "7"
+      }
+    },
+    {
+      "i": 19,
+      "gold": "6",
+      "answers": [
+        "6",
+        "4",
+        "6",
+        "1",
+        "6",
+        "6",
+        "2",
+        "2"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "6",
+        "srt_mean_entropy": "2",
+        "srt_mean_div_norm": "1",
+        "srt_regime_super_frac": "1",
+        "srt_mean_r_hat": "2",
+        "srt_mean_chain": "1",
+        "srt_mean_nll": "2",
+        "oracle_passk": "6",
+        "oracle_best": "6"
+      }
+    },
+    {
+      "i": 20,
+      "gold": "15",
+      "answers": [
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15"
+      ],
+      "sel": {
+        "greedy": "14.67",
+        "majority": "15",
+        "srt_mean_entropy": "15",
+        "srt_mean_div_norm": "15",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "15",
+        "srt_mean_chain": "15",
+        "srt_mean_nll": "15",
+        "oracle_passk": "15",
+        "oracle_best": "15"
+      }
+    },
+    {
+      "i": 21,
+      "gold": "14",
+      "answers": [
+        "23",
+        "14",
+        "14",
+        "2",
+        "2",
+        "14",
+        "2",
+        "2"
+      ],
+      "sel": {
+        "greedy": "0",
+        "majority": "2",
+        "srt_mean_entropy": "14",
+        "srt_mean_div_norm": "2",
+        "srt_regime_super_frac": "2",
+        "srt_mean_r_hat": "2",
+        "srt_mean_chain": "2",
+        "srt_mean_nll": "14",
+        "oracle_passk": "14",
+        "oracle_best": "14"
+      }
+    },
+    {
+      "i": 22,
+      "gold": "7",
+      "answers": [
+        "7",
+        "7",
+        "7",
+        "7",
+        "7",
+        "13",
+        "7",
+        "7"
+      ],
+      "sel": {
+        "greedy": "7",
+        "majority": "7",
+        "srt_mean_entropy": "7",
+        "srt_mean_div_norm": "7",
+        "srt_regime_super_frac": "7",
+        "srt_mean_r_hat": "7",
+        "srt_mean_chain": "7",
+        "srt_mean_nll": "7",
+        "oracle_passk": "7",
+        "oracle_best": "7"
+      }
+    },
+    {
+      "i": 23,
+      "gold": "8",
+      "answers": [
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8"
+      ],
+      "sel": {
+        "greedy": "8",
+        "majority": "8",
+        "srt_mean_entropy": "8",
+        "srt_mean_div_norm": "8",
+        "srt_regime_super_frac": "8",
+        "srt_mean_r_hat": "8",
+        "srt_mean_chain": "8",
+        "srt_mean_nll": "8",
+        "oracle_passk": "8",
+        "oracle_best": "8"
+      }
+    },
+    {
+      "i": 24,
+      "gold": "26",
+      "answers": [
+        "26",
+        "26",
+        "26",
+        "26",
+        "26",
+        "26",
+        "26",
+        "26"
+      ],
+      "sel": {
+        "greedy": "26",
+        "majority": "26",
+        "srt_mean_entropy": "26",
+        "srt_mean_div_norm": "26",
+        "srt_regime_super_frac": "26",
+        "srt_mean_r_hat": "26",
+        "srt_mean_chain": "26",
+        "srt_mean_nll": "26",
+        "oracle_passk": "26",
+        "oracle_best": "26"
+      }
+    },
+    {
+      "i": 25,
+      "gold": "2",
+      "answers": [
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2"
+      ],
+      "sel": {
+        "greedy": "2",
+        "majority": "2",
+        "srt_mean_entropy": "2",
+        "srt_mean_div_norm": "2",
+        "srt_regime_super_frac": "2",
+        "srt_mean_r_hat": "2",
+        "srt_mean_chain": "2",
+        "srt_mean_nll": "2",
+        "oracle_passk": "2",
+        "oracle_best": "2"
+      }
+    },
+    {
+      "i": 26,
+      "gold": "243",
+      "answers": [
+        "243",
+        "243",
+        "243",
+        "243",
+        "243",
+        "243",
+        "243",
+        "243"
+      ],
+      "sel": {
+        "greedy": "243",
+        "majority": "243",
+        "srt_mean_entropy": "243",
+        "srt_mean_div_norm": "243",
+        "srt_regime_super_frac": "243",
+        "srt_mean_r_hat": "243",
+        "srt_mean_chain": "243",
+        "srt_mean_nll": "243",
+        "oracle_passk": "243",
+        "oracle_best": "243"
+      }
+    },
+    {
+      "i": 27,
+      "gold": "16",
+      "answers": [
+        "16",
+        "16",
+        "16",
+        "16",
+        "4.56",
+        "16",
+        "16",
+        "16"
+      ],
+      "sel": {
+        "greedy": "16",
+        "majority": "16",
+        "srt_mean_entropy": "16",
+        "srt_mean_div_norm": "16",
+        "srt_regime_super_frac": "16",
+        "srt_mean_r_hat": "16",
+        "srt_mean_chain": "16",
+        "srt_mean_nll": "16",
+        "oracle_passk": "16",
+        "oracle_best": "16"
+      }
+    },
+    {
+      "i": 28,
+      "gold": "25",
+      "answers": [
+        "25",
+        "25",
+        "25",
+        "25",
+        "65",
+        "25",
+        "25",
+        "25"
+      ],
+      "sel": {
+        "greedy": "25",
+        "majority": "25",
+        "srt_mean_entropy": "25",
+        "srt_mean_div_norm": "25",
+        "srt_regime_super_frac": "25",
+        "srt_mean_r_hat": "25",
+        "srt_mean_chain": "25",
+        "srt_mean_nll": "25",
+        "oracle_passk": "25",
+        "oracle_best": "25"
+      }
+    },
+    {
+      "i": 29,
+      "gold": "104",
+      "answers": [
+        "104",
+        "104",
+        "104",
+        "104",
+        "104",
+        "104",
+        "104",
+        "104"
+      ],
+      "sel": {
+        "greedy": "104",
+        "majority": "104",
+        "srt_mean_entropy": "104",
+        "srt_mean_div_norm": "104",
+        "srt_regime_super_frac": "104",
+        "srt_mean_r_hat": "104",
+        "srt_mean_chain": "104",
+        "srt_mean_nll": "104",
+        "oracle_passk": "104",
+        "oracle_best": "104"
+      }
+    },
+    {
+      "i": 30,
+      "gold": "109",
+      "answers": [
+        "109",
+        "109",
+        "109",
+        "109",
+        "109",
+        "18",
+        "109",
+        "109"
+      ],
+      "sel": {
+        "greedy": "109",
+        "majority": "109",
+        "srt_mean_entropy": "109",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "109",
+        "srt_mean_r_hat": "109",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "109",
+        "oracle_passk": "109",
+        "oracle_best": "109"
+      }
+    },
+    {
+      "i": 31,
+      "gold": "80",
+      "answers": [
+        "80",
+        "80",
+        "80",
+        "73.33",
+        "80",
+        "80",
+        "80",
+        "80"
+      ],
+      "sel": {
+        "greedy": "80",
+        "majority": "80",
+        "srt_mean_entropy": "73.33",
+        "srt_mean_div_norm": "73.33",
+        "srt_regime_super_frac": "80",
+        "srt_mean_r_hat": "73.33",
+        "srt_mean_chain": "73.33",
+        "srt_mean_nll": "73.33",
+        "oracle_passk": "80",
+        "oracle_best": "80"
+      }
+    },
+    {
+      "i": 32,
+      "gold": "35",
+      "answers": [
+        "35",
+        "35",
+        "35",
+        "35",
+        "35",
+        "35",
+        "35",
+        "35"
+      ],
+      "sel": {
+        "greedy": "35",
+        "majority": "35",
+        "srt_mean_entropy": "35",
+        "srt_mean_div_norm": "35",
+        "srt_regime_super_frac": "35",
+        "srt_mean_r_hat": "35",
+        "srt_mean_chain": "35",
+        "srt_mean_nll": "35",
+        "oracle_passk": "35",
+        "oracle_best": "35"
+      }
+    },
+    {
+      "i": 33,
+      "gold": "70",
+      "answers": [
+        "70",
+        "70",
+        "70",
+        "70",
+        "70",
+        "70",
+        "70",
+        "70"
+      ],
+      "sel": {
+        "greedy": "70",
+        "majority": "70",
+        "srt_mean_entropy": "70",
+        "srt_mean_div_norm": "70",
+        "srt_regime_super_frac": "70",
+        "srt_mean_r_hat": "70",
+        "srt_mean_chain": "70",
+        "srt_mean_nll": "70",
+        "oracle_passk": "70",
+        "oracle_best": "70"
+      }
+    },
+    {
+      "i": 34,
+      "gold": "23",
+      "answers": [
+        "23",
+        "23",
+        "23",
+        "23",
+        "23",
+        "23",
+        "23",
+        "23"
+      ],
+      "sel": {
+        "greedy": "23",
+        "majority": "23",
+        "srt_mean_entropy": "23",
+        "srt_mean_div_norm": "23",
+        "srt_regime_super_frac": "23",
+        "srt_mean_r_hat": "23",
+        "srt_mean_chain": "23",
+        "srt_mean_nll": "23",
+        "oracle_passk": "23",
+        "oracle_best": "23"
+      }
+    },
+    {
+      "i": 35,
+      "gold": "9",
+      "answers": [
+        "9",
+        "9",
+        "9",
+        "9",
+        "9",
+        "9",
+        "9",
+        "9"
+      ],
+      "sel": {
+        "greedy": "9",
+        "majority": "9",
+        "srt_mean_entropy": "9",
+        "srt_mean_div_norm": "9",
+        "srt_regime_super_frac": "9",
+        "srt_mean_r_hat": "9",
+        "srt_mean_chain": "9",
+        "srt_mean_nll": "9",
+        "oracle_passk": "9",
+        "oracle_best": "9"
+      }
+    },
+    {
+      "i": 36,
+      "gold": "75",
+      "answers": [
+        "75",
+        "75",
+        "75",
+        "75",
+        "75",
+        "75",
+        "75",
+        "75"
+      ],
+      "sel": {
+        "greedy": "75",
+        "majority": "75",
+        "srt_mean_entropy": "75",
+        "srt_mean_div_norm": "75",
+        "srt_regime_super_frac": "75",
+        "srt_mean_r_hat": "75",
+        "srt_mean_chain": "75",
+        "srt_mean_nll": "75",
+        "oracle_passk": "75",
+        "oracle_best": "75"
+      }
+    },
+    {
+      "i": 37,
+      "gold": "2",
+      "answers": [
+        "15",
+        "2",
+        "2",
+        "2",
+        "40",
+        "11",
+        "2",
+        "30"
+      ],
+      "sel": {
+        "greedy": "13",
+        "majority": "2",
+        "srt_mean_entropy": "15",
+        "srt_mean_div_norm": "2",
+        "srt_regime_super_frac": "40",
+        "srt_mean_r_hat": "2",
+        "srt_mean_chain": "2",
+        "srt_mean_nll": "15",
+        "oracle_passk": "2",
+        "oracle_best": "2"
+      }
+    },
+    {
+      "i": 38,
+      "gold": "10",
+      "answers": [
+        "10",
+        "120",
+        "10",
+        "20",
+        "10",
+        "13.33",
+        "6.67",
+        "11.43"
+      ],
+      "sel": {
+        "greedy": "6.67",
+        "majority": "10",
+        "srt_mean_entropy": "20",
+        "srt_mean_div_norm": "10",
+        "srt_regime_super_frac": "10",
+        "srt_mean_r_hat": "11.43",
+        "srt_mean_chain": "10",
+        "srt_mean_nll": "20",
+        "oracle_passk": "10",
+        "oracle_best": "10"
+      }
+    },
+    {
+      "i": 39,
+      "gold": "18",
+      "answers": [
+        "1.5",
+        "4",
+        "4",
+        "6",
+        "18",
+        "48",
+        "18",
+        "18"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "18",
+        "srt_mean_entropy": "1.5",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "18",
+        "srt_mean_r_hat": "1.5",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "1.5",
+        "oracle_passk": "18",
+        "oracle_best": "18"
+      }
+    },
+    {
+      "i": 40,
+      "gold": "8",
+      "answers": [
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8"
+      ],
+      "sel": {
+        "greedy": "8",
+        "majority": "8",
+        "srt_mean_entropy": "8",
+        "srt_mean_div_norm": "8",
+        "srt_regime_super_frac": "8",
+        "srt_mean_r_hat": "8",
+        "srt_mean_chain": "8",
+        "srt_mean_nll": "8",
+        "oracle_passk": "8",
+        "oracle_best": "8"
+      }
+    },
+    {
+      "i": 41,
+      "gold": "200",
+      "answers": [
+        "200",
+        "200",
+        "200",
+        "2200",
+        "200",
+        "200",
+        "200",
+        "200"
+      ],
+      "sel": {
+        "greedy": "200",
+        "majority": "200",
+        "srt_mean_entropy": "200",
+        "srt_mean_div_norm": "200",
+        "srt_regime_super_frac": "200",
+        "srt_mean_r_hat": "200",
+        "srt_mean_chain": "200",
+        "srt_mean_nll": "200",
+        "oracle_passk": "200",
+        "oracle_best": "200"
+      }
+    },
+    {
+      "i": 42,
+      "gold": "26",
+      "answers": [
+        "26",
+        "26",
+        "26",
+        "26",
+        "26",
+        "26",
+        "26",
+        "26"
+      ],
+      "sel": {
+        "greedy": "26",
+        "majority": "26",
+        "srt_mean_entropy": "26",
+        "srt_mean_div_norm": "26",
+        "srt_regime_super_frac": "26",
+        "srt_mean_r_hat": "26",
+        "srt_mean_chain": "26",
+        "srt_mean_nll": "26",
+        "oracle_passk": "26",
+        "oracle_best": "26"
+      }
+    },
+    {
+      "i": 43,
+      "gold": "48",
+      "answers": [
+        "240",
+        "240",
+        "48",
+        "48",
+        "240",
+        "120",
+        "240",
+        "200"
+      ],
+      "sel": {
+        "greedy": "300",
+        "majority": "240",
+        "srt_mean_entropy": "240",
+        "srt_mean_div_norm": "48",
+        "srt_regime_super_frac": "120",
+        "srt_mean_r_hat": "48",
+        "srt_mean_chain": "48",
+        "srt_mean_nll": "200",
+        "oracle_passk": "48",
+        "oracle_best": "48"
+      }
+    },
+    {
+      "i": 44,
+      "gold": "20",
+      "answers": [
+        "40",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20"
+      ],
+      "sel": {
+        "greedy": "20",
+        "majority": "20",
+        "srt_mean_entropy": "20",
+        "srt_mean_div_norm": "20",
+        "srt_regime_super_frac": "40",
+        "srt_mean_r_hat": "20",
+        "srt_mean_chain": "20",
+        "srt_mean_nll": "20",
+        "oracle_passk": "20",
+        "oracle_best": "20"
+      }
+    },
+    {
+      "i": 45,
+      "gold": "104",
+      "answers": [
+        "104",
+        "104",
+        "104",
+        "104",
+        "104",
+        "104",
+        "104",
+        "104"
+      ],
+      "sel": {
+        "greedy": "104",
+        "majority": "104",
+        "srt_mean_entropy": "104",
+        "srt_mean_div_norm": "104",
+        "srt_regime_super_frac": "104",
+        "srt_mean_r_hat": "104",
+        "srt_mean_chain": "104",
+        "srt_mean_nll": "104",
+        "oracle_passk": "104",
+        "oracle_best": "104"
+      }
+    },
+    {
+      "i": 46,
+      "gold": "163",
+      "answers": [
+        "-117",
+        "277",
+        "243",
+        "140",
+        "57",
+        "117",
+        "163",
+        "243"
+      ],
+      "sel": {
+        "greedy": "163",
+        "majority": "243",
+        "srt_mean_entropy": "163",
+        "srt_mean_div_norm": "243",
+        "srt_regime_super_frac": "57",
+        "srt_mean_r_hat": "117",
+        "srt_mean_chain": "-117",
+        "srt_mean_nll": "163",
+        "oracle_passk": "163",
+        "oracle_best": "163"
+      }
+    },
+    {
+      "i": 47,
+      "gold": "800",
+      "answers": [
+        "800",
+        "800",
+        "800",
+        "800",
+        "800",
+        "800",
+        "800",
+        "800"
+      ],
+      "sel": {
+        "greedy": "800",
+        "majority": "800",
+        "srt_mean_entropy": "800",
+        "srt_mean_div_norm": "800",
+        "srt_regime_super_frac": "800",
+        "srt_mean_r_hat": "800",
+        "srt_mean_chain": "800",
+        "srt_mean_nll": "800",
+        "oracle_passk": "800",
+        "oracle_best": "800"
+      }
+    },
+    {
+      "i": 48,
+      "gold": "8",
+      "answers": [
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8",
+        "8"
+      ],
+      "sel": {
+        "greedy": "8",
+        "majority": "8",
+        "srt_mean_entropy": "8",
+        "srt_mean_div_norm": "8",
+        "srt_regime_super_frac": "8",
+        "srt_mean_r_hat": "8",
+        "srt_mean_chain": "8",
+        "srt_mean_nll": "8",
+        "oracle_passk": "8",
+        "oracle_best": "8"
+      }
+    },
+    {
+      "i": 49,
+      "gold": "30",
+      "answers": [
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30"
+      ],
+      "sel": {
+        "greedy": "30",
+        "majority": "30",
+        "srt_mean_entropy": "30",
+        "srt_mean_div_norm": "30",
+        "srt_regime_super_frac": "30",
+        "srt_mean_r_hat": "30",
+        "srt_mean_chain": "30",
+        "srt_mean_nll": "30",
+        "oracle_passk": "30",
+        "oracle_best": "30"
+      }
+    },
+    {
+      "i": 50,
+      "gold": "294",
+      "answers": [
+        "294",
+        "294",
+        "294",
+        "84",
+        "294",
+        "294",
+        "294",
+        "294"
+      ],
+      "sel": {
+        "greedy": "294",
+        "majority": "294",
+        "srt_mean_entropy": "294",
+        "srt_mean_div_norm": "294",
+        "srt_regime_super_frac": "294",
+        "srt_mean_r_hat": "294",
+        "srt_mean_chain": "294",
+        "srt_mean_nll": "294",
+        "oracle_passk": "294",
+        "oracle_best": "294"
+      }
+    },
+    {
+      "i": 51,
+      "gold": "5",
+      "answers": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "5",
+        "srt_mean_entropy": "5",
+        "srt_mean_div_norm": "5",
+        "srt_regime_super_frac": "5",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "5",
+        "srt_mean_nll": "5",
+        "oracle_passk": "5",
+        "oracle_best": "5"
+      }
+    },
+    {
+      "i": 52,
+      "gold": "15",
+      "answers": [
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15"
+      ],
+      "sel": {
+        "greedy": "15",
+        "majority": "15",
+        "srt_mean_entropy": "15",
+        "srt_mean_div_norm": "15",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "15",
+        "srt_mean_chain": "15",
+        "srt_mean_nll": "15",
+        "oracle_passk": "15",
+        "oracle_best": "15"
+      }
+    },
+    {
+      "i": 53,
+      "gold": "40",
+      "answers": [
+        "40",
+        "40",
+        "120",
+        "40",
+        "-40",
+        "40",
+        "40",
+        "40"
+      ],
+      "sel": {
+        "greedy": "40",
+        "majority": "40",
+        "srt_mean_entropy": "40",
+        "srt_mean_div_norm": "120",
+        "srt_regime_super_frac": "120",
+        "srt_mean_r_hat": "40",
+        "srt_mean_chain": "40",
+        "srt_mean_nll": "40",
+        "oracle_passk": "40",
+        "oracle_best": "40"
+      }
+    },
+    {
+      "i": 54,
+      "gold": "40",
+      "answers": [
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40"
+      ],
+      "sel": {
+        "greedy": "40",
+        "majority": "40",
+        "srt_mean_entropy": "40",
+        "srt_mean_div_norm": "40",
+        "srt_regime_super_frac": "40",
+        "srt_mean_r_hat": "40",
+        "srt_mean_chain": "40",
+        "srt_mean_nll": "40",
+        "oracle_passk": "40",
+        "oracle_best": "40"
+      }
+    },
+    {
+      "i": 55,
+      "gold": "14",
+      "answers": [
+        "14",
+        "14",
+        "14",
+        "14",
+        "14",
+        "14",
+        "14",
+        "14"
+      ],
+      "sel": {
+        "greedy": "14",
+        "majority": "14",
+        "srt_mean_entropy": "14",
+        "srt_mean_div_norm": "14",
+        "srt_regime_super_frac": "14",
+        "srt_mean_r_hat": "14",
+        "srt_mean_chain": "14",
+        "srt_mean_nll": "14",
+        "oracle_passk": "14",
+        "oracle_best": "14"
+      }
+    },
+    {
+      "i": 56,
+      "gold": "3",
+      "answers": [
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3"
+      ],
+      "sel": {
+        "greedy": "3",
+        "majority": "3",
+        "srt_mean_entropy": "3",
+        "srt_mean_div_norm": "3",
+        "srt_regime_super_frac": "3",
+        "srt_mean_r_hat": "3",
+        "srt_mean_chain": "3",
+        "srt_mean_nll": "3",
+        "oracle_passk": "3",
+        "oracle_best": "3"
+      }
+    },
+    {
+      "i": 57,
+      "gold": "83",
+      "answers": [
+        "83",
+        "83",
+        "83",
+        "83",
+        "83",
+        "83",
+        "83",
+        "83"
+      ],
+      "sel": {
+        "greedy": "83",
+        "majority": "83",
+        "srt_mean_entropy": "83",
+        "srt_mean_div_norm": "83",
+        "srt_regime_super_frac": "83",
+        "srt_mean_r_hat": "83",
+        "srt_mean_chain": "83",
+        "srt_mean_nll": "83",
+        "oracle_passk": "83",
+        "oracle_best": "83"
+      }
+    },
+    {
+      "i": 58,
+      "gold": "57",
+      "answers": [
+        "57",
+        "57",
+        "57",
+        "57",
+        "54",
+        "57",
+        "57",
+        "57"
+      ],
+      "sel": {
+        "greedy": "57",
+        "majority": "57",
+        "srt_mean_entropy": "57",
+        "srt_mean_div_norm": "57",
+        "srt_regime_super_frac": "57",
+        "srt_mean_r_hat": "57",
+        "srt_mean_chain": "54",
+        "srt_mean_nll": "57",
+        "oracle_passk": "57",
+        "oracle_best": "57"
+      }
+    },
+    {
+      "i": 59,
+      "gold": "187",
+      "answers": [
+        "187",
+        "187",
+        "187",
+        "187",
+        "187",
+        "187",
+        "187",
+        "187"
+      ],
+      "sel": {
+        "greedy": "187",
+        "majority": "187",
+        "srt_mean_entropy": "187",
+        "srt_mean_div_norm": "187",
+        "srt_regime_super_frac": "187",
+        "srt_mean_r_hat": "187",
+        "srt_mean_chain": "187",
+        "srt_mean_nll": "187",
+        "oracle_passk": "187",
+        "oracle_best": "187"
+      }
+    },
+    {
+      "i": 60,
+      "gold": "17",
+      "answers": [
+        "17",
+        "17",
+        "17",
+        "17",
+        "17",
+        "17",
+        "18",
+        "17"
+      ],
+      "sel": {
+        "greedy": "17",
+        "majority": "17",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "17",
+        "srt_regime_super_frac": "17",
+        "srt_mean_r_hat": "17",
+        "srt_mean_chain": "17",
+        "srt_mean_nll": "18",
+        "oracle_passk": "17",
+        "oracle_best": "17"
+      }
+    },
+    {
+      "i": 61,
+      "gold": "1430",
+      "answers": [
+        "1430",
+        "1430",
+        "1430",
+        "1430",
+        "1430",
+        "1430",
+        "1430",
+        "1430"
+      ],
+      "sel": {
+        "greedy": "1430",
+        "majority": "1430",
+        "srt_mean_entropy": "1430",
+        "srt_mean_div_norm": "1430",
+        "srt_regime_super_frac": "1430",
+        "srt_mean_r_hat": "1430",
+        "srt_mean_chain": "1430",
+        "srt_mean_nll": "1430",
+        "oracle_passk": "1430",
+        "oracle_best": "1430"
+      }
+    },
+    {
+      "i": 62,
+      "gold": "25000",
+      "answers": [
+        "100000",
+        "500",
+        "1025",
+        "25000",
+        "2500",
+        "100000",
+        "2500",
+        "52500"
+      ],
+      "sel": {
+        "greedy": "52500",
+        "majority": "100000",
+        "srt_mean_entropy": "2500",
+        "srt_mean_div_norm": "25000",
+        "srt_regime_super_frac": "2500",
+        "srt_mean_r_hat": "100000",
+        "srt_mean_chain": "25000",
+        "srt_mean_nll": "2500",
+        "oracle_passk": "25000",
+        "oracle_best": "25000"
+      }
+    },
+    {
+      "i": 63,
+      "gold": "1596",
+      "answers": [
+        "1596",
+        "1596",
+        "1596",
+        "1596",
+        "1596",
+        "1596",
+        "756",
+        "756"
+      ],
+      "sel": {
+        "greedy": "1596",
+        "majority": "1596",
+        "srt_mean_entropy": "1596",
+        "srt_mean_div_norm": "1596",
+        "srt_regime_super_frac": "756",
+        "srt_mean_r_hat": "1596",
+        "srt_mean_chain": "1596",
+        "srt_mean_nll": "756",
+        "oracle_passk": "1596",
+        "oracle_best": "1596"
+      }
+    },
+    {
+      "i": 64,
+      "gold": "300",
+      "answers": [
+        "300",
+        "300",
+        "300",
+        "300",
+        "300",
+        "300",
+        "800",
+        "1200"
+      ],
+      "sel": {
+        "greedy": "300",
+        "majority": "300",
+        "srt_mean_entropy": "1200",
+        "srt_mean_div_norm": "300",
+        "srt_regime_super_frac": "300",
+        "srt_mean_r_hat": "300",
+        "srt_mean_chain": "300",
+        "srt_mean_nll": "1200",
+        "oracle_passk": "300",
+        "oracle_best": "300"
+      }
+    },
+    {
+      "i": 65,
+      "gold": "36",
+      "answers": [
+        "12",
+        "36",
+        "36",
+        "36",
+        "36",
+        "12",
+        "36",
+        "36"
+      ],
+      "sel": {
+        "greedy": "36",
+        "majority": "36",
+        "srt_mean_entropy": "36",
+        "srt_mean_div_norm": "12",
+        "srt_regime_super_frac": "36",
+        "srt_mean_r_hat": "36",
+        "srt_mean_chain": "36",
+        "srt_mean_nll": "36",
+        "oracle_passk": "36",
+        "oracle_best": "36"
+      }
+    },
+    {
+      "i": 66,
+      "gold": "48",
+      "answers": [
+        "88",
+        "48",
+        "48",
+        "48",
+        "48",
+        "48",
+        "48",
+        "48"
+      ],
+      "sel": {
+        "greedy": "48",
+        "majority": "48",
+        "srt_mean_entropy": "88",
+        "srt_mean_div_norm": "88",
+        "srt_regime_super_frac": "48",
+        "srt_mean_r_hat": "48",
+        "srt_mean_chain": "88",
+        "srt_mean_nll": "88",
+        "oracle_passk": "48",
+        "oracle_best": "48"
+      }
+    },
+    {
+      "i": 67,
+      "gold": "595",
+      "answers": [
+        "695",
+        "595",
+        "595",
+        "595",
+        "595",
+        "595",
+        "605",
+        "635"
+      ],
+      "sel": {
+        "greedy": "595",
+        "majority": "595",
+        "srt_mean_entropy": "595",
+        "srt_mean_div_norm": "635",
+        "srt_regime_super_frac": "595",
+        "srt_mean_r_hat": "635",
+        "srt_mean_chain": "635",
+        "srt_mean_nll": "635",
+        "oracle_passk": "595",
+        "oracle_best": "595"
+      }
+    },
+    {
+      "i": 68,
+      "gold": "36",
+      "answers": [
+        "36",
+        "36",
+        "36",
+        "36",
+        "36",
+        "36",
+        "36",
+        "36"
+      ],
+      "sel": {
+        "greedy": "36",
+        "majority": "36",
+        "srt_mean_entropy": "36",
+        "srt_mean_div_norm": "36",
+        "srt_regime_super_frac": "36",
+        "srt_mean_r_hat": "36",
+        "srt_mean_chain": "36",
+        "srt_mean_nll": "36",
+        "oracle_passk": "36",
+        "oracle_best": "36"
+      }
+    },
+    {
+      "i": 69,
+      "gold": "60",
+      "answers": [
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60"
+      ],
+      "sel": {
+        "greedy": "60",
+        "majority": "60",
+        "srt_mean_entropy": "60",
+        "srt_mean_div_norm": "60",
+        "srt_regime_super_frac": "60",
+        "srt_mean_r_hat": "60",
+        "srt_mean_chain": "60",
+        "srt_mean_nll": "60",
+        "oracle_passk": "60",
+        "oracle_best": "60"
+      }
+    },
+    {
+      "i": 70,
+      "gold": "7425",
+      "answers": [
+        "7425",
+        "15",
+        "7425",
+        "7425",
+        "7425",
+        "2925",
+        "7425",
+        "7425"
+      ],
+      "sel": {
+        "greedy": "7425",
+        "majority": "7425",
+        "srt_mean_entropy": "7425",
+        "srt_mean_div_norm": "7425",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "2925",
+        "srt_mean_chain": "7425",
+        "srt_mean_nll": "7425",
+        "oracle_passk": "7425",
+        "oracle_best": "7425"
+      }
+    },
+    {
+      "i": 71,
+      "gold": "60",
+      "answers": [
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60"
+      ],
+      "sel": {
+        "greedy": "60",
+        "majority": "60",
+        "srt_mean_entropy": "60",
+        "srt_mean_div_norm": "60",
+        "srt_regime_super_frac": "60",
+        "srt_mean_r_hat": "60",
+        "srt_mean_chain": "60",
+        "srt_mean_nll": "60",
+        "oracle_passk": "60",
+        "oracle_best": "60"
+      }
+    },
+    {
+      "i": 72,
+      "gold": "221",
+      "answers": [
+        "221",
+        "221",
+        "221",
+        "221",
+        "221",
+        "221",
+        "221",
+        "221"
+      ],
+      "sel": {
+        "greedy": "221",
+        "majority": "221",
+        "srt_mean_entropy": "221",
+        "srt_mean_div_norm": "221",
+        "srt_regime_super_frac": "221",
+        "srt_mean_r_hat": "221",
+        "srt_mean_chain": "221",
+        "srt_mean_nll": "221",
+        "oracle_passk": "221",
+        "oracle_best": "221"
+      }
+    },
+    {
+      "i": 73,
+      "gold": "255",
+      "answers": [
+        "255",
+        "255",
+        "255",
+        "255",
+        "255",
+        "255",
+        "255",
+        "255"
+      ],
+      "sel": {
+        "greedy": "255",
+        "majority": "255",
+        "srt_mean_entropy": "255",
+        "srt_mean_div_norm": "255",
+        "srt_regime_super_frac": "255",
+        "srt_mean_r_hat": "255",
+        "srt_mean_chain": "255",
+        "srt_mean_nll": "255",
+        "oracle_passk": "255",
+        "oracle_best": "255"
+      }
+    },
+    {
+      "i": 74,
+      "gold": "88",
+      "answers": [
+        "88",
+        "88",
+        "88",
+        "88",
+        "88",
+        "88",
+        "36",
+        "88"
+      ],
+      "sel": {
+        "greedy": "1",
+        "majority": "88",
+        "srt_mean_entropy": "88",
+        "srt_mean_div_norm": "88",
+        "srt_regime_super_frac": "88",
+        "srt_mean_r_hat": "88",
+        "srt_mean_chain": "88",
+        "srt_mean_nll": "88",
+        "oracle_passk": "88",
+        "oracle_best": "88"
+      }
+    },
+    {
+      "i": 75,
+      "gold": "60",
+      "answers": [
+        "60",
+        "60",
+        "60",
+        "64",
+        "60",
+        "60",
+        "60",
+        "60"
+      ],
+      "sel": {
+        "greedy": "60",
+        "majority": "60",
+        "srt_mean_entropy": "60",
+        "srt_mean_div_norm": "64",
+        "srt_regime_super_frac": "60",
+        "srt_mean_r_hat": "60",
+        "srt_mean_chain": "64",
+        "srt_mean_nll": "60",
+        "oracle_passk": "60",
+        "oracle_best": "60"
+      }
+    },
+    {
+      "i": 76,
+      "gold": "5",
+      "answers": [
+        "1.636",
+        "185",
+        "5",
+        "5",
+        "110",
+        "180",
+        "5",
+        "4"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "5",
+        "srt_mean_entropy": "185",
+        "srt_mean_div_norm": "1.636",
+        "srt_regime_super_frac": "180",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "1.636",
+        "srt_mean_nll": "185",
+        "oracle_passk": "5",
+        "oracle_best": "5"
+      }
+    },
+    {
+      "i": 77,
+      "gold": "100",
+      "answers": [
+        "100",
+        "100",
+        "100",
+        "100",
+        "100",
+        "100",
+        "100",
+        "100"
+      ],
+      "sel": {
+        "greedy": "100",
+        "majority": "100",
+        "srt_mean_entropy": "100",
+        "srt_mean_div_norm": "100",
+        "srt_regime_super_frac": "100",
+        "srt_mean_r_hat": "100",
+        "srt_mean_chain": "100",
+        "srt_mean_nll": "100",
+        "oracle_passk": "100",
+        "oracle_best": "100"
+      }
+    },
+    {
+      "i": 78,
+      "gold": "6",
+      "answers": [
+        "3",
+        "6",
+        "1",
+        "18",
+        "6",
+        "6",
+        "6",
+        "6"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "6",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "1",
+        "srt_regime_super_frac": "6",
+        "srt_mean_r_hat": "1",
+        "srt_mean_chain": "1",
+        "srt_mean_nll": "18",
+        "oracle_passk": "6",
+        "oracle_best": "6"
+      }
+    },
+    {
+      "i": 79,
+      "gold": "70",
+      "answers": [
+        "70",
+        "70",
+        "70",
+        "70",
+        "70",
+        "70",
+        "70",
+        "70"
+      ],
+      "sel": {
+        "greedy": "70",
+        "majority": "70",
+        "srt_mean_entropy": "70",
+        "srt_mean_div_norm": "70",
+        "srt_regime_super_frac": "70",
+        "srt_mean_r_hat": "70",
+        "srt_mean_chain": "70",
+        "srt_mean_nll": "70",
+        "oracle_passk": "70",
+        "oracle_best": "70"
+      }
+    },
+    {
+      "i": 80,
+      "gold": "10",
+      "answers": [
+        "10",
+        "14",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        "14"
+      ],
+      "sel": {
+        "greedy": "10",
+        "majority": "10",
+        "srt_mean_entropy": "10",
+        "srt_mean_div_norm": "10",
+        "srt_regime_super_frac": "10",
+        "srt_mean_r_hat": "10",
+        "srt_mean_chain": "10",
+        "srt_mean_nll": "10",
+        "oracle_passk": "10",
+        "oracle_best": "10"
+      }
+    },
+    {
+      "i": 81,
+      "gold": "17",
+      "answers": [
+        "17",
+        "17",
+        "17",
+        "17",
+        "17",
+        "17",
+        "17",
+        "17"
+      ],
+      "sel": {
+        "greedy": "17",
+        "majority": "17",
+        "srt_mean_entropy": "17",
+        "srt_mean_div_norm": "17",
+        "srt_regime_super_frac": "17",
+        "srt_mean_r_hat": "17",
+        "srt_mean_chain": "17",
+        "srt_mean_nll": "17",
+        "oracle_passk": "17",
+        "oracle_best": "17"
+      }
+    },
+    {
+      "i": 82,
+      "gold": "623",
+      "answers": [
+        "623",
+        "623",
+        "623",
+        "623",
+        "623",
+        "623",
+        "623",
+        "623"
+      ],
+      "sel": {
+        "greedy": "623",
+        "majority": "623",
+        "srt_mean_entropy": "623",
+        "srt_mean_div_norm": "623",
+        "srt_regime_super_frac": "623",
+        "srt_mean_r_hat": "623",
+        "srt_mean_chain": "623",
+        "srt_mean_nll": "623",
+        "oracle_passk": "623",
+        "oracle_best": "623"
+      }
+    },
+    {
+      "i": 83,
+      "gold": "600",
+      "answers": [
+        "600",
+        "600",
+        "600",
+        "600",
+        "600",
+        "600",
+        "600",
+        "600"
+      ],
+      "sel": {
+        "greedy": "600",
+        "majority": "600",
+        "srt_mean_entropy": "600",
+        "srt_mean_div_norm": "600",
+        "srt_regime_super_frac": "600",
+        "srt_mean_r_hat": "600",
+        "srt_mean_chain": "600",
+        "srt_mean_nll": "600",
+        "oracle_passk": "600",
+        "oracle_best": "600"
+      }
+    },
+    {
+      "i": 84,
+      "gold": "15",
+      "answers": [
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15"
+      ],
+      "sel": {
+        "greedy": "15",
+        "majority": "15",
+        "srt_mean_entropy": "15",
+        "srt_mean_div_norm": "15",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "15",
+        "srt_mean_chain": "15",
+        "srt_mean_nll": "15",
+        "oracle_passk": "15",
+        "oracle_best": "15"
+      }
+    },
+    {
+      "i": 85,
+      "gold": "44",
+      "answers": [
+        "44",
+        "44",
+        "44",
+        "44",
+        "44",
+        "44",
+        "44",
+        "44"
+      ],
+      "sel": {
+        "greedy": "44",
+        "majority": "44",
+        "srt_mean_entropy": "44",
+        "srt_mean_div_norm": "44",
+        "srt_regime_super_frac": "44",
+        "srt_mean_r_hat": "44",
+        "srt_mean_chain": "44",
+        "srt_mean_nll": "44",
+        "oracle_passk": "44",
+        "oracle_best": "44"
+      }
+    },
+    {
+      "i": 86,
+      "gold": "22",
+      "answers": [
+        "22",
+        "22",
+        "22",
+        "22",
+        "22",
+        "22",
+        "22",
+        "22"
+      ],
+      "sel": {
+        "greedy": "22",
+        "majority": "22",
+        "srt_mean_entropy": "22",
+        "srt_mean_div_norm": "22",
+        "srt_regime_super_frac": "22",
+        "srt_mean_r_hat": "22",
+        "srt_mean_chain": "22",
+        "srt_mean_nll": "22",
+        "oracle_passk": "22",
+        "oracle_best": "22"
+      }
+    },
+    {
+      "i": 87,
+      "gold": "9360",
+      "answers": [
+        "9583.2",
+        "1.1",
+        "798.6",
+        "10",
+        "798.6",
+        "10541.52",
+        "798.6",
+        "858"
+      ],
+      "sel": {
+        "greedy": "1288.53",
+        "majority": "798.6",
+        "srt_mean_entropy": "1.1",
+        "srt_mean_div_norm": "858",
+        "srt_regime_super_frac": "858",
+        "srt_mean_r_hat": "798.6",
+        "srt_mean_chain": "10541.52",
+        "srt_mean_nll": "1.1",
+        "oracle_passk": null,
+        "oracle_best": "798.6"
+      }
+    },
+    {
+      "i": 88,
+      "gold": "8000",
+      "answers": [
+        "8000",
+        "8000",
+        "8000",
+        "8000",
+        "8000",
+        "8000",
+        "8000",
+        "8000"
+      ],
+      "sel": {
+        "greedy": "8000",
+        "majority": "8000",
+        "srt_mean_entropy": "8000",
+        "srt_mean_div_norm": "8000",
+        "srt_regime_super_frac": "8000",
+        "srt_mean_r_hat": "8000",
+        "srt_mean_chain": "8000",
+        "srt_mean_nll": "8000",
+        "oracle_passk": "8000",
+        "oracle_best": "8000"
+      }
+    },
+    {
+      "i": 89,
+      "gold": "24",
+      "answers": [
+        "18",
+        "24",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "44"
+      ],
+      "sel": {
+        "greedy": "18",
+        "majority": "18",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "18",
+        "srt_mean_r_hat": "18",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "18",
+        "oracle_passk": "24",
+        "oracle_best": "24"
+      }
+    },
+    {
+      "i": 90,
+      "gold": "225",
+      "answers": [
+        "225",
+        "225",
+        "225",
+        "225",
+        "225",
+        "225",
+        "2",
+        "225"
+      ],
+      "sel": {
+        "greedy": "225",
+        "majority": "225",
+        "srt_mean_entropy": "225",
+        "srt_mean_div_norm": "225",
+        "srt_regime_super_frac": "225",
+        "srt_mean_r_hat": "225",
+        "srt_mean_chain": "225",
+        "srt_mean_nll": "225",
+        "oracle_passk": "225",
+        "oracle_best": "225"
+      }
+    },
+    {
+      "i": 91,
+      "gold": "28",
+      "answers": [
+        "28",
+        "28",
+        "28",
+        "28",
+        "28",
+        "28",
+        "28",
+        "28"
+      ],
+      "sel": {
+        "greedy": "28",
+        "majority": "28",
+        "srt_mean_entropy": "28",
+        "srt_mean_div_norm": "28",
+        "srt_regime_super_frac": "28",
+        "srt_mean_r_hat": "28",
+        "srt_mean_chain": "28",
+        "srt_mean_nll": "28",
+        "oracle_passk": "28",
+        "oracle_best": "28"
+      }
+    },
+    {
+      "i": 92,
+      "gold": "4",
+      "answers": [
+        "4",
+        "4",
+        "4",
+        "8",
+        "4",
+        "4",
+        "4",
+        "4"
+      ],
+      "sel": {
+        "greedy": "4",
+        "majority": "4",
+        "srt_mean_entropy": "4",
+        "srt_mean_div_norm": "4",
+        "srt_regime_super_frac": "4",
+        "srt_mean_r_hat": "4",
+        "srt_mean_chain": "4",
+        "srt_mean_nll": "4",
+        "oracle_passk": "4",
+        "oracle_best": "4"
+      }
+    },
+    {
+      "i": 93,
+      "gold": "36",
+      "answers": [
+        "36",
+        "32.4",
+        "44",
+        "42",
+        "36",
+        "36.2",
+        "44",
+        "44"
+      ],
+      "sel": {
+        "greedy": "36",
+        "majority": "44",
+        "srt_mean_entropy": "36.2",
+        "srt_mean_div_norm": "44",
+        "srt_regime_super_frac": "36",
+        "srt_mean_r_hat": "36.2",
+        "srt_mean_chain": "44",
+        "srt_mean_nll": "36.2",
+        "oracle_passk": "36",
+        "oracle_best": "36"
+      }
+    },
+    {
+      "i": 94,
+      "gold": "348",
+      "answers": [
+        "180",
+        "348",
+        "348",
+        "348",
+        "348",
+        "348",
+        "348",
+        "348"
+      ],
+      "sel": {
+        "greedy": "348",
+        "majority": "348",
+        "srt_mean_entropy": "348",
+        "srt_mean_div_norm": "348",
+        "srt_regime_super_frac": "348",
+        "srt_mean_r_hat": "348",
+        "srt_mean_chain": "348",
+        "srt_mean_nll": "348",
+        "oracle_passk": "348",
+        "oracle_best": "348"
+      }
+    },
+    {
+      "i": 95,
+      "gold": "40",
+      "answers": [
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40"
+      ],
+      "sel": {
+        "greedy": "40",
+        "majority": "40",
+        "srt_mean_entropy": "40",
+        "srt_mean_div_norm": "40",
+        "srt_regime_super_frac": "40",
+        "srt_mean_r_hat": "40",
+        "srt_mean_chain": "40",
+        "srt_mean_nll": "40",
+        "oracle_passk": "40",
+        "oracle_best": "40"
+      }
+    },
+    {
+      "i": 96,
+      "gold": "3",
+      "answers": [
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3",
+        "3"
+      ],
+      "sel": {
+        "greedy": "3",
+        "majority": "3",
+        "srt_mean_entropy": "3",
+        "srt_mean_div_norm": "3",
+        "srt_regime_super_frac": "3",
+        "srt_mean_r_hat": "3",
+        "srt_mean_chain": "3",
+        "srt_mean_nll": "3",
+        "oracle_passk": "3",
+        "oracle_best": "3"
+      }
+    },
+    {
+      "i": 97,
+      "gold": "12",
+      "answers": [
+        "9",
+        "12",
+        "18",
+        "21.3",
+        "12",
+        "5",
+        "12",
+        "6"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "12",
+        "srt_mean_entropy": "9",
+        "srt_mean_div_norm": "6",
+        "srt_regime_super_frac": "12",
+        "srt_mean_r_hat": "12",
+        "srt_mean_chain": "6",
+        "srt_mean_nll": "9",
+        "oracle_passk": "12",
+        "oracle_best": "12"
+      }
+    },
+    {
+      "i": 98,
+      "gold": "5",
+      "answers": [
+        "5",
+        "5",
+        "5",
+        "25",
+        "5",
+        "5",
+        "5",
+        "5"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "5",
+        "srt_mean_entropy": "5",
+        "srt_mean_div_norm": "5",
+        "srt_regime_super_frac": "5",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "5",
+        "srt_mean_nll": "5",
+        "oracle_passk": "5",
+        "oracle_best": "5"
+      }
+    },
+    {
+      "i": 99,
+      "gold": "58",
+      "answers": [
+        "40",
+        "58",
+        "58",
+        "58",
+        "58",
+        "40",
+        "40",
+        "40"
+      ],
+      "sel": {
+        "greedy": "58",
+        "majority": "40",
+        "srt_mean_entropy": "58",
+        "srt_mean_div_norm": "40",
+        "srt_regime_super_frac": "58",
+        "srt_mean_r_hat": "58",
+        "srt_mean_chain": "40",
+        "srt_mean_nll": "58",
+        "oracle_passk": "58",
+        "oracle_best": "58"
+      }
+    },
+    {
+      "i": 100,
+      "gold": "175",
+      "answers": [
+        "175",
+        "175",
+        "175",
+        "175",
+        "175",
+        "175",
+        "175",
+        "175"
+      ],
+      "sel": {
+        "greedy": "175",
+        "majority": "175",
+        "srt_mean_entropy": "175",
+        "srt_mean_div_norm": "175",
+        "srt_regime_super_frac": "175",
+        "srt_mean_r_hat": "175",
+        "srt_mean_chain": "175",
+        "srt_mean_nll": "175",
+        "oracle_passk": "175",
+        "oracle_best": "175"
+      }
+    },
+    {
+      "i": 101,
+      "gold": "6",
+      "answers": [
+        "8.5",
+        "6.25",
+        "7",
+        "6",
+        "7",
+        "6",
+        "6",
+        "6"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "6",
+        "srt_mean_entropy": "8.5",
+        "srt_mean_div_norm": "6",
+        "srt_regime_super_frac": "6",
+        "srt_mean_r_hat": "6",
+        "srt_mean_chain": "6",
+        "srt_mean_nll": "6",
+        "oracle_passk": "6",
+        "oracle_best": "6"
+      }
+    },
+    {
+      "i": 102,
+      "gold": "26",
+      "answers": [
+        "19",
+        "17",
+        "13",
+        "25",
+        "19",
+        "19",
+        "19",
+        "17"
+      ],
+      "sel": {
+        "greedy": "15",
+        "majority": "19",
+        "srt_mean_entropy": "17",
+        "srt_mean_div_norm": "17",
+        "srt_regime_super_frac": "19",
+        "srt_mean_r_hat": "13",
+        "srt_mean_chain": "17",
+        "srt_mean_nll": "17",
+        "oracle_passk": null,
+        "oracle_best": "19"
+      }
+    },
+    {
+      "i": 103,
+      "gold": "140",
+      "answers": [
+        "140",
+        "140",
+        "140",
+        "140",
+        "140",
+        "140",
+        "140",
+        "140"
+      ],
+      "sel": {
+        "greedy": "140",
+        "majority": "140",
+        "srt_mean_entropy": "140",
+        "srt_mean_div_norm": "140",
+        "srt_regime_super_frac": "140",
+        "srt_mean_r_hat": "140",
+        "srt_mean_chain": "140",
+        "srt_mean_nll": "140",
+        "oracle_passk": "140",
+        "oracle_best": "140"
+      }
+    },
+    {
+      "i": 104,
+      "gold": "500",
+      "answers": [
+        "500",
+        "500",
+        "500",
+        "500",
+        "500",
+        "500",
+        "500",
+        "500"
+      ],
+      "sel": {
+        "greedy": "500",
+        "majority": "500",
+        "srt_mean_entropy": "500",
+        "srt_mean_div_norm": "500",
+        "srt_regime_super_frac": "500",
+        "srt_mean_r_hat": "500",
+        "srt_mean_chain": "500",
+        "srt_mean_nll": "500",
+        "oracle_passk": "500",
+        "oracle_best": "500"
+      }
+    },
+    {
+      "i": 105,
+      "gold": "20",
+      "answers": [
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20"
+      ],
+      "sel": {
+        "greedy": "20",
+        "majority": "20",
+        "srt_mean_entropy": "20",
+        "srt_mean_div_norm": "20",
+        "srt_regime_super_frac": "20",
+        "srt_mean_r_hat": "20",
+        "srt_mean_chain": "20",
+        "srt_mean_nll": "20",
+        "oracle_passk": "20",
+        "oracle_best": "20"
+      }
+    },
+    {
+      "i": 106,
+      "gold": "72",
+      "answers": [
+        "96",
+        "72",
+        "72",
+        "72",
+        "72",
+        "72",
+        "72",
+        "72"
+      ],
+      "sel": {
+        "greedy": "72",
+        "majority": "72",
+        "srt_mean_entropy": "72",
+        "srt_mean_div_norm": "72",
+        "srt_regime_super_frac": "72",
+        "srt_mean_r_hat": "72",
+        "srt_mean_chain": "96",
+        "srt_mean_nll": "72",
+        "oracle_passk": "72",
+        "oracle_best": "72"
+      }
+    },
+    {
+      "i": 107,
+      "gold": "3",
+      "answers": [
+        "0.5",
+        "3",
+        "7",
+        "3",
+        "3",
+        "0",
+        "3",
+        "4"
+      ],
+      "sel": {
+        "greedy": "3",
+        "majority": "3",
+        "srt_mean_entropy": "3",
+        "srt_mean_div_norm": "7",
+        "srt_regime_super_frac": "3",
+        "srt_mean_r_hat": "4",
+        "srt_mean_chain": "4",
+        "srt_mean_nll": "3",
+        "oracle_passk": "3",
+        "oracle_best": "3"
+      }
+    },
+    {
+      "i": 108,
+      "gold": "50",
+      "answers": [
+        "50",
+        "50",
+        "57",
+        "50",
+        "50",
+        "58",
+        "50",
+        "58"
+      ],
+      "sel": {
+        "greedy": "50",
+        "majority": "50",
+        "srt_mean_entropy": "50",
+        "srt_mean_div_norm": "50",
+        "srt_regime_super_frac": "50",
+        "srt_mean_r_hat": "50",
+        "srt_mean_chain": "50",
+        "srt_mean_nll": "50",
+        "oracle_passk": "50",
+        "oracle_best": "50"
+      }
+    },
+    {
+      "i": 109,
+      "gold": "28",
+      "answers": [
+        "28",
+        "28",
+        "28",
+        "28",
+        "28",
+        "28",
+        "28",
+        "28"
+      ],
+      "sel": {
+        "greedy": "28",
+        "majority": "28",
+        "srt_mean_entropy": "28",
+        "srt_mean_div_norm": "28",
+        "srt_regime_super_frac": "28",
+        "srt_mean_r_hat": "28",
+        "srt_mean_chain": "28",
+        "srt_mean_nll": "28",
+        "oracle_passk": "28",
+        "oracle_best": "28"
+      }
+    },
+    {
+      "i": 110,
+      "gold": "45",
+      "answers": [
+        "45",
+        "45",
+        "45",
+        "45",
+        "45",
+        "45",
+        "45",
+        "45"
+      ],
+      "sel": {
+        "greedy": "45",
+        "majority": "45",
+        "srt_mean_entropy": "45",
+        "srt_mean_div_norm": "45",
+        "srt_regime_super_frac": "45",
+        "srt_mean_r_hat": "45",
+        "srt_mean_chain": "45",
+        "srt_mean_nll": "45",
+        "oracle_passk": "45",
+        "oracle_best": "45"
+      }
+    },
+    {
+      "i": 111,
+      "gold": "16",
+      "answers": [
+        "16",
+        "16",
+        "16",
+        "16",
+        "8",
+        "2",
+        "16",
+        "16"
+      ],
+      "sel": {
+        "greedy": "16",
+        "majority": "16",
+        "srt_mean_entropy": "16",
+        "srt_mean_div_norm": "16",
+        "srt_regime_super_frac": "16",
+        "srt_mean_r_hat": "16",
+        "srt_mean_chain": "16",
+        "srt_mean_nll": "16",
+        "oracle_passk": "16",
+        "oracle_best": "16"
+      }
+    },
+    {
+      "i": 112,
+      "gold": "24",
+      "answers": [
+        "24",
+        "24",
+        "24",
+        "24",
+        "24",
+        "24",
+        "24",
+        "24"
+      ],
+      "sel": {
+        "greedy": "24",
+        "majority": "24",
+        "srt_mean_entropy": "24",
+        "srt_mean_div_norm": "24",
+        "srt_regime_super_frac": "24",
+        "srt_mean_r_hat": "24",
+        "srt_mean_chain": "24",
+        "srt_mean_nll": "24",
+        "oracle_passk": "24",
+        "oracle_best": "24"
+      }
+    },
+    {
+      "i": 113,
+      "gold": "25",
+      "answers": [
+        "25",
+        "25",
+        "25",
+        "25",
+        "25",
+        "25",
+        "25",
+        "25"
+      ],
+      "sel": {
+        "greedy": "25",
+        "majority": "25",
+        "srt_mean_entropy": "25",
+        "srt_mean_div_norm": "25",
+        "srt_regime_super_frac": "25",
+        "srt_mean_r_hat": "25",
+        "srt_mean_chain": "25",
+        "srt_mean_nll": "25",
+        "oracle_passk": "25",
+        "oracle_best": "25"
+      }
+    },
+    {
+      "i": 114,
+      "gold": "6",
+      "answers": [
+        "6",
+        "6",
+        "6",
+        "6",
+        "6",
+        "6",
+        "6",
+        "6"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "6",
+        "srt_mean_entropy": "6",
+        "srt_mean_div_norm": "6",
+        "srt_regime_super_frac": "6",
+        "srt_mean_r_hat": "6",
+        "srt_mean_chain": "6",
+        "srt_mean_nll": "6",
+        "oracle_passk": "6",
+        "oracle_best": "6"
+      }
+    },
+    {
+      "i": 115,
+      "gold": "90",
+      "answers": [
+        "90",
+        "4",
+        "180",
+        "150",
+        "16",
+        "50",
+        "1",
+        "270"
+      ],
+      "sel": {
+        "greedy": "1.5",
+        "majority": "90",
+        "srt_mean_entropy": "270",
+        "srt_mean_div_norm": "1",
+        "srt_regime_super_frac": "90",
+        "srt_mean_r_hat": "1",
+        "srt_mean_chain": "1",
+        "srt_mean_nll": "50",
+        "oracle_passk": "90",
+        "oracle_best": "90"
+      }
+    },
+    {
+      "i": 116,
+      "gold": "42",
+      "answers": [
+        "42",
+        "78",
+        "42",
+        "42",
+        "42",
+        "42",
+        "42",
+        "42"
+      ],
+      "sel": {
+        "greedy": "42",
+        "majority": "42",
+        "srt_mean_entropy": "42",
+        "srt_mean_div_norm": "42",
+        "srt_regime_super_frac": "42",
+        "srt_mean_r_hat": "42",
+        "srt_mean_chain": "42",
+        "srt_mean_nll": "42",
+        "oracle_passk": "42",
+        "oracle_best": "42"
+      }
+    },
+    {
+      "i": 117,
+      "gold": "360",
+      "answers": [
+        "360",
+        "360",
+        "360",
+        "360",
+        "360",
+        "720",
+        "360",
+        "360"
+      ],
+      "sel": {
+        "greedy": "360",
+        "majority": "360",
+        "srt_mean_entropy": "360",
+        "srt_mean_div_norm": "360",
+        "srt_regime_super_frac": "360",
+        "srt_mean_r_hat": "360",
+        "srt_mean_chain": "360",
+        "srt_mean_nll": "360",
+        "oracle_passk": "360",
+        "oracle_best": "360"
+      }
+    },
+    {
+      "i": 118,
+      "gold": "4",
+      "answers": [
+        "4",
+        "4",
+        "4",
+        "4",
+        "4",
+        "4",
+        "4",
+        "4"
+      ],
+      "sel": {
+        "greedy": "4",
+        "majority": "4",
+        "srt_mean_entropy": "4",
+        "srt_mean_div_norm": "4",
+        "srt_regime_super_frac": "4",
+        "srt_mean_r_hat": "4",
+        "srt_mean_chain": "4",
+        "srt_mean_nll": "4",
+        "oracle_passk": "4",
+        "oracle_best": "4"
+      }
+    },
+    {
+      "i": 119,
+      "gold": "95200",
+      "answers": [
+        "56000",
+        "99076.92",
+        "99076.94",
+        "56000",
+        "30769.23",
+        "99076.94",
+        "2",
+        "43076.92"
+      ],
+      "sel": {
+        "greedy": "95200",
+        "majority": "56000",
+        "srt_mean_entropy": "2",
+        "srt_mean_div_norm": "99076.92",
+        "srt_regime_super_frac": "2",
+        "srt_mean_r_hat": "2",
+        "srt_mean_chain": "99076.92",
+        "srt_mean_nll": "2",
+        "oracle_passk": null,
+        "oracle_best": "56000"
+      }
+    },
+    {
+      "i": 120,
+      "gold": "240",
+      "answers": [
+        "240",
+        "240",
+        "240",
+        "240",
+        "240",
+        "240",
+        "240",
+        "240"
+      ],
+      "sel": {
+        "greedy": "240",
+        "majority": "240",
+        "srt_mean_entropy": "240",
+        "srt_mean_div_norm": "240",
+        "srt_regime_super_frac": "240",
+        "srt_mean_r_hat": "240",
+        "srt_mean_chain": "240",
+        "srt_mean_nll": "240",
+        "oracle_passk": "240",
+        "oracle_best": "240"
+      }
+    },
+    {
+      "i": 121,
+      "gold": "27",
+      "answers": [
+        "27",
+        "27",
+        "27",
+        "27",
+        "27",
+        "27",
+        "27",
+        "27"
+      ],
+      "sel": {
+        "greedy": "27",
+        "majority": "27",
+        "srt_mean_entropy": "27",
+        "srt_mean_div_norm": "27",
+        "srt_regime_super_frac": "27",
+        "srt_mean_r_hat": "27",
+        "srt_mean_chain": "27",
+        "srt_mean_nll": "27",
+        "oracle_passk": "27",
+        "oracle_best": "27"
+      }
+    },
+    {
+      "i": 122,
+      "gold": "48",
+      "answers": [
+        "34",
+        "48",
+        "41",
+        "48",
+        "41",
+        "52",
+        "48",
+        "41"
+      ],
+      "sel": {
+        "greedy": "46",
+        "majority": "48",
+        "srt_mean_entropy": "41",
+        "srt_mean_div_norm": "52",
+        "srt_regime_super_frac": "34",
+        "srt_mean_r_hat": "52",
+        "srt_mean_chain": "52",
+        "srt_mean_nll": "41",
+        "oracle_passk": "48",
+        "oracle_best": "48"
+      }
+    },
+    {
+      "i": 123,
+      "gold": "50",
+      "answers": [
+        "50",
+        "50",
+        "50",
+        "50",
+        "50",
+        "50",
+        "50",
+        "50"
+      ],
+      "sel": {
+        "greedy": "50",
+        "majority": "50",
+        "srt_mean_entropy": "50",
+        "srt_mean_div_norm": "50",
+        "srt_regime_super_frac": "50",
+        "srt_mean_r_hat": "50",
+        "srt_mean_chain": "50",
+        "srt_mean_nll": "50",
+        "oracle_passk": "50",
+        "oracle_best": "50"
+      }
+    },
+    {
+      "i": 124,
+      "gold": "10",
+      "answers": [
+        "10",
+        "10",
+        "10",
+        "50",
+        "10",
+        "10",
+        "10",
+        "10"
+      ],
+      "sel": {
+        "greedy": "10",
+        "majority": "10",
+        "srt_mean_entropy": "10",
+        "srt_mean_div_norm": "10",
+        "srt_regime_super_frac": "10",
+        "srt_mean_r_hat": "10",
+        "srt_mean_chain": "10",
+        "srt_mean_nll": "10",
+        "oracle_passk": "10",
+        "oracle_best": "10"
+      }
+    },
+    {
+      "i": 125,
+      "gold": "10",
+      "answers": [
+        "10",
+        "10",
+        "15",
+        "10",
+        "10",
+        "5",
+        "10",
+        "10"
+      ],
+      "sel": {
+        "greedy": "7",
+        "majority": "10",
+        "srt_mean_entropy": "10",
+        "srt_mean_div_norm": "10",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "10",
+        "srt_mean_nll": "10",
+        "oracle_passk": "10",
+        "oracle_best": "10"
+      }
+    },
+    {
+      "i": 126,
+      "gold": "82",
+      "answers": [
+        "82",
+        "82",
+        "82",
+        "82",
+        "82",
+        "82",
+        "82",
+        "82"
+      ],
+      "sel": {
+        "greedy": "82",
+        "majority": "82",
+        "srt_mean_entropy": "82",
+        "srt_mean_div_norm": "82",
+        "srt_regime_super_frac": "82",
+        "srt_mean_r_hat": "82",
+        "srt_mean_chain": "82",
+        "srt_mean_nll": "82",
+        "oracle_passk": "82",
+        "oracle_best": "82"
+      }
+    },
+    {
+      "i": 127,
+      "gold": "120",
+      "answers": [
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120"
+      ],
+      "sel": {
+        "greedy": "120",
+        "majority": "120",
+        "srt_mean_entropy": "120",
+        "srt_mean_div_norm": "120",
+        "srt_regime_super_frac": "120",
+        "srt_mean_r_hat": "120",
+        "srt_mean_chain": "120",
+        "srt_mean_nll": "120",
+        "oracle_passk": "120",
+        "oracle_best": "120"
+      }
+    },
+    {
+      "i": 128,
+      "gold": "880",
+      "answers": [
+        "880",
+        "880",
+        "1",
+        "880",
+        "880",
+        "880",
+        "880",
+        "880"
+      ],
+      "sel": {
+        "greedy": "880",
+        "majority": "880",
+        "srt_mean_entropy": "880",
+        "srt_mean_div_norm": "880",
+        "srt_regime_super_frac": "1",
+        "srt_mean_r_hat": "880",
+        "srt_mean_chain": "880",
+        "srt_mean_nll": "880",
+        "oracle_passk": "880",
+        "oracle_best": "880"
+      }
+    },
+    {
+      "i": 129,
+      "gold": "10000",
+      "answers": [
+        "70000",
+        "80",
+        "30000",
+        "70",
+        "200",
+        "10000",
+        "10000",
+        "10000"
+      ],
+      "sel": {
+        "greedy": "40000",
+        "majority": "10000",
+        "srt_mean_entropy": "200",
+        "srt_mean_div_norm": "10000",
+        "srt_regime_super_frac": "200",
+        "srt_mean_r_hat": "10000",
+        "srt_mean_chain": "10000",
+        "srt_mean_nll": "200",
+        "oracle_passk": "10000",
+        "oracle_best": "10000"
+      }
+    },
+    {
+      "i": 130,
+      "gold": "30",
+      "answers": [
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30"
+      ],
+      "sel": {
+        "greedy": "30",
+        "majority": "30",
+        "srt_mean_entropy": "30",
+        "srt_mean_div_norm": "30",
+        "srt_regime_super_frac": "30",
+        "srt_mean_r_hat": "30",
+        "srt_mean_chain": "30",
+        "srt_mean_nll": "30",
+        "oracle_passk": "30",
+        "oracle_best": "30"
+      }
+    },
+    {
+      "i": 131,
+      "gold": "940",
+      "answers": [
+        "940",
+        "940",
+        "940",
+        "940",
+        "940",
+        "940",
+        "940",
+        "940"
+      ],
+      "sel": {
+        "greedy": "940",
+        "majority": "940",
+        "srt_mean_entropy": "940",
+        "srt_mean_div_norm": "940",
+        "srt_regime_super_frac": "940",
+        "srt_mean_r_hat": "940",
+        "srt_mean_chain": "940",
+        "srt_mean_nll": "940",
+        "oracle_passk": "940",
+        "oracle_best": "940"
+      }
+    },
+    {
+      "i": 132,
+      "gold": "60",
+      "answers": [
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60",
+        "60"
+      ],
+      "sel": {
+        "greedy": "60",
+        "majority": "60",
+        "srt_mean_entropy": "60",
+        "srt_mean_div_norm": "60",
+        "srt_regime_super_frac": "60",
+        "srt_mean_r_hat": "60",
+        "srt_mean_chain": "60",
+        "srt_mean_nll": "60",
+        "oracle_passk": "60",
+        "oracle_best": "60"
+      }
+    },
+    {
+      "i": 133,
+      "gold": "13",
+      "answers": [
+        "13",
+        "13",
+        "13",
+        "13",
+        "13",
+        "13",
+        "13",
+        "13"
+      ],
+      "sel": {
+        "greedy": "13",
+        "majority": "13",
+        "srt_mean_entropy": "13",
+        "srt_mean_div_norm": "13",
+        "srt_regime_super_frac": "13",
+        "srt_mean_r_hat": "13",
+        "srt_mean_chain": "13",
+        "srt_mean_nll": "13",
+        "oracle_passk": "13",
+        "oracle_best": "13"
+      }
+    },
+    {
+      "i": 134,
+      "gold": "720",
+      "answers": [
+        "720",
+        "720",
+        "720",
+        "720",
+        "720",
+        "720",
+        "720",
+        "720"
+      ],
+      "sel": {
+        "greedy": "720",
+        "majority": "720",
+        "srt_mean_entropy": "720",
+        "srt_mean_div_norm": "720",
+        "srt_regime_super_frac": "720",
+        "srt_mean_r_hat": "720",
+        "srt_mean_chain": "720",
+        "srt_mean_nll": "720",
+        "oracle_passk": "720",
+        "oracle_best": "720"
+      }
+    },
+    {
+      "i": 135,
+      "gold": "40",
+      "answers": [
+        "75",
+        "70",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40",
+        "40"
+      ],
+      "sel": {
+        "greedy": "40",
+        "majority": "40",
+        "srt_mean_entropy": "70",
+        "srt_mean_div_norm": "70",
+        "srt_regime_super_frac": "40",
+        "srt_mean_r_hat": "40",
+        "srt_mean_chain": "70",
+        "srt_mean_nll": "70",
+        "oracle_passk": "40",
+        "oracle_best": "40"
+      }
+    },
+    {
+      "i": 136,
+      "gold": "6",
+      "answers": [
+        "6",
+        "6",
+        "6",
+        "6",
+        "6",
+        "6",
+        "6",
+        "6"
+      ],
+      "sel": {
+        "greedy": "6",
+        "majority": "6",
+        "srt_mean_entropy": "6",
+        "srt_mean_div_norm": "6",
+        "srt_regime_super_frac": "6",
+        "srt_mean_r_hat": "6",
+        "srt_mean_chain": "6",
+        "srt_mean_nll": "6",
+        "oracle_passk": "6",
+        "oracle_best": "6"
+      }
+    },
+    {
+      "i": 137,
+      "gold": "29",
+      "answers": [
+        "29",
+        "20",
+        "29",
+        "24",
+        "4",
+        "5",
+        "20",
+        "5"
+      ],
+      "sel": {
+        "greedy": "20",
+        "majority": "29",
+        "srt_mean_entropy": "29",
+        "srt_mean_div_norm": "5",
+        "srt_regime_super_frac": "20",
+        "srt_mean_r_hat": "24",
+        "srt_mean_chain": "29",
+        "srt_mean_nll": "29",
+        "oracle_passk": "29",
+        "oracle_best": "29"
+      }
+    },
+    {
+      "i": 138,
+      "gold": "105",
+      "answers": [
+        "105",
+        "35",
+        "105",
+        "21",
+        "70",
+        "21",
+        "105",
+        "105"
+      ],
+      "sel": {
+        "greedy": "105",
+        "majority": "105",
+        "srt_mean_entropy": "70",
+        "srt_mean_div_norm": "70",
+        "srt_regime_super_frac": "105",
+        "srt_mean_r_hat": "105",
+        "srt_mean_chain": "21",
+        "srt_mean_nll": "35",
+        "oracle_passk": "105",
+        "oracle_best": "105"
+      }
+    },
+    {
+      "i": 139,
+      "gold": "70",
+      "answers": [
+        "70",
+        "70",
+        "70",
+        "50",
+        "70",
+        "70",
+        "70",
+        "70"
+      ],
+      "sel": {
+        "greedy": "70",
+        "majority": "70",
+        "srt_mean_entropy": "70",
+        "srt_mean_div_norm": "50",
+        "srt_regime_super_frac": "70",
+        "srt_mean_r_hat": "70",
+        "srt_mean_chain": "50",
+        "srt_mean_nll": "70",
+        "oracle_passk": "70",
+        "oracle_best": "70"
+      }
+    },
+    {
+      "i": 140,
+      "gold": "20",
+      "answers": [
+        "20",
+        "20",
+        "40",
+        "20",
+        "20",
+        "10",
+        "20",
+        "20"
+      ],
+      "sel": {
+        "greedy": "20",
+        "majority": "20",
+        "srt_mean_entropy": "20",
+        "srt_mean_div_norm": "40",
+        "srt_regime_super_frac": "10",
+        "srt_mean_r_hat": "20",
+        "srt_mean_chain": "40",
+        "srt_mean_nll": "20",
+        "oracle_passk": "20",
+        "oracle_best": "20"
+      }
+    },
+    {
+      "i": 141,
+      "gold": "400",
+      "answers": [
+        "4",
+        "400",
+        "200",
+        "100",
+        "7",
+        "400",
+        "560",
+        "200"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "400",
+        "srt_mean_entropy": "7",
+        "srt_mean_div_norm": "560",
+        "srt_regime_super_frac": "400",
+        "srt_mean_r_hat": "7",
+        "srt_mean_chain": "560",
+        "srt_mean_nll": "7",
+        "oracle_passk": "400",
+        "oracle_best": "400"
+      }
+    },
+    {
+      "i": 142,
+      "gold": "140",
+      "answers": [
+        "140",
+        "140",
+        "140",
+        "140",
+        "140",
+        "140",
+        "140",
+        "140"
+      ],
+      "sel": {
+        "greedy": "140",
+        "majority": "140",
+        "srt_mean_entropy": "140",
+        "srt_mean_div_norm": "140",
+        "srt_regime_super_frac": "140",
+        "srt_mean_r_hat": "140",
+        "srt_mean_chain": "140",
+        "srt_mean_nll": "140",
+        "oracle_passk": "140",
+        "oracle_best": "140"
+      }
+    },
+    {
+      "i": 143,
+      "gold": "16",
+      "answers": [
+        "15.7",
+        "16",
+        "16",
+        "15.7",
+        "16",
+        "16",
+        "17.6",
+        "16"
+      ],
+      "sel": {
+        "greedy": "15.7",
+        "majority": "16",
+        "srt_mean_entropy": "16",
+        "srt_mean_div_norm": "16",
+        "srt_regime_super_frac": "16",
+        "srt_mean_r_hat": "15.7",
+        "srt_mean_chain": "16",
+        "srt_mean_nll": "16",
+        "oracle_passk": "16",
+        "oracle_best": "16"
+      }
+    },
+    {
+      "i": 144,
+      "gold": "20",
+      "answers": [
+        "20",
+        "20",
+        "20",
+        "-140",
+        "20",
+        "20",
+        "20",
+        "20"
+      ],
+      "sel": {
+        "greedy": "20",
+        "majority": "20",
+        "srt_mean_entropy": "-140",
+        "srt_mean_div_norm": "-140",
+        "srt_regime_super_frac": "20",
+        "srt_mean_r_hat": "20",
+        "srt_mean_chain": "-140",
+        "srt_mean_nll": "-140",
+        "oracle_passk": "20",
+        "oracle_best": "20"
+      }
+    },
+    {
+      "i": 145,
+      "gold": "4000",
+      "answers": [
+        "4000",
+        "4000",
+        "4000",
+        "4000",
+        "4000",
+        "4000",
+        "4000",
+        "4000"
+      ],
+      "sel": {
+        "greedy": "4000",
+        "majority": "4000",
+        "srt_mean_entropy": "4000",
+        "srt_mean_div_norm": "4000",
+        "srt_regime_super_frac": "4000",
+        "srt_mean_r_hat": "4000",
+        "srt_mean_chain": "4000",
+        "srt_mean_nll": "4000",
+        "oracle_passk": "4000",
+        "oracle_best": "4000"
+      }
+    },
+    {
+      "i": 146,
+      "gold": "2125",
+      "answers": [
+        "2125",
+        "2125",
+        "2125",
+        "2125",
+        "2125",
+        "2125",
+        "2125",
+        "2125"
+      ],
+      "sel": {
+        "greedy": "2125",
+        "majority": "2125",
+        "srt_mean_entropy": "2125",
+        "srt_mean_div_norm": "2125",
+        "srt_regime_super_frac": "2125",
+        "srt_mean_r_hat": "2125",
+        "srt_mean_chain": "2125",
+        "srt_mean_nll": "2125",
+        "oracle_passk": "2125",
+        "oracle_best": "2125"
+      }
+    },
+    {
+      "i": 147,
+      "gold": "75",
+      "answers": [
+        "15",
+        "105",
+        "75",
+        "60",
+        "30",
+        "75",
+        "105",
+        "105"
+      ],
+      "sel": {
+        "greedy": "45",
+        "majority": "105",
+        "srt_mean_entropy": "15",
+        "srt_mean_div_norm": "15",
+        "srt_regime_super_frac": "60",
+        "srt_mean_r_hat": "105",
+        "srt_mean_chain": "15",
+        "srt_mean_nll": "15",
+        "oracle_passk": "75",
+        "oracle_best": "75"
+      }
+    },
+    {
+      "i": 148,
+      "gold": "30",
+      "answers": [
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30"
+      ],
+      "sel": {
+        "greedy": "30",
+        "majority": "30",
+        "srt_mean_entropy": "30",
+        "srt_mean_div_norm": "30",
+        "srt_regime_super_frac": "30",
+        "srt_mean_r_hat": "30",
+        "srt_mean_chain": "30",
+        "srt_mean_nll": "30",
+        "oracle_passk": "30",
+        "oracle_best": "30"
+      }
+    },
+    {
+      "i": 149,
+      "gold": "16",
+      "answers": [
+        "16",
+        "16",
+        "16",
+        "16",
+        "16",
+        "16",
+        "16",
+        "16"
+      ],
+      "sel": {
+        "greedy": "16",
+        "majority": "16",
+        "srt_mean_entropy": "16",
+        "srt_mean_div_norm": "16",
+        "srt_regime_super_frac": "16",
+        "srt_mean_r_hat": "16",
+        "srt_mean_chain": "16",
+        "srt_mean_nll": "16",
+        "oracle_passk": "16",
+        "oracle_best": "16"
+      }
+    },
+    {
+      "i": 150,
+      "gold": "4",
+      "answers": [
+        "4",
+        "4",
+        "4",
+        "4",
+        "40",
+        "4",
+        "4",
+        "4"
+      ],
+      "sel": {
+        "greedy": "4",
+        "majority": "4",
+        "srt_mean_entropy": "4",
+        "srt_mean_div_norm": "40",
+        "srt_regime_super_frac": "4",
+        "srt_mean_r_hat": "4",
+        "srt_mean_chain": "4",
+        "srt_mean_nll": "4",
+        "oracle_passk": "4",
+        "oracle_best": "4"
+      }
+    },
+    {
+      "i": 151,
+      "gold": "5",
+      "answers": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "3.5",
+        "5",
+        "5",
+        "5"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "5",
+        "srt_mean_entropy": "5",
+        "srt_mean_div_norm": "5",
+        "srt_regime_super_frac": "5",
+        "srt_mean_r_hat": "3.5",
+        "srt_mean_chain": "5",
+        "srt_mean_nll": "5",
+        "oracle_passk": "5",
+        "oracle_best": "5"
+      }
+    },
+    {
+      "i": 152,
+      "gold": "4",
+      "answers": [
+        "4",
+        "4",
+        "4",
+        "4",
+        "4",
+        "4",
+        "4",
+        "4"
+      ],
+      "sel": {
+        "greedy": "4",
+        "majority": "4",
+        "srt_mean_entropy": "4",
+        "srt_mean_div_norm": "4",
+        "srt_regime_super_frac": "4",
+        "srt_mean_r_hat": "4",
+        "srt_mean_chain": "4",
+        "srt_mean_nll": "4",
+        "oracle_passk": "4",
+        "oracle_best": "4"
+      }
+    },
+    {
+      "i": 153,
+      "gold": "48",
+      "answers": [
+        "6",
+        "60",
+        "20",
+        "1",
+        "18",
+        "8",
+        "59",
+        "8"
+      ],
+      "sel": {
+        "greedy": "1",
+        "majority": "8",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "6",
+        "srt_mean_r_hat": "59",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "18",
+        "oracle_passk": null,
+        "oracle_best": "8"
+      }
+    },
+    {
+      "i": 154,
+      "gold": "272",
+      "answers": [
+        "272",
+        "272",
+        "272",
+        "272",
+        "272",
+        "17",
+        "208",
+        "208"
+      ],
+      "sel": {
+        "greedy": "272",
+        "majority": "272",
+        "srt_mean_entropy": "208",
+        "srt_mean_div_norm": "208",
+        "srt_regime_super_frac": "272",
+        "srt_mean_r_hat": "272",
+        "srt_mean_chain": "272",
+        "srt_mean_nll": "208",
+        "oracle_passk": "272",
+        "oracle_best": "272"
+      }
+    },
+    {
+      "i": 155,
+      "gold": "280",
+      "answers": [
+        "28",
+        "3360",
+        "1",
+        "280",
+        "2",
+        "280",
+        "280",
+        "280"
+      ],
+      "sel": {
+        "greedy": "28",
+        "majority": "280",
+        "srt_mean_entropy": "280",
+        "srt_mean_div_norm": "280",
+        "srt_regime_super_frac": "280",
+        "srt_mean_r_hat": "28",
+        "srt_mean_chain": "280",
+        "srt_mean_nll": "280",
+        "oracle_passk": "280",
+        "oracle_best": "280"
+      }
+    },
+    {
+      "i": 156,
+      "gold": "1400",
+      "answers": [
+        "1400",
+        "1400",
+        "1400",
+        "1400",
+        "1400",
+        "1400",
+        "1400",
+        "1400"
+      ],
+      "sel": {
+        "greedy": "1400",
+        "majority": "1400",
+        "srt_mean_entropy": "1400",
+        "srt_mean_div_norm": "1400",
+        "srt_regime_super_frac": "1400",
+        "srt_mean_r_hat": "1400",
+        "srt_mean_chain": "1400",
+        "srt_mean_nll": "1400",
+        "oracle_passk": "1400",
+        "oracle_best": "1400"
+      }
+    },
+    {
+      "i": 157,
+      "gold": "80",
+      "answers": [
+        "2720",
+        "1220",
+        "4620",
+        "280",
+        "2720",
+        "1220",
+        "360",
+        "280"
+      ],
+      "sel": {
+        "greedy": "280",
+        "majority": "2720",
+        "srt_mean_entropy": "2720",
+        "srt_mean_div_norm": "360",
+        "srt_regime_super_frac": "1220",
+        "srt_mean_r_hat": "360",
+        "srt_mean_chain": "360",
+        "srt_mean_nll": "2720",
+        "oracle_passk": null,
+        "oracle_best": "2720"
+      }
+    },
+    {
+      "i": 158,
+      "gold": "34",
+      "answers": [
+        "34",
+        "34",
+        "34",
+        "34",
+        "34",
+        "34",
+        "34",
+        "34"
+      ],
+      "sel": {
+        "greedy": "34",
+        "majority": "34",
+        "srt_mean_entropy": "34",
+        "srt_mean_div_norm": "34",
+        "srt_regime_super_frac": "34",
+        "srt_mean_r_hat": "34",
+        "srt_mean_chain": "34",
+        "srt_mean_nll": "34",
+        "oracle_passk": "34",
+        "oracle_best": "34"
+      }
+    },
+    {
+      "i": 159,
+      "gold": "15",
+      "answers": [
+        "15",
+        "15",
+        "3",
+        "15",
+        "15",
+        "9",
+        "3",
+        "15"
+      ],
+      "sel": {
+        "greedy": "15",
+        "majority": "15",
+        "srt_mean_entropy": "3",
+        "srt_mean_div_norm": "3",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "15",
+        "srt_mean_chain": "15",
+        "srt_mean_nll": "3",
+        "oracle_passk": "15",
+        "oracle_best": "15"
+      }
+    },
+    {
+      "i": 160,
+      "gold": "16",
+      "answers": [
+        "16",
+        "16",
+        "16",
+        "16",
+        "16",
+        "16",
+        "16",
+        "16"
+      ],
+      "sel": {
+        "greedy": "16",
+        "majority": "16",
+        "srt_mean_entropy": "16",
+        "srt_mean_div_norm": "16",
+        "srt_regime_super_frac": "16",
+        "srt_mean_r_hat": "16",
+        "srt_mean_chain": "16",
+        "srt_mean_nll": "16",
+        "oracle_passk": "16",
+        "oracle_best": "16"
+      }
+    },
+    {
+      "i": 161,
+      "gold": "32",
+      "answers": [
+        "32",
+        "32",
+        "32",
+        "32",
+        "32",
+        "32",
+        "32",
+        "32"
+      ],
+      "sel": {
+        "greedy": "32",
+        "majority": "32",
+        "srt_mean_entropy": "32",
+        "srt_mean_div_norm": "32",
+        "srt_regime_super_frac": "32",
+        "srt_mean_r_hat": "32",
+        "srt_mean_chain": "32",
+        "srt_mean_nll": "32",
+        "oracle_passk": "32",
+        "oracle_best": "32"
+      }
+    },
+    {
+      "i": 162,
+      "gold": "92",
+      "answers": [
+        "92",
+        "92",
+        "92",
+        "3",
+        "36",
+        "92",
+        "92",
+        "0"
+      ],
+      "sel": {
+        "greedy": "92",
+        "majority": "92",
+        "srt_mean_entropy": "92",
+        "srt_mean_div_norm": "0",
+        "srt_regime_super_frac": "3",
+        "srt_mean_r_hat": "0",
+        "srt_mean_chain": "92",
+        "srt_mean_nll": "92",
+        "oracle_passk": "92",
+        "oracle_best": "92"
+      }
+    },
+    {
+      "i": 163,
+      "gold": "50",
+      "answers": [
+        "50",
+        "52",
+        "50",
+        "50",
+        "32",
+        "47",
+        "50",
+        "50"
+      ],
+      "sel": {
+        "greedy": "50",
+        "majority": "50",
+        "srt_mean_entropy": "50",
+        "srt_mean_div_norm": "50",
+        "srt_regime_super_frac": "50",
+        "srt_mean_r_hat": "32",
+        "srt_mean_chain": "50",
+        "srt_mean_nll": "50",
+        "oracle_passk": "50",
+        "oracle_best": "50"
+      }
+    },
+    {
+      "i": 164,
+      "gold": "15",
+      "answers": [
+        "15",
+        "15",
+        "-15",
+        "15",
+        "15",
+        "15",
+        "15",
+        "15"
+      ],
+      "sel": {
+        "greedy": "15",
+        "majority": "15",
+        "srt_mean_entropy": "15",
+        "srt_mean_div_norm": "-15",
+        "srt_regime_super_frac": "15",
+        "srt_mean_r_hat": "15",
+        "srt_mean_chain": "15",
+        "srt_mean_nll": "15",
+        "oracle_passk": "15",
+        "oracle_best": "15"
+      }
+    },
+    {
+      "i": 165,
+      "gold": "77",
+      "answers": [
+        "0",
+        "77",
+        "77",
+        "77",
+        "77",
+        "77",
+        "77",
+        "77"
+      ],
+      "sel": {
+        "greedy": "77",
+        "majority": "77",
+        "srt_mean_entropy": "0",
+        "srt_mean_div_norm": "77",
+        "srt_regime_super_frac": "77",
+        "srt_mean_r_hat": "77",
+        "srt_mean_chain": "77",
+        "srt_mean_nll": "0",
+        "oracle_passk": "77",
+        "oracle_best": "77"
+      }
+    },
+    {
+      "i": 166,
+      "gold": "5",
+      "answers": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "5",
+        "srt_mean_entropy": "5",
+        "srt_mean_div_norm": "5",
+        "srt_regime_super_frac": "5",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "5",
+        "srt_mean_nll": "5",
+        "oracle_passk": "5",
+        "oracle_best": "5"
+      }
+    },
+    {
+      "i": 167,
+      "gold": "16",
+      "answers": [
+        "16",
+        "16",
+        "16",
+        "8",
+        "16",
+        "8",
+        "16",
+        "16"
+      ],
+      "sel": {
+        "greedy": "16",
+        "majority": "16",
+        "srt_mean_entropy": "16",
+        "srt_mean_div_norm": "16",
+        "srt_regime_super_frac": "16",
+        "srt_mean_r_hat": "16",
+        "srt_mean_chain": "16",
+        "srt_mean_nll": "8",
+        "oracle_passk": "16",
+        "oracle_best": "16"
+      }
+    },
+    {
+      "i": 168,
+      "gold": "18",
+      "answers": [
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18",
+        "18"
+      ],
+      "sel": {
+        "greedy": "18",
+        "majority": "18",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "18",
+        "srt_mean_r_hat": "18",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "18",
+        "oracle_passk": "18",
+        "oracle_best": "18"
+      }
+    },
+    {
+      "i": 169,
+      "gold": "120",
+      "answers": [
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120"
+      ],
+      "sel": {
+        "greedy": "120",
+        "majority": "120",
+        "srt_mean_entropy": "120",
+        "srt_mean_div_norm": "120",
+        "srt_regime_super_frac": "120",
+        "srt_mean_r_hat": "120",
+        "srt_mean_chain": "120",
+        "srt_mean_nll": "120",
+        "oracle_passk": "120",
+        "oracle_best": "120"
+      }
+    },
+    {
+      "i": 170,
+      "gold": "150",
+      "answers": [
+        "150",
+        "150",
+        "150",
+        "150",
+        "150",
+        "150",
+        "150",
+        "150"
+      ],
+      "sel": {
+        "greedy": "150",
+        "majority": "150",
+        "srt_mean_entropy": "150",
+        "srt_mean_div_norm": "150",
+        "srt_regime_super_frac": "150",
+        "srt_mean_r_hat": "150",
+        "srt_mean_chain": "150",
+        "srt_mean_nll": "150",
+        "oracle_passk": "150",
+        "oracle_best": "150"
+      }
+    },
+    {
+      "i": 171,
+      "gold": "1210",
+      "answers": [
+        "1210",
+        "1210",
+        "1210",
+        "1210",
+        "1210",
+        "1210",
+        "1210",
+        "1210"
+      ],
+      "sel": {
+        "greedy": "1210",
+        "majority": "1210",
+        "srt_mean_entropy": "1210",
+        "srt_mean_div_norm": "1210",
+        "srt_regime_super_frac": "1210",
+        "srt_mean_r_hat": "1210",
+        "srt_mean_chain": "1210",
+        "srt_mean_nll": "1210",
+        "oracle_passk": "1210",
+        "oracle_best": "1210"
+      }
+    },
+    {
+      "i": 172,
+      "gold": "51",
+      "answers": [
+        "51",
+        "51",
+        "49",
+        "51",
+        "41",
+        "49",
+        "41",
+        "49"
+      ],
+      "sel": {
+        "greedy": "51",
+        "majority": "51",
+        "srt_mean_entropy": "49",
+        "srt_mean_div_norm": "51",
+        "srt_regime_super_frac": "51",
+        "srt_mean_r_hat": "51",
+        "srt_mean_chain": "41",
+        "srt_mean_nll": "49",
+        "oracle_passk": "51",
+        "oracle_best": "51"
+      }
+    },
+    {
+      "i": 173,
+      "gold": "18000",
+      "answers": [
+        "18000",
+        "18000",
+        "18000",
+        "1",
+        "12",
+        "18000",
+        "18000",
+        "18000"
+      ],
+      "sel": {
+        "greedy": "18000",
+        "majority": "18000",
+        "srt_mean_entropy": "18000",
+        "srt_mean_div_norm": "18000",
+        "srt_regime_super_frac": "18000",
+        "srt_mean_r_hat": "18000",
+        "srt_mean_chain": "18000",
+        "srt_mean_nll": "18000",
+        "oracle_passk": "18000",
+        "oracle_best": "18000"
+      }
+    },
+    {
+      "i": 174,
+      "gold": "95",
+      "answers": [
+        "95",
+        "300",
+        "95",
+        "95",
+        "80",
+        "90",
+        "95",
+        "155"
+      ],
+      "sel": {
+        "greedy": "72",
+        "majority": "95",
+        "srt_mean_entropy": "95",
+        "srt_mean_div_norm": "155",
+        "srt_regime_super_frac": "95",
+        "srt_mean_r_hat": "80",
+        "srt_mean_chain": "155",
+        "srt_mean_nll": "300",
+        "oracle_passk": "95",
+        "oracle_best": "95"
+      }
+    },
+    {
+      "i": 175,
+      "gold": "15",
+      "answers": [
+        "5",
+        "15",
+        "25",
+        "7.5",
+        "10",
+        "7.5",
+        "25",
+        "7.5"
+      ],
+      "sel": {
+        "greedy": "7.5",
+        "majority": "7.5",
+        "srt_mean_entropy": "10",
+        "srt_mean_div_norm": "7.5",
+        "srt_regime_super_frac": "25",
+        "srt_mean_r_hat": "7.5",
+        "srt_mean_chain": "7.5",
+        "srt_mean_nll": "10",
+        "oracle_passk": "15",
+        "oracle_best": "15"
+      }
+    },
+    {
+      "i": 176,
+      "gold": "100",
+      "answers": [
+        "100",
+        "100",
+        "100",
+        "100",
+        "100",
+        "100",
+        "100",
+        "100"
+      ],
+      "sel": {
+        "greedy": "100",
+        "majority": "100",
+        "srt_mean_entropy": "100",
+        "srt_mean_div_norm": "100",
+        "srt_regime_super_frac": "100",
+        "srt_mean_r_hat": "100",
+        "srt_mean_chain": "100",
+        "srt_mean_nll": "100",
+        "oracle_passk": "100",
+        "oracle_best": "100"
+      }
+    },
+    {
+      "i": 177,
+      "gold": "350",
+      "answers": [
+        "1250",
+        "200",
+        "1250",
+        "350",
+        "35",
+        "350",
+        "900",
+        "70"
+      ],
+      "sel": {
+        "greedy": "1250",
+        "majority": "1250",
+        "srt_mean_entropy": "70",
+        "srt_mean_div_norm": "350",
+        "srt_regime_super_frac": "350",
+        "srt_mean_r_hat": "350",
+        "srt_mean_chain": "350",
+        "srt_mean_nll": "70",
+        "oracle_passk": "350",
+        "oracle_best": "350"
+      }
+    },
+    {
+      "i": 178,
+      "gold": "122",
+      "answers": [
+        "122",
+        "122",
+        "122",
+        "122",
+        "122",
+        "122",
+        "122",
+        "122"
+      ],
+      "sel": {
+        "greedy": "122",
+        "majority": "122",
+        "srt_mean_entropy": "122",
+        "srt_mean_div_norm": "122",
+        "srt_regime_super_frac": "122",
+        "srt_mean_r_hat": "122",
+        "srt_mean_chain": "122",
+        "srt_mean_nll": "122",
+        "oracle_passk": "122",
+        "oracle_best": "122"
+      }
+    },
+    {
+      "i": 179,
+      "gold": "130",
+      "answers": [
+        "130",
+        "130",
+        "130",
+        "130",
+        "130",
+        "130",
+        "130",
+        "130"
+      ],
+      "sel": {
+        "greedy": "130",
+        "majority": "130",
+        "srt_mean_entropy": "130",
+        "srt_mean_div_norm": "130",
+        "srt_regime_super_frac": "130",
+        "srt_mean_r_hat": "130",
+        "srt_mean_chain": "130",
+        "srt_mean_nll": "130",
+        "oracle_passk": "130",
+        "oracle_best": "130"
+      }
+    },
+    {
+      "i": 180,
+      "gold": "20",
+      "answers": [
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20",
+        "20"
+      ],
+      "sel": {
+        "greedy": "20",
+        "majority": "20",
+        "srt_mean_entropy": "20",
+        "srt_mean_div_norm": "20",
+        "srt_regime_super_frac": "20",
+        "srt_mean_r_hat": "20",
+        "srt_mean_chain": "20",
+        "srt_mean_nll": "20",
+        "oracle_passk": "20",
+        "oracle_best": "20"
+      }
+    },
+    {
+      "i": 181,
+      "gold": "160",
+      "answers": [
+        "160",
+        "160",
+        "160",
+        "160",
+        "160",
+        "160",
+        "160",
+        "160"
+      ],
+      "sel": {
+        "greedy": "160",
+        "majority": "160",
+        "srt_mean_entropy": "160",
+        "srt_mean_div_norm": "160",
+        "srt_regime_super_frac": "160",
+        "srt_mean_r_hat": "160",
+        "srt_mean_chain": "160",
+        "srt_mean_nll": "160",
+        "oracle_passk": "160",
+        "oracle_best": "160"
+      }
+    },
+    {
+      "i": 182,
+      "gold": "23",
+      "answers": [
+        "23",
+        "24",
+        "22",
+        "25",
+        "24",
+        "23",
+        "21",
+        "21"
+      ],
+      "sel": {
+        "greedy": "23",
+        "majority": "23",
+        "srt_mean_entropy": "22",
+        "srt_mean_div_norm": "23",
+        "srt_regime_super_frac": "24",
+        "srt_mean_r_hat": "23",
+        "srt_mean_chain": "23",
+        "srt_mean_nll": "22",
+        "oracle_passk": "23",
+        "oracle_best": "23"
+      }
+    },
+    {
+      "i": 183,
+      "gold": "2",
+      "answers": [
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2"
+      ],
+      "sel": {
+        "greedy": "2",
+        "majority": "2",
+        "srt_mean_entropy": "2",
+        "srt_mean_div_norm": "2",
+        "srt_regime_super_frac": "2",
+        "srt_mean_r_hat": "2",
+        "srt_mean_chain": "2",
+        "srt_mean_nll": "2",
+        "oracle_passk": "2",
+        "oracle_best": "2"
+      }
+    },
+    {
+      "i": 184,
+      "gold": "25",
+      "answers": [
+        "25",
+        "3",
+        "50",
+        "2",
+        "25",
+        "25",
+        "12",
+        "4"
+      ],
+      "sel": {
+        "greedy": "1",
+        "majority": "25",
+        "srt_mean_entropy": "25",
+        "srt_mean_div_norm": "25",
+        "srt_regime_super_frac": "25",
+        "srt_mean_r_hat": "3",
+        "srt_mean_chain": "25",
+        "srt_mean_nll": "25",
+        "oracle_passk": "25",
+        "oracle_best": "25"
+      }
+    },
+    {
+      "i": 185,
+      "gold": "30",
+      "answers": [
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30"
+      ],
+      "sel": {
+        "greedy": "30",
+        "majority": "30",
+        "srt_mean_entropy": "30",
+        "srt_mean_div_norm": "30",
+        "srt_regime_super_frac": "30",
+        "srt_mean_r_hat": "30",
+        "srt_mean_chain": "30",
+        "srt_mean_nll": "30",
+        "oracle_passk": "30",
+        "oracle_best": "30"
+      }
+    },
+    {
+      "i": 186,
+      "gold": "5",
+      "answers": [
+        "3",
+        "6",
+        "36.6666667",
+        "15",
+        "3",
+        "6",
+        "3",
+        "18"
+      ],
+      "sel": {
+        "greedy": "15",
+        "majority": "3",
+        "srt_mean_entropy": "36.6666667",
+        "srt_mean_div_norm": "18",
+        "srt_regime_super_frac": "6",
+        "srt_mean_r_hat": "3",
+        "srt_mean_chain": "18",
+        "srt_mean_nll": "6",
+        "oracle_passk": null,
+        "oracle_best": "3"
+      }
+    },
+    {
+      "i": 187,
+      "gold": "106",
+      "answers": [
+        "306",
+        "106.12",
+        "106.1208",
+        "106.12",
+        "106.12",
+        "106",
+        "106.1",
+        "6.1208"
+      ],
+      "sel": {
+        "greedy": "106.12",
+        "majority": "106.12",
+        "srt_mean_entropy": "306",
+        "srt_mean_div_norm": "106.12",
+        "srt_regime_super_frac": "306",
+        "srt_mean_r_hat": "106.12",
+        "srt_mean_chain": "106.12",
+        "srt_mean_nll": "6.1208",
+        "oracle_passk": "106",
+        "oracle_best": "106"
+      }
+    },
+    {
+      "i": 188,
+      "gold": "50",
+      "answers": [
+        "50",
+        "50",
+        "50",
+        "14",
+        "50",
+        "50",
+        "5",
+        "50"
+      ],
+      "sel": {
+        "greedy": "50",
+        "majority": "50",
+        "srt_mean_entropy": "50",
+        "srt_mean_div_norm": "50",
+        "srt_regime_super_frac": "50",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "50",
+        "srt_mean_nll": "50",
+        "oracle_passk": "50",
+        "oracle_best": "50"
+      }
+    },
+    {
+      "i": 189,
+      "gold": "34",
+      "answers": [
+        "34",
+        "34",
+        "34",
+        "34",
+        "37",
+        "34",
+        "1",
+        "102"
+      ],
+      "sel": {
+        "greedy": "3",
+        "majority": "34",
+        "srt_mean_entropy": "34",
+        "srt_mean_div_norm": "37",
+        "srt_regime_super_frac": "102",
+        "srt_mean_r_hat": "34",
+        "srt_mean_chain": "37",
+        "srt_mean_nll": "34",
+        "oracle_passk": "34",
+        "oracle_best": "34"
+      }
+    },
+    {
+      "i": 190,
+      "gold": "360",
+      "answers": [
+        "360",
+        "360",
+        "360",
+        "360",
+        "360",
+        "360",
+        "360",
+        "360"
+      ],
+      "sel": {
+        "greedy": "360",
+        "majority": "360",
+        "srt_mean_entropy": "360",
+        "srt_mean_div_norm": "360",
+        "srt_regime_super_frac": "360",
+        "srt_mean_r_hat": "360",
+        "srt_mean_chain": "360",
+        "srt_mean_nll": "360",
+        "oracle_passk": "360",
+        "oracle_best": "360"
+      }
+    },
+    {
+      "i": 191,
+      "gold": "5",
+      "answers": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5"
+      ],
+      "sel": {
+        "greedy": "5",
+        "majority": "5",
+        "srt_mean_entropy": "5",
+        "srt_mean_div_norm": "5",
+        "srt_regime_super_frac": "5",
+        "srt_mean_r_hat": "5",
+        "srt_mean_chain": "5",
+        "srt_mean_nll": "5",
+        "oracle_passk": "5",
+        "oracle_best": "5"
+      }
+    },
+    {
+      "i": 192,
+      "gold": "91",
+      "answers": [
+        "91",
+        "91",
+        "91",
+        "91",
+        "91",
+        "91",
+        "56",
+        "56"
+      ],
+      "sel": {
+        "greedy": "56",
+        "majority": "91",
+        "srt_mean_entropy": "91",
+        "srt_mean_div_norm": "91",
+        "srt_regime_super_frac": "91",
+        "srt_mean_r_hat": "91",
+        "srt_mean_chain": "91",
+        "srt_mean_nll": "91",
+        "oracle_passk": "91",
+        "oracle_best": "91"
+      }
+    },
+    {
+      "i": 193,
+      "gold": "24",
+      "answers": [
+        "18",
+        "24",
+        "18",
+        "36",
+        "24",
+        "24",
+        "30",
+        "12"
+      ],
+      "sel": {
+        "greedy": "24",
+        "majority": "24",
+        "srt_mean_entropy": "18",
+        "srt_mean_div_norm": "30",
+        "srt_regime_super_frac": "24",
+        "srt_mean_r_hat": "24",
+        "srt_mean_chain": "36",
+        "srt_mean_nll": "18",
+        "oracle_passk": "24",
+        "oracle_best": "24"
+      }
+    },
+    {
+      "i": 194,
+      "gold": "10",
+      "answers": [
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10"
+      ],
+      "sel": {
+        "greedy": "10",
+        "majority": "10",
+        "srt_mean_entropy": "10",
+        "srt_mean_div_norm": "10",
+        "srt_regime_super_frac": "10",
+        "srt_mean_r_hat": "10",
+        "srt_mean_chain": "10",
+        "srt_mean_nll": "10",
+        "oracle_passk": "10",
+        "oracle_best": "10"
+      }
+    },
+    {
+      "i": 195,
+      "gold": "12",
+      "answers": [
+        "12",
+        "12",
+        "12",
+        "12",
+        "12",
+        "12",
+        "12",
+        "12"
+      ],
+      "sel": {
+        "greedy": "12",
+        "majority": "12",
+        "srt_mean_entropy": "12",
+        "srt_mean_div_norm": "12",
+        "srt_regime_super_frac": "12",
+        "srt_mean_r_hat": "12",
+        "srt_mean_chain": "12",
+        "srt_mean_nll": "12",
+        "oracle_passk": "12",
+        "oracle_best": "12"
+      }
+    },
+    {
+      "i": 196,
+      "gold": "120",
+      "answers": [
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120",
+        "120"
+      ],
+      "sel": {
+        "greedy": "120",
+        "majority": "120",
+        "srt_mean_entropy": "120",
+        "srt_mean_div_norm": "120",
+        "srt_regime_super_frac": "120",
+        "srt_mean_r_hat": "120",
+        "srt_mean_chain": "120",
+        "srt_mean_nll": "120",
+        "oracle_passk": "120",
+        "oracle_best": "120"
+      }
+    },
+    {
+      "i": 197,
+      "gold": "6277",
+      "answers": [
+        "6277",
+        "6277",
+        "6277",
+        "6277",
+        "6277",
+        "6277",
+        "6277",
+        "6277"
+      ],
+      "sel": {
+        "greedy": "6277",
+        "majority": "6277",
+        "srt_mean_entropy": "6277",
+        "srt_mean_div_norm": "6277",
+        "srt_regime_super_frac": "6277",
+        "srt_mean_r_hat": "6277",
+        "srt_mean_chain": "6277",
+        "srt_mean_nll": "6277",
+        "oracle_passk": "6277",
+        "oracle_best": "6277"
+      }
+    },
+    {
+      "i": 198,
+      "gold": "320",
+      "answers": [
+        "320",
+        "360",
+        "320",
+        "280",
+        "320",
+        "320",
+        "320",
+        "320"
+      ],
+      "sel": {
+        "greedy": "320",
+        "majority": "320",
+        "srt_mean_entropy": "320",
+        "srt_mean_div_norm": "320",
+        "srt_regime_super_frac": "320",
+        "srt_mean_r_hat": "320",
+        "srt_mean_chain": "320",
+        "srt_mean_nll": "320",
+        "oracle_passk": "320",
+        "oracle_best": "320"
+      }
+    },
+    {
+      "i": 199,
+      "gold": "7500",
+      "answers": [
+        "5000",
+        "7500",
+        "2500",
+        "7500",
+        "7500",
+        "7500",
+        "7500",
+        "2500"
+      ],
+      "sel": {
+        "greedy": "7500",
+        "majority": "7500",
+        "srt_mean_entropy": "7500",
+        "srt_mean_div_norm": "7500",
+        "srt_regime_super_frac": "2500",
+        "srt_mean_r_hat": "7500",
+        "srt_mean_chain": "7500",
+        "srt_mean_nll": "7500",
+        "oracle_passk": "7500",
+        "oracle_best": "7500"
+      }
+    }
+  ]
+}

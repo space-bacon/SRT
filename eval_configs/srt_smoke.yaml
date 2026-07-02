@@ -1,0 +1,27 @@
+# Single-task smoke config: validate the full agent->report->judge loop once
+# before committing to the full A/B sweep.
+
+name: srt_smoke
+
+agent_model:
+  name_env: AGENT_MODEL_NAME
+  api_base_env: AGENT_API_BASE
+  api_key_env: AGENT_API_KEY
+
+tasks:
+  - id: Information_000
+    repeats: 1
+
+repeats_per_task: 1
+max_concurrent_runs: 1
+
+researchharness:
+  max_rounds: 120
+  max_runtime_seconds: 1800
+  max_output_tokens: 8192
+
+judge_model:
+  enabled: true
+  name_env: JUDGE_MODEL_NAME
+  api_base_env: JUDGE_API_BASE
+  api_key_env: JUDGE_API_KEY

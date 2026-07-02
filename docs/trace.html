@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SRT-introspect: Example Trace</title>
+  <style>
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #f8fafc; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 2rem; }
+    h1, h2, h3 { color: #1e293b; }
+    .prompt, .completion { background: #f1f5f9; border-radius: 6px; padding: 1rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 1.05em; }
+    .trace-img { display: block; margin: 2rem auto; border-radius: 8px; box-shadow: 0 1px 8px #0002; max-width: 100%; }
+    .caption { text-align: center; color: #64748b; font-size: 0.98em; margin-top: 0.5rem; margin-bottom: 2rem; }
+    .pinboard-img { margin: 2rem auto 0 auto; display: block; border-radius: 8px; box-shadow: 0 1px 8px #0002; max-width: 100%; }
+    .verbalization-img { margin: 2rem auto 0 auto; display: block; border-radius: 8px; box-shadow: 0 1px 8px #0002; max-width: 100%; }
+    .note { background: #e0e7ef; color: #334155; border-left: 4px solid #7ee0ff; padding: 0.7em 1em; margin: 2em 0; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SRT-introspect: Example Trace</h1>
+    <p class="note">This is a static HTML mockup for sharing screenshots and narration of the SRT-introspect demo. All images are local; no live backend required.</p>
+
+    <h2>Prompt</h2>
+    <div class="prompt">
+      def quicksort(arr):<br>
+      &nbsp;&nbsp;if len(arr) &lt;= 1:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;return arr<br>
+      &nbsp;&nbsp;pivot = arr[len(arr) // 2]
+    </div>
+
+    <h2>Trace Output</h2>
+    <img src="screenshots/shot-trace-quicksort.png" alt="Trace output: colored tokens, boxed narrations" class="trace-img" />
+    <div class="caption">Figure 1. The trace: colored tokens show divergence, boxed tokens are narrated by the sidecar.</div>
+
+    <h2>Verbalization Tooltip</h2>
+    <img src="screenshots/shot-verbalization-hover.png" alt="Tooltip over boxed token showing narration" class="verbalization-img" />
+    <div class="caption">Figure 2. Hovering a boxed token reveals the AV narration (here, a LeetCode-style paraphrase).</div>
+
+    <h2>Pinboard</h2>
+    <img src="screenshots/shot-pinboard.png" alt="Pinboard panel with pinned narrations" class="pinboard-img" />
+    <div class="caption">Figure 3. The Pinboard: click any boxed token to pin its narration for side-by-side comparison.</div>
+
+    <h2>App Overview</h2>
+    <img src="screenshots/shot-app-overview.png" alt="App overview: prompt, sliders, and empty trace pane" class="trace-img" />
+    <div class="caption">Figure 4. The app on first load: prompt textbox, sampling sliders, and empty trace pane.</div>
+
+    <div class="note">
+      <b>Links:</b> <br>
+      <a href="https://huggingface.co/spaces/RiverRider/srt-introspect">Live demo on Hugging Face Spaces</a> &middot; 
+      <a href="https://github.com/space-bacon/SRT/blob/main/paper.md">Paper on GitHub</a>
+    </div>
+  </div>
+</body>
+</html>

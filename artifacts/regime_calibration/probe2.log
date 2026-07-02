@@ -1,0 +1,41 @@
+15:28:12 srt.phaseA_probe INFO Building model (device_map=auto) ...
+15:28:12 srt.adapter INFO Loading backbone: Qwen/Qwen3-235B-A22B-FP8 in bfloat16 (device_map=auto)
+Loading checkpoint shards:   0%|          | 0/48 [00:00<?, ?it/s]Loading checkpoint shards:   2%|▏         | 1/48 [00:00<00:38,  1.21it/s]Loading checkpoint shards:   4%|▍         | 2/48 [00:02<00:53,  1.16s/it]Loading checkpoint shards:   6%|▋         | 3/48 [00:03<00:58,  1.29s/it]Loading checkpoint shards:   8%|▊         | 4/48 [00:05<01:00,  1.37s/it]Loading checkpoint shards:  10%|█         | 5/48 [00:06<00:56,  1.32s/it]Loading checkpoint shards:  12%|█▎        | 6/48 [00:07<00:56,  1.35s/it]Loading checkpoint shards:  15%|█▍        | 7/48 [00:09<00:57,  1.40s/it]Loading checkpoint shards:  17%|█▋        | 8/48 [00:10<00:50,  1.27s/it]Loading checkpoint shards:  19%|█▉        | 9/48 [00:11<00:46,  1.18s/it]Loading checkpoint shards:  21%|██        | 10/48 [00:12<00:48,  1.29s/it]Loading checkpoint shards:  23%|██▎       | 11/48 [00:13<00:44,  1.21s/it]Loading checkpoint shards:  25%|██▌       | 12/48 [00:14<00:41,  1.16s/it]Loading checkpoint shards:  27%|██▋       | 13/48 [00:16<00:44,  1.28s/it]Loading checkpoint shards:  29%|██▉       | 14/48 [00:17<00:41,  1.22s/it]Loading checkpoint shards:  31%|███▏      | 15/48 [00:18<00:39,  1.19s/it]Loading checkpoint shards:  33%|███▎      | 16/48 [00:20<00:42,  1.33s/it]Loading checkpoint shards:  35%|███▌      | 17/48 [00:21<00:40,  1.31s/it]Loading checkpoint shards:  38%|███▊      | 18/48 [00:22<00:37,  1.26s/it]Loading checkpoint shards:  40%|███▉      | 19/48 [00:23<00:35,  1.23s/it]Loading checkpoint shards:  42%|████▏     | 20/48 [00:25<00:34,  1.22s/it]Loading checkpoint shards:  44%|████▍     | 21/48 [00:26<00:34,  1.29s/it]Loading checkpoint shards:  46%|████▌     | 22/48 [00:28<00:36,  1.41s/it]Loading checkpoint shards:  48%|████▊     | 23/48 [00:29<00:37,  1.49s/it]Loading checkpoint shards:  50%|█████     | 24/48 [00:31<00:33,  1.41s/it]Loading checkpoint shards:  52%|█████▏    | 25/48 [00:32<00:31,  1.35s/it]Loading checkpoint shards:  54%|█████▍    | 26/48 [00:33<00:28,  1.32s/it]Loading checkpoint shards:  56%|█████▋    | 27/48 [00:34<00:27,  1.30s/it]Loading checkpoint shards:  58%|█████▊    | 28/48 [00:36<00:25,  1.30s/it]Loading checkpoint shards:  60%|██████    | 29/48 [00:37<00:24,  1.31s/it]Loading checkpoint shards:  62%|██████▎   | 30/48 [00:38<00:23,  1.31s/it]Loading checkpoint shards:  65%|██████▍   | 31/48 [00:40<00:24,  1.45s/it]Loading checkpoint shards:  67%|██████▋   | 32/48 [00:42<00:24,  1.53s/it]Loading checkpoint shards:  69%|██████▉   | 33/48 [00:43<00:22,  1.47s/it]Loading checkpoint shards:  71%|███████   | 34/48 [00:45<00:21,  1.50s/it]Loading checkpoint shards:  73%|███████▎  | 35/48 [00:46<00:19,  1.48s/it]Loading checkpoint shards:  75%|███████▌  | 36/48 [00:47<00:17,  1.45s/it]Loading checkpoint shards:  77%|███████▋  | 37/48 [00:49<00:15,  1.44s/it]Loading checkpoint shards:  79%|███████▉  | 38/48 [00:51<00:15,  1.55s/it]Loading checkpoint shards:  81%|████████▏ | 39/48 [00:52<00:13,  1.52s/it]Loading checkpoint shards:  83%|████████▎ | 40/48 [00:54<00:12,  1.51s/it]Loading checkpoint shards:  85%|████████▌ | 41/48 [00:55<00:10,  1.56s/it]Loading checkpoint shards:  88%|████████▊ | 42/48 [00:57<00:09,  1.56s/it]Loading checkpoint shards:  90%|████████▉ | 43/48 [00:58<00:07,  1.58s/it]Loading checkpoint shards:  92%|█████████▏| 44/48 [01:00<00:06,  1.67s/it]Loading checkpoint shards:  94%|█████████▍| 45/48 [01:02<00:04,  1.65s/it]Loading checkpoint shards:  96%|█████████▌| 46/48 [01:03<00:03,  1.61s/it]Loading checkpoint shards:  98%|█████████▊| 47/48 [01:05<00:01,  1.59s/it]Loading checkpoint shards: 100%|██████████| 48/48 [01:06<00:00,  1.51s/it]Loading checkpoint shards: 100%|██████████| 48/48 [01:06<00:00,  1.39s/it]
+15:29:45 srt.adapter INFO Backbone: d=4096, L=94, MAH@[23, 46, 69], inject@[46, 69], community@13
+15:29:45 srt.adapter INFO SRT Adapter: 15,907,139 trainable, 235,107,904,512 frozen (backbone)
+15:29:45 srt.adapter INFO SRT heads pinned to cuda:0
+15:29:46 srt.adapter INFO Loaded adapter weights from checkpoints/qwen3_235b_phaseA_bs128/best_adapter.pt
+15:29:46 srt.phaseA_probe INFO Loaded adapter: checkpoints/qwen3_235b_phaseA_bs128/best_adapter.pt
+15:29:46 srt.data.dataset INFO Loading dataset from data/all_val.jsonl
+15:29:46 srt.data.dataset INFO Loaded 3000 samples from data/all_val.jsonl
+15:31:02 srt.phaseA_probe INFO batch 10  regime_tokens=25988  comm_samples=160
+15:32:14 srt.phaseA_probe INFO batch 20  regime_tokens=53431  comm_samples=320
+15:33:27 srt.phaseA_probe INFO batch 30  regime_tokens=81963  comm_samples=480
+15:34:39 srt.phaseA_probe INFO batch 40  regime_tokens=109778  comm_samples=640
+15:35:49 srt.phaseA_probe INFO batch 50  regime_tokens=137497  comm_samples=800
+15:37:03 srt.phaseA_probe INFO batch 60  regime_tokens=168378  comm_samples=960
+15:38:16 srt.phaseA_probe INFO batch 70  regime_tokens=197724  comm_samples=1120
+15:39:29 srt.phaseA_probe INFO batch 80  regime_tokens=227104  comm_samples=1280
+15:40:41 srt.phaseA_probe INFO batch 90  regime_tokens=254458  comm_samples=1440
+15:41:53 srt.phaseA_probe INFO batch 100  regime_tokens=283144  comm_samples=1600
+15:43:03 srt.phaseA_probe INFO batch 110  regime_tokens=309976  comm_samples=1760
+15:44:15 srt.phaseA_probe INFO batch 120  regime_tokens=337821  comm_samples=1920
+15:45:28 srt.phaseA_probe INFO batch 130  regime_tokens=366543  comm_samples=2080
+15:46:38 srt.phaseA_probe INFO batch 140  regime_tokens=393003  comm_samples=2240
+15:47:47 srt.phaseA_probe INFO batch 150  regime_tokens=420310  comm_samples=2400
+15:48:58 srt.phaseA_probe INFO batch 160  regime_tokens=448901  comm_samples=2560
+15:50:08 srt.phaseA_probe INFO batch 170  regime_tokens=476648  comm_samples=2720
+15:51:20 srt.phaseA_probe INFO batch 180  regime_tokens=503645  comm_samples=2880
+15:52:14 srt.phaseA_probe INFO Saved raw community arrays to artifacts/regime_calibration/qwen3_235b_phaseA.community.npz
+15:52:14 srt.phaseA_probe INFO Community NMI: 3000 samples, 35 unique ids, k=35
+
+================================================================
+PHASE-A HELD-OUT PROBE — checkpoints/qwen3_235b_phaseA_bs128/best_adapter.pt
+================================================================
+  Regime    tokens=523391  base=0.9451
+            ECE=0.0005  Brier=0.0123  AUROC=0.9859
+  r_hat     MAE=0.5709  Pearson=0.7508  (pred 0.580 / true 1.035)
+  Community NMI=0.6247  ARI=0.4040  (n=3000, ids=35, k=35)
+  Div norms L0=0.998  L1=0.998  L2=3.537
+================================================================
+Wrote artifacts/regime_calibration/qwen3_235b_phaseA.json

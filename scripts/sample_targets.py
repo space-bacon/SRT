@@ -33,7 +33,13 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--backbone", default="Qwen/Qwen2.5-7B")
     p.add_argument("--dtype", default="bfloat16")
-    p.add_argument("--layer", type=int, default=20)
+    p.add_argument("--layer", type=int, default=20,
+                   help="primary extraction layer (kept for backward compat / meta)")
+    p.add_argument("--layers", type=str, default=None,
+                   help="comma-separated layer list or 'all' for a full-stack "
+                        "trace (e.g. '1,10,20,28'). Defaults to --layer only. "
+                        "Saved under 'activations_by_layer' for multi-position/"
+                        "multi-layer training via srt.nla.build_trace_pairs.")
     p.add_argument("--num-sequences", type=int, default=1000)
     p.add_argument("--seq-len", type=int, default=256)
     p.add_argument("--batch-size", type=int, default=8)
@@ -54,6 +60,18 @@ def _dtype(name: str) -> torch.dtype:
     return {"float32": torch.float32, "float16": torch.float16, "bfloat16": torch.bfloat16}[name]
 
 
+def _load_backbone(model_id: str, dtype: torch.dtype):
+    """Load a causal-LM backbone across transformers versions.
+
+    Newer transformers use ``dtype=``; older releases only accept the
+    deprecated ``torch_dtype=`` and raise ``TypeError`` on ``dtype=``.
+    """
+    try:
+        return AutoModelForCausalLM.from_pretrained(model_id, dtype=dtype)
+    except TypeError:
+        return AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype)
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     args = parse_args()
@@ -61,12 +79,22 @@ def main() -> None:
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tok = AutoTokenizer.from_pretrained(args.backbone)
-    model = AutoModelForCausalLM.from_pretrained(args.backbone, dtype=_dtype(args.dtype))
+    model = _load_backbone(args.backbone, _dtype(args.dtype))
     model.to(device)
     model.eval()
 
-    if not (0 < args.layer <= model.config.num_hidden_layers):
-        raise SystemExit(f"--layer {args.layer} out of range for {args.backbone}")
+    n_hidden = model.config.num_hidden_layers
+    if args.layers is not None:
+        if args.layers.strip() == "all":
+            layers = list(range(1, n_hidden + 1))
+        else:
+            layers = sorted({int(x) for x in args.layers.split(",") if x.strip()})
+    else:
+        layers = [args.layer]
+    for L in layers:
+        if not (0 < L <= n_hidden):
+            raise SystemExit(f"layer {L} out of range for {args.backbone} (1..{n_hidden})")
+    primary_layer = args.layer if args.layer in layers else layers[0]
 
     bos = tok.bos_token_id or model.config.bos_token_id or 0
     eos_id = tok.eos_token_id if tok.eos_token_id is not None else model.config.eos_token_id
@@ -74,7 +102,9 @@ def main() -> None:
     args.out.parent.mkdir(parents=True, exist_ok=True)
 
     sequences: list[str] = []
-    activations: list[torch.Tensor] = []  # each (T_valid, d) on CPU, trimmed to first EOS
+    token_ids: list[torch.Tensor] = []  # each (T_valid,) exact generated ids incl. BOS
+    activations: list[torch.Tensor] = []  # primary layer, each (T_valid, d) — backward compat
+    activations_by_layer: dict[int, list[torch.Tensor]] = {L: [] for L in layers}
 
     todo = args.num_sequences
     while todo > 0:
@@ -117,12 +147,18 @@ def main() -> None:
                 output_hidden_states=True,
                 use_cache=False,
             )
-            h = fwd.hidden_states[args.layer].detach().to(torch.float32).cpu()  # (B, T, d)
+            hs = {
+                L: fwd.hidden_states[L].detach().to(torch.float32).cpu()  # (B, T, d)
+                for L in layers
+            }
 
         for i in range(bs):
             n = int(valid_len[i].item())
             sequences.append(tok.decode(out_ids[i, :n], skip_special_tokens=True))
-            activations.append(h[i, :n].clone())
+            token_ids.append(out_ids[i, :n].detach().cpu().clone())
+            activations.append(hs[primary_layer][i, :n].clone())
+            for L in layers:
+                activations_by_layer[L].append(hs[L][i, :n].clone())
         todo -= bs
         logger.info("sampled %d / %d", args.num_sequences - todo, args.num_sequences)
 
@@ -134,10 +170,13 @@ def main() -> None:
         torch.save(
             {
                 "sequences": sequences,
-                "activations": activations,  # list of (T_i, d) float32 cpu tensors
+                "token_ids": token_ids,  # list of (T_i,) exact generated ids incl. BOS
+                "activations": activations,  # primary layer, list of (T_i, d) — backward compat
+                "activations_by_layer": activations_by_layer,  # {layer: list of (T_i, d)}
                 "meta": {
                     "backbone_id": args.backbone,
-                    "extraction_layer": args.layer,
+                    "extraction_layer": primary_layer,
+                    "layers": layers,
                     "d": model.config.hidden_size,
                     "temperature": args.temperature,
                     "top_p": args.top_p,

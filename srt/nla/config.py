@@ -61,6 +61,25 @@ class NLAConfig:
     # learned prefix; intended to break the single-slot information bottleneck.
     num_inject_slots: int = 1
 
+    # Layer-conditioning embedding. When the AV is trained on activations drawn
+    # from multiple layers (the full input→output trace), different layers have
+    # different scales/semantics; a learned per-layer embedding added to every
+    # inject slot tells the injection which layer v was read from. Zero-init so
+    # it is a no-op at warm-start; safe to enable on top of a single-layer ckpt.
+    use_layer_embed: bool = False
+
+    # Injection scale normalization:
+    #   "none"  — inject proj(v) as-is (original behaviour; fine on backbones
+    #             whose hidden norms are near the embedding scale, e.g. Qwen).
+    #   "embed" — L2-normalize v and rescale to the backbone's mean input-
+    #             embedding row norm before projecting. REQUIRED on backbones
+    #             with extreme hidden-state norms (gpt-oss L18 ‖v‖ ~ 4000+,
+    #             ~1000x the embedding scale): injecting raw v as a token
+    #             embedding saturates the early layers and destroys the
+    #             forward (TF fve below the random floor). Cosine-based
+    #             round-trip metrics are scale-invariant, so nothing is lost.
+    inject_norm: str = "none"
+
     # ---- (de)serialization helpers --------------------------------------
 
     def to_json(self, path: str | Path) -> None:

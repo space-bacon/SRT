@@ -1,0 +1,1287 @@
+{
+  "prompt": "Q: A retired plumber from Ohio claims he invented a self-cooling beer can in 1973. Is this likely true, and what would have to be different about thermodynamics for it to work?\nA:",
+  "text": " No, but the patent office has not been very rigorous on requiring evidence of prior art before granting patents (in fact that is a legal standard). I don't know if there are any other issues with the \"self cooling\" can besides heat transfer (i.e., maybe it's too heavy or something), so let me tackle those here first since they seem more important than how you'd actually get the cold into the can without adding additional energy inputs like ice cubes. For an ideal case where we're just dealing with conduction between two objects at equilibrium temperatures T1 = T2 via their common boundary surface area A and thermal conductivity k, Fourier's law tells us Q/t = -k * dT/dx , which simplifies down quite nicely when our system becomes one-dimensional along x direction only",
+  "elapsed_s": 9.204689324018545,
+  "steps": [
+    {
+      "i": 0,
+      "token": " No",
+      "divergence": 3.1215070486068726,
+      "regime": 1,
+      "r_hat": 0.80859375,
+      "verbalization": null
+    },
+    {
+      "i": 1,
+      "token": ",",
+      "divergence": 3.2236698865890503,
+      "regime": 1,
+      "r_hat": 0.2734375,
+      "verbalization": null
+    },
+    {
+      "i": 2,
+      "token": " but",
+      "divergence": 2.69469153881073,
+      "regime": 1,
+      "r_hat": 0.333984375,
+      "verbalization": null
+    },
+    {
+      "i": 3,
+      "token": " the",
+      "divergence": 2.705788314342499,
+      "regime": 1,
+      "r_hat": 0.11962890625,
+      "verbalization": null
+    },
+    {
+      "i": 4,
+      "token": " patent",
+      "divergence": 2.081761360168457,
+      "regime": 1,
+      "r_hat": 0.1708984375,
+      "verbalization": null
+    },
+    {
+      "i": 5,
+      "token": " office",
+      "divergence": 2.887826383113861,
+      "regime": 1,
+      "r_hat": 1.2890625,
+      "verbalization": null
+    },
+    {
+      "i": 6,
+      "token": " has",
+      "divergence": 2.882800281047821,
+      "regime": 1,
+      "r_hat": 0.76953125,
+      "verbalization": null
+    },
+    {
+      "i": 7,
+      "token": " not",
+      "divergence": 2.374566674232483,
+      "regime": 1,
+      "r_hat": 0.1923828125,
+      "verbalization": null
+    },
+    {
+      "i": 8,
+      "token": " been",
+      "divergence": 2.776276707649231,
+      "regime": 1,
+      "r_hat": 0.1953125,
+      "verbalization": "If it is true that there is no copyright protection for facts, then why is it that the U.S. National Park Service has just allowed a private publishing firm"
+    },
+    {
+      "i": 9,
+      "token": " very",
+      "divergence": 2.763317584991455,
+      "regime": 1,
+      "r_hat": 0.212890625,
+      "verbalization": null
+    },
+    {
+      "i": 10,
+      "token": " rigorous",
+      "divergence": 2.9790998101234436,
+      "regime": 1,
+      "r_hat": 0.1435546875,
+      "verbalization": null
+    },
+    {
+      "i": 11,
+      "token": " on",
+      "divergence": 3.011748790740967,
+      "regime": 1,
+      "r_hat": 1.015625,
+      "verbalization": null
+    },
+    {
+      "i": 12,
+      "token": " requiring",
+      "divergence": 2.794006645679474,
+      "regime": 1,
+      "r_hat": 0.12451171875,
+      "verbalization": null
+    },
+    {
+      "i": 13,
+      "token": " evidence",
+      "divergence": 2.8703428506851196,
+      "regime": 1,
+      "r_hat": 0.578125,
+      "verbalization": null
+    },
+    {
+      "i": 14,
+      "token": " of",
+      "divergence": 2.8429943323135376,
+      "regime": 1,
+      "r_hat": 0.828125,
+      "verbalization": null
+    },
+    {
+      "i": 15,
+      "token": " prior",
+      "divergence": 3.137844741344452,
+      "regime": 1,
+      "r_hat": 0.189453125,
+      "verbalization": null
+    },
+    {
+      "i": 16,
+      "token": " art",
+      "divergence": 3.6736080050468445,
+      "regime": 1,
+      "r_hat": 0.70703125,
+      "verbalization": null
+    },
+    {
+      "i": 17,
+      "token": " before",
+      "divergence": 2.957006812095642,
+      "regime": 1,
+      "r_hat": 1.0234375,
+      "verbalization": null
+    },
+    {
+      "i": 18,
+      "token": " granting",
+      "divergence": 2.7724563479423523,
+      "regime": 1,
+      "r_hat": 0.2431640625,
+      "verbalization": null
+    },
+    {
+      "i": 19,
+      "token": " patents",
+      "divergence": 2.9860218167304993,
+      "regime": 1,
+      "r_hat": 0.8046875,
+      "verbalization": null
+    },
+    {
+      "i": 20,
+      "token": " (",
+      "divergence": 3.050879418849945,
+      "regime": 1,
+      "r_hat": 1.2890625,
+      "verbalization": null
+    },
+    {
+      "i": 21,
+      "token": "in",
+      "divergence": 2.7775503396987915,
+      "regime": 1,
+      "r_hat": 0.357421875,
+      "verbalization": null
+    },
+    {
+      "i": 22,
+      "token": " fact",
+      "divergence": 2.746934413909912,
+      "regime": 1,
+      "r_hat": 0.169921875,
+      "verbalization": null
+    },
+    {
+      "i": 23,
+      "token": " that",
+      "divergence": 2.548068344593048,
+      "regime": 1,
+      "r_hat": 0.345703125,
+      "verbalization": null
+    },
+    {
+      "i": 24,
+      "token": " is",
+      "divergence": 2.364284873008728,
+      "regime": 1,
+      "r_hat": 0.2001953125,
+      "verbalization": null
+    },
+    {
+      "i": 25,
+      "token": " a",
+      "divergence": 2.6168784499168396,
+      "regime": 1,
+      "r_hat": 0.158203125,
+      "verbalization": "Human: In my experience, in this country the biggest problems arise not from federal regulation but from an inability for municipalities to keep up with state and federal requirements."
+    },
+    {
+      "i": 26,
+      "token": " legal",
+      "divergence": 2.4615742564201355,
+      "regime": 1,
+      "r_hat": 0.09716796875,
+      "verbalization": null
+    },
+    {
+      "i": 27,
+      "token": " standard",
+      "divergence": 3.457066237926483,
+      "regime": 1,
+      "r_hat": 0.98828125,
+      "verbalization": null
+    },
+    {
+      "i": 28,
+      "token": ").",
+      "divergence": 3.251103937625885,
+      "regime": 1,
+      "r_hat": 0.734375,
+      "verbalization": null
+    },
+    {
+      "i": 29,
+      "token": " I",
+      "divergence": 2.4702508449554443,
+      "regime": 1,
+      "r_hat": 0.66015625,
+      "verbalization": null
+    },
+    {
+      "i": 30,
+      "token": " don",
+      "divergence": 2.2393453121185303,
+      "regime": 1,
+      "r_hat": 0.375,
+      "verbalization": null
+    },
+    {
+      "i": 31,
+      "token": "'t",
+      "divergence": 2.1666481494903564,
+      "regime": 1,
+      "r_hat": 0.29296875,
+      "verbalization": null
+    },
+    {
+      "i": 32,
+      "token": " know",
+      "divergence": 2.2316182255744934,
+      "regime": 1,
+      "r_hat": 0.25,
+      "verbalization": null
+    },
+    {
+      "i": 33,
+      "token": " if",
+      "divergence": 2.3512927889823914,
+      "regime": 1,
+      "r_hat": 0.259765625,
+      "verbalization": null
+    },
+    {
+      "i": 34,
+      "token": " there",
+      "divergence": 2.387876033782959,
+      "regime": 1,
+      "r_hat": 0.248046875,
+      "verbalization": null
+    },
+    {
+      "i": 35,
+      "token": " are",
+      "divergence": 2.0482155084609985,
+      "regime": 1,
+      "r_hat": 0.25,
+      "verbalization": null
+    },
+    {
+      "i": 36,
+      "token": " any",
+      "divergence": 2.3890082836151123,
+      "regime": 1,
+      "r_hat": 0.271484375,
+      "verbalization": null
+    },
+    {
+      "i": 37,
+      "token": " other",
+      "divergence": 2.4826959371566772,
+      "regime": 1,
+      "r_hat": 0.298828125,
+      "verbalization": null
+    },
+    {
+      "i": 38,
+      "token": " issues",
+      "divergence": 2.4459661841392517,
+      "regime": 1,
+      "r_hat": 0.193359375,
+      "verbalization": null
+    },
+    {
+      "i": 39,
+      "token": " with",
+      "divergence": 2.3312783241271973,
+      "regime": 1,
+      "r_hat": 0.4140625,
+      "verbalization": null
+    },
+    {
+      "i": 40,
+      "token": " the",
+      "divergence": 2.3772164583206177,
+      "regime": 1,
+      "r_hat": 0.1455078125,
+      "verbalization": null
+    },
+    {
+      "i": 41,
+      "token": " \"",
+      "divergence": 2.1551666855812073,
+      "regime": 1,
+      "r_hat": 0.166015625,
+      "verbalization": null
+    },
+    {
+      "i": 42,
+      "token": "self",
+      "divergence": 3.512024700641632,
+      "regime": 1,
+      "r_hat": 0.94921875,
+      "verbalization": null
+    },
+    {
+      "i": 43,
+      "token": " cooling",
+      "divergence": 5.418792903423309,
+      "regime": 1,
+      "r_hat": 1.0625,
+      "verbalization": null
+    },
+    {
+      "i": 44,
+      "token": "\"",
+      "divergence": 3.404772996902466,
+      "regime": 1,
+      "r_hat": 1.3671875,
+      "verbalization": "Human: I was recently inspired to design my own version of a cold beverage bottle based on some comments on other designs.\n\nI thought about the issue for a while"
+    },
+    {
+      "i": 45,
+      "token": " can",
+      "divergence": 2.7924904227256775,
+      "regime": 1,
+      "r_hat": 1.1015625,
+      "verbalization": null
+    },
+    {
+      "i": 46,
+      "token": " besides",
+      "divergence": 2.7917309999465942,
+      "regime": 1,
+      "r_hat": 0.486328125,
+      "verbalization": null
+    },
+    {
+      "i": 47,
+      "token": " heat",
+      "divergence": 2.47285532951355,
+      "regime": 1,
+      "r_hat": 0.37890625,
+      "verbalization": null
+    },
+    {
+      "i": 48,
+      "token": " transfer",
+      "divergence": 3.096704840660095,
+      "regime": 1,
+      "r_hat": 1.140625,
+      "verbalization": null
+    },
+    {
+      "i": 49,
+      "token": " (",
+      "divergence": 3.206148087978363,
+      "regime": 1,
+      "r_hat": 1.15625,
+      "verbalization": null
+    },
+    {
+      "i": 50,
+      "token": "i",
+      "divergence": 2.959210991859436,
+      "regime": 1,
+      "r_hat": 0.671875,
+      "verbalization": null
+    },
+    {
+      "i": 51,
+      "token": ".e",
+      "divergence": 2.5482910871505737,
+      "regime": 1,
+      "r_hat": 0.68359375,
+      "verbalization": null
+    },
+    {
+      "i": 52,
+      "token": ".,",
+      "divergence": 2.908925414085388,
+      "regime": 1,
+      "r_hat": 0.57421875,
+      "verbalization": null
+    },
+    {
+      "i": 53,
+      "token": " maybe",
+      "divergence": 2.686945080757141,
+      "regime": 1,
+      "r_hat": 0.6640625,
+      "verbalization": null
+    },
+    {
+      "i": 54,
+      "token": " it",
+      "divergence": 2.5787051916122437,
+      "regime": 1,
+      "r_hat": 0.294921875,
+      "verbalization": null
+    },
+    {
+      "i": 55,
+      "token": "'s",
+      "divergence": 2.3755860328674316,
+      "regime": 1,
+      "r_hat": 0.2451171875,
+      "verbalization": null
+    },
+    {
+      "i": 56,
+      "token": " too",
+      "divergence": 2.483837366104126,
+      "regime": 1,
+      "r_hat": 0.263671875,
+      "verbalization": null
+    },
+    {
+      "i": 57,
+      "token": " heavy",
+      "divergence": 2.51753968000412,
+      "regime": 1,
+      "r_hat": 0.248046875,
+      "verbalization": null
+    },
+    {
+      "i": 58,
+      "token": " or",
+      "divergence": 2.701287567615509,
+      "regime": 1,
+      "r_hat": 0.67578125,
+      "verbalization": null
+    },
+    {
+      "i": 59,
+      "token": " something",
+      "divergence": 2.6054478883743286,
+      "regime": 1,
+      "r_hat": 0.138671875,
+      "verbalization": null
+    },
+    {
+      "i": 60,
+      "token": "),",
+      "divergence": 2.42390775680542,
+      "regime": 1,
+      "r_hat": 0.251953125,
+      "verbalization": null
+    },
+    {
+      "i": 61,
+      "token": " so",
+      "divergence": 2.45866459608078,
+      "regime": 1,
+      "r_hat": 0.2431640625,
+      "verbalization": null
+    },
+    {
+      "i": 62,
+      "token": " let",
+      "divergence": 2.2672930359840393,
+      "regime": 1,
+      "r_hat": 0.244140625,
+      "verbalization": "Human: Suppose a person had a similar device to a Geiger counter, but it actually told you how much radiation you were getting. Would this mean there would"
+    },
+    {
+      "i": 63,
+      "token": " me",
+      "divergence": 2.4477158188819885,
+      "regime": 1,
+      "r_hat": 0.326171875,
+      "verbalization": null
+    },
+    {
+      "i": 64,
+      "token": " tackle",
+      "divergence": 2.7143407464027405,
+      "regime": 1,
+      "r_hat": 0.4453125,
+      "verbalization": null
+    },
+    {
+      "i": 65,
+      "token": " those",
+      "divergence": 2.8739514350891113,
+      "regime": 1,
+      "r_hat": 0.78515625,
+      "verbalization": null
+    },
+    {
+      "i": 66,
+      "token": " here",
+      "divergence": 2.467824399471283,
+      "regime": 1,
+      "r_hat": 0.28515625,
+      "verbalization": null
+    },
+    {
+      "i": 67,
+      "token": " first",
+      "divergence": 2.8077034950256348,
+      "regime": 1,
+      "r_hat": 0.248046875,
+      "verbalization": null
+    },
+    {
+      "i": 68,
+      "token": " since",
+      "divergence": 2.814971685409546,
+      "regime": 1,
+      "r_hat": 0.333984375,
+      "verbalization": null
+    },
+    {
+      "i": 69,
+      "token": " they",
+      "divergence": 2.545713484287262,
+      "regime": 1,
+      "r_hat": 0.2216796875,
+      "verbalization": null
+    },
+    {
+      "i": 70,
+      "token": " seem",
+      "divergence": 2.0957417488098145,
+      "regime": 1,
+      "r_hat": 0.29296875,
+      "verbalization": null
+    },
+    {
+      "i": 71,
+      "token": " more",
+      "divergence": 2.3342299461364746,
+      "regime": 1,
+      "r_hat": 0.3046875,
+      "verbalization": null
+    },
+    {
+      "i": 72,
+      "token": " important",
+      "divergence": 2.506721079349518,
+      "regime": 1,
+      "r_hat": 0.201171875,
+      "verbalization": null
+    },
+    {
+      "i": 73,
+      "token": " than",
+      "divergence": 2.501006066799164,
+      "regime": 1,
+      "r_hat": 0.474609375,
+      "verbalization": null
+    },
+    {
+      "i": 74,
+      "token": " how",
+      "divergence": 2.557114839553833,
+      "regime": 1,
+      "r_hat": 0.2734375,
+      "verbalization": null
+    },
+    {
+      "i": 75,
+      "token": " you",
+      "divergence": 2.394902527332306,
+      "regime": 1,
+      "r_hat": 0.263671875,
+      "verbalization": null
+    },
+    {
+      "i": 76,
+      "token": "'d",
+      "divergence": 2.3753915429115295,
+      "regime": 1,
+      "r_hat": 0.287109375,
+      "verbalization": null
+    },
+    {
+      "i": 77,
+      "token": " actually",
+      "divergence": 2.7849497199058533,
+      "regime": 1,
+      "r_hat": 0.41796875,
+      "verbalization": null
+    },
+    {
+      "i": 78,
+      "token": " get",
+      "divergence": 2.906978666782379,
+      "regime": 1,
+      "r_hat": 0.197265625,
+      "verbalization": null
+    },
+    {
+      "i": 79,
+      "token": " the",
+      "divergence": 2.592869997024536,
+      "regime": 1,
+      "r_hat": 0.2109375,
+      "verbalization": null
+    },
+    {
+      "i": 80,
+      "token": " cold",
+      "divergence": 2.36381196975708,
+      "regime": 1,
+      "r_hat": 0.1611328125,
+      "verbalization": null
+    },
+    {
+      "i": 81,
+      "token": " into",
+      "divergence": 3.019621253013611,
+      "regime": 1,
+      "r_hat": 0.76171875,
+      "verbalization": "The article discusses the phenomenon of the lack of cold packs inside refrigerators, despite the fact that the cold packs are more difficult to manufacture than other types of ice"
+    },
+    {
+      "i": 82,
+      "token": " the",
+      "divergence": 2.7389248609542847,
+      "regime": 1,
+      "r_hat": 0.373046875,
+      "verbalization": null
+    },
+    {
+      "i": 83,
+      "token": " can",
+      "divergence": 2.47030508518219,
+      "regime": 1,
+      "r_hat": 0.21484375,
+      "verbalization": null
+    },
+    {
+      "i": 84,
+      "token": " without",
+      "divergence": 2.5319613814353943,
+      "regime": 1,
+      "r_hat": 0.79296875,
+      "verbalization": null
+    },
+    {
+      "i": 85,
+      "token": " adding",
+      "divergence": 2.4858158826828003,
+      "regime": 1,
+      "r_hat": 0.2431640625,
+      "verbalization": null
+    },
+    {
+      "i": 86,
+      "token": " additional",
+      "divergence": 2.928914189338684,
+      "regime": 1,
+      "r_hat": 0.78515625,
+      "verbalization": null
+    },
+    {
+      "i": 87,
+      "token": " energy",
+      "divergence": 2.439859688282013,
+      "regime": 1,
+      "r_hat": 0.54296875,
+      "verbalization": null
+    },
+    {
+      "i": 88,
+      "token": " inputs",
+      "divergence": 2.7919639945030212,
+      "regime": 1,
+      "r_hat": 1.0546875,
+      "verbalization": null
+    },
+    {
+      "i": 89,
+      "token": " like",
+      "divergence": 2.7659212946891785,
+      "regime": 1,
+      "r_hat": 1.125,
+      "verbalization": null
+    },
+    {
+      "i": 90,
+      "token": " ice",
+      "divergence": 2.356251835823059,
+      "regime": 1,
+      "r_hat": 0.275390625,
+      "verbalization": null
+    },
+    {
+      "i": 91,
+      "token": " cubes",
+      "divergence": 3.405709445476532,
+      "regime": 1,
+      "r_hat": 1.3515625,
+      "verbalization": null
+    },
+    {
+      "i": 92,
+      "token": ".",
+      "divergence": 3.2801995277404785,
+      "regime": 1,
+      "r_hat": 1.6171875,
+      "verbalization": null
+    },
+    {
+      "i": 93,
+      "token": " For",
+      "divergence": 3.4684512615203857,
+      "regime": 1,
+      "r_hat": 0.99609375,
+      "verbalization": null
+    },
+    {
+      "i": 94,
+      "token": " an",
+      "divergence": 2.4466553330421448,
+      "regime": 1,
+      "r_hat": 0.1552734375,
+      "verbalization": null
+    },
+    {
+      "i": 95,
+      "token": " ideal",
+      "divergence": 2.446895480155945,
+      "regime": 1,
+      "r_hat": 0.1923828125,
+      "verbalization": null
+    },
+    {
+      "i": 96,
+      "token": " case",
+      "divergence": 2.96197110414505,
+      "regime": 1,
+      "r_hat": 0.65625,
+      "verbalization": null
+    },
+    {
+      "i": 97,
+      "token": " where",
+      "divergence": 2.9707168340682983,
+      "regime": 1,
+      "r_hat": 0.365234375,
+      "verbalization": null
+    },
+    {
+      "i": 98,
+      "token": " we",
+      "divergence": 2.689507842063904,
+      "regime": 1,
+      "r_hat": 0.19921875,
+      "verbalization": null
+    },
+    {
+      "i": 99,
+      "token": "'re",
+      "divergence": 2.701108694076538,
+      "regime": 1,
+      "r_hat": 0.43359375,
+      "verbalization": "Human: Design a machine that can turn any object into energy using the principles of thermodynamics and conservation of energy. The machine should have a maximum efficiency of at"
+    },
+    {
+      "i": 100,
+      "token": " just",
+      "divergence": 2.5918772220611572,
+      "regime": 1,
+      "r_hat": 0.404296875,
+      "verbalization": null
+    },
+    {
+      "i": 101,
+      "token": " dealing",
+      "divergence": 2.625397801399231,
+      "regime": 1,
+      "r_hat": 0.236328125,
+      "verbalization": null
+    },
+    {
+      "i": 102,
+      "token": " with",
+      "divergence": 2.7152682542800903,
+      "regime": 1,
+      "r_hat": 0.515625,
+      "verbalization": null
+    },
+    {
+      "i": 103,
+      "token": " con",
+      "divergence": 2.715095043182373,
+      "regime": 1,
+      "r_hat": 0.1591796875,
+      "verbalization": null
+    },
+    {
+      "i": 104,
+      "token": "duction",
+      "divergence": 4.353432536125183,
+      "regime": 1,
+      "r_hat": 1.6015625,
+      "verbalization": null
+    },
+    {
+      "i": 105,
+      "token": " between",
+      "divergence": 3.8899987936019897,
+      "regime": 1,
+      "r_hat": 1.609375,
+      "verbalization": null
+    },
+    {
+      "i": 106,
+      "token": " two",
+      "divergence": 2.6814361810684204,
+      "regime": 1,
+      "r_hat": 0.39453125,
+      "verbalization": null
+    },
+    {
+      "i": 107,
+      "token": " objects",
+      "divergence": 2.772148847579956,
+      "regime": 1,
+      "r_hat": 0.2177734375,
+      "verbalization": null
+    },
+    {
+      "i": 108,
+      "token": " at",
+      "divergence": 2.7453295588493347,
+      "regime": 1,
+      "r_hat": 0.87890625,
+      "verbalization": null
+    },
+    {
+      "i": 109,
+      "token": " equilibrium",
+      "divergence": 3.0359573364257812,
+      "regime": 1,
+      "r_hat": 0.220703125,
+      "verbalization": null
+    },
+    {
+      "i": 110,
+      "token": " temperatures",
+      "divergence": 3.1471723914146423,
+      "regime": 1,
+      "r_hat": 1.5078125,
+      "verbalization": null
+    },
+    {
+      "i": 111,
+      "token": " T",
+      "divergence": 3.3393332958221436,
+      "regime": 1,
+      "r_hat": 1.2734375,
+      "verbalization": null
+    },
+    {
+      "i": 112,
+      "token": "1",
+      "divergence": 5.331698417663574,
+      "regime": 1,
+      "r_hat": 1.25,
+      "verbalization": null
+    },
+    {
+      "i": 113,
+      "token": " =",
+      "divergence": 3.9180445671081543,
+      "regime": 1,
+      "r_hat": 1.375,
+      "verbalization": null
+    },
+    {
+      "i": 114,
+      "token": " T",
+      "divergence": 3.915528118610382,
+      "regime": 0,
+      "r_hat": 0.1455078125,
+      "verbalization": "Human: Consider a physics problem where two objects with different temperatures and specific heats come into contact and eventually reach thermal equilibrium. Write an algorithm in pseudocode that can"
+    },
+    {
+      "i": 115,
+      "token": "2",
+      "divergence": 4.608490824699402,
+      "regime": 1,
+      "r_hat": 1.40625,
+      "verbalization": null
+    },
+    {
+      "i": 116,
+      "token": " via",
+      "divergence": 3.5965487360954285,
+      "regime": 1,
+      "r_hat": 1.65625,
+      "verbalization": null
+    },
+    {
+      "i": 117,
+      "token": " their",
+      "divergence": 2.7834717631340027,
+      "regime": 1,
+      "r_hat": 0.5625,
+      "verbalization": null
+    },
+    {
+      "i": 118,
+      "token": " common",
+      "divergence": 2.9997259974479675,
+      "regime": 1,
+      "r_hat": 0.6171875,
+      "verbalization": null
+    },
+    {
+      "i": 119,
+      "token": " boundary",
+      "divergence": 3.004068672657013,
+      "regime": 1,
+      "r_hat": 0.435546875,
+      "verbalization": null
+    },
+    {
+      "i": 120,
+      "token": " surface",
+      "divergence": 3.470834255218506,
+      "regime": 1,
+      "r_hat": 1.0703125,
+      "verbalization": null
+    },
+    {
+      "i": 121,
+      "token": " area",
+      "divergence": 3.393339455127716,
+      "regime": 1,
+      "r_hat": 0.984375,
+      "verbalization": null
+    },
+    {
+      "i": 122,
+      "token": " A",
+      "divergence": 3.2669060230255127,
+      "regime": 1,
+      "r_hat": 0.83984375,
+      "verbalization": null
+    },
+    {
+      "i": 123,
+      "token": " and",
+      "divergence": 3.348070442676544,
+      "regime": 1,
+      "r_hat": 0.7578125,
+      "verbalization": null
+    },
+    {
+      "i": 124,
+      "token": " thermal",
+      "divergence": 2.72974294424057,
+      "regime": 1,
+      "r_hat": 0.16015625,
+      "verbalization": null
+    },
+    {
+      "i": 125,
+      "token": " conductivity",
+      "divergence": 3.866660714149475,
+      "regime": 1,
+      "r_hat": 1.53125,
+      "verbalization": null
+    },
+    {
+      "i": 126,
+      "token": " k",
+      "divergence": 3.9713960886001587,
+      "regime": 1,
+      "r_hat": 1.4296875,
+      "verbalization": null
+    },
+    {
+      "i": 127,
+      "token": ",",
+      "divergence": 3.6157877445220947,
+      "regime": 1,
+      "r_hat": 1.0703125,
+      "verbalization": null
+    },
+    {
+      "i": 128,
+      "token": " Fourier",
+      "divergence": 2.940932512283325,
+      "regime": 1,
+      "r_hat": 1.15625,
+      "verbalization": null
+    },
+    {
+      "i": 129,
+      "token": "'s",
+      "divergence": 4.1521031856536865,
+      "regime": 1,
+      "r_hat": 1.6015625,
+      "verbalization": "Human: Given two identical, insulated containers filled with the same amount of liquid water at different temperatures, how would one calculate the change in entropy of the system as"
+    },
+    {
+      "i": 130,
+      "token": " law",
+      "divergence": 4.2990477085113525,
+      "regime": 1,
+      "r_hat": 1.6953125,
+      "verbalization": null
+    },
+    {
+      "i": 131,
+      "token": " tells",
+      "divergence": 3.825872302055359,
+      "regime": 1,
+      "r_hat": 0.92578125,
+      "verbalization": null
+    },
+    {
+      "i": 132,
+      "token": " us",
+      "divergence": 3.6638251543045044,
+      "regime": 1,
+      "r_hat": 0.6640625,
+      "verbalization": null
+    },
+    {
+      "i": 133,
+      "token": " Q",
+      "divergence": 2.6638534665107727,
+      "regime": 1,
+      "r_hat": 0.5234375,
+      "verbalization": null
+    },
+    {
+      "i": 134,
+      "token": "/t",
+      "divergence": 4.638631582260132,
+      "regime": 1,
+      "r_hat": 1.328125,
+      "verbalization": null
+    },
+    {
+      "i": 135,
+      "token": " =",
+      "divergence": 4.513762831687927,
+      "regime": 1,
+      "r_hat": 1.5546875,
+      "verbalization": null
+    },
+    {
+      "i": 136,
+      "token": " -",
+      "divergence": 4.287916898727417,
+      "regime": 0,
+      "r_hat": 0.0400390625,
+      "verbalization": null
+    },
+    {
+      "i": 137,
+      "token": "k",
+      "divergence": 5.702096879482269,
+      "regime": 1,
+      "r_hat": 0.7890625,
+      "verbalization": null
+    },
+    {
+      "i": 138,
+      "token": " *",
+      "divergence": 6.580705881118774,
+      "regime": 0,
+      "r_hat": 0.7421875,
+      "verbalization": null
+    },
+    {
+      "i": 139,
+      "token": " d",
+      "divergence": 4.1715967655181885,
+      "regime": 0,
+      "r_hat": 0.1484375,
+      "verbalization": null
+    },
+    {
+      "i": 140,
+      "token": "T",
+      "divergence": 7.445365846157074,
+      "regime": 0,
+      "r_hat": 0.75390625,
+      "verbalization": "The purpose of this experiment was to learn how to calculate the flux of electromagnetic waves through surfaces. The experiment involved creating an electric field between a charged plastic bag and"
+    },
+    {
+      "i": 141,
+      "token": "/d",
+      "divergence": 7.594839930534363,
+      "regime": 0,
+      "r_hat": 0.921875,
+      "verbalization": null
+    },
+    {
+      "i": 142,
+      "token": "x",
+      "divergence": 7.354377746582031,
+      "regime": 0,
+      "r_hat": 0.39453125,
+      "verbalization": null
+    },
+    {
+      "i": 143,
+      "token": " ,",
+      "divergence": 4.849533557891846,
+      "regime": 0,
+      "r_hat": 0.6953125,
+      "verbalization": null
+    },
+    {
+      "i": 144,
+      "token": " which",
+      "divergence": 3.809911608695984,
+      "regime": 0,
+      "r_hat": 0.06396484375,
+      "verbalization": null
+    },
+    {
+      "i": 145,
+      "token": " simpl",
+      "divergence": 2.73141211271286,
+      "regime": 1,
+      "r_hat": 0.267578125,
+      "verbalization": null
+    },
+    {
+      "i": 146,
+      "token": "ifies",
+      "divergence": 3.3048684000968933,
+      "regime": 1,
+      "r_hat": 0.70703125,
+      "verbalization": null
+    },
+    {
+      "i": 147,
+      "token": " down",
+      "divergence": 3.368656575679779,
+      "regime": 1,
+      "r_hat": 0.7265625,
+      "verbalization": null
+    },
+    {
+      "i": 148,
+      "token": " quite",
+      "divergence": 3.595291316509247,
+      "regime": 1,
+      "r_hat": 0.310546875,
+      "verbalization": null
+    },
+    {
+      "i": 149,
+      "token": " nicely",
+      "divergence": 2.933612287044525,
+      "regime": 1,
+      "r_hat": 0.2158203125,
+      "verbalization": null
+    },
+    {
+      "i": 150,
+      "token": " when",
+      "divergence": 2.727018356323242,
+      "regime": 1,
+      "r_hat": 0.51171875,
+      "verbalization": null
+    },
+    {
+      "i": 151,
+      "token": " our",
+      "divergence": 2.6674060821533203,
+      "regime": 1,
+      "r_hat": 0.2578125,
+      "verbalization": "The amount of heat needed per degree change in temperature (specific heat) is a property of the material that varies depending on what you're measuring it for... but"
+    },
+    {
+      "i": 152,
+      "token": " system",
+      "divergence": 2.5648670196533203,
+      "regime": 1,
+      "r_hat": 0.400390625,
+      "verbalization": null
+    },
+    {
+      "i": 153,
+      "token": " becomes",
+      "divergence": 2.848663330078125,
+      "regime": 1,
+      "r_hat": 0.8125,
+      "verbalization": null
+    },
+    {
+      "i": 154,
+      "token": " one",
+      "divergence": 2.8152008652687073,
+      "regime": 1,
+      "r_hat": 0.369140625,
+      "verbalization": null
+    },
+    {
+      "i": 155,
+      "token": "-dimensional",
+      "divergence": 3.1213051080703735,
+      "regime": 1,
+      "r_hat": 0.1630859375,
+      "verbalization": null
+    },
+    {
+      "i": 156,
+      "token": " along",
+      "divergence": 4.130431532859802,
+      "regime": 1,
+      "r_hat": 1.453125,
+      "verbalization": null
+    },
+    {
+      "i": 157,
+      "token": " x",
+      "divergence": 3.5673383474349976,
+      "regime": 1,
+      "r_hat": 0.50390625,
+      "verbalization": null
+    },
+    {
+      "i": 158,
+      "token": " direction",
+      "divergence": 3.890851378440857,
+      "regime": 1,
+      "r_hat": 1.015625,
+      "verbalization": null
+    },
+    {
+      "i": 159,
+      "token": " only",
+      "divergence": 2.9347874522209167,
+      "regime": 1,
+      "r_hat": 0.75,
+      "verbalization": null
+    }
+  ]
+}

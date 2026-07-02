@@ -33,22 +33,38 @@ from srt.nla.metrics import (
 )
 from srt.nla.reconstructor import ActivationReconstructor
 from srt.nla.sidecar import NLAMeta, load_meta, save_meta
+from srt.nla.state_index import CodebookEntry, StateIndex, dedup_by_state_index
+from srt.nla.trace import NLATrace, NLATracer, TraceCell
+from srt.nla.trace_data import (
+    build_trace_pairs,
+    normalize_layer_activations,
+    resolve_saved_layers,
+)
 from srt.nla.verbalizer import ActivationVerbalizer
 
 __all__ = [
     "ActivationReconstructor",
     "ActivationVerbalizer",
     "Anchors",
+    "CodebookEntry",
     "NLAConfig",
     "NLAMeta",
+    "NLATrace",
+    "NLATracer",
+    "StateIndex",
+    "TraceCell",
     "anisotropy_mu",
+    "build_trace_pairs",
     "cosine_similarity",
+    "dedup_by_state_index",
     "fraction_variance_explained",
     "fve_nrm",
     "fve_nrm_centered",
     "load_meta",
     "mse_nrm",
     "nla_reward",
+    "normalize_layer_activations",
+    "resolve_saved_layers",
     "rho_norm",
     "save_meta",
 ]

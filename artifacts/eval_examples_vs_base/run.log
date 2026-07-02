@@ -1,0 +1,58 @@
+Loaded as API: https://riverrider-srt-introspect.hf.space
+connected to Space
+
+[1/9] code_quicksort  (Completion)
+  cached html 83566 chars
+  OFF: n=85 text='    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr '
+  ON : n=85 text='    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr '
+  shared prefix tokens: 85 / 85
+
+[2/9] xml_chapter  (Completion)
+  api 36.9s, html 109858 chars
+  OFF: n=160 text='The Bell Tower</chapter>\n\n<p class="text"><span class="bold">Nathan He'
+  ON : n=160 text='The Bell Tower</chapter>\n\n<p class="text"><span class="bold">Nathan He'
+  shared prefix tokens: 160 / 160
+
+[3/9] fact_capital  (Completion)
+  api 26.9s, html 110633 chars
+  OFF: n=159 text=' a city with the name Canberra. It was originally designed and planned'
+  ON : n=159 text=' a city with the name Canberra. It was originally designed and planned'
+  shared prefix tokens: 159 / 159
+
+[4/9] essay_shift  (Completion)
+  api 26.9s, html 106571 chars
+  OFF: n=160 text=' argued against it.\nA. ��确\nB. ��误\n答案: B\n\n《中共中央关于全面推进依法治国若干重大问题的决定》提出，将'
+  ON : n=160 text=' argued against it.\nA. ��确\nB. ��误\n答案: B\n\n《中共中央关于全面推进依法治国若干重大问题的决定》提出，将'
+  shared prefix tokens: 160 / 160
+
+[5/9] chat_mpemba  (Chat)
+  api 27.0s, html 110517 chars
+  OFF: n=158 text=' Warm water can freeze faster than cold water due to phenomenon known '
+  ON : n=158 text=' Warm water can freeze faster than cold water due to phenomenon known '
+  shared prefix tokens: 158 / 158
+
+[6/9] chat_capital_why  (Chat)
+  api 23.7s, html 81610 chars
+  OFF: n=55 text=' The capital city of Australia is Canberra. It was chosen as a comprom'
+  ON : n=55 text=' The capital city of Australia is Canberra. It was chosen as a comprom'
+  shared prefix tokens: 55 / 55
+
+[7/9] chat_diagnosis  (Chat)
+  api 37.7s, html 111093 chars
+  OFF: n=158 text=' Consider the possibility of an infectious disease such as Lyme Diseas'
+  ON : n=158 text=' Consider the possibility of an infectious disease such as Lyme Diseas'
+  shared prefix tokens: 158 / 158
+
+[8/9] chat_story  (Chat)
+  api 27.1s, html 110133 chars
+  OFF: n=158 text=' The sun had barely risen over the horizon when the old man began his '
+  ON : n=158 text=' The sun had barely risen over the horizon when the old man began his '
+  shared prefix tokens: 158 / 158
+
+[9/9] chat_phil  (Chat)
+  api 26.8s, html 110700 chars
+  OFF: n=158 text=' Yes, consciousness is computable. A computer can replicate the same p'
+  ON : n=158 text=' Yes, consciousness is computable. A computer can replicate the same p'
+  shared prefix tokens: 158 / 158
+
+wrote artifacts/eval_examples_vs_base/results.json

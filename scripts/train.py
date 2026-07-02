@@ -103,6 +103,16 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--divergence-supcon-weight", type=float, default=None)
     p.add_argument("--listnet-weight", type=float, default=None)
     p.add_argument("--chain-residual-aux-weight", type=float, default=None)
+    # Divergence-magnitude-dependent losses. On backbones whose residual scale
+    # is much larger than Qwen's (e.g. gpt-oss, div-std ~26 vs ~1-3), these
+    # produce proportionally larger gradients and must be down-weighted to keep
+    # the multi-task balance (and effective LR) stable.
+    p.add_argument("--chain-weight", type=float, default=None,
+                   help="override config.loss.chain_weight (default 0.5)")
+    p.add_argument("--bif-weight", type=float, default=None,
+                   help="override config.loss.bif_weight (default 1.0)")
+    p.add_argument("--regime-weight", type=float, default=None,
+                   help="override config.loss.regime_weight (default 5.0)")
     # v8b: tune the community-side SupCon (the only discriminative pressure
     # once prototypes are removed).
     p.add_argument("--community-supcon-weight", type=float, default=None)
@@ -272,6 +282,12 @@ def train(args: argparse.Namespace) -> None:
         config.loss.listnet_weight = args.listnet_weight
     if args.chain_residual_aux_weight is not None:
         config.loss.chain_residual_aux_weight = args.chain_residual_aux_weight
+    if args.chain_weight is not None:
+        config.loss.chain_weight = args.chain_weight
+    if args.bif_weight is not None:
+        config.loss.bif_weight = args.bif_weight
+    if args.regime_weight is not None:
+        config.loss.regime_weight = args.regime_weight
     if args.community_supcon_weight is not None:
         config.loss.community_supcon_weight = args.community_supcon_weight
     if args.community_supcon_temperature is not None:

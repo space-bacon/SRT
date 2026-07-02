@@ -1,0 +1,2061 @@
+{
+  "adapter": "RiverRider/srt-adapter-v1.0",
+  "n": 200,
+  "accuracy": 0.86,
+  "base_rate_wrong": 0.14,
+  "auroc": {
+    "mean_entropy": {
+      "auroc_wrong_if_high": 0.7527,
+      "auroc_oriented": 0.7527,
+      "prereg_direction": "high",
+      "auroc_prereg": 0.7527,
+      "direction": "high=wrong"
+    },
+    "peak_entropy": {
+      "auroc_wrong_if_high": 0.4192,
+      "auroc_oriented": 0.5808,
+      "prereg_direction": "low",
+      "auroc_prereg": 0.5808,
+      "direction": "low=wrong"
+    },
+    "mean_div_norm": {
+      "auroc_wrong_if_high": 0.2895,
+      "auroc_oriented": 0.7105,
+      "prereg_direction": "low",
+      "auroc_prereg": 0.7105,
+      "direction": "low=wrong"
+    },
+    "peak_div_norm": {
+      "auroc_wrong_if_high": 0.5276,
+      "auroc_oriented": 0.5276,
+      "prereg_direction": "high",
+      "auroc_prereg": 0.5276,
+      "direction": "high=wrong"
+    },
+    "regime_super_frac": {
+      "auroc_wrong_if_high": 0.4728,
+      "auroc_oriented": 0.5272,
+      "prereg_direction": "low",
+      "auroc_prereg": 0.5272,
+      "direction": "low=wrong"
+    },
+    "mean_r_hat": {
+      "auroc_wrong_if_high": 0.4458,
+      "auroc_oriented": 0.5542,
+      "prereg_direction": "low",
+      "auroc_prereg": 0.5542,
+      "direction": "low=wrong"
+    },
+    "mean_chain": {
+      "auroc_wrong_if_high": 0.2888,
+      "auroc_oriented": 0.7112,
+      "prereg_direction": "low",
+      "auroc_prereg": 0.7112,
+      "direction": "low=wrong"
+    }
+  },
+  "feats": [
+    {
+      "mean_entropy": 0.22681539754344435,
+      "peak_entropy": 6.349523544311523,
+      "mean_div_norm": 1.9622514204545454,
+      "peak_div_norm": 3.765625,
+      "regime_super_frac": 0.9489599748091264,
+      "mean_r_hat": 0.7565773703835227,
+      "mean_chain": 0.010964688387784092
+    },
+    {
+      "mean_entropy": 0.39680467364595107,
+      "peak_entropy": 2.469601631164551,
+      "mean_div_norm": 1.7618075284090908,
+      "peak_div_norm": 4.875,
+      "regime_super_frac": 0.861420692097057,
+      "mean_r_hat": 0.6205560857599431,
+      "mean_chain": 0.008609563654119318
+    },
+    {
+      "mean_entropy": 0.4596750391954052,
+      "peak_entropy": 6.55325984954834,
+      "mean_div_norm": 1.7625355113636363,
+      "peak_div_norm": 3.625,
+      "regime_super_frac": 0.9726787372068926,
+      "mean_r_hat": 0.6417458274147727,
+      "mean_chain": 0.009377913041548296
+    },
+    {
+      "mean_entropy": 0.24644106093008747,
+      "peak_entropy": 5.3999714851379395,
+      "mean_div_norm": 1.7388494318181817,
+      "peak_div_norm": 3.984375,
+      "regime_super_frac": 0.9581531437960538,
+      "mean_r_hat": 0.8063154740767046,
+      "mean_chain": 0.008798911354758522
+    },
+    {
+      "mean_entropy": 0.15626125918730274,
+      "peak_entropy": 4.427345275878906,
+      "mean_div_norm": 1.7565873579545455,
+      "peak_div_norm": 3.203125,
+      "regime_super_frac": 0.9402191682295366,
+      "mean_r_hat": 0.7741063898259943,
+      "mean_chain": 0.009145077792080967
+    },
+    {
+      "mean_entropy": 0.28169558546107637,
+      "peak_entropy": 4.75740909576416,
+      "mean_div_norm": 1.730362215909091,
+      "peak_div_norm": 3.6875,
+      "regime_super_frac": 0.8680011207407171,
+      "mean_r_hat": 0.7261091752485795,
+      "mean_chain": 0.00883206454190341
+    },
+    {
+      "mean_entropy": 0.2121181979314793,
+      "peak_entropy": 4.182191848754883,
+      "mean_div_norm": 1.694034090909091,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.9510004043579101,
+      "mean_r_hat": 0.8227511319247159,
+      "mean_chain": 0.008350302956321023
+    },
+    {
+      "mean_entropy": 0.14653310782207885,
+      "peak_entropy": 5.084129333496094,
+      "mean_div_norm": 1.9041725852272726,
+      "peak_div_norm": 4.5625,
+      "regime_super_frac": 0.9063056338917125,
+      "mean_r_hat": 0.8852278275923295,
+      "mean_chain": 0.010155625776811079
+    },
+    {
+      "mean_entropy": 0.13156133011243956,
+      "peak_entropy": 4.206727981567383,
+      "mean_div_norm": 1.8329190340909092,
+      "peak_div_norm": 3.578125,
+      "regime_super_frac": 0.9558935392986644,
+      "mean_r_hat": 0.7163457697088068,
+      "mean_chain": 0.00982998934659091
+    },
+    {
+      "mean_entropy": 0.28043787591163605,
+      "peak_entropy": 4.26603364944458,
+      "mean_div_norm": 1.874502840909091,
+      "peak_div_norm": 3.40625,
+      "regime_super_frac": 0.9153412905606356,
+      "mean_r_hat": 0.792788973721591,
+      "mean_chain": 0.009883880615234375
+    },
+    {
+      "mean_entropy": 0.38060896102347214,
+      "peak_entropy": 1.9029778242111206,
+      "mean_div_norm": 1.6158735795454546,
+      "peak_div_norm": 3.546875,
+      "regime_super_frac": 0.9498689868233421,
+      "mean_r_hat": 0.7241782448508522,
+      "mean_chain": 0.007186959006569602
+    },
+    {
+      "mean_entropy": 0.2785372345574966,
+      "peak_entropy": 6.535306453704834,
+      "mean_div_norm": 1.8393288352272728,
+      "peak_div_norm": 3.984375,
+      "regime_super_frac": 0.9384766318581321,
+      "mean_r_hat": 0.7683083274147727,
+      "mean_chain": 0.009814245050603692
+    },
+    {
+      "mean_entropy": 0.22397069207394948,
+      "peak_entropy": 6.236634731292725,
+      "mean_div_norm": 1.8474786931818181,
+      "peak_div_norm": 4.15625,
+      "regime_super_frac": 0.923603764447299,
+      "mean_r_hat": 0.6460687810724431,
+      "mean_chain": 0.009744748202237216
+    },
+    {
+      "mean_entropy": 0.1814513634130311,
+      "peak_entropy": 6.196745872497559,
+      "mean_div_norm": 1.8370028409090908,
+      "peak_div_norm": 3.46875,
+      "regime_super_frac": 0.9596158591183749,
+      "mean_r_hat": 0.7120272549715909,
+      "mean_chain": 0.009848577325994317
+    },
+    {
+      "mean_entropy": 0.29650959710114133,
+      "peak_entropy": 2.111720323562622,
+      "mean_div_norm": 1.6806818181818182,
+      "peak_div_norm": 5.34375,
+      "regime_super_frac": 0.9300251353870739,
+      "mean_r_hat": 0.685909756747159,
+      "mean_chain": 0.007902734929865056
+    },
+    {
+      "mean_entropy": 0.21768095444656113,
+      "peak_entropy": 6.300673961639404,
+      "mean_div_norm": 2.0213245738636365,
+      "peak_div_norm": 4.5,
+      "regime_super_frac": 0.8677447622472589,
+      "mean_r_hat": 0.7311049027876421,
+      "mean_chain": 0.011728598854758522
+    },
+    {
+      "mean_entropy": 0.16999556310689476,
+      "peak_entropy": 3.9568700790405273,
+      "mean_div_norm": 1.9883522727272727,
+      "peak_div_norm": 4.0625,
+      "regime_super_frac": 0.8996388909491626,
+      "mean_r_hat": 0.7209741765802556,
+      "mean_chain": 0.010999922318892045
+    },
+    {
+      "mean_entropy": 0.1853530331180577,
+      "peak_entropy": 6.248256683349609,
+      "mean_div_norm": 1.8143821022727273,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.9365956913341176,
+      "mean_r_hat": 0.6834117542613637,
+      "mean_chain": 0.00946530428799716
+    },
+    {
+      "mean_entropy": 0.19885516899129516,
+      "peak_entropy": 5.541523456573486,
+      "mean_div_norm": 1.764169034090909,
+      "peak_div_norm": 4.21875,
+      "regime_super_frac": 0.9498713753440163,
+      "mean_r_hat": 0.6828740900213068,
+      "mean_chain": 0.008890741521661931
+    },
+    {
+      "mean_entropy": 0.1675897449665479,
+      "peak_entropy": 4.079912185668945,
+      "mean_div_norm": 1.7636896306818182,
+      "peak_div_norm": 3.6875,
+      "regime_super_frac": 0.9388090827248313,
+      "mean_r_hat": 0.8673506303267046,
+      "mean_chain": 0.008850236372514204
+    },
+    {
+      "mean_entropy": 0.20311185539791812,
+      "peak_entropy": 3.920966148376465,
+      "mean_div_norm": 1.7462180397727274,
+      "peak_div_norm": 3.59375,
+      "regime_super_frac": 0.9415137009187178,
+      "mean_r_hat": 0.71903076171875,
+      "mean_chain": 0.009003448486328124
+    },
+    {
+      "mean_entropy": 0.1558189662099563,
+      "peak_entropy": 4.52793025970459,
+      "mean_div_norm": 1.8763139204545454,
+      "peak_div_norm": 3.484375,
+      "regime_super_frac": 0.9702888055281206,
+      "mean_r_hat": 0.7267267400568181,
+      "mean_chain": 0.009978277033025567
+    },
+    {
+      "mean_entropy": 0.18781780925717184,
+      "peak_entropy": 6.316293716430664,
+      "mean_div_norm": 1.8105113636363637,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.9436823411421342,
+      "mean_r_hat": 0.7213045987215909,
+      "mean_chain": 0.009516351873224431
+    },
+    {
+      "mean_entropy": 0.21025590713294998,
+      "peak_entropy": 5.9682207107543945,
+      "mean_div_norm": 1.87734375,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.9406042575836182,
+      "mean_r_hat": 0.7093650124289773,
+      "mean_chain": 0.010204037753018466
+    },
+    {
+      "mean_entropy": 0.21791324849718927,
+      "peak_entropy": 6.30531120300293,
+      "mean_div_norm": 1.833877840909091,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.941968128897927,
+      "mean_r_hat": 0.7047368829900568,
+      "mean_chain": 0.009685793789950284
+    },
+    {
+      "mean_entropy": 0.22593591876497912,
+      "peak_entropy": 6.418051719665527,
+      "mean_div_norm": 1.8187855113636364,
+      "peak_div_norm": 4.09375,
+      "regime_super_frac": 0.9381232128901915,
+      "mean_r_hat": 0.6381103515625,
+      "mean_chain": 0.009584530917080966
+    },
+    {
+      "mean_entropy": 0.27865336552549036,
+      "peak_entropy": 3.9561781883239746,
+      "mean_div_norm": 1.6266157670454546,
+      "peak_div_norm": 3.609375,
+      "regime_super_frac": 0.914035211909901,
+      "mean_r_hat": 0.7218372691761363,
+      "mean_chain": 0.007831365411931818
+    },
+    {
+      "mean_entropy": 0.20389089439556657,
+      "peak_entropy": 3.6849365234375,
+      "mean_div_norm": 1.906853693181818,
+      "peak_div_norm": 4.46875,
+      "regime_super_frac": 0.8651269045743075,
+      "mean_r_hat": 0.8500499378551136,
+      "mean_chain": 0.010127813165838068
+    },
+    {
+      "mean_entropy": 0.13778592048062874,
+      "peak_entropy": 4.947995185852051,
+      "mean_div_norm": 1.8927911931818182,
+      "peak_div_norm": 3.984375,
+      "regime_super_frac": 0.9234961878169666,
+      "mean_r_hat": 0.6732765891335227,
+      "mean_chain": 0.010184825550426137
+    },
+    {
+      "mean_entropy": 0.24605138274456168,
+      "peak_entropy": 4.0040740966796875,
+      "mean_div_norm": 1.8349609375,
+      "peak_div_norm": 4.8125,
+      "regime_super_frac": 0.9466036558151245,
+      "mean_r_hat": 0.87667236328125,
+      "mean_chain": 0.009605130282315341
+    },
+    {
+      "mean_entropy": 0.23171408275913385,
+      "peak_entropy": 4.2429375648498535,
+      "mean_div_norm": 2.0501420454545456,
+      "peak_div_norm": 5.15625,
+      "regime_super_frac": 0.7697734247554432,
+      "mean_r_hat": 0.7389948064630681,
+      "mean_chain": 0.011730471524325284
+    },
+    {
+      "mean_entropy": 0.1840453302252275,
+      "peak_entropy": 6.251976013183594,
+      "mean_div_norm": 1.7899147727272726,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9405082789334384,
+      "mean_r_hat": 0.6882335316051137,
+      "mean_chain": 0.009250918301669034
+    },
+    {
+      "mean_entropy": 0.24559568490646924,
+      "peak_entropy": 6.309554576873779,
+      "mean_div_norm": 1.9647017045454545,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.9441331386566162,
+      "mean_r_hat": 0.7317460493607955,
+      "mean_chain": 0.011039803244850852
+    },
+    {
+      "mean_entropy": 0.28825085208053425,
+      "peak_entropy": 6.300026893615723,
+      "mean_div_norm": 1.9288529829545455,
+      "peak_div_norm": 3.703125,
+      "regime_super_frac": 0.9480909867720171,
+      "mean_r_hat": 0.8328224875710227,
+      "mean_chain": 0.010608326305042614
+    },
+    {
+      "mean_entropy": 0.19277323828807275,
+      "peak_entropy": 4.569968223571777,
+      "mean_div_norm": 1.9181640625,
+      "peak_div_norm": 3.625,
+      "regime_super_frac": 0.9477730664339933,
+      "mean_r_hat": 0.7894919655539773,
+      "mean_chain": 0.010133500532670455
+    },
+    {
+      "mean_entropy": 0.2911584043224963,
+      "peak_entropy": 6.120460033416748,
+      "mean_div_norm": 1.777450284090909,
+      "peak_div_norm": 3.328125,
+      "regime_super_frac": 0.939389093355699,
+      "mean_r_hat": 0.693890380859375,
+      "mean_chain": 0.009237809614701704
+    },
+    {
+      "mean_entropy": 0.4402439987383497,
+      "peak_entropy": 4.29549503326416,
+      "mean_div_norm": 1.4735440340909092,
+      "peak_div_norm": 3.703125,
+      "regime_super_frac": 0.9479784857143055,
+      "mean_r_hat": 0.6379339044744318,
+      "mean_chain": 0.006339888139204546
+    },
+    {
+      "mean_entropy": 0.2701183493611346,
+      "peak_entropy": 6.372415542602539,
+      "mean_div_norm": 1.9382279829545455,
+      "peak_div_norm": 3.84375,
+      "regime_super_frac": 0.9501239083030008,
+      "mean_r_hat": 0.7462635387073864,
+      "mean_chain": 0.010419880260120739
+    },
+    {
+      "mean_entropy": 0.14442447957478946,
+      "peak_entropy": 6.203403472900391,
+      "mean_div_norm": 1.8154119318181818,
+      "peak_div_norm": 3.484375,
+      "regime_super_frac": 0.9570966590534556,
+      "mean_r_hat": 0.7017522638494318,
+      "mean_chain": 0.00971769853071733
+    },
+    {
+      "mean_entropy": 0.31295909711311654,
+      "peak_entropy": 4.729540824890137,
+      "mean_div_norm": 1.9708629261363637,
+      "peak_div_norm": 5.3125,
+      "regime_super_frac": 0.9144746281883933,
+      "mean_r_hat": 0.7543337735262784,
+      "mean_chain": 0.011113461581143467
+    },
+    {
+      "mean_entropy": 0.16759640159433864,
+      "peak_entropy": 6.230297088623047,
+      "mean_div_norm": 1.8283735795454545,
+      "peak_div_norm": 3.984375,
+      "regime_super_frac": 0.9435426018454812,
+      "mean_r_hat": 0.6915366432883523,
+      "mean_chain": 0.00953126387162642
+    },
+    {
+      "mean_entropy": 0.2483486401065291,
+      "peak_entropy": 6.412671089172363,
+      "mean_div_norm": 1.8270596590909092,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9462524847550826,
+      "mean_r_hat": 0.6840703790838069,
+      "mean_chain": 0.009558937766335228
+    },
+    {
+      "mean_entropy": 0.2660405875954988,
+      "peak_entropy": 4.724538326263428,
+      "mean_div_norm": 1.7921342329545455,
+      "peak_div_norm": 3.4375,
+      "regime_super_frac": 0.9604873310435902,
+      "mean_r_hat": 0.6889592950994318,
+      "mean_chain": 0.009315768155184659
+    },
+    {
+      "mean_entropy": 0.22101463649618386,
+      "peak_entropy": 4.579388618469238,
+      "mean_div_norm": 1.826065340909091,
+      "peak_div_norm": 3.5625,
+      "regime_super_frac": 0.9637530933726918,
+      "mean_r_hat": 0.6795454545454546,
+      "mean_chain": 0.009539309414950283
+    },
+    {
+      "mean_entropy": 0.22757427989155465,
+      "peak_entropy": 5.3031721115112305,
+      "mean_div_norm": 1.7175248579545455,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.9799552657387474,
+      "mean_r_hat": 0.7650479403409091,
+      "mean_chain": 0.008564272793856534
+    },
+    {
+      "mean_entropy": 0.2825767662319035,
+      "peak_entropy": 6.348109245300293,
+      "mean_div_norm": 1.8791193181818182,
+      "peak_div_norm": 3.546875,
+      "regime_super_frac": 0.9367416295138272,
+      "mean_r_hat": 0.7222016768022017,
+      "mean_chain": 0.010134818337180398
+    },
+    {
+      "mean_entropy": 0.2733048879070814,
+      "peak_entropy": 4.8686065673828125,
+      "mean_div_norm": 1.9076349431818183,
+      "peak_div_norm": 6.5,
+      "regime_super_frac": 0.8082868576049804,
+      "mean_r_hat": 0.7321704170920632,
+      "mean_chain": 0.010775618119673296
+    },
+    {
+      "mean_entropy": 0.28361147264913733,
+      "peak_entropy": 5.382742881774902,
+      "mean_div_norm": 1.7392400568181818,
+      "peak_div_norm": 3.625,
+      "regime_super_frac": 0.9155395464463667,
+      "mean_r_hat": 0.7069041859019887,
+      "mean_chain": 0.008904335715553977
+    },
+    {
+      "mean_entropy": 0.367836569309267,
+      "peak_entropy": 6.15963077545166,
+      "mean_div_norm": 1.9201349431818182,
+      "peak_div_norm": 3.671875,
+      "regime_super_frac": 0.9262060165405274,
+      "mean_r_hat": 0.6853221546519886,
+      "mean_chain": 0.010711669921875
+    },
+    {
+      "mean_entropy": 0.15044548431245217,
+      "peak_entropy": 6.322117328643799,
+      "mean_div_norm": 1.861434659090909,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9245661388744008,
+      "mean_r_hat": 0.8204384543678978,
+      "mean_chain": 0.009873823686079546
+    },
+    {
+      "mean_entropy": 0.29135289405674497,
+      "peak_entropy": 6.296562671661377,
+      "mean_div_norm": 1.7696732954545455,
+      "peak_div_norm": 4.53125,
+      "regime_super_frac": 0.9431598143144088,
+      "mean_r_hat": 0.6495660955255682,
+      "mean_chain": 0.008986178311434658
+    },
+    {
+      "mean_entropy": 0.20234526152214327,
+      "peak_entropy": 6.388084411621094,
+      "mean_div_norm": 1.8610085227272728,
+      "peak_div_norm": 3.90625,
+      "regime_super_frac": 0.9567398851568049,
+      "mean_r_hat": 0.7012545498934659,
+      "mean_chain": 0.009914120760830966
+    },
+    {
+      "mean_entropy": 0.18422634428850448,
+      "peak_entropy": 3.9892001152038574,
+      "mean_div_norm": 1.7648792613636364,
+      "peak_div_norm": 3.28125,
+      "regime_super_frac": 0.9672048655423251,
+      "mean_r_hat": 0.7566689231178977,
+      "mean_chain": 0.009023909135298295
+    },
+    {
+      "mean_entropy": 0.2311323150689637,
+      "peak_entropy": 3.6868457794189453,
+      "mean_div_norm": 1.8332741477272727,
+      "peak_div_norm": 3.78125,
+      "regime_super_frac": 0.9398887699300592,
+      "mean_r_hat": 0.7098172274502841,
+      "mean_chain": 0.009430278431285511
+    },
+    {
+      "mean_entropy": 0.14267920437322734,
+      "peak_entropy": 4.475409507751465,
+      "mean_div_norm": 1.9685724431818181,
+      "peak_div_norm": 4.40625,
+      "regime_super_frac": 0.9516424005681818,
+      "mean_r_hat": 0.7549044522372159,
+      "mean_chain": 0.010578432950106534
+    },
+    {
+      "mean_entropy": 0.2605150710070429,
+      "peak_entropy": 4.5024919509887695,
+      "mean_div_norm": 1.7094105113636364,
+      "peak_div_norm": 3.734375,
+      "regime_super_frac": 0.9409643433310769,
+      "mean_r_hat": 0.747161865234375,
+      "mean_chain": 0.00842985673384233
+    },
+    {
+      "mean_entropy": 0.21384506353667182,
+      "peak_entropy": 6.372378349304199,
+      "mean_div_norm": 2.0483664772727272,
+      "peak_div_norm": 4.84375,
+      "regime_super_frac": 0.9264467412775214,
+      "mean_r_hat": 0.8415027965198864,
+      "mean_chain": 0.01187466708096591
+    },
+    {
+      "mean_entropy": 0.29594953512101324,
+      "peak_entropy": 3.812645196914673,
+      "mean_div_norm": 1.9021306818181818,
+      "peak_div_norm": 4.46875,
+      "regime_super_frac": 0.9215628645636819,
+      "mean_r_hat": 0.7898670543323864,
+      "mean_chain": 0.009806130149147727
+    },
+    {
+      "mean_entropy": 0.19486071766673402,
+      "peak_entropy": 4.882325172424316,
+      "mean_div_norm": 1.906356534090909,
+      "peak_div_norm": 3.96875,
+      "regime_super_frac": 0.9427388212897561,
+      "mean_r_hat": 0.6747109153053977,
+      "mean_chain": 0.010383814031427557
+    },
+    {
+      "mean_entropy": 0.17836132123876752,
+      "peak_entropy": 5.078432083129883,
+      "mean_div_norm": 1.8038707386363637,
+      "peak_div_norm": 3.78125,
+      "regime_super_frac": 0.95115046934648,
+      "mean_r_hat": 0.7972023703835227,
+      "mean_chain": 0.009236283735795454
+    },
+    {
+      "mean_entropy": 0.25952217733442423,
+      "peak_entropy": 4.06868839263916,
+      "mean_div_norm": 1.6256924715909091,
+      "peak_div_norm": 4.15625,
+      "regime_super_frac": 0.9353010204705325,
+      "mean_r_hat": 0.6970745433460582,
+      "mean_chain": 0.007697018710049716
+    },
+    {
+      "mean_entropy": 0.1821634483052931,
+      "peak_entropy": 6.012699127197266,
+      "mean_div_norm": 1.8984907670454545,
+      "peak_div_norm": 4.25,
+      "regime_super_frac": 0.9185300436886874,
+      "mean_r_hat": 0.7300403941761363,
+      "mean_chain": 0.010485284978693181
+    },
+    {
+      "mean_entropy": 0.22034623074954088,
+      "peak_entropy": 6.291046142578125,
+      "mean_div_norm": 1.8509232954545454,
+      "peak_div_norm": 3.890625,
+      "regime_super_frac": 0.9453492338007147,
+      "mean_r_hat": 0.7479503284801137,
+      "mean_chain": 0.009772352738813921
+    },
+    {
+      "mean_entropy": 0.19630354130514144,
+      "peak_entropy": 6.249573707580566,
+      "mean_div_norm": 1.8381747159090909,
+      "peak_div_norm": 3.53125,
+      "regime_super_frac": 0.9362475655295632,
+      "mean_r_hat": 0.7062472256747159,
+      "mean_chain": 0.010120322487571023
+    },
+    {
+      "mean_entropy": 0.17692210211060652,
+      "peak_entropy": 6.211214542388916,
+      "mean_div_norm": 1.845028409090909,
+      "peak_div_norm": 3.90625,
+      "regime_super_frac": 0.9306903318925337,
+      "mean_r_hat": 0.713616943359375,
+      "mean_chain": 0.00973295731977983
+    },
+    {
+      "mean_entropy": 0.1321677783529661,
+      "peak_entropy": 5.533395767211914,
+      "mean_div_norm": 2.2976740056818183,
+      "peak_div_norm": 5.53125,
+      "regime_super_frac": 0.6423298662359064,
+      "mean_r_hat": 0.747578291459517,
+      "mean_chain": 0.014203505082563921
+    },
+    {
+      "mean_entropy": 0.17984572653117953,
+      "peak_entropy": 5.284095764160156,
+      "mean_div_norm": 2.288955965909091,
+      "peak_div_norm": 5.5,
+      "regime_super_frac": 0.6482348122379996,
+      "mean_r_hat": 0.8196533203125,
+      "mean_chain": 0.013627069646661933
+    },
+    {
+      "mean_entropy": 0.26586607916640126,
+      "peak_entropy": 1.5881028175354004,
+      "mean_div_norm": 1.5498579545454545,
+      "peak_div_norm": 4.53125,
+      "regime_super_frac": 0.8847078708085147,
+      "mean_r_hat": 0.6063279585404829,
+      "mean_chain": 0.006743413751775568
+    },
+    {
+      "mean_entropy": 0.345847394479445,
+      "peak_entropy": 6.33736515045166,
+      "mean_div_norm": 1.9504616477272727,
+      "peak_div_norm": 3.734375,
+      "regime_super_frac": 0.8977472749623385,
+      "mean_r_hat": 0.688450137051669,
+      "mean_chain": 0.010986536199396307
+    },
+    {
+      "mean_entropy": 0.20878195857032916,
+      "peak_entropy": 6.258166790008545,
+      "mean_div_norm": 1.8076704545454545,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9332249251278963,
+      "mean_r_hat": 0.6608182040127841,
+      "mean_chain": 0.009552279385653409
+    },
+    {
+      "mean_entropy": 0.17391380094440323,
+      "peak_entropy": 6.216739654541016,
+      "mean_div_norm": 1.8703480113636364,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.936054143038663,
+      "mean_r_hat": 0.7596790660511363,
+      "mean_chain": 0.009909612482244317
+    },
+    {
+      "mean_entropy": 0.25464373303876575,
+      "peak_entropy": 4.865753173828125,
+      "mean_div_norm": 1.6187855113636365,
+      "peak_div_norm": 3.5625,
+      "regime_super_frac": 0.9758813337846236,
+      "mean_r_hat": 0.5888427734375,
+      "mean_chain": 0.0077873923561789776
+    },
+    {
+      "mean_entropy": 0.26592690291057786,
+      "peak_entropy": 4.609606742858887,
+      "mean_div_norm": 1.9382102272727273,
+      "peak_div_norm": 4.53125,
+      "regime_super_frac": 0.923215406591242,
+      "mean_r_hat": 0.7840787020596591,
+      "mean_chain": 0.01052426424893466
+    },
+    {
+      "mean_entropy": 0.2173480896551311,
+      "peak_entropy": 4.928933620452881,
+      "mean_div_norm": 1.8648082386363636,
+      "peak_div_norm": 3.90625,
+      "regime_super_frac": 0.9479140628467907,
+      "mean_r_hat": 0.8954140403053977,
+      "mean_chain": 0.009859119762073864
+    },
+    {
+      "mean_entropy": 0.2152351998604443,
+      "peak_entropy": 6.326489448547363,
+      "mean_div_norm": 1.962393465909091,
+      "peak_div_norm": 3.78125,
+      "regime_super_frac": 0.9368364420804111,
+      "mean_r_hat": 0.8718605735085228,
+      "mean_chain": 0.010732061212713069
+    },
+    {
+      "mean_entropy": 0.1462313426436082,
+      "peak_entropy": 5.658738136291504,
+      "mean_div_norm": 1.68125,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.9396014560352672,
+      "mean_r_hat": 0.7814930308948863,
+      "mean_chain": 0.008387340198863636
+    },
+    {
+      "mean_entropy": 0.1657368896394629,
+      "peak_entropy": 3.9838223457336426,
+      "mean_div_norm": 1.7440163352272726,
+      "peak_div_norm": 3.90625,
+      "regime_super_frac": 0.9400414661927656,
+      "mean_r_hat": 0.6977239435369318,
+      "mean_chain": 0.008668032559481535
+    },
+    {
+      "mean_entropy": 0.17539770912649766,
+      "peak_entropy": 2.248150587081909,
+      "mean_div_norm": 1.4927379261363636,
+      "peak_div_norm": 3.4375,
+      "regime_super_frac": 0.8995444270697507,
+      "mean_r_hat": 0.5769969593394887,
+      "mean_chain": 0.0063100641424005685
+    },
+    {
+      "mean_entropy": 0.2149753245720805,
+      "peak_entropy": 6.289955139160156,
+      "mean_div_norm": 1.788671875,
+      "peak_div_norm": 3.84375,
+      "regime_super_frac": 0.9389560439369895,
+      "mean_r_hat": 0.6522200150923295,
+      "mean_chain": 0.009302728826349431
+    },
+    {
+      "mean_entropy": 0.20837409075650778,
+      "peak_entropy": 2.3484575748443604,
+      "mean_div_norm": 1.7717329545454545,
+      "peak_div_norm": 4.3125,
+      "regime_super_frac": 0.9274436257102273,
+      "mean_r_hat": 0.7160378196022728,
+      "mean_chain": 0.008843023126775568
+    },
+    {
+      "mean_entropy": 0.18727000016177933,
+      "peak_entropy": 6.215709686279297,
+      "mean_div_norm": 1.8538707386363635,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9181701486760919,
+      "mean_r_hat": 0.6520846280184659,
+      "mean_chain": 0.009828324751420455
+    },
+    {
+      "mean_entropy": 0.2216103498447286,
+      "peak_entropy": 3.917614459991455,
+      "mean_div_norm": 1.7599609375,
+      "peak_div_norm": 4.03125,
+      "regime_super_frac": 0.8956812403418801,
+      "mean_r_hat": 0.7931915283203125,
+      "mean_chain": 0.00873385342684659
+    },
+    {
+      "mean_entropy": 0.15645333578200935,
+      "peak_entropy": 4.762279510498047,
+      "mean_div_norm": 1.8243963068181819,
+      "peak_div_norm": 4.75,
+      "regime_super_frac": 0.9433907985687255,
+      "mean_r_hat": 0.7170332475142045,
+      "mean_chain": 0.00951600508256392
+    },
+    {
+      "mean_entropy": 0.37618868214663465,
+      "peak_entropy": 5.44305944442749,
+      "mean_div_norm": 1.641796875,
+      "peak_div_norm": 3.5625,
+      "regime_super_frac": 0.9471818634054877,
+      "mean_r_hat": 0.7913507634943182,
+      "mean_chain": 0.0079620361328125
+    },
+    {
+      "mean_entropy": 0.1679489200144205,
+      "peak_entropy": 6.475951194763184,
+      "mean_div_norm": 1.785635653409091,
+      "peak_div_norm": 3.890625,
+      "regime_super_frac": 0.9251988237554377,
+      "mean_r_hat": 0.7614496404474432,
+      "mean_chain": 0.00939060557972301
+    },
+    {
+      "mean_entropy": 0.20268607801114238,
+      "peak_entropy": 6.173290252685547,
+      "mean_div_norm": 1.8180397727272728,
+      "peak_div_norm": 4.25,
+      "regime_super_frac": 0.9507746306332675,
+      "mean_r_hat": 0.6598532936789773,
+      "mean_chain": 0.009507820822975853
+    },
+    {
+      "mean_entropy": 0.18957407072964716,
+      "peak_entropy": 6.2754106521606445,
+      "mean_div_norm": 1.9051846590909092,
+      "peak_div_norm": 3.59375,
+      "regime_super_frac": 0.9465265794233843,
+      "mean_r_hat": 0.7692309292879972,
+      "mean_chain": 0.010332142223011364
+    },
+    {
+      "mean_entropy": 0.2748050126015138,
+      "peak_entropy": 3.8877434730529785,
+      "mean_div_norm": 1.8210227272727273,
+      "peak_div_norm": 3.5625,
+      "regime_super_frac": 0.9405309438705445,
+      "mean_r_hat": 0.7193414861505681,
+      "mean_chain": 0.009396223588423295
+    },
+    {
+      "mean_entropy": 0.26362106598945784,
+      "peak_entropy": 6.32125186920166,
+      "mean_div_norm": 2.0096235795454547,
+      "peak_div_norm": 4.25,
+      "regime_super_frac": 0.9247401448813352,
+      "mean_r_hat": 0.7879078258167613,
+      "mean_chain": 0.011384305087002842
+    },
+    {
+      "mean_entropy": 0.17648471053284195,
+      "peak_entropy": 5.375463485717773,
+      "mean_div_norm": 1.9558948863636363,
+      "peak_div_norm": 5.8125,
+      "regime_super_frac": 0.9168746774846858,
+      "mean_r_hat": 0.690235762162642,
+      "mean_chain": 0.010967046564275568
+    },
+    {
+      "mean_entropy": 0.1945143152061002,
+      "peak_entropy": 6.264158248901367,
+      "mean_div_norm": 1.8303977272727272,
+      "peak_div_norm": 3.546875,
+      "regime_super_frac": 0.956356143951416,
+      "mean_r_hat": 0.7309725674715909,
+      "mean_chain": 0.0098236083984375
+    },
+    {
+      "mean_entropy": 0.23210394900740022,
+      "peak_entropy": 4.2970476150512695,
+      "mean_div_norm": 1.7614346590909091,
+      "peak_div_norm": 3.75,
+      "regime_super_frac": 0.9498829321427779,
+      "mean_r_hat": 0.7144761518998579,
+      "mean_chain": 0.009160059148615058
+    },
+    {
+      "mean_entropy": 0.24392998338659286,
+      "peak_entropy": 3.991100788116455,
+      "mean_div_norm": 1.9040305397727273,
+      "peak_div_norm": 5.53125,
+      "regime_super_frac": 0.9652699649333953,
+      "mean_r_hat": 0.7103116122159091,
+      "mean_chain": 0.010150978781960227
+    },
+    {
+      "mean_entropy": 0.2418797477704291,
+      "peak_entropy": 6.327422142028809,
+      "mean_div_norm": 1.7982421875,
+      "peak_div_norm": 3.953125,
+      "regime_super_frac": 0.9437903057445179,
+      "mean_r_hat": 0.70782470703125,
+      "mean_chain": 0.009442970969460228
+    },
+    {
+      "mean_entropy": 0.2636327150220024,
+      "peak_entropy": 6.309728622436523,
+      "mean_div_norm": 1.9062144886363637,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.9460338332436301,
+      "mean_r_hat": 0.746856689453125,
+      "mean_chain": 0.010491388494318183
+    },
+    {
+      "mean_entropy": 0.14021708626579157,
+      "peak_entropy": 4.344825744628906,
+      "mean_div_norm": 1.7091086647727274,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.936420692097057,
+      "mean_r_hat": 0.8887051669034091,
+      "mean_chain": 0.008401627974076705
+    },
+    {
+      "mean_entropy": 0.3081376554223361,
+      "peak_entropy": 4.302883625030518,
+      "mean_div_norm": 1.817755681818182,
+      "peak_div_norm": 5.40625,
+      "regime_super_frac": 0.9271673592654142,
+      "mean_r_hat": 0.6744437477805397,
+      "mean_chain": 0.00955262617631392
+    },
+    {
+      "mean_entropy": 0.33644205759806955,
+      "peak_entropy": 4.80756950378418,
+      "mean_div_norm": 1.7178267045454545,
+      "peak_div_norm": 3.59375,
+      "regime_super_frac": 0.958313909443942,
+      "mean_r_hat": 0.6871129816228693,
+      "mean_chain": 0.008578005704012783
+    },
+    {
+      "mean_entropy": 0.37958178824378913,
+      "peak_entropy": 4.079197406768799,
+      "mean_div_norm": 1.7941228693181819,
+      "peak_div_norm": 3.453125,
+      "regime_super_frac": 0.9674123590642756,
+      "mean_r_hat": 0.7116865678267046,
+      "mean_chain": 0.009155065363103693
+    },
+    {
+      "mean_entropy": 0.2586600928837718,
+      "peak_entropy": 1.7646136283874512,
+      "mean_div_norm": 1.5865767045454546,
+      "peak_div_norm": 4.71875,
+      "regime_super_frac": 0.9455186822197654,
+      "mean_r_hat": 0.6482732599431819,
+      "mean_chain": 0.007271645285866477
+    },
+    {
+      "mean_entropy": 0.19508981401354814,
+      "peak_entropy": 6.4108991622924805,
+      "mean_div_norm": 1.8282137784090908,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.9448175993832675,
+      "mean_r_hat": 0.6772472034801137,
+      "mean_chain": 0.009623787619850853
+    },
+    {
+      "mean_entropy": 0.33147638567857557,
+      "peak_entropy": 6.317993640899658,
+      "mean_div_norm": 1.9355113636363637,
+      "peak_div_norm": 4.03125,
+      "regime_super_frac": 0.9574474681507458,
+      "mean_r_hat": 0.7616943359375,
+      "mean_chain": 0.010485701127485796
+    },
+    {
+      "mean_entropy": 0.16427644358898724,
+      "peak_entropy": 4.5683135986328125,
+      "mean_div_norm": 1.9150923295454545,
+      "peak_div_norm": 3.640625,
+      "regime_super_frac": 0.9587291544133967,
+      "mean_r_hat": 0.7069463556463068,
+      "mean_chain": 0.010146193070845171
+    },
+    {
+      "mean_entropy": 0.2909765101908058,
+      "peak_entropy": 6.1798295974731445,
+      "mean_div_norm": 1.8072265625,
+      "peak_div_norm": 3.46875,
+      "regime_super_frac": 0.9515328190543435,
+      "mean_r_hat": 0.7255337801846591,
+      "mean_chain": 0.00917635830965909
+    },
+    {
+      "mean_entropy": 0.2717605956826045,
+      "peak_entropy": 4.8402204513549805,
+      "mean_div_norm": 1.9104403409090909,
+      "peak_div_norm": 3.84375,
+      "regime_super_frac": 0.944987253709273,
+      "mean_r_hat": 0.7437239213423296,
+      "mean_chain": 0.010077112371271306
+    },
+    {
+      "mean_entropy": 0.2855120473440415,
+      "peak_entropy": 6.337151050567627,
+      "mean_div_norm": 1.9333629261363636,
+      "peak_div_norm": 5.03125,
+      "regime_super_frac": 0.9387271577661688,
+      "mean_r_hat": 0.7234447132457387,
+      "mean_chain": 0.010653617165305398
+    },
+    {
+      "mean_entropy": 0.16253199144013625,
+      "peak_entropy": 4.148482322692871,
+      "mean_div_norm": 1.9703480113636365,
+      "peak_div_norm": 4.40625,
+      "regime_super_frac": 0.9587784593755548,
+      "mean_r_hat": 0.7552556818181818,
+      "mean_chain": 0.01058564619584517
+    },
+    {
+      "mean_entropy": 0.2884181695596814,
+      "peak_entropy": 6.321922302246094,
+      "mean_div_norm": 1.8257457386363636,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.9439771457151933,
+      "mean_r_hat": 0.6548583984375,
+      "mean_chain": 0.009985837069424715
+    },
+    {
+      "mean_entropy": 0.2435796277573797,
+      "peak_entropy": 6.2591142654418945,
+      "mean_div_norm": 1.8474076704545455,
+      "peak_div_norm": 3.546875,
+      "regime_super_frac": 0.9416393280029297,
+      "mean_r_hat": 0.7065579501065341,
+      "mean_chain": 0.009946094859730114
+    },
+    {
+      "mean_entropy": 0.2629298152163094,
+      "peak_entropy": 6.285899639129639,
+      "mean_div_norm": 1.9019886363636365,
+      "peak_div_norm": 3.796875,
+      "regime_super_frac": 0.9307538856159557,
+      "mean_r_hat": 0.6333218661221591,
+      "mean_chain": 0.010063102028586648
+    },
+    {
+      "mean_entropy": 0.3036734584711873,
+      "peak_entropy": 6.479086875915527,
+      "mean_div_norm": 1.7174538352272728,
+      "peak_div_norm": 3.5,
+      "regime_super_frac": 0.9229096109216863,
+      "mean_r_hat": 0.78212890625,
+      "mean_chain": 0.008423961292613637
+    },
+    {
+      "mean_entropy": 0.2472398711553547,
+      "peak_entropy": 4.625510215759277,
+      "mean_div_norm": 1.7892755681818182,
+      "peak_div_norm": 3.84375,
+      "regime_super_frac": 0.9646487626162442,
+      "mean_r_hat": 0.6710504705255682,
+      "mean_chain": 0.009048045765269887
+    },
+    {
+      "mean_entropy": 0.12750254326277602,
+      "peak_entropy": 4.604839324951172,
+      "mean_div_norm": 1.9307173295454545,
+      "peak_div_norm": 4.15625,
+      "regime_super_frac": 0.9605312152342362,
+      "mean_r_hat": 0.7547551935369318,
+      "mean_chain": 0.010223735462535511
+    },
+    {
+      "mean_entropy": 0.1579714194031386,
+      "peak_entropy": 4.663881301879883,
+      "mean_div_norm": 1.9773792613636363,
+      "peak_div_norm": 4.375,
+      "regime_super_frac": 0.9209401347420433,
+      "mean_r_hat": 0.7424538352272727,
+      "mean_chain": 0.010590431906960227
+    },
+    {
+      "mean_entropy": 0.16195510131062696,
+      "peak_entropy": 1.7068579196929932,
+      "mean_div_norm": 1.7490056818181818,
+      "peak_div_norm": 3.640625,
+      "regime_super_frac": 0.9489571744745428,
+      "mean_r_hat": 0.6830091996626421,
+      "mean_chain": 0.008763469349254262
+    },
+    {
+      "mean_entropy": 0.2554641911025266,
+      "peak_entropy": 4.014037609100342,
+      "mean_div_norm": 1.546377840909091,
+      "peak_div_norm": 3.25,
+      "regime_super_frac": 0.9463017290288752,
+      "mean_r_hat": 0.5405068137428978,
+      "mean_chain": 0.006976665150035512
+    },
+    {
+      "mean_entropy": 0.20128449687822803,
+      "peak_entropy": 5.00635290145874,
+      "mean_div_norm": 1.8431995738636364,
+      "peak_div_norm": 3.546875,
+      "regime_super_frac": 0.9072868217121471,
+      "mean_r_hat": 0.8286787206476385,
+      "mean_chain": 0.009611441872336647
+    },
+    {
+      "mean_entropy": 0.27272567298744016,
+      "peak_entropy": 6.337396621704102,
+      "mean_div_norm": 1.9703125,
+      "peak_div_norm": 5.40625,
+      "regime_super_frac": 0.9351022655313665,
+      "mean_r_hat": 0.7515203302556818,
+      "mean_chain": 0.010940343683416193
+    },
+    {
+      "mean_entropy": 0.16828114807894595,
+      "peak_entropy": 3.938297748565674,
+      "mean_div_norm": 1.8459517045454545,
+      "peak_div_norm": 3.421875,
+      "regime_super_frac": 0.9173810081048446,
+      "mean_r_hat": 0.7758855646306818,
+      "mean_chain": 0.009745025634765625
+    },
+    {
+      "mean_entropy": 0.23599951803390365,
+      "peak_entropy": 4.304749965667725,
+      "mean_div_norm": 1.8877485795454545,
+      "peak_div_norm": 3.90625,
+      "regime_super_frac": 0.9511037436398593,
+      "mean_r_hat": 0.7352428089488636,
+      "mean_chain": 0.009894908558238637
+    },
+    {
+      "mean_entropy": 0.2520731083335789,
+      "peak_entropy": 3.9402835369110107,
+      "mean_div_norm": 1.6924538352272727,
+      "peak_div_norm": 3.46875,
+      "regime_super_frac": 0.9588988650928844,
+      "mean_r_hat": 0.6471413352272727,
+      "mean_chain": 0.008481181751598012
+    },
+    {
+      "mean_entropy": 0.30668826898432827,
+      "peak_entropy": 6.3202433586120605,
+      "mean_div_norm": 1.9867897727272728,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.9442238016562028,
+      "mean_r_hat": 0.5789653431285512,
+      "mean_chain": 0.011251068115234375
+    },
+    {
+      "mean_entropy": 0.2883509056064089,
+      "peak_entropy": 3.643300771713257,
+      "mean_div_norm": 1.523828125,
+      "peak_div_norm": 3.421875,
+      "regime_super_frac": 0.9390379623933272,
+      "mean_r_hat": 0.6760797674005682,
+      "mean_chain": 0.006904740767045454
+    },
+    {
+      "mean_entropy": 0.2162005196727367,
+      "peak_entropy": 4.448427200317383,
+      "mean_div_norm": 1.792595880681818,
+      "peak_div_norm": 3.6875,
+      "regime_super_frac": 0.9563608386299827,
+      "mean_r_hat": 0.8346291281960228,
+      "mean_chain": 0.00921450528231534
+    },
+    {
+      "mean_entropy": 0.24636586876769065,
+      "peak_entropy": 6.150520324707031,
+      "mean_div_norm": 1.84921875,
+      "peak_div_norm": 3.578125,
+      "regime_super_frac": 0.9545786814256148,
+      "mean_r_hat": 0.6605268998579545,
+      "mean_chain": 0.009975502707741477
+    },
+    {
+      "mean_entropy": 0.1818502195338314,
+      "peak_entropy": 4.099924087524414,
+      "mean_div_norm": 1.8375,
+      "peak_div_norm": 4.3125,
+      "regime_super_frac": 0.7836015354503285,
+      "mean_r_hat": 0.725054238059304,
+      "mean_chain": 0.009441999955610795
+    },
+    {
+      "mean_entropy": 0.19983180692713218,
+      "peak_entropy": 5.0909318923950195,
+      "mean_div_norm": 1.5778409090909091,
+      "peak_div_norm": 3.140625,
+      "regime_super_frac": 0.9566926262595437,
+      "mean_r_hat": 0.5809954209761186,
+      "mean_chain": 0.007284892689098012
+    },
+    {
+      "mean_entropy": 0.13920244925211334,
+      "peak_entropy": 4.64640474319458,
+      "mean_div_norm": 1.7486860795454546,
+      "peak_div_norm": 3.890625,
+      "regime_super_frac": 0.9546290603550998,
+      "mean_r_hat": 0.8416281960227273,
+      "mean_chain": 0.008852525190873579
+    },
+    {
+      "mean_entropy": 0.3243618844052181,
+      "peak_entropy": 4.0228800773620605,
+      "mean_div_norm": 1.6493607954545455,
+      "peak_div_norm": 4.125,
+      "regime_super_frac": 0.9326858937740325,
+      "mean_r_hat": 0.6303712844848632,
+      "mean_chain": 0.00793179598721591
+    },
+    {
+      "mean_entropy": 0.2422522694746993,
+      "peak_entropy": 6.2161712646484375,
+      "mean_div_norm": 1.780948153409091,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9596296527168967,
+      "mean_r_hat": 0.7217601429332386,
+      "mean_chain": 0.009202783757990057
+    },
+    {
+      "mean_entropy": 0.3606726483949507,
+      "peak_entropy": 6.286683082580566,
+      "mean_div_norm": 1.8268643465909091,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.9474769072099165,
+      "mean_r_hat": 0.6830718994140625,
+      "mean_chain": 0.010053599964488636
+    },
+    {
+      "mean_entropy": 0.1862667749432541,
+      "peak_entropy": 2.113947629928589,
+      "mean_div_norm": 1.9090376420454545,
+      "peak_div_norm": 5.03125,
+      "regime_super_frac": 0.8498008034446023,
+      "mean_r_hat": 0.8672940340909091,
+      "mean_chain": 0.009582450173117898
+    },
+    {
+      "mean_entropy": 0.25221922520262335,
+      "peak_entropy": 4.050133228302002,
+      "mean_div_norm": 1.881356534090909,
+      "peak_div_norm": 4.78125,
+      "regime_super_frac": 0.9382399602369829,
+      "mean_r_hat": 0.7749434037642046,
+      "mean_chain": 0.009991801868785512
+    },
+    {
+      "mean_entropy": 0.14648800094218678,
+      "peak_entropy": 6.48352575302124,
+      "mean_div_norm": 2.050284090909091,
+      "peak_div_norm": 4.21875,
+      "regime_super_frac": 0.8715431039983575,
+      "mean_r_hat": 0.8727289373224432,
+      "mean_chain": 0.01178561123934659
+    },
+    {
+      "mean_entropy": 0.2032071873293355,
+      "peak_entropy": 5.012196063995361,
+      "mean_div_norm": 1.7155539772727273,
+      "peak_div_norm": 3.34375,
+      "regime_super_frac": 0.9338041999123313,
+      "mean_r_hat": 0.6801763361150568,
+      "mean_chain": 0.008813545920632103
+    },
+    {
+      "mean_entropy": 0.19783289438603513,
+      "peak_entropy": 1.7147713899612427,
+      "mean_div_norm": 1.6115056818181819,
+      "peak_div_norm": 3.65625,
+      "regime_super_frac": 0.9495895949277011,
+      "mean_r_hat": 0.7745905095880682,
+      "mean_chain": 0.007641878995028409
+    },
+    {
+      "mean_entropy": 0.23797377673115935,
+      "peak_entropy": 3.8798575401306152,
+      "mean_div_norm": 1.853213778409091,
+      "peak_div_norm": 4.5625,
+      "regime_super_frac": 0.9659623579545454,
+      "mean_r_hat": 0.6889382102272728,
+      "mean_chain": 0.009607696533203125
+    },
+    {
+      "mean_entropy": 0.17094365593349556,
+      "peak_entropy": 6.24769401550293,
+      "mean_div_norm": 1.8105113636363637,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.9380521427501332,
+      "mean_r_hat": 0.6767899946732955,
+      "mean_chain": 0.009453790838068183
+    },
+    {
+      "mean_entropy": 0.1799797980953944,
+      "peak_entropy": 4.615690231323242,
+      "mean_div_norm": 1.835333806818182,
+      "peak_div_norm": 4.125,
+      "regime_super_frac": 0.9584101113406095,
+      "mean_r_hat": 0.70311279296875,
+      "mean_chain": 0.009630723433061079
+    },
+    {
+      "mean_entropy": 0.24030738859024375,
+      "peak_entropy": 3.8535919189453125,
+      "mean_div_norm": 1.8139914772727272,
+      "peak_div_norm": 3.4375,
+      "regime_super_frac": 0.9570411855524237,
+      "mean_r_hat": 0.8040616122159091,
+      "mean_chain": 0.009147782759232954
+    },
+    {
+      "mean_entropy": 0.37172034652590713,
+      "peak_entropy": 6.33013391494751,
+      "mean_div_norm": 1.888565340909091,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9512752663005483,
+      "mean_r_hat": 0.6928350275213068,
+      "mean_chain": 0.010654657537286932
+    },
+    {
+      "mean_entropy": 0.20362772098053278,
+      "peak_entropy": 6.360123634338379,
+      "mean_div_norm": 1.8220525568181818,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.947477149963379,
+      "mean_r_hat": 0.7336619984019886,
+      "mean_chain": 0.009596737948330965
+    },
+    {
+      "mean_entropy": 0.18334523034321198,
+      "peak_entropy": 4.611363410949707,
+      "mean_div_norm": 1.9117542613636365,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.9615455280650745,
+      "mean_r_hat": 0.7398365367542613,
+      "mean_chain": 0.010398309881036932
+    },
+    {
+      "mean_entropy": 0.2097414554155818,
+      "peak_entropy": 4.168023109436035,
+      "mean_div_norm": 1.997745028409091,
+      "peak_div_norm": 4.21875,
+      "regime_super_frac": 0.9118361429734664,
+      "mean_r_hat": 0.8070417924360795,
+      "mean_chain": 0.010726096413352273
+    },
+    {
+      "mean_entropy": 0.17662657623497194,
+      "peak_entropy": 6.248146057128906,
+      "mean_div_norm": 1.8251775568181818,
+      "peak_div_norm": 4.0625,
+      "regime_super_frac": 0.9443790435791015,
+      "mean_r_hat": 0.6519353693181819,
+      "mean_chain": 0.00949977527965199
+    },
+    {
+      "mean_entropy": 0.17301579510395462,
+      "peak_entropy": 4.127252101898193,
+      "mean_div_norm": 1.802130681818182,
+      "peak_div_norm": 3.375,
+      "regime_super_frac": 0.9338097117163918,
+      "mean_r_hat": 0.7788463245738636,
+      "mean_chain": 0.00948486328125
+    },
+    {
+      "mean_entropy": 0.21478760824815304,
+      "peak_entropy": 5.253387928009033,
+      "mean_div_norm": 1.8675426136363635,
+      "peak_div_norm": 3.671875,
+      "regime_super_frac": 0.954151777787642,
+      "mean_r_hat": 0.7969804243607954,
+      "mean_chain": 0.009689469770951704
+    },
+    {
+      "mean_entropy": 0.2508907081628717,
+      "peak_entropy": 6.363729953765869,
+      "mean_div_norm": 1.9314630681818181,
+      "peak_div_norm": 5.71875,
+      "regime_super_frac": 0.9458327640186657,
+      "mean_r_hat": 0.6838711825284091,
+      "mean_chain": 0.010595841841264204
+    },
+    {
+      "mean_entropy": 0.2489499421787548,
+      "peak_entropy": 4.444409370422363,
+      "mean_div_norm": 1.8810014204545455,
+      "peak_div_norm": 4.09375,
+      "regime_super_frac": 0.9347557978196578,
+      "mean_r_hat": 0.7705599698153409,
+      "mean_chain": 0.009935552423650568
+    },
+    {
+      "mean_entropy": 0.2310970520357098,
+      "peak_entropy": 4.619312286376953,
+      "mean_div_norm": 1.8264914772727272,
+      "peak_div_norm": 3.703125,
+      "regime_super_frac": 0.913569181615656,
+      "mean_r_hat": 0.7000660289417614,
+      "mean_chain": 0.009654097123579546
+    },
+    {
+      "mean_entropy": 0.27953067216583427,
+      "peak_entropy": 6.372125625610352,
+      "mean_div_norm": 1.8318892045454545,
+      "peak_div_norm": 5.125,
+      "regime_super_frac": 0.9328955737027255,
+      "mean_r_hat": 0.6818947531960228,
+      "mean_chain": 0.009752377596768466
+    },
+    {
+      "mean_entropy": 0.23160915362252843,
+      "peak_entropy": 6.335396766662598,
+      "mean_div_norm": 1.8724964488636364,
+      "peak_div_norm": 3.578125,
+      "regime_super_frac": 0.959065259586681,
+      "mean_r_hat": 0.809390536221591,
+      "mean_chain": 0.009961492365056819
+    },
+    {
+      "mean_entropy": 0.2428683865928818,
+      "peak_entropy": 6.317877292633057,
+      "mean_div_norm": 1.925674715909091,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.9525148608467796,
+      "mean_r_hat": 0.7085543545809659,
+      "mean_chain": 0.010661732066761364
+    },
+    {
+      "mean_entropy": 0.35232343237225494,
+      "peak_entropy": 1.6246016025543213,
+      "mean_div_norm": 1.571661931818182,
+      "peak_div_norm": 11.625,
+      "regime_super_frac": 0.9468418901616876,
+      "mean_r_hat": 0.5666143243963068,
+      "mean_chain": 0.007939702814275569
+    },
+    {
+      "mean_entropy": 0.20425997788131386,
+      "peak_entropy": 5.368684768676758,
+      "mean_div_norm": 1.8825994318181818,
+      "peak_div_norm": 3.671875,
+      "regime_super_frac": 0.9445139278065074,
+      "mean_r_hat": 0.7955799449573864,
+      "mean_chain": 0.009759452126242898
+    },
+    {
+      "mean_entropy": 0.19311792126321578,
+      "peak_entropy": 6.285307884216309,
+      "mean_div_norm": 1.758416193181818,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9535764043981378,
+      "mean_r_hat": 0.6452664462002841,
+      "mean_chain": 0.008962457830255682
+    },
+    {
+      "mean_entropy": 0.15903105503336504,
+      "peak_entropy": 5.501635551452637,
+      "mean_div_norm": 1.864453125,
+      "peak_div_norm": 3.46875,
+      "regime_super_frac": 0.9537110328674316,
+      "mean_r_hat": 0.7171336780894887,
+      "mean_chain": 0.009932570023970171
+    },
+    {
+      "mean_entropy": 0.4590284037460854,
+      "peak_entropy": 2.4034080505371094,
+      "mean_div_norm": 1.5985795454545455,
+      "peak_div_norm": 3.46875,
+      "regime_super_frac": 0.9295249418778853,
+      "mean_r_hat": 0.6882179953835227,
+      "mean_chain": 0.007145344127308238
+    },
+    {
+      "mean_entropy": 0.25162239396380426,
+      "peak_entropy": 6.295884132385254,
+      "mean_div_norm": 1.8498579545454545,
+      "peak_div_norm": 3.53125,
+      "regime_super_frac": 0.9629100452769886,
+      "mean_r_hat": 0.7114374334161931,
+      "mean_chain": 0.009959480979225853
+    },
+    {
+      "mean_entropy": 0.3137801921996116,
+      "peak_entropy": 4.100140571594238,
+      "mean_div_norm": 1.8120383522727272,
+      "peak_div_norm": 4.71875,
+      "regime_super_frac": 0.9348647724498402,
+      "mean_r_hat": 0.7911260431463069,
+      "mean_chain": 0.009526270086115058
+    },
+    {
+      "mean_entropy": 0.21885995540610928,
+      "peak_entropy": 3.781351327896118,
+      "mean_div_norm": 1.9697798295454545,
+      "peak_div_norm": 4.1875,
+      "regime_super_frac": 0.9322784727269953,
+      "mean_r_hat": 0.7486292058771307,
+      "mean_chain": 0.010731922496448864
+    },
+    {
+      "mean_entropy": 0.2826819290464197,
+      "peak_entropy": 1.8007447719573975,
+      "mean_div_norm": 1.513068181818182,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.924544568495317,
+      "mean_r_hat": 0.6394568703391336,
+      "mean_chain": 0.006629874489524148
+    },
+    {
+      "mean_entropy": 0.21351489274865795,
+      "peak_entropy": 4.712850093841553,
+      "mean_div_norm": 1.748916903409091,
+      "peak_div_norm": 3.328125,
+      "regime_super_frac": 0.9408420996232466,
+      "mean_r_hat": 0.7835593483664772,
+      "mean_chain": 0.009041179310191761
+    },
+    {
+      "mean_entropy": 0.27751808763636787,
+      "peak_entropy": 1.8830792903900146,
+      "mean_div_norm": 1.6607954545454546,
+      "peak_div_norm": 5.375,
+      "regime_super_frac": 0.9114437428387728,
+      "mean_r_hat": 0.6988458806818182,
+      "mean_chain": 0.007614066384055398
+    },
+    {
+      "mean_entropy": 0.1985350565456403,
+      "peak_entropy": 6.147304534912109,
+      "mean_div_norm": 1.87265625,
+      "peak_div_norm": 3.890625,
+      "regime_super_frac": 0.9602968042547052,
+      "mean_r_hat": 0.7179665305397728,
+      "mean_chain": 0.010219782049005682
+    },
+    {
+      "mean_entropy": 0.19747022319201205,
+      "peak_entropy": 6.24027681350708,
+      "mean_div_norm": 1.777734375,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.9440511963584206,
+      "mean_r_hat": 0.6468666770241477,
+      "mean_chain": 0.009205766157670454
+    },
+    {
+      "mean_entropy": 0.24502497228929046,
+      "peak_entropy": 6.392539978027344,
+      "mean_div_norm": 1.8081321022727272,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.9450445521961559,
+      "mean_r_hat": 0.6937868985262784,
+      "mean_chain": 0.009418071400035512
+    },
+    {
+      "mean_entropy": 0.21411887917881556,
+      "peak_entropy": 2.053271532058716,
+      "mean_div_norm": 1.5173473011363636,
+      "peak_div_norm": 3.453125,
+      "regime_super_frac": 0.9567627974531867,
+      "mean_r_hat": 0.6192815607244319,
+      "mean_chain": 0.006950170343572443
+    },
+    {
+      "mean_entropy": 0.27084674975571427,
+      "peak_entropy": 6.357086658477783,
+      "mean_div_norm": 1.769158380681818,
+      "peak_div_norm": 3.9375,
+      "regime_super_frac": 0.9692726915532892,
+      "mean_r_hat": 0.6871210271661932,
+      "mean_chain": 0.009140222722833807
+    },
+    {
+      "mean_entropy": 0.26101657796304856,
+      "peak_entropy": 2.1507091522216797,
+      "mean_div_norm": 1.7281960227272728,
+      "peak_div_norm": 4.1875,
+      "regime_super_frac": 0.8764495849609375,
+      "mean_r_hat": 0.7945456158031117,
+      "mean_chain": 0.008656241677024147
+    },
+    {
+      "mean_entropy": 0.29543702994393395,
+      "peak_entropy": 6.161550521850586,
+      "mean_div_norm": 1.8458806818181819,
+      "peak_div_norm": 4.03125,
+      "regime_super_frac": 0.9484346303072843,
+      "mean_r_hat": 0.6755859375,
+      "mean_chain": 0.00967344804243608
+    },
+    {
+      "mean_entropy": 0.2357377409908694,
+      "peak_entropy": 4.047711372375488,
+      "mean_div_norm": 1.734375,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.947720701044256,
+      "mean_r_hat": 0.7113279862837358,
+      "mean_chain": 0.008772069757634943
+    },
+    {
+      "mean_entropy": 0.24328602319388723,
+      "peak_entropy": 4.551028251647949,
+      "mean_div_norm": 1.7833984375,
+      "peak_div_norm": 3.875,
+      "regime_super_frac": 0.9514786980368874,
+      "mean_r_hat": 0.7419133966619318,
+      "mean_chain": 0.00908050537109375
+    },
+    {
+      "mean_entropy": 0.19120932135315033,
+      "peak_entropy": 6.120342254638672,
+      "mean_div_norm": 2.050035511363636,
+      "peak_div_norm": 5.375,
+      "regime_super_frac": 0.8699366742914373,
+      "mean_r_hat": 0.7826848810369318,
+      "mean_chain": 0.011980854381214488
+    },
+    {
+      "mean_entropy": 0.18828151977746033,
+      "peak_entropy": 6.1461334228515625,
+      "mean_div_norm": 1.789932528409091,
+      "peak_div_norm": 3.578125,
+      "regime_super_frac": 0.9509135679765182,
+      "mean_r_hat": 0.7125244140625,
+      "mean_chain": 0.009345245361328126
+    },
+    {
+      "mean_entropy": 0.24252549637592244,
+      "peak_entropy": 6.335566520690918,
+      "mean_div_norm": 1.9443181818181818,
+      "peak_div_norm": 3.984375,
+      "regime_super_frac": 0.966132588820024,
+      "mean_r_hat": 0.7643809925426136,
+      "mean_chain": 0.01050900545987216
+    },
+    {
+      "mean_entropy": 0.1772754948877977,
+      "peak_entropy": 6.085047245025635,
+      "mean_div_norm": 1.8280894886363637,
+      "peak_div_norm": 3.546875,
+      "regime_super_frac": 0.9520448207855224,
+      "mean_r_hat": 0.6969182794744319,
+      "mean_chain": 0.009779288552024147
+    },
+    {
+      "mean_entropy": 0.19978391338676224,
+      "peak_entropy": 4.002015590667725,
+      "mean_div_norm": 1.8016157670454545,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.9606807622042569,
+      "mean_r_hat": 0.7109223560853438,
+      "mean_chain": 0.009440057927911931
+    },
+    {
+      "mean_entropy": 0.21660238277130398,
+      "peak_entropy": 4.934301376342773,
+      "mean_div_norm": 1.8498579545454545,
+      "peak_div_norm": 3.28125,
+      "regime_super_frac": 0.956078069860285,
+      "mean_r_hat": 0.7945889559659091,
+      "mean_chain": 0.009460241144353693
+    },
+    {
+      "mean_entropy": 0.25790235789377636,
+      "peak_entropy": 6.3739333152771,
+      "mean_div_norm": 1.844921875,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.9629013928500089,
+      "mean_r_hat": 0.7287458939985796,
+      "mean_chain": 0.00971499356356534
+    },
+    {
+      "mean_entropy": 0.24744257260139943,
+      "peak_entropy": 4.036725997924805,
+      "mean_div_norm": 2.165127840909091,
+      "peak_div_norm": 5.0,
+      "regime_super_frac": 0.8170164877718146,
+      "mean_r_hat": 0.7256675026633522,
+      "mean_chain": 0.01263580322265625
+    },
+    {
+      "mean_entropy": 0.14653327383582979,
+      "peak_entropy": 6.204180717468262,
+      "mean_div_norm": 1.8693181818181819,
+      "peak_div_norm": 3.75,
+      "regime_super_frac": 0.9584586880423805,
+      "mean_r_hat": 0.8153076171875,
+      "mean_chain": 0.01007475419477983
+    },
+    {
+      "mean_entropy": 0.14228461724528718,
+      "peak_entropy": 5.13978910446167,
+      "mean_div_norm": 1.7249289772727272,
+      "peak_div_norm": 3.125,
+      "regime_super_frac": 0.9366774125532671,
+      "mean_r_hat": 0.8341952237215909,
+      "mean_chain": 0.008782750909978694
+    },
+    {
+      "mean_entropy": 0.298465917261285,
+      "peak_entropy": 6.201450347900391,
+      "mean_div_norm": 1.8981711647727273,
+      "peak_div_norm": 3.90625,
+      "regime_super_frac": 0.9393264770507812,
+      "mean_r_hat": 0.7142037131569602,
+      "mean_chain": 0.010260842063210228
+    },
+    {
+      "mean_entropy": 0.18381040694296266,
+      "peak_entropy": 1.848779320716858,
+      "mean_div_norm": 1.938285175879397,
+      "peak_div_norm": 4.0,
+      "regime_super_frac": 0.9305278691814174,
+      "mean_r_hat": 0.7346758818506596,
+      "mean_chain": 0.010692117202222047
+    },
+    {
+      "mean_entropy": 0.28484578254677617,
+      "peak_entropy": 4.377933979034424,
+      "mean_div_norm": 1.7521484375,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.954850266196511,
+      "mean_r_hat": 0.6877707741477272,
+      "mean_chain": 0.008883042768998579
+    },
+    {
+      "mean_entropy": 0.2444823347076467,
+      "peak_entropy": 4.156498432159424,
+      "mean_div_norm": 1.8330965909090908,
+      "peak_div_norm": 3.71875,
+      "regime_super_frac": 0.9222799734635787,
+      "mean_r_hat": 0.7293423739346591,
+      "mean_chain": 0.00972380204634233
+    },
+    {
+      "mean_entropy": 0.18400818079150785,
+      "peak_entropy": 6.274587154388428,
+      "mean_div_norm": 1.8401633522727272,
+      "peak_div_norm": 4.0,
+      "regime_super_frac": 0.9456005529923872,
+      "mean_r_hat": 0.6602516867897728,
+      "mean_chain": 0.00971866954456676
+    },
+    {
+      "mean_entropy": 0.18922978197339532,
+      "peak_entropy": 3.961027145385742,
+      "mean_div_norm": 1.8592329545454545,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.942945495518771,
+      "mean_r_hat": 0.7563687411221591,
+      "mean_chain": 0.009755151922052558
+    },
+    {
+      "mean_entropy": 0.31133038764481263,
+      "peak_entropy": 6.353577613830566,
+      "mean_div_norm": 1.9122869318181819,
+      "peak_div_norm": 4.4375,
+      "regime_super_frac": 0.9505209706046365,
+      "mean_r_hat": 0.7529513272372159,
+      "mean_chain": 0.01088166670365767
+    },
+    {
+      "mean_entropy": 0.18911328594366755,
+      "peak_entropy": 4.388260364532471,
+      "mean_div_norm": 1.8636008522727272,
+      "peak_div_norm": 3.9375,
+      "regime_super_frac": 0.9371945446187799,
+      "mean_r_hat": 0.691357421875,
+      "mean_chain": 0.010034249045632103
+    },
+    {
+      "mean_entropy": 0.20005791280517385,
+      "peak_entropy": 4.109371185302734,
+      "mean_div_norm": 1.9010120738636365,
+      "peak_div_norm": 3.9375,
+      "regime_super_frac": 0.9181321057406339,
+      "mean_r_hat": 0.8535866477272728,
+      "mean_chain": 0.010005604137073864
+    },
+    {
+      "mean_entropy": 0.3695624200020452,
+      "peak_entropy": 3.923048496246338,
+      "mean_div_norm": 1.7995561079545455,
+      "peak_div_norm": 3.53125,
+      "regime_super_frac": 0.9508854562586004,
+      "mean_r_hat": 0.6993252840909091,
+      "mean_chain": 0.009492215243252842
+    },
+    {
+      "mean_entropy": 0.3047073247193321,
+      "peak_entropy": 5.322129726409912,
+      "mean_div_norm": 1.7306818181818182,
+      "peak_div_norm": 3.8125,
+      "regime_super_frac": 0.9221230160106312,
+      "mean_r_hat": 0.6708324085582387,
+      "mean_chain": 0.008558862859552556
+    },
+    {
+      "mean_entropy": 0.267081207924457,
+      "peak_entropy": 4.3851823806762695,
+      "mean_div_norm": 1.7076704545454546,
+      "peak_div_norm": 3.828125,
+      "regime_super_frac": 0.9430778330022639,
+      "mean_r_hat": 0.7128976995294745,
+      "mean_chain": 0.008372636274857955
+    },
+    {
+      "mean_entropy": 0.25764945679922613,
+      "peak_entropy": 6.222589492797852,
+      "mean_div_norm": 1.854794034090909,
+      "peak_div_norm": 3.46875,
+      "regime_super_frac": 0.9408662405881014,
+      "mean_r_hat": 0.7180741743607955,
+      "mean_chain": 0.01002564863725142
+    },
+    {
+      "mean_entropy": 0.17563556125478116,
+      "peak_entropy": 4.058408737182617,
+      "mean_div_norm": 1.9553622159090909,
+      "peak_div_norm": 3.859375,
+      "regime_super_frac": 0.9555828181180087,
+      "mean_r_hat": 0.7504216974431818,
+      "mean_chain": 0.010493885387073864
+    },
+    {
+      "mean_entropy": 0.1960061490455091,
+      "peak_entropy": 6.2177534103393555,
+      "mean_div_norm": 1.939346590909091,
+      "peak_div_norm": 4.15625,
+      "regime_super_frac": 0.9400632966648449,
+      "mean_r_hat": 0.6876653497869318,
+      "mean_chain": 0.010740522904829545
+    },
+    {
+      "mean_entropy": 0.17444793667994352,
+      "peak_entropy": 3.8490171432495117,
+      "mean_div_norm": 1.8237038352272728,
+      "peak_div_norm": 4.09375,
+      "regime_super_frac": 0.9460714643651789,
+      "mean_r_hat": 0.8439675071022728,
+      "mean_chain": 0.009681216153231535
+    },
+    {
+      "mean_entropy": 0.15121802617531185,
+      "peak_entropy": 6.157863616943359,
+      "mean_div_norm": 1.8479758522727272,
+      "peak_div_norm": 3.484375,
+      "regime_super_frac": 0.9603240056471392,
+      "mean_r_hat": 0.7021251331676136,
+      "mean_chain": 0.009928339177911931
+    }
+  ],
+  "wrong": [
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ]
+}

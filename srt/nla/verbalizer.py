@@ -16,6 +16,7 @@ import logging
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from srt.nla.config import NLAConfig
@@ -59,6 +60,7 @@ class ActivationVerbalizer(nn.Module):
         self.tokenizer = tokenizer
 
         self._d_embed = self.backbone.config.hidden_size
+        self._num_layers = self.backbone.config.num_hidden_layers
         self._backbone_dtype = dtype
         d_vec = cfg.d_vector or self._d_embed
 
@@ -145,25 +147,59 @@ class ActivationVerbalizer(nn.Module):
         else:
             self.register_parameter("prefix_embeds", None)
             self.prefix_mlp = None
+        # Optional layer-conditioning embedding. When the AV is trained on
+        # activations drawn from *multiple* layers (the full input→output
+        # trace), different layers have different scales and semantics; this
+        # embedding tells the injection which layer v was read from. It is
+        # added to every inject slot and zero-initialised so it starts as a
+        # no-op (safe to enable on top of a single-layer warm-start).
+        if getattr(cfg, "use_layer_embed", False):
+            self.layer_embed = nn.Embedding(self._num_layers + 1, self._d_embed)
+            with torch.no_grad():
+                nn.init.zeros_(self.layer_embed.weight)
+        else:
+            self.layer_embed = None
 
+        # Injection scale normalization (see NLAConfig.inject_norm). When
+        # "embed", v is unit-normalized and rescaled to the backbone's mean
+        # input-embedding row norm before projection, so the injected slot
+        # lives at token-embedding scale regardless of the backbone's hidden-
+        # state norms.
+        self._inject_scale: float | None = None
+        if getattr(cfg, "inject_norm", "none") == "embed":
+            with torch.no_grad():
+                emb_w = self.backbone.get_input_embeddings().weight
+                self._inject_scale = float(emb_w.float().norm(dim=-1).mean())
+            logger.info("AV inject_norm=embed: scaling v to %.3f", self._inject_scale)
     # ─────────────────────────── helpers ────────────────────────────
 
-    def _inject_prefix(self, v: torch.Tensor) -> torch.Tensor:
+    def _inject_prefix(
+        self, v: torch.Tensor, layer: int | torch.Tensor | None = None
+    ) -> torch.Tensor:
         """Build ``(B, P, d_embed)`` injection prefix from vectors ``(B, d_vec)``.
 
         Adapter params are float32; the output is cast to the backbone's
         dtype at this boundary so ``inputs_embeds`` matches the frozen
         backbone weights without forcing the optimizer onto low precision.
+
+        ``layer`` selects the layer-conditioning embedding (int, ``(B,)``
+        tensor, or ``None`` to fall back to ``cfg.extraction_layer``). Ignored
+        when the AV was built without ``use_layer_embed``.
         """
         if v.dim() == 1:
             v = v.unsqueeze(0)
         v32 = v.float()
+        if self._inject_scale is not None:
+            v32 = F.normalize(v32, dim=-1) * self._inject_scale
         # Slot 0 always uses self.proj; slots 1..M-1 use proj_extra.
         inject_list = [self.proj(v32).unsqueeze(1)]
         if self.proj_extra is not None:
             for lin in self.proj_extra:
                 inject_list.append(lin(v32).unsqueeze(1))
         inject = torch.cat(inject_list, dim=1)  # (B, M, d) float32
+        if self.layer_embed is not None:
+            le = self._layer_embedding(layer, v32.size(0), v32.device)  # (B, d)
+            inject = inject + le.unsqueeze(1)
         if self._n_pref == 0:
             return inject.to(self._backbone_dtype)
         if self.prefix_mlp is not None:
@@ -171,6 +207,21 @@ class ActivationVerbalizer(nn.Module):
         else:
             extra = self.prefix_embeds.unsqueeze(0).expand(v.size(0), -1, -1)
         return torch.cat([inject, extra], dim=1).to(self._backbone_dtype)
+
+    def _layer_embedding(
+        self, layer: int | torch.Tensor | None, batch: int, device: torch.device
+    ) -> torch.Tensor:
+        """Return ``(B, d_embed)`` float32 layer embedding for ``layer``."""
+        if layer is None:
+            layer = self.cfg.extraction_layer
+        if not torch.is_tensor(layer):
+            layer_ids = torch.full((batch,), int(layer), dtype=torch.long, device=device)
+        else:
+            layer_ids = layer.to(device=device, dtype=torch.long)
+            if layer_ids.dim() == 0:
+                layer_ids = layer_ids.expand(batch)
+        layer_ids = layer_ids.clamp(0, self._num_layers)
+        return self.layer_embed(layer_ids).float()
 
     @property
     def prefix_length(self) -> int:
@@ -186,9 +237,10 @@ class ActivationVerbalizer(nn.Module):
         do_sample: bool = True,
         temperature: float | None = None,
         top_p: float | None = None,
+        layer: int | torch.Tensor | None = None,
     ) -> torch.Tensor:
         """Return generated token ids ``(B, T_new)`` (without the prefix)."""
-        inputs_embeds = self._inject_prefix(v)
+        inputs_embeds = self._inject_prefix(v, layer=layer)
         attn = torch.ones(inputs_embeds.shape[:2], dtype=torch.long, device=inputs_embeds.device)
         out = self.backbone.generate(
             inputs_embeds=inputs_embeds,

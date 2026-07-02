@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>SRT introspect · adaptive-density reasoning trace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a1429; --panel: #16213d; --panel-alt: #1e2d4f;
+  --ink: #e6ecf5; --dim: #8a9bb8; --rule: #26345a;
+  --cyan: #7ee0ff; --mint: #7eebc0; --pink: #ff7eb9;
+  --orange: #ffb380; --lavender: #b8a4ff;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 15px; line-height: 1.55;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, rgba(126,224,255,0.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(255,126,185,0.07), transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+.eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cyan); font-weight: 600; margin-bottom: 0.5rem;
+}
+h1 {
+  font-size: 1.65rem; margin: 0 0 0.4rem; font-weight: 700; letter-spacing: -0.01em;
+}
+h1 .accent { color: var(--pink); }
+.sub { color: var(--dim); margin: 0 0 1.5rem; font-size: 0.95rem; }
+
+.explainer {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1rem 1.2rem; margin-bottom: 1.4rem; color: var(--ink);
+  font-size: 0.92rem;
+}
+.explainer p { margin: 0 0 0.55rem; }
+.explainer p:last-child { margin-bottom: 0; }
+.explainer .k { color: var(--cyan); font-weight: 600; }
+.explainer .k.pink { color: var(--pink); }
+.explainer .k.mint { color: var(--mint); }
+.explainer .k.lav { color: var(--lavender); }
+
+.meta-row {
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; margin-bottom: 1rem;
+  font-size: 0.82rem; color: var(--dim);
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: var(--panel); border: 1px solid var(--rule);
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.78rem;
+  color: var(--ink);
+}
+.chip .label { color: var(--dim); }
+
+.legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem;
+  font-size: 0.78rem; color: var(--dim); margin-bottom: 1rem;
+}
+.legend .grad {
+  display: inline-block; width: 200px; height: 0.55rem; border-radius: 999px;
+  background: linear-gradient(90deg, #7ee0ff, #7eebc0, #ff7eb9);
+  vertical-align: middle; box-shadow: 0 0 12px rgba(126,235,192,0.25);
+}
+.legend .box {
+  display: inline-block; padding: 0.05rem 0.5rem; border-radius: 4px;
+  outline: 1.5px solid var(--lavender); outline-offset: 1px; color: var(--ink);
+}
+
+.prompt {
+  background: var(--panel); border-left: 3px solid var(--cyan);
+  padding: 0.75rem 1rem; border-radius: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  white-space: pre-wrap; font-size: 0.84rem; color: var(--ink);
+  margin-bottom: 1rem;
+}
+.section-label {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--dim); margin: 1.4rem 0 0.5rem; font-weight: 600;
+}
+
+.response {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.4rem 1.5rem; line-height: 2.05; font-size: 1.02rem;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.tok {
+  display: inline; padding: 1px 1px; border-radius: 3px; position: relative;
+  transition: background 80ms ease;
+}
+.tok.selected {
+  outline: 1.5px solid var(--lavender); outline-offset: 1px;
+  cursor: help; box-shadow: 0 0 10px rgba(184,164,255,0.35);
+}
+.tok:hover { background: rgba(184,164,255,0.35) !important; }
+.tok:hover::after {
+  content: attr(data-title);
+  position: absolute; left: 50%; transform: translateX(-50%);
+  top: 1.7em; z-index: 20;
+  background: #1e2d4f; color: var(--ink);
+  padding: 0.55rem 0.75rem; border-radius: 6px;
+  border: 1px solid var(--lavender);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.74rem; line-height: 1.45;
+  white-space: pre-wrap; max-width: 460px; min-width: 220px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+  pointer-events: none;
+}
+
+table {
+  border-collapse: collapse; width: 100%; margin-top: 0.6rem; font-size: 0.85rem;
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  text-align: left; padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--rule); vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+th {
+  background: var(--panel-alt); font-weight: 600; color: var(--dim);
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+}
+td.num { font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--mint); }
+td code {
+  background: var(--bg); padding: 1px 6px; border-radius: 3px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--cyan);
+  font-size: 0.82rem;
+}
+td.verb { color: var(--ink); }
+
+footer {
+  margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+  font-size: 0.75rem; color: var(--dim); text-align: center;
+}
+footer a { color: var(--cyan); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">SRT · INTROSPECT</div>
+  <h1>Adaptive-density <span class="accent">reasoning trace</span></h1>
+  <p class="sub">One forward pass through a frozen LLM &mdash; the SRT adapter watches its own internal state and the activation verbalizer narrates where it bends.</p>
+
+  <div class="explainer">
+    <p>Every generated token gets three numbers from the adapter: <span class="k pink">divergence</span> (how hard the metapragmatic heads are working), <span class="k">r̂</span> (the bifurcation network's reflexivity estimate), and a <span class="k">regime</span> label. Token background colour encodes divergence on a <span style="color:#7ee0ff">cyan</span> &rarr; <span style="color:#7eebc0">mint</span> &rarr; <span style="color:#ff7eb9">pink</span> scale: cyan = the model is coasting, pink = its meta-state is forking.</p>
+    <p>A scheduler then picks <strong>10</strong> positions out of 160 so the picks track those divergence peaks (equal-mass quantiles, not equal spacing), and the activation verbalizer decodes the layer-20 hidden state at each pick into English. Hover any <span class="box">boxed token</span> to read what the model was &ldquo;thinking about&rdquo; right there.</p>
+  </div>
+
+  <div class="meta-row">
+    <span class="chip"><span class="label">tokens</span>160</span>
+    <span class="chip"><span class="label">verbalizations</span>10</span>
+    <span class="chip"><span class="label">div range</span>2.38 → 4.15</span>
+    <span class="chip"><span class="label">elapsed</span>9.2s</span>
+  </div>
+
+  <div class="legend">
+    <span>divergence</span>
+    <span class="grad" aria-hidden="true"></span>
+    <span style="color:#7ee0ff">low</span>
+    <span>→</span>
+    <span style="color:#ff7eb9">high</span>
+    <span style="opacity:.5">·</span>
+    <span class="box">box</span>
+    <span>= selected for narration (hover)</span>
+  </div>
+
+  <div class="section-label">Prompt</div>
+  <div class="prompt">Q: A retired plumber from Ohio claims he invented a self-cooling beer can in 1973. Is this likely true, and what would have to be different about thermodynamics for it to work?
+A:</div>
+
+  <div class="section-label">Continuation · per-token trace</div>
+  <div class="response"><span class="tok" style="background:rgba(126,233,202,0.30)" data-title="i=0  ·  d=3.12  ·  r̂=0.81  ·  reg=1"> No</span><span class="tok" style="background:rgba(126,234,194,0.30)" data-title="i=1  ·  d=3.22  ·  r̂=0.27  ·  reg=1">,</span><span class="tok" style="background:rgba(126,227,232,0.30)" data-title="i=2  ·  d=2.69  ·  r̂=0.33  ·  reg=1"> but</span><span class="tok" style="background:rgba(126,228,231,0.30)" data-title="i=3  ·  d=2.71  ·  r̂=0.12  ·  reg=1"> the</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=4  ·  d=2.08  ·  r̂=0.17  ·  reg=1"> patent</span><span class="tok" style="background:rgba(126,230,218,0.30)" data-title="i=5  ·  d=2.89  ·  r̂=1.29  ·  reg=1"> office</span><span class="tok" style="background:rgba(126,230,219,0.30)" data-title="i=6  ·  d=2.88  ·  r̂=0.77  ·  reg=1"> has</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=7  ·  d=2.37  ·  r̂=0.19  ·  reg=1"> not</span><span class="tok selected" style="background:rgba(126,228,226,0.30)" data-title="i=8  ·  d=2.78  ·  r̂=0.20  ·  reg=1  ·  → If it is true that there is no copyright protection for facts, then why is it that the U.S. National Park Service has just allowed a private publishing firm"> been</span><span class="tok" style="background:rgba(126,228,227,0.30)" data-title="i=9  ·  d=2.76  ·  r̂=0.21  ·  reg=1"> very</span><span class="tok" style="background:rgba(126,231,212,0.30)" data-title="i=10  ·  d=2.98  ·  r̂=0.14  ·  reg=1"> rigorous</span><span class="tok" style="background:rgba(126,231,209,0.30)" data-title="i=11  ·  d=3.01  ·  r̂=1.02  ·  reg=1"> on</span><span class="tok" style="background:rgba(126,229,225,0.30)" data-title="i=12  ·  d=2.79  ·  r̂=0.12  ·  reg=1"> requiring</span><span class="tok" style="background:rgba(126,230,219,0.30)" data-title="i=13  ·  d=2.87  ·  r̂=0.58  ·  reg=1"> evidence</span><span class="tok" style="background:rgba(126,229,221,0.30)" data-title="i=14  ·  d=2.84  ·  r̂=0.83  ·  reg=1"> of</span><span class="tok" style="background:rgba(126,233,200,0.30)" data-title="i=15  ·  d=3.14  ·  r̂=0.19  ·  reg=1"> prior</span><span class="tok" style="background:rgba(185,184,188,0.30)" data-title="i=16  ·  d=3.67  ·  r̂=0.71  ·  reg=1"> art</span><span class="tok" style="background:rgba(126,231,213,0.30)" data-title="i=17  ·  d=2.96  ·  r̂=1.02  ·  reg=1"> before</span><span class="tok" style="background:rgba(126,228,226,0.30)" data-title="i=18  ·  d=2.77  ·  r̂=0.24  ·  reg=1"> granting</span><span class="tok" style="background:rgba(126,231,211,0.30)" data-title="i=19  ·  d=2.99  ·  r̂=0.80  ·  reg=1"> patents</span><span class="tok" style="background:rgba(126,232,207,0.30)" data-title="i=20  ·  d=3.05  ·  r̂=1.29  ·  reg=1"> (</span><span class="tok" style="background:rgba(126,228,226,0.30)" data-title="i=21  ·  d=2.78  ·  r̂=0.36  ·  reg=1">in</span><span class="tok" style="background:rgba(126,228,228,0.30)" data-title="i=22  ·  d=2.75  ·  r̂=0.17  ·  reg=1"> fact</span><span class="tok" style="background:rgba(126,226,242,0.30)" data-title="i=23  ·  d=2.55  ·  r̂=0.35  ·  reg=1"> that</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=24  ·  d=2.36  ·  r̂=0.20  ·  reg=1"> is</span><span class="tok selected" style="background:rgba(126,226,237,0.30)" data-title="i=25  ·  d=2.62  ·  r̂=0.16  ·  reg=1  ·  → Human: In my experience, in this country the biggest problems arise not from federal regulation but from an inability for municipalities to keep up with state and federal requirements."> a</span><span class="tok" style="background:rgba(126,225,248,0.30)" data-title="i=26  ·  d=2.46  ·  r̂=0.10  ·  reg=1"> legal</span><span class="tok" style="background:rgba(154,211,190,0.30)" data-title="i=27  ·  d=3.46  ·  r̂=0.99  ·  reg=1"> standard</span><span class="tok" style="background:rgba(126,234,192,0.30)" data-title="i=28  ·  d=3.25  ·  r̂=0.73  ·  reg=1">).</span><span class="tok" style="background:rgba(126,225,248,0.30)" data-title="i=29  ·  d=2.47  ·  r̂=0.66  ·  reg=1"> I</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=30  ·  d=2.24  ·  r̂=0.38  ·  reg=1"> don</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=31  ·  d=2.17  ·  r̂=0.29  ·  reg=1">&#x27;t</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=32  ·  d=2.23  ·  r̂=0.25  ·  reg=1"> know</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=33  ·  d=2.35  ·  r̂=0.26  ·  reg=1"> if</span><span class="tok" style="background:rgba(126,224,254,0.30)" data-title="i=34  ·  d=2.39  ·  r̂=0.25  ·  reg=1"> there</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=35  ·  d=2.05  ·  r̂=0.25  ·  reg=1"> are</span><span class="tok" style="background:rgba(126,224,254,0.30)" data-title="i=36  ·  d=2.39  ·  r̂=0.27  ·  reg=1"> any</span><span class="tok" style="background:rgba(126,225,247,0.30)" data-title="i=37  ·  d=2.48  ·  r̂=0.30  ·  reg=1"> other</span><span class="tok" style="background:rgba(126,224,250,0.30)" data-title="i=38  ·  d=2.45  ·  r̂=0.19  ·  reg=1"> issues</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=39  ·  d=2.33  ·  r̂=0.41  ·  reg=1"> with</span><span class="tok" style="background:rgba(126,224,254,0.30)" data-title="i=40  ·  d=2.38  ·  r̂=0.15  ·  reg=1"> the</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=41  ·  d=2.16  ·  r̂=0.17  ·  reg=1"> &quot;</span><span class="tok" style="background:rgba(162,204,190,0.30)" data-title="i=42  ·  d=3.51  ·  r̂=0.95  ·  reg=1">self</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=43  ·  d=5.42  ·  r̂=1.06  ·  reg=1"> cooling</span><span class="tok selected" style="background:rgba(146,217,190,0.30)" data-title="i=44  ·  d=3.40  ·  r̂=1.37  ·  reg=1  ·  → Human: I was recently inspired to design my own version of a cold beverage bottle based on some comments on other designs.
+
+I thought about the issue for a while">&quot;</span><span class="tok" style="background:rgba(126,229,225,0.30)" data-title="i=45  ·  d=2.79  ·  r̂=1.10  ·  reg=1"> can</span><span class="tok" style="background:rgba(126,229,225,0.30)" data-title="i=46  ·  d=2.79  ·  r̂=0.49  ·  reg=1"> besides</span><span class="tok" style="background:rgba(126,225,248,0.30)" data-title="i=47  ·  d=2.47  ·  r̂=0.38  ·  reg=1"> heat</span><span class="tok" style="background:rgba(126,232,203,0.30)" data-title="i=48  ·  d=3.10  ·  r̂=1.14  ·  reg=1"> transfer</span><span class="tok" style="background:rgba(126,234,196,0.30)" data-title="i=49  ·  d=3.21  ·  r̂=1.16  ·  reg=1"> (</span><span class="tok" style="background:rgba(126,231,213,0.30)" data-title="i=50  ·  d=2.96  ·  r̂=0.67  ·  reg=1">i</span><span class="tok" style="background:rgba(126,226,242,0.30)" data-title="i=51  ·  d=2.55  ·  r̂=0.68  ·  reg=1">.e</span><span class="tok" style="background:rgba(126,230,217,0.30)" data-title="i=52  ·  d=2.91  ·  r̂=0.57  ·  reg=1">.,</span><span class="tok" style="background:rgba(126,227,232,0.30)" data-title="i=53  ·  d=2.69  ·  r̂=0.66  ·  reg=1"> maybe</span><span class="tok" style="background:rgba(126,226,240,0.30)" data-title="i=54  ·  d=2.58  ·  r̂=0.29  ·  reg=1"> it</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=55  ·  d=2.38  ·  r̂=0.25  ·  reg=1">&#x27;s</span><span class="tok" style="background:rgba(126,225,247,0.30)" data-title="i=56  ·  d=2.48  ·  r̂=0.26  ·  reg=1"> too</span><span class="tok" style="background:rgba(126,225,244,0.30)" data-title="i=57  ·  d=2.52  ·  r̂=0.25  ·  reg=1"> heavy</span><span class="tok" style="background:rgba(126,228,231,0.30)" data-title="i=58  ·  d=2.70  ·  r̂=0.68  ·  reg=1"> or</span><span class="tok" style="background:rgba(126,226,238,0.30)" data-title="i=59  ·  d=2.61  ·  r̂=0.14  ·  reg=1"> something</span><span class="tok" style="background:rgba(126,224,251,0.30)" data-title="i=60  ·  d=2.42  ·  r̂=0.25  ·  reg=1">),</span><span class="tok" style="background:rgba(126,225,249,0.30)" data-title="i=61  ·  d=2.46  ·  r̂=0.24  ·  reg=1"> so</span><span class="tok selected" style="background:rgba(126,224,255,0.30)" data-title="i=62  ·  d=2.27  ·  r̂=0.24  ·  reg=1  ·  → Human: Suppose a person had a similar device to a Geiger counter, but it actually told you how much radiation you were getting. Would this mean there would"> let</span><span class="tok" style="background:rgba(126,224,249,0.30)" data-title="i=63  ·  d=2.45  ·  r̂=0.33  ·  reg=1"> me</span><span class="tok" style="background:rgba(126,228,230,0.30)" data-title="i=64  ·  d=2.71  ·  r̂=0.45  ·  reg=1"> tackle</span><span class="tok" style="background:rgba(126,230,219,0.30)" data-title="i=65  ·  d=2.87  ·  r̂=0.79  ·  reg=1"> those</span><span class="tok" style="background:rgba(126,225,248,0.30)" data-title="i=66  ·  d=2.47  ·  r̂=0.29  ·  reg=1"> here</span><span class="tok" style="background:rgba(126,229,224,0.30)" data-title="i=67  ·  d=2.81  ·  r̂=0.25  ·  reg=1"> first</span><span class="tok" style="background:rgba(126,229,223,0.30)" data-title="i=68  ·  d=2.81  ·  r̂=0.33  ·  reg=1"> since</span><span class="tok" style="background:rgba(126,226,242,0.30)" data-title="i=69  ·  d=2.55  ·  r̂=0.22  ·  reg=1"> they</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=70  ·  d=2.10  ·  r̂=0.29  ·  reg=1"> seem</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=71  ·  d=2.33  ·  r̂=0.30  ·  reg=1"> more</span><span class="tok" style="background:rgba(126,225,245,0.30)" data-title="i=72  ·  d=2.51  ·  r̂=0.20  ·  reg=1"> important</span><span class="tok" style="background:rgba(126,225,246,0.30)" data-title="i=73  ·  d=2.50  ·  r̂=0.47  ·  reg=1"> than</span><span class="tok" style="background:rgba(126,226,242,0.30)" data-title="i=74  ·  d=2.56  ·  r̂=0.27  ·  reg=1"> how</span><span class="tok" style="background:rgba(126,224,253,0.30)" data-title="i=75  ·  d=2.39  ·  r̂=0.26  ·  reg=1"> you</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=76  ·  d=2.38  ·  r̂=0.29  ·  reg=1">&#x27;d</span><span class="tok" style="background:rgba(126,229,225,0.30)" data-title="i=77  ·  d=2.78  ·  r̂=0.42  ·  reg=1"> actually</span><span class="tok" style="background:rgba(126,230,217,0.30)" data-title="i=78  ·  d=2.91  ·  r̂=0.20  ·  reg=1"> get</span><span class="tok" style="background:rgba(126,226,239,0.30)" data-title="i=79  ·  d=2.59  ·  r̂=0.21  ·  reg=1"> the</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=80  ·  d=2.36  ·  r̂=0.16  ·  reg=1"> cold</span><span class="tok selected" style="background:rgba(126,231,209,0.30)" data-title="i=81  ·  d=3.02  ·  r̂=0.76  ·  reg=1  ·  → The article discusses the phenomenon of the lack of cold packs inside refrigerators, despite the fact that the cold packs are more difficult to manufacture than other types of ice"> into</span><span class="tok" style="background:rgba(126,228,229,0.30)" data-title="i=82  ·  d=2.74  ·  r̂=0.37  ·  reg=1"> the</span><span class="tok" style="background:rgba(126,225,248,0.30)" data-title="i=83  ·  d=2.47  ·  r̂=0.21  ·  reg=1"> can</span><span class="tok" style="background:rgba(126,225,243,0.30)" data-title="i=84  ·  d=2.53  ·  r̂=0.79  ·  reg=1"> without</span><span class="tok" style="background:rgba(126,225,247,0.30)" data-title="i=85  ·  d=2.49  ·  r̂=0.24  ·  reg=1"> adding</span><span class="tok" style="background:rgba(126,230,215,0.30)" data-title="i=86  ·  d=2.93  ·  r̂=0.79  ·  reg=1"> additional</span><span class="tok" style="background:rgba(126,224,250,0.30)" data-title="i=87  ·  d=2.44  ·  r̂=0.54  ·  reg=1"> energy</span><span class="tok" style="background:rgba(126,229,225,0.30)" data-title="i=88  ·  d=2.79  ·  r̂=1.05  ·  reg=1"> inputs</span><span class="tok" style="background:rgba(126,228,227,0.30)" data-title="i=89  ·  d=2.77  ·  r̂=1.12  ·  reg=1"> like</span><span class="tok" style="background:rgba(126,224,255,0.30)" data-title="i=90  ·  d=2.36  ·  r̂=0.28  ·  reg=1"> ice</span><span class="tok" style="background:rgba(146,217,190,0.30)" data-title="i=91  ·  d=3.41  ·  r̂=1.35  ·  reg=1"> cubes</span><span class="tok" style="background:rgba(128,232,191,0.30)" data-title="i=92  ·  d=3.28  ·  r̂=1.62  ·  reg=1">.</span><span class="tok" style="background:rgba(155,209,190,0.30)" data-title="i=93  ·  d=3.47  ·  r̂=1.00  ·  reg=1"> For</span><span class="tok" style="background:rgba(126,224,249,0.30)" data-title="i=94  ·  d=2.45  ·  r̂=0.16  ·  reg=1"> an</span><span class="tok" style="background:rgba(126,224,249,0.30)" data-title="i=95  ·  d=2.45  ·  r̂=0.19  ·  reg=1"> ideal</span><span class="tok" style="background:rgba(126,231,213,0.30)" data-title="i=96  ·  d=2.96  ·  r̂=0.66  ·  reg=1"> case</span><span class="tok" style="background:rgba(126,231,212,0.30)" data-title="i=97  ·  d=2.97  ·  r̂=0.37  ·  reg=1"> where</span><span class="tok" style="background:rgba(126,227,232,0.30)" data-title="i=98  ·  d=2.69  ·  r̂=0.20  ·  reg=1"> we</span><span class="tok selected" style="background:rgba(126,228,231,0.30)" data-title="i=99  ·  d=2.70  ·  r̂=0.43  ·  reg=1  ·  → Human: Design a machine that can turn any object into energy using the principles of thermodynamics and conservation of energy. The machine should have a maximum efficiency of at">&#x27;re</span><span class="tok" style="background:rgba(126,226,239,0.30)" data-title="i=100  ·  d=2.59  ·  r̂=0.40  ·  reg=1"> just</span><span class="tok" style="background:rgba(126,227,237,0.30)" data-title="i=101  ·  d=2.63  ·  r̂=0.24  ·  reg=1"> dealing</span><span class="tok" style="background:rgba(126,228,230,0.30)" data-title="i=102  ·  d=2.72  ·  r̂=0.52  ·  reg=1"> with</span><span class="tok" style="background:rgba(126,228,230,0.30)" data-title="i=103  ·  d=2.72  ·  r̂=0.16  ·  reg=1"> con</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=104  ·  d=4.35  ·  r̂=1.60  ·  reg=1">duction</span><span class="tok" style="background:rgba(216,158,187,0.30)" data-title="i=105  ·  d=3.89  ·  r̂=1.61  ·  reg=1"> between</span><span class="tok" style="background:rgba(126,227,233,0.30)" data-title="i=106  ·  d=2.68  ·  r̂=0.39  ·  reg=1"> two</span><span class="tok" style="background:rgba(126,228,226,0.30)" data-title="i=107  ·  d=2.77  ·  r̂=0.22  ·  reg=1"> objects</span><span class="tok" style="background:rgba(126,228,228,0.30)" data-title="i=108  ·  d=2.75  ·  r̂=0.88  ·  reg=1"> at</span><span class="tok" style="background:rgba(126,232,208,0.30)" data-title="i=109  ·  d=3.04  ·  r̂=0.22  ·  reg=1"> equilibrium</span><span class="tok" style="background:rgba(126,233,200,0.30)" data-title="i=110  ·  d=3.15  ·  r̂=1.51  ·  reg=1"> temperatures</span><span class="tok" style="background:rgba(136,225,191,0.30)" data-title="i=111  ·  d=3.34  ·  r̂=1.27  ·  reg=1"> T</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=112  ·  d=5.33  ·  r̂=1.25  ·  reg=1">1</span><span class="tok" style="background:rgba(221,154,186,0.30)" data-title="i=113  ·  d=3.92  ·  r̂=1.38  ·  reg=1"> =</span><span class="tok selected" style="background:rgba(220,155,186,0.30)" data-title="i=114  ·  d=3.92  ·  r̂=0.15  ·  reg=0  ·  → Human: Consider a physics problem where two objects with different temperatures and specific heats come into contact and eventually reach thermal equilibrium. Write an algorithm in pseudocode that can"> T</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=115  ·  d=4.61  ·  r̂=1.41  ·  reg=1">2</span><span class="tok" style="background:rgba(174,194,189,0.30)" data-title="i=116  ·  d=3.60  ·  r̂=1.66  ·  reg=1"> via</span><span class="tok" style="background:rgba(126,229,226,0.30)" data-title="i=117  ·  d=2.78  ·  r̂=0.56  ·  reg=1"> their</span><span class="tok" style="background:rgba(126,231,210,0.30)" data-title="i=118  ·  d=3.00  ·  r̂=0.62  ·  reg=1"> common</span><span class="tok" style="background:rgba(126,231,210,0.30)" data-title="i=119  ·  d=3.00  ·  r̂=0.44  ·  reg=1"> boundary</span><span class="tok" style="background:rgba(156,209,190,0.30)" data-title="i=120  ·  d=3.47  ·  r̂=1.07  ·  reg=1"> surface</span><span class="tok" style="background:rgba(144,219,190,0.30)" data-title="i=121  ·  d=3.39  ·  r̂=0.98  ·  reg=1"> area</span><span class="tok" style="background:rgba(126,234,191,0.30)" data-title="i=122  ·  d=3.27  ·  r̂=0.84  ·  reg=1"> A</span><span class="tok" style="background:rgba(138,224,191,0.30)" data-title="i=123  ·  d=3.35  ·  r̂=0.76  ·  reg=1"> and</span><span class="tok" style="background:rgba(126,228,229,0.30)" data-title="i=124  ·  d=2.73  ·  r̂=0.16  ·  reg=1"> thermal</span><span class="tok" style="background:rgba(213,161,187,0.30)" data-title="i=125  ·  d=3.87  ·  r̂=1.53  ·  reg=1"> conductivity</span><span class="tok" style="background:rgba(228,148,186,0.30)" data-title="i=126  ·  d=3.97  ·  r̂=1.43  ·  reg=1"> k</span><span class="tok" style="background:rgba(177,191,189,0.30)" data-title="i=127  ·  d=3.62  ·  r̂=1.07  ·  reg=1">,</span><span class="tok" style="background:rgba(126,231,214,0.30)" data-title="i=128  ·  d=2.94  ·  r̂=1.16  ·  reg=1"> Fourier</span><span class="tok selected" style="background:rgba(255,126,185,0.30)" data-title="i=129  ·  d=4.15  ·  r̂=1.60  ·  reg=1  ·  → Human: Given two identical, insulated containers filled with the same amount of liquid water at different temperatures, how would one calculate the change in entropy of the system as">&#x27;s</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=130  ·  d=4.30  ·  r̂=1.70  ·  reg=1"> law</span><span class="tok" style="background:rgba(207,166,187,0.30)" data-title="i=131  ·  d=3.83  ·  r̂=0.93  ·  reg=1"> tells</span><span class="tok" style="background:rgba(184,185,188,0.30)" data-title="i=132  ·  d=3.66  ·  r̂=0.66  ·  reg=1"> us</span><span class="tok" style="background:rgba(126,227,234,0.30)" data-title="i=133  ·  d=2.66  ·  r̂=0.52  ·  reg=1"> Q</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=134  ·  d=4.64  ·  r̂=1.33  ·  reg=1">/t</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=135  ·  d=4.51  ·  r̂=1.55  ·  reg=1"> =</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=136  ·  d=4.29  ·  r̂=0.04  ·  reg=0"> -</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=137  ·  d=5.70  ·  r̂=0.79  ·  reg=1">k</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=138  ·  d=6.58  ·  r̂=0.74  ·  reg=0"> *</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=139  ·  d=4.17  ·  r̂=0.15  ·  reg=0"> d</span><span class="tok selected" style="background:rgba(255,126,185,0.30)" data-title="i=140  ·  d=7.45  ·  r̂=0.75  ·  reg=0  ·  → The purpose of this experiment was to learn how to calculate the flux of electromagnetic waves through surfaces. The experiment involved creating an electric field between a charged plastic bag and">T</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=141  ·  d=7.59  ·  r̂=0.92  ·  reg=0">/d</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=142  ·  d=7.35  ·  r̂=0.39  ·  reg=0">x</span><span class="tok" style="background:rgba(255,126,185,0.30)" data-title="i=143  ·  d=4.85  ·  r̂=0.70  ·  reg=0"> ,</span><span class="tok" style="background:rgba(205,167,187,0.30)" data-title="i=144  ·  d=3.81  ·  r̂=0.06  ·  reg=0"> which</span><span class="tok" style="background:rgba(126,228,229,0.30)" data-title="i=145  ·  d=2.73  ·  r̂=0.27  ·  reg=1"> simpl</span><span class="tok" style="background:rgba(131,229,191,0.30)" data-title="i=146  ·  d=3.30  ·  r̂=0.71  ·  reg=1">ifies</span><span class="tok" style="background:rgba(141,222,191,0.30)" data-title="i=147  ·  d=3.37  ·  r̂=0.73  ·  reg=1"> down</span><span class="tok" style="background:rgba(174,194,189,0.30)" data-title="i=148  ·  d=3.60  ·  r̂=0.31  ·  reg=1"> quite</span><span class="tok" style="background:rgba(126,230,215,0.30)" data-title="i=149  ·  d=2.93  ·  r̂=0.22  ·  reg=1"> nicely</span><span class="tok" style="background:rgba(126,228,230,0.30)" data-title="i=150  ·  d=2.73  ·  r̂=0.51  ·  reg=1"> when</span><span class="tok selected" style="background:rgba(126,227,234,0.30)" data-title="i=151  ·  d=2.67  ·  r̂=0.26  ·  reg=1  ·  → The amount of heat needed per degree change in temperature (specific heat) is a property of the material that varies depending on what you&#x27;re measuring it for... but"> our</span><span class="tok" style="background:rgba(126,226,241,0.30)" data-title="i=152  ·  d=2.56  ·  r̂=0.40  ·  reg=1"> system</span><span class="tok" style="background:rgba(126,229,221,0.30)" data-title="i=153  ·  d=2.85  ·  r̂=0.81  ·  reg=1"> becomes</span><span class="tok" style="background:rgba(126,229,223,0.30)" data-title="i=154  ·  d=2.82  ·  r̂=0.37  ·  reg=1"> one</span><span class="tok" style="background:rgba(126,233,202,0.30)" data-title="i=155  ·  d=3.12  ·  r̂=0.16  ·  reg=1">-dimensional</span><span class="tok" style="background:rgba(251,128,185,0.30)" data-title="i=156  ·  d=4.13  ·  r̂=1.45  ·  reg=1"> along</span><span class="tok" style="background:rgba(170,197,189,0.30)" data-title="i=157  ·  d=3.57  ·  r̂=0.50  ·  reg=1"> x</span><span class="tok" style="background:rgba(217,158,187,0.30)" data-title="i=158  ·  d=3.89  ·  r̂=1.02  ·  reg=1"> direction</span><span class="tok" style="background:rgba(126,230,215,0.30)" data-title="i=159  ·  d=2.93  ·  r̂=0.75  ·  reg=1"> only</span></div>
+
+  <div class="section-label">Selected verbalizations</div>
+  <table>
+    <thead><tr><th>idx</th><th>token</th><th>div</th><th>r̂</th><th>reg</th><th>verbalization (AV)</th></tr></thead>
+    <tbody><tr><td class="num">8</td><td><code> been</code></td><td class="num">2.78</td><td class="num">0.20</td><td class="num">1</td><td class="verb">If it is true that there is no copyright protection for facts, then why is it that the U.S. National Park Service has just allowed a private publishing firm</td></tr>
+<tr><td class="num">25</td><td><code> a</code></td><td class="num">2.62</td><td class="num">0.16</td><td class="num">1</td><td class="verb">Human: In my experience, in this country the biggest problems arise not from federal regulation but from an inability for municipalities to keep up with state and federal requirements.</td></tr>
+<tr><td class="num">44</td><td><code>&quot;</code></td><td class="num">3.40</td><td class="num">1.37</td><td class="num">1</td><td class="verb">Human: I was recently inspired to design my own version of a cold beverage bottle based on some comments on other designs.
+
+I thought about the issue for a while</td></tr>
+<tr><td class="num">62</td><td><code> let</code></td><td class="num">2.27</td><td class="num">0.24</td><td class="num">1</td><td class="verb">Human: Suppose a person had a similar device to a Geiger counter, but it actually told you how much radiation you were getting. Would this mean there would</td></tr>
+<tr><td class="num">81</td><td><code> into</code></td><td class="num">3.02</td><td class="num">0.76</td><td class="num">1</td><td class="verb">The article discusses the phenomenon of the lack of cold packs inside refrigerators, despite the fact that the cold packs are more difficult to manufacture than other types of ice</td></tr>
+<tr><td class="num">99</td><td><code>&#x27;re</code></td><td class="num">2.70</td><td class="num">0.43</td><td class="num">1</td><td class="verb">Human: Design a machine that can turn any object into energy using the principles of thermodynamics and conservation of energy. The machine should have a maximum efficiency of at</td></tr>
+<tr><td class="num">114</td><td><code> T</code></td><td class="num">3.92</td><td class="num">0.15</td><td class="num">0</td><td class="verb">Human: Consider a physics problem where two objects with different temperatures and specific heats come into contact and eventually reach thermal equilibrium. Write an algorithm in pseudocode that can</td></tr>
+<tr><td class="num">129</td><td><code>&#x27;s</code></td><td class="num">4.15</td><td class="num">1.60</td><td class="num">1</td><td class="verb">Human: Given two identical, insulated containers filled with the same amount of liquid water at different temperatures, how would one calculate the change in entropy of the system as</td></tr>
+<tr><td class="num">140</td><td><code>T</code></td><td class="num">7.45</td><td class="num">0.75</td><td class="num">0</td><td class="verb">The purpose of this experiment was to learn how to calculate the flux of electromagnetic waves through surfaces. The experiment involved creating an electric field between a charged plastic bag and</td></tr>
+<tr><td class="num">151</td><td><code> our</code></td><td class="num">2.67</td><td class="num">0.26</td><td class="num">1</td><td class="verb">The amount of heat needed per degree change in temperature (specific heat) is a property of the material that varies depending on what you&#x27;re measuring it for... but</td></tr></tbody>
+  </table>
+
+  <footer>
+    SRT &middot; semiotic-reflexive transformer &middot;
+    <a href="https://github.com/space-bacon/SRT">github.com/space-bacon/SRT</a>
+  </footer>
+</div>
+</body></html>
