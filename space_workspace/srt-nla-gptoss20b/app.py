@@ -103,9 +103,20 @@ class MiniCodebook:
         self.text: dict[int, str] = {int(e["code"]): (e["text"] or "") for e in obj["entries"]}
         self.count: dict[int, int] = {int(e["code"]): int(e["count"]) for e in obj["entries"]}
         self.labels: dict[int, str] = {}
+        self.lab_counts: dict[int, int] = {}
+        self.lab_src: dict[int, str] = {}
 
     def label(self, code: int) -> str:
         return self.labels.get(int(code), "")
+
+    def label_note(self, code: int) -> str:
+        """Qualifier for the label: measured basins and broad cells."""
+        c = int(code)
+        if self.lab_src.get(c) == "measured":
+            return "measured"
+        if self.lab_counts.get(c, 0) > 500:
+            return "broad basin — label approximate"
+        return ""
 
     def encode(self, vs: torch.Tensor) -> torch.Tensor:
         vc = vs.float().to(self.centroids.device) - self.mu
@@ -148,11 +159,17 @@ def _load_everything():
                       map_location="cpu", weights_only=False).float().cuda()
     try:
         import json as _json
-        raw = _json.load(open(hf_hub_download(ART_REPO, "codebook_labels.json",
-                                              repo_type="dataset")))
-        good = {int(k): v.strip() for k, v in raw.items()
-                if v and len(v.split()) >= 2 and not v.strip().isdigit()}
-        cb.labels = good
+        try:  # v2: multi-member labels + red-team measured overrides + counts
+            raw = _json.load(open(hf_hub_download(ART_REPO, "codebook_labels_v2_final.json",
+                                                  repo_type="dataset")))
+            cb.labels = {int(k): v.strip() for k, v in raw["labels"].items() if v.strip()}
+            cb.lab_counts = {int(k): int(v) for k, v in raw.get("counts", {}).items()}
+            cb.lab_src = {int(k): v for k, v in raw.get("source", {}).items()}
+        except Exception:  # fallback: v1 single-member labels
+            raw = _json.load(open(hf_hub_download(ART_REPO, "codebook_labels.json",
+                                                  repo_type="dataset")))
+            cb.labels = {int(k): v.strip() for k, v in raw.items()
+                         if v and len(v.split()) >= 2 and not v.strip().isdigit()}
     except Exception as e:  # noqa: BLE001 — labels are an enhancement, not required
         print("labels unavailable:", e)
     try:
@@ -331,8 +348,9 @@ def cb_trace(prompt: str, max_new: int, stride: int):
         lab = cb.label(code)
         raw_txt = html.escape(thought) if thought else "<i>(no canonical text)</i>"
         if lab:
+            note = cb.label_note(code) or "model-named"
             body = (
-                f"<div style='font-size:10px;color:#8a9bb8'>state label (model-named)</div>"
+                f"<div style='font-size:10px;color:#8a9bb8'>state label ({html.escape(note)})</div>"
                 f"<div style='font-size:14px;font-weight:600;color:#e6ecf5'>{html.escape(lab)}</div>"
                 f"<details style='margin-top:3px'><summary style='cursor:pointer;font-size:10px;"
                 f"color:#8a9bb8'>nearest known state (raw retrieval text)</summary>"
@@ -630,7 +648,8 @@ def cb_compare(pa: str, pb: str):
         def _desc(code: int) -> str:
             lab = cb.label(code)
             if lab:
-                return lab
+                note = cb.label_note(code)
+                return f"{lab} ({note})" if note else lab
             raw = (cb.decode(code) or "").strip()
             return ("\u201c" + raw[:60] + ("\u2026" if len(raw) > 60 else "") + "\u201d") \
                 if raw else "(no canonical text)"
