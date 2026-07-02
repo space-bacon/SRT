@@ -130,7 +130,18 @@ binding ceiling) and report a third-backbone replication on
 floor $0.498$, paraphrase ceiling $0.598$, best-of-$64$ centred fve
 $0.631$, $\rho_{\text{cen}} = 1.33$, $\|\mu\| \approx 156$, the most
 anisotropic backbone we have tested, and the cleanest case for the
-centring claim of §§4–5). Three readings
+centring claim of §§4–5). A fourth port, **openai/gpt-oss-20b**
+(§11.5), is the first backbone where the AV recipe does *not* reach
+its retrieval baseline ($0.642$ at best-of-$64$ vs. NN $0.744$;
+$\|\mu\| \approx 4438$): verbalizability is backbone-dependent. On
+that backbone the deployed decoder is instead a $4096$-code VQ state
+codebook, which doubles as a new instrument, deterministic
+*state-identity red-teaming*: A/B prompt pairs compared by discrete
+basin membership per layer expose a punctuation-driven completeness
+flag at the final layer (spoofable by a single appended "."), a
+diffuse anomaly basin the codebook under-resolves, and systematic
+label failure on high-traffic states, none visible from behaviour
+alone. Three readings
 follow. *First*, hidden-state verbalisation on a frozen mid-scale decoder
 is decoding-bound, not capacity-bound: $\sim\!12.7\text{M}$ trainable
 parameters suffice to make the paraphrase manifold reachable, but the
@@ -613,6 +624,15 @@ buys.
   Lever B's `best_av.pt` is *not* released as a separate revision: it
   matches the warm-start within sampling noise.
 - Targets: `artifacts/nla/targets_q7b_L20_seq64_{10k,30k_seed1}.pt`.
+- gpt-oss-20b port (§11.5): adapter
+  [`RiverRider/srt-adapter-gptoss20b`](https://huggingface.co/RiverRider/srt-adapter-gptoss20b),
+  AV [`RiverRider/srt-nla-av-gptoss20b`](https://huggingface.co/RiverRider/srt-nla-av-gptoss20b),
+  codebook + trace pairs + anchors
+  [`RiverRider/srt-nla-gptoss20b-artifacts`](https://huggingface.co/datasets/RiverRider/srt-nla-gptoss20b-artifacts),
+  live demo [`RiverRider/srt-nla-gptoss20b-trace`](https://huggingface.co/spaces/RiverRider/srt-nla-gptoss20b-trace).
+- State-identity red-teaming harness (§11.5): `scripts/redteam_states.py`
+  (`--wave {1,2,3,4}`), per-pair records in
+  `artifacts/nla/gptoss20b/redteam_states{,_wave2,_wave3,_wave4}.jsonl`.
 
 ## 9. Limitations
 
@@ -887,6 +907,236 @@ Gemma-2-2B, three labs, three architectural lineages, three
 anisotropy regimes, at a uniform $\sim\!90$ minute training cost
 per backbone with no per-backbone hyperparameter tuning beyond
 choice of probe layer.
+
+---
+
+## 11.5 Cross-backbone transfer #3, and a new instrument: state-identity red-teaming on gpt-oss-20b
+
+### 11.5.1 The fourth backbone, and where the recipe breaks
+
+The fourth port, **openai/gpt-oss-20b** (MXFP4 MoE, $L=24$ layers,
+$d_{\text{embed}}=2880$, harmony-tuned reasoning model), is the first
+backbone on which the AV recipe *does not* reach its retrieval
+baseline. The anchors at L18 (centred fve, the §3 protocol): random
+floor $0.500$, NN retrieval $0.744$, replay $0.999$. The released AV's
+K-curve runs $0.541 \to 0.642$ from $K{=}1$ to $K{=}64$
+($+0.017$/doubling, vs. $+0.030$ on Qwen/Llama) and never crosses the
+zero-training NN baseline; extrapolation puts the crossing near
+$K \approx 4096$. Four training recipes (multi-layer CE,
+injection-scale normalisation, best-of-$K$ checkpoint selection,
+single-layer $\times$ 3 epochs) landed in a statistically tied
+$0.56$–$0.60$ band at best-of-8. We publish this as a negative result:
+verbalizability is backbone-dependent, and gpt-oss-20b's L18
+anisotropy ($\|\mu\| \approx 4438$, roughly $80\times$ Qwen's L20) and
+assistant-register generation distribution appear to be the relevant
+substrate differences.
+
+The engineering consequence is a different decoder. Because the AV
+cannot beat retrieval on this backbone, the deployed decoder is a
+**VQ state codebook**: $4096$ k-means++ centroids over $200$K centred
+hidden states drawn from all four probe layers (L6/L12/L18/L24), each
+centroid carrying a canonical generating prefix as its retrieval
+verbalization. `encode(v)` maps any hidden state to an integer
+("magic number"); `decode(v)` returns the canonical text; a
+round-trip re-encoding of that text, scored centred against the
+original state, gives a per-decode confidence. The codebook is $O(1)$
+at inference, fully deterministic, and — the point of this section —
+turns hidden states into *addressable, comparable objects*.
+
+### 11.5.2 The instrument: A/B state-identity comparison
+
+An external replication of the SRT recipe on this architecture family
+contributed the key observation: for semantic-role swaps, the
+*magnitude* of interpretant divergence does not discriminate valid
+from nonsense transformations (their uni- vs bidirectional swaps had
+indistinguishable $|\Delta\text{div}|$, $\sim\!52$ vs $\sim\!55$),
+but *discrete state identity* does (community assignment changed for
+$0\%$ of nonsense reversals and $50\%$ of valid ones). Continuous
+divergence measures surprise; the discrete code measures *which basin
+you are in*. That maps directly onto the codebook, and yields a
+cheap experimental protocol we call **state-identity red-teaming**:
+
+1. Catalog recurring codes from traces (the demo's most frequent
+   states, e.g. `#1672`, the digit-labelled enumeration family, the
+   over-represented `#3667` topic state).
+2. Craft prompt *pairs* designed to activate, invert, or destabilise
+   a target state.
+3. For each pair, read the last-token hidden state at L6/L12/L18/L24,
+   record: code A, code B, same/changed, and the centred cosine
+   between the two (continuous similarity inside or across cells).
+4. Iterate: every anomaly becomes the next wave's hypothesis.
+
+Each comparison is two forward passes — deterministic, no sampling,
+$\sim\!2$ s of GPU. The entire four-wave campaign below cost about
+one GPU-minute, ran against the *public demo Space* over its API, and
+is reproducible from
+`scripts/redteam_states.py --wave {1,2,3,4}` with per-pair records in
+`artifacts/nla/gptoss20b/redteam_states{,_wave2,_wave3,_wave4}.jsonl`.
+
+### 11.5.3 The campaign: four waves of A/B probes, with samples
+
+**A worked example first**, to fix the output format. The chirality
+probe (borrowed from the external replication), run through the
+public Compare tool:
+
+> **A:** "The Principal defines the principles."
+> **B:** "The principles define the Principal."
+
+| layer | A state | B state | identity | centred cos |
+|---|---|---|---|---|
+| L24 | `#1672` | `#1672` | same | $0.914$ |
+| L18 | `#577` | `#1807` | **changed** | $0.672$ |
+| L12 | `#3368` | `#3368` | same | $0.625$ |
+| L6 | `#560` | `#560` | same | $0.821$ |
+
+Reading: both sentences are complete declaratives (shared L24 closure
+state `#1672`), share form/register (L6) and early-mid composition
+(L12); the *only* layer that registers the agent–patient swap is L18,
+the content layer. One deterministic comparison localises where in
+the stack a semantic-role reversal is represented. Every result below
+is a table of exactly this shape; we compress to the changed-layer
+string (L24→L6) and the minimum centred cosine.
+
+**Wave 1 (16 pairs, 4 target families) — reconnaissance.**
+Representative pairs and per-layer outcomes (layers ordered
+L24→L6; `X` = code changed, `.` = same code; min centred cos across
+layers):
+
+| Pair (A vs B) | Changed | min cos | What we learned |
+|---|---|---|---|
+| "I think, therefore I." vs "I think, therefore I am." | `X.X.` | $+0.85$ | Target `#1672` reachable on demand; small perturbation, states mostly held |
+| "This sentence ends exactly where it should." vs "This sentence ends where it shouldn't, namely" | `XXXX` | $\mathbf{-0.12}$ | The only *negative* centred cosine in the suite — all four layers flip, L24 near-orthogonal. Flagged for wave 2 |
+| "Rule 1… Rule 4:" vs the same rules in reverse order | `.XX.` | $+0.25$ | `#560` (enumeration state) at L6 invariant to rule *order* while L18 content states changed: form and content live at different depths |
+| "Describe, as a numbered list, how you generate numbered lists." vs the same request "in flowing prose" | `....` | $+0.81$ | Null result: a register *instruction* alone moves nothing at the prompt-final position |
+| "As a language model, describe your own mental health." vs "…describe your own file format and weights." | `..X.` | $+0.59$ | Self-referential well-being probe lands target `#3667` |
+| `def is_happy(user): …` vs its prose paraphrase | `XXXX` | $+0.19$ | Code-vs-prose flips every layer regardless of shared meaning |
+
+Aggregate: `#3667` ("mental health and well-being") was the most-hit
+state of the run (9 appearances, including on prompts with no
+well-being content) and `#1672` second (8), confirming both as
+high-traffic basins.
+
+**Wave 2 (12 pairs) — robustness and controls.** The wave-1
+anomaly (the $-0.12$ flip) survived four paraphrase variants
+(min cos $-0.123$, $-0.098$, $-0.008$, $-0.023$; all four layers
+changed each time), so it is a real axis, not a prompt quirk. The
+controls then dissected it:
+
+| Control pair | Changed | min cos | Inference |
+|---|---|---|---|
+| complete-meta vs complete-meta (paraphrases) | `X.X.` | $+0.69$ | Complete sentences share states (both in `#1672`) |
+| incomplete-meta vs incomplete-meta (paraphrases) | `XXXX` | $+0.45$ | Incomplete variants share *no* codes — the axis is completeness, not meta-content |
+| `x = x # …` vs `y = y # …` (variable rename) | `..X.` | $+0.85$ | Codes are not keying on surface tokens; renaming is a no-op |
+| "committee discussed employee wellness" vs "…quarterly budget allocations" | `....` | $+0.88$ | **Both** sides land `#3667` at L6 |
+| "Take a deep breath and relax" vs "Tighten the bolt and torque it to spec" | `.X.X` | $+0.34$ | The *bolt* prompt lands `#3667`; the relaxation prompt does not |
+
+The last two rows are a catch: `#3667`'s "mental health and
+well-being" label is a *canonical-text artifact*. The state is a
+broad generic-declarative L6 basin; its single canonical prefix
+happened to be well-being-flavoured. Corollary (now a standing
+rule): **label trustworthiness is inversely proportional to basin
+frequency**; for high-traffic codes, trust the measured round-trip
+confidence, not the name.
+
+**Wave 3 (23 pairs) — all-pairs truncation matrix.** Six truncated
+prompts (meta, recipe, story, fact, logic), all $\binom{6}{2}$
+pairings, plus complete-complete controls and matched
+complete/incomplete pairs. This *overturned* the wave-2 "scatter"
+reading with a two-basin structure:
+
+| Population | L24 code | L24 pairwise cos | L18 behaviour |
+|---|---|---|---|
+| complete sentences (any content) | `#1672` (9/12 slots) | $0.66$–$0.87$ (tight) | all collapse to `#2506` — content erased |
+| truncated prompts (any content) | `#266` (25/30 slots) | $0.11$–$0.31$ (diffuse) | each keeps its *own* deterministic code (recipe `#1855`, story `#3432`, fact `#3549`, logic `#2743`) |
+| matched pairs (± final word) | `#266` vs `#1672` | $0.03$–$0.20$ | clean flag flip |
+
+Sample: "The recipe calls for two cups of" and "She opened the door
+and saw" — different topics, same L24 code `#266`, centred cos only
+$0.23$: one VQ cell covering near-orthogonal directions. The
+codebook is well-resolved where the sampling distribution was dense
+(complete sentences) and coarse where it was sparse — code identity
+*overstates* similarity in rare regions, which is why the protocol
+reports the continuous cosine alongside the code.
+
+**Wave 4 (11 pairs) — the falsification test.** Wave 3 left a
+confound: complete prompts end in "." and truncated ones end in a
+content word, and the probe reads the last token. So: staple a bare
+period onto each broken sentence and re-run.
+
+| Pair (A vs B) | L24 | L18 |
+|---|---|---|
+| "The recipe calls for two cups of." vs "The recipe calls for two cups of" | `#1672` vs `#266` — **flag flipped by one character** | `#1807` vs `#1855` |
+| "The recipe calls for two cups of." vs "The recipe calls for two cups of flour." | same code `#1672`, cos $0.798$ | `#1807` vs `#2506` — **mid-layer still tells them apart** |
+| "She opened the door and saw." vs "She opened the door and saw nothing." | `#3249` vs `#1672`, cos $0.896$ | both `#2506` |
+
+All six spoofed prompts left `#266`. At L24, a semantically broken
+sentence with a fake period is *indistinguishable* from the genuine
+sentence (same code, cos $0.80$–$0.90$, inside the normal
+complete–complete range). At L18, genuine completes land `#2506`
+while most spoofs land `#1807`: the mid-layer retains a partial
+semantic-completeness signal that the final layer discards.
+
+### 11.5.4 The finding: a punctuation-driven completeness flag
+
+Putting the waves together: gpt-oss-20b's final probe layer encodes a
+coarse binary *utterance-status flag* (complete `#1672`/`#3249` vs
+incomplete `#266`) that is **token-driven** — its value is set by
+sentence-final punctuation, not by whether the sentence resolved. A
+one-character adversarial edit flips it. The mechanistically
+plausible reading is the known aggregation-site behaviour of
+sentence-final punctuation: by L24 the residual stream at a "."
+position is dominated by a converged "clause closed, prepare next
+clause" configuration triggered by token identity plus local context,
+without re-verifying the clause's well-formedness. The deeper claim
+this licenses: **on this backbone the final layer is *less* semantic
+than L18** — it compresses toward surface-predictive features for
+emission, while L18 is where content identity and the harder-to-fool
+completeness signal live.
+
+This inverts a common default (read the last layer) and gives the SRT
+program a concrete monitoring prescription for gpt-oss-20b: tap L18;
+never trust an L24 readout alone.
+
+### 11.5.5 Practical applications
+
+1. **Robustness auditing of late-layer consumers.** Any downstream
+   component reading late-layer features — stopping criteria,
+   completion classifiers, linear probes, RLHF value heads — inherits
+   the punctuation spoof. The wave-4 matrix is a ready-made test
+   battery: if a system's behaviour changes when a bare "." is
+   appended to a broken sentence, it is reading the flag, not the
+   syntax.
+2. **Layer selection for monitoring, by experiment instead of
+   convention.** The same all-pairs protocol run per layer localises
+   where a given distinction (content, register, completeness,
+   code-vs-prose) is represented and where it is discarded; on
+   gpt-oss-20b it took $\sim\!50$ pairs to establish
+   L6 = form, L18 = content + semantic status, L24 = surface status.
+3. **Codebook quality control.** The campaign identified four
+   high-traffic basins with unreliable labels (`#3667`, `#1807`,
+   `#1672`, `#3249`) and a systematic cause (single canonical text on
+   a huge cell). The fix is mechanical: multi-member relabelling
+   weighted toward the top-frequency codes, and a UI flag ("broad
+   basin — label approximate") above a frequency threshold.
+4. **Surgical red-teaming.** Instead of fuzzing surface behaviour,
+   target the model's *actual internal repertoire*: pick a recurring
+   state, design activation/inversion/meta-pressure/overload prompts,
+   and measure basin membership. Wave 1 → 4 shows the loop converging
+   from "recurring numbers in a demo" to a mechanistic,
+   falsification-tested claim in four iterations and about one
+   GPU-minute, entirely against a public demo endpoint.
+5. **A determinism-friendly demo surface.** Because every readout in
+   the protocol is a forward pass (no sampling), the same comparisons
+   run live in the public Space's "Compare A vs B" tab with
+   per-layer codes, labels, change chips and centred cosines —
+   the experiments in this section are one-click reproducible by a
+   reader.
+
+Scope cautions: all results are last-token readouts on one backbone;
+the codebook's resolution is nonuniform (§11.5.3); and the
+completeness flag's token-driven character has not yet been tested at
+positions away from the aggregation site, nor cross-backbone. Both
+are mechanical extensions of the released harness.
 
 ---
 
