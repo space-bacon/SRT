@@ -143,6 +143,36 @@ PAIRS_WAVE2 = [
      "Take a deep breath and relax your shoulders.",
      "Tighten the bolt and torque it to spec."),
 ]
+
+# Wave 3: is truncation true scatter, or is there a hidden incompleteness basin?
+# All pairs among incomplete prompts vs complete-complete controls.
+_INCOMPLETE = [
+    ("i_meta1", "This sentence ends where it shouldn't, namely"),
+    ("i_meta2", "The final word of this sentence is missing, namely"),
+    ("i_recipe", "The recipe calls for two cups of"),
+    ("i_story", "She opened the door and saw"),
+    ("i_fact", "The capital of France is"),
+    ("i_logic", "If A then B. If B then C. Therefore, if A then"),
+]
+_COMPLETE = [
+    ("c_meta1", "This sentence ends exactly where it should."),
+    ("c_meta2", "This sentence stops at the right place."),
+    ("c_recipe", "The recipe calls for two cups of flour."),
+    ("c_story", "She opened the door and saw nothing."),
+]
+PAIRS_WAVE3 = []
+for _i in range(len(_INCOMPLETE)):
+    for _j in range(_i + 1, len(_INCOMPLETE)):
+        (na, a), (nb, b) = _INCOMPLETE[_i], _INCOMPLETE[_j]
+        PAIRS_WAVE3.append(("truncation_scatter", f"{na}~{nb}", a, b))
+for _i in range(len(_COMPLETE)):
+    for _j in range(_i + 1, len(_COMPLETE)):
+        (na, a), (nb, b) = _COMPLETE[_i], _COMPLETE[_j]
+        PAIRS_WAVE3.append(("complete_ctrl", f"{na}~{nb}", a, b))
+PAIRS_WAVE3 += [
+    ("matched", "i_recipe~c_recipe", _INCOMPLETE[2][1], _COMPLETE[2][1]),
+    ("matched", "i_story~c_story", _INCOMPLETE[3][1], _COMPLETE[3][1]),
+]
 ROW_RE = re.compile(
     r"color:#8a9bb8'>L(\d+)</td>"        # layer
     r"<td[^>]*>#(\d+)<br>.*?"            # code A
@@ -164,16 +194,16 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="artifacts/nla/gptoss20b/redteam_states.jsonl")
     ap.add_argument("--sleep", type=float, default=3.0)
-    ap.add_argument("--wave", type=int, default=1, choices=[1, 2])
+    ap.add_argument("--wave", type=int, default=1, choices=[1, 2, 3])
     args = ap.parse_args()
-    pairs = PAIRS if args.wave == 1 else PAIRS_WAVE2
+    pairs = {1: PAIRS, 2: PAIRS_WAVE2, 3: PAIRS_WAVE3}[args.wave]
 
     client = Client(SPACE, token=_local_token())
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     results = []
     for i, (family, technique, pa, pb) in enumerate(pairs):
-        target_codes = set(TARGETS[family]["codes"])
+        target_codes = set(TARGETS.get(family, {}).get("codes", []))
         for attempt in range(3):
             try:
                 html = client.predict(pa, pb, api_name="/cb_compare")
