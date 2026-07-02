@@ -173,6 +173,26 @@ PAIRS_WAVE3 += [
     ("matched", "i_recipe~c_recipe", _INCOMPLETE[2][1], _COMPLETE[2][1]),
     ("matched", "i_story~c_story", _INCOMPLETE[3][1], _COMPLETE[3][1]),
 ]
+
+# Wave 4: add a trailing period to the broken sentences. If the period token
+# alone drags states into the #1672/#2506 complete basins, the completeness
+# flag is token-driven; if not, it is genuinely syntactic.
+_PERIOD = [(n.replace("i_", "p_"), t + ".") for n, t in _INCOMPLETE]
+PAIRS_WAVE4 = []
+# 1. period-added vs original incomplete (does '.' alone flip the code?)
+for (pn, pt), (inn, it) in zip(_PERIOD, _INCOMPLETE):
+    PAIRS_WAVE4.append(("period_vs_broken", f"{pn}~{inn}", pt, it))
+# 2. period-added vs true complete versions (same content)
+PAIRS_WAVE4 += [
+    ("period_vs_complete", "p_recipe~c_recipe", _PERIOD[2][1], _COMPLETE[2][1]),
+    ("period_vs_complete", "p_story~c_story", _PERIOD[3][1], _COMPLETE[3][1]),
+]
+# 3. period-added pairwise (do broken-but-period prompts collapse together?)
+PAIRS_WAVE4 += [
+    ("period_pairwise", "p_meta1~p_recipe", _PERIOD[0][1], _PERIOD[2][1]),
+    ("period_pairwise", "p_recipe~p_story", _PERIOD[2][1], _PERIOD[3][1]),
+    ("period_pairwise", "p_fact~p_logic", _PERIOD[4][1], _PERIOD[5][1]),
+]
 ROW_RE = re.compile(
     r"color:#8a9bb8'>L(\d+)</td>"        # layer
     r"<td[^>]*>#(\d+)<br>.*?"            # code A
@@ -194,9 +214,9 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="artifacts/nla/gptoss20b/redteam_states.jsonl")
     ap.add_argument("--sleep", type=float, default=3.0)
-    ap.add_argument("--wave", type=int, default=1, choices=[1, 2, 3])
+    ap.add_argument("--wave", type=int, default=1, choices=[1, 2, 3, 4])
     args = ap.parse_args()
-    pairs = {1: PAIRS, 2: PAIRS_WAVE2, 3: PAIRS_WAVE3}[args.wave]
+    pairs = {1: PAIRS, 2: PAIRS_WAVE2, 3: PAIRS_WAVE3, 4: PAIRS_WAVE4}[args.wave]
 
     client = Client(SPACE, token=_local_token())
     out = Path(args.out)
