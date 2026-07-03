@@ -1359,6 +1359,62 @@ practical corollary matches every other backbone here — tap the late
 middle, never the final layer — and it now holds across modality, not
 just across text position.
 
+## 11.6.1 A trained read-out transfers from text signs to image signs
+
+The convergence above uses raw hidden states with no trained adapter.
+The stronger claim is that an SRT read-out *head*, trained only on
+text, transfers its learned structure to images it has never seen. We
+tested this directly. We trained the SRT community head on frozen
+gemma-4-31B over a $150$K-passage discourse corpus ($35$ communities,
+supervised-contrastive on `community_id`, grouped sampling, the
+backbone frozen and only the $12.3$M head parameters updated). Held-out
+checkpoint selection over twelve step-tagged checkpoints picked step
+$2250$ by community-assignment accuracy on unseen passages: centred
+top-1 $0.535$ against a $0.029$ chance floor, an $18.7\times$ lift.
+Training loss would have mis-selected step $750$ (held-out $0.462$), so
+the selection sweep is load-bearing, not cosmetic. Only after fixing
+the checkpoint by this text metric did we touch images.
+
+We then fed CIFAR-10 images into the same frozen backbone, pooled the
+community encoder over the image soft-token positions at the community
+layer, and asked three questions. First, does a purely text-trained
+read-out organise images by their semantic referent at all? It does:
+image-class centroid top-1 is $0.620$ and kNN is $0.640$ against a
+$0.10$ chance floor ($6.2\times$), with zero image training. Second, do
+an image and its class word retrieve each other through the trained
+head? Above chance but weakly: image-to-word retrieval@1 is $0.270$
+($2.7\times$ chance), lower than the untrained centred-cosine peak of
+§11.6 because the community encoder compresses to a $64$-dimensional
+discourse code that discards most of the fine visual detail the raw
+stream carries. Third, and most telling, which discourse community does
+each visual class get read into? The assignments are coherent:
+
+| CIFAR-10 class | modal discourse community |
+|---|---|
+| car | reddit:cars ($8/10$) |
+| truck | reddit:cars ($4$) |
+| deer | reddit:gardening ($5$) |
+| cat | reddit:knitting ($6$) |
+| dog | reddit:knitting ($5$) |
+| frog | reddit:biology ($8$) |
+| bird | reddit:biology ($5$) |
+| horse | reddit:gardening ($3$) |
+
+The vehicle classes route to the automotive community, the wild and
+farm animals route to biology, deer and horse route to gardening (deer
+and horses are garden and pasture referents), and the companion animals
+cat and dog route to knitting, which is the corpus's domestic and cozy
+discourse cluster. None of these images or their labels appeared in
+training, and the head never saw a pixel during training. A community
+structure learned entirely from text is projected onto pictures and
+lands in the semantically right place, which is the semiotic transfer
+the theory predicts: the read-out interprets a sign by its place in a
+system of interpretants, and that system is indifferent to whether the
+sign arrived as a word or an image. Artifacts:
+`scripts/train_gemma4_readout.py`, `scripts/select_gemma4_readout.py`,
+`scripts/cross_modal_readout.py`,
+`artifacts/nla/gemma4/{readout_selection,cross_modal_readout}.json`.
+
 **An honest null on the same backbone.** We also ran the §11.5.6
 metacognition layer-sweep on gemma-4-31B (TriviaQA, $n=1000$, accuracy
 $0.764$). Here the mid-layer prescription did *not* transfer: the best

@@ -1,0 +1,162 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "ckpt": "checkpoints/gemma4_readout/readout_selected.pt",
+  "step": 2250,
+  "n_images": 100,
+  "classes": [
+    "airplane",
+    "car",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck"
+  ],
+  "chance": 0.1,
+  "image_class_separability": {
+    "centroid_top1": 0.6200000047683716,
+    "knn": 0.6399999856948853
+  },
+  "image_word_retrieval_at1": 0.27,
+  "image_to_community": {
+    "airplane": [
+      [
+        "reddit:biology",
+        9
+      ],
+      [
+        "reddit:AskAnAmerican",
+        1
+      ]
+    ],
+    "car": [
+      [
+        "reddit:cars",
+        8
+      ],
+      [
+        "reddit:Republican",
+        1
+      ],
+      [
+        "reddit:cycling",
+        1
+      ]
+    ],
+    "bird": [
+      [
+        "reddit:biology",
+        5
+      ],
+      [
+        "reddit:screenwriting",
+        2
+      ],
+      [
+        "reddit:cycling",
+        1
+      ]
+    ],
+    "cat": [
+      [
+        "reddit:knitting",
+        6
+      ],
+      [
+        "reddit:biology",
+        2
+      ],
+      [
+        "reddit:Stoicism",
+        1
+      ]
+    ],
+    "deer": [
+      [
+        "reddit:gardening",
+        5
+      ],
+      [
+        "reddit:biology",
+        3
+      ],
+      [
+        "reddit:knitting",
+        2
+      ]
+    ],
+    "dog": [
+      [
+        "reddit:knitting",
+        5
+      ],
+      [
+        "reddit:biology",
+        3
+      ],
+      [
+        "reddit:Mommit",
+        2
+      ]
+    ],
+    "frog": [
+      [
+        "reddit:biology",
+        8
+      ],
+      [
+        "reddit:gardening",
+        1
+      ],
+      [
+        "reddit:EatCheapAndHealthy",
+        1
+      ]
+    ],
+    "horse": [
+      [
+        "reddit:gardening",
+        3
+      ],
+      [
+        "reddit:biology",
+        2
+      ],
+      [
+        "reddit:cars",
+        2
+      ]
+    ],
+    "ship": [
+      [
+        "reddit:biology",
+        5
+      ],
+      [
+        "reddit:screenwriting",
+        2
+      ],
+      [
+        "reddit:engineering",
+        2
+      ]
+    ],
+    "truck": [
+      [
+        "reddit:cars",
+        4
+      ],
+      [
+        "reddit:AskAnAmerican",
+        3
+      ],
+      [
+        "reddit:engineering",
+        2
+      ]
+    ]
+  }
+}
