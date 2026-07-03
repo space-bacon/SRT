@@ -35,46 +35,57 @@ TILES = [(os.path.join(CACHE, c["thumbs"][0]), c["category"]) for c in CATS]
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap');
 :root { --didot: 'Didot','GFS Didot','Bodoni MT','Playfair Display',Georgia,serif;
-        --violet:#7c5cff; --ink:#2b2536; --muted:#6b6577; --line:#ece7f5; }
+        --bg:#131233; --panel:#1c1a47; --violet:#a48dff; --ink:#eae7fb;
+        --muted:#a7a1cc; --line:#332e66; }
+html, body, gradio-app, .gradio-container { background: var(--bg) !important; }
 .gradio-container { max-width: 1180px !important; margin: 0 auto !important;
-        padding: 8px 22px 48px !important; background: #ffffff; }
+        padding: 8px 22px 48px !important; }
 .gradio-container, .gradio-container * { font-family: var(--didot) !important;
         color: var(--ink); }
 .gradio-container h1, .gradio-container h2, .gradio-container h3 { font-weight: 400 !important; }
+/* make gradio's own wrappers blend into the dark canvas */
+.gradio-container .block, .gradio-container .form, .gradio-container .gr-box,
+.gradio-container .panel, .gradio-container .wrap { background: transparent !important;
+        border: none !important; box-shadow: none !important; }
+.gradio-container .gallery, .gradio-container .grid-wrap,
+.gradio-container .thumbnail-item { background: transparent !important; }
+.gradio-container details, .gradio-container .accordion { background: var(--panel) !important;
+        border: 1px solid var(--line) !important; border-radius: 14px !important; }
 
 /* hero */
 .hero { text-align:center; padding: 54px 16px 10px; }
 .hero .mark { font-size: 2rem; color: var(--violet); letter-spacing: 6px; }
 .hero h1 { font-size: 4rem !important; letter-spacing: 1.5px; margin: 10px 0 2px;
         line-height: 1.02; }
-.hero .subtitle { font-size: 1.7rem; font-style: italic; color:#4a4458; margin: 6px 0 0; }
+.hero .subtitle { font-size: 1.7rem; font-style: italic; color:#c9c3ea; margin: 6px 0 0; }
 .hero .subtitle em { color: var(--violet); font-style: italic; }
 .hero .valueprop { max-width: 680px; margin: 22px auto 0; font-size: 1.16rem;
         line-height: 1.6; color: var(--muted); }
 
 /* capability cards */
 .cap-grid { display:flex; gap: 22px; margin: 46px 0 8px; flex-wrap: wrap; }
-.cap-card { flex:1; min-width: 230px; background:#fdfcff; border:1px solid var(--line);
-        border-radius: 18px; padding: 26px 24px; box-shadow: 0 4px 22px rgba(90,60,160,.06); }
-.cap-card .ico { font-size: 1.7rem; }
+.cap-card { flex:1; min-width: 230px; background: var(--panel); border:1px solid var(--line);
+        border-radius: 18px; padding: 26px 24px; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+.cap-card .ico { font-size: 1.7rem; color: var(--violet); }
 .cap-card h3 { margin: .5em 0 .35em; font-size: 1.28rem; letter-spacing:.3px; }
 .cap-card p { color: var(--muted); font-size: 1.04rem; line-height: 1.55; margin: 0; }
-.cap-card code { font-family: var(--didot) !important; background:#f2edfb;
-        padding: 1px 7px; border-radius: 6px; }
+.cap-card code { font-family: var(--didot) !important; background:#2a2662;
+        color:#d8d0fb; padding: 1px 7px; border-radius: 6px; }
 
 /* section + panels */
 .section-title { text-align:center; font-size: 1.9rem; margin: 56px 0 4px; }
 .section-sub { text-align:center; color: var(--muted); font-size: 1.08rem; margin: 0 0 22px; }
 .readout { border:1px solid var(--line); border-radius: 16px; padding: 22px 24px;
-        background:#fdfcff; box-shadow: 0 4px 22px rgba(90,60,160,.05); min-height: 150px; }
+        background: var(--panel); box-shadow: 0 8px 30px rgba(0,0,0,.3); min-height: 150px; }
 .readout h3 { font-size: 1.5rem; margin: 0 0 12px; }
 .word-chip { display:inline-block; padding: 5px 14px; margin: 4px 6px 0 0;
-        border: 1px solid #ddd3f2; border-radius: 999px; font-size: 1.08rem; color:#4a4458; }
-.word-chip.top { background: var(--violet); border-color: var(--violet); color:#fff;
+        border: 1px solid #494285; border-radius: 999px; font-size: 1.08rem;
+        color:#d7d0f2; background: rgba(255,255,255,.03); }
+.word-chip.top { background: var(--violet); border-color: var(--violet); color:#1a1533;
         font-weight: 600; }
 .evoke { color: var(--muted); font-size: 1.02rem; margin-top: 16px; }
 a { color: var(--violet) !important; }
-.footnote { color:#9a94a6; font-size:.94rem; text-align:center; margin-top: 34px;
+.footnote { color:#8f89b6; font-size:.94rem; text-align:center; margin-top: 34px;
         line-height: 1.6; }
 """
 
