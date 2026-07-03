@@ -116,13 +116,14 @@ def main() -> None:
 
     @torch.no_grad()
     def process(prompt: str, answer: str):
-        pids = tok.apply_chat_template([{"role": "user", "content": prompt}],
-                                       add_generation_prompt=True, tokenize=True,
-                                       return_tensors="pt").to("cuda")
-        fids = tok.apply_chat_template(
-            [{"role": "user", "content": prompt},
-             {"role": "assistant", "content": answer}],
-            add_generation_prompt=False, tokenize=True, return_tensors="pt").to("cuda")
+        def ids(msgs, gen):
+            x = tok.apply_chat_template(msgs, add_generation_prompt=gen, tokenize=True,
+                                        return_tensors="pt")
+            x = x if torch.is_tensor(x) else x["input_ids"]
+            return x.to("cuda")
+        pids = ids([{"role": "user", "content": prompt}], True)
+        fids = ids([{"role": "user", "content": prompt},
+                    {"role": "assistant", "content": answer}], False)
         start = pids.shape[1]
         if fids.shape[1] <= start + 1:
             return None
