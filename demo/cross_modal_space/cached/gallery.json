@@ -1,0 +1,1457 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "ckpt_step": 2250,
+  "n_communities": 35,
+  "communities": [
+    "communism",
+    "DemocraticSocialism",
+    "geopolitics",
+    "changemyview",
+    "AskTrumpSupporters",
+    "Republican",
+    "conspiracy",
+    "Christianity",
+    "pagan",
+    "DebateReligion",
+    "biology",
+    "engineering",
+    "Stoicism",
+    "financialindependence",
+    "overemployed",
+    "fitness",
+    "selfimprovement",
+    "relationship_advice",
+    "AskWomen",
+    "MensLib",
+    "Mommit",
+    "ZeroWaste",
+    "gardening",
+    "media_criticism",
+    "AskAnAmerican",
+    "NoStupidQuestions",
+    "AskAcademia",
+    "knitting",
+    "truegaming",
+    "cycling",
+    "screenwriting",
+    "WeAreTheMusicMakers",
+    "legaladvice",
+    "cars",
+    "EatCheapAndHealthy"
+  ],
+  "n_images": 150,
+  "n_categories": 30,
+  "categories": [
+    {
+      "category": "airplane",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_003.png",
+        "thumbs/img_010.png",
+        "thumbs/img_021.png",
+        "thumbs/img_027.png",
+        "thumbs/img_038.png"
+      ],
+      "top_communities": [
+        [
+          "AskAcademia",
+          0.383
+        ],
+        [
+          "biology",
+          0.346
+        ],
+        [
+          "engineering",
+          0.211
+        ]
+      ],
+      "top_words": [
+        [
+          "rocket",
+          0.867
+        ],
+        [
+          "machine",
+          0.548
+        ],
+        [
+          "bridge",
+          0.534
+        ],
+        [
+          "sky",
+          0.453
+        ],
+        [
+          "ship",
+          0.45
+        ]
+      ]
+    },
+    {
+      "category": "bicycle",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_061.png",
+        "thumbs/img_062.png",
+        "thumbs/img_084.png",
+        "thumbs/img_091.png",
+        "thumbs/img_115.png"
+      ],
+      "top_communities": [
+        [
+          "cycling",
+          0.576
+        ],
+        [
+          "cars",
+          0.421
+        ],
+        [
+          "fitness",
+          0.003
+        ]
+      ],
+      "top_words": [
+        [
+          "bicycle",
+          0.805
+        ],
+        [
+          "wheel",
+          0.753
+        ],
+        [
+          "motorcycle",
+          0.743
+        ],
+        [
+          "car",
+          0.62
+        ],
+        [
+          "engine",
+          0.518
+        ]
+      ]
+    },
+    {
+      "category": "bird",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_025.png",
+        "thumbs/img_034.png",
+        "thumbs/img_045.png",
+        "thumbs/img_047.png",
+        "thumbs/img_048.png"
+      ],
+      "top_communities": [
+        [
+          "gardening",
+          0.687
+        ],
+        [
+          "knitting",
+          0.229
+        ],
+        [
+          "Mommit",
+          0.037
+        ]
+      ],
+      "top_words": [
+        [
+          "bird",
+          0.825
+        ],
+        [
+          "frog",
+          0.715
+        ],
+        [
+          "insect",
+          0.681
+        ],
+        [
+          "wildlife",
+          0.636
+        ],
+        [
+          "deer",
+          0.633
+        ]
+      ]
+    },
+    {
+      "category": "bottle",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_068.png",
+        "thumbs/img_082.png",
+        "thumbs/img_093.png",
+        "thumbs/img_118.png",
+        "thumbs/img_131.png"
+      ],
+      "top_communities": [
+        [
+          "EatCheapAndHealthy",
+          0.92
+        ],
+        [
+          "knitting",
+          0.025
+        ],
+        [
+          "fitness",
+          0.016
+        ]
+      ],
+      "top_words": [
+        [
+          "cup",
+          0.711
+        ],
+        [
+          "kitchen",
+          0.659
+        ],
+        [
+          "food",
+          0.64
+        ],
+        [
+          "mushroom",
+          0.635
+        ],
+        [
+          "bottle",
+          0.609
+        ]
+      ]
+    },
+    {
+      "category": "bridge",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_099.png",
+        "thumbs/img_103.png",
+        "thumbs/img_111.png",
+        "thumbs/img_112.png",
+        "thumbs/img_117.png"
+      ],
+      "top_communities": [
+        [
+          "overemployed",
+          0.331
+        ],
+        [
+          "AskAcademia",
+          0.151
+        ],
+        [
+          "media_criticism",
+          0.098
+        ]
+      ],
+      "top_words": [
+        [
+          "ship",
+          0.682
+        ],
+        [
+          "bridge",
+          0.658
+        ],
+        [
+          "train",
+          0.559
+        ],
+        [
+          "machine",
+          0.554
+        ],
+        [
+          "sky",
+          0.533
+        ]
+      ]
+    },
+    {
+      "category": "bus",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_078.png",
+        "thumbs/img_100.png",
+        "thumbs/img_140.png",
+        "thumbs/img_147.png",
+        "thumbs/img_149.png"
+      ],
+      "top_communities": [
+        [
+          "financialindependence",
+          0.347
+        ],
+        [
+          "AskAnAmerican",
+          0.228
+        ],
+        [
+          "cars",
+          0.113
+        ]
+      ],
+      "top_words": [
+        [
+          "car",
+          0.83
+        ],
+        [
+          "motorcycle",
+          0.754
+        ],
+        [
+          "bicycle",
+          0.676
+        ],
+        [
+          "road",
+          0.64
+        ],
+        [
+          "vehicle",
+          0.632
+        ]
+      ]
+    },
+    {
+      "category": "car",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_006.png",
+        "thumbs/img_009.png",
+        "thumbs/img_036.png",
+        "thumbs/img_046.png",
+        "thumbs/img_049.png"
+      ],
+      "top_communities": [
+        [
+          "cars",
+          0.656
+        ],
+        [
+          "cycling",
+          0.3
+        ],
+        [
+          "financialindependence",
+          0.023
+        ]
+      ],
+      "top_words": [
+        [
+          "car",
+          0.845
+        ],
+        [
+          "motorcycle",
+          0.811
+        ],
+        [
+          "bicycle",
+          0.797
+        ],
+        [
+          "wheel",
+          0.693
+        ],
+        [
+          "vehicle",
+          0.662
+        ]
+      ]
+    },
+    {
+      "category": "castle",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_067.png",
+        "thumbs/img_081.png",
+        "thumbs/img_132.png",
+        "thumbs/img_141.png",
+        "thumbs/img_142.png"
+      ],
+      "top_communities": [
+        [
+          "pagan",
+          0.409
+        ],
+        [
+          "Christianity",
+          0.193
+        ],
+        [
+          "DebateReligion",
+          0.141
+        ]
+      ],
+      "top_words": [
+        [
+          "castle",
+          0.815
+        ],
+        [
+          "sea",
+          0.597
+        ],
+        [
+          "clock",
+          0.54
+        ],
+        [
+          "ship",
+          0.523
+        ],
+        [
+          "building",
+          0.493
+        ]
+      ]
+    },
+    {
+      "category": "cat",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_000.png",
+        "thumbs/img_008.png",
+        "thumbs/img_039.png",
+        "thumbs/img_042.png",
+        "thumbs/img_044.png"
+      ],
+      "top_communities": [
+        [
+          "Mommit",
+          0.287
+        ],
+        [
+          "knitting",
+          0.248
+        ],
+        [
+          "relationship_advice",
+          0.184
+        ]
+      ],
+      "top_words": [
+        [
+          "frog",
+          0.733
+        ],
+        [
+          "bird",
+          0.675
+        ],
+        [
+          "pet",
+          0.618
+        ],
+        [
+          "flower",
+          0.601
+        ],
+        [
+          "cat",
+          0.596
+        ]
+      ]
+    },
+    {
+      "category": "clock",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_066.png",
+        "thumbs/img_074.png",
+        "thumbs/img_077.png",
+        "thumbs/img_096.png",
+        "thumbs/img_130.png"
+      ],
+      "top_communities": [
+        [
+          "changemyview",
+          0.459
+        ],
+        [
+          "Republican",
+          0.119
+        ],
+        [
+          "conspiracy",
+          0.099
+        ]
+      ],
+      "top_words": [
+        [
+          "bus",
+          0.655
+        ],
+        [
+          "train",
+          0.622
+        ],
+        [
+          "telephone",
+          0.549
+        ],
+        [
+          "building",
+          0.475
+        ],
+        [
+          "truck",
+          0.467
+        ]
+      ]
+    },
+    {
+      "category": "cup",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_097.png",
+        "thumbs/img_098.png",
+        "thumbs/img_109.png",
+        "thumbs/img_114.png",
+        "thumbs/img_124.png"
+      ],
+      "top_communities": [
+        [
+          "pagan",
+          0.39
+        ],
+        [
+          "DebateReligion",
+          0.315
+        ],
+        [
+          "Christianity",
+          0.266
+        ]
+      ],
+      "top_words": [
+        [
+          "castle",
+          0.542
+        ],
+        [
+          "sky",
+          0.536
+        ],
+        [
+          "ocean",
+          0.511
+        ],
+        [
+          "flower",
+          0.483
+        ],
+        [
+          "sea",
+          0.448
+        ]
+      ]
+    },
+    {
+      "category": "deer",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_022.png",
+        "thumbs/img_026.png",
+        "thumbs/img_031.png",
+        "thumbs/img_035.png",
+        "thumbs/img_037.png"
+      ],
+      "top_communities": [
+        [
+          "gardening",
+          0.935
+        ],
+        [
+          "knitting",
+          0.026
+        ],
+        [
+          "ZeroWaste",
+          0.018
+        ]
+      ],
+      "top_words": [
+        [
+          "bird",
+          0.795
+        ],
+        [
+          "tree",
+          0.749
+        ],
+        [
+          "wildlife",
+          0.738
+        ],
+        [
+          "garden",
+          0.701
+        ],
+        [
+          "animal",
+          0.676
+        ]
+      ]
+    },
+    {
+      "category": "dog",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_012.png",
+        "thumbs/img_016.png",
+        "thumbs/img_024.png",
+        "thumbs/img_030.png",
+        "thumbs/img_032.png"
+      ],
+      "top_communities": [
+        [
+          "Mommit",
+          0.857
+        ],
+        [
+          "relationship_advice",
+          0.073
+        ],
+        [
+          "gardening",
+          0.033
+        ]
+      ],
+      "top_words": [
+        [
+          "dog",
+          0.74
+        ],
+        [
+          "horse",
+          0.734
+        ],
+        [
+          "bird",
+          0.63
+        ],
+        [
+          "pet",
+          0.626
+        ],
+        [
+          "frog",
+          0.577
+        ]
+      ]
+    },
+    {
+      "category": "forest",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_051.png",
+        "thumbs/img_076.png",
+        "thumbs/img_085.png",
+        "thumbs/img_087.png",
+        "thumbs/img_121.png"
+      ],
+      "top_communities": [
+        [
+          "gardening",
+          0.756
+        ],
+        [
+          "EatCheapAndHealthy",
+          0.106
+        ],
+        [
+          "ZeroWaste",
+          0.077
+        ]
+      ],
+      "top_words": [
+        [
+          "deer",
+          0.575
+        ],
+        [
+          "landscape",
+          0.566
+        ],
+        [
+          "tree",
+          0.467
+        ],
+        [
+          "garden",
+          0.387
+        ],
+        [
+          "horse",
+          0.367
+        ]
+      ]
+    },
+    {
+      "category": "frog",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_004.png",
+        "thumbs/img_005.png",
+        "thumbs/img_007.png",
+        "thumbs/img_019.png",
+        "thumbs/img_029.png"
+      ],
+      "top_communities": [
+        [
+          "gardening",
+          0.785
+        ],
+        [
+          "Mommit",
+          0.082
+        ],
+        [
+          "knitting",
+          0.029
+        ]
+      ],
+      "top_words": [
+        [
+          "bird",
+          0.775
+        ],
+        [
+          "frog",
+          0.741
+        ],
+        [
+          "tree",
+          0.715
+        ],
+        [
+          "animal",
+          0.669
+        ],
+        [
+          "garden",
+          0.669
+        ]
+      ]
+    },
+    {
+      "category": "horse",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_013.png",
+        "thumbs/img_017.png",
+        "thumbs/img_020.png",
+        "thumbs/img_040.png",
+        "thumbs/img_043.png"
+      ],
+      "top_communities": [
+        [
+          "Mommit",
+          0.318
+        ],
+        [
+          "cars",
+          0.279
+        ],
+        [
+          "gardening",
+          0.162
+        ]
+      ],
+      "top_words": [
+        [
+          "horse",
+          0.834
+        ],
+        [
+          "dog",
+          0.766
+        ],
+        [
+          "pet",
+          0.659
+        ],
+        [
+          "cat",
+          0.564
+        ],
+        [
+          "animal",
+          0.514
+        ]
+      ]
+    },
+    {
+      "category": "house",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_064.png",
+        "thumbs/img_079.png",
+        "thumbs/img_088.png",
+        "thumbs/img_094.png",
+        "thumbs/img_116.png"
+      ],
+      "top_communities": [
+        [
+          "media_criticism",
+          0.2
+        ],
+        [
+          "communism",
+          0.191
+        ],
+        [
+          "AskTrumpSupporters",
+          0.145
+        ]
+      ],
+      "top_words": [
+        [
+          "telephone",
+          0.602
+        ],
+        [
+          "sea",
+          0.566
+        ],
+        [
+          "train",
+          0.531
+        ],
+        [
+          "kitchen",
+          0.516
+        ],
+        [
+          "castle",
+          0.509
+        ]
+      ]
+    },
+    {
+      "category": "keyboard",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_060.png",
+        "thumbs/img_089.png",
+        "thumbs/img_095.png",
+        "thumbs/img_106.png",
+        "thumbs/img_120.png"
+      ],
+      "top_communities": [
+        [
+          "overemployed",
+          0.338
+        ],
+        [
+          "AskAcademia",
+          0.255
+        ],
+        [
+          "conspiracy",
+          0.13
+        ]
+      ],
+      "top_words": [
+        [
+          "bridge",
+          0.801
+        ],
+        [
+          "building",
+          0.7
+        ],
+        [
+          "train",
+          0.695
+        ],
+        [
+          "ship",
+          0.626
+        ],
+        [
+          "telephone",
+          0.62
+        ]
+      ]
+    },
+    {
+      "category": "motorcycle",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_119.png",
+        "thumbs/img_139.png",
+        "thumbs/img_143.png",
+        "thumbs/img_146.png",
+        "thumbs/img_148.png"
+      ],
+      "top_communities": [
+        [
+          "cycling",
+          0.508
+        ],
+        [
+          "cars",
+          0.488
+        ],
+        [
+          "fitness",
+          0.001
+        ]
+      ],
+      "top_words": [
+        [
+          "bicycle",
+          0.772
+        ],
+        [
+          "motorcycle",
+          0.764
+        ],
+        [
+          "wheel",
+          0.71
+        ],
+        [
+          "car",
+          0.671
+        ],
+        [
+          "engine",
+          0.549
+        ]
+      ]
+    },
+    {
+      "category": "mountain",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_050.png",
+        "thumbs/img_059.png",
+        "thumbs/img_065.png",
+        "thumbs/img_101.png",
+        "thumbs/img_127.png"
+      ],
+      "top_communities": [
+        [
+          "biology",
+          0.731
+        ],
+        [
+          "screenwriting",
+          0.201
+        ],
+        [
+          "engineering",
+          0.031
+        ]
+      ],
+      "top_words": [
+        [
+          "insect",
+          0.711
+        ],
+        [
+          "forest",
+          0.643
+        ],
+        [
+          "sky",
+          0.486
+        ],
+        [
+          "rocket",
+          0.448
+        ],
+        [
+          "tree",
+          0.381
+        ]
+      ]
+    },
+    {
+      "category": "mushroom",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_052.png",
+        "thumbs/img_090.png",
+        "thumbs/img_092.png",
+        "thumbs/img_108.png",
+        "thumbs/img_129.png"
+      ],
+      "top_communities": [
+        [
+          "gardening",
+          0.721
+        ],
+        [
+          "EatCheapAndHealthy",
+          0.149
+        ],
+        [
+          "knitting",
+          0.115
+        ]
+      ],
+      "top_words": [
+        [
+          "tree",
+          0.85
+        ],
+        [
+          "mushroom",
+          0.782
+        ],
+        [
+          "deer",
+          0.693
+        ],
+        [
+          "forest",
+          0.671
+        ],
+        [
+          "garden",
+          0.643
+        ]
+      ]
+    },
+    {
+      "category": "orange",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_057.png",
+        "thumbs/img_105.png",
+        "thumbs/img_128.png",
+        "thumbs/img_135.png",
+        "thumbs/img_136.png"
+      ],
+      "top_communities": [
+        [
+          "EatCheapAndHealthy",
+          0.686
+        ],
+        [
+          "gardening",
+          0.21
+        ],
+        [
+          "ZeroWaste",
+          0.077
+        ]
+      ],
+      "top_words": [
+        [
+          "garden",
+          0.627
+        ],
+        [
+          "food",
+          0.618
+        ],
+        [
+          "deer",
+          0.533
+        ],
+        [
+          "orange",
+          0.527
+        ],
+        [
+          "tree",
+          0.512
+        ]
+      ]
+    },
+    {
+      "category": "rocket",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_055.png",
+        "thumbs/img_070.png",
+        "thumbs/img_080.png",
+        "thumbs/img_126.png",
+        "thumbs/img_133.png"
+      ],
+      "top_communities": [
+        [
+          "conspiracy",
+          0.416
+        ],
+        [
+          "DebateReligion",
+          0.162
+        ],
+        [
+          "AskAcademia",
+          0.13
+        ]
+      ],
+      "top_words": [
+        [
+          "rocket",
+          0.683
+        ],
+        [
+          "sky",
+          0.66
+        ],
+        [
+          "building",
+          0.616
+        ],
+        [
+          "clock",
+          0.549
+        ],
+        [
+          "bridge",
+          0.536
+        ]
+      ]
+    },
+    {
+      "category": "rose",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_056.png",
+        "thumbs/img_058.png",
+        "thumbs/img_063.png",
+        "thumbs/img_086.png",
+        "thumbs/img_107.png"
+      ],
+      "top_communities": [
+        [
+          "AskWomen",
+          0.426
+        ],
+        [
+          "MensLib",
+          0.347
+        ],
+        [
+          "relationship_advice",
+          0.143
+        ]
+      ],
+      "top_words": [
+        [
+          "flower",
+          0.809
+        ],
+        [
+          "rose",
+          0.801
+        ],
+        [
+          "cup",
+          0.639
+        ],
+        [
+          "sunflower",
+          0.607
+        ],
+        [
+          "bottle",
+          0.533
+        ]
+      ]
+    },
+    {
+      "category": "sea",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_053.png",
+        "thumbs/img_054.png",
+        "thumbs/img_069.png",
+        "thumbs/img_075.png",
+        "thumbs/img_083.png"
+      ],
+      "top_communities": [
+        [
+          "pagan",
+          0.256
+        ],
+        [
+          "Stoicism",
+          0.246
+        ],
+        [
+          "DebateReligion",
+          0.165
+        ]
+      ],
+      "top_words": [
+        [
+          "sky",
+          0.65
+        ],
+        [
+          "castle",
+          0.62
+        ],
+        [
+          "clock",
+          0.581
+        ],
+        [
+          "sea",
+          0.504
+        ],
+        [
+          "ship",
+          0.489
+        ]
+      ]
+    },
+    {
+      "category": "ship",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_001.png",
+        "thumbs/img_002.png",
+        "thumbs/img_015.png",
+        "thumbs/img_018.png",
+        "thumbs/img_041.png"
+      ],
+      "top_communities": [
+        [
+          "screenwriting",
+          0.189
+        ],
+        [
+          "overemployed",
+          0.163
+        ],
+        [
+          "legaladvice",
+          0.161
+        ]
+      ],
+      "top_words": [
+        [
+          "ship",
+          0.599
+        ],
+        [
+          "road",
+          0.485
+        ],
+        [
+          "sky",
+          0.437
+        ],
+        [
+          "sea",
+          0.426
+        ],
+        [
+          "keyboard",
+          0.387
+        ]
+      ]
+    },
+    {
+      "category": "sunflower",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_071.png",
+        "thumbs/img_073.png",
+        "thumbs/img_104.png",
+        "thumbs/img_137.png",
+        "thumbs/img_138.png"
+      ],
+      "top_communities": [
+        [
+          "gardening",
+          0.483
+        ],
+        [
+          "knitting",
+          0.275
+        ],
+        [
+          "Mommit",
+          0.15
+        ]
+      ],
+      "top_words": [
+        [
+          "bird",
+          0.711
+        ],
+        [
+          "frog",
+          0.71
+        ],
+        [
+          "tree",
+          0.616
+        ],
+        [
+          "flower",
+          0.612
+        ],
+        [
+          "garden",
+          0.597
+        ]
+      ]
+    },
+    {
+      "category": "telephone",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_110.png",
+        "thumbs/img_113.png",
+        "thumbs/img_125.png",
+        "thumbs/img_144.png",
+        "thumbs/img_145.png"
+      ],
+      "top_communities": [
+        [
+          "conspiracy",
+          0.578
+        ],
+        [
+          "media_criticism",
+          0.156
+        ],
+        [
+          "changemyview",
+          0.068
+        ]
+      ],
+      "top_words": [
+        [
+          "building",
+          0.76
+        ],
+        [
+          "bus",
+          0.69
+        ],
+        [
+          "telephone",
+          0.651
+        ],
+        [
+          "clock",
+          0.632
+        ],
+        [
+          "bridge",
+          0.616
+        ]
+      ]
+    },
+    {
+      "category": "train",
+      "dataset": "cifar100",
+      "thumbs": [
+        "thumbs/img_072.png",
+        "thumbs/img_102.png",
+        "thumbs/img_122.png",
+        "thumbs/img_123.png",
+        "thumbs/img_134.png"
+      ],
+      "top_communities": [
+        [
+          "AskAnAmerican",
+          0.917
+        ],
+        [
+          "cars",
+          0.026
+        ],
+        [
+          "geopolitics",
+          0.018
+        ]
+      ],
+      "top_words": [
+        [
+          "road",
+          0.722
+        ],
+        [
+          "engine",
+          0.662
+        ],
+        [
+          "orange",
+          0.551
+        ],
+        [
+          "bicycle",
+          0.492
+        ],
+        [
+          "vehicle",
+          0.489
+        ]
+      ]
+    },
+    {
+      "category": "truck",
+      "dataset": "cifar10",
+      "thumbs": [
+        "thumbs/img_011.png",
+        "thumbs/img_014.png",
+        "thumbs/img_023.png",
+        "thumbs/img_028.png",
+        "thumbs/img_033.png"
+      ],
+      "top_communities": [
+        [
+          "financialindependence",
+          0.417
+        ],
+        [
+          "AskAnAmerican",
+          0.24
+        ],
+        [
+          "DemocraticSocialism",
+          0.081
+        ]
+      ],
+      "top_words": [
+        [
+          "car",
+          0.754
+        ],
+        [
+          "truck",
+          0.651
+        ],
+        [
+          "motorcycle",
+          0.616
+        ],
+        [
+          "road",
+          0.566
+        ],
+        [
+          "bicycle",
+          0.549
+        ]
+      ]
+    }
+  ],
+  "note": "Community head trained on TEXT only (discourse SupCon on frozen gemma-4-31B); applied here to image tokens with zero image training. Assignments are aggregated per category (mean over the category's images) to match the paper-level result."
+}
