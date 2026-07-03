@@ -61,14 +61,14 @@ def main() -> None:
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     import random
     random.seed(0); torch.manual_seed(0)
-    from transformers import Gemma4ForCausalLM, AutoTokenizer
+    from transformers import Gemma4ForConditionalGeneration, AutoTokenizer
     from datasets import load_dataset
 
     tok = AutoTokenizer.from_pretrained(args.model)
     if tok.pad_token_id is None:
         tok.pad_token = tok.eos_token
     tok.padding_side = "left"
-    model = Gemma4ForCausalLM.from_pretrained(
+    model = Gemma4ForConditionalGeneration.from_pretrained(
         args.model, dtype=torch.bfloat16, device_map="cuda").eval()
     for p in model.parameters():
         p.requires_grad_(False)
