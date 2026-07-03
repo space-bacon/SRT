@@ -158,8 +158,10 @@ def main() -> None:
                  if comm_out.weights is not None else torch.zeros((), device="cuda"))
         # Target-norm penalty caps divergence magnitude so the self-supervised
         # chain MSE cannot run away as dsup makes divergences more discriminative.
-        mnorm = attn.unsqueeze(-1).float()
-        dnorms = [((dv * mnorm).pow(2).sum(-1).sqrt().sum() / mnorm.sum()) for dv in divs]
+        # Norm over the feature dim on the raw (nonzero) divergence, then mask —
+        # taking sqrt of masked-to-zero padded positions gives inf-gradient NaNs.
+        am = attn.float()
+        dnorms = [((dv.norm(dim=-1) * am).sum() / am.sum().clamp(min=1)) for dv in divs]
         l_dnorm = sum((dn - args.div_target_norm).pow(2) for dn in dnorms) / len(dnorms)
         loss = (W.community_supcon_weight * l_sup
                 + args.chain_weight * l_chain
