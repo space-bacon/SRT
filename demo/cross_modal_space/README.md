@@ -1,5 +1,5 @@
 ---
-title: SRT Cross-Modal Read-Out
+title: SRT Sunstone
 emoji: 🜲
 colorFrom: indigo
 colorTo: pink
@@ -8,10 +8,12 @@ sdk_version: "5.9.1"
 app_file: app.py
 pinned: false
 license: apache-2.0
-short_description: A text-trained SRT read-out that reads images into discourse communities
+short_description: A read-out that reads images — trained only on words
 ---
 
-# 🜲 A read-out that reads images — trained only on words
+# 🜲 SRT Sunstone
+
+### A read-out that reads images — trained only on words
 
 The **SRT read-out** is a 12.3 M side-channel head on a **frozen
 `google/gemma-4-31B-it`**. It was taught one thing, from **text alone**: to tell
