@@ -1,0 +1,2772 @@
+{
+  "summary": {
+    "model": "google/gemma-4-31B-it",
+    "n": 300,
+    "chance_trap": 0.25,
+    "trap_rate": 0.006666666666666667,
+    "accuracy": 0.99,
+    "unparsed": 0,
+    "note": "Reconstructed 4-option MC (options built by Claude from expected_behavior/hidden_trap); indicative of axis-1 methodology, NOT ginigen's official option set.",
+    "by_ticos_type": {
+      "A_TrapEscape": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 53
+      },
+      "B_ContradictionResolution": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 54
+      },
+      "C_ProgressiveDiscovery": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 25
+      },
+      "D_MultiConstraint": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 25
+      },
+      "E_SelfCorrecting": {
+        "trap_rate": 0.0,
+        "accuracy": 0.9811320754716981,
+        "n": 53
+      },
+      "F_ExpertPanel": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 13
+      },
+      "G_PivotDetection": {
+        "trap_rate": 0.044444444444444446,
+        "accuracy": 0.9555555555555556,
+        "n": 45
+      },
+      "H_DecisionUnderUncertainty": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 32
+      }
+    },
+    "by_grade": {
+      "A": {
+        "trap_rate": 0.007352941176470588,
+        "accuracy": 0.9926470588235294,
+        "n": 136
+      },
+      "B": {
+        "trap_rate": 0.0070921985815602835,
+        "accuracy": 0.9858156028368794,
+        "n": 141
+      },
+      "C": {
+        "trap_rate": 0.0,
+        "accuracy": 1.0,
+        "n": 23
+      }
+    }
+  },
+  "results": [
+    {
+      "task_id": "META-001",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-002",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-003",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-004",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-005",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-006",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-007",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-008",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-009",
+      "ticos_type": "A_TrapEscape",
+      "grade": "C",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-010",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-011",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-012",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-013",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-014",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-015",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-016",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-017",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-018",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-019",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-020",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-021",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-022",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-023",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-024",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-025",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-026",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-027",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-028",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-029",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-030",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-031",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-032",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-033",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-034",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-035",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-036",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-037",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-038",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-039",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-040",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-041",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-042",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-043",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-044",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-045",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-046",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-047",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-048",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-049",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-050",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-051",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-052",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-053",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-054",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-055",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-056",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-057",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-058",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-059",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-060",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-061",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-062",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-063",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-064",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-065",
+      "ticos_type": "A_TrapEscape",
+      "grade": "C",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-066",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-067",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-068",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-069",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-070",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-071",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-072",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-073",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-074",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-075",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-076",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "C",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-077",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-078",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-079",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-080",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-081",
+      "ticos_type": "A_TrapEscape",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-082",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-083",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-084",
+      "ticos_type": "G_PivotDetection",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-085",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-086",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-087",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-088",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-089",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-090",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "C",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-091",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-092",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-093",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-094",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-095",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-096",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-097",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-098",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-099",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-100",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-101",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-102",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-103",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-104",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-105",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-106",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-107",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-108",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-109",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-110",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-111",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-112",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-113",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-114",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-115",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-116",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-117",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-118",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-119",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-120",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-121",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-122",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-123",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-124",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-125",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-126",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-127",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-128",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-129",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-130",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-131",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-132",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "C",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-133",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-134",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-135",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-136",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-137",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "C",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-138",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-139",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-140",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-141",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "C",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-142",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-143",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-144",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-145",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-146",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-147",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-148",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-149",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-150",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-151",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-152",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-153",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-154",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-155",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-156",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-157",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-158",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-159",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "C",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-160",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-161",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-162",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-163",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-164",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-165",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-166",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-167",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-168",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-169",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-170",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-171",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-172",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "C",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-173",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-174",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-175",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-176",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-177",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-178",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-179",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-180",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-181",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-182",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-183",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-184",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-185",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-186",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-187",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-188",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-189",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-190",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-191",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-192",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-193",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-194",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-195",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-196",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "C",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-197",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-198",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-199",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-200",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-201",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-202",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-203",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-204",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-205",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-206",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-207",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-208",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-209",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "C",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-210",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-211",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-212",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-213",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-214",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-215",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-216",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-217",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-218",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-219",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-220",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-221",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-222",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-223",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-224",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-225",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-226",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-227",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-228",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-229",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-230",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-231",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-232",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "C",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-233",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-234",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-235",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-236",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-237",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-238",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-239",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-240",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-241",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-242",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-243",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-244",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-245",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "C",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-246",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-247",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-248",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-249",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-250",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-251",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-252",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-253",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-254",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-255",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-256",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "C",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-257",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-258",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-259",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-260",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-261",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-262",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-263",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-264",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-265",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-266",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-267",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-268",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-269",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-270",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-271",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-272",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-273",
+      "ticos_type": "G_PivotDetection",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-274",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-275",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-276",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "B",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-277",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "A",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-278",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-279",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-280",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-281",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-282",
+      "ticos_type": "A_TrapEscape",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-283",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "A",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-284",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-285",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-286",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "A",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-287",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-288",
+      "ticos_type": "F_ExpertPanel",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "D",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-289",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-290",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-291",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "C",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-292",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "C",
+      "trap_letter": "D",
+      "picked": "C",
+      "raw": "C"
+    },
+    {
+      "task_id": "META-293",
+      "ticos_type": "D_MultiConstraint",
+      "grade": "C",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-294",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    },
+    {
+      "task_id": "META-295",
+      "ticos_type": "C_ProgressiveDiscovery",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "C",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-296",
+      "ticos_type": "E_SelfCorrecting",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "C",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-297",
+      "ticos_type": "H_DecisionUnderUncertainty",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "A",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-298",
+      "ticos_type": "A_TrapEscape",
+      "grade": "B",
+      "correct_letter": "D",
+      "trap_letter": "B",
+      "picked": "D",
+      "raw": "D"
+    },
+    {
+      "task_id": "META-299",
+      "ticos_type": "B_ContradictionResolution",
+      "grade": "A",
+      "correct_letter": "B",
+      "trap_letter": "D",
+      "picked": "B",
+      "raw": "B"
+    },
+    {
+      "task_id": "META-300",
+      "ticos_type": "G_PivotDetection",
+      "grade": "A",
+      "correct_letter": "A",
+      "trap_letter": "B",
+      "picked": "A",
+      "raw": "A"
+    }
+  ]
+}
