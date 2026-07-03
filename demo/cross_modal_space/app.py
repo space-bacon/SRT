@@ -17,6 +17,10 @@ from __future__ import annotations
 import json
 import os
 
+# Disable SSR before importing gradio: SSR mode on Spaces intermittently serves
+# a page whose client 404s event calls ("no api found") until a hard reload.
+os.environ.setdefault("GRADIO_SSR_MODE", "false")
+
 import gradio as gr
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -87,6 +91,24 @@ html, body, gradio-app, .gradio-container { background: var(--bg) !important; }
 a { color: var(--violet) !important; }
 .footnote { color:#8f89b6; font-size:.94rem; text-align:center; margin-top: 34px;
         line-height: 1.6; }
+
+/* mobile */
+@media (max-width: 680px) {
+  .gradio-container { padding: 6px 12px 32px !important; }
+  .hero { padding: 26px 6px 6px; }
+  .hero h1 { font-size: 2.15rem !important; letter-spacing: .3px;
+        overflow-wrap: break-word; }
+  .hero .subtitle { font-size: 1.15rem; }
+  .hero .valueprop { font-size: 1.02rem; margin-top: 14px; }
+  .cap-grid { gap: 14px; margin: 30px 0 6px; }
+  .cap-card { padding: 20px 18px; min-width: 100%; }
+  .section-title { font-size: 1.5rem; margin: 36px 0 4px; }
+  .section-sub { font-size: 1rem; }
+  .readout { padding: 18px 18px; }
+  /* fewer, larger gallery tiles on phones */
+  .gradio-container .grid-wrap, .gradio-container .gallery .grid-wrap,
+  .gradio-container .thumbnails { grid-template-columns: repeat(3, 1fr) !important; }
+}
 """
 
 HERO = """
@@ -211,4 +233,4 @@ def build_app() -> gr.Blocks:
 demo = build_app()
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(ssr_mode=False, show_error=True)
