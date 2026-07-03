@@ -66,11 +66,11 @@ html, body, gradio-app, .gradio-container { background: var(--bg) !important;
 /* hero */
 .hero { text-align:center; padding: 54px 16px 10px; }
 .hero .mark { font-size: 2rem; color: var(--violet); letter-spacing: 6px; }
-.hero h1 { font-size: 4rem !important; letter-spacing: 1.5px; margin: 10px 0 2px;
-        line-height: 1.02; overflow-wrap: break-word; word-break: break-word; }
-.hero .subtitle { font-size: 1.7rem; font-style: italic; color:#c9c3ea; margin: 6px 0 0; }
+.hero h1 { font-size: clamp(1.85rem, 6.5vw, 4rem) !important; letter-spacing: 1px;
+        margin: 10px 0 2px; line-height: 1.05; overflow-wrap: break-word; word-break: break-word; }
+.hero .subtitle { font-size: clamp(1.15rem, 3.4vw, 1.7rem); font-style: italic; color:#c9c3ea; margin: 6px 0 0; }
 .hero .subtitle em { color: var(--violet); font-style: italic; }
-.hero .valueprop { max-width: 680px; margin: 22px auto 0; font-size: 1.16rem;
+.hero .valueprop { max-width: 680px; margin: 22px auto 0; font-size: clamp(1rem, 2.6vw, 1.16rem);
         line-height: 1.6; color: var(--muted); }
 
 /* capability cards */
@@ -84,7 +84,7 @@ html, body, gradio-app, .gradio-container { background: var(--bg) !important;
         color:#d8d0fb; padding: 1px 7px; border-radius: 6px; }
 
 /* section + panels */
-.section-title { text-align:center; font-size: 1.9rem; margin: 56px 0 4px; }
+.section-title { text-align:center; font-size: clamp(1.4rem, 4.2vw, 1.9rem); margin: 56px 0 4px; }
 .section-sub { text-align:center; color: var(--muted); font-size: 1.08rem; margin: 0 0 22px; }
 .readout { border:1px solid var(--line); border-radius: 16px; padding: 22px 24px;
         background: var(--panel); box-shadow: 0 8px 30px rgba(0,0,0,.3); min-height: 150px; }
@@ -99,8 +99,8 @@ a { color: var(--violet) !important; }
 .footnote { color:#8f89b6; font-size:.94rem; text-align:center; margin-top: 34px;
         line-height: 1.6; }
 
-/* mobile */
-@media (max-width: 680px) {
+/* mobile / narrow-iframe */
+@media (max-width: 860px) {
   .gradio-container { padding: 6px 12px 32px !important; }
   .hero { padding: 26px 6px 6px; }
   .hero h1 { font-size: 2.15rem !important; letter-spacing: .3px;
