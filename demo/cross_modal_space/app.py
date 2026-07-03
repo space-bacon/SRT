@@ -17,10 +17,6 @@ from __future__ import annotations
 import json
 import os
 
-# Disable SSR before importing gradio: SSR mode on Spaces intermittently serves
-# a page whose client 404s event calls ("no api found") until a hard reload.
-os.environ.setdefault("GRADIO_SSR_MODE", "false")
-
 import gradio as gr
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -233,4 +229,4 @@ def build_app() -> gr.Blocks:
 demo = build_app()
 
 if __name__ == "__main__":
-    demo.launch(ssr_mode=False, show_error=True)
+    demo.launch()
