@@ -145,10 +145,7 @@ def main() -> None:
         l_sup, diag = community_supcon_loss(comm_out.encoded, cids,
                                             temperature=W.community_supcon_temperature)
         l_chain = chain_loss(divs, chain_predictor, attention_mask=attn)
-        # mean-pool last divergence per passage for divergence SupCon
-        m = attn.unsqueeze(-1).float()
-        div_pool = (divs[-1] * m).sum(1) / m.sum(1).clamp(min=1)
-        l_dsup, _ = divergence_supcon_loss(div_pool, cids,
+        l_dsup, _ = divergence_supcon_loss(divs, cids, attention_mask=attn,
                                            temperature=W.divergence_supcon_temperature)
         l_ent = (community_entropy_loss(comm_out.weights)
                  if comm_out.weights is not None else torch.zeros((), device="cuda"))
