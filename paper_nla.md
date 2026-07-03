@@ -1305,6 +1305,78 @@ Artifacts: `scripts/metacog_probe.py`,
 
 ---
 
+## 11.6 Cross-modal semiosis: the read-out is not linguistic
+
+Every study so far tapped a text-only backbone, which leaves the
+program's central word open to a deflationary reading: perhaps the SRT
+read-out is a *linguistic* probe, and "interpretant divergence" is just
+next-token statistics under a Peircean name. The theory says otherwise
+— an interpretant is what a system makes of *any* sign, and semiosis is
+modality-agnostic — so the sharpest possible test is a native omni
+model, where image patches and text tokens are projected into one
+residual stream. We ran it on **google/gemma-4-31B** (the strongest US
+model on a concurrent public metacognition leaderboard; a
+`Gemma4ForConditionalGeneration` omni model, 60-layer text tower
+$d=5376$, 27-layer SigLIP vision tower, 280 image soft-tokens per
+image). A single image + text forward confirms the premise: a photo
+enters the tapped stream as $266$ soft-tokens flowing through all $60$
+text layers.
+
+**Interpretant convergence (forward passes only, no trained adapter).**
+For $10$ CIFAR-10 concepts $\times\,10$ images we read the
+residual-stream representation of each image (mean over its
+soft-tokens) and of each concept *word* ("a photo of a cat", last
+token) at every layer, centred each modality by its own layer-mean
+(image-space and word-space have different anisotropy), and asked, per
+layer, whether the correct concept word tops the centred-cosine
+ranking for each image (retrieval@1, chance $0.10$). The interpretant
+converges, and its depth profile is the result:
+
+| depth | retrieval@1 | reading |
+|---|---|---|
+| L0 (embed) | $0.77$ | surface colour/shape co-location |
+| L3–L21 | $0.55$–$0.79$ | early alignment |
+| L27–L39 | $0.19$–$0.36$ | **trough** — modality-specific processing |
+| **L42–L57** | $0.88$–$\mathbf{0.93}$ | **shared interpretant** (peak L47/L54, $\sim\!78$–$90\%$ depth) |
+| L60 (final) | $0.21$ | **collapse** — output-token surface again |
+
+An image of a cat and the word "cat" land in the same region of the
+residual stream ($0.93$ retrieval at $9\times$ chance), and they do so
+maximally at $\sim\!80\%$ depth, *not* at the final layer, which
+collapses back to a modality-specific, task-surface code. This is the
+same late-is-surface signature the red-team waves found on gpt-oss L24
+(§11.5.4) and the word/token studies found at the last layer
+(§11.5.2), now recovered in a *cross-modal* setting: the modality-
+agnostic interpretant lives in the late middle, and the two dead zones
+(the L27–39 trough and the L60 collapse) bracket it. Artifacts:
+`scripts/cross_modal_semiosis.py`,
+`artifacts/nla/gemma4/cross_modal_semiosis.json`.
+
+The deflationary reading is therefore false: the read-out target is a
+sign-interpretation locus that unifies pictures and words, exactly what
+a *semiotic* (as opposed to linguistic) adapter should find. The
+practical corollary matches every other backbone here — tap the late
+middle, never the final layer — and it now holds across modality, not
+just across text position.
+
+**An honest null on the same backbone.** We also ran the §11.5.6
+metacognition layer-sweep on gemma-4-31B (TriviaQA, $n=1000$, accuracy
+$0.764$). Here the mid-layer prescription did *not* transfer: the best
+probe layer was the *last* ($L60$, AUROC $0.785$), and the
+mean-logprob baseline ($0.842$) beat every hidden-state probe. The
+lesson is scope, not contradiction: on easy factual QA a
+well-calibrated model's verbal confidence already carries its error
+signal, so a probe adds nothing and layer choice barely matters — the
+probe's value (and the mid-layer advantage) appears only on the
+*adversarial* distributions where confident models are wrong, which is
+precisely why the leaderboard uses reasoning traps rather than trivia.
+Establishing the mid-layer advantage on that trap distribution needs an
+LLM-judge over free-form reasoning answers and is left as scoped
+future work. Artifact:
+`artifacts/nla/gemma4/metacog_layer_sweep.json`.
+
+---
+
 ## 12. NLA as Stage 4 of the SRT program
 
 We now connect Stage 4 explicitly to Stages 1–3 (Lancaster, 2025;
