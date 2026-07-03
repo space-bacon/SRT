@@ -1,0 +1,24 @@
+{
+  "n": 1200,
+  "accuracy": 0.2833333333333333,
+  "seed": 0,
+  "baseline_logp_auroc": 0.7244632400780742,
+  "layers": {
+    "18": {
+      "auroc": 0.960149642160052,
+      "spoof_dP_mean": -0.019838443025946617,
+      "spoof_frac_lowered": 0.6338383555412292,
+      "p_wrong_full_mean": 0.733008086681366,
+      "p_wrong_trunc_mean": 0.9655649065971375,
+      "p_wrong_trunc_dot_mean": 0.985403299331665
+    },
+    "24": {
+      "auroc": 0.9417371502927782,
+      "spoof_dP_mean": -0.0019377418793737888,
+      "spoof_frac_lowered": 0.5631313323974609,
+      "p_wrong_full_mean": 0.7305900454521179,
+      "p_wrong_trunc_mean": 0.9459530115127563,
+      "p_wrong_trunc_dot_mean": 0.9478907585144043
+    }
+  }
+}
