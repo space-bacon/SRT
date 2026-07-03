@@ -1,0 +1,43 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "n": 300,
+  "n_fail": 14,
+  "note": "AUROC for predicting the model's OWN trap failure (1=failed). Scalars folded to max(a,1-a). Small n_fail -> high variance.",
+  "global": {
+    "n_fail": 14,
+    "scalar_auroc": {
+      "nll_mean": 0.6606,
+      "nll_max": 0.5457,
+      "ent_mean": 0.6206,
+      "ent_max": 0.5245,
+      "margin_mean": 0.5829,
+      "div_norm_mean": 0.5412,
+      "comm_entropy": 0.5157
+    },
+    "hidden_probe_loocv_auroc": {
+      "15": 0.6434,
+      "30": 0.7025,
+      "45": 0.7003,
+      "60": 0.6691
+    }
+  },
+  "pivot_detection": {
+    "n": 45,
+    "n_fail": 7,
+    "scalar_auroc": {
+      "nll_mean": 0.5338,
+      "nll_max": 0.5865,
+      "ent_mean": 0.5526,
+      "ent_max": 0.5451,
+      "margin_mean": 0.5677,
+      "div_norm_mean": 0.5376,
+      "comm_entropy": 0.6015
+    },
+    "hidden_probe_loocv_auroc": {
+      "15": 0.5564,
+      "30": 0.688,
+      "45": 0.6617,
+      "60": 0.5263
+    }
+  }
+}
