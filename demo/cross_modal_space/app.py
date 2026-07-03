@@ -49,6 +49,16 @@ html, body, gradio-app, .gradio-container { background: var(--bg) !important; }
         border: none !important; box-shadow: none !important; }
 .gradio-container .gallery, .gradio-container .grid-wrap,
 .gradio-container .thumbnail-item { background: transparent !important; }
+/* gallery: size to exactly fit all tiles — no inner scroll, no edge shadows */
+.gradio-container .gallery, .gradio-container .grid-wrap,
+.gradio-container .grid-container, .gradio-container .thumbnails {
+        height: auto !important; max-height: none !important; min-height: 0 !important;
+        overflow: visible !important; box-shadow: none !important; }
+.gradio-container .gallery::before, .gradio-container .gallery::after,
+.gradio-container .grid-wrap::before, .gradio-container .grid-wrap::after {
+        display: none !important; content: none !important; box-shadow: none !important; }
+.gradio-container .thumbnail-item, .gradio-container .thumbnail-item img {
+        box-shadow: none !important; }
 .gradio-container details, .gradio-container .accordion { background: var(--panel) !important;
         border: 1px solid var(--line) !important; border-radius: 14px !important; }
 
@@ -205,7 +215,7 @@ def build_app() -> gr.Blocks:
                 "places each image in a meaning space built from words.</div>")
         with gr.Row(equal_height=False):
             with gr.Column(scale=3):
-                gallery = gr.Gallery(value=TILES, columns=6, height=850,
+                gallery = gr.Gallery(value=TILES, columns=6,
                                      show_label=False, allow_preview=False)
             with gr.Column(scale=2):
                 caption = gr.HTML(
