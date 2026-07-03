@@ -56,7 +56,7 @@ def main() -> None:
     if not ckpts:
         raise SystemExit(f"no step-tagged checkpoints in {args.ckpt_dir}")
     print(f"found {len(ckpts)} checkpoints: "
-          f"{[int(re.search(r'_step(\\d+)', c).group(1)) for c in ckpts]}", flush=True)
+          f"{[int(re.search(r'_step(\d+)', c).group(1)) for c in ckpts]}", flush=True)
 
     cc = torch.load(ckpts[0], map_location="cpu", weights_only=False)["config"]
     comm_L, mah_Ls = cc["community_layer"], cc["mah_layers"]
