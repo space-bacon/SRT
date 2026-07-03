@@ -183,16 +183,28 @@ def judge_answers(args, rows_path: str) -> list[dict]:
         raise SystemExit("judge creds missing: set API_KEY + MODEL_NAME (source .env)")
     print(f"judge: {model} @ {base}", flush=True)
     rows = [json.loads(l) for l in open(rows_path) if l.strip()]
+    # resume: verdicts are persisted incrementally so a crash never re-pays API
+    judged_path = rows_path.rsplit(".", 1)[0] + ".judged.jsonl"
+    done: dict = {}
+    if os.path.exists(judged_path):
+        for l in open(judged_path):
+            if l.strip():
+                jr = json.loads(l); done[jr["task_id"]] = jr
+        print(f"  resume: {len(done)} already judged", flush=True)
     out = []
     t0 = time.time()
-    for i, it in enumerate(rows, 1):
-        v = judge_one(base, key, model, it, args.judge_retries)
-        it["verdict"] = v
-        out.append(it)
-        if i % 10 == 0 or i == len(rows):
-            passed = sum(x["verdict"]["correct"] for x in out)
-            print(f"  judged {i}/{len(rows)} | running pass {passed/i:.3f} "
-                  f"({i/(time.time()-t0):.2f} it/s)", flush=True)
+    with open(judged_path, "a") as jf:
+        for i, it in enumerate(rows, 1):
+            if it.get("task_id") in done:
+                out.append(done[it["task_id"]]); continue
+            v = judge_one(base, key, model, it, args.judge_retries)
+            it["verdict"] = v
+            jf.write(json.dumps(it) + "\n"); jf.flush()
+            out.append(it)
+            if i % 10 == 0 or i == len(rows):
+                passed = sum(x["verdict"]["correct"] for x in out)
+                print(f"  judged {i}/{len(rows)} | running pass {passed/i:.3f} "
+                      f"({i/(time.time()-t0):.2f} it/s)", flush=True)
     return out
 
 
@@ -210,12 +222,17 @@ def aggregate(rows: list[dict]) -> dict:
             g[k][0] += r["verdict"]["correct"]; g[k][1] += 1
         return {str(k): {"pass_rate": c / t, "n": t} for k, (c, t) in sorted(g.items())}
 
-    # difficulty tertiles
-    diffs = sorted(r.get("difficulty") or 0.0 for r in rows)
+    # difficulty tertiles (difficulty may be str or float in the bench)
+    def as_float(x):
+        try:
+            return float(x)
+        except (TypeError, ValueError):
+            return 0.0
+    diffs = sorted(as_float(r.get("difficulty")) for r in rows)
     lo, hi = (diffs[len(diffs)//3], diffs[2*len(diffs)//3]) if diffs else (0.33, 0.66)
     dt = defaultdict(lambda: [0, 0])
     for r in rows:
-        d = r.get("difficulty") or 0.0
+        d = as_float(r.get("difficulty"))
         b = "easy" if d <= lo else ("hard" if d > hi else "medium")
         dt[b][0] += r["verdict"]["correct"]; dt[b][1] += 1
 
