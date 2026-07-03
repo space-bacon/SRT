@@ -146,33 +146,48 @@ def main() -> None:
         [text_encoded("a photo of a " + w) for w in words]), dim=-1)
     print(f"{len(words)} word anchors", flush=True)
 
-    # ---- per-image assignment + thumbnail ----
-    items = []
+    # ---- per-image embeddings + thumbnails ----
+    per_img = []
     for i, (pil, cat, dset) in enumerate(gallery):
         emb = F.normalize(image_encoded(pil), dim=0)
-        csim = emb @ cent.T
-        cprob = F.softmax(csim * 8.0, dim=0)  # temp-sharpened for display
-        ctop = cprob.topk(args.topk_comm)
-        wsim = emb @ word_emb.T
-        wtop = wsim.topk(args.topk_word)
         fn = f"img_{i:03d}.png"
         pil.convert("RGB").resize((args.thumb, args.thumb)).save(os.path.join(thumb_dir, fn))
-        items.append({
-            "file": f"thumbs/{fn}", "category": cat, "dataset": dset,
-            "top_communities": [[labels[j], round(float(cprob[j]), 3)] for j in ctop.indices.tolist()],
-            "top_words": [[words[j], round(float(wsim[j]), 3)] for j in wtop.indices.tolist()],
-        })
+        per_img.append({"emb": emb, "file": f"thumbs/{fn}", "category": cat, "dataset": dset})
         if (i + 1) % 20 == 0:
             print(f"  {i+1}/{len(gallery)}", flush=True)
 
+    # ---- aggregate per CATEGORY (the robust, paper-level result) ----
+    by_cat: dict[str, list] = defaultdict(list)
+    for r in per_img:
+        by_cat[r["category"]].append(r)
+    categories = []
+    for cat in sorted(by_cat):
+        rows = by_cat[cat]
+        emb = F.normalize(torch.stack([r["emb"] for r in rows]).mean(0), dim=0)
+        csim = emb @ cent.T
+        cprob = F.softmax(csim * 12.0, dim=0)
+        ctop = cprob.topk(args.topk_comm)
+        wsim = emb @ word_emb.T
+        wtop = wsim.topk(args.topk_word)
+        categories.append({
+            "category": cat, "dataset": rows[0]["dataset"],
+            "thumbs": [r["file"] for r in rows],
+            "top_communities": [[labels[j], round(float(cprob[j]), 3)] for j in ctop.indices.tolist()],
+            "top_words": [[words[j], round(float(wsim[j]), 3)] for j in wtop.indices.tolist()],
+        })
+
     out = {"model": MID, "ckpt_step": ck.get("step"),
            "n_communities": len(comms), "communities": labels,
-           "n_images": len(items), "images": items,
+           "n_images": len(per_img), "n_categories": len(categories),
+           "categories": categories,
            "note": "Community head trained on TEXT only (discourse SupCon on frozen "
-                   "gemma-4-31B); applied here to image tokens with zero image training."}
+                   "gemma-4-31B); applied here to image tokens with zero image training. "
+                   "Assignments are aggregated per category (mean over the category's "
+                   "images) to match the paper-level result."}
     with open(os.path.join(args.out_dir, "gallery.json"), "w") as f:
         json.dump(out, f, indent=2)
-    print(f"wrote {args.out_dir}/gallery.json + {len(items)} thumbs", flush=True)
+    print(f"wrote {args.out_dir}/gallery.json + {len(per_img)} thumbs, "
+          f"{len(categories)} categories", flush=True)
 
 
 if __name__ == "__main__":
