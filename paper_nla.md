@@ -973,6 +973,34 @@ is reproducible from
 `scripts/redteam_states.py --wave {1,2,3,4}` with per-pair records in
 `artifacts/nla/gptoss20b/redteam_states{,_wave2,_wave3,_wave4}.jsonl`.
 
+A second external contribution extends the dissociation finding to
+the **lexical grain**. Running one-word prompts through the gpt-oss-20b
+adapter (five categories — single-definition, multiple-definition,
+noun, verb, proper name — $64$K tokens total), all seven SRT signals
+separate the categories by one-way ANOVA ($F$ from $16.4$ for nll to
+$127.0$ for $\hat{r}$; every $p \approx 0$, though at this $n$
+significance is guaranteed and the effect sizes are the honest
+quantity, e.g. $\hat{r}$ spans $0.508$–$0.610$ across categories).
+The informative structure is in the *inversions*: single-definition
+words are maximal on the SRT-side signals (margin, $\hat{r}$,
+div\_norm, chain\_residual) and minimal on the uncertainty side
+(entropy, nll), while verbs are the exact mirror (highest entropy,
+nll and regime, lowest $\hat{r}$ and divergence) — if the seven
+signals were redundant proxies for token surprise, the category
+profiles would move together, and they anti-correlate instead.
+Notably, multiple-definition (lexically ambiguous) words are
+mid-pack on *every* signal including entropy: ambiguity without
+disambiguating context does not register as uncertainty, consistent
+with the wave-1 word-sense result where the "bank" state only
+diverged once context forced a reading. Two confounds keep this
+suggestive rather than established: one-word prompts entangle
+category with word frequency and tokenization length (both of which
+drive entropy/nll directly), and "single-definition words are more
+semantically divergent" has the rival reading that such words skew
+rare and technical. A frequency-matched replication, and the
+discrete companion analysis (do the five categories occupy distinct
+codebook basins at the form layers L6/L12?), are queued.
+
 ### 11.5.3 The campaign: four waves of A/B probes, with samples
 
 **A worked example first**, to fix the output format. The chirality
