@@ -183,11 +183,19 @@ def main() -> None:
         if step % args.save_every == 0 or step == args.steps:
             if loss.item() < best:
                 best = loss.item()
-            torch.save({"heads": heads.state_dict(),
-                        "config": {"community_layer": comm_L, "mah_layers": mah_Ls,
-                                   "d_backbone": d, "d_community": dc,
-                                   "backbone": MID},
-                        "step": step, "loss": loss.item()}, args.out)
+            payload = {"heads": heads.state_dict(),
+                       "config": {"community_layer": comm_L, "mah_layers": mah_Ls,
+                                  "d_backbone": d, "d_community": dc,
+                                  "backbone": MID},
+                       "step": step, "loss": loss.item()}
+            # Retain a step-tagged checkpoint at every boundary so held-out eval
+            # (scripts/eval_gemma4_readout.py) can pick the winner by community
+            # accuracy — train loss alone (noisy, grouped, not held-out) is not a
+            # trustworthy selector. args.out is also updated as a "latest" pointer.
+            tagged = args.out[:-3] + f"_step{step}.pt" if args.out.endswith(".pt") \
+                else f"{args.out}_step{step}"
+            torch.save(payload, tagged)
+            torch.save(payload, args.out)
     print(f"saved {args.out} (best loss {best:.3f})", flush=True)
 
 
