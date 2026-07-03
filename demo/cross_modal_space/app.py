@@ -103,9 +103,13 @@ a { color: var(--violet) !important; }
    Everything stacks in one vertical column, so no row can ever be forced wider
    than the screen. Galleries reflow their tiles to whatever width is available. */
 .cap-card { min-width: 0 !important; flex: 1 1 230px !important; }
-.gradio-container .grid-wrap, .gradio-container .gallery .grid-wrap,
-.gradio-container .thumbnails {
-        grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)) !important; }
+/* Gradio 6.x renders the real gallery grid as `.grid-container` with FIXED px
+   columns (e.g. `100px 100px ...`). That is what overflowed narrow screens and
+   got clipped. Force every gallery grid to reflow to the available width. */
+.gradio-container .grid-container, .gradio-container .grid-wrap,
+.gradio-container .gallery .grid-wrap, .gradio-container .thumbnails {
+        grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)) !important;
+        width: 100% !important; }
 .gradio-container .thumbnail-item { min-width: 0 !important; }
 .gradio-container .thumbnail-item img { max-width: 100% !important; height: auto !important; }
 .main-gallery { margin: 0 0 22px !important; }
