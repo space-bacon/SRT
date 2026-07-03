@@ -110,7 +110,7 @@ no model download.
 
 ## Links
 
-- **Model (read-out head):** [`RiverRider/srt-gemma4-readout`](https://huggingface.co/RiverRider/srt-gemma4-readout)
+- **Model (read-out head):** [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone)
 - **Code & paper:** https://github.com/space-bacon/SRT
 - **Base model:** [`google/gemma-4-31B-it`](https://huggingface.co/google/gemma-4-31B-it)
 
