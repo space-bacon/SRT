@@ -37,7 +37,8 @@ CSS = """
 :root { --didot: 'Didot','GFS Didot','Bodoni MT','Playfair Display',Georgia,serif;
         --bg:#131233; --panel:#1c1a47; --violet:#a48dff; --ink:#eae7fb;
         --muted:#a7a1cc; --line:#332e66; }
-html, body, gradio-app, .gradio-container { background: var(--bg) !important; }
+html, body, gradio-app, .gradio-container { background: var(--bg) !important;
+        max-width: 100% !important; overflow-x: hidden !important; }
 .gradio-container { max-width: 1180px !important; margin: 0 auto !important;
         padding: 8px 22px 48px !important; }
 .gradio-container, .gradio-container * { font-family: var(--didot) !important;
@@ -66,7 +67,7 @@ html, body, gradio-app, .gradio-container { background: var(--bg) !important; }
 .hero { text-align:center; padding: 54px 16px 10px; }
 .hero .mark { font-size: 2rem; color: var(--violet); letter-spacing: 6px; }
 .hero h1 { font-size: 4rem !important; letter-spacing: 1.5px; margin: 10px 0 2px;
-        line-height: 1.02; }
+        line-height: 1.02; overflow-wrap: break-word; word-break: break-word; }
 .hero .subtitle { font-size: 1.7rem; font-style: italic; color:#c9c3ea; margin: 6px 0 0; }
 .hero .subtitle em { color: var(--violet); font-style: italic; }
 .hero .valueprop { max-width: 680px; margin: 22px auto 0; font-size: 1.16rem;
@@ -120,7 +121,7 @@ a { color: var(--violet) !important; }
 HERO = """
 <div class="hero">
   <div class="mark">&#10022;</div>
-  <h1>Gemma-4-31B-it&nbsp;SRT-Sunstone</h1>
+  <h1>Gemma-4-31B-it SRT-Sunstone</h1>
   <div class="subtitle">A read-out that <em>reads images</em> &mdash; trained only on words</div>
   <div class="valueprop">
     A 12.3&nbsp;M side-channel head on a <b>frozen <code>gemma-4-31B</code></b>,
