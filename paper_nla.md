@@ -1101,11 +1101,12 @@ never trust an L24 readout alone.
 
 1. **Robustness auditing of late-layer consumers.** Any downstream
    component reading late-layer features — stopping criteria,
-   completion classifiers, linear probes, RLHF value heads — inherits
-   the punctuation spoof. The wave-4 matrix is a ready-made test
-   battery: if a system's behaviour changes when a bare "." is
+   completion classifiers, linear probes, RLHF value heads — *may*
+   inherit the punctuation spoof. The wave-4 matrix is a ready-made
+   test battery: if a system's behaviour changes when a bare "." is
    appended to a broken sentence, it is reading the flag, not the
-   syntax.
+   syntax. (§11.5.6 tests this prediction on a correctness probe and
+   refutes it in an instructive way.)
 2. **Layer selection for monitoring, by experiment instead of
    convention.** The same all-pairs protocol run per layer localises
    where a given distinction (content, register, completeness,
@@ -1137,6 +1138,64 @@ the codebook's resolution is nonuniform (§11.5.3); and the
 completeness flag's token-driven character has not yet been tested at
 positions away from the aggregation site, nor cross-backbone. Both
 are mechanical extensions of the released harness.
+
+### 11.5.6 Falsifying our own prediction: a correctness probe under the punctuation battery
+
+Application #1 above makes a testable prediction: a P(wrong) probe
+reading the final layer's last-token state — the exact architecture
+of a concurrently released open metacognition benchmark's adapters
+(ginigen-ai's Metacognition-Bench: frozen base, last hidden state
+$\to$ LayerNorm $\to$ MLP $\to$ P(wrong)) — should shift when a bare
+period is appended to a broken answer, because the completeness flag
+lives at that read point. We tested it.
+
+**Setup.** TriviaQA (rc.nocontext, validation), $n = 1200$ questions;
+frozen gpt-oss-20b generates short free-form answers (greedy),
+graded against answer aliases (accuracy $0.283$, so $340/860$
+correct/wrong — healthy class balance). The ginigen-style MLP probe
+is trained per layer on the last-token hidden state of
+"Q: …\nA: {answer}" with a $67/33$ split
+(`scripts/metacog_probe.py`).
+
+**Result 1 — the benchmark's core claim replicates.** Hidden states
+carry far more error signal than the model's verbal confidence:
+
+| signal | AUROC(P(wrong)) |
+|---|---|
+| L18 probe | $\mathbf{0.960}$ |
+| L24 probe (their read point) | $0.942$ |
+| mean-logprob self-confidence | $0.724$ |
+
+**Result 2 — the mid-layer prescription holds, modestly.** L18 beats
+L24 by $+0.018$ AUROC, consistent with §11.5.4's layer-role story but
+far from dramatic.
+
+**Result 3 — the spoof-transfer prediction is refuted.** On the test
+split, comparing each truncated answer against the same truncation
+with a fake period appended: $\Delta P(\text{wrong}) \approx -0.020$
+(L18) and $-0.002$ (L24) — the fake period slightly *raises* the
+probe's error estimate, and both probes correctly rate truncated
+answers as near-certainly wrong ($0.73 \to 0.95+$). The completeness
+flag demonstrably exists in the representation (§11.5.3–§11.5.4),
+but a correctness-trained probe does not load on that direction:
+its training data consisted entirely of complete answers, so
+completeness was never a discriminative feature and the learned
+direction is orthogonal to the spoofable one.
+
+The refined principle, which we adopt in place of application #1's
+original form: **the existence of a spoofable feature at a read point
+does not make a probe at that read point spoofable; vulnerability is
+determined by the probe's training distribution, not by the
+representation alone.** A probe becomes punctuation-fragile only if
+its training data lets punctuation carry label information. This is
+a sharper — and for auditors, more actionable — claim than the one
+we set out to confirm: audit the *probe's training distribution* for
+spurious feature-label correlations, and use representation-level
+findings (like the wave 1–4 basins) to decide *which* spurious
+features to look for.
+
+Artifacts: `scripts/metacog_probe.py`,
+`artifacts/nla/gptoss20b/metacog_probe.json`.
 
 ---
 
