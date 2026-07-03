@@ -1,6 +1,6 @@
 ---
 title: SRT Sunstone
-emoji: 🜲
+emoji: �
 colorFrom: indigo
 colorTo: purple
 sdk: gradio
