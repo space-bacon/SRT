@@ -99,20 +99,17 @@ a { color: var(--violet) !important; }
 .footnote { color:#8f89b6; font-size:.94rem; text-align:center; margin-top: 34px;
         line-height: 1.6; }
 
-/* --- responsive layout that does NOT depend on the device viewport ---
-   The app renders inside a Hugging Face iframe whose width is not the phone's
-   width, so `@media` viewport queries are unreliable. Instead we let the columns
-   and galleries reflow based on the actual space available (flex-wrap + auto-fill
-   grids), so nothing can be forced wider than its container at any frame width. */
-.pick-row { flex-wrap: wrap !important; row-gap: 18px !important; }
-.gallery-col { flex: 3 1 340px !important; min-width: 0 !important; }
-.read-col   { flex: 2 1 260px !important; min-width: 0 !important; }
-.cap-card   { min-width: 0 !important; flex: 1 1 230px !important; }
+/* --- single-column, fully fluid layout ---
+   Everything stacks in one vertical column, so no row can ever be forced wider
+   than the screen. Galleries reflow their tiles to whatever width is available. */
+.cap-card { min-width: 0 !important; flex: 1 1 230px !important; }
 .gradio-container .grid-wrap, .gradio-container .gallery .grid-wrap,
 .gradio-container .thumbnails {
         grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)) !important; }
 .gradio-container .thumbnail-item { min-width: 0 !important; }
 .gradio-container .thumbnail-item img { max-width: 100% !important; height: auto !important; }
+.main-gallery { margin: 0 0 22px !important; }
+.readout { margin-top: 4px; }
 
 /* small-frame typographic tightening (on top of the clamp() fluid sizes) */
 @media (max-width: 860px) {
@@ -221,16 +218,17 @@ def build_app() -> gr.Blocks:
         gr.HTML("<div class='section-title'>See it read a picture</div>"
                 "<div class='section-sub'>Pick a category &mdash; the read-out "
                 "places each image in a meaning space built from words.</div>")
-        with gr.Row(equal_height=False, elem_classes="pick-row"):
-            with gr.Column(scale=3, min_width=160, elem_classes="gallery-col"):
-                gallery = gr.Gallery(value=TILES, columns=6,
-                                     show_label=False, allow_preview=False)
-            with gr.Column(scale=2, min_width=160, elem_classes="read-col"):
-                caption = gr.HTML(
-                    "<div class='readout'><em>Select a category to read its "
-                    "interpretant.</em></div>")
-                examples = gr.Gallery(label="Images in this category", columns=5,
-                                      height=112, allow_preview=False)
+        # Single vertical column: gallery, then read-out, then example strip.
+        # No side-by-side row, so the layout cannot overflow horizontally on any
+        # screen width (this is what makes it robust on mobile).
+        gallery = gr.Gallery(value=TILES, columns=6, show_label=False,
+                             allow_preview=False, elem_classes="main-gallery")
+        caption = gr.HTML(
+            "<div class='readout'><em>Select a category above to read its "
+            "interpretant.</em></div>")
+        examples = gr.Gallery(label="Images in this category", columns=5,
+                              height=112, allow_preview=False,
+                              elem_classes="ex-gallery")
         gallery.select(describe, None, [caption, examples])
         with gr.Accordion("Why this is a semiotic read-out, not a classifier", open=True):
             gr.Markdown(WHY)
