@@ -157,17 +157,24 @@ def main() -> None:
             print(f"  {i+1}/{len(gallery)}", flush=True)
 
     # ---- aggregate per CATEGORY (the robust, paper-level result) ----
+    # Per-modality centering: raw cosine on this backbone is dominated by
+    # anisotropy (unrelated vectors already cos~0.2), so we subtract each space's
+    # pool mean before comparing (the validated centered-cosine frame).
+    img_mean = torch.stack([r["emb"] for r in per_img]).mean(0)
+    cent_c = F.normalize(cent - cent.mean(0, keepdim=True), dim=-1)
+    word_c = F.normalize(word_emb - word_emb.mean(0, keepdim=True), dim=-1)
     by_cat: dict[str, list] = defaultdict(list)
     for r in per_img:
         by_cat[r["category"]].append(r)
     categories = []
     for cat in sorted(by_cat):
         rows = by_cat[cat]
-        emb = F.normalize(torch.stack([r["emb"] for r in rows]).mean(0), dim=0)
-        csim = emb @ cent.T
+        emb = torch.stack([r["emb"] for r in rows]).mean(0)
+        emb_c = F.normalize(emb - img_mean, dim=0)
+        csim = emb_c @ cent_c.T
         cprob = F.softmax(csim * 12.0, dim=0)
         ctop = cprob.topk(args.topk_comm)
-        wsim = emb @ word_emb.T
+        wsim = emb_c @ word_c.T
         wtop = wsim.topk(args.topk_word)
         categories.append({
             "category": cat, "dataset": rows[0]["dataset"],
