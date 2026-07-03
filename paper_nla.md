@@ -1036,6 +1036,49 @@ distinction that is semantic (one dictionary sense vs many) rather
 than syntactic. Artifacts:
 `artifacts/nla/gptoss20b/word_category_study.json`.
 
+The natural next question — does the word effect merely reflect that
+categories *tokenize* differently? — has its own study
+(`scripts/token_structure_study.py`). A single forward pass over a
+$200$-passage corpus reads all seven signals at every one of
+$21{,}343$ token positions and bins each by the *structural* type of
+its token (word-initial, subword continuation / morpheme,
+punctuation, digit, whitespace). Token structure separates the
+signals *even more strongly* than word semantics did ($\hat{r}$
+$F = 929$ vs the word study's $48$), and the means are mechanistically
+legible: **word-initial** tokens are decision points (lowest $\hat{r}$
+$0.51$, highest entropy and regime — the model is maximally uncertain
+about the coming content word); **subword-continuation / morpheme**
+tokens are committed completions (highest $\hat{r}$ $1.23$, highest
+divergence and chain — mid-word the next piece is nearly forced);
+**punctuation** tokens are settled resting states (lowest nll $2.77$,
+lowest divergence, lowest chain — the aggregation-site behaviour of
+§11.5.4 seen from the signal side). So a large share of the
+raw signal variance is indeed token-structural, not semantic — a real
+caveat for any word-level reading.
+
+But the discrete basin analysis dissolves the confound by *layer*.
+Comparing MI(category; code) from the word study against
+MI(token-type; code) here:
+
+| layer | word category | token structure |
+|---|---|---|
+| L6 (early) | $0.43$ | $\mathbf{0.57}$ |
+| L12 (mid) | $\mathbf{0.89}$ | $0.29$ |
+| L18 | $0.74$ | $0.57$ |
+| L24 (late) | $0.22$ | $0.35$ |
+
+The crossover is the result: **early layers organise by token
+structure, mid layers by word meaning.** At L6 token type is more
+basin-predictive than word category ($0.57 > 0.43$); by L12 that
+reverses decisively ($0.89 > 0.29$). So the word-category basin
+finding is *not* a tokenization artefact — at the semantic layer,
+word identity carries basin information that pure token structure does
+not — and the two studies together recover a clean
+morphology-early / semantics-mid depth-of-abstraction gradient,
+consistent with the §11.5.4 layer-role story derived independently
+from the red-team waves. Artifacts:
+`artifacts/nla/gptoss20b/token_structure_study.json`.
+
 ### 11.5.3 The campaign: four waves of A/B probes, with samples
 
 **A worked example first**, to fix the output format. The chirality
