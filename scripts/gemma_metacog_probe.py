@@ -86,12 +86,15 @@ def main() -> None:
              "aliases": [a.lower() for a in ds[i]["answer"]["normalized_aliases"]]}
             for i in idx]
 
-    prompts = [f"Answer the trivia question with just the answer.\nQ: {r['q']}\nA:"
-               for r in rows]
+    prompts = [tok.apply_chat_template(
+        [{"role": "user",
+          "content": f"Answer this trivia question with only the answer, "
+                     f"no explanation.\nQuestion: {r['q']}"}],
+        add_generation_prompt=True, tokenize=False) for r in rows]
     answers, logps = [], []
     for s in range(0, len(prompts), args.gen_bs):
         enc = tok(prompts[s:s + args.gen_bs], return_tensors="pt", padding=True,
-                  truncation=True, max_length=128).to("cuda")
+                  truncation=True, max_length=256, add_special_tokens=False).to("cuda")
         with torch.no_grad():
             o = model.generate(**enc, max_new_tokens=16, do_sample=False,
                                pad_token_id=tok.pad_token_id,
@@ -114,12 +117,15 @@ def main() -> None:
     acc = sum(correct) / len(correct)
     print(f"accuracy {acc:.3f} ({sum(correct)}/{len(correct)})", flush=True)
 
-    # hidden states at "Q..\nA: {ans}" last token, all swept layers
-    texts = [f"Q: {r['q']}\nA: {a or 'unknown'}" for r, a in zip(rows, answers)]
+    # hidden states at the assistant answer's last token, all swept layers
+    texts = [tok.apply_chat_template(
+        [{"role": "user", "content": f"Question: {r['q']}"},
+         {"role": "assistant", "content": (a or "unknown")}],
+        tokenize=False) for r, a in zip(rows, answers)]
     H = {li: torch.empty(len(texts), d) for li in layers}
     for s in range(0, len(texts), args.enc_bs):
         enc = tok(texts[s:s + args.enc_bs], return_tensors="pt", padding=True,
-                  truncation=True, max_length=160).to("cuda")
+                  truncation=True, max_length=256, add_special_tokens=False).to("cuda")
         with torch.no_grad():
             out = model(**enc, output_hidden_states=True, use_cache=False)
         for li in layers:
