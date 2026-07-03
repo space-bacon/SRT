@@ -30,19 +30,16 @@ import torch.nn.functional as F
 
 MID = "google/gemma-4-31B-it"
 
-# imagenette label index -> clean concept word
-IMAGENETTE_WORDS = {
-    0: "fish", 1: "dog", 2: "cassette", 3: "chainsaw", 4: "church",
-    5: "horn", 6: "truck", 7: "pump", 8: "ball", 9: "parachute",
-}
+# label-name -> cleaner concept word (identity for the rest)
+WORD_FIX = {"automobile": "car"}
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--out", default="artifacts/nla/gemma4/cross_modal_semiosis.json")
-    p.add_argument("--dataset", default="frgfm/imagenette")
-    p.add_argument("--config", default="320px")
-    p.add_argument("--split", default="validation")
+    p.add_argument("--dataset", default="uoft-cs/cifar10")
+    p.add_argument("--config", default="")
+    p.add_argument("--split", default="test")
     p.add_argument("--per-class", type=int, default=10)
     return p.parse_args()
 
@@ -63,23 +60,23 @@ def main() -> None:
     img_tok = model.config.image_token_id
     tok = proc.tokenizer
 
-    ds = load_dataset(args.dataset, args.config, split=args.split)
-    label_names = ds.features["label"].names if "label" in ds.features else None
-    print(f"{len(ds)} images | labels: {label_names[:4] if label_names else '?'}", flush=True)
+    ds = load_dataset(args.dataset, args.config or None, split=args.split)
+    label_names = ds.features["label"].names
+    img_key = "image" if "image" in ds.features else "img"
+    concept_word = {i: WORD_FIX.get(n, n) for i, n in enumerate(label_names)}
+    print(f"{len(ds)} images | {len(label_names)} labels: {label_names}", flush=True)
 
     # gather up to per-class images per label
     by_label: dict[int, list] = {}
     for row in ds:
         lb = int(row["label"])
-        if lb not in IMAGENETTE_WORDS:
-            continue
         by_label.setdefault(lb, [])
         if len(by_label[lb]) < args.per_class:
-            by_label[lb].append(row["image"])
-        if all(len(v) >= args.per_class for v in by_label.values()) and len(by_label) == len(IMAGENETTE_WORDS):
+            by_label[lb].append(row[img_key])
+        if all(len(by_label.get(i, [])) >= args.per_class for i in range(len(label_names))):
             break
     concepts = sorted(by_label)
-    words = [IMAGENETTE_WORDS[c] for c in concepts]
+    words = [concept_word[c] for c in concepts]
     print("concepts:", words, flush=True)
 
     @torch.no_grad()
@@ -100,12 +97,12 @@ def main() -> None:
         return torch.stack([h[0, -1].float() for h in out.hidden_states])
 
     # collect reps
-    word_R = {c: word_reps(IMAGENETTE_WORDS[c]) for c in concepts}  # concept -> (L+1,d)
+    word_R = {c: word_reps(concept_word[c]) for c in concepts}  # concept -> (L+1,d)
     img_R: list[tuple[int, torch.Tensor]] = []
     for c in concepts:
         for im in by_label[c]:
             img_R.append((c, image_reps(im)))
-        print(f"  encoded images for '{IMAGENETTE_WORDS[c]}'", flush=True)
+        print(f"  encoded images for '{concept_word[c]}'", flush=True)
 
     n_layers = L + 1
     # per-modality centering means per layer
