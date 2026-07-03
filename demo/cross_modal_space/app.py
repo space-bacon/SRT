@@ -114,7 +114,9 @@ a { color: var(--violet) !important; }
   .readout { padding: 18px 18px; }
   /* fewer, larger gallery tiles on phones */
   .gradio-container .grid-wrap, .gradio-container .gallery .grid-wrap,
-  .gradio-container .thumbnails { grid-template-columns: repeat(3, 1fr) !important; }
+  .gradio-container .thumbnails { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .gradio-container .thumbnail-item { min-width: 0 !important; }
+  .gradio-container .thumbnail-item img { max-width: 100% !important; height: auto !important; }
   /* stack the gallery + readout columns so they don't force horizontal overflow */
   .pick-row { flex-wrap: wrap !important; }
   .gallery-col, .read-col { min-width: 100% !important; flex: 1 1 100% !important; }
