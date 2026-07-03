@@ -92,7 +92,7 @@ a { color: var(--violet) !important; }
 HERO = """
 <div class="hero">
   <div class="mark">&#10022;</div>
-  <h1>SRT&nbsp;Sunstone</h1>
+  <h1>Gemma-4-31B-it&nbsp;SRT-Sunstone</h1>
   <div class="subtitle">A read-out that <em>reads images</em> &mdash; trained only on words</div>
   <div class="valueprop">
     A 12.3&nbsp;M side-channel head on a <b>frozen <code>gemma-4-31B</code></b>,
@@ -178,7 +178,7 @@ def describe(evt: gr.SelectData):
 
 
 def build_app() -> gr.Blocks:
-    with gr.Blocks(title="SRT Sunstone") as demo:
+    with gr.Blocks(title="Gemma-4-31B-it SRT-Sunstone") as demo:
         gr.HTML(f"<style>{CSS}</style>")
         gr.HTML(HERO)
         gr.HTML(CAPABILITIES)

@@ -14,7 +14,7 @@ tags:
 pipeline_tag: feature-extraction
 ---
 
-# SRT Cross-Modal Read-Out — gemma-4-31B
+# Gemma-4-31B-it SRT-Sunstone — cross-modal read-out
 
 A **12.3 M-parameter side-channel read-out** for a **frozen `google/gemma-4-31B-it`**.
 It reads the model's residual stream and produces a discourse-community
@@ -87,6 +87,9 @@ code = head(hs[cc["community_layer"]].float(), attention_mask=enc.attention_mask
 
 Code, training/eval/selection scripts, and the cross-modal demo:
 https://github.com/space-bacon/SRT
+
+**Live demo:** [🔮 SRT Sunstone](https://huggingface.co/spaces/RiverRider/srt-sunstone)
+— the text-trained head reading images into words and discourse.
 
 ## Limitations
 

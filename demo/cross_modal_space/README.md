@@ -1,5 +1,5 @@
 ---
-title: SRT Sunstone
+title: Gemma-4-31B-it SRT-Sunstone
 emoji: 🔮
 colorFrom: indigo
 colorTo: purple
@@ -19,7 +19,7 @@ tags:
 short_description: A read-out that reads images — trained only on words
 ---
 
-# 🜲 SRT Sunstone
+# 🜲 Gemma-4-31B-it SRT-Sunstone
 
 ### A read-out that reads images — trained only on words
 
@@ -110,6 +110,7 @@ no model download.
 
 ## Links
 
+- **Model (read-out head):** [`RiverRider/srt-gemma4-readout`](https://huggingface.co/RiverRider/srt-gemma4-readout)
 - **Code & paper:** https://github.com/space-bacon/SRT
 - **Base model:** [`google/gemma-4-31B-it`](https://huggingface.co/google/gemma-4-31B-it)
 
