@@ -47,6 +47,9 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--per-comm", type=int, default=4)
     p.add_argument("--max-seq-len", type=int, default=128)
     p.add_argument("--lr", type=float, default=3e-4)
+    p.add_argument("--chain-weight", type=float, default=0.1)
+    p.add_argument("--div-norm-weight", type=float, default=0.1)
+    p.add_argument("--div-target-norm", type=float, default=1.0)
     p.add_argument("--max-passages", type=int, default=200000)
     p.add_argument("--log-every", type=int, default=50)
     p.add_argument("--save-every", type=int, default=500)
@@ -136,9 +139,13 @@ def main() -> None:
                     output_hidden_states=True, use_cache=False).hidden_states
         cmask = causal_mask(ids.shape[1])
         comm_out = community(hs[comm_L].float(), attention_mask=attn)
+        # Detach the community vector before conditioning MAH: the community head
+        # is the prize (its transfer to image signs is the goal), so MAH/chain
+        # gradients must not flow back into it and corrupt it.
+        comm_vec = comm_out.vector.detach()
         divs = []
         for i, Li in enumerate(mah_Ls):
-            mo = mah_heads[i](hs[Li].float(), community_vec=comm_out.vector,
+            mo = mah_heads[i](hs[Li].float(), community_vec=comm_vec,
                               causal_mask=cmask)
             divs.append(mo.divergence)
 
@@ -149,9 +156,15 @@ def main() -> None:
                                            temperature=W.divergence_supcon_temperature)
         l_ent = (community_entropy_loss(comm_out.weights)
                  if comm_out.weights is not None else torch.zeros((), device="cuda"))
+        # Target-norm penalty caps divergence magnitude so the self-supervised
+        # chain MSE cannot run away as dsup makes divergences more discriminative.
+        mnorm = attn.unsqueeze(-1).float()
+        dnorms = [((dv * mnorm).pow(2).sum(-1).sqrt().sum() / mnorm.sum()) for dv in divs]
+        l_dnorm = sum((dn - args.div_target_norm).pow(2) for dn in dnorms) / len(dnorms)
         loss = (W.community_supcon_weight * l_sup
-                + W.chain_weight * l_chain
+                + args.chain_weight * l_chain
                 + W.divergence_supcon_weight * l_dsup
+                + args.div_norm_weight * l_dnorm
                 + W.community_entropy_weight * l_ent)
 
         opt.zero_grad(); loss.backward()
@@ -163,6 +176,7 @@ def main() -> None:
             print(f"step {step:5d} loss {loss.item():.3f} | supcon {l_sup.item():.3f} "
                   f"(pos {diag['pos_pairs']}, cls {diag['unique_classes']}) | "
                   f"chain {l_chain.item():.4f} | dsup {l_dsup.item():.3f} | "
+                  f"dnorm {l_dnorm.item():.3f} | "
                   f"{rate:.2f} it/s", flush=True)
         if step % args.save_every == 0 or step == args.steps:
             if loss.item() < best:
