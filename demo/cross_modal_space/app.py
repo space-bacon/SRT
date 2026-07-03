@@ -115,6 +115,9 @@ a { color: var(--violet) !important; }
   /* fewer, larger gallery tiles on phones */
   .gradio-container .grid-wrap, .gradio-container .gallery .grid-wrap,
   .gradio-container .thumbnails { grid-template-columns: repeat(3, 1fr) !important; }
+  /* stack the gallery + readout columns so they don't force horizontal overflow */
+  .pick-row { flex-wrap: wrap !important; }
+  .gallery-col, .read-col { min-width: 100% !important; flex: 1 1 100% !important; }
 }
 """
 
@@ -214,11 +217,11 @@ def build_app() -> gr.Blocks:
         gr.HTML("<div class='section-title'>See it read a picture</div>"
                 "<div class='section-sub'>Pick a category &mdash; the read-out "
                 "places each image in a meaning space built from words.</div>")
-        with gr.Row(equal_height=False):
-            with gr.Column(scale=3):
+        with gr.Row(equal_height=False, elem_classes="pick-row"):
+            with gr.Column(scale=3, min_width=160, elem_classes="gallery-col"):
                 gallery = gr.Gallery(value=TILES, columns=6,
                                      show_label=False, allow_preview=False)
-            with gr.Column(scale=2):
+            with gr.Column(scale=2, min_width=160, elem_classes="read-col"):
                 caption = gr.HTML(
                     "<div class='readout'><em>Select a category to read its "
                     "interpretant.</em></div>")
