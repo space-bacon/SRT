@@ -1001,6 +1001,41 @@ rare and technical. A frequency-matched replication, and the
 discrete companion analysis (do the five categories occupy distinct
 codebook basins at the form layers L6/L12?), are queued.
 
+We ran both controls on our own balanced list ($400$ words, five
+categories $\times\,80$, human-tagged by frequency tier;
+`data/word_categories.json`, `scripts/word_category_study.py`,
+$12{,}800$ signal tokens). The dissociation **replicates and
+strengthens under the frequency control**: all seven signals separate
+the categories in the full set ($F$ from $4.9$ (nll) to $48.0$
+($\hat{r}$), all $p < 10^{-3}$), and — the point — *every one
+survives* the common-tier-only ANOVA ($n = 9856$), with several
+$F$-statistics *increasing* (chain $15.8 \to 24.7$, div\_norm
+$9.8 \to 16.0$, entropy $9.7 \to 14.8$). Frequency was masking the
+effect, not manufacturing it. The category-mean inversion reproduces
+in direction: verbs sit lowest on the SRT-side signals ($\hat{r}$,
+div\_norm, chain, margin) and highest on the uncertainty side
+(entropy, nll, regime), while definitional and proper-name words are
+the mirror. The one departure from the original is our
+multiple-definition column, which is *lowest* on entropy rather than
+mid-pack — an artefact of our polyseme list skewing high-frequency
+(bank, spring, match), which lowers next-token entropy directly, and
+a reminder that the lexical-ambiguity reading needs a
+frequency-balanced polyseme set to isolate.
+
+The discrete companion analysis then shows something the
+continuous-signal study could not: **word category is a basin-level
+property, and maximally so at the mid layers.** Mutual information
+between category and VQ code peaks at L12 ($0.89$ bits, $27$ codes)
+and L18 ($0.74$), collapsing at the surface layer L24 ($0.22$ bits,
+only $4$ distinct codes — consistent with L24's coarse
+completeness/closure role from §11.5.4). Proper names occupy a
+near-pure basin (code `#413`, $71/80$ names), verbs a distinct one
+(`#328`), while single-definition and generic-noun words blur into a
+shared nominal basin (`#3881`) — exactly the collapse expected from a
+distinction that is semantic (one dictionary sense vs many) rather
+than syntactic. Artifacts:
+`artifacts/nla/gptoss20b/word_category_study.json`.
+
 ### 11.5.3 The campaign: four waves of A/B probes, with samples
 
 **A worked example first**, to fix the output format. The chirality
