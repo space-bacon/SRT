@@ -205,7 +205,7 @@ def build_app() -> gr.Blocks:
                 "places each image in a meaning space built from words.</div>")
         with gr.Row(equal_height=False):
             with gr.Column(scale=3):
-                gallery = gr.Gallery(value=TILES, columns=6, height=460,
+                gallery = gr.Gallery(value=TILES, columns=6, height=850,
                                      show_label=False, allow_preview=False)
             with gr.Column(scale=2):
                 caption = gr.HTML(
