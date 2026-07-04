@@ -1,0 +1,171 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "ckpt_step": 2250,
+  "shape_words": [
+    "heart",
+    "star",
+    "circle",
+    "square",
+    "triangle",
+    "cross",
+    "horse",
+    "cat",
+    "dog",
+    "bird",
+    "fish",
+    "face",
+    "tree",
+    "flower"
+  ],
+  "surface_words": [
+    "noise",
+    "static",
+    "texture",
+    "pattern",
+    "dots",
+    "mosaic",
+    "confetti",
+    "colorful",
+    "abstract",
+    "wallpaper",
+    "camouflage",
+    "carpet",
+    "tile",
+    "sand",
+    "gravel",
+    "speckles",
+    "television",
+    "sprinkles",
+    "pixels",
+    "grain"
+  ],
+  "results": {
+    "stereogram.png": {
+      "top_words": [
+        [
+          "speckles",
+          0.576
+        ],
+        [
+          "star",
+          0.47
+        ],
+        [
+          "television",
+          0.468
+        ],
+        [
+          "mosaic",
+          0.434
+        ],
+        [
+          "abstract",
+          0.428
+        ],
+        [
+          "circle",
+          0.411
+        ]
+      ],
+      "top_communities": [
+        [
+          "screenwriting",
+          0.524
+        ],
+        [
+          "DebateReligion",
+          0.138
+        ],
+        [
+          "biology",
+          0.085
+        ]
+      ]
+    },
+    "disparity.png": {
+      "top_words": [
+        [
+          "television",
+          0.731
+        ],
+        [
+          "circle",
+          0.516
+        ],
+        [
+          "star",
+          0.484
+        ],
+        [
+          "texture",
+          0.438
+        ],
+        [
+          "square",
+          0.43
+        ],
+        [
+          "pixels",
+          0.421
+        ]
+      ],
+      "top_communities": [
+        [
+          "screenwriting",
+          0.296
+        ],
+        [
+          "media_criticism",
+          0.245
+        ],
+        [
+          "conspiracy",
+          0.182
+        ]
+      ]
+    },
+    "control.png": {
+      "top_words": [
+        [
+          "television",
+          0.728
+        ],
+        [
+          "circle",
+          0.454
+        ],
+        [
+          "square",
+          0.385
+        ],
+        [
+          "face",
+          0.383
+        ],
+        [
+          "pixels",
+          0.362
+        ],
+        [
+          "cross",
+          0.358
+        ]
+      ],
+      "top_communities": [
+        [
+          "changemyview",
+          0.269
+        ],
+        [
+          "media_criticism",
+          0.205
+        ],
+        [
+          "conspiracy",
+          0.142
+        ]
+      ]
+    }
+  },
+  "note": "Text-trained SRT community read-out applied to image tokens. Centred-cosine frame with a CIFAR image-pool mean."
+}

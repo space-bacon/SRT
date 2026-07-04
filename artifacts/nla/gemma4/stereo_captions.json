@@ -1,0 +1,9 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "prompt": "What is in this picture? Answer in one short sentence.",
+  "captions": {
+    "stereogram.png": "This picture consists of multicolored static or random noise.",
+    "disparity.png": "This picture shows a white heart on a black background.",
+    "control.png": "This picture shows a white heart on a black background."
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "ckpt_step": 2250,
+  "shape_words": [
+    "heart",
+    "star",
+    "circle",
+    "square",
+    "triangle",
+    "cross",
+    "horse",
+    "cat",
+    "dog",
+    "bird",
+    "fish",
+    "face",
+    "tree",
+    "flower"
+  ],
+  "surface_words": [
+    "noise",
+    "static",
+    "texture",
+    "pattern",
+    "dots",
+    "mosaic",
+    "confetti",
+    "colorful",
+    "abstract",
+    "wallpaper",
+    "camouflage",
+    "carpet",
+    "tile",
+    "sand",
+    "gravel",
+    "speckles",
+    "television",
+    "sprinkles",
+    "pixels",
+    "grain"
+  ],
+  "results": {
+    "control.png": {
+      "top_words": [
+        [
+          "television",
+          0.729
+        ],
+        [
+          "circle",
+          0.456
+        ],
+        [
+          "square",
+          0.387
+        ],
+        [
+          "face",
+          0.382
+        ],
+        [
+          "pixels",
+          0.364
+        ],
+        [
+          "cross",
+          0.359
+        ]
+      ],
+      "top_communities": [
+        [
+          "changemyview",
+          0.265
+        ],
+        [
+          "media_criticism",
+          0.209
+        ],
+        [
+          "conspiracy",
+          0.145
+        ]
+      ]
+    },
+    "stereogram.png": {
+      "top_words": [
+        [
+          "speckles",
+          0.572
+        ],
+        [
+          "television",
+          0.475
+        ],
+        [
+          "star",
+          0.473
+        ],
+        [
+          "mosaic",
+          0.436
+        ],
+        [
+          "abstract",
+          0.428
+        ],
+        [
+          "circle",
+          0.415
+        ]
+      ],
+      "top_communities": [
+        [
+          "screenwriting",
+          0.532
+        ],
+        [
+          "DebateReligion",
+          0.137
+        ],
+        [
+          "biology",
+          0.079
+        ]
+      ]
+    }
+  },
+  "note": "Text-trained SRT community read-out applied to image tokens. Centred-cosine frame with a CIFAR image-pool mean."
+}

@@ -1431,6 +1431,86 @@ LLM-judge over free-form reasoning answers and is left as scoped
 future work. Artifact:
 `artifacts/nla/gemma4/metacog_layer_sweep.json`.
 
+## 11.6.2 A capability the substrate lacks, and the front-end that restores it: autostereograms
+
+A read-out is only as honest as the interpretant the substrate actually
+forms. The strongest test of that honesty is a sign the substrate
+*cannot* interpret, where a generative head is free to confabulate but a
+faithful read-out should report the absence. Autostereograms are exactly
+such a sign. The hidden figure of a single-image (Magic-Eye)
+autostereogram lives entirely in the horizontal *disparity* between
+repeated pattern columns: there is, by construction, no two-dimensional
+luminance or colour cue to the shape. Recovering it requires binocular
+stereopsis, matching a column to its shifted copy, which a flat-raster
+vision encoder never performs. This makes it a clean instance of the
+"things a model cannot do that a human does easily" question.
+
+![**Figure 11.6.2. What a model sees versus what it means.** Left: a colour random-dot autostereogram whose only hidden content is a heart, encoded purely in horizontal disparity. Fed to frozen gemma-4-31B, the generative head captions it "multicolored static or random noise" and the text-trained SRT read-out lands on texture words (speckles, mosaic, abstract). Both are correct: the figure is not in the flat pixels. Right: the same image after a simulated binocular front-end (a horizontal vergence shift plus local correspondence matching, `scripts/stereo_decode.py`) recovers the depth map. The generative head now captions it "a white heart on a black background", verbatim identical to the real silhouette, and the read-out flips to coherent-shape words that match the true-silhouette profile.](artifacts/nla/gemma4/stereo/stereo_figure.png)
+
+We generated a random-dot autostereogram that hides a heart, using the
+Thimbleby-Inglis same-pixel-linking algorithm with a vivid colour
+palette (`scripts/make_stereogram.py`), together with a plain visible
+control: the same heart drawn as a white silhouette on black. We then
+asked the frozen backbone what it saw, both through its generative head
+(greedy caption) and through the §11.6.1 text-trained community read-out
+at step $2250$.
+
+On the raw stereogram the substrate reports texture and nothing more.
+The generative caption is "multicolored static or random noise". The
+read-out's nearest concept words, in the centred frame, are `speckles`
+($0.576$), `star`, `television`, `mosaic` ($0.434$) and `abstract`
+($0.428$): surface descriptors, with no shape among them. This is the
+faithful outcome. A flat-raster encoder has no mechanism to solve the
+stereo-correspondence problem, so there is no interpretant for the heart
+to complete, and the read-out declines to invent one. It is worth noting
+that this is *more* honest than a generative model confidently narrating
+a figure it cannot actually resolve, which is the failure mode the
+public challenge highlighted.
+
+The missing capability is narrow and well-understood, so we supplied it.
+Simulating what two eyes do, we slide the image against a horizontally
+shifted copy of itself and, for each pixel, pick the vergence shift in a
+$[45, 80]$-pixel range that minimises a local colour mismatch over a
+$17\times5$ window (`scripts/stereo_decode.py`). The recovered per-pixel
+shift is the depth: the background separation of roughly $70$ pixels and
+the raised-figure separation of roughly $57$ pixels part cleanly, and
+the heart emerges from what was pure noise. Feeding that recovered image
+back through the same frozen backbone flips both read-outs. The
+generative caption becomes "a white heart on a black background", the
+exact string returned for the real control silhouette. The community
+read-out's nearest words become `television` ($0.731$), `circle`
+($0.516$), `star`, `texture`, `square` and `pixels`, whose top cosines
+are within noise of the true silhouette's (`television` $0.728$,
+`circle` $0.454$), and the texture words that dominated the raw
+stereogram vanish entirely.
+
+| stage | generative caption | read-out top words |
+|---|---|---|
+| raw autostereogram | "multicolored static or random noise" | speckles, star, television, mosaic, abstract |
+| after simulated fusion | "a white heart on a black background" | television, circle, star, texture, square |
+| true visible control | "a white heart on a black background" | television, circle, square, face, cross |
+
+The reading is continuous with §11.6.1. Sign interpretation in this
+substrate is modality-general, but it is bounded by what the substrate
+can physically encode. When the encoding is present, whether the sign
+arrived as a word, a photograph, or a decoded depth map, the same
+interpretant machinery names the referent, and it names it identically
+for the recovered figure and the real one. When the encoding is absent,
+the read-out reports the absence rather than confabulating a figure.
+The autostereogram is therefore not a counterexample to the transfer
+claim but a boundary condition on it: supply the disparity the eyes
+would supply, and the boundary moves. Two honest caveats. This is a
+single shape and a single seed. And the community read-out is a coarse
+$64$-dimensional discourse code, so on a synthetic white-on-black
+silhouette it lands on generic shape words rather than the literal token
+"heart"; it is the *generative* head that names the figure literally,
+while the read-out's contribution is the faithful texture-versus-shape
+flip. Artifacts: `scripts/make_stereogram.py`,
+`scripts/stereo_decode.py`, `scripts/stereogram_readout.py`,
+`scripts/gemma_caption.py`, `scripts/make_stereo_figure.py`,
+`artifacts/nla/gemma4/{stereogram_readout,stereo_decode_readout,stereo_captions}.json`,
+`artifacts/nla/gemma4/stereo/`.
+
 ---
 
 ## 12. NLA as Stage 4 of the SRT program
