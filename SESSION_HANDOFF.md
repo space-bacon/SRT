@@ -30,7 +30,9 @@ active jobs — all data is safe on HF/git/local, spin down at will.
 
 - Uncommitted: `demo/cross_modal_space/promo/sunstone_mobile.png`
   (untracked screenshot; commit or discard).
-- Dependabot: 5 high on SRT, 8 (5 high / 3 moderate) on SRT-Sunstone.
+- Dependabot: resolved 2026-07-08 — gradio bumped to 6.19.0
+  (CVE-2026-48545); transformers CVE-2026-4372 dismissed tolerable-risk
+  (5.3.0 fix breaks KV-cached generation; rationale at each pin).
 - MTEB(eng, v2) 41-task run for `v22c_a050`: launched 2026-07-03 on a
   since-retired box; verify whether results were pulled, relaunch if not.
 - ginigen Metacognition leaderboard: 4 backbones queued, still unscored.

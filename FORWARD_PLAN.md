@@ -40,8 +40,9 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 > - Queued GPU experiments: multi-position spoof test (completeness flag
 >   vs aggregation site); Qwen2.5-7B replication of the
 >   L24-surface/L18-semantic split.
-> - Dependabot: 5 high-severity alerts on `space-bacon/SRT` (8 on the
->   SRT-Sunstone mirror).
+> - Dependabot: RESOLVED 2026-07-08 (gradio bumped to 6.19.0; transformers
+>   CVE-2026-4372 dismissed as tolerable risk — 5.3.0 fix breaks KV-cached
+>   generation; rationale at each pin, commit f896edab).
 > - SRT-Sunstone repo curation: decide whether to trim it into a
 >   Sunstone-focused public repo (README, scope) or keep as mirror.
 

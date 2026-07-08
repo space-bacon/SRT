@@ -66,11 +66,14 @@ dramatically or finds its boundary — both publishable. Same geometry-only
 method, no training, one box-day. Audio via the Gemma4Unified omni variant is
 the follow-on that makes "modality-agnostic semiotics" literal.
 
-## 9. Fix the Dependabot debt (5 high on SRT, 8 on SRT-Sunstone)
+## 9. Fix the Dependabot debt — DONE 2026-07-08
 
-Unsexy, but press and researchers are about to be invited to these repos; a
-security banner undercuts credibility. Likely an hour of pinned-requirements
-bumps given the starlette/jinja2 precedent.
+Gradio bumped 6.7.0 → 6.19.0 (CVE-2026-48545 cookie injection, fix validated
+on the live Sunstone Space). Transformers CVE-2026-4372 cannot be fixed by
+upgrade (patched only in 5.3.0, and 5.x verifiably breaks the adapter's
+KV-cached generation); dismissed as tolerable risk on both repos with the
+mitigation documented at every pin (fixed first-party model IDs only, no HF
+Trainer). Commit `f896edab`.
 
 ## 10. Run the two queued mechanistic experiments on the next box
 
