@@ -55,6 +55,9 @@ def parse_args() -> argparse.Namespace:
                         "instead of self-sampling. Required for chat-tuned "
                         "backbones whose bare-BOS samples degenerate into "
                         "repetition loops (observed on gemma-4-31B-it).")
+    p.add_argument("--min-chars", type=int, default=40,
+                   help="skip corpus rows shorter than this (chars). Lower to "
+                        "~15 for caption-style pools.")
     p.add_argument("--temperature", type=float, default=1.0)
     p.add_argument("--top-p", type=float, default=1.0)
     p.add_argument("--seed", type=int, default=0)
@@ -126,7 +129,7 @@ def main() -> None:
                 if not line:
                     continue
                 text = json.loads(line).get("text", "").strip()
-                if len(text) >= 40:  # skip trivially short rows
+                if len(text) >= args.min_chars:
                     corpus_rows.append(text)
                 if len(corpus_rows) >= args.num_sequences:
                     break
