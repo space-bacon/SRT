@@ -1,3 +1,39 @@
+# SRT — Session Handoff (2026-07-08, night)
+
+All work committed and pushed; SRT and the SRT-Sunstone mirror in sync.
+Box ssh2:24453 is SAFE TO DESTROY: no jobs, all data on HF/git/local
+(compact L47 retrieval indexes + AV ckpts on HF; raw target .pt files
+regenerable from `data/{corpus_targets,caption_pool}.jsonl` in ~8 min).
+
+## Tonight's results (gemma-4-31B-it, L47)
+
+1. **Greedy-gap campaign complete** (`paper_nla.md` §11.7): anchors
+   replay .994 / NN .695 / floor .494; CE verbalizer mode-collapses at
+   the floor under argmax; draft-conditioning REFUTED via 4-way CE
+   decomposition (NN draft adds 0.03 nats); K-curve +0.017/doubling
+   patterns with gpt-oss. Hypothesis: base models verbalize,
+   instruction-tuned hosts do not. Cheap test: gemma-4 base checkpoint.
+2. **Open-vocab caption retrieval validated** (§11.6.3): 5/5 CIFAR
+   images retrieve on-topic COCO captions at rank 1 from a 10k pool,
+   zero training. Boundary: synthetic graphics rank low (heart caption
+   352/10088).
+3. **Sunstone demo v2 LIVE**: third read-out panel "The caption it
+   retrieves" (per-category, up to 0.778). Space RUNNING.
+4. Backbone gotchas banked: gemma-4 needs corpus targets (bare-BOS
+   degenerates), BOS-prepended re-encodes, Gemma4ForConditionalGeneration
+   loader. Units rule: train_nla_act val logs are COSINE, anchors are fve.
+
+## Open items
+
+- gemma-4 **base** checkpoint run of the same pipeline (tests the
+  tuned-vs-base hypothesis; highest-value next GPU job).
+- Vision boundary levers: natural-photo image-mean, Procrustes
+  image→text projection.
+- Carry-overs: WIRED pitch send; MTEB engv2 status; ginigen leaderboard;
+  arXiv posting (leverage.md 1).
+
+---
+
 # SRT — Session Handoff (2026-07-08)
 
 All work committed and pushed; `space-bacon/SRT` and the

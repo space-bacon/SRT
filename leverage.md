@@ -20,18 +20,16 @@ stereogram story ("the model that couldn't see the Magic Eye until we gave it
 eyes") is a tale, not a topic. Cost: 10 minutes. Add byline/credentials and
 send; queue Tim Marchman as the 2-week fallback.
 
-## 3. Attack the greedy gap — the program's one real open problem — PREPPED, RETARGETED TO GEMMA-4
+## 3. Attack the greedy gap — RUN ON GEMMA-4, RESOLVED AS A NEGATIVE + A HYPOTHESIS
 
-Zero-training NN retrieval (ρ≈0.71) still beats the trained greedy decoder
-(ρ≈0.28) on Qwen. The chosen lever is draft-conditioned decoding
-(retrieval-then-edit): the AV conditions on the NN-retrieved text plus v, so
-its worst case is copying the draft (= the NN baseline). Built and
-smoke-tested 2026-07-08 (`scripts/train_nla_draft.py`, AV `context_ids`).
-Retargeted to the vision backbone gemma-4-31B-it at L47 (the cross-modal
-alignment peak) so the same AV powers the vision follow-on: verbalizing
-image-position activations (`scripts/gemma4_vision_verbalize.py`). Full
-box runbook: `scripts/train_gemma4_nla_all.sh` (phases 0–8). Needs one
-96GB+ GPU box.
+Executed 2026-07-08 on gemma-4-31B-it at L47 (`paper_nla.md` §11.7).
+Draft-conditioned decoding is refuted with a mechanism: the activation-space
+neighbour adds 0.03 nats of predictive value for the gold text, so CE never
+learns to use it. The K-curve (+0.017/doubling, never reaching NN) patterns
+with gpt-oss and yields the program's sharpest open conjecture: base models
+verbalize, instruction-tuned hosts do not. Next lever: same pipeline on the
+gemma-4 base checkpoint. Deployable decode on tuned hosts = retrieval, now
+validated on the visual channel too (§11.6.3, live in the Sunstone demo).
 
 ## 4. Run the gpt-oss-120b port
 
@@ -62,13 +60,13 @@ demo, stereogram scripts, the figure, a focused README leading with the 0.93
 retrieval result and the live Space. This is the repo journalists and HN
 should click through to; it is what makes moves 1–2 land.
 
-## 8. Extend Sunstone beyond CIFAR-10
+## 8. Extend Sunstone beyond CIFAR-10 — FIRST STEP SHIPPED
 
-The demo's honest caveat is 10 categories / 35 communities. A run on a harder
-open-vocabulary set (ImageNet subset, COCO objects) either scales the claim
-dramatically or finds its boundary — both publishable. Same geometry-only
-method, no training, one box-day. Audio via the Gemma4Unified omni variant is
-the follow-on that makes "modality-agnostic semiotics" literal.
+Open-vocabulary caption retrieval (10k COCO pool) is live in the Sunstone
+demo as a third read-out panel (5/5 CIFAR rank-1, per-category up to 0.778;
+§11.6.3). Remaining: harder open-vocab image sets (ImageNet/COCO objects),
+and audio via the Gemma4Unified omni variant for literal
+modality-agnosticism.
 
 ## 9. Fix the Dependabot debt — DONE 2026-07-08
 

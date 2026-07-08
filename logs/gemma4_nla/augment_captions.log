@@ -1,0 +1,65 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3851.52it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  79%|███████▉  | 942/1188 [00:00<00:00, 9407.25it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 9447.90it/s]
+caption pool: 10000
+  encoded airplane (5 images)
+  encoded bicycle (5 images)
+  encoded bird (5 images)
+  encoded bottle (5 images)
+  encoded bridge (5 images)
+  encoded bus (5 images)
+  encoded car (5 images)
+  encoded castle (5 images)
+  encoded cat (5 images)
+  encoded clock (5 images)
+  encoded cup (5 images)
+  encoded deer (5 images)
+  encoded dog (5 images)
+  encoded forest (5 images)
+  encoded frog (5 images)
+  encoded horse (5 images)
+  encoded house (5 images)
+  encoded keyboard (5 images)
+  encoded motorcycle (5 images)
+  encoded mountain (5 images)
+  encoded mushroom (5 images)
+  encoded orange (5 images)
+  encoded rocket (5 images)
+  encoded rose (5 images)
+  encoded sea (5 images)
+  encoded ship (5 images)
+  encoded sunflower (5 images)
+  encoded telephone (5 images)
+  encoded train (5 images)
+  encoded truck (5 images)
+||mu_img||=120.5 over 150 images
+    airplane -> 0.677 | an old photo of a large crowd wearing hats standing in front of an airplane
+     bicycle -> 0.730 | A shirtless man pumping up the tyre of a bicycle
+        bird -> 0.657 | Waiters serve food on a restaurant's patio with a bird sitting on the back of a 
+      bottle -> 0.705 | a tray with some food a pot and some bottles
+      bridge -> 0.682 | An old black and white photo of a bridge construction.
+         bus -> 0.694 | A woman walks her bicycle near a bus.
+         car -> 0.634 | A black and white cat on the roof of a car
+      castle -> 0.622 | A scenic view of a water front with windmills that stand out on the horizon.
+         cat -> 0.677 | a woman sitting in a car with a black and white cat
+       clock -> 0.642 | Food items are sitting on a tray with a clock sitting in front.
+         cup -> 0.650 | A young child brushing their teeth holding a cup of water.
+        deer -> 0.605 | a woman sitting on a horse,in a open field.
+         dog -> 0.778 | Kitchen scene light brown wood wood counter tops and floor with mostly brown dog
+      forest -> 0.675 | A man sitting on a concrete fence in front of trees.
+        frog -> 0.608 | An animal crawled up in a bathroom sink.
+       horse -> 0.749 | A man in a hat and coat next to horses
+       house -> 0.636 | A blue car parked in front of an apartment.
+    keyboard -> 0.741 | A black computer keyboard with a bunch of keys on it
+  motorcycle -> 0.687 | A motorcycle with a bicycle strapped to the back of it
+    mountain -> 0.694 | a man on skis skiing down a snowy mountain
+    mushroom -> 0.626 | A disgusting bathroom covered in dirt and falling apart.
+      orange -> 0.758 | A red vice grip squashing a whole orange.
+      rocket -> 0.688 | Man standing like a shadow in front of the ocean.
+        rose -> 0.628 | A small bathroom decorated with pretty red flowers.
+         sea -> 0.650 | A surfer is walking toward the water with board in tow with the horizon in the b
+        ship -> 0.687 | Bicycles parked at a marina of motor boats
+   sunflower -> 0.668 | A very large bathroom with some yellow flowers.
+   telephone -> 0.743 | A hotel bathroom that also has a phone.
+       train -> 0.726 | Two people riding their bikes along side a train
+       truck -> 0.723 | A fireman is standing in front of a fire truck.
+updated demo/cross_modal_space/cached/gallery.json

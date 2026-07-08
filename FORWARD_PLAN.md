@@ -28,11 +28,11 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >    `RiverRider/srt-sunstone`, repo mirrored to
 >    `space-bacon/SRT-Sunstone`.
 >
-> **Open queue (2026-07-08, priority order):**
-> - **Greedy-gap attack on gemma-4-31B-it (launch-ready, needs one 96GB box).**
->   Draft-conditioned decoding (retrieval-then-edit) at L47, then the vision
->   transition (image-position verbalization). Runbook:
->   `scripts/train_gemma4_nla_all.sh`; trainer `scripts/train_nla_draft.py`.
+> **Open queue (2026-07-08 night, priority order):**
+> - **Gemma-4 BASE checkpoint verbalizer run** (tests the
+>   base-vs-instruction-tuned hypothesis from `paper_nla.md` §11.7;
+>   identical pipeline, `scripts/train_gemma4_nla_all.sh` with
+>   BACKBONE=google/gemma-4-31B, one box-day).
 > - Press/outreach: WIRED pitch drafted (Sandra Upson); send decision
 >   with the user.
 > - MTEB(eng, v2) full 41-task run for `v22c_a050` leaderboard

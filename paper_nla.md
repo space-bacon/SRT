@@ -1513,6 +1513,121 @@ flip. Artifacts: `scripts/make_stereogram.py`,
 
 ---
 
+## 11.6.3 Open-vocabulary retrieval decoding for the visual channel
+
+The §11.6.1 word-anchor result used a closed vocabulary of a few dozen
+concept words. A natural question is whether the image-side interpretant
+is precise enough to select not a word but a *sentence*, from an open
+pool it was never trained against. It is. We encoded $10{,}000$
+deduplicated COCO captions through the frozen backbone and took each
+caption's last-token L47 state as a retrieval index
+(`scripts/sample_targets.py --corpus`, index released as
+`caption_index_L47.pt`). Retrieval is the validated per-modality centred
+frame: the image query is the mean L47 state over the image soft-token
+positions, centred by an image-side mean, and compared against the
+caption pool centred by its own mean. No component of this pipeline is
+trained; the captions were never paired with these images.
+
+Five CIFAR-10 natural test images all retrieve on-topic captions at rank
+one out of $10{,}088$: cat $\to$ "Cats standing in and next to a
+restroom sink" ($0.616$), dog $\to$ a brown-and-white-dog kitchen scene
+($0.651$), ship $\to$ "A red bicycle in front of a line of docked white
+yachts" ($0.631$), truck $\to$ "A woman is carrying carrots by a truck"
+($0.603$), and horse $\to$ "an old black and white photo with a person
+riding a horse" ($0.680$). Aggregating per category over the demo
+gallery's five images raises the scores further (dog $0.778$, orange
+$0.758$, horse $0.749$, telephone $0.743$, keyboard $0.741$), and this
+per-category retrieval now ships live in the public demo Space. The
+stereogram of §11.6.2 closes its own loop here: against a pool augmented
+with $88$ programmatic shape and texture captions, its rank-one
+retrieval is "An abstract mosaic of tiny colored squares" ($0.694$),
+the honest texture report of §11.6.2 now expressed as a full sentence.
+
+The boundary is equally clean. The synthetic white-heart control ranks
+its exact caption ("A white heart shape on a black background") at
+$352/10{,}088$. Abstract synthetic graphics sit outside the photographic
+domain that both the COCO pool and the image-side mean describe, so the
+query lands among photographic near-neighbours instead. Retrieval
+decoding inherits the coverage of its pool; within coverage it is
+precise, and outside coverage it fails legibly rather than confidently.
+Two misses in the per-category run make the same point: rocket and
+mushroom, objects COCO barely describes, retrieve unrelated scenes.
+Artifacts: `scripts/gemma4_vision_retrieval.py`,
+`scripts/augment_gallery_captions.py`, `data/caption_pool.jsonl`,
+`artifacts/nla/gemma4/{vision_caps_retrieval,vision_caps_cifar}.json`,
+`RiverRider/srt-nla-gemma4-artifacts` (caption and corpus L47 indexes).
+
+---
+
+## 11.7 The decoding gap on a chat-tuned multimodal host, and a refuted repair
+
+With gemma-4-31B-it established as a cross-modal substrate, we ran the
+full activation-verbalizer recipe on it, both as a fourth backbone for
+the decoding-gap comparison and as a test of a proposed repair for the
+greedy gap. Both questions resolved cleanly, the second negatively.
+
+**Setup and anchors.** Chat-tuned hosts break the corpus-free
+self-sampling step: bare-BOS sampling from gemma-4-31B-it degenerates
+into repetition loops, so targets must come from encoded corpus text
+(`sample_targets.py --corpus`; $10$k forum passages, seq $64$, L47, the
+cross-modal alignment peak). The backbone is also BOS-sensitive: the
+same gold text re-encoded without a leading BOS scores a centred replay
+of only $0.615$, versus $0.9986$ with it, so every prefix-free re-encode
+in the protocol prepends BOS. With both corrections the anchor frame is
+healthy and Qwen-like: replay ceiling $0.994$, nearest-neighbour
+retrieval $0.695$, random floor $0.494$
+(`artifacts/nla/gemma4/anchors_L47.json`).
+
+**The CE verbalizer mode-collapses under argmax.** The standard CE
+recipe (np $16$, two epochs) reaches teacher-forced cosine $0.90$, but
+its greedy decode emits one degenerate loop for every target and scores
+at the random floor ($0.500$). The information is demonstrably present:
+the injected vector halves the gold text's cross-entropy ($8.70 \to
+4.13$ nats per token). At that perplexity the conditional is broad, and
+sixty-four steps of compounding argmax collapse onto a generic
+attractor. This is the Qwen greedy gap in its most extreme form.
+
+**Draft conditioning is refuted, with a mechanism.** The proposed repair
+conditioned the verbalizer on the retrieval neighbour's *text* as an
+in-context draft, reasoning that the worst case, copying the draft,
+already matches the NN baseline. A four-way cross-entropy decomposition
+(`scripts/nla_ce_decomp.py`) shows why this cannot work on this host:
+
+| context for gold CE | nats/token |
+|---|---|
+| injected prefix + gold | $4.13$ |
+| injected prefix + NN draft + gold | $4.10$ |
+| BOS + NN draft + gold | $9.21$ |
+| BOS + gold | $8.70$ |
+
+The activation-space neighbour (centred similarity $0.69$) contributes
+$0.03$ nats of predictive value for the gold text, and in the pure
+in-context setting it actively hurts. Activation-space similarity is not
+token-space predictive utility, so CE training has no gradient toward
+using, or even copying, the draft. The trained draft model confirmed
+this: its copy baseline read $0.712$ while its greedy decode ignored the
+draft entirely ($0.507$). We record this as a clean negative alongside
+the Lever-B negative of §6.
+
+**The K-curve patterns with gpt-oss, not Qwen.** Best-of-$K$ oracle
+rerank on the CE checkpoint climbs from $0.507$ ($K{=}1$) to $0.591$
+($K{=}32$) at $+0.017$ per doubling of $K$, exactly the gpt-oss slope
+and half the Qwen slope, and extrapolates to an impractical $K \approx
+2000$ to reach the retrieval baseline. Across four backbones the pattern
+is now: the base-model host (Qwen2.5-7B) crosses its paraphrase ceiling
+at $K{=}64$, while both instruction/reasoning-tuned hosts (gpt-oss-20b,
+gemma-4-31B-it) never reach their retrieval baselines at any practical
+$K$. We conjecture that instruction tuning collapses the unconditional
+text manifold that best-of-$K$ sampling must traverse, and note that the
+conjecture is cheaply testable by running the identical pipeline on the
+gemma-4 base checkpoint. The deployable decode on this host is therefore
+retrieval, which is precisely the mechanism §11.6.3 validates on the
+visual channel. Artifacts:
+`artifacts/nla/gemma4/{kcurve_ce.jsonl,decode_probe_ce.jsonl}`,
+checkpoints at `RiverRider/srt-nla-av-gemma4`.
+
+---
+
 ## 12. NLA as Stage 4 of the SRT program
 
 We now connect Stage 4 explicitly to Stages 1–3 (Lancaster, 2025;

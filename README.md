@@ -168,9 +168,12 @@ A 12.3M community read-out head trained on **text only**, attached to a frozen
 multimodal `google/gemma-4-31B-it`, interprets **images** with zero image
 training. Point it at a picture and it retrieves the picture's own words
 (CIFAR-10 image→word retrieval@1 = **0.93**, chance 0.10) and names the
-nearest discourse community the head learned from prose. Cross-modal alignment
-peaks at ~80% of backbone depth and collapses at the final layer, the same
-late-is-surface signature seen on gpt-oss-20b (`paper_nla.md` §11.6–§11.6.1).
+nearest discourse community the head learned from prose. The same image state
+also retrieves full **sentences** from an open pool of 10,000 COCO captions,
+zero training (5/5 CIFAR natural images on-topic at rank 1; `paper_nla.md`
+§11.6.3). Cross-modal alignment peaks at ~80% of backbone depth and collapses
+at the final layer, the same late-is-surface signature seen on gpt-oss-20b
+(`paper_nla.md` §11.6–§11.6.1).
 
 This is the semiotic claim made concrete: the read-out taps the shared
 **interpretant** in the residual stream, independent of whether the sign

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Open-vocabulary caption retrieval on the gemma-4 visual channel**
+  (`paper_nla.md` §11.6.3): an image's mean L47 state retrieves full sentences
+  from 10k COCO captions with zero training (5/5 CIFAR natural images on-topic
+  at rank 1; per-category up to 0.778). Live in the Sunstone Space as a third
+  read-out panel. Scripts: `gemma4_vision_retrieval.py`,
+  `augment_gallery_captions.py`; L47 retrieval indexes released in
+  [`RiverRider/srt-nla-gemma4-artifacts`](https://huggingface.co/datasets/RiverRider/srt-nla-gemma4-artifacts).
+- **Greedy-gap campaign on gemma-4-31B-it** (`paper_nla.md` §11.7): fourth
+  backbone for the decoding-gap comparison. CE verbalizer mode-collapses under
+  argmax despite the injected vector halving gold CE; draft-conditioned
+  decoding refuted with a four-way CE decomposition (activation similarity ≠
+  predictive utility); K-curve slope +0.017/doubling patterns with gpt-oss,
+  not Qwen, supporting a base-vs-instruction-tuned verbalization hypothesis.
+  New tooling: `train_nla_draft.py`, `nla_ce_decomp.py`, `nla_decode_probe.py`,
+  `nla_anchors.py` (backbone-generic), multimodal-aware
+  `srt/nla/backbones.py` loader, corpus-encode mode in `sample_targets.py`.
+  Checkpoints: [`RiverRider/srt-nla-av-gemma4`](https://huggingface.co/RiverRider/srt-nla-av-gemma4).
 - **SRT-Sunstone: cross-modal read-out on a frozen gemma-4-31B-it.** A 12.3M
   community read-out head trained on text alone reads images zero-shot
   (CIFAR-10 image→word retrieval@1 = 0.93, chance 0.10; alignment peaks ~80%
