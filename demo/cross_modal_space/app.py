@@ -155,6 +155,13 @@ CAPABILITIES = """
        <code>dog &rarr; pet</code>.</p>
   </div>
   <div class="cap-card">
+    <div class="ico">&#10086;</div>
+    <h3>Open-vocabulary captions</h3>
+    <p>The same image state retrieves a full <i>sentence</i> from
+       <b>10,000</b> COCO captions &mdash; zero training:
+       <code>horse &rarr; &ldquo;a person riding a horse&rdquo;</code>.</p>
+  </div>
+  <div class="cap-card">
     <div class="ico">&#9678;</div>
     <h3>Meaning, not pixels</h3>
     <p>It groups images by what they <i>mean</i>, not how they look:
@@ -181,10 +188,14 @@ So it does not *classify* the image. It tells you **what the image means to a
 system that learned meaning from words** &mdash; a transfer across modality, from
 a head that was never cross-trained. That is the result.
 
-### How to read the two panels
+### How to read the three panels
 - **The words it means** &mdash; the load-bearing evidence. The image is placed in
   a shared word space and the nearest words are shown. This is precise, and it is
   the point.
+- **The caption it retrieves** &mdash; the same image state, asked to pick a full
+  sentence out of **10,000 COCO captions** it has never been trained against.
+  Open vocabulary, zero training: the image's place in meaning space is precise
+  enough to select a whole description, not just a word.
 - **The discourse it evokes** &mdash; a *flavour*, not a category. The head knows
   only **35** discourse communities from its training corpus, far too few to label
   the visual world precisely. Read it as the *nearest cultural neighbourhood* a
@@ -200,11 +211,22 @@ def describe(evt: gr.SelectData):
         f'<span class="word-chip {"top" if i == 0 else ""}">{w}</span>'
         for i, (w, _) in enumerate(c["top_words"]))
     tc = c["top_communities"]
+    cap_block = ""
+    if c.get("top_captions"):
+        best = c["top_captions"][0]
+        rest = " &middot; ".join(
+            f'<i>&ldquo;{t}&rdquo;</i>' for t, _ in c["top_captions"][1:])
+        cap_block = (
+            "<div style='margin-top:16px'><b>The caption it retrieves</b> "
+            "&nbsp;&middot;&nbsp; nearest of 10,000 COCO captions</div>"
+            f"<div style='margin:8px 0 0; font-size:1.12rem'>&ldquo;{best[0]}&rdquo;</div>"
+            + (f"<div class='evoke' style='margin-top:6px'>{rest}</div>" if rest else ""))
     cap = (
         "<div class='readout'>"
         f"<h3>{c['category']}</h3>"
         "<div><b>The words it means</b></div>"
         f"<div style='margin:8px 0 4px'>{chips}</div>"
+        f"{cap_block}"
         "<div class='evoke'><b>The discourse it evokes</b> &nbsp;&middot;&nbsp; "
         "nearest of 35 communities<br>"
         f"{tc[0][0]} ({tc[0][1]:.0%}) &middot; {tc[1][0]} ({tc[1][1]:.0%}) &middot; "

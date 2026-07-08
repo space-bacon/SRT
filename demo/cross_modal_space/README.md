@@ -42,8 +42,10 @@ Pick any category in the gallery. For each one you see:
 
 - **The words it means** — the image, placed in a shared word space, retrieves
   its own words: `bicycle → bicycle`, `rose → flower`, `dog → pet`, `car → car`.
-  This is the precise, load-bearing result.
-- **The discourse it evokes** — the nearest of 35 discourse communities the head
+  This is the precise, load-bearing result.- **The caption it retrieves** — the same image state picks a full *sentence*
+  out of **10,000 COCO captions**, open vocabulary, zero training:
+  `horse → "a person riding a horse"`. The image's place in meaning space is
+  precise enough to select a whole description, not just a word.- **The discourse it evokes** — the nearest of 35 discourse communities the head
   learned from text: cars into the automotive community, deer and mushrooms into
   gardening, cats and dogs into the cozy-domestic communities. A *flavour*, not a
   label.

@@ -87,6 +87,20 @@
           "ship",
           0.45
         ]
+      ],
+      "top_captions": [
+        [
+          "an old photo of a large crowd wearing hats standing in front of an airplane",
+          0.677
+        ],
+        [
+          "a man with a suit a hat and an airplane",
+          0.643
+        ],
+        [
+          "AA man with signals standing in front of a plane",
+          0.632
+        ]
       ]
     },
     {
@@ -133,6 +147,20 @@
         [
           "engine",
           0.518
+        ]
+      ],
+      "top_captions": [
+        [
+          "A shirtless man pumping up the tyre of a bicycle",
+          0.73
+        ],
+        [
+          "A bike with an umbrella attached to it",
+          0.723
+        ],
+        [
+          "a shirtless man is airing up a tire on a bicycle",
+          0.718
         ]
       ]
     },
@@ -181,6 +209,20 @@
           "deer",
           0.633
         ]
+      ],
+      "top_captions": [
+        [
+          "Waiters serve food on a restaurant's patio with a bird sitting on the back of a chair.",
+          0.657
+        ],
+        [
+          "A baby is staring a two birds with yellow feathers on their heads.",
+          0.65
+        ],
+        [
+          "A bicycle parked next to a wooded area, with a large brown bird perched on the bike seat.",
+          0.644
+        ]
       ]
     },
     {
@@ -227,6 +269,20 @@
         [
           "bottle",
           0.609
+        ]
+      ],
+      "top_captions": [
+        [
+          "a tray with some food a pot and some bottles",
+          0.705
+        ],
+        [
+          "A lady wearing a sweater and glasses drinking an alcoholic beverage from a bottle.",
+          0.699
+        ],
+        [
+          "a kitchen counter filled with some bowls, plates and bottles",
+          0.69
         ]
       ]
     },
@@ -275,6 +331,20 @@
           "sky",
           0.533
         ]
+      ],
+      "top_captions": [
+        [
+          "An old black and white photo of a bridge construction.",
+          0.682
+        ],
+        [
+          "Young man in jeans skateboarding in front of a ship.",
+          0.656
+        ],
+        [
+          "A bicycle parked on the edge of the water with a barge on the other side.",
+          0.636
+        ]
       ]
     },
     {
@@ -321,6 +391,20 @@
         [
           "vehicle",
           0.632
+        ]
+      ],
+      "top_captions": [
+        [
+          "A woman walks her bicycle near a bus.",
+          0.694
+        ],
+        [
+          "A man has propane tanks on his bicycle that is parked next to the bus.",
+          0.692
+        ],
+        [
+          "A school bus filled with children sitting next to each other.",
+          0.69
         ]
       ]
     },
@@ -369,6 +453,20 @@
           "vehicle",
           0.662
         ]
+      ],
+      "top_captions": [
+        [
+          "A black and white cat on the roof of a car",
+          0.634
+        ],
+        [
+          "A street scene with a police car parked on the side of the road.",
+          0.633
+        ],
+        [
+          "BLACK AND WHITE PICTURE OF A MOTORCYCLE COP AND A POLICE C AR",
+          0.631
+        ]
       ]
     },
     {
@@ -415,6 +513,20 @@
         [
           "building",
           0.493
+        ]
+      ],
+      "top_captions": [
+        [
+          "A scenic view of a water front with windmills that stand out on the horizon.",
+          0.622
+        ],
+        [
+          "a person riding a snowboard with buildings in the background",
+          0.6
+        ],
+        [
+          "A plethora of kites flying in the sky next to some mountains.",
+          0.599
         ]
       ]
     },
@@ -463,6 +575,20 @@
           "cat",
           0.596
         ]
+      ],
+      "top_captions": [
+        [
+          "a woman sitting in a car with a black and white cat",
+          0.677
+        ],
+        [
+          "White and black cat sitting beside the wheel of a bicycle.",
+          0.658
+        ],
+        [
+          "a close up of a cat under a car with another cat",
+          0.658
+        ]
       ]
     },
     {
@@ -509,6 +635,20 @@
         [
           "truck",
           0.467
+        ]
+      ],
+      "top_captions": [
+        [
+          "Food items are sitting on a tray with a clock sitting in front.",
+          0.642
+        ],
+        [
+          "A kitchen with a empty refrigerator next to a wall under a clock.",
+          0.638
+        ],
+        [
+          "Bicycles hand from the rafters near a large, square clock.",
+          0.618
         ]
       ]
     },
@@ -557,6 +697,20 @@
           "sea",
           0.448
         ]
+      ],
+      "top_captions": [
+        [
+          "A young child brushing their teeth holding a cup of water.",
+          0.65
+        ],
+        [
+          "a small candle lit beside a placemat and some glasses",
+          0.641
+        ],
+        [
+          "Bathroom sink holding liquid soap and a cup with toothbrushes.",
+          0.641
+        ]
       ]
     },
     {
@@ -603,6 +757,20 @@
         [
           "animal",
           0.676
+        ]
+      ],
+      "top_captions": [
+        [
+          "a woman sitting on a horse,in a open field.",
+          0.605
+        ],
+        [
+          "Bathroom scene with a black cat going behind the door.",
+          0.603
+        ],
+        [
+          "Group of cows painted with similar patterns walking through a town.",
+          0.596
         ]
       ]
     },
@@ -651,6 +819,20 @@
           "frog",
           0.577
         ]
+      ],
+      "top_captions": [
+        [
+          "Kitchen scene light brown wood wood counter tops and floor with mostly brown dog with white accents.",
+          0.778
+        ],
+        [
+          "A man kneeling down next to a brown and white dog with black spots.",
+          0.731
+        ],
+        [
+          "A woman standing in a kitchen next to a brown dog.",
+          0.709
+        ]
       ]
     },
     {
@@ -697,6 +879,20 @@
         [
           "horse",
           0.367
+        ]
+      ],
+      "top_captions": [
+        [
+          "A man sitting on a concrete fence in front of trees.",
+          0.675
+        ],
+        [
+          "A man and woman stand with bikes in front of a field.",
+          0.655
+        ],
+        [
+          "Pots are lying on a brick surface in a room.",
+          0.655
         ]
       ]
     },
@@ -745,6 +941,20 @@
           "garden",
           0.669
         ]
+      ],
+      "top_captions": [
+        [
+          "An animal crawled up in a bathroom sink.",
+          0.608
+        ],
+        [
+          "A round urinal is shiny clean except for a fly sitting in there.",
+          0.603
+        ],
+        [
+          "A gray and black raven sits on top of the car, looking as if he could talk if he wanted to.",
+          0.601
+        ]
       ]
     },
     {
@@ -791,6 +1001,20 @@
         [
           "animal",
           0.514
+        ]
+      ],
+      "top_captions": [
+        [
+          "A man in a hat and coat next to horses",
+          0.749
+        ],
+        [
+          "an old black and white photo with a person riding a horse",
+          0.726
+        ],
+        [
+          "A couple young girls standing on top of a horse",
+          0.724
         ]
       ]
     },
@@ -839,6 +1063,20 @@
           "castle",
           0.509
         ]
+      ],
+      "top_captions": [
+        [
+          "A blue car parked in front of an apartment.",
+          0.636
+        ],
+        [
+          "A small blue car parked outside a house",
+          0.633
+        ],
+        [
+          "A man riding a bike in front of a small blue house.",
+          0.628
+        ]
       ]
     },
     {
@@ -885,6 +1123,20 @@
         [
           "telephone",
           0.62
+        ]
+      ],
+      "top_captions": [
+        [
+          "A black computer keyboard with a bunch of keys on it",
+          0.741
+        ],
+        [
+          "A computer keyboard, with black keys and white lettering.",
+          0.718
+        ],
+        [
+          "A black computer keyboard with lcd panel and numeric pad.",
+          0.667
         ]
       ]
     },
@@ -933,6 +1185,20 @@
           "engine",
           0.549
         ]
+      ],
+      "top_captions": [
+        [
+          "A motorcycle with a bicycle strapped to the back of it",
+          0.687
+        ],
+        [
+          "a motorcycle with a bicycle tethered to the back of it",
+          0.672
+        ],
+        [
+          "A bunch of people on bicycles and motorcycles",
+          0.667
+        ]
       ]
     },
     {
@@ -979,6 +1245,20 @@
         [
           "tree",
           0.381
+        ]
+      ],
+      "top_captions": [
+        [
+          "a man on skis skiing down a snowy mountain",
+          0.694
+        ],
+        [
+          "A skier walking downhill in the snow-capped mountains",
+          0.675
+        ],
+        [
+          "City street with various vehicles and several traffic lights, mountains in the background",
+          0.668
         ]
       ]
     },
@@ -1027,6 +1307,20 @@
           "garden",
           0.643
         ]
+      ],
+      "top_captions": [
+        [
+          "A disgusting bathroom covered in dirt and falling apart.",
+          0.626
+        ],
+        [
+          "Close up of a hand touching various pastries.",
+          0.624
+        ],
+        [
+          "A close-up of the seeds and guts of a pumpkin.",
+          0.622
+        ]
       ]
     },
     {
@@ -1073,6 +1367,20 @@
         [
           "tree",
           0.512
+        ]
+      ],
+      "top_captions": [
+        [
+          "A red vice grip squashing a whole orange.",
+          0.758
+        ],
+        [
+          "A bowl has been filled with small oranges",
+          0.712
+        ],
+        [
+          "A closeup shot of the insides of a squash.",
+          0.672
         ]
       ]
     },
@@ -1121,6 +1429,20 @@
           "bridge",
           0.536
         ]
+      ],
+      "top_captions": [
+        [
+          "Man standing like a shadow in front of the ocean.",
+          0.688
+        ],
+        [
+          "A photoshopped picture of a bathroom with the floor missing and a guy falling through the sky.",
+          0.676
+        ],
+        [
+          "An image of half a bathroom and half stairs.",
+          0.675
+        ]
       ]
     },
     {
@@ -1167,6 +1489,20 @@
         [
           "bottle",
           0.533
+        ]
+      ],
+      "top_captions": [
+        [
+          "A small bathroom decorated with pretty red flowers.",
+          0.628
+        ],
+        [
+          "A very large bathroom with some yellow flowers.",
+          0.626
+        ],
+        [
+          "A BATHROOM WITH DUAL SINKS AND A MIRROR AND FLOWERS",
+          0.624
         ]
       ]
     },
@@ -1215,6 +1551,20 @@
           "ship",
           0.489
         ]
+      ],
+      "top_captions": [
+        [
+          "A surfer is walking toward the water with board in tow with the horizon in the background.",
+          0.65
+        ],
+        [
+          "A person standing in front of a large body of water as the sun sets.",
+          0.637
+        ],
+        [
+          "Bicycles are parked on a beach with palm trees.",
+          0.633
+        ]
       ]
     },
     {
@@ -1261,6 +1611,20 @@
         [
           "keyboard",
           0.387
+        ]
+      ],
+      "top_captions": [
+        [
+          "Bicycles parked at a marina of motor boats",
+          0.687
+        ],
+        [
+          "A red bicycle in front of a line of docked white yachts",
+          0.683
+        ],
+        [
+          "two bicycles parked on a dock and overlooking some boats",
+          0.683
         ]
       ]
     },
@@ -1309,6 +1673,20 @@
           "garden",
           0.597
         ]
+      ],
+      "top_captions": [
+        [
+          "A very large bathroom with some yellow flowers.",
+          0.668
+        ],
+        [
+          "A bathroom counter has purple orchids on it.",
+          0.647
+        ],
+        [
+          "A toilet and a speckled floor in a bathroom.",
+          0.644
+        ]
       ]
     },
     {
@@ -1355,6 +1733,20 @@
         [
           "bridge",
           0.616
+        ]
+      ],
+      "top_captions": [
+        [
+          "A hotel bathroom that also has a phone.",
+          0.743
+        ],
+        [
+          "a man holding a banana as if it were a phone",
+          0.662
+        ],
+        [
+          "A man in a phone booth, talking on the phone.",
+          0.653
         ]
       ]
     },
@@ -1403,6 +1795,20 @@
           "vehicle",
           0.489
         ]
+      ],
+      "top_captions": [
+        [
+          "Two people riding their bikes along side a train",
+          0.726
+        ],
+        [
+          "Bike riders travel next to a passenger train",
+          0.699
+        ],
+        [
+          "Person with bicycle and dog is boarding a train",
+          0.697
+        ]
       ]
     },
     {
@@ -1450,8 +1856,28 @@
           "bicycle",
           0.549
         ]
+      ],
+      "top_captions": [
+        [
+          "A fireman is standing in front of a fire truck.",
+          0.723
+        ],
+        [
+          "A man takes a picture alongside his tow truck.",
+          0.713
+        ],
+        [
+          "A man takes a picture of a green tow truck.",
+          0.712
+        ]
       ]
     }
   ],
-  "note": "Community head trained on TEXT only (discourse SupCon on frozen gemma-4-31B); applied here to image tokens with zero image training. Assignments are aggregated per category (mean over the category's images) to match the paper-level result."
+  "note": "Community head trained on TEXT only (discourse SupCon on frozen gemma-4-31B); applied here to image tokens with zero image training. Assignments are aggregated per category (mean over the category's images) to match the paper-level result.",
+  "caption_pool": {
+    "n": 10000,
+    "source": "sentence-transformers/coco-captions (deduped)",
+    "layer": 47,
+    "note": "Open-vocabulary retrieval: category mean L47 image state vs 10k COCO captions, per-modality centered. Zero training."
+  }
 }
