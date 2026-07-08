@@ -167,6 +167,11 @@ def _last_token_h_by_layer(
 
 
 def _fve_nrm(h: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
+    """NOTE: algebraically this is RAW COSINE (1 - |hn-vn|^2/2 = cos), NOT
+    fve = 0.5*(1+cos). All val numbers this script logs (tf_fve/disc_fve/
+    disc_cen) are in cosine units; convert with 0.5*(1+x) before comparing
+    to nla_anchors.py or the paper frame. Kept as-is because act_loss
+    (1 - this) and historical Qwen logs depend on it."""
     hn = F.normalize(h.float(), dim=-1)
     vn = F.normalize(v.float(), dim=-1)
     return 1.0 - ((hn - vn) ** 2).sum(dim=-1) / 2.0

@@ -63,8 +63,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--dtype", default="bfloat16")
     p.add_argument("--layer", type=int, default=20)
     p.add_argument("--max-seq-len", type=int, default=64)
-    p.add_argument("--max-draft-len", type=int, default=48,
-                   help="drafts truncated to this many tokens")
+    p.add_argument("--max-draft-len", type=int, default=64,
+                   help="drafts truncated to this many tokens. Use full gold "
+                        "length: truncation destroys the copy baseline on "
+                        "position-decorrelating backbones (gemma-4 L47: "
+                        "fve 0.53 @48 tok vs 0.69 full).")
     p.add_argument("--separator", default="\n\u2192 ",
                    help="text placed between draft and gold/generation")
     p.add_argument("--draft-dropout", type=float, default=0.1,
@@ -110,9 +113,12 @@ def _load_pairs(path: Path) -> list[dict]:
 
 
 def _fve_nrm(h: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
+    """fve units: 0.5*(1+cos). Matches nla_anchors.py / the paper frame.
+    (train_nla_act.py's same-named helper returns RAW COSINE — do not
+    compare its val numbers to anchors without converting.)"""
     hn = F.normalize(h.float(), dim=-1)
     vn = F.normalize(v.float(), dim=-1)
-    return 1.0 - ((hn - vn) ** 2).sum(dim=-1) / 2.0
+    return 0.5 * (1.0 + (hn * vn).sum(dim=-1))
 
 
 def _centered_nn(
