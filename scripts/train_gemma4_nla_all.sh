@@ -41,6 +41,10 @@ HF_USER="${HF_USER:-RiverRider}"
 NLA_LAYER="${NLA_LAYER:-47}"
 NLA_NUM_SEQ="${NLA_NUM_SEQ:-10000}"
 NLA_SEQ_LEN="${NLA_SEQ_LEN:-64}"
+# gemma-4-it is chat-tuned: bare-BOS self-sampling DEGENERATES into repetition
+# loops (verified 2026-07-08: 'own own own...', anchors replay 0.524 vs floor
+# 0.468 — no dynamic range). Targets must come from ENCODED CORPUS TEXT.
+CORPUS="${CORPUS:-${ROOT}/data/corpus_targets.jsonl}"
 # 31B bf16 = 62.5GB resident; batch must stay small on a 96GB card.
 AV_BATCH="${AV_BATCH:-4}"
 AV_EPOCHS="${AV_EPOCHS:-2}"
@@ -101,9 +105,11 @@ fi
 
 # ---- 2. targets ----------------------------------------------------------------
 if run_phase 2; then
-  echo "=== phase 2: sample ${NLA_NUM_SEQ} targets @ L${NLA_LAYER} ==="
+  echo "=== phase 2: encode ${NLA_NUM_SEQ} corpus targets @ L${NLA_LAYER} ==="
+  [[ -f "${CORPUS}" ]] || { echo "MISSING corpus ${CORPUS} — rsync it first"; exit 1; }
   nohup "${PY}" scripts/sample_targets.py \
     --backbone "${BACKBONE}" --layer "${NLA_LAYER}" \
+    --corpus "${CORPUS}" \
     --num-sequences "${NLA_NUM_SEQ}" --seq-len "${NLA_SEQ_LEN}" \
     --batch-size 8 --format pt --out "${TARGETS}" \
     > "${LOGS}/targets.log" 2>&1

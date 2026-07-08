@@ -50,6 +50,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--num-sequences", type=int, default=1000)
     p.add_argument("--seq-len", type=int, default=256)
     p.add_argument("--batch-size", type=int, default=8)
+    p.add_argument("--corpus", type=Path, default=None,
+                   help="JSONL with a 'text' field. When set, ENCODE corpus rows "
+                        "instead of self-sampling. Required for chat-tuned "
+                        "backbones whose bare-BOS samples degenerate into "
+                        "repetition loops (observed on gemma-4-31B-it).")
     p.add_argument("--temperature", type=float, default=1.0)
     p.add_argument("--top-p", type=float, default=1.0)
     p.add_argument("--seed", type=int, default=0)
@@ -112,7 +117,57 @@ def main() -> None:
     activations: list[torch.Tensor] = []  # primary layer, each (T_valid, d) — backward compat
     activations_by_layer: dict[int, list[torch.Tensor]] = {L: [] for L in layers}
 
-    todo = args.num_sequences
+    corpus_rows: list[str] | None = None
+    if args.corpus is not None:
+        corpus_rows = []
+        with args.corpus.open() as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                text = json.loads(line).get("text", "").strip()
+                if len(text) >= 40:  # skip trivially short rows
+                    corpus_rows.append(text)
+                if len(corpus_rows) >= args.num_sequences:
+                    break
+        if len(corpus_rows) < args.num_sequences:
+            logger.warning("corpus has only %d usable rows (< %d requested)",
+                           len(corpus_rows), args.num_sequences)
+        logger.info("corpus-encode mode: %d rows from %s", len(corpus_rows), args.corpus)
+
+    todo = args.num_sequences if corpus_rows is None else len(corpus_rows)
+    done = 0
+    while todo > 0 and corpus_rows is not None:
+        bs = min(args.batch_size, todo)
+        texts = corpus_rows[done : done + bs]
+        enc_ids = [
+            [bos] + tok(t, add_special_tokens=False)["input_ids"][: args.seq_len - 1]
+            for t in texts
+        ]
+        T = max(len(x) for x in enc_ids)
+        ids = torch.full((bs, T), pad_id, dtype=torch.long, device=device)
+        attn_mask = torch.zeros((bs, T), dtype=torch.long, device=device)
+        for j, x in enumerate(enc_ids):
+            ids[j, : len(x)] = torch.tensor(x, device=device)
+            attn_mask[j, : len(x)] = 1
+        with torch.no_grad():
+            fwd = model(input_ids=ids, attention_mask=attn_mask,
+                        output_hidden_states=True, use_cache=False)
+            hs = {L: fwd.hidden_states[L].detach().to(torch.float32).cpu() for L in layers}
+        for i in range(bs):
+            n = len(enc_ids[i])
+            # store the TRUNCATED text (decoded from the ids actually encoded,
+            # sans BOS) so build_gold_pairs re-tokenizes to the same window
+            sequences.append(tok.decode(ids[i, 1:n], skip_special_tokens=True))
+            token_ids.append(ids[i, :n].detach().cpu().clone())
+            activations.append(hs[primary_layer][i, :n].clone())
+            for L in layers:
+                activations_by_layer[L].append(hs[L][i, :n].clone())
+        done += bs
+        todo -= bs
+        if done % (args.batch_size * 25) == 0 or todo == 0:
+            logger.info("encoded %d / %d", done, len(corpus_rows))
+
     while todo > 0:
         bs = min(args.batch_size, todo)
         input_ids = torch.full((bs, 1), bos, dtype=torch.long, device=device)
