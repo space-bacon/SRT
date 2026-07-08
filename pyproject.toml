@@ -29,7 +29,7 @@ dependencies = [
     # CVE-2026-4372 (config.json RCE, patched only in 5.3.0): mitigated by usage
     # — this package only loads fixed first-party model IDs; callers must not
     # pass untrusted Hub IDs to from_pretrained() while pinned <5.3.0.
-    "transformers>=4.40,<5.0",
+    "transformers>=4.40,<6.0",
     "safetensors>=0.4",
     "huggingface_hub>=0.24",
     "numpy>=1.24",

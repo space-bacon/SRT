@@ -7,7 +7,7 @@ torch>=2.6
 # CVE-2026-4372 (config.json RCE, patched only in 5.3.0): mitigated by usage —
 # the demos load fixed first-party model IDs only; never pass untrusted Hub IDs
 # to from_pretrained() while this pin is <5.3.0.
-transformers==4.53.3
+transformers==5.3.0
 huggingface_hub>=0.24
 accelerate>=0.33
 sentencepiece
