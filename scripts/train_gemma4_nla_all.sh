@@ -51,6 +51,11 @@ AV_EPOCHS="${AV_EPOCHS:-2}"
 AV_LR_CE="${AV_LR_CE:-3e-4}"
 AV_LR_DRAFT="${AV_LR_DRAFT:-1e-4}"
 NP="${NP:-16}"
+# Val cost on a 31B is dominated by generation: VECTORS x (1 + BESTOF) rollouts
+# per val. Keep the product modest.
+AV_VAL_EVERY="${AV_VAL_EVERY:-600}"
+AV_VAL_VECTORS="${AV_VAL_VECTORS:-100}"
+AV_VAL_BESTOF="${AV_VAL_BESTOF:-8}"
 
 ART="${ROOT}/artifacts/nla/gemma4"
 LOGS="${ROOT}/logs/gemma4_nla"
@@ -152,9 +157,9 @@ if run_phase 5; then
     --backbone "${BACKBONE}" --layer "${NLA_LAYER}" \
     --num-prefix-tokens "${NP}" --max-seq-len "${NLA_SEQ_LEN}" \
     --ce-weight 1.0 --act-weight 0.0 \
-    --select-metric centered --val-bestof 8 --prepend-bos \
+    --select-metric centered --val-bestof "${AV_VAL_BESTOF}" --prepend-bos \
     --epochs "${AV_EPOCHS}" --batch-size "${AV_BATCH}" --lr "${AV_LR_CE}" \
-    --val-every 400 --val-vectors 200 \
+    --val-every "${AV_VAL_EVERY}" --val-vectors "${AV_VAL_VECTORS}" \
     --out "${ART}/ce_seq${NLA_SEQ_LEN}_np${NP}" \
     > "${LOGS}/av_ce.log" 2>&1
 fi
@@ -169,7 +174,7 @@ if run_phase 6; then
     --num-prefix-tokens "${NP}" --max-seq-len "${NLA_SEQ_LEN}" \
     --prepend-bos \
     --epochs "${AV_EPOCHS}" --batch-size "${AV_BATCH}" --lr "${AV_LR_DRAFT}" \
-    --val-every 400 --val-vectors 200 --val-bestof 8 \
+    --val-every "${AV_VAL_EVERY}" --val-vectors "${AV_VAL_VECTORS}" --val-bestof "${AV_VAL_BESTOF}" \
     --out "${ART}/draft_seq${NLA_SEQ_LEN}_np${NP}" \
     > "${LOGS}/av_draft.log" 2>&1
   echo "READ OFF: val draft_cen (copy/NN baseline) vs greedy_cen (the test)"
