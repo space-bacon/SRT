@@ -286,7 +286,9 @@ remains the only mechanism that closes the gap on this backbone.
 |---|---|---|
 | Qwen2.5-7B | [`RiverRider/srt-nla-av-v1`](https://huggingface.co/RiverRider/srt-nla-av-v1) | [`RiverRider/srt-nla-targets-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-v1) |
 | Llama-3.2-3B | [`RiverRider/srt-nla-av-llama32-3b`](https://huggingface.co/RiverRider/srt-nla-av-llama32-3b) | [`RiverRider/srt-nla-targets-llama32-3b-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-llama32-3b-v1) |
-| Gemma-2-2B | [`RiverRider/srt-nla-av-gemma2-2b-v1`](https://huggingface.co/RiverRider/srt-nla-av-gemma2-2b-v1) *(release pending)* | [`RiverRider/srt-nla-targets-gemma2-2b-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-gemma2-2b-v1) *(release pending)* |
+| Gemma-2-2B | [`RiverRider/srt-nla-av-gemma2-2b-v1`](https://huggingface.co/RiverRider/srt-nla-av-gemma2-2b-v1) | [`RiverRider/srt-nla-targets-gemma2-2b-v1`](https://huggingface.co/datasets/RiverRider/srt-nla-targets-gemma2-2b-v1) |
+| gpt-oss-20b | [`RiverRider/srt-nla-av-gptoss20b`](https://huggingface.co/RiverRider/srt-nla-av-gptoss20b) *(negative result; use the codebook in the artifacts repo)* | [`RiverRider/srt-nla-gptoss20b-artifacts`](https://huggingface.co/datasets/RiverRider/srt-nla-gptoss20b-artifacts) |
+| gemma-4-31B-it | [`RiverRider/srt-nla-av-gemma4`](https://huggingface.co/RiverRider/srt-nla-av-gemma4) *(negative result; use the retrieval indexes)* | [`RiverRider/srt-nla-gemma4-artifacts`](https://huggingface.co/datasets/RiverRider/srt-nla-gemma4-artifacts) |
 
 ### Reproducibility caveat
 
