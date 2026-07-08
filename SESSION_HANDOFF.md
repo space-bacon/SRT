@@ -1,3 +1,45 @@
+# SRT — Session Handoff (2026-07-08)
+
+All work committed and pushed; `space-bacon/SRT` and the
+`space-bacon/SRT-Sunstone` mirror are both at `7da4691`. A vast.ai box
+(ssh4:20759, 1× RTX PRO 6000 Blackwell) may still be billing with no
+active jobs — all data is safe on HF/git/local, spin down at will.
+
+## Current state (what shipped recently)
+
+1. **SRT-Sunstone live.** Text-trained community read-out (12.3M head,
+   step-2250 ckpt) on frozen `google/gemma-4-31B-it` reads images
+   zero-shot. Space: `RiverRider/srt-sunstone` (RUNNING, gradio 6.19.0),
+   model: `RiverRider/Gemma-4-31B-it-SRT-Sunstone`. Source:
+   `demo/cross_modal_space/`. Mobile overflow fixed (root cause:
+   Gradio 6 `.grid-container` fixed-px columns; layout now
+   single-column + auto-fill grids).
+2. **Autostereogram study** in `paper_nla.md` §11.6.2: read-out honestly
+   reports texture on a disparity-only figure; simulated binocular
+   fusion (`scripts/stereo_decode.py`) recovers the heart and both the
+   caption head and read-out then name it. Composite figure at
+   `artifacts/nla/gemma4/stereo/stereo_figure.png`.
+3. **Repo duplicated** to `github.com/space-bacon/SRT-Sunstone` (mirror
+   push, all branches + tags) and cloned locally at
+   `/Users/burtron/development/SRT-Sunstone`, synced to `7da4691`.
+4. **gptoss20b trace_pairs_L18.jsonl** committed to git (13MB).
+5. **WIRED pitch email drafted** (addressed to sandra_upson@wired.com;
+   alt: Tim Marchman). Awaiting user to add byline/credentials and send.
+
+## Open items
+
+- Uncommitted: `demo/cross_modal_space/promo/sunstone_mobile.png`
+  (untracked screenshot; commit or discard).
+- Dependabot: 5 high on SRT, 8 (5 high / 3 moderate) on SRT-Sunstone.
+- MTEB(eng, v2) 41-task run for `v22c_a050`: launched 2026-07-03 on a
+  since-retired box; verify whether results were pulled, relaunch if not.
+- ginigen Metacognition leaderboard: 4 backbones queued, still unscored.
+- Queued GPU experiments: multi-position spoof test; Qwen2.5-7B
+  replication of the L24-surface/L18-semantic split.
+- See `FORWARD_PLAN.md` (2026-07-08 addendum) for the prioritized queue.
+
+---
+
 # SRT-Adapter NLA — Session Handoff (2026-05-20, end of day)
 
 Vast.ai Blackwell instance still up at `ssh -p 37853 root@ssh8.vast.ai`

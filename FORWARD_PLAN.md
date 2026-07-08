@@ -1,18 +1,49 @@
 # Forward Plan — SRT / SRT-NLA
 
-**Date:** 2026-06-12 (Qwen3-235B scaling plan added; Stage-4 framing addendum 2026-05-20)
-**Author of last edit:** Qwen3-235B-A22B port planning pass.
+**Date:** 2026-07-08 (cross-modal Sunstone + gpt-oss-20b status addendum; Qwen3-235B scaling plan 2026-06-12; Stage-4 framing addendum 2026-05-20)
+**Author of last edit:** Post-Sunstone documentation pass.
 
 This is the single source of truth for "what is the next thing to work on"
 across the workstreams in this repo. Supersedes the per-day handoff in
-`SESSION_HANDOFF.md` (which remains a snapshot of 2026-05-17).
+`SESSION_HANDOFF.md` (which remains a snapshot of 2026-07-08).
 
-> **2026-06-12 top priority.** The next major effort is scaling the SRT
-> read-out to **Qwen3-235B-A22B**. See the new
-> [Scaling to Qwen3-235B-A22B](#scaling-to-qwen3-235b-a22b-stage-5) section
-> below, which is now the lead workstream. The SRT-Adapter and SRT-NLA
-> sections that follow remain accurate but are in maintenance or
-> publish-and-hold status.
+> **2026-07-08 status addendum.** Since the 235B plan below was written,
+> three workstreams completed:
+>
+> 1. **Qwen3-235B Phase A: DONE and shipped** (see Status box in the
+>    Stage-5 section below).
+> 2. **gpt-oss-20b port: DONE, full Phase A+B plus NLA pipeline.**
+>    Read-out validated (regime ECE 0.0009 / AUROC 0.974); the AV is an
+>    honest negative on this backbone (best-of-64 centered 0.642 <
+>    NN-retrieval 0.744), so the 4096-code VQ codebook is the shipped
+>    decoder. Three HF repos + live trace Space
+>    (`RiverRider/srt-nla-gptoss20b-trace`). State-identity red-teaming
+>    instrument and findings in `paper_nla.md` §11.5. gpt-oss-120b
+>    runbook prepared (`docs/PORTING_GPT_OSS_120B.md`), not yet run.
+> 3. **Cross-modal (Stage 6, "SRT-Sunstone"): SHIPPED.** Text-trained
+>    community read-out on frozen gemma-4-31B-it reads images zero-shot
+>    (CIFAR-10 image→word retrieval@1 0.93; `paper_nla.md` §11.6).
+>    Autostereogram boundary study in §11.6.2. Model
+>    `RiverRider/Gemma-4-31B-it-SRT-Sunstone`, Space
+>    `RiverRider/srt-sunstone`, repo mirrored to
+>    `space-bacon/SRT-Sunstone`.
+>
+> **Open queue (2026-07-08, priority order):**
+> - Press/outreach: WIRED pitch drafted (Sandra Upson); send decision
+>   with the user.
+> - MTEB(eng, v2) full 41-task run for `v22c_a050` leaderboard
+>   submission (was launched on a since-retired box; check for partial
+>   results, relaunch if needed).
+> - ginigen Metacognition leaderboard: 4 backbones submitted, results
+>   still unscored; pull `leaderboard_mcq.json` and run the
+>   verbalizability-vs-gain correlation for §13.
+> - Queued GPU experiments: multi-position spoof test (completeness flag
+>   vs aggregation site); Qwen2.5-7B replication of the
+>   L24-surface/L18-semantic split.
+> - Dependabot: 5 high-severity alerts on `space-bacon/SRT` (8 on the
+>   SRT-Sunstone mirror).
+> - SRT-Sunstone repo curation: decide whether to trim it into a
+>   Sunstone-focused public repo (README, scope) or keep as mirror.
 
 > **2026-05-20 framing addendum.** NLA is **Stage 4** of the SRT
 > program (Stages 1–2 = Lancaster 2025 / 2026a SSRN; Stage 3 = the

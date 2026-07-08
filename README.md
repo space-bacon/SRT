@@ -142,6 +142,9 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 
 ### Live demos
 
+- **SRT-Sunstone** (gemma-4-31B-it cross-modal read-out): <https://huggingface.co/spaces/RiverRider/srt-sunstone>
+- gpt-oss-20b full input→output trace: <https://huggingface.co/spaces/RiverRider/srt-nla-gptoss20b-trace>
+- SRT showcase (Qwen2.5-7B live introspection, ZeroGPU): <https://huggingface.co/spaces/RiverRider/srt-showcase>
 - v1.0 demo: <https://huggingface.co/spaces/RiverRider/srt-adapter-v1.0-demo>
 - v8a demo: <https://huggingface.co/spaces/RiverRider/srt-adapter-v8a-demo>
 
@@ -152,10 +155,37 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 | [`RiverRider/srt-adapter-v1.0`](https://huggingface.co/RiverRider/srt-adapter-v1.0) | Qwen2.5-7B | Stable release, semantic embeddings (MTEB-STS). |
 | [`RiverRider/srt-adapter-v8a`](https://huggingface.co/RiverRider/srt-adapter-v8a) | Qwen2.5-7B | Encoder-as-community headline run. |
 | [`RiverRider/srt-adapter-qwen3-235b`](https://huggingface.co/RiverRider/srt-adapter-qwen3-235b) | Qwen3-235B-A22B-FP8 | Read-only port to a frozen frontier MoE. Held-out regime ECE 0.0005 / AUROC 0.986, community NMI 0.62. |
+| [`RiverRider/srt-adapter-gptoss20b`](https://huggingface.co/RiverRider/srt-adapter-gptoss20b) | gpt-oss-20b (MXFP4 MoE) | Full Phase A+B port. Regime ECE 0.0009 / AUROC 0.974, r̂ Pearson 0.689, community NMI 0.42. |
+| [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone) | gemma-4-31B-it (multimodal) | Text-trained community read-out that reads images zero-shot. See SRT-Sunstone below. |
 
 The 235B checkpoint shows the SRT read-out transfers across backbone scale and
 architecture (dense 7B → 94-layer, 22B-active MoE): only the ~15.9M side-channel
 heads are trained, on a fully frozen, forward-only backbone.
+
+## SRT-Sunstone — the read-out reads images (cross-modal)
+
+A 12.3M community read-out head trained on **text only**, attached to a frozen
+multimodal `google/gemma-4-31B-it`, interprets **images** with zero image
+training. Point it at a picture and it retrieves the picture's own words
+(CIFAR-10 image→word retrieval@1 = **0.93**, chance 0.10) and names the
+nearest discourse community the head learned from prose. Cross-modal alignment
+peaks at ~80% of backbone depth and collapses at the final layer, the same
+late-is-surface signature seen on gpt-oss-20b (`paper_nla.md` §11.6–§11.6.1).
+
+This is the semiotic claim made concrete: the read-out taps the shared
+**interpretant** in the residual stream, independent of whether the sign
+arrived as a word or an image.
+
+A boundary condition sharpens the claim (`paper_nla.md` §11.6.2): on a
+random-dot **autostereogram**, whose figure exists only in binocular
+disparity, the read-out honestly reports texture. A simulated
+binocular-fusion front-end (`scripts/stereo_decode.py`) recovers the hidden
+figure from the same pixels, and both the generative caption and the read-out
+then name it. The capability gap is in the sensor, not the semiotics.
+
+- **Live demo**: <https://huggingface.co/spaces/RiverRider/srt-sunstone>
+- **Model**: [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone)
+- **Demo source**: [demo/cross_modal_space/](demo/cross_modal_space/)
 
 ### Train from scratch
 

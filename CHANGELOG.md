@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **SRT-Sunstone: cross-modal read-out on a frozen gemma-4-31B-it.** A 12.3M
+  community read-out head trained on text alone reads images zero-shot
+  (CIFAR-10 image→word retrieval@1 = 0.93, chance 0.10; alignment peaks ~80%
+  depth, collapses at the final layer). Model:
+  [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone).
+  Live Space: [`RiverRider/srt-sunstone`](https://huggingface.co/spaces/RiverRider/srt-sunstone)
+  (source under `demo/cross_modal_space/`). Paper: `paper_nla.md` §11.6–§11.6.1.
+- **Autostereogram boundary-condition study** (`paper_nla.md` §11.6.2): the
+  read-out honestly reports texture on a random-dot stereogram (figure exists
+  only in binocular disparity); a simulated binocular-fusion front-end
+  (`scripts/stereo_decode.py`) recovers the hidden figure, after which both
+  the generative caption and the read-out name it. New scripts:
+  `make_stereogram.py`, `stereo_decode.py`, `stereogram_readout.py`,
+  `gemma_caption.py`, `make_stereo_figure.py`; artifacts under
+  `artifacts/nla/gemma4/stereo/`.
+- **SRT adapter ported to frozen gpt-oss-20b (MXFP4 MoE), Phase A+B.**
+  Held-out probe: regime ECE 0.0009 / AUROC 0.9742, r̂ Pearson 0.689,
+  community NMI 0.4226. Full NLA pipeline run (targets → pairs → AV → 4096-code
+  VQ codebook); the AV is an honest negative on this backbone (best-of-64
+  centered fve 0.642 < NN-retrieval 0.744), so the codebook / NN retrieval is
+  the recommended decoder. Releases:
+  [`RiverRider/srt-adapter-gptoss20b`](https://huggingface.co/RiverRider/srt-adapter-gptoss20b),
+  [`RiverRider/srt-nla-av-gptoss20b`](https://huggingface.co/RiverRider/srt-nla-av-gptoss20b),
+  [`RiverRider/srt-nla-gptoss20b-artifacts`](https://huggingface.co/datasets/RiverRider/srt-nla-gptoss20b-artifacts).
+  Live trace Space:
+  [`RiverRider/srt-nla-gptoss20b-trace`](https://huggingface.co/spaces/RiverRider/srt-nla-gptoss20b-trace).
+- Gated sliding-window attention-mask support in `srt/adapter.py`
+  (autodetected via `config.layer_types`), required for gpt-oss backbones;
+  bit-exact parity vs the HF forward (`tests/test_gptoss_smoke.py`,
+  `docs/PORTING_GPT_OSS_120B.md`).
+- State-identity red-teaming instrument and studies on gpt-oss-20b
+  (`scripts/redteam_states.py`, word-category / token-structure studies;
+  `paper_nla.md` §11.5).
+- Repository mirrored to
+  [`space-bacon/SRT-Sunstone`](https://github.com/space-bacon/SRT-Sunstone)
+  as a standalone public home for the Sunstone line.
 - **SRT adapter ported to a frozen Qwen3-235B-A22B (22B-active MoE) backbone.**
   First SRT read-out adapter on a frontier-scale host. Phase-A (read-only)
   checkpoint released as
