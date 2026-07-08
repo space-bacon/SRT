@@ -84,7 +84,9 @@ assert num_layers_of(bb.config) == 60 and hidden_size_of(bb.config) == 5376
 assert tok.bos_token_id != tok.eos_token_id, "bos==eos: sample_targets EOS guard would misfire"
 # random-weights trap check: chat generation must be coherent
 msgs = [{"role": "user", "content": [{"type": "text", "text": "What is the capital of France? Answer in one word."}]}]
-ids = tok.apply_chat_template(msgs, add_generation_prompt=True, return_tensors="pt").cuda()
+enc = tok.apply_chat_template(msgs, add_generation_prompt=True, tokenize=True,
+                              return_dict=True, return_tensors="pt")
+ids = enc["input_ids"].cuda()
 out = bb.generate(input_ids=ids, max_new_tokens=24, do_sample=False)
 text = tok.decode(out[0, ids.shape[1]:], skip_special_tokens=True)
 print("gen:", text)
