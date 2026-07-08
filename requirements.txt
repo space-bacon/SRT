@@ -7,11 +7,19 @@ torch>=2.2
 # 4.53.3 is correct). forward() parity is bit-exact under 5.x but multi-step
 # cached decoding is not. CVE-2026-1839 (Trainer RCE) stays mitigated by the
 # torch>=2.6 floor below, and we never invoke the HF Trainer.
+# CVE-2026-4372 (config.json `_attn_implementation_internal` RCE, patched only
+# in 5.3.0): mitigated by usage, not upgrade — every from_pretrained() call in
+# this repo loads a fixed allowlist of first-party repos (Qwen/, openai/,
+# google/, meta-llama/, RiverRider/); no untrusted Hub IDs are ever loaded.
+# Do NOT add user-supplied model IDs anywhere while this pin is <5.3.0.
 transformers==4.53.3
 safetensors>=0.4
 huggingface_hub>=0.24
 numpy>=1.24
-gradio==6.7.0
+# gradio >=6.15.0 fixes the cross-Space cookie-injection / session-fixation bug
+# (CVE-2026-48545, GHSA-7hp7-4p35-3cx2). 6.19.0 is the version validated on the
+# live srt-sunstone Space.
+gradio==6.19.0
 # Starlette is pulled transitively by gradio; floor at 0.40.0 to avoid the
 # multipart/form-data DoS (CVE-2024-47874, GHSA-f96h-pmfr-66vw). gradio 6.x
 # already requires a modern starlette, so the old <0.40 cap was both stale

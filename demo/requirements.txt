@@ -1,8 +1,12 @@
-gradio>=6.7.0
+# gradio >=6.15.0 fixes CVE-2026-48545 (cross-Space cookie injection).
+gradio>=6.15.0
 torch>=2.6
 # HARD PIN: transformers 5.x breaks the adapter's KV-cached manual generation
 # (verified: 5.7.0 garbles on Qwen2.5-7B, 4.53.3 correct). CVE-2026-1839 stays
 # mitigated by torch>=2.6 above; the HF Trainer is never used here.
+# CVE-2026-4372 (config.json RCE, patched only in 5.3.0): mitigated by usage —
+# the demos load fixed first-party model IDs only; never pass untrusted Hub IDs
+# to from_pretrained() while this pin is <5.3.0.
 transformers==4.53.3
 huggingface_hub>=0.24
 accelerate>=0.33
