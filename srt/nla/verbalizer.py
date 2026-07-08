@@ -238,10 +238,30 @@ class ActivationVerbalizer(nn.Module):
         temperature: float | None = None,
         top_p: float | None = None,
         layer: int | torch.Tensor | None = None,
+        context_ids: torch.Tensor | None = None,
+        context_attn: torch.Tensor | None = None,
     ) -> torch.Tensor:
-        """Return generated token ids ``(B, T_new)`` (without the prefix)."""
+        """Return generated token ids ``(B, T_new)`` (without the prefix).
+
+        ``context_ids`` (``(B, C)`` LongTensor, optional) are embedded and
+        appended after the injection prefix before generation begins. Used
+        for draft-conditioned decoding (retrieval-then-edit): the draft text
+        plus separator go here, and the model continues from it. Pad rows
+        with ``pad_token_id`` and pass ``context_attn`` (1 = valid) when rows
+        have unequal length.
+        """
         inputs_embeds = self._inject_prefix(v, layer=layer)
         attn = torch.ones(inputs_embeds.shape[:2], dtype=torch.long, device=inputs_embeds.device)
+        if context_ids is not None:
+            ctx = self.backbone.get_input_embeddings()(
+                context_ids.to(inputs_embeds.device)
+            ).to(inputs_embeds.dtype)
+            inputs_embeds = torch.cat([inputs_embeds, ctx], dim=1)
+            if context_attn is None:
+                context_attn = torch.ones(
+                    context_ids.shape, dtype=torch.long, device=inputs_embeds.device
+                )
+            attn = torch.cat([attn, context_attn.to(attn.device)], dim=1)
         out = self.backbone.generate(
             inputs_embeds=inputs_embeds,
             attention_mask=attn,
