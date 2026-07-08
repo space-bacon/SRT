@@ -1,0 +1,53 @@
+[
+  {
+    "image": "control",
+    "nn": [
+      {
+        "cen": 0.8026815056800842,
+        "text": "Chasm bridged. .-/++://-:/+//+:. :odmmmmmmmmmmmmmNNmy+. -ymmNNNmNNNNNNNNNNNNNNNm+. -sdmmmmNNNNNNNNNNNmmmmmNNNN"
+      },
+      {
+        "cen": 0.7988449335098267,
+        "text": "Match Thread: Fulham vs Sheffield United FA Cup Replay FULHAM 13 Stockdale 46 Passley 35 Amorebieta 28 Parker "
+      },
+      {
+        "cen": 0.7912598848342896,
+        "text": "Many people are working on fixing problems of our world, but... ...has anyone stopped to think whether they're"
+      }
+    ]
+  },
+  {
+    "image": "stereogram",
+    "nn": [
+      {
+        "cen": 0.7757281064987183,
+        "text": "Chasm bridged. .-/++://-:/+//+:. :odmmmmmmmmmmmmmNNmy+. -ymmNNNmNNNNNNNNNNNNNNNm+. -sdmmmmNNNNNNNNNNNmmmmmNNNN"
+      },
+      {
+        "cen": 0.7650188207626343,
+        "text": "Match Thread: Fulham vs Sheffield United FA Cup Replay FULHAM 13 Stockdale 46 Passley 35 Amorebieta 28 Parker "
+      },
+      {
+        "cen": 0.7582713961601257,
+        "text": "Many people are working on fixing problems of our world, but... ...has anyone stopped to think whether they're"
+      }
+    ]
+  },
+  {
+    "image": "disparity",
+    "nn": [
+      {
+        "cen": 0.8154525756835938,
+        "text": "Chasm bridged. .-/++://-:/+//+:. :odmmmmmmmmmmmmmNNmy+. -ymmNNNmNNNNNNNNNNNNNNNm+. -sdmmmmNNNNNNNNNNNmmmmmNNNN"
+      },
+      {
+        "cen": 0.8112127780914307,
+        "text": "Match Thread: Fulham vs Sheffield United FA Cup Replay FULHAM 13 Stockdale 46 Passley 35 Amorebieta 28 Parker "
+      },
+      {
+        "cen": 0.8063879013061523,
+        "text": "Many people are working on fixing problems of our world, but... ...has anyone stopped to think whether they're"
+      }
+    ]
+  }
+]

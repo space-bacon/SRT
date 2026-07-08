@@ -1,0 +1,54 @@
+=== phase 2: sample 10000 targets @ L47 ===
+target std = 0.5994
+=== phase 3: gold pairs ===
+wrote 9873 pairs (skipped 127) -> /workspace/srt-adapter/artifacts/nla/gemma4/gold_pairs_seq64.jsonl
+=== phase 4: anchors (centered frame) ===
+{
+  "backbone": "google/gemma-4-31B-it",
+  "layer": 47,
+  "num_queries": 100,
+  "pool_size": 2000,
+  "mu_norm": 108.4465560913086,
+  "replay": {
+    "raw": {
+      "mean": 0.9405433773994446,
+      "median": 0.9446435272693634,
+      "p10": 0.9177065491676331,
+      "p90": 0.959419846534729
+    },
+    "centered": {
+      "mean": 0.5242959854006767,
+      "median": 0.5015476644039154,
+      "p10": 0.403683066368103,
+      "p90": 0.6301150918006897
+    }
+  },
+  "nn_retrieval": {
+    "raw": {
+      "mean": 0.9386713778972626,
+      "median": 0.9406075477600098,
+      "p10": 0.9222438335418701,
+      "p90": 0.9576727151870728
+    },
+    "centered": {
+      "mean": 0.5075337100028992,
+      "median": 0.5016745030879974,
+      "p10": 0.414833664894104,
+      "p90": 0.6000033617019653
+    }
+  },
+  "random_floor": {
+    "raw": {
+      "mean": 0.932355985045433,
+      "median": 0.9354609251022339,
+      "p10": 0.9166287183761597,
+      "p90": 0.9500499963760376
+    },
+    "centered": {
+      "mean": 0.4677823534607887,
+      "median": 0.45055288076400757,
+      "p10": 0.3770231008529663,
+      "p90": 0.5718166828155518
+    }
+  }
+}ALL REQUESTED PHASES DONE

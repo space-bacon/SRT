@@ -1,0 +1,79 @@
+2026-07-08 17:26:14,900 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:14,911 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:15,071 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:15,081 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:15,160 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 17:26:15,232 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 17:26:17,008 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 17:26:17,119 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:17,128 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:17,215 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-08 17:26:17,278 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:17,288 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:17,360 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-08 17:26:17,424 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:17,432 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:17,496 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2438.55it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  64%|██████▍   | 765/1188 [00:00<00:00, 7638.79it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 7575.47it/s]
+2026-07-08 17:26:17,923 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:17,932 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/generation_config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:17,998 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:18,007 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:18,084 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 17:26:18,096 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 17:26:18,167 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 17:26:18,238 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 17:26:20,105 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 17:26:27,117 sample_targets corpus-encode mode: 10000 rows from /workspace/srt-adapter/data/corpus_targets.jsonl
+2026-07-08 17:26:31,788 sample_targets encoded 200 / 10000
+2026-07-08 17:26:36,103 sample_targets encoded 400 / 10000
+2026-07-08 17:26:40,460 sample_targets encoded 600 / 10000
+2026-07-08 17:26:44,830 sample_targets encoded 800 / 10000
+2026-07-08 17:26:49,204 sample_targets encoded 1000 / 10000
+2026-07-08 17:26:53,631 sample_targets encoded 1200 / 10000
+2026-07-08 17:26:58,017 sample_targets encoded 1400 / 10000
+2026-07-08 17:27:02,417 sample_targets encoded 1600 / 10000
+2026-07-08 17:27:06,835 sample_targets encoded 1800 / 10000
+2026-07-08 17:27:11,363 sample_targets encoded 2000 / 10000
+2026-07-08 17:27:15,829 sample_targets encoded 2200 / 10000
+2026-07-08 17:27:20,292 sample_targets encoded 2400 / 10000
+2026-07-08 17:27:24,777 sample_targets encoded 2600 / 10000
+2026-07-08 17:27:29,268 sample_targets encoded 2800 / 10000
+2026-07-08 17:27:33,928 sample_targets encoded 3000 / 10000
+2026-07-08 17:27:38,725 sample_targets encoded 3200 / 10000
+2026-07-08 17:27:43,238 sample_targets encoded 3400 / 10000
+2026-07-08 17:27:47,781 sample_targets encoded 3600 / 10000
+2026-07-08 17:27:52,325 sample_targets encoded 3800 / 10000
+2026-07-08 17:27:56,926 sample_targets encoded 4000 / 10000
+2026-07-08 17:28:01,492 sample_targets encoded 4200 / 10000
+2026-07-08 17:28:06,130 sample_targets encoded 4400 / 10000
+2026-07-08 17:28:10,764 sample_targets encoded 4600 / 10000
+2026-07-08 17:28:15,339 sample_targets encoded 4800 / 10000
+2026-07-08 17:28:19,923 sample_targets encoded 5000 / 10000
+2026-07-08 17:28:24,500 sample_targets encoded 5200 / 10000
+2026-07-08 17:28:29,078 sample_targets encoded 5400 / 10000
+2026-07-08 17:28:33,670 sample_targets encoded 5600 / 10000
+2026-07-08 17:28:38,271 sample_targets encoded 5800 / 10000
+2026-07-08 17:28:42,869 sample_targets encoded 6000 / 10000
+2026-07-08 17:28:47,482 sample_targets encoded 6200 / 10000
+2026-07-08 17:28:52,088 sample_targets encoded 6400 / 10000
+2026-07-08 17:28:56,702 sample_targets encoded 6600 / 10000
+2026-07-08 17:29:01,303 sample_targets encoded 6800 / 10000
+2026-07-08 17:29:05,961 sample_targets encoded 7000 / 10000
+2026-07-08 17:29:10,568 sample_targets encoded 7200 / 10000
+2026-07-08 17:29:15,228 sample_targets encoded 7400 / 10000
+2026-07-08 17:29:19,856 sample_targets encoded 7600 / 10000
+2026-07-08 17:29:24,537 sample_targets encoded 7800 / 10000
+2026-07-08 17:29:29,147 sample_targets encoded 8000 / 10000
+2026-07-08 17:29:33,762 sample_targets encoded 8200 / 10000
+2026-07-08 17:29:38,380 sample_targets encoded 8400 / 10000
+2026-07-08 17:29:42,999 sample_targets encoded 8600 / 10000
+2026-07-08 17:29:47,632 sample_targets encoded 8800 / 10000
+2026-07-08 17:29:52,303 sample_targets encoded 9000 / 10000
+2026-07-08 17:29:56,920 sample_targets encoded 9200 / 10000
+2026-07-08 17:30:01,540 sample_targets encoded 9400 / 10000
+2026-07-08 17:30:06,161 sample_targets encoded 9600 / 10000
+2026-07-08 17:30:10,783 sample_targets encoded 9800 / 10000
+2026-07-08 17:30:15,400 sample_targets encoded 10000 / 10000
+2026-07-08 17:30:28,777 sample_targets wrote /workspace/srt-adapter/artifacts/nla/gemma4/targets_L47_seq64_10k.pt (10000 sequences)

@@ -1,0 +1,7 @@
+=== phase 1: gemma-4 load smoke ===
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2222.15it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  54%|█████▍    | 647/1188 [00:00<00:00, 6465.71it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 6417.89it/s]
+gen: Paris
+L47 last-token ||h|| = 129.6
+SMOKE OK
+ALL REQUESTED PHASES DONE
