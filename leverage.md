@@ -20,14 +20,18 @@ stereogram story ("the model that couldn't see the Magic Eye until we gave it
 eyes") is a tale, not a topic. Cost: 10 minutes. Add byline/credentials and
 send; queue Tim Marchman as the 2-week fallback.
 
-## 3. Attack the greedy gap — the program's one real open problem
+## 3. Attack the greedy gap — the program's one real open problem — PREPPED, RETARGETED TO GEMMA-4
 
 Zero-training NN retrieval (ρ≈0.71) still beats the trained greedy decoder
-(ρ≈0.28) on Qwen. Everything else saturated ceilings. Unexplored levers:
-multi-position injection, value-head with hidden-state features, or reframing
-decode as retrieval-then-paraphrase (NN as draft, AV as editor). Cracking this
-converts "oracle rerank demo" into a deployable verbalizer and is the
-strongest paper-2 claim.
+(ρ≈0.28) on Qwen. The chosen lever is draft-conditioned decoding
+(retrieval-then-edit): the AV conditions on the NN-retrieved text plus v, so
+its worst case is copying the draft (= the NN baseline). Built and
+smoke-tested 2026-07-08 (`scripts/train_nla_draft.py`, AV `context_ids`).
+Retargeted to the vision backbone gemma-4-31B-it at L47 (the cross-modal
+alignment peak) so the same AV powers the vision follow-on: verbalizing
+image-position activations (`scripts/gemma4_vision_verbalize.py`). Full
+box runbook: `scripts/train_gemma4_nla_all.sh` (phases 0–8). Needs one
+96GB+ GPU box.
 
 ## 4. Run the gpt-oss-120b port
 

@@ -24,7 +24,14 @@ import logging
 from pathlib import Path
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoTokenizer
+
+from srt.nla.backbones import (
+    hidden_size_of,
+    load_frozen_backbone,
+    num_layers_of,
+    text_config,
+)
 
 logger = logging.getLogger("sample_targets")
 
@@ -61,15 +68,9 @@ def _dtype(name: str) -> torch.dtype:
 
 
 def _load_backbone(model_id: str, dtype: torch.dtype):
-    """Load a causal-LM backbone across transformers versions.
-
-    Newer transformers use ``dtype=``; older releases only accept the
-    deprecated ``torch_dtype=`` and raise ``TypeError`` on ``dtype=``.
-    """
-    try:
-        return AutoModelForCausalLM.from_pretrained(model_id, dtype=dtype)
-    except TypeError:
-        return AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype)
+    """Load a frozen backbone with the correct class (multimodal-aware)."""
+    model, _ = load_frozen_backbone(model_id, dtype)
+    return model
 
 
 def main() -> None:
@@ -83,7 +84,7 @@ def main() -> None:
     model.to(device)
     model.eval()
 
-    n_hidden = model.config.num_hidden_layers
+    n_hidden = num_layers_of(model.config)
     if args.layers is not None:
         if args.layers.strip() == "all":
             layers = list(range(1, n_hidden + 1))
@@ -96,8 +97,13 @@ def main() -> None:
             raise SystemExit(f"layer {L} out of range for {args.backbone} (1..{n_hidden})")
     primary_layer = args.layer if args.layer in layers else layers[0]
 
-    bos = tok.bos_token_id or model.config.bos_token_id or 0
-    eos_id = tok.eos_token_id if tok.eos_token_id is not None else model.config.eos_token_id
+    tcfg = text_config(model.config)
+    bos = tok.bos_token_id or getattr(tcfg, "bos_token_id", None) or 0
+    eos_id = (
+        tok.eos_token_id
+        if tok.eos_token_id is not None
+        else getattr(tcfg, "eos_token_id", None)
+    )
     pad_id = tok.pad_token_id if tok.pad_token_id is not None else eos_id
     args.out.parent.mkdir(parents=True, exist_ok=True)
 
@@ -177,7 +183,7 @@ def main() -> None:
                     "backbone_id": args.backbone,
                     "extraction_layer": primary_layer,
                     "layers": layers,
-                    "d": model.config.hidden_size,
+                    "d": hidden_size_of(model.config),
                     "temperature": args.temperature,
                     "top_p": args.top_p,
                     "seed": args.seed,

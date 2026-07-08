@@ -45,17 +45,10 @@ from pathlib import Path
 
 import torch
 import torch.nn.functional as F
-from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from srt.nla import ActivationVerbalizer, NLAConfig
+from srt.nla import ActivationVerbalizer, NLAConfig, load_frozen_backbone
 
 logger = logging.getLogger("train_nla_draft")
-
-_DTYPE_MAP = {
-    "float32": torch.float32,
-    "float16": torch.float16,
-    "bfloat16": torch.bfloat16,
-}
 
 
 def parse_args() -> argparse.Namespace:
@@ -179,15 +172,7 @@ def main() -> None:
     )
 
     logger.info("loading backbone %s", args.backbone)
-    backbone = AutoModelForCausalLM.from_pretrained(
-        args.backbone, torch_dtype=_DTYPE_MAP[args.dtype]
-    )
-    for p in backbone.parameters():
-        p.requires_grad = False
-    backbone.to(device).eval()
-    tok = AutoTokenizer.from_pretrained(args.backbone)
-    if tok.pad_token_id is None:
-        tok.pad_token_id = tok.eos_token_id
+    backbone, tok = load_frozen_backbone(args.backbone, args.dtype, device=device)
     pad_id = tok.pad_token_id
     sep_ids = tok(args.separator, add_special_tokens=False)["input_ids"]
     logger.info("separator %r -> %s", args.separator, sep_ids)

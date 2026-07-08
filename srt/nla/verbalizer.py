@@ -19,6 +19,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from srt.nla.backbones import hidden_size_of, num_layers_of, text_config
 from srt.nla.config import NLAConfig
 
 logger = logging.getLogger(__name__)
@@ -59,8 +60,8 @@ class ActivationVerbalizer(nn.Module):
             tokenizer = AutoTokenizer.from_pretrained(cfg.backbone_id)
         self.tokenizer = tokenizer
 
-        self._d_embed = self.backbone.config.hidden_size
-        self._num_layers = self.backbone.config.num_hidden_layers
+        self._d_embed = hidden_size_of(self.backbone.config)
+        self._num_layers = num_layers_of(self.backbone.config)
         self._backbone_dtype = dtype
         d_vec = cfg.d_vector or self._d_embed
 
@@ -110,7 +111,8 @@ class ActivationVerbalizer(nn.Module):
         self._prefix_mode = getattr(cfg, "prefix_mode", "static")
         if n_pref > 0:
             bos_id = (
-                self.backbone.config.bos_token_id
+                getattr(text_config(self.backbone.config), "bos_token_id", None)
+                or getattr(self.backbone.config, "bos_token_id", None)
                 or self.tokenizer.bos_token_id
                 or 0
             )

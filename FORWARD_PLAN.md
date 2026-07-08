@@ -29,6 +29,10 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >    `space-bacon/SRT-Sunstone`.
 >
 > **Open queue (2026-07-08, priority order):**
+> - **Greedy-gap attack on gemma-4-31B-it (launch-ready, needs one 96GB box).**
+>   Draft-conditioned decoding (retrieval-then-edit) at L47, then the vision
+>   transition (image-position verbalization). Runbook:
+>   `scripts/train_gemma4_nla_all.sh`; trainer `scripts/train_nla_draft.py`.
 > - Press/outreach: WIRED pitch drafted (Sandra Upson); send decision
 >   with the user.
 > - MTEB(eng, v2) full 41-task run for `v22c_a050` leaderboard

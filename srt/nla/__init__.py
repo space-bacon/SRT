@@ -17,6 +17,12 @@ See ``docs/SRT_NLA_PLAN.md`` for the phasing.
 
 from __future__ import annotations
 
+from srt.nla.backbones import (
+    hidden_size_of,
+    load_frozen_backbone,
+    num_layers_of,
+    text_config,
+)
 from srt.nla.config import NLAConfig
 from srt.nla.loss import (
     cosine_similarity,
