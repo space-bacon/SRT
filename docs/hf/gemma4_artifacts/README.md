@@ -11,21 +11,27 @@ pretty_name: SRT-NLA gemma-4-31B-it L47 artifacts
 
 # SRT-NLA gemma-4-31B-it artifacts (L47)
 
-Retrieval indexes, anchors, and evaluation results for the SRT-NLA work
-on a frozen `google/gemma-4-31B-it`
+**The retrieval indexes that let a frozen gemma-4-31B-it say what it
+sees and what it means — in full sentences, with zero training.**
+
+Layer 47 is the backbone's cross-modal alignment peak. Encode any L47
+state — a text's last token, or the mean over an image's soft-tokens —
+and these indexes decode it by nearest-neighbour retrieval
 ([github.com/space-bacon/SRT](https://github.com/space-bacon/SRT),
 `paper_nla.md` §11.6–§11.7).
 
-## The recommended decoder for this backbone is retrieval
+## What they power
 
-The trained verbalizer mode-collapses under greedy decoding on this
-chat-tuned host (see
-[`RiverRider/srt-nla-av-gemma4`](https://huggingface.co/RiverRider/srt-nla-av-gemma4)),
-while zero-training nearest-neighbour retrieval against these indexes
-reaches centered fve 0.695 on text and retrieves on-topic captions for
-5/5 CIFAR natural images at rank 1 (paper §11.6.3). These indexes power
-the open-vocabulary caption panel in the live
-[SRT-Sunstone demo](https://huggingface.co/spaces/RiverRider/srt-sunstone).
+- **Open-vocabulary image captioning**: 5/5 CIFAR natural images
+  retrieve on-topic captions at rank 1 from the 10k pool (paper
+  §11.6.3), live in the
+  [SRT-Sunstone demo](https://huggingface.co/spaces/RiverRider/srt-sunstone).
+- **Text-state read-out** at centered fve 0.695 (NN) inside a calibrated
+  anchor frame (replay 0.994 / floor 0.494).
+- Retrieval is the primary decoder on this backbone; the generative
+  companion for sampled candidates is
+  [`RiverRider/srt-nla-av-gemma4`](https://huggingface.co/RiverRider/srt-nla-av-gemma4)
+  (best-of-K with oracle rerank).
 
 ## Files
 
@@ -34,8 +40,8 @@ the open-vocabulary caption panel in the live
 | `caption_index_L47.pt` | `{vectors: (10000, 5376) fp16, texts}` — last-token L47 states of 10k deduped COCO captions. The open-vocabulary image→caption retrieval index. |
 | `corpus_index_L47.pt` | `{vectors: (10000, 5376) fp16, texts}` — last-token L47 states of 10k forum passages. The text-side NN baseline pool. |
 | `anchors_L47.json` | Centered reference frame: replay 0.994 / NN 0.695 / floor 0.494. |
-| `kcurve_ce.jsonl` | Per-target best-of-K rollouts + scores for the K-curve (greedy 0.50 → best-of-32 0.59). |
-| `decode_probe_ce.jsonl` | Decoded samples showing the greedy mode collapse. |
+| `kcurve_ce.jsonl` | Per-target best-of-K rollouts + scores for the K-curve. |
+| `decode_probe_ce.jsonl` | Decoded verbalizer samples (paper §11.7 measurement set). |
 | `vision_caps_retrieval.json`, `vision_caps_cifar.json` | Image→caption retrieval results (stereo images; CIFAR naturals 5/5 rank-1). |
 | `caption_pool.jsonl`, `corpus_targets.jsonl` | The source texts (regenerate either index in ~8 min with `scripts/sample_targets.py --corpus`). |
 
