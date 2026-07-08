@@ -138,7 +138,7 @@ if run_phase 4; then
   nohup "${PY}" scripts/nla_anchors.py \
     --backbone "${BACKBONE}" --layer "${NLA_LAYER}" \
     --targets "${TARGETS}" --pairs "${PAIRS}" \
-    --num-queries 100 --pool-size 2000 \
+    --num-queries 100 --pool-size 2000 --prepend-bos \
     --out "${ART}/anchors_L${NLA_LAYER}.json" \
     > "${LOGS}/anchors.log" 2>&1
   cat "${ART}/anchors_L${NLA_LAYER}.json"
@@ -152,7 +152,7 @@ if run_phase 5; then
     --backbone "${BACKBONE}" --layer "${NLA_LAYER}" \
     --num-prefix-tokens "${NP}" --max-seq-len "${NLA_SEQ_LEN}" \
     --ce-weight 1.0 --act-weight 0.0 \
-    --select-metric centered --val-bestof 8 \
+    --select-metric centered --val-bestof 8 --prepend-bos \
     --epochs "${AV_EPOCHS}" --batch-size "${AV_BATCH}" --lr "${AV_LR_CE}" \
     --val-every 400 --val-vectors 200 \
     --out "${ART}/ce_seq${NLA_SEQ_LEN}_np${NP}" \
@@ -167,6 +167,7 @@ if run_phase 6; then
     --backbone "${BACKBONE}" --layer "${NLA_LAYER}" \
     --init-from "${ART}/ce_seq${NLA_SEQ_LEN}_np${NP}/best_av.pt" \
     --num-prefix-tokens "${NP}" --max-seq-len "${NLA_SEQ_LEN}" \
+    --prepend-bos \
     --epochs "${AV_EPOCHS}" --batch-size "${AV_BATCH}" --lr "${AV_LR_DRAFT}" \
     --val-every 400 --val-vectors 200 --val-bestof 8 \
     --out "${ART}/draft_seq${NLA_SEQ_LEN}_np${NP}" \

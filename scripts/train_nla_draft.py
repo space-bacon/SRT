@@ -69,6 +69,10 @@ def parse_args() -> argparse.Namespace:
                    help="text placed between draft and gold/generation")
     p.add_argument("--draft-dropout", type=float, default=0.1,
                    help="fraction of training rows whose draft is blanked")
+    p.add_argument("--prepend-bos", action="store_true",
+                   help="prepend BOS in every prefix-free re-encode (val "
+                        "scoring). REQUIRED on BOS-sensitive backbones "
+                        "(gemma-4).")
     p.add_argument("--epochs", type=int, default=2)
     p.add_argument("--batch-size", type=int, default=16)
     p.add_argument("--lr", type=float, default=1e-4)
@@ -141,12 +145,18 @@ def _eos_attn(gen_ids: torch.Tensor, eos_id: int | None) -> torch.Tensor:
 
 @torch.no_grad()
 def _encode_last_h(
-    backbone, ids: torch.Tensor, layer: int, attn: torch.Tensor | None = None
+    backbone, ids: torch.Tensor, layer: int, attn: torch.Tensor | None = None,
+    bos_id: int | None = None,
 ) -> torch.Tensor:
     """Prefix-free re-encode: (B, T) ids -> (B, d) hidden at `layer`, last
-    valid (attended) position per row."""
+    valid (attended) position per row. ``bos_id`` prepends a BOS column
+    (required on BOS-sensitive backbones such as gemma-4)."""
     if attn is None:
         attn = torch.ones_like(ids)
+    if bos_id is not None:
+        col = torch.full((ids.size(0), 1), bos_id, dtype=ids.dtype, device=ids.device)
+        ids = torch.cat([col, ids], dim=1)
+        attn = torch.cat([torch.ones_like(col), attn], dim=1)
     out = backbone(input_ids=ids, attention_mask=attn,
                    output_hidden_states=True, use_cache=False)
     h = out.hidden_states[layer]
@@ -265,6 +275,7 @@ def main() -> None:
     @torch.no_grad()
     def run_val() -> dict[str, float]:
         av.eval()
+        bos_re = tok.bos_token_id if args.prepend_bos else None
         draft_sum = greedy_sum = best_sum = 0.0
         n = 0
         K = max(1, args.val_bestof)
@@ -273,13 +284,14 @@ def main() -> None:
             v_c = v - mu
             ctx = torch.tensor([list(dids) + list(sep_ids)], dtype=torch.long, device=device)
             # copy baseline: encode the draft text alone
-            h_d = _encode_last_h(backbone, torch.tensor([dids], device=device), args.layer)
+            h_d = _encode_last_h(backbone, torch.tensor([dids], device=device),
+                                 args.layer, bos_id=bos_re)
             draft_sum += float(_fve_nrm(h_d - mu, v_c).item())
             # greedy, draft-conditioned
             gen = av.generate(v, max_new_tokens=args.max_seq_len, do_sample=False,
                               context_ids=ctx)
             h_g = _encode_last_h(backbone, gen, args.layer,
-                                 attn=_eos_attn(gen, tok.eos_token_id))
+                                 attn=_eos_attn(gen, tok.eos_token_id), bos_id=bos_re)
             greedy_sum += float(_fve_nrm(h_g - mu, v_c).item())
             # best-of-K sampled, draft-conditioned (per-target batch: no padding)
             if K > 1:
@@ -288,7 +300,7 @@ def main() -> None:
                 genK = av.generate(v_rep, max_new_tokens=args.max_seq_len,
                                    do_sample=True, temperature=1.0, context_ids=ctx_rep)
                 h_k = _encode_last_h(backbone, genK, args.layer,
-                                     attn=_eos_attn(genK, tok.eos_token_id))
+                                     attn=_eos_attn(genK, tok.eos_token_id), bos_id=bos_re)
                 best_sum += float(_fve_nrm(h_k - mu, (v_c).expand(K, -1)).max().item())
             n += 1
         av.train()

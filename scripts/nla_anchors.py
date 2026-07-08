@@ -42,6 +42,10 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--num-queries", type=int, default=100)
     p.add_argument("--pool-size", type=int, default=2000)
     p.add_argument("--batch-size", type=int, default=16)
+    p.add_argument("--prepend-bos", action="store_true",
+                   help="prepend BOS to every re-encode. REQUIRED on "
+                        "BOS-sensitive backbones (gemma-4: replay_cen 0.62 "
+                        "without BOS, 0.999 with).")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--out", required=True, type=Path)
     return p.parse_args()
@@ -77,6 +81,8 @@ def main() -> None:
 
     @torch.no_grad()
     def encode_texts(id_lists: list[list[int]]) -> torch.Tensor:
+        if args.prepend_bos and tok.bos_token_id is not None:
+            id_lists = [[tok.bos_token_id] + list(x) for x in id_lists]
         out = []
         for i in range(0, len(id_lists), args.batch_size):
             chunk = id_lists[i : i + args.batch_size]

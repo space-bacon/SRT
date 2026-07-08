@@ -65,6 +65,9 @@ def parse_args() -> argparse.Namespace:
                    help="K sampled rollouts per val target; score = per-target max. "
                         "K=1 keeps legacy greedy val. Greedy disc-fve is documented "
                         "to be uninformative for checkpoint ranking; use K>=8.")
+    p.add_argument("--prepend-bos", action="store_true",
+                   help="prepend BOS when re-encoding generated ids in val. "
+                        "REQUIRED on BOS-sensitive backbones (gemma-4).")
     p.add_argument("--backbone", default="Qwen/Qwen2.5-7B")
     p.add_argument("--dtype", default="bfloat16")
     p.add_argument("--layer", type=int, default=20)
@@ -308,6 +311,11 @@ def main() -> None:
                 torch.full((B, 1), T, device=gen_ids.device, dtype=torch.long),
             )
             gen_attn = (pos <= first_eos).long()
+            if args.prepend_bos and tok.bos_token_id is not None:
+                col = torch.full((B, 1), tok.bos_token_id, dtype=gen_ids.dtype,
+                                 device=gen_ids.device)
+                gen_ids = torch.cat([col, gen_ids], dim=1)
+                gen_attn = torch.cat([torch.ones_like(col), gen_attn], dim=1)
             out2 = backbone(
                 input_ids=gen_ids, attention_mask=gen_attn,
                 output_hidden_states=True, use_cache=False,

@@ -120,10 +120,12 @@ def main() -> None:
 
     @torch.no_grad()
     def reencode_last(texts: list[str]) -> torch.Tensor:
+        bos = tok.bos_token_id
         hs = []
         for t in texts:
-            ids = torch.tensor([tok(t, add_special_tokens=False)["input_ids"]
-                                or [tok.pad_token_id]], device=device)
+            body = tok(t, add_special_tokens=False)["input_ids"] or [tok.pad_token_id]
+            # gemma-4 is BOS-sensitive: replay_cen 0.62 without BOS, 0.999 with.
+            ids = torch.tensor([[bos] + body], device=device)
             o = backbone(input_ids=ids, output_hidden_states=True, use_cache=False)
             hs.append(o.hidden_states[args.layer][0, -1].float())
         return torch.stack(hs)
