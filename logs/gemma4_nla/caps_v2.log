@@ -1,0 +1,57 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2964.17it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  88%|████████▊ | 1040/1188 [00:00<00:00, 10352.74it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 10559.69it/s]
+augment captions: 88
+pool: 10088
+control
+  0.570 | A view of a park bench through a split tree trunk.
+  0.566 | A view of a bathroom toilet, tub, and sink with a mirror cut out.
+  0.563 | A brand new toilet with a bow across the seat.
+stereogram
+  0.694 | An abstract mosaic of tiny colored squares.
+  0.639 | An image of half a bathroom and half stairs.
+  0.637 | A filthy bathroom full of debris, broken glass, and grime.
+disparity
+  0.565 | A view of a bathroom toilet, tub, and sink with a mirror cut out.
+  0.562 | A view of a park bench through a split tree trunk.
+  0.562 | A bathroom has a toilet seat shaped like a shell.
+Traceback (most recent call last):
+  File "/venv/main/lib/python3.12/shutil.py", line 847, in move
+    os.rename(src, real_dst)
+OSError: [Errno 116] Stale file handle: '/workspace/.hf_home/hub/datasets--uoft-cs--cifar10/blobs/841389e6f2d64f28bf17310e430aebac20ec3ba611a3c5e231dc93c645ce84de.856ca12c.incomplete' -> '/workspace/.hf_home/hub/datasets--uoft-cs--cifar10/blobs/841389e6f2d64f28bf17310e430aebac20ec3ba611a3c5e231dc93c645ce84de'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1949, in _copy_no_matter_what
+    shutil.copy2(src, dst)
+  File "/venv/main/lib/python3.12/shutil.py", line 475, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/venv/main/lib/python3.12/shutil.py", line 262, in copyfile
+    with open(dst, 'wb') as fdst:
+         ^^^^^^^^^^^^^^^
+OSError: [Errno 116] Stale file handle: '/workspace/.hf_home/hub/datasets--uoft-cs--cifar10/blobs/841389e6f2d64f28bf17310e430aebac20ec3ba611a3c5e231dc93c645ce84de'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 72, in <module>
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1241, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1889, in _download_to_tmp_and_move
+    _chmod_and_move(tmp_path, destination_path)
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1938, in _chmod_and_move
+    shutil.move(str(src), str(dst), copy_function=_copy_no_matter_what)
+  File "/venv/main/lib/python3.12/shutil.py", line 867, in move
+    copy_function(src, real_dst)
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1952, in _copy_no_matter_what
+    shutil.copyfile(src, dst)
+  File "/venv/main/lib/python3.12/shutil.py", line 262, in copyfile
+    with open(dst, 'wb') as fdst:
+         ^^^^^^^^^^^^^^^
+OSError: [Errno 116] Stale file handle: '/workspace/.hf_home/hub/datasets--uoft-cs--cifar10/blobs/841389e6f2d64f28bf17310e430aebac20ec3ba611a3c5e231dc93c645ce84de'

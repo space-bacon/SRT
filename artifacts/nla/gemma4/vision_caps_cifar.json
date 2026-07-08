@@ -1,0 +1,87 @@
+[
+  {
+    "image": "cifar_cat",
+    "retrievals": [
+      {
+        "cen": 0.6159953474998474,
+        "text": "Cats standing in and next to a restroom sink."
+      },
+      {
+        "cen": 0.6067133545875549,
+        "text": "An orange tabby cat peaking out from behind a tire."
+      },
+      {
+        "cen": 0.6063196659088135,
+        "text": "A blurry picture of a kitchen stove and tea pot."
+      }
+    ]
+  },
+  {
+    "image": "cifar_dog",
+    "retrievals": [
+      {
+        "cen": 0.6506145000457764,
+        "text": "Kitchen scene light brown wood wood counter tops and floor with mostly brown dog with white accents."
+      },
+      {
+        "cen": 0.6368017792701721,
+        "text": "A man kneeling down next to a brown and white dog with black spots."
+      },
+      {
+        "cen": 0.6178684234619141,
+        "text": "two women in a kitche with a little brown and white dog"
+      }
+    ]
+  },
+  {
+    "image": "cifar_ship",
+    "retrievals": [
+      {
+        "cen": 0.6310629844665527,
+        "text": "A red bicycle in front of a line of docked white yachts"
+      },
+      {
+        "cen": 0.629034161567688,
+        "text": "Bicycles parked at a marina of motor boats"
+      },
+      {
+        "cen": 0.5890772342681885,
+        "text": "A boater is driving a speed boat through the water."
+      }
+    ]
+  },
+  {
+    "image": "cifar_truck",
+    "retrievals": [
+      {
+        "cen": 0.6025760173797607,
+        "text": "A woman is carrying carrots by a truck"
+      },
+      {
+        "cen": 0.6018434762954712,
+        "text": "A man in a helmet stands in front of a fire truck."
+      },
+      {
+        "cen": 0.5973396301269531,
+        "text": "A man riding his bike near a beach passing by a truck"
+      }
+    ]
+  },
+  {
+    "image": "cifar_horse",
+    "retrievals": [
+      {
+        "cen": 0.680407702922821,
+        "text": "an old black and white photo with a person riding a horse"
+      },
+      {
+        "cen": 0.6649699211120605,
+        "text": "Two pictures of a woman sitting on a horse"
+      },
+      {
+        "cen": 0.6608759164810181,
+        "text": "The man with blue jacked and yellow hat stands next to the white horses"
+      }
+    ]
+  }
+]

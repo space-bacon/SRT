@@ -1,0 +1,24 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3185.95it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  52%|█████▏    | 616/1188 [00:00<00:00, 6157.79it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 5843.94it/s]
+control: heart caption rank=352/10088 cen=0.535
+cifar_cat
+  0.616 | Cats standing in and next to a restroom sink.
+  0.607 | An orange tabby cat peaking out from behind a tire.
+  0.606 | A blurry picture of a kitchen stove and tea pot.
+cifar_dog
+  0.651 | Kitchen scene light brown wood wood counter tops and floor with mostly brown dog with whit
+  0.637 | A man kneeling down next to a brown and white dog with black spots.
+  0.618 | two women in a kitche with a little brown and white dog
+cifar_ship
+  0.631 | A red bicycle in front of a line of docked white yachts
+  0.629 | Bicycles parked at a marina of motor boats
+  0.589 | A boater is driving a speed boat through the water.
+cifar_truck
+  0.603 | A woman is carrying carrots by a truck
+  0.602 | A man in a helmet stands in front of a fire truck.
+  0.597 | A man riding his bike near a beach passing by a truck
+cifar_horse
+  0.680 | an old black and white photo with a person riding a horse
+  0.665 | Two pictures of a woman sitting on a horse
+  0.661 | The man with blue jacked and yellow hat stands next to the white horses
+DONE

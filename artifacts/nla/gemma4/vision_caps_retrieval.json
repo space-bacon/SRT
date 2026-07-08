@@ -1,0 +1,53 @@
+[
+  {
+    "image": "artifacts/nla/gemma4/stereo/control.png",
+    "retrievals": [
+      {
+        "cen_fve": 0.5696475505828857,
+        "text": "A view of a park bench through a split tree trunk."
+      },
+      {
+        "cen_fve": 0.5658310651779175,
+        "text": "A view of a bathroom toilet, tub, and sink with a mirror cut out."
+      },
+      {
+        "cen_fve": 0.5632837414741516,
+        "text": "A brand new toilet with a bow across the seat."
+      }
+    ]
+  },
+  {
+    "image": "artifacts/nla/gemma4/stereo/stereogram.png",
+    "retrievals": [
+      {
+        "cen_fve": 0.6381338834762573,
+        "text": "An image of half a bathroom and half stairs."
+      },
+      {
+        "cen_fve": 0.6362114548683167,
+        "text": "A filthy bathroom full of debris, broken glass, and grime."
+      },
+      {
+        "cen_fve": 0.6344963312149048,
+        "text": "A wooden table filled with office supplies and cooking utensils."
+      }
+    ]
+  },
+  {
+    "image": "artifacts/nla/gemma4/stereo/disparity.png",
+    "retrievals": [
+      {
+        "cen_fve": 0.565180778503418,
+        "text": "A view of a bathroom toilet, tub, and sink with a mirror cut out."
+      },
+      {
+        "cen_fve": 0.5617462992668152,
+        "text": "A view of a park bench through a split tree trunk."
+      },
+      {
+        "cen_fve": 0.5615155696868896,
+        "text": "A bathroom has a toilet seat shaped like a shell."
+      }
+    ]
+  }
+]
