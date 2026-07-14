@@ -26,11 +26,19 @@ WARN = "#ffb3c1"
 
 W, H, S = 1672, 941, 2  # output size, supersample factor
 DIDOT = "/System/Library/Fonts/Supplemental/Didot.ttc"
+SANS = "/System/Library/Fonts/HelveticaNeue.ttc"
 
 
 def F(size: int, face: str = "regular") -> ImageFont.FreeTypeFont:
+    """Didot: hero/title use only (hard to read at body sizes)."""
     idx = {"regular": 0, "italic": 1, "bold": 2}[face]
     return ImageFont.truetype(DIDOT, size * S, index=idx)
+
+
+def G(size: int, face: str = "regular") -> ImageFont.FreeTypeFont:
+    """Helvetica Neue for exhibit body copy."""
+    idx = {"regular": 0, "bold": 1, "italic": 2, "medium": 10, "light": 7}[face]
+    return ImageFont.truetype(SANS, size * S, index=idx)
 
 
 def canvas() -> tuple[Image.Image, ImageDraw.ImageDraw]:
@@ -47,10 +55,10 @@ def kicker_block(d: ImageDraw.ImageDraw, kicker: str, headline: list[str],
                  y0: int = 72) -> int:
     """Standard exhibit header. Returns y below the rule."""
     x = 96 * S
-    d.text((x, y0 * S), kicker.upper(), font=F(21), fill=VIOLET)
+    d.text((x, y0 * S), kicker.upper(), font=G(20, "medium"), fill=VIOLET)
     y = y0 + 44
     for ln in headline:
-        d.text((x, y * S), ln, font=F(52, "bold"), fill=INK)
+        d.text((x, y * S), ln, font=G(48, "bold"), fill=INK)
         y += 62
     y += 14
     d.line([(x, y * S), ((W - 96) * S, y * S)], fill=LINE, width=2 * S)
@@ -58,7 +66,7 @@ def kicker_block(d: ImageDraw.ImageDraw, kicker: str, headline: list[str],
 
 
 def footer(d: ImageDraw.ImageDraw, text: str) -> None:
-    d.text((96 * S, (H - 58) * S), text, font=F(19), fill=MUTED)
+    d.text((96 * S, (H - 58) * S), text, font=G(18, "light"), fill=MUTED)
 
 
 def spark(d: ImageDraw.ImageDraw, pts: list[float], box: tuple[int, int, int, int],
@@ -133,18 +141,18 @@ def instruments(out: str) -> None:
     for i, (a, asub, b, bsub) in enumerate(rows):
         ry = y + 26 + i * (row_h + gap)
         rounded(d, (col1_x, ry, col1_x + col_w, ry + row_h), PANEL)
-        d.text(((col1_x + 34) * S, (ry + 20) * S), a, font=F(30, "bold"), fill=INK)
-        d.text(((col1_x + 34) * S, (ry + 66) * S), asub, font=F(22), fill=MUTED)
+        d.text(((col1_x + 34) * S, (ry + 20) * S), a, font=G(28, "bold"), fill=INK)
+        d.text(((col1_x + 34) * S, (ry + 66) * S), asub, font=G(21), fill=MUTED)
         rounded(d, (col2_x, ry, col2_x + col_w - 24, ry + row_h), PANEL2, outline=VIOLET)
-        d.text(((col2_x + 34) * S, (ry + 20) * S), b, font=F(30, "bold"), fill=VIOLET)
-        d.text(((col2_x + 34) * S, (ry + 66) * S), bsub, font=F(22), fill="#cfc8f0")
+        d.text(((col2_x + 34) * S, (ry + 20) * S), b, font=G(28, "bold"), fill=VIOLET)
+        d.text(((col2_x + 34) * S, (ry + 66) * S), bsub, font=G(21), fill="#cfc8f0")
         ay = ry + row_h // 2
         d.line([((col1_x + col_w + 18) * S, ay * S), ((col2_x - 18) * S, ay * S)],
                fill=LINE, width=3 * S)
         d.polygon([((col2_x - 18) * S, (ay - 7) * S), ((col2_x - 18) * S, (ay + 7) * S),
                    ((col2_x - 4) * S, ay * S)], fill=VIOLET)
-    d.text((col1_x * S, (y - 4) * S), "THE COCKPIT", font=F(20), fill=MUTED)
-    d.text((col2_x * S, (y - 4) * S), "THE MODEL, WITH SRT", font=F(20), fill=VIOLET)
+    d.text((col1_x * S, (y - 4) * S), "THE COCKPIT", font=G(19, "medium"), fill=MUTED)
+    d.text((col2_x * S, (y - 4) * S), "THE MODEL, WITH SRT", font=G(19, "medium"), fill=VIOLET)
     footer(d, "SRT adds \u22480.17% parameters to a frozen model. The backbone is never retrained.   \u00b7   github.com/space-bacon/SRT")
     save(im, out)
 
@@ -177,14 +185,14 @@ def dangerous(out: str) -> None:
     d.ellipse([(sx - r) * S, (sy_ - r) * S, (sx + r) * S, (sy_ + r) * S],
               outline=WARN, width=3 * S)
     d.text(((sx + 28) * S, (sy_ - 12) * S), "regime shift detected",
-           font=F(26, "bold"), fill=WARN)
+           font=G(25, "bold"), fill=WARN)
     # annotate output-normal region
     d.text(((box[0] + 44) * S, (box[3] + 4) * S),
-           "output looks normal", font=F(22, "italic"), fill=MUTED)
+           "output looks normal", font=G(20, "italic"), fill=MUTED)
     d.text(((box[2] - 420) * S, (box[3] + 4) * S),
-           "output still looks normal", font=F(22, "italic"), fill=MUTED)
+           "output still looks normal", font=G(20, "italic"), fill=MUTED)
     d.text(((box[0] + 44) * S, (box[1] - 22) * S),
-           "per-token divergence, live during generation", font=F(21), fill=MUTED)
+           "per-token divergence, live during generation", font=G(20), fill=MUTED)
     footer(d, "\u201cThe most dangerous moment is when the system has quietly changed modes.\u201d  \u00b7  Signal shown: SRT divergence with regime annunciation")
     save(im, out)
 
@@ -208,9 +216,9 @@ def numbers(out: str) -> None:
     for i, (big, l1, l2) in enumerate(stats):
         cx = x0 + i * (card_w + gap)
         rounded(d, (cx, cy, cx + card_w, cy + card_h), PANEL)
-        ctext(d, cx + card_w // 2, cy + 58, big, F(66, "bold"), VIOLET)
-        ctext(d, cx + card_w // 2, cy + 182, l1, F(23), INK)
-        ctext(d, cx + card_w // 2, cy + 222, l2, F(23), MUTED)
+        ctext(d, cx + card_w // 2, cy + 58, big, G(64, "bold"), VIOLET)
+        ctext(d, cx + card_w // 2, cy + 182, l1, G(22), INK)
+        ctext(d, cx + card_w // 2, cy + 222, l2, G(22), MUTED)
     footer(d, "Every number is reproducible from the repository, with anchors, floors, and ceilings stated.   \u00b7   github.com/space-bacon/SRT \u00b7 huggingface.co/RiverRider")
     save(im, out)
 
