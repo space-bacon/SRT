@@ -8,7 +8,7 @@ torch>=2.6
 # mitigated by usage — the demos load fixed first-party model IDs only and
 # never use LightGlue; never pass untrusted Hub IDs to from_pretrained()
 # while this pin is <5.5.0.
-transformers==4.53.3
+transformers==5.5.0
 huggingface_hub>=0.24
 accelerate>=0.33
 sentencepiece

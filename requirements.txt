@@ -14,7 +14,7 @@ torch>=2.2
 # allowlist of first-party repos (Qwen/, openai/, google/, meta-llama/,
 # RiverRider/); LightGlue is never used. Do NOT add user-supplied model IDs
 # anywhere while this pin is <5.5.0.
-transformers==4.53.3
+transformers==5.5.0
 safetensors>=0.4
 huggingface_hub>=0.24
 numpy>=1.24
