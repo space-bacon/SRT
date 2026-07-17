@@ -40,6 +40,14 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >   `scripts/polyseme_minimal_pairs.py` (20 minimal pairs, 6 polysemes,
 >   paired d + sign-flip permutation; ~15 min on one GPU with the Qwen
 >   adapter). Also re-anchor their ρ on prompt-conditioned states.
+> - **State-switchboard pilot ("catscan test", contributor idea 2026-07-17).**
+>   Reverse probing → named concept switches: atlas (3 CS concepts +
+>   controls) / monitor (centered-cosine detection AUROC per layer) /
+>   steer (hook-based ±α·direction with coherence guard, May-probe
+>   mechanism) / route (deny-list → escalate simulation, no injection).
+>   `scripts/state_switchboard_pilot.py`, smoke-tested; ~30-45 min on one
+>   GPU. Monitor+Route are the deployable product; Steer is content-axis
+>   only (GSM8K A/B showed untrained injection hurts quality).
 > - Press/outreach: WIRED pitch drafted (Sandra Upson); send decision
 >   with the user.
 > - MTEB(eng, v2) full 41-task run for `v22c_a050` leaderboard
