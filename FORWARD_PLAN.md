@@ -33,6 +33,13 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >   base-vs-instruction-tuned hypothesis from `paper_nla.md` §11.7;
 >   identical pipeline, `scripts/train_gemma4_nla_all.sh` with
 >   BACKBONE=google/gemma-4-31B, one box-day).
+> - **Polyseme minimal-pair reproduction (external contribution #3,
+>   2026-07-17).** Contributor found Stage-3 CS-vs-food effects up to
+>   d=1.49 (bite/nibble) plus a FLAT best-of-K curve on OOD
+>   prompt-conditioned states. Confound-free paired design ready:
+>   `scripts/polyseme_minimal_pairs.py` (20 minimal pairs, 6 polysemes,
+>   paired d + sign-flip permutation; ~15 min on one GPU with the Qwen
+>   adapter). Also re-anchor their ρ on prompt-conditioned states.
 > - Press/outreach: WIRED pitch drafted (Sandra Upson); send decision
 >   with the user.
 > - MTEB(eng, v2) full 41-task run for `v22c_a050` leaderboard
