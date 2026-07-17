@@ -26,9 +26,10 @@ dependencies = [
     # (verified on Qwen2.5-7B). forward() parity is fine under 5.x but multi-step
     # cached decoding degenerates. CVE-2026-1839 is mitigated by torch>=2.6 (and
     # we never use the HF Trainer), so we do not need the 5.x code fix.
-    # CVE-2026-4372 (config.json RCE, patched only in 5.3.0): mitigated by usage
-    # — this package only loads fixed first-party model IDs; callers must not
-    # pass untrusted Hub IDs to from_pretrained() while pinned <5.3.0.
+    # CVE-2026-4372 + CVE-2026-5241 (loader RCEs, patched only in 5.3.0/5.5.0):
+    # mitigated by usage — this package only loads fixed first-party model IDs
+    # and never uses LightGlue; callers must not pass untrusted Hub IDs to
+    # from_pretrained() while pinned <5.5.0.
     "transformers>=4.40,<5.0",
     "safetensors>=0.4",
     "huggingface_hub>=0.24",

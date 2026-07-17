@@ -6,9 +6,10 @@ srt-adapter @ git+https://github.com/space-bacon/SRT.git@main
 # HARD PIN: transformers 5.x breaks the adapter's KV-cached manual generation
 # (verified: 5.7.0 garbles on Qwen2.5-7B, 4.53.3 correct). This is the deployed
 # showcase; generation MUST work. CVE-2026-1839 stays mitigated by torch>=2.6.
-# CVE-2026-4372 (config.json RCE, patched only in 5.3.0): mitigated by usage —
-# this Space loads only Qwen/Qwen2.5-7B + RiverRider checkpoints; no
-# user-supplied Hub IDs reach from_pretrained().
+# CVE-2026-4372 + CVE-2026-5241 (loader RCEs, patched only in 5.3.0/5.5.0):
+# mitigated by usage — this Space loads only Qwen/Qwen2.5-7B + RiverRider
+# checkpoints and never uses LightGlue; no user-supplied Hub IDs reach
+# from_pretrained().
 transformers==4.53.3
 torch>=2.6
 gradio==6.17.3

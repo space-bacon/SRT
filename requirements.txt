@@ -8,10 +8,12 @@ torch>=2.2
 # cached decoding is not. CVE-2026-1839 (Trainer RCE) stays mitigated by the
 # torch>=2.6 floor below, and we never invoke the HF Trainer.
 # CVE-2026-4372 (config.json `_attn_implementation_internal` RCE, patched only
-# in 5.3.0): mitigated by usage, not upgrade — every from_pretrained() call in
-# this repo loads a fixed allowlist of first-party repos (Qwen/, openai/,
-# google/, meta-llama/, RiverRider/); no untrusted Hub IDs are ever loaded.
-# Do NOT add user-supplied model IDs anywhere while this pin is <5.3.0.
+# in 5.3.0) and CVE-2026-5241 (LightGlue loading-path RCE, patched only in
+# 5.5.0): both require loading an ATTACKER-CONTROLLED Hub repo. Mitigated by
+# usage, not upgrade — every from_pretrained() call in this repo loads a fixed
+# allowlist of first-party repos (Qwen/, openai/, google/, meta-llama/,
+# RiverRider/); LightGlue is never used. Do NOT add user-supplied model IDs
+# anywhere while this pin is <5.5.0.
 transformers==4.53.3
 safetensors>=0.4
 huggingface_hub>=0.24
