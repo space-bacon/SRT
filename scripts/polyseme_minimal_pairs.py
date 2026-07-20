@@ -132,7 +132,11 @@ def paired_stats(cs: list[float], food: list[float],
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--adapter", default=None)
+    ap.add_argument("--adapter", default=None,
+                   help="local .pt adapter checkpoint (overrides --adapter-repo)")
+    ap.add_argument("--adapter-repo", default="RiverRider/srt-adapter-v1.0",
+                   help="HF repo with config.json + adapter.safetensors "
+                        "(the Stage-3 signals the contributor used)")
     ap.add_argument("--backbone", default="Qwen/Qwen2.5-7B")
     ap.add_argument("--max-new", type=int, default=32)
     ap.add_argument("--temperature", type=float, default=0.0,
@@ -159,13 +163,23 @@ def main() -> None:
 
     torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    cfg = SRTConfig(backbone_id=args.backbone)
-    model = SRTAdapter(cfg).to(device).eval()
     if args.adapter:
+        cfg = SRTConfig(backbone_id=args.backbone)
+        model = SRTAdapter(cfg).to(device).eval()
         ck = torch.load(args.adapter, map_location=device, weights_only=False)
         state = ck.get("adapter", ck.get("trainable", ck)) if isinstance(ck, dict) else ck
         model.load_state_dict(state, strict=False)
         print(f"loaded adapter {args.adapter}")
+    else:
+        from huggingface_hub import hf_hub_download
+        from safetensors.torch import load_file
+        cfg = SRTConfig.from_json(hf_hub_download(args.adapter_repo, "config.json"))
+        cfg.backbone_id = args.backbone
+        model = SRTAdapter(cfg).to(device).eval()
+        sd = load_file(hf_hub_download(args.adapter_repo, "adapter.safetensors"))
+        missing, unexpected = model.load_state_dict(sd, strict=False)
+        print(f"loaded HF adapter {args.adapter_repo} "
+              f"({len(sd)} tensors; missing={len(missing)} unexpected={len(unexpected)})")
     tok = AutoTokenizer.from_pretrained(args.backbone)
 
     def collect(prompt: str) -> dict[str, float]:
