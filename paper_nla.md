@@ -1614,17 +1614,33 @@ rerank on the CE checkpoint climbs from $0.507$ ($K{=}1$) to $0.591$
 ($K{=}32$) at $+0.017$ per doubling of $K$, exactly the gpt-oss slope
 and half the Qwen slope, and extrapolates to an impractical $K \approx
 2000$ to reach the retrieval baseline. Across four backbones the pattern
-is now: the base-model host (Qwen2.5-7B) crosses its paraphrase ceiling
+is: the base-model host (Qwen2.5-7B) crosses its paraphrase ceiling
 at $K{=}64$, while both instruction/reasoning-tuned hosts (gpt-oss-20b,
 gemma-4-31B-it) never reach their retrieval baselines at any practical
-$K$. We conjecture that instruction tuning collapses the unconditional
-text manifold that best-of-$K$ sampling must traverse, and note that the
-conjecture is cheaply testable by running the identical pipeline on the
-gemma-4 base checkpoint. The deployable decode on this host is therefore
-retrieval, which is precisely the mechanism §11.6.3 validates on the
-visual channel. Artifacts:
-`artifacts/nla/gemma4/{kcurve_ce.jsonl,decode_probe_ce.jsonl}`,
-checkpoints at `RiverRider/srt-nla-av-gemma4`.
+$K$. It is tempting to read this as instruction tuning collapsing the
+unconditional text manifold that best-of-$K$ sampling must traverse, and
+in an earlier draft we advanced exactly that conjecture. **A within-family
+control refutes it.** We ran the identical pipeline on the *base*
+`gemma-4-31B` checkpoint, matched on layer, corpus targets, and training
+recipe to the instruction-tuned run. The two K-curves are
+indistinguishable: slope $+0.013$ per doubling for the base versus
+$+0.015$ for the instruction-tuned model, with the base if anything
+marginally *lower* at every $K$ (best-of-$32$ $0.575$ versus $0.591$),
+and identical anchor frames (replay $1.00$, NN $0.674$, floor $0.502$).
+Instruction tuning therefore does not measurably change verbalizability
+within this family. The steeper Qwen slope that motivated the conjecture
+is a cross-family difference, confounded with architecture and scale, not
+an effect of tuning. One honest caveat: the base verbalizer was
+early-stopped at a slightly lower validation than the instruction-tuned
+run, which may account for the small level offset, but the slope, which
+is the quantity the conjecture concerned, is unchanged. The negative is
+itself informative: whatever governs how far sampling can travel toward
+the paraphrase manifold is set by the pretrained substrate, not by the
+alignment stage layered on top of it. The deployable decode on this host
+is retrieval regardless, which is precisely the mechanism §11.6.3
+validates on the visual channel. Artifacts:
+`artifacts/nla/gemma4{,_base}/{kcurve_ce.jsonl,anchors_L47.json}`,
+checkpoints at `RiverRider/srt-nla-av-gemma4` (`base_ce/`).
 
 ---
 
