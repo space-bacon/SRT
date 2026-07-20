@@ -1,0 +1,598 @@
+{
+  "convention": "d_paired > 0 means signal HIGHER in CS-sense context; d = mean(CS-FOOD)/sd(CS-FOOD) over pairs",
+  "backbone": "Qwen/Qwen2.5-7B",
+  "adapter": null,
+  "max_new": 32,
+  "temperature": 0.0,
+  "n_pairs": 20,
+  "stats": {
+    "r_hat": {
+      "n_pairs": 20,
+      "mean_cs": 0.35781402587890626,
+      "mean_food": 0.362835693359375,
+      "d_paired": -0.1324577299068233,
+      "t_paired": -0.5923689764339275,
+      "p_signflip": 0.5619719014049298
+    },
+    "regime_super": {
+      "n_pairs": 20,
+      "mean_cs": 0.991766357421875,
+      "mean_food": 0.99173583984375,
+      "d_paired": 0.011905649995081214,
+      "t_paired": 0.05324368541064327,
+      "p_signflip": 0.9674516274186291
+    },
+    "div_norm": {
+      "n_pairs": 20,
+      "mean_cs": 9.38125,
+      "mean_food": 9.30107421875,
+      "d_paired": 0.12239631603311547,
+      "t_paired": 0.5473729656911873,
+      "p_signflip": 0.608019599020049
+    },
+    "chain": {
+      "n_pairs": 20,
+      "mean_cs": 2.2211875915527344,
+      "mean_food": 2.256386566162109,
+      "d_paired": -0.2054751308241724,
+      "t_paired": -0.9189127204170238,
+      "p_signflip": 0.37743112844357785
+    },
+    "ent": {
+      "n_pairs": 20,
+      "mean_cs": 6.553160313144327,
+      "mean_food": 6.579046886041761,
+      "d_paired": -0.10900013643146683,
+      "t_paired": -0.4874634292350224,
+      "p_signflip": 0.6278686065696715
+    },
+    "margin": {
+      "n_pairs": 20,
+      "mean_cs": 0.05152155966934515,
+      "mean_food": 0.05132384096068563,
+      "d_paired": 0.011718478485717315,
+      "t_paired": 0.05240662897386542,
+      "p_signflip": 0.9657017149142543
+    },
+    "nll": {
+      "n_pairs": 20,
+      "mean_cs": 2.7994556156918406,
+      "mean_food": 2.807494896184653,
+      "d_paired": -0.07102056553056749,
+      "t_paired": -0.31761362465365467,
+      "p_signflip": 0.7499125043747813
+    }
+  },
+  "div_norm_by_polyseme": {
+    "chunk": {
+      "n_pairs": 4,
+      "mean_cs": 9.53131103515625,
+      "mean_food": 9.24932861328125,
+      "d_paired": 0.5538768060513994,
+      "t_paired": 1.1077536121027989,
+      "p_signflip": 0.5
+    },
+    "cookie": {
+      "n_pairs": 4,
+      "mean_cs": 9.43115234375,
+      "mean_food": 9.91796875,
+      "d_paired": -0.49261482740241896,
+      "t_paired": -0.9852296548048379,
+      "p_signflip": 0.5
+    },
+    "menu": {
+      "n_pairs": 2,
+      "mean_cs": 9.064453125,
+      "mean_food": 8.7271728515625,
+      "d_paired": 0.29173302022076014,
+      "t_paired": 0.4125727937882634,
+      "p_signflip": 1.0
+    },
+    "nibble": {
+      "n_pairs": 4,
+      "mean_cs": 9.5374755859375,
+      "mean_food": 9.6639404296875,
+      "d_paired": -0.8107908975039447,
+      "t_paired": -1.6215817950078895,
+      "p_signflip": 0.25
+    },
+    "stream": {
+      "n_pairs": 3,
+      "mean_cs": 9.25537109375,
+      "mean_food": 8.705078125,
+      "d_paired": 1.0871285412476788,
+      "t_paired": 1.8829618677992175,
+      "p_signflip": 0.5
+    },
+    "word": {
+      "n_pairs": 3,
+      "mean_cs": 9.243408203125,
+      "mean_food": 9.042317708333334,
+      "d_paired": 1.1190623952586156,
+      "t_paired": 1.9382729254276472,
+      "p_signflip": 0.25
+    }
+  },
+  "rows": [
+    {
+      "pair_id": 0,
+      "polyseme": "nibble",
+      "cs_prompt": "The first nibble was stored carefully in the register.",
+      "food_prompt": "The first nibble was stored carefully in the lunchbox.",
+      "cs": {
+        "r_hat": 0.35845947265625,
+        "regime_super": 0.9901123046875,
+        "div_norm": 10.6572265625,
+        "chain": 2.0741424560546875,
+        "ent": 6.621378317475319,
+        "margin": 0.05865758168511093,
+        "nll": 2.7943445835262537
+      },
+      "food": {
+        "r_hat": 0.419952392578125,
+        "regime_super": 0.9853515625,
+        "div_norm": 10.96826171875,
+        "chain": 1.895599365234375,
+        "ent": 6.3444304168224335,
+        "margin": 0.051950774708529934,
+        "nll": 2.656723577529192
+      }
+    },
+    {
+      "pair_id": 1,
+      "polyseme": "nibble",
+      "cs_prompt": "Each nibble should be checked against the checksum before use.",
+      "food_prompt": "Each nibble should be checked against the recipe before use.",
+      "cs": {
+        "r_hat": 0.414031982421875,
+        "regime_super": 0.986083984375,
+        "div_norm": 9.74755859375,
+        "chain": 2.0244903564453125,
+        "ent": 6.202788345515728,
+        "margin": 0.056696077837841585,
+        "nll": 2.5976429041475058
+      },
+      "food": {
+        "r_hat": 0.387115478515625,
+        "regime_super": 0.9891357421875,
+        "div_norm": 9.677734375,
+        "chain": 2.3191986083984375,
+        "ent": 6.3971283584833145,
+        "margin": 0.059615123172989115,
+        "nll": 2.6720821522176266
+      }
+    },
+    {
+      "pair_id": 2,
+      "polyseme": "nibble",
+      "cs_prompt": "A single nibble from the payload was all it took.",
+      "food_prompt": "A single nibble from the pastry was all it took.",
+      "cs": {
+        "r_hat": 0.35931396484375,
+        "regime_super": 0.9921875,
+        "div_norm": 9.12841796875,
+        "chain": 2.2452239990234375,
+        "ent": 6.57945254445076,
+        "margin": 0.04647375916829333,
+        "nll": 2.8359122294932604
+      },
+      "food": {
+        "r_hat": 0.3548583984375,
+        "regime_super": 0.9921875,
+        "div_norm": 9.2734375,
+        "chain": 2.2292633056640625,
+        "ent": 6.5515134036540985,
+        "margin": 0.05425112199736759,
+        "nll": 2.837396342307329
+      }
+    },
+    {
+      "pair_id": 3,
+      "polyseme": "nibble",
+      "cs_prompt": "She logged every nibble that passed through the decoder.",
+      "food_prompt": "She logged every nibble that passed through the kitchen.",
+      "cs": {
+        "r_hat": 0.329193115234375,
+        "regime_super": 0.9940185546875,
+        "div_norm": 8.61669921875,
+        "chain": 2.369964599609375,
+        "ent": 6.732113234698772,
+        "margin": 0.03989948984235525,
+        "nll": 2.953756980597973
+      },
+      "food": {
+        "r_hat": 0.328460693359375,
+        "regime_super": 0.993896484375,
+        "div_norm": 8.736328125,
+        "chain": 2.387298583984375,
+        "ent": 6.724929131567478,
+        "margin": 0.040025648457231,
+        "nll": 2.9479117933660746
+      }
+    },
+    {
+      "pair_id": 4,
+      "polyseme": "chunk",
+      "cs_prompt": "The next chunk was loaded into the buffer.",
+      "food_prompt": "The next chunk was loaded into the bowl.",
+      "cs": {
+        "r_hat": 0.352386474609375,
+        "regime_super": 0.9906005859375,
+        "div_norm": 10.575927734375,
+        "chain": 2.029205322265625,
+        "ent": 6.579655729234219,
+        "margin": 0.05705930100521073,
+        "nll": 2.789551693946123
+      },
+      "food": {
+        "r_hat": 0.324127197265625,
+        "regime_super": 0.9927978515625,
+        "div_norm": 10.109130859375,
+        "chain": 2.098724365234375,
+        "ent": 6.72281850874424,
+        "margin": 0.061331669363426045,
+        "nll": 2.845578970387578
+      }
+    },
+    {
+      "pair_id": 5,
+      "polyseme": "chunk",
+      "cs_prompt": "One chunk at a time came out of the parser.",
+      "food_prompt": "One chunk at a time came out of the oven.",
+      "cs": {
+        "r_hat": 0.376007080078125,
+        "regime_super": 0.9898681640625,
+        "div_norm": 9.63232421875,
+        "chain": 2.1175689697265625,
+        "ent": 6.421439811587334,
+        "margin": 0.05469262387487106,
+        "nll": 2.758775444701314
+      },
+      "food": {
+        "r_hat": 0.38531494140625,
+        "regime_super": 0.9906005859375,
+        "div_norm": 8.71435546875,
+        "chain": 2.08544921875,
+        "ent": 6.690076045691967,
+        "margin": 0.06451531141647138,
+        "nll": 2.8828148655593395
+      }
+    },
+    {
+      "pair_id": 6,
+      "polyseme": "chunk",
+      "cs_prompt": "They split the archive into a chunk of manageable size.",
+      "food_prompt": "They split the brisket into a chunk of manageable size.",
+      "cs": {
+        "r_hat": 0.317169189453125,
+        "regime_super": 0.993408203125,
+        "div_norm": 8.9345703125,
+        "chain": 2.348876953125,
+        "ent": 6.735279984772205,
+        "margin": 0.05066101040574722,
+        "nll": 2.901173450052738
+      },
+      "food": {
+        "r_hat": 0.32012939453125,
+        "regime_super": 0.993896484375,
+        "div_norm": 9.09521484375,
+        "chain": 2.355224609375,
+        "ent": 6.62577997893095,
+        "margin": 0.06481911049922928,
+        "nll": 2.816111944615841
+      }
+    },
+    {
+      "pair_id": 7,
+      "polyseme": "chunk",
+      "cs_prompt": "A corrupted chunk ruined the whole download.",
+      "food_prompt": "A corrupted chunk ruined the whole casserole.",
+      "cs": {
+        "r_hat": 0.335784912109375,
+        "regime_super": 0.993896484375,
+        "div_norm": 8.982421875,
+        "chain": 2.3773193359375,
+        "ent": 6.775410793721676,
+        "margin": 0.0565717184508685,
+        "nll": 2.8981555476784706
+      },
+      "food": {
+        "r_hat": 0.33197021484375,
+        "regime_super": 0.9940185546875,
+        "div_norm": 9.07861328125,
+        "chain": 2.373687744140625,
+        "ent": 6.697182685136795,
+        "margin": 0.05517870275070891,
+        "nll": 2.895004205405712
+      }
+    },
+    {
+      "pair_id": 8,
+      "polyseme": "cookie",
+      "cs_prompt": "Every cookie was carefully stored in the browser.",
+      "food_prompt": "Every cookie was carefully stored in the jar.",
+      "cs": {
+        "r_hat": 0.307586669921875,
+        "regime_super": 0.993896484375,
+        "div_norm": 9.27587890625,
+        "chain": 2.4520111083984375,
+        "ent": 6.6017879992723465,
+        "margin": 0.04147555542294867,
+        "nll": 2.8245995678007603
+      },
+      "food": {
+        "r_hat": 0.390167236328125,
+        "regime_super": 0.9913330078125,
+        "div_norm": 11.21240234375,
+        "chain": 2.0369415283203125,
+        "ent": 6.0158684104681015,
+        "margin": 0.04694399412255734,
+        "nll": 2.5800392143428326
+      }
+    },
+    {
+      "pair_id": 9,
+      "polyseme": "cookie",
+      "cs_prompt": "The cookie expired before anyone could refresh it.",
+      "food_prompt": "The cookie expired before anyone could taste it.",
+      "cs": {
+        "r_hat": 0.40765380859375,
+        "regime_super": 0.98974609375,
+        "div_norm": 9.75244140625,
+        "chain": 2.151763916015625,
+        "ent": 6.570343933999538,
+        "margin": 0.04663511231774464,
+        "nll": 2.79604909196496
+      },
+      "food": {
+        "r_hat": 0.41290283203125,
+        "regime_super": 0.9888916015625,
+        "div_norm": 9.82861328125,
+        "chain": 2.130645751953125,
+        "ent": 6.620763882994652,
+        "margin": 0.04942215111805126,
+        "nll": 2.809617241844535
+      }
+    },
+    {
+      "pair_id": 10,
+      "polyseme": "cookie",
+      "cs_prompt": "He inspected the cookie set by the server.",
+      "food_prompt": "He inspected the cookie set by the bakery.",
+      "cs": {
+        "r_hat": 0.32830810546875,
+        "regime_super": 0.993896484375,
+        "div_norm": 8.818359375,
+        "chain": 2.3048095703125,
+        "ent": 6.644310414791107,
+        "margin": 0.06356717547168955,
+        "nll": 2.8164844885468483
+      },
+      "food": {
+        "r_hat": 0.37908935546875,
+        "regime_super": 0.9903564453125,
+        "div_norm": 9.0302734375,
+        "chain": 2.2545013427734375,
+        "ent": 6.533876515924931,
+        "margin": 0.04543476807884872,
+        "nll": 2.7664496935904026
+      }
+    },
+    {
+      "pair_id": 11,
+      "polyseme": "cookie",
+      "cs_prompt": "Deleting the cookie from the session solved the problem.",
+      "food_prompt": "Deleting the cookie from the pantry solved the problem.",
+      "cs": {
+        "r_hat": 0.358551025390625,
+        "regime_super": 0.991455078125,
+        "div_norm": 9.8779296875,
+        "chain": 2.2694091796875,
+        "ent": 6.4966283068060875,
+        "margin": 0.054768460046034306,
+        "nll": 2.8031132724136114
+      },
+      "food": {
+        "r_hat": 0.33233642578125,
+        "regime_super": 0.9942626953125,
+        "div_norm": 9.6005859375,
+        "chain": 2.3526611328125,
+        "ent": 6.7073947340250015,
+        "margin": 0.058127616764977574,
+        "nll": 2.881078504025936
+      }
+    },
+    {
+      "pair_id": 12,
+      "polyseme": "word",
+      "cs_prompt": "The processor handled one word at a time.",
+      "food_prompt": "The toddler handled one word at a time.",
+      "cs": {
+        "r_hat": 0.38067626953125,
+        "regime_super": 0.9912109375,
+        "div_norm": 9.367431640625,
+        "chain": 1.8730316162109375,
+        "ent": 6.575015217065811,
+        "margin": 0.058955211454303935,
+        "nll": 2.753774067386985
+      },
+      "food": {
+        "r_hat": 0.334808349609375,
+        "regime_super": 0.994140625,
+        "div_norm": 8.99072265625,
+        "chain": 2.305450439453125,
+        "ent": 6.74793903529644,
+        "margin": 0.05178066439111717,
+        "nll": 2.9059425946325064
+      }
+    },
+    {
+      "pair_id": 13,
+      "polyseme": "word",
+      "cs_prompt": "Each word was aligned neatly in the memory.",
+      "food_prompt": "Each word was aligned neatly in the notebook.",
+      "cs": {
+        "r_hat": 0.329315185546875,
+        "regime_super": 0.9932861328125,
+        "div_norm": 9.20068359375,
+        "chain": 2.376190185546875,
+        "ent": 6.619141221046448,
+        "margin": 0.055100887548178434,
+        "nll": 2.7892466206103563
+      },
+      "food": {
+        "r_hat": 0.320831298828125,
+        "regime_super": 0.993896484375,
+        "div_norm": 9.18310546875,
+        "chain": 2.355987548828125,
+        "ent": 6.655883818864822,
+        "margin": 0.06710520325577818,
+        "nll": 2.765472676604986
+      }
+    },
+    {
+      "pair_id": 14,
+      "polyseme": "word",
+      "cs_prompt": "A missing word halted the entire pipeline.",
+      "food_prompt": "A missing word halted the entire lecture.",
+      "cs": {
+        "r_hat": 0.35736083984375,
+        "regime_super": 0.9920654296875,
+        "div_norm": 9.162109375,
+        "chain": 2.2602386474609375,
+        "ent": 6.562573403120041,
+        "margin": 0.048950860917102545,
+        "nll": 2.8243253733962774
+      },
+      "food": {
+        "r_hat": 0.333282470703125,
+        "regime_super": 0.9937744140625,
+        "div_norm": 8.953125,
+        "chain": 2.374237060546875,
+        "ent": 6.7356100752949715,
+        "margin": 0.05734998048865236,
+        "nll": 2.880540657788515
+      }
+    },
+    {
+      "pair_id": 15,
+      "polyseme": "stream",
+      "cs_prompt": "They monitored the stream for unexpected packets.",
+      "food_prompt": "They monitored the stream for unexpected fish.",
+      "cs": {
+        "r_hat": 0.3563232421875,
+        "regime_super": 0.9906005859375,
+        "div_norm": 9.7158203125,
+        "chain": 2.3415069580078125,
+        "ent": 6.470501966774464,
+        "margin": 0.04426700927433558,
+        "nll": 2.820220338180661
+      },
+      "food": {
+        "r_hat": 0.370391845703125,
+        "regime_super": 0.990966796875,
+        "div_norm": 8.7587890625,
+        "chain": 2.26171875,
+        "ent": 6.65723579376936,
+        "margin": 0.05952438004896976,
+        "nll": 2.8480526879429817
+      }
+    },
+    {
+      "pair_id": 16,
+      "polyseme": "stream",
+      "cs_prompt": "The stream dried up when the socket failed.",
+      "food_prompt": "The stream dried up when the spring failed.",
+      "cs": {
+        "r_hat": 0.33660888671875,
+        "regime_super": 0.9937744140625,
+        "div_norm": 8.779296875,
+        "chain": 2.337066650390625,
+        "ent": 6.629311338067055,
+        "margin": 0.06675697700120509,
+        "nll": 2.855586849153042
+      },
+      "food": {
+        "r_hat": 0.39154052734375,
+        "regime_super": 0.9910888671875,
+        "div_norm": 8.7958984375,
+        "chain": 2.47216796875,
+        "ent": 6.3455152958631516,
+        "margin": 0.011839444079669192,
+        "nll": 2.6864488646388054
+      }
+    },
+    {
+      "pair_id": 17,
+      "polyseme": "stream",
+      "cs_prompt": "Filtering the stream removed most of the noise.",
+      "food_prompt": "Filtering the stream removed most of the silt.",
+      "cs": {
+        "r_hat": 0.39410400390625,
+        "regime_super": 0.99169921875,
+        "div_norm": 9.27099609375,
+        "chain": 2.074310302734375,
+        "ent": 6.611412703990936,
+        "margin": 0.05664116359548643,
+        "nll": 2.781194882467389
+      },
+      "food": {
+        "r_hat": 0.4542236328125,
+        "regime_super": 0.9866943359375,
+        "div_norm": 8.560546875,
+        "chain": 2.1405792236328125,
+        "ent": 6.461263529956341,
+        "margin": 0.04029553374857642,
+        "nll": 2.717582393437624
+      }
+    },
+    {
+      "pair_id": 18,
+      "polyseme": "menu",
+      "cs_prompt": "The dropdown menu offered too many options.",
+      "food_prompt": "The dinner menu offered too many options.",
+      "cs": {
+        "r_hat": 0.371826171875,
+        "regime_super": 0.99365234375,
+        "div_norm": 8.7421875,
+        "chain": 2.2763671875,
+        "ent": 6.296890541911125,
+        "margin": 0.020277967036236078,
+        "nll": 2.632708713412285
+      },
+      "food": {
+        "r_hat": 0.341644287109375,
+        "regime_super": 0.99365234375,
+        "div_norm": 9.222412109375,
+        "chain": 2.4244232177734375,
+        "ent": 6.604720897972584,
+        "margin": 0.0463755673263222,
+        "nll": 2.792242616415024
+      }
+    },
+    {
+      "pair_id": 19,
+      "polyseme": "menu",
+      "cs_prompt": "She navigated the menu looking for the settings.",
+      "food_prompt": "She navigated the menu looking for the dessert.",
+      "cs": {
+        "r_hat": 0.3856201171875,
+        "regime_super": 0.9898681640625,
+        "div_norm": 9.38671875,
+        "chain": 2.1202545166015625,
+        "ent": 6.337770454585552,
+        "margin": 0.05232325103133917,
+        "nll": 2.7624962143599987
+      },
+      "food": {
+        "r_hat": 0.34356689453125,
+        "regime_super": 0.9937744140625,
+        "div_norm": 8.23193359375,
+        "chain": 2.2739715576171875,
+        "ent": 6.741007201373577,
+        "margin": 0.04059005342423916,
+        "nll": 2.9628069270402193
+      }
+    }
+  ]
+}
