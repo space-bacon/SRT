@@ -57,8 +57,8 @@ AV_VAL_EVERY="${AV_VAL_EVERY:-600}"
 AV_VAL_VECTORS="${AV_VAL_VECTORS:-100}"
 AV_VAL_BESTOF="${AV_VAL_BESTOF:-8}"
 
-ART="${ROOT}/artifacts/nla/gemma4"
-LOGS="${ROOT}/logs/gemma4_nla"
+ART="${ART:-${ROOT}/artifacts/nla/gemma4}"
+LOGS="${LOGS:-${ROOT}/logs/gemma4_nla}"
 TARGETS="${ART}/targets_L${NLA_LAYER}_seq${NLA_SEQ_LEN}_10k.pt"
 PAIRS="${ART}/gold_pairs_seq${NLA_SEQ_LEN}.jsonl"
 mkdir -p "${ART}" "${LOGS}"
@@ -105,6 +105,28 @@ assert len(o.hidden_states) == 61, len(o.hidden_states)
 mu_norm = o.hidden_states[${NLA_LAYER}][0, -1].float().norm().item()
 print(f"L${NLA_LAYER} last-token ||h|| = {mu_norm:.1f}")
 print("SMOKE OK")
+EOF
+fi
+
+# ---- 1b. base smoke (no chat template; for gemma-4-31B base/pt) --------------
+if run_phase 1b; then
+  echo "=== phase 1b: gemma-4 BASE load smoke (no chat template) ==="
+  "${PY}" - <<EOF
+import torch
+from srt.nla import load_frozen_backbone, num_layers_of, hidden_size_of
+bb, tok = load_frozen_backbone("${BACKBONE}", "bfloat16", device="cuda")
+assert num_layers_of(bb.config) == 60 and hidden_size_of(bb.config) == 5376
+assert tok.bos_token_id != tok.eos_token_id, "bos==eos: EOS guard would misfire"
+# plain-continuation coherence (base model, no chat template)
+ids = tok("The capital of France is", return_tensors="pt").input_ids.cuda()
+out = bb.generate(input_ids=ids, max_new_tokens=8, do_sample=False)
+text = tok.decode(out[0, ids.shape[1]:], skip_special_tokens=True)
+print("cont:", repr(text))
+assert "Paris" in text, "base generation incoherent — weights did NOT load?"
+o = bb(input_ids=ids, output_hidden_states=True, use_cache=False)
+assert len(o.hidden_states) == 61, len(o.hidden_states)
+print(f"L${NLA_LAYER} ||h|| = {o.hidden_states[${NLA_LAYER}][0,-1].float().norm():.1f}")
+print("BASE SMOKE OK")
 EOF
 fi
 
