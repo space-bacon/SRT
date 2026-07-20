@@ -1,0 +1,299 @@
+2026-07-20 12:22:34,052 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 12:22:34,069 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B/5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89/config.json "HTTP/1.1 200 OK"
+2026-07-20 12:22:34,374 srt.nla.backbones loading google/gemma-4-31B via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-20 12:22:34,455 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 12:22:34,471 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B/5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89/config.json "HTTP/1.1 200 OK"
+2026-07-20 12:22:34,560 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-20 12:22:34,705 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 12:22:34,720 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B/5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-20 12:22:34,803 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3165.51it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  47%|████▋     | 557/1188 [00:00<00:00, 5566.66it/s]Loading weights:  96%|█████████▌| 1139/1188 [00:00<00:00, 5707.35it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 5714.85it/s]
+2026-07-20 12:22:35,347 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 12:22:35,361 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B/5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89/generation_config.json "HTTP/1.1 200 OK"
+2026-07-20 12:22:40,987 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 12:22:41,002 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B/5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89/config.json "HTTP/1.1 200 OK"
+2026-07-20 12:22:41,083 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 12:22:41,098 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B/5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-20 12:22:41,191 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-20 12:22:41,278 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-20 12:22:43,163 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B "HTTP/1.1 200 OK"
+2026-07-20 12:22:43,572 decode_probe AV loaded 2/2 keys (ckpt step 1800)
+2026-07-20 12:23:03,938 decode_probe tidx 6044
+  GOLD  : I started touching myself sexually at least when I was 7, is
+  GREEDY (0.475): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.546): --- Thea's P. O.V. ---
+
+When a girl is a witch, there are pl
+2026-07-20 12:23:11,391 decode_probe tidx 2890
+  GOLD  : Solid ash floating panel? I am currently building a cabinet 
+  GREEDY (0.529): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.534): <strong> Aplikaziozientako aplikazioen funtzioa eta ezaugarr
+2026-07-20 12:23:18,870 decode_probe tidx 9399
+  GOLD  : First line - what is a "sharp" noise? (Normally I'm not this
+  GREEDY (0.605): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.686): <strong> We’squeaking it by:</strong>
+
+<code>var.name =  $ 2
+2026-07-20 12:23:26,347 decode_probe tidx 1917
+  GOLD  : Sure, but what makes it even more ugly is that the String is
+  GREEDY (0.493): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.539): <h3> <strong>Themed - Ansys Fluent - Introduction to Fluid D
+2026-07-20 12:23:33,849 decode_probe tidx 4919
+  GOLD  : Being new to trading, I have to say I like the Kraken interf
+  GREEDY (0.437): <strong> <strong><strong><strong><strong><strong><strong><st
+  BEST-S (0.525): BAM Construction have signed a number of major construction 
+2026-07-20 12:23:41,338 decode_probe tidx 1729
+  GOLD  : Concept I’ve always loved to make music and after going to a
+  GREEDY (0.592): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.575): <h1> Lancement du Club du Cercle national à la rencontre de 
+2026-07-20 12:23:48,837 decode_probe tidx 429
+  GOLD  : Who else plays better with their eyes shut? Over the years, 
+  GREEDY (0.459): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.520): <strong> Asociaţia pentru Românii Italiani Sante In Romania
+
+2026-07-20 12:23:56,339 decode_probe tidx 7532
+  GOLD  : Found an unusual container of unknown grounds this morning a
+  GREEDY (0.593): <h1> I am a <strong><em>Certified Professional Dog Trainer</
+  BEST-S (0.608): <h2>-6.543
+  -----oOo-----
+  680,002
+   3,733
+  846,59203:27
+2026-07-20 12:24:03,811 decode_probe tidx 337
+  GOLD  : "Fearless Girl" is designed to call attention to a new initi
+  GREEDY (0.569): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.587): <h2>I am curious you know, it’s the type about me
+a.c.e
+b.a.
+2026-07-20 12:24:11,283 decode_probe tidx 8223
+  GOLD  : Is anybody having problems with their banking apps today? I’
+  GREEDY (0.504): <h1> I. Introduction
+
+</h2>
+
+<strong>A. Definition of the Pr
+  BEST-S (0.544): ---I am planning to switch to Comcast (from Verizon landline
+2026-07-20 12:24:18,812 decode_probe tidx 981
+  GOLD  : Emrald Court gurgaon, DLF The Belaire gurgaon, DLF Summit gu
+  GREEDY (0.534): <strong> <strong><strong><strong><strong><strong><strong><st
+  BEST-S (0.594): Iyada Ntegeeberg
+3 bedroom luxury fully furnished serviced a
+2026-07-20 12:24:26,356 decode_probe tidx 4869
+  GOLD  : I think understanding the term 'objectification' is one of t
+  GREEDY (0.507): <h1>The <strong>2017</strong> <strong><em>International Conf
+  BEST-S (0.558): <b>.envision.events
+* |10634557.13714s–en|
+7h 12m <i>16m ago
+2026-07-20 12:24:33,823 decode_probe tidx 784
+  GOLD  : Potential tax law questions for running a KS for a friend. O
+  GREEDY (0.522): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.528): 
+
+ 
+
+ 
+
+1. 9月25日（日）に開催された全日本吹奏楽コンクール全国大会に出場するため、7時に札幌を出発し10時
+2026-07-20 12:24:41,379 decode_probe tidx 4840
+  GOLD  : Fair enough, Russia basically just ever so slightly pulled o
+  GREEDY (0.382): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.582): As we head into this week’ myBnk needs, through its work, to
+2026-07-20 12:24:48,893 decode_probe tidx 5592
+  GOLD  : I want to write a memoir but I have no idea where or how to 
+  GREEDY (0.546): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.547): Souradip is an Assistant Professor of Computer Science and E
+2026-07-20 12:24:56,396 decode_probe tidx 6301
+  GOLD  : I'm slightly dubious about the petrodollar argument myself, 
+  GREEDY (0.518): <h1> I. Introduction
+
+</h2>
+
+<strong>A. The Importance of a 
+  BEST-S (0.536): Ases 360
+A new day
+The one and only - I think
+Thank you very
+2026-07-20 12:25:03,949 decode_probe tidx 2920
+  GOLD  : I have a BS in CS and a BA in neuroscience. How can I best u
+  GREEDY (0.544): <h1> I am a <strong><em>Certified Professional Dog Trainer</
+  BEST-S (0.573): <h3> 2008 - 2009 <strong>MGA 10690</strong>: How could the U
+2026-07-20 12:25:11,467 decode_probe tidx 4053
+  GOLD  : Yes, but you better be a good shot. If you already own the r
+  GREEDY (0.555): <h1> I.  Introduction
+
+II.  Theories of the Origin of the Un
+  BEST-S (0.639): <strong> TASTE OF KOSZ
+</strong>
+
+<strong>By NICK GOSMIPage<
+2026-07-20 12:25:18,968 decode_probe tidx 8506
+  GOLD  : I often get most indignant over critiques that later turn ou
+  GREEDY (0.559): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.570): <h1> 'THE UNIVERSE SERIES‘ - S01 - E157 - THE 8th. WONDER OF
+2026-07-20 12:25:26,513 decode_probe tidx 1426
+  GOLD  : I'm pretty lucky here. A guy in my club has 3 (one of which 
+  GREEDY (0.474): <h2> The 100000000000000000000000000000000000000000000
+  BEST-S (0.574): This is the worst.
+
+[#<b>856,763</b> ]
+I would assume the wo
+2026-07-20 12:25:34,054 decode_probe tidx 7626
+  GOLD  : My options at the moment are limited, so bear with me... For
+  GREEDY (0.448): <strong> <strong><strong><strong><strong><strong><strong><st
+  BEST-S (0.575):  I wish to talk to you about.
+
+I have a 1982 1st edition 240
+2026-07-20 12:25:41,579 decode_probe tidx 8837
+  GOLD  : 350lb newbie Hi all, I'm overweight and dieting. I would lik
+  GREEDY (0.631): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.639): Elaborates.py
+<unused53>alizeinev = Elaborate[13:]
+print(ali
+2026-07-20 12:25:49,132 decode_probe tidx 4911
+  GOLD  : Buddhism teaches that there is no self, and that ego is an i
+  GREEDY (0.526): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.536): [<strong>A</strong><strong>bout the book]</strong> A few yea
+2026-07-20 12:25:56,649 decode_probe tidx 8606
+  GOLD  : This is what made me a bit sad to see, that even Jacobin see
+  GREEDY (0.479): <h1> I am a <strong><em>Certified Professional Coach</em></s
+  BEST-S (0.528): <h2> The World of the Celtic Knot and The Path of the Celtic
+2026-07-20 12:26:04,185 decode_probe tidx 2288
+  GOLD  : The difference is pretty huge. The dynamic range of the Fish
+  GREEDY (0.603): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.611): --- In response to 's request for "FMAH-11-3-3041 – R735/B42
+2026-07-20 12:26:11,735 decode_probe tidx 5916
+  GOLD  : Haha. Yes it does...point taken. Although SAB relies on the 
+  GREEDY (0.485): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.524): <h1> DMX: EGO TRIP: Anatomy of a Selfish Self - EP 44
+ </str
+2026-07-20 12:26:19,223 decode_probe tidx 297
+  GOLD  : Do you think we'll ever see another team like the 2000 Raven
+  GREEDY (0.546): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.552): <strong>I love it
+It has a sweet, soft, and warm scent not o
+2026-07-20 12:26:26,746 decode_probe tidx 2751
+  GOLD  : Get something with a stick. If you haven't driven a manual, 
+  GREEDY (0.611): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.623): <h4> thejasonharvey 2019-07-23 0309044.41.94409.74132.841.42
+2026-07-20 12:26:34,300 decode_probe tidx 4237
+  GOLD  : Man, I feel you. Though, I do regret everything...because if
+  GREEDY (0.454): <h1> I am a <strong><em>Certified Professional Dog Trainer</
+  BEST-S (0.536): This es un libro que te transporta a un mundo muy particular
+2026-07-20 12:26:41,801 decode_probe tidx 137
+  GOLD  : Sure, but generally speaking, anyone who could apply SA to a
+  GREEDY (0.482): <h1> <strong><em>Theaflavine 100%</em></strong>
+
+<strong><em
+  BEST-S (0.555): <h2> The European Space Telescope and Hubble space telescope
+2026-07-20 12:26:49,344 decode_probe tidx 3531
+  GOLD  : In the first example, the comma is used because it is a head
+  GREEDY (0.499): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.519): In-situ. a-e) SEM images and EDX spectra of ZnO:La nanostruc
+2026-07-20 12:26:56,888 decode_probe tidx 3886
+  GOLD  : Chrono Cross was the real deal. I loved the combat system, t
+  GREEDY (0.631): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.633): <h2> 'My name is Chantal, I am 32 years old. My husband and 
+2026-07-20 12:27:04,392 decode_probe tidx 6147
+  GOLD  : We’re going to try to only buy things second hand unless we 
+  GREEDY (0.356): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.560): In. 
+
+
+A.2.  
+
+
+<i>I agree with the idea of including in [a 
+2026-07-20 12:27:11,940 decode_probe tidx 1899
+  GOLD  : I'm going to go ahead and be the bearer of bad/pessimist new
+  GREEDY (0.497): <h1>The <strong>2017</strong> <strong><em>International Conf
+  BEST-S (0.545): We’sdomoes a new kindalytics — a new kindalytics – is a digi
+2026-07-20 12:27:19,477 decode_probe tidx 5147
+  GOLD  : I suck at my job, but I can't leave yet. I’ve been at this j
+  GREEDY (0.500): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.557): If I could do that I would
+It’s not about the money
+Or for m
+2026-07-20 12:27:26,971 decode_probe tidx 8950
+  GOLD  : Prepping uncooked meals I tend to get home late at night and
+  GREEDY (0.432): <strong> <strong><strong><strong><strong><strong><strong><st
+  BEST-S (0.592): \yall I am starting my little shop
+the-boredemerald.tumblr.c
+2026-07-20 12:27:34,587 decode_probe tidx 3086
+  GOLD  : Actually... through pour overs, the extraction into the cup 
+  GREEDY (0.544): <h1> I am a <strong><em><u>Certified Professional Resume Wri
+  BEST-S (0.573): Theleaveteam are the official provider of our Virtualised UK
+2026-07-20 12:27:42,171 decode_probe tidx 684
+  GOLD  : That inverse relationship is a funny thing. I tried to recov
+  GREEDY (0.232): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.642): <strong>
+
+<h3>136086.  Revisiting the Nature, Causes, and Co
+2026-07-20 12:27:49,743 decode_probe tidx 7245
+  GOLD  : How do I attach a table top? I'm in the middle of a cherry t
+  GREEDY (0.577): <h1>The <strong>2016</strong> <strong><em>National Associati
+  BEST-S (0.629): Thisly
+
+<h2><strong>Análise: T-Mobile Xperia Z2 tablet vs T-
+2026-07-20 12:27:57,346 decode_probe tidx 7645
+  GOLD  : Noobs like me make sure you check your tyre pressures! (Was 
+  GREEDY (0.552): <strong> <strong><strong><strong><strong><strong><strong><st
+  BEST-S (0.563): AA.  A.
+The following are some observations.
+
+1. A single po
+2026-07-20 12:28:04,916 decode_probe tidx 3858
+  GOLD  : Would you stay at a company because you know it will be good
+  GREEDY (0.572): <h1>The <strong>2017</strong> <strong><em>International Conf
+  BEST-S (0.634): I I took you along my dreams   In every single episode   I c
+2026-07-20 12:28:12,498 decode_probe tidx 5334
+  GOLD  : I suppose it all comes down to liberals hating Christians an
+  GREEDY (0.410): <h1> I am a <strong><em>Certified Professional Dog Trainer</
+  BEST-S (0.632): “<i>In the next place, we shall begin with
+
+Clement VI, whic
+2026-07-20 12:28:20,053 decode_probe tidx 6624
+  GOLD  : There are hundreds of them all over the country in local mar
+  GREEDY (0.395): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.602): 
+
+L’Hô-Chi, who was just one of them, a little in love with 
+2026-07-20 12:28:27,603 decode_probe tidx 914
+  GOLD  : Feminism & Men Rights Movement - You Share The Same Goals; T
+  GREEDY (0.393): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.526): 
+
+In this article, the authors reflect on the use of digital
+2026-07-20 12:28:35,156 decode_probe tidx 8291
+  GOLD  : A humane way is elegant, but not strategic according to His 
+  GREEDY (0.531): <h1> I am a <strong><em>Certified Professional Coach</em></s
+  BEST-S (0.579): <strong> L 1.5 : A Novelty Actuator Architecture For Large S
+2026-07-20 12:28:42,706 decode_probe tidx 8687
+  GOLD  : I don't know enough about how EU institutions work to say wh
+  GREEDY (0.371): <h1> The 100000000000000000000000000000000000000000000
+  BEST-S (0.573): <h1>There’s a new way the University of Texas School of Publ
+2026-07-20 12:28:50,239 decode_probe tidx 9347
+  GOLD  : &009; &009; &009; 1999 F-117A shootdown --- The 1999 F-117A 
+  GREEDY (0.547): <h1>A new study has found that the number of people who are 
+  BEST-S (0.609): This — and the lack ofness of self-help —  is where the word
+2026-07-20 12:28:57,788 decode_probe tidx 4233
+  GOLD  : If the price is cheap ? and you are not going to invest a lo
+  GREEDY (0.501): <h1> I am a <strong><em>Certified Professional Coach</em></s
+  BEST-S (0.617): 
+
+ <strong><em>“I need this job for my next audition tomorro
+2026-07-20 12:29:05,293 decode_probe tidx 4894
+  GOLD  : Voting is probably your best bet at getting anything you wan
+  GREEDY (0.296): <h1> <strong><em>Thea 5000</em></strong> <strong><em>-</em><
+  BEST-S (0.598): 
+
+ 
+
+1. <strong>No more waste</strong>. If you see the produ
+2026-07-20 12:29:12,842 decode_probe tidx 4337
+  GOLD  : Oof, that's rough. My half sister's father was a window inst
+  GREEDY (0.504): <h1> I am a <strong><em>Certified Professional Coach</em></s
+  BEST-S (0.528): Seniors and people with dementia 55Aged and aged
+
+The Austra
+2026-07-20 12:29:12,842 decode_probe wrote artifacts/nla/gemma4_base/kcurve_ce.jsonl
