@@ -1,0 +1,145 @@
+{
+  "repo": "RiverRider/srt-adapter-v1.0",
+  "n_concepts": 54,
+  "hypothesis": "curated transmission-time contestedness tracks within-pass r_hat",
+  "couplings": {
+    "r_hat_mean": {
+      "metric": "r_hat_mean",
+      "spearman_rho": 0.016510964674405465,
+      "perm_p_two_sided": 0.9063046847657618
+    },
+    "r_hat_max": {
+      "metric": "r_hat_max",
+      "spearman_rho": -0.12635457076041906,
+      "perm_p_two_sided": 0.3640817959102045
+    },
+    "r_hat_last": {
+      "metric": "r_hat_last",
+      "spearman_rho": 0.2760876512352596,
+      "perm_p_two_sided": 0.04409779511024449
+    },
+    "psuper_mean": {
+      "metric": "psuper_mean",
+      "spearman_rho": -0.24044287068514233,
+      "perm_p_two_sided": 0.07969601519924004
+    },
+    "psuper_last": {
+      "metric": "psuper_last",
+      "spearman_rho": NaN,
+      "perm_p_two_sided": NaN
+    },
+    "div_mean": {
+      "metric": "div_mean",
+      "spearman_rho": 0.6112821203167224,
+      "perm_p_two_sided": 4.999750012499375e-05
+    },
+    "div_peak": {
+      "metric": "div_peak",
+      "spearman_rho": 0.3069569613379857,
+      "perm_p_two_sided": 0.025148742562871855
+    },
+    "div_last": {
+      "metric": "div_last",
+      "spearman_rho": 0.5738207919954014,
+      "perm_p_two_sided": 4.999750012499375e-05
+    }
+  },
+  "length_controlled_divergence": {
+    "div_mean": {
+      "partial_rho_given_n_tokens": 0.40871128314306215
+    },
+    "div_peak": {
+      "partial_rho_given_n_tokens": 0.22468162600746663
+    },
+    "div_last": {
+      "partial_rho_given_n_tokens": 0.436641082888788
+    },
+    "contest_vs_n_tokens": -0.5439060195274845
+  },
+  "tertile_primary": {
+    "k_per_group": 18,
+    "r_hat_low_contest": 0.6707802381780412,
+    "r_hat_high_contest": 0.6536271058850818,
+    "delta": -0.01715313229295945
+  },
+  "tier_means_r_hat": {
+    "tier0": {
+      "n": 18,
+      "r_hat_mean": 0.6707802381780412
+    },
+    "tier1": {
+      "n": 18,
+      "r_hat_mean": 0.7052148547437456
+    },
+    "tier2": {
+      "n": 18,
+      "r_hat_mean": 0.6536271058850818
+    }
+  },
+  "domain_breakdown_r_hat_mean": {
+    "aesthetics": {
+      "n": 2,
+      "spearman_rho": null
+    },
+    "astronomy": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "biology": {
+      "n": 7,
+      "spearman_rho": -0.10910894511799618
+    },
+    "earth": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "epistemology": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "ethics": {
+      "n": 2,
+      "spearman_rho": null
+    },
+    "everyday": {
+      "n": 5,
+      "spearman_rho": NaN
+    },
+    "linguistics": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "math": {
+      "n": 6,
+      "spearman_rho": 0.304255531702266
+    },
+    "medicine": {
+      "n": 3,
+      "spearman_rho": null
+    },
+    "philosophy": {
+      "n": 6,
+      "spearman_rho": 0.0
+    },
+    "physics": {
+      "n": 10,
+      "spearman_rho": 0.6986107936456589
+    },
+    "politics": {
+      "n": 3,
+      "spearman_rho": null
+    },
+    "psychology": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "religion": {
+      "n": 3,
+      "spearman_rho": null
+    },
+    "social": {
+      "n": 2,
+      "spearman_rho": null
+    }
+  }
+}
