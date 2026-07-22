@@ -258,8 +258,9 @@ def main() -> int:
             "D": d_mean[mah_layers[last_i]],
             "D_last": d_last[mah_layers[last_i]],
             **{f"D_L{L}": d_mean[L] for L in mah_layers},
-            "ucom_entropy": ucom_entropy,
-            "ucom_spread": ucom_spread,
+            "ucom_entropy": ucom_entropy,   # prototype channel (degenerate, kept for record)
+            "ucom_spread": ucom_spread,     # continuous per-token code spread
+            "encoded": co.encoded[0].float().cpu().tolist(),  # 64-d community code
         }
 
     # ---- available years ----------------------------------------------------
@@ -308,24 +309,63 @@ def main() -> int:
     ntok = np.array([r["n_tokens"] for r in rows], float)
     yr = np.array([r["year"] for r in rows], float)
 
-    # variance check on the proxies (vision run had ucom saturated at log(32))
+    # ---- U_com from corpus-discovered community geometry --------------------
+    # The prototype channel is degenerate (ucom_entropy saturates at log K), but
+    # the continuous encoder discriminates communities (cross_modal kNN 0.64).
+    # We recover the community structure the encoder learned by clustering the
+    # L2-normalised encoded vectors, and define per-passage U_com a priori as
+    # the ambiguity of its soft assignment to those clusters (entropy) and the
+    # closeness of its two nearest clusters (small margin = between communities).
+    E = np.array([r["encoded"] for r in rows], float)
+    E = E / (np.linalg.norm(E, axis=1, keepdims=True) + 1e-9)
+    K = int(protos.shape[0])
+
+    def kmeans(X, k, iters=30):
+        C = X[rng.choice(len(X), k, replace=False)].copy()
+        for _ in range(iters):
+            d = (X ** 2).sum(1)[:, None] + (C ** 2).sum(1)[None, :] - 2 * X @ C.T
+            a = d.argmin(1)
+            newC = np.stack([X[a == j].mean(0) if (a == j).any() else C[j]
+                             for j in range(k)])
+            if np.allclose(newC, C):
+                C = newC
+                break
+            C = newC
+        return C
+
+    C = kmeans(E, K)
+    dist = (E ** 2).sum(1)[:, None] + (C ** 2).sum(1)[None, :] - 2 * E @ C.T  # (N,K)
+    tau = float(np.median(dist.min(1))) + 1e-6
+    soft = np.exp(-dist / tau)
+    soft = soft / soft.sum(1, keepdims=True)
+    ucom_cluster = -(soft * np.log(soft + 1e-12)).sum(1)          # assignment entropy
+    ds = np.sort(dist, axis=1)
+    ucom_margin = -(ds[:, 1] - ds[:, 0])                          # -(2nd - 1st nearest)
+
+    # variance check (vision + text prototype proxy saturated at log(32))
+    def vstat(a):
+        return {"mean": float(a.mean()), "std": float(a.std()),
+                "min": float(a.min()), "max": float(a.max())}
     proxy_variance = {
-        "ucom_entropy": {"mean": float(Uent.mean()), "std": float(Uent.std()),
-                         "min": float(Uent.min()), "max": float(Uent.max())},
-        "ucom_spread": {"mean": float(Uspr.mean()), "std": float(Uspr.std()),
-                        "min": float(Uspr.min()), "max": float(Uspr.max())},
-        "log_K_ceiling": float(np.log(protos.shape[0])),
+        "ucom_entropy_prototype": vstat(Uent),
+        "ucom_spread": vstat(Uspr),
+        "ucom_cluster_entropy": vstat(ucom_cluster),
+        "ucom_cluster_margin": vstat(ucom_margin),
+        "log_K_ceiling": float(np.log(K)),
     }
 
+    def couple(name, yv):
+        return {
+            "metric": name,
+            "spearman": spearman(D, yv),
+            "partial_given_ntok": partial_spearman(D, yv, ntok),
+            "perm_p": perm_p_spearman(D, yv, args.nperm, rng),
+        }
+
     structural = {
-        "D_vs_ucom_entropy": {
-            "spearman": spearman(D, Uent),
-            "partial_given_ntok": partial_spearman(D, Uent, ntok),
-            "perm_p": perm_p_spearman(D, Uent, args.nperm, rng)},
-        "D_vs_ucom_spread": {
-            "spearman": spearman(D, Uspr),
-            "partial_given_ntok": partial_spearman(D, Uspr, ntok),
-            "perm_p": perm_p_spearman(D, Uspr, args.nperm, rng)},
+        "D_vs_ucom_cluster_entropy": couple("ucom_cluster_entropy", ucom_cluster),
+        "D_vs_ucom_cluster_margin": couple("ucom_cluster_margin", ucom_margin),
+        "D_vs_ucom_spread": couple("ucom_spread", Uspr),
         "D_vs_ntok(control)": {"spearman": spearman(D, ntok)},
     }
 
@@ -334,40 +374,37 @@ def main() -> int:
     for y in sorted(set(int(v) for v in yr)):
         mask = yr == y
         ymeans[y] = {"n": int(mask.sum()), "D": float(D[mask].mean()),
-                     "ucom_entropy": float(Uent[mask].mean()),
+                     "ucom_cluster": float(ucom_cluster[mask].mean()),
                      "ucom_spread": float(Uspr[mask].mean())}
     yy = np.array(sorted(ymeans))
     diachronic = {
         "per_article": {
             "year_vs_D": spearman(yr, D),
-            "year_vs_ucom_entropy": spearman(yr, Uent),
+            "year_vs_ucom_cluster": spearman(yr, ucom_cluster),
             "year_vs_ucom_spread": spearman(yr, Uspr),
             "year_vs_D_partial_ntok": partial_spearman(yr, D, ntok),
         },
         "per_year_mean": {
             "year_vs_meanD": spearman(yy, np.array([ymeans[y]["D"] for y in yy])),
-            "year_vs_mean_ucom_entropy": spearman(
-                yy, np.array([ymeans[y]["ucom_entropy"] for y in yy])),
-            "year_vs_mean_ucom_spread": spearman(
-                yy, np.array([ymeans[y]["ucom_spread"] for y in yy])),
+            "year_vs_mean_ucom_cluster": spearman(
+                yy, np.array([ymeans[y]["ucom_cluster"] for y in yy])),
         },
     }
-    decade = {}
-    for r in rows:
-        dec = (r["year"] // 10) * 10
-        decade.setdefault(dec, []).append(r)
-    decade_means = {int(d): {
-        "n": len(v),
-        "D": float(np.mean([x["D"] for x in v])),
-        "ucom_entropy": float(np.mean([x["ucom_entropy"] for x in v])),
-        "ucom_spread": float(np.mean([x["ucom_spread"] for x in v])),
-    } for d, v in sorted(decade.items())}
+    decade: dict = {}
+    for i, r in enumerate(rows):
+        decade.setdefault((r["year"] // 10) * 10, []).append(i)
+    decade_means = {int(dc): {
+        "n": len(idx),
+        "D": float(D[idx].mean()),
+        "ucom_cluster": float(ucom_cluster[idx].mean()),
+        "ucom_spread": float(Uspr[idx].mean()),
+    } for dc, idx in sorted(decade.items())}
 
     summary = {
         "backbone": mid, "repo": args.repo, "dataset": DATASET,
         "n_articles": len(rows), "n_years": len(set(int(v) for v in yr)),
         "year_range": [int(yr.min()), int(yr.max())],
-        "mah_layers": mah_layers,
+        "mah_layers": mah_layers, "n_clusters": K,
         "proxy_variance": proxy_variance,
         "structural_coupling": structural,
         "diachronic": diachronic,
@@ -380,29 +417,28 @@ def main() -> int:
     print(f"n={len(rows)} articles, {len(set(int(v) for v in yr))} years "
           f"[{int(yr.min())}-{int(yr.max())}]")
     print("proxy variance (must be > ~0 to be usable):")
-    print(f"  ucom_entropy std={proxy_variance['ucom_entropy']['std']:.4f} "
-          f"(ceiling logK={proxy_variance['log_K_ceiling']:.3f})")
-    print(f"  ucom_spread  std={proxy_variance['ucom_spread']['std']:.4f}")
+    print(f"  prototype entropy std={proxy_variance['ucom_entropy_prototype']['std']:.4f}"
+          f" (DEGENERATE if ~0; ceiling logK={np.log(K):.3f})")
+    print(f"  cluster entropy   std={proxy_variance['ucom_cluster_entropy']['std']:.4f}")
+    print(f"  code spread       std={proxy_variance['ucom_spread']['std']:.4f}")
     s = structural
     print("structural coupling (the law in historical prose):")
-    print(f"  D~ucom_entropy rho={s['D_vs_ucom_entropy']['spearman']:+.3f} "
-          f"partial|ntok={s['D_vs_ucom_entropy']['partial_given_ntok']:+.3f} "
-          f"p={s['D_vs_ucom_entropy']['perm_p']:.4g}")
-    print(f"  D~ucom_spread  rho={s['D_vs_ucom_spread']['spearman']:+.3f} "
-          f"partial|ntok={s['D_vs_ucom_spread']['partial_given_ntok']:+.3f} "
-          f"p={s['D_vs_ucom_spread']['perm_p']:.4g}")
+    for key in ("D_vs_ucom_cluster_entropy", "D_vs_ucom_cluster_margin",
+                "D_vs_ucom_spread"):
+        c = s[key]
+        print(f"  {key:<28} rho={c['spearman']:+.3f} "
+              f"partial|ntok={c['partial_given_ntok']:+.3f} p={c['perm_p']:.4g}")
     print(f"  control D~ntok rho={s['D_vs_ntok(control)']['spearman']:+.3f}")
     d = diachronic
     print("diachronic drift:")
-    print(f"  per-article year~D={d['per_article']['year_vs_D']:+.3f} "
-          f"year~ucom_ent={d['per_article']['year_vs_ucom_entropy']:+.3f} "
-          f"year~ucom_spr={d['per_article']['year_vs_ucom_spread']:+.3f}")
+    print(f"  per-article  year~D={d['per_article']['year_vs_D']:+.3f} "
+          f"year~ucom_cluster={d['per_article']['year_vs_ucom_cluster']:+.3f}")
     print(f"  per-year-mean year~meanD={d['per_year_mean']['year_vs_meanD']:+.3f} "
-          f"year~mean_ucom_ent={d['per_year_mean']['year_vs_mean_ucom_entropy']:+.3f}")
-    print("decade means (D / ucom_entropy / ucom_spread):")
-    for dec, m in decade_means.items():
-        print(f"  {dec}s n={m['n']:<4} D={m['D']:.3f} "
-              f"Uent={m['ucom_entropy']:.3f} Uspr={m['ucom_spread']:.4f}")
+          f"year~mean_ucom={d['per_year_mean']['year_vs_mean_ucom_cluster']:+.3f}")
+    print("decade means (D / ucom_cluster / spread):")
+    for dc, m in decade_means.items():
+        print(f"  {dc}s n={m['n']:<5} D={m['D']:.3f} "
+              f"Uclu={m['ucom_cluster']:.3f} Uspr={m['ucom_spread']:.4f}")
     print(f"\nwrote {out_r}\nwrote {args.out_summary}")
     return 0
 
