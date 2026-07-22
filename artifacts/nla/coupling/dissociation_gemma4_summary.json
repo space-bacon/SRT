@@ -1,0 +1,264 @@
+{
+  "backbone": "google/gemma-4-31B-it",
+  "repo": "RiverRider/Gemma-4-31B-it-SRT-Sunstone",
+  "step": 2250,
+  "n_concepts": 40,
+  "mah_layers": [
+    15,
+    30,
+    45
+  ],
+  "hypothesis": "abstractness (U_ref) and contestedness-within-abstract (U_com) raise MAH divergence on a second backbone family",
+  "gemma4": {
+    "div_last": {
+      "metric": "div_last",
+      "cells": {
+        "concrete1_contested0": {
+          "n": 10,
+          "mean": 2.3279800415039062,
+          "z_mean": -0.21997244977456476
+        },
+        "concrete1_contested1": {
+          "n": 10,
+          "mean": 2.406204581260681,
+          "z_mean": 0.16377250813777774
+        },
+        "concrete0_contested0": {
+          "n": 10,
+          "mean": 2.252081561088562,
+          "z_mean": -0.5923064930704156
+        },
+        "concrete0_contested1": {
+          "n": 10,
+          "mean": 2.505015230178833,
+          "z_mean": 0.6485064347072008
+        }
+      },
+      "main_abstractness": {
+        "delta_raw": 0.011456084251403986,
+        "delta_z": 0.05619994163678609,
+        "cohen_d": 0.05479856630813069,
+        "perm_p": 0.8660566971651418
+      },
+      "contest_within_abstract": {
+        "delta_raw": 0.25293366909027126,
+        "delta_z": 1.2408129277776165,
+        "cohen_d": 1.1587356210137492,
+        "perm_p": 0.020098995050247488
+      },
+      "contest_within_concrete": {
+        "delta_raw": 0.0782245397567749,
+        "delta_z": 0.38374495791234253,
+        "cohen_d": 0.4932771423535204,
+        "perm_p": 0.28368581570921453
+      },
+      "std_beta": {
+        "intercept": -4.0374584888632065e-16,
+        "U_ref": 0.028099970818392987,
+        "U_com": 0.4061394714224897
+      },
+      "contest_vs_ntokens_spearman": -0.1497798435490381,
+      "contest_partial_given_ntokens": 0.3808946311655404
+    },
+    "div_last_L15": {
+      "metric": "div_last_L15",
+      "cells": {
+        "concrete1_contested0": {
+          "n": 10,
+          "mean": 0.9354191899299622,
+          "z_mean": 0.314415434829885
+        },
+        "concrete1_contested1": {
+          "n": 10,
+          "mean": 0.9195243656635285,
+          "z_mean": -0.03609362300819918
+        },
+        "concrete0_contested0": {
+          "n": 10,
+          "mean": 0.8889220356941223,
+          "z_mean": -0.7109292591516219
+        },
+        "concrete0_contested1": {
+          "n": 10,
+          "mean": 0.9407789409160614,
+          "z_mean": 0.43260744732993217
+        }
+      },
+      "main_abstractness": {
+        "delta_raw": -0.01262128949165342,
+        "delta_z": -0.27832181182168775,
+        "cohen_d": -0.27394004233154406,
+        "perm_p": 0.39093045347732613
+      },
+      "contest_within_abstract": {
+        "delta_raw": 0.05185690522193909,
+        "delta_z": 1.143536706481554,
+        "cohen_d": 1.0771208323032961,
+        "perm_p": 0.02589870506474676
+      },
+      "contest_within_concrete": {
+        "delta_raw": -0.015894824266433738,
+        "delta_z": -0.35050905783808417,
+        "cohen_d": -0.43319169207682784,
+        "perm_p": 0.3512324383780811
+      },
+      "std_beta": {
+        "intercept": -9.56702120187151e-16,
+        "U_ref": -0.1391609059108439,
+        "U_com": 0.1982569121608675
+      },
+      "contest_vs_ntokens_spearman": -0.1497798435490381,
+      "contest_partial_given_ntokens": 0.16360661998828482
+    },
+    "div_last_L30": {
+      "metric": "div_last_L30",
+      "cells": {
+        "concrete1_contested0": {
+          "n": 10,
+          "mean": 0.9190517783164978,
+          "z_mean": -0.317530254321734
+        },
+        "concrete1_contested1": {
+          "n": 10,
+          "mean": 0.9260554432868957,
+          "z_mean": -0.2172045156191705
+        },
+        "concrete0_contested0": {
+          "n": 10,
+          "mean": 0.9092708706855774,
+          "z_mean": -0.4576392954310883
+        },
+        "concrete0_contested1": {
+          "n": 10,
+          "mean": 1.0104952216148377,
+          "z_mean": 0.9923740653719955
+        }
+      },
+      "main_abstractness": {
+        "delta_raw": 0.03732943534851074,
+        "delta_z": 0.5347347699409057,
+        "cohen_d": 0.5408861228167764,
+        "perm_p": 0.09344532773361332
+      },
+      "contest_within_abstract": {
+        "delta_raw": 0.1012243509292603,
+        "delta_z": 1.4500133608030836,
+        "cohen_d": 1.3926289366415723,
+        "perm_p": 0.0066496675166241685
+      },
+      "contest_within_concrete": {
+        "delta_raw": 0.007003664970397949,
+        "delta_z": 0.10032573870256348,
+        "cohen_d": 0.16015323793625477,
+        "perm_p": 0.7242637868106595
+      },
+      "std_beta": {
+        "intercept": 6.495041916866897e-16,
+        "U_ref": 0.267367384970453,
+        "U_com": 0.3875847748764118
+      },
+      "contest_vs_ntokens_spearman": -0.1497798435490381,
+      "contest_partial_given_ntokens": 0.3358018964667668
+    },
+    "div_last_L45": {
+      "metric": "div_last_L45",
+      "cells": {
+        "concrete1_contested0": {
+          "n": 10,
+          "mean": 2.3279800415039062,
+          "z_mean": -0.21997244977456476
+        },
+        "concrete1_contested1": {
+          "n": 10,
+          "mean": 2.406204581260681,
+          "z_mean": 0.16377250813777774
+        },
+        "concrete0_contested0": {
+          "n": 10,
+          "mean": 2.252081561088562,
+          "z_mean": -0.5923064930704156
+        },
+        "concrete0_contested1": {
+          "n": 10,
+          "mean": 2.505015230178833,
+          "z_mean": 0.6485064347072008
+        }
+      },
+      "main_abstractness": {
+        "delta_raw": 0.011456084251403986,
+        "delta_z": 0.05619994163678609,
+        "cohen_d": 0.05479856630813069,
+        "perm_p": 0.8613069346532674
+      },
+      "contest_within_abstract": {
+        "delta_raw": 0.25293366909027126,
+        "delta_z": 1.2408129277776165,
+        "cohen_d": 1.1587356210137492,
+        "perm_p": 0.020898955052247387
+      },
+      "contest_within_concrete": {
+        "delta_raw": 0.0782245397567749,
+        "delta_z": 0.38374495791234253,
+        "cohen_d": 0.4932771423535204,
+        "perm_p": 0.2847357632118394
+      },
+      "std_beta": {
+        "intercept": -4.0374584888632065e-16,
+        "U_ref": 0.028099970818392987,
+        "U_com": 0.4061394714224897
+      },
+      "contest_vs_ntokens_spearman": -0.1497798435490381,
+      "contest_partial_given_ntokens": 0.3808946311655404
+    }
+  },
+  "qwen_v1_div_last": {
+    "metric": "div_last",
+    "cells": {
+      "concrete1_contested0": {
+        "n": 10,
+        "mean": 1.165625,
+        "z_mean": -0.8014776050281819
+      },
+      "concrete1_contested1": {
+        "n": 10,
+        "mean": 1.23671875,
+        "z_mean": -0.4088290878945909
+      },
+      "concrete0_contested0": {
+        "n": 10,
+        "mean": 1.31796875,
+        "z_mean": 0.03991207454379884
+      },
+      "concrete0_contested1": {
+        "n": 10,
+        "mean": 1.52265625,
+        "z_mean": 1.1703946183789729
+      }
+    },
+    "main_abstractness": {
+      "delta_raw": 0.2191406250000001,
+      "delta_z": 1.2103066929227722,
+      "cohen_d": 1.4817834590744423,
+      "perm_p": 4.999750012499375e-05
+    },
+    "contest_within_abstract": {
+      "delta_raw": 0.20468750000000013,
+      "delta_z": 1.130482543835174,
+      "cohen_d": 1.3192860059792257,
+      "perm_p": 0.005549722513874306
+    },
+    "contest_within_concrete": {
+      "delta_raw": 0.07109375000000018,
+      "delta_z": 0.392648517133591,
+      "cohen_d": 0.7469367018035108,
+      "perm_p": 0.11854407279636019
+    },
+    "std_beta": {
+      "intercept": -2.1065000811460205e-16,
+      "U_ref": 0.605153346461386,
+      "U_com": 0.3807827652421912
+    },
+    "contest_vs_ntokens_spearman": -0.25455844122715715,
+    "contest_partial_given_ntokens": 0.3228983528590881
+  }
+}

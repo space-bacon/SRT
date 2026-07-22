@@ -1816,10 +1816,12 @@ The two clocks enter as follows. $U_{\text{ref}}$ and $U_{\text{com}}$
 are set in transmission time — whether the corpus gave the sign a
 stable denotation, and how variously its communities used it — and
 $D(t)$ reads their sum in token-sequence time. What we can presently
-sign our names to is $\alpha>0$ robustly, and $\beta>0$ small and
-conditional on $U_{\text{ref}}$ being high: the community fork
-appears to require the absence of a concrete referent to fall back
-on. The dissociation of $D$ (load) from $\hat{r}$ (commitment) is
+sign our names to, within a single backbone, is $\alpha>0$ robustly
+and $\beta>0$ conditional on $U_{\text{ref}}$ being high: the
+community fork appears to require the absence of a concrete referent
+to fall back on. Across backbones the ordering inverts (Test 2): it
+is $\beta$, the community coupling, that proves portable, while
+$\alpha$ does not. The dissociation of $D$ (load) from $\hat{r}$ (commitment) is
 itself a structural claim about the infrastructure — it carries
 separable *load* and *bifurcation* registers, and underdetermination
 drives the first, not the second.
@@ -1837,13 +1839,27 @@ and contestedness survives controlling *measured* concreteness
 binary $2\times2$. The remaining softness is that $U_{\text{com}}$ is
 still a curated ordinal rather than a causally measured
 community-decoding disagreement, which is Test 3. *Test 2
-(cross-backbone invariance):* the same signs on Qwen, Gemma, and
-Mistral; the Stage-3/4 finding that the sampling-reachable manifold
-is set by the pretrained substrate rather than the alignment stage
-(§11.7) *predicts* substrate-invariance, a falsifiable prediction of
-the conjecture. A cross-backbone SRT adapter (gpt-oss-20b) exists but
-loads under a different transformers pin, so this is set up but
-unrun. *Test 3 (causal $U_{\text{com}}$):* forcing the community
+(cross-backbone invariance), run:* we repeated the $2\times2$
+dissociation on a second backbone family, google/gemma-4-31B-it, read
+out by an independently trained side-channel (the SRT-Sunstone
+community-plus-MAH readout, which shares neither weights nor training
+run with the Qwen adapter). Metapragmatic divergence $D$ (last-layer
+MAH, final shared token) was recorded on the same $40$-concept
+battery and standardised within each backbone. The community term
+replicates almost exactly: the standardised contestedness coefficient
+is $\beta_{U_{\text{com}}}=+0.41$ on gemma-4 against $+0.38$ on Qwen
+v1.0, and the contested-minus-consensus contrast inside the abstract
+cell is $+1.24$ against $+1.13$ standard deviations. The referential
+term does not transfer: the abstractness coefficient is
+$\beta_{U_{\text{ref}}}=+0.03$ on gemma-4 (null) against $+0.61$ on
+Qwen. In both backbones contestedness raises $D$ more inside the
+abstract cell than the concrete one (gemma $+0.25$ vs $+0.08$; Qwen
+$+0.21$ vs $+0.07$ in raw divergence). The substrate-invariance
+prediction is therefore confirmed for $U_{\text{com}}$, the community
+coupling the program's semiotics foregrounds, and refuted for the
+generic referential term $U_{\text{ref}}$: $\beta$ holds across two
+model families and two independently trained readouts, $\alpha$ does
+not. *Test 3 (causal $U_{\text{com}}$):* forcing the community
 index at decode time should move the interpretant only where
 $U_{\text{com}}$ is high; this closes the one open commitment (active
 intervention) in the "semiotic-infrastructure" claim. It requires a
@@ -1854,21 +1870,23 @@ from consensus to contested should show rising $U_{\text{com}}$, and
 rising $D$, across a dated corpus; we have identified suitable dated
 English corpora (AmericanStories, 1774–1963; Chronicling America),
 but a clean text-only multi-era extraction remains to be run. We have
-run Test 1 and the cross-*adapter* replication (above); Tests 2–4 are
-set up but open.
+run Tests 1 and 2, together with the cross-*adapter* replication on
+Qwen (above); Tests 3 and 4 are set up but open.
 
 We do not claim a law. We claim a replicated dissociation and a
 falsifiable target, and we note the honest shape of the result: the
 readout most observers would expect to carry the semiotic signal
 (the bifurcation order parameter) does *not* move; the one that does
-(metapragmatic divergence) is driven first by referential
+(metapragmatic divergence) is driven, on Qwen, first by referential
 underdetermination and only secondarily, and conditionally, by the
-community-contestedness the program's semiotics foregrounds. In the
+community-contestedness the program's semiotics foregrounds, while on
+gemma-4 it is the community term that carries the signal outright. In the
 program's register: contestedness here is a curated ordinal, not a
 causally measured community-decoding disagreement (the forcing
 instrument requires a discrete-prototype adapter, which the
-trajectory-mode v1.0/v8a do not provide); the replication is
-cross-adapter on a single backbone, not cross-backbone; $n$ is
+trajectory-mode v1.0/v8a do not provide); the community coupling now
+replicates cross-backbone (Qwen and gemma-4) while the referential
+coupling does not; $n$ is
 $40$–$94$ concepts; and the diachronic term — the actual
 transmission-time drift of one sign from consensus to contested — is
 unbuilt. The conjecture's value is that each of these gaps names a
