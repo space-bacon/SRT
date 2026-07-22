@@ -1,0 +1,29 @@
+{
+  "cells": {
+    "concrete_consensus": 1.165625,
+    "concrete_contested": 1.23671875,
+    "abstract_consensus": 1.31796875,
+    "abstract_contested": 1.52265625
+  },
+  "contestedness_within_concrete": {
+    "delta": 0.071,
+    "p": 0.116,
+    "sig": false
+  },
+  "contestedness_within_abstract": {
+    "delta": 0.205,
+    "p": 0.006,
+    "sig": true
+  },
+  "concreteness_within_consensus": {
+    "delta": 0.152,
+    "p": 0.012,
+    "sig": true
+  },
+  "concreteness_within_contested": {
+    "delta": 0.286,
+    "p": 5e-05,
+    "sig": true
+  },
+  "verdict": "MAH divergence tracks ABSTRACTNESS primarily; contestedness is a weaker secondary effect present only among abstract concepts (freedom>number seven) and absent among concrete objects (handgun~=bicycle). The earlier contestedness_v1 coupling (rho +0.44) was largely the abstractness confound."
+}
