@@ -192,6 +192,9 @@ def main() -> int:
     ap.add_argument("--qwen-readouts",
                     default="artifacts/nla/coupling/dissociation_v1_readouts.jsonl",
                     help="Qwen v1.0 dissociation readouts for a side-by-side comparison")
+    ap.add_argument("--backbone-path", default=None,
+                    help="Local dir to load the backbone from (bypasses the hub); "
+                         "defaults to the backbone id in the readout config")
     ap.add_argument("--max-seq-len", type=int, default=64)
     ap.add_argument("--nperm", type=int, default=20000)
     ap.add_argument("--seed", type=int, default=0)
@@ -215,8 +218,9 @@ def main() -> int:
     d_backbone = int(cc["d_backbone"])
     d_community = int(cc["d_community"])
     mid = cc["backbone"]
+    load_id = args.backbone_path or mid
     heads = ckpt["heads"]
-    print(f"[ckpt] step {ckpt.get('step')} backbone={mid} "
+    print(f"[ckpt] step {ckpt.get('step')} backbone={mid} load_from={load_id} "
           f"community@{comm_L} mah@{mah_layers} d={d_backbone}", flush=True)
 
     # community head lives under the "0." prefix; MAH heads under "1.<i>."
@@ -237,11 +241,11 @@ def main() -> int:
     print(f"[heads] community + {len(mah_heads)} MAH heads loaded", flush=True)
 
     # ---- backbone ------------------------------------------------------------
-    tok = AutoTokenizer.from_pretrained(mid)
+    tok = AutoTokenizer.from_pretrained(load_id)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     model = Gemma4ForConditionalGeneration.from_pretrained(
-        mid, dtype=torch.bfloat16, device_map=dev).eval()
+        load_id, dtype=torch.bfloat16, device_map=dev).eval()
     for p in model.parameters():
         p.requires_grad_(False)
     last_layer = mah_layers[-1]
