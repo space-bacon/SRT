@@ -194,7 +194,9 @@ def main() -> int:
             C = newC
         anchors_t = torch.tensor(C, dtype=torch.float32)
         src = f"{args.n_anchors} k-means anchors from {len(texts)} probe passages"
-    protos = anchors_t.to(args.device)
+    # match the MAH comm_proj dtype (bfloat16); _to_head moves device only, not dtype
+    head_dtype = next(model.mah_heads[0].comm_proj.parameters()).dtype
+    protos = anchors_t.to(device=args.device, dtype=head_dtype)
     K = protos.shape[0]
     pf = anchors_t.numpy()
     pn = pf / (np.linalg.norm(pf, axis=1, keepdims=True) + 1e-9)
