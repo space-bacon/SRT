@@ -1,0 +1,24 @@
+{
+  "test": "Test 1 (unified latent) of the Metapragmatic-load conjecture E[D]=D0+a*U_ref+b*U_com",
+  "date": "2026-07-22",
+  "backbone": "Qwen/Qwen2.5-7B",
+  "adapter": "RiverRider/srt-adapter-v1.0",
+  "signal": "div_last (MAH divergence at the shared final token 'is')",
+  "U_ref": "5 - Brysbaert concreteness (lecslab/brysbaert_concreteness, HF); referential underdetermination",
+  "U_com": "curated contestedness score in [0,1] (contestedness_battery_v1 + dissociation_v1)",
+  "n_concepts": 79,
+  "n_unique_before_join": 80,
+  "joined_missing": ["entropy"],
+  "headword_extraction": "drop {a,an,the,of}; first remaining word (reversed) present in Brysbaert norms",
+  "collinearity_check": {"spearman_Uref_contest": 0.463},
+  "results": {
+    "spearman_div_last_vs_Uref": 0.560,
+    "spearman_div_last_vs_contest": 0.445,
+    "partial_div_last_vs_Uref_given_contest": 0.446,
+    "partial_div_last_vs_contest_given_Uref": 0.253,
+    "standardized_beta_Uref": 0.440,
+    "standardized_beta_contest": 0.205
+  },
+  "verdict": "PASS (partial). Both terms positive and separable with independently measured, continuous U_ref: a (abstractness) ~2x b (contestedness), and contestedness survives controlling REAL concreteness (partial rho +0.25). Strengthens the conjecture vs the binary 2x2. Remaining softness: U_com is still curated, not the causal community-decoding disagreement (that is Test 3, blocked by lack of a discrete-prototype adapter).",
+  "provenance": "lecslab/brysbaert_concreteness downloaded on box ssh1:14437; div_last from artifacts/nla/coupling/{contestedness_v1,dissociation_v1}_readouts.jsonl (committed)."
+}

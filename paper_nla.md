@@ -1825,23 +1825,37 @@ separable *load* and *bifurcation* registers, and underdetermination
 drives the first, not the second.
 
 We are explicit about what would earn the conjecture the word "law,"
-and about how little of that programme is done. *Test 1 (unified
-latent):* regress $D$ on *independently measured* axes — published
-concreteness norms for $U_{\text{ref}}$, counterfactual
-community-decoding disagreement for $U_{\text{com}}$ — and show
-stable additive positive coefficients. *Test 2 (cross-backbone
-invariance):* the same signs on Qwen, Gemma, and Mistral; the
-Stage-3/4 finding that the sampling-reachable manifold is set by the
-pretrained substrate rather than the alignment stage (§11.7) *predicts*
-substrate-invariance, which is a falsifiable prediction of the
-conjecture. *Test 3 (causal $U_{\text{com}}$):* forcing the community
+and about how much of that programme remains. *Test 1 (unified
+latent), run:* we regressed $D$ on two independently varying axes —
+published Brysbaert concreteness norms for $U_{\text{ref}}$ and the
+curated contestedness score for $U_{\text{com}}$ — across $79$
+concepts on which the two axes are only weakly collinear
+($\rho=0.46$). Both coefficients are positive and separable
+(standardised $\beta_{U_{\text{ref}}}=0.44$, $\beta_{U_{\text{com}}}=0.21$),
+and contestedness survives controlling *measured* concreteness
+(partial $\rho=0.25$); this strengthens the conjecture beyond the
+binary $2\times2$. The remaining softness is that $U_{\text{com}}$ is
+still a curated ordinal rather than a causally measured
+community-decoding disagreement, which is Test 3. *Test 2
+(cross-backbone invariance):* the same signs on Qwen, Gemma, and
+Mistral; the Stage-3/4 finding that the sampling-reachable manifold
+is set by the pretrained substrate rather than the alignment stage
+(§11.7) *predicts* substrate-invariance, a falsifiable prediction of
+the conjecture. A cross-backbone SRT adapter (gpt-oss-20b) exists but
+loads under a different transformers pin, so this is set up but
+unrun. *Test 3 (causal $U_{\text{com}}$):* forcing the community
 index at decode time should move the interpretant only where
 $U_{\text{com}}$ is high; this closes the one open commitment (active
-intervention) in the "semiotic infrastructure" claim. *Test 4
-(diachronic):* a sign that historically drifted from consensus to
-contested should show rising $U_{\text{com}}$, and rising $D$, across
-a dated corpus. We have run the cross-*adapter* replication (above);
-Tests 1–4 are open.
+intervention) in the "semiotic-infrastructure" claim. It requires a
+discrete-prototype community adapter, which the trajectory-mode
+released adapters do not provide, so it is currently blocked on
+training one. *Test 4 (diachronic):* a sign that historically drifted
+from consensus to contested should show rising $U_{\text{com}}$, and
+rising $D$, across a dated corpus; we have identified suitable dated
+English corpora (AmericanStories, 1774–1963; Chronicling America),
+but a clean text-only multi-era extraction remains to be run. We have
+run Test 1 and the cross-*adapter* replication (above); Tests 2–4 are
+set up but open.
 
 We do not claim a law. We claim a replicated dissociation and a
 falsifiable target, and we note the honest shape of the result: the
