@@ -1,0 +1,54 @@
+{"id": "con_001", "concept": "the boiling point of water", "domain": "physics", "tier": 0, "contest_score": 0.05, "prompt": "The boiling point of water, properly understood, is"}
+{"id": "con_002", "concept": "a bicycle", "domain": "everyday", "tier": 0, "contest_score": 0.05, "prompt": "A bicycle, properly understood, is"}
+{"id": "con_003", "concept": "the number seven", "domain": "math", "tier": 0, "contest_score": 0.05, "prompt": "The number seven, properly understood, is"}
+{"id": "con_004", "concept": "photosynthesis", "domain": "biology", "tier": 0, "contest_score": 0.10, "prompt": "Photosynthesis, properly understood, is"}
+{"id": "con_005", "concept": "a right triangle", "domain": "math", "tier": 0, "contest_score": 0.05, "prompt": "A right triangle, properly understood, is"}
+{"id": "con_006", "concept": "the freezing point of water", "domain": "physics", "tier": 0, "contest_score": 0.05, "prompt": "The freezing point of water, properly understood, is"}
+{"id": "con_007", "concept": "a hammer", "domain": "everyday", "tier": 0, "contest_score": 0.05, "prompt": "A hammer, properly understood, is"}
+{"id": "con_008", "concept": "the alphabet", "domain": "everyday", "tier": 0, "contest_score": 0.05, "prompt": "The alphabet, properly understood, is"}
+{"id": "con_009", "concept": "multiplication", "domain": "math", "tier": 0, "contest_score": 0.08, "prompt": "Multiplication, properly understood, is"}
+{"id": "con_010", "concept": "the human heart", "domain": "biology", "tier": 0, "contest_score": 0.12, "prompt": "The human heart, properly understood, is"}
+{"id": "con_011", "concept": "a circle", "domain": "math", "tier": 0, "contest_score": 0.05, "prompt": "A circle, properly understood, is"}
+{"id": "con_012", "concept": "rainfall", "domain": "earth", "tier": 0, "contest_score": 0.10, "prompt": "Rainfall, properly understood, is"}
+{"id": "con_013", "concept": "the speed of light", "domain": "physics", "tier": 0, "contest_score": 0.10, "prompt": "The speed of light, properly understood, is"}
+{"id": "con_014", "concept": "a wooden table", "domain": "everyday", "tier": 0, "contest_score": 0.05, "prompt": "A wooden table, properly understood, is"}
+{"id": "con_015", "concept": "digestion", "domain": "biology", "tier": 0, "contest_score": 0.12, "prompt": "Digestion, properly understood, is"}
+{"id": "con_016", "concept": "an even number", "domain": "math", "tier": 0, "contest_score": 0.05, "prompt": "An even number, properly understood, is"}
+{"id": "con_017", "concept": "the moon", "domain": "astronomy", "tier": 0, "contest_score": 0.10, "prompt": "The moon, properly understood, is"}
+{"id": "con_018", "concept": "a staircase", "domain": "everyday", "tier": 0, "contest_score": 0.05, "prompt": "A staircase, properly understood, is"}
+{"id": "con_019", "concept": "quantum entanglement", "domain": "physics", "tier": 1, "contest_score": 0.55, "prompt": "Quantum entanglement, properly understood, is"}
+{"id": "con_020", "concept": "energy", "domain": "physics", "tier": 1, "contest_score": 0.60, "prompt": "Energy, properly understood, is"}
+{"id": "con_021", "concept": "resonance", "domain": "physics", "tier": 1, "contest_score": 0.50, "prompt": "Resonance, properly understood, is"}
+{"id": "con_022", "concept": "evolution", "domain": "biology", "tier": 1, "contest_score": 0.55, "prompt": "Evolution, properly understood, is"}
+{"id": "con_023", "concept": "a scientific theory", "domain": "epistemology", "tier": 1, "contest_score": 0.55, "prompt": "A scientific theory, properly understood, is"}
+{"id": "con_024", "concept": "intelligence", "domain": "psychology", "tier": 1, "contest_score": 0.62, "prompt": "Intelligence, properly understood, is"}
+{"id": "con_025", "concept": "instinct", "domain": "biology", "tier": 1, "contest_score": 0.45, "prompt": "Instinct, properly understood, is"}
+{"id": "con_026", "concept": "chaos", "domain": "physics", "tier": 1, "contest_score": 0.50, "prompt": "Chaos, properly understood, is"}
+{"id": "con_027", "concept": "entropy", "domain": "physics", "tier": 1, "contest_score": 0.55, "prompt": "Entropy, properly understood, is"}
+{"id": "con_028", "concept": "a virus", "domain": "biology", "tier": 1, "contest_score": 0.45, "prompt": "A virus, properly understood, is"}
+{"id": "con_029", "concept": "frequency", "domain": "physics", "tier": 1, "contest_score": 0.50, "prompt": "Frequency, properly understood, is"}
+{"id": "con_030", "concept": "addiction", "domain": "medicine", "tier": 1, "contest_score": 0.62, "prompt": "Addiction, properly understood, is"}
+{"id": "con_031", "concept": "a gene", "domain": "biology", "tier": 1, "contest_score": 0.50, "prompt": "A gene, properly understood, is"}
+{"id": "con_032", "concept": "depression", "domain": "medicine", "tier": 1, "contest_score": 0.62, "prompt": "Depression, properly understood, is"}
+{"id": "con_033", "concept": "a dimension", "domain": "math", "tier": 1, "contest_score": 0.48, "prompt": "A dimension, properly understood, is"}
+{"id": "con_034", "concept": "the placebo effect", "domain": "medicine", "tier": 1, "contest_score": 0.50, "prompt": "The placebo effect, properly understood, is"}
+{"id": "con_035", "concept": "a physical field", "domain": "physics", "tier": 1, "contest_score": 0.50, "prompt": "A physical field, properly understood, is"}
+{"id": "con_036", "concept": "language", "domain": "linguistics", "tier": 1, "contest_score": 0.58, "prompt": "Language, properly understood, is"}
+{"id": "con_037", "concept": "freedom", "domain": "politics", "tier": 2, "contest_score": 0.95, "prompt": "Freedom, properly understood, is"}
+{"id": "con_038", "concept": "justice", "domain": "ethics", "tier": 2, "contest_score": 0.95, "prompt": "Justice, properly understood, is"}
+{"id": "con_039", "concept": "consciousness", "domain": "philosophy", "tier": 2, "contest_score": 0.90, "prompt": "Consciousness, properly understood, is"}
+{"id": "con_040", "concept": "God", "domain": "religion", "tier": 2, "contest_score": 0.95, "prompt": "God, properly understood, is"}
+{"id": "con_041", "concept": "race", "domain": "social", "tier": 2, "contest_score": 0.95, "prompt": "Race, properly understood, is"}
+{"id": "con_042", "concept": "art", "domain": "aesthetics", "tier": 2, "contest_score": 0.85, "prompt": "Art, properly understood, is"}
+{"id": "con_043", "concept": "beauty", "domain": "aesthetics", "tier": 2, "contest_score": 0.85, "prompt": "Beauty, properly understood, is"}
+{"id": "con_044", "concept": "the self", "domain": "philosophy", "tier": 2, "contest_score": 0.90, "prompt": "The self, properly understood, is"}
+{"id": "con_045", "concept": "morality", "domain": "ethics", "tier": 2, "contest_score": 0.90, "prompt": "Morality, properly understood, is"}
+{"id": "con_046", "concept": "gender", "domain": "social", "tier": 2, "contest_score": 0.95, "prompt": "Gender, properly understood, is"}
+{"id": "con_047", "concept": "truth", "domain": "philosophy", "tier": 2, "contest_score": 0.90, "prompt": "Truth, properly understood, is"}
+{"id": "con_048", "concept": "love", "domain": "philosophy", "tier": 2, "contest_score": 0.85, "prompt": "Love, properly understood, is"}
+{"id": "con_049", "concept": "democracy", "domain": "politics", "tier": 2, "contest_score": 0.90, "prompt": "Democracy, properly understood, is"}
+{"id": "con_050", "concept": "the natural", "domain": "philosophy", "tier": 2, "contest_score": 0.85, "prompt": "The natural, properly understood, is"}
+{"id": "con_051", "concept": "free will", "domain": "philosophy", "tier": 2, "contest_score": 0.95, "prompt": "Free will, properly understood, is"}
+{"id": "con_052", "concept": "human rights", "domain": "politics", "tier": 2, "contest_score": 0.90, "prompt": "Human rights, properly understood, is"}
+{"id": "con_053", "concept": "faith", "domain": "religion", "tier": 2, "contest_score": 0.90, "prompt": "Faith, properly understood, is"}
+{"id": "con_054", "concept": "the soul", "domain": "religion", "tier": 2, "contest_score": 0.92, "prompt": "The soul, properly understood, is"}

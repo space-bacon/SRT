@@ -1,0 +1,148 @@
+{
+  "source": "artifacts/separatrix/v8a/readouts.jsonl",
+  "n_concepts": 61,
+  "centering_mu_norm": 1.2295328203572997,
+  "hypothesis": "higher transmission-time contestedness (technical vs mystical framing separation in centered community space) couples to higher token-sequence-time order parameter r_hat on the shared prompt",
+  "means": {
+    "contest_cen": 0.24739140290574022,
+    "contest_bedrock_cen": 0.19735725424102252,
+    "r_hat": 1.121426061528628,
+    "mah_peak": 2.288652054599074
+  },
+  "couplings": {
+    "contest_cen__r_hat": {
+      "label": "centered contestedness vs r_hat (PRIMARY)",
+      "spearman_rho": -0.11485986250661026,
+      "perm_p_two_sided": 0.3793310334483276,
+      "n": 61
+    },
+    "contest_cen__mah_peak": {
+      "label": "centered contestedness vs MAH peak divergence",
+      "spearman_rho": -0.08876373300264095,
+      "perm_p_two_sided": 0.496125193740313,
+      "n": 61
+    },
+    "contest_raw__r_hat": {
+      "label": "raw contestedness vs r_hat",
+      "spearman_rho": -0.09291380222104706,
+      "perm_p_two_sided": 0.47717614119294033,
+      "n": 61
+    },
+    "spread_cen__r_hat": {
+      "label": "3-way centered framing spread vs r_hat",
+      "spearman_rho": -0.08059227921734533,
+      "perm_p_two_sided": 0.5356732163391831,
+      "n": 61
+    },
+    "contest_bedrock_cen__r_hat": {
+      "label": "bedrock(consensus) contestedness vs r_hat (CONTROL)",
+      "spearman_rho": -0.11099947117927023,
+      "perm_p_two_sided": 0.3888805559722014,
+      "n": 61
+    }
+  },
+  "tertile_primary": {
+    "k_per_group": 20,
+    "mean_r_hat_low_contest": 1.1528890073299407,
+    "mean_r_hat_high_contest": 1.1205723226070403,
+    "delta": -0.03231668472290039
+  },
+  "domain_breakdown_primary": {
+    "anthropology": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "biology": {
+      "n": 3,
+      "spearman_rho": null
+    },
+    "clinical psychology": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "cognitive science": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "complex systems": {
+      "n": 2,
+      "spearman_rho": null
+    },
+    "computer science": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "cosmology": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "cybernetics": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "decision science": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "dynamical systems": {
+      "n": 3,
+      "spearman_rho": null
+    },
+    "history of science": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "information theory": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "linguistics": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "mathematics": {
+      "n": 2,
+      "spearman_rho": null
+    },
+    "molecular biology": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "neuroscience": {
+      "n": 5,
+      "spearman_rho": 0.1
+    },
+    "philosophy": {
+      "n": 5,
+      "spearman_rho": -0.7
+    },
+    "philosophy of science": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "physics": {
+      "n": 13,
+      "spearman_rho": -0.41208791208791207
+    },
+    "physiology": {
+      "n": 3,
+      "spearman_rho": null
+    },
+    "psychoanalysis": {
+      "n": 1,
+      "spearman_rho": null
+    },
+    "psychology": {
+      "n": 5,
+      "spearman_rho": 0.6
+    },
+    "religious studies": {
+      "n": 5,
+      "spearman_rho": -0.1
+    },
+    "thermodynamics": {
+      "n": 2,
+      "spearman_rho": null
+    }
+  }
+}
