@@ -98,6 +98,16 @@ def spearman(x, y) -> float:
     return pearson(rankdata(x), rankdata(y))
 
 
+def partial_spearman(x, y, z) -> float:
+    """Rank partial correlation of x,y controlling for z (residualize ranks on z)."""
+    rx, ry, rz = rankdata(x), rankdata(y), rankdata(z)
+    def resid(a, b):
+        b1 = np.c_[np.ones(len(b)), b]
+        beta = np.linalg.lstsq(b1, a, rcond=None)[0]
+        return a - b1 @ beta
+    return float(np.corrcoef(resid(rx, rz), resid(ry, rz))[0, 1])
+
+
 def perm_p(x, y, nperm, rng) -> tuple[float, float]:
     rx, ry = rankdata(x), rankdata(y)
     rho0 = pearson(rx, ry)
@@ -159,6 +169,8 @@ def main() -> int:
                 "r_hat_mean": float(r.mean()), "r_hat_max": float(r.max()),
                 "psuper_mean": float(psuper.mean()), "psuper_max": float(psuper.max()),
                 "div_mean": float(div.mean()), "div_peak": float(div.max()),
+                "r_hat_last": float(r[-1]), "psuper_last": float(psuper[-1]),
+                "div_last": float(div[-1]),
             }
             rows.append(row)
             f.write(json.dumps(row) + "\n")
@@ -177,7 +189,18 @@ def main() -> int:
         return {"metric": key, "spearman_rho": rho, "perm_p_two_sided": p}
 
     couplings = {k: couple(k) for k in
-                 ("r_hat_mean", "r_hat_max", "psuper_mean", "div_mean", "div_peak")}
+                 ("r_hat_mean", "r_hat_max", "r_hat_last", "psuper_mean", "psuper_last",
+                  "div_mean", "div_peak", "div_last")}
+
+    # length-controlled partials for the divergence channel (n_tokens is the confound:
+    # contested concepts are shorter, and averaged divergence inflates on short prompts).
+    ntok = np.array([r["n_tokens"] for r in rows])
+    length_controlled = {
+        k: {"partial_rho_given_n_tokens": partial_spearman(
+            contest, np.array([r[k] for r in rows]), ntok)}
+        for k in ("div_mean", "div_peak", "div_last")
+    }
+    length_controlled["contest_vs_n_tokens"] = spearman(contest, ntok)
 
     # tertile effect on the primary axis (r_hat_mean by contestedness)
     order = np.argsort(contest)
@@ -204,7 +227,8 @@ def main() -> int:
     summary = {
         "repo": args.repo, "n_concepts": len(rows),
         "hypothesis": "curated transmission-time contestedness tracks within-pass r_hat",
-        "couplings": couplings, "tertile_primary": tertile,
+        "couplings": couplings, "length_controlled_divergence": length_controlled,
+        "tertile_primary": tertile,
         "tier_means_r_hat": tiers, "domain_breakdown_r_hat_mean": dom,
     }
     Path(args.out_summary).write_text(json.dumps(summary, indent=2))
@@ -212,6 +236,10 @@ def main() -> int:
     print("\n=== coupling (contestedness vs fast-time) ===")
     for k2, c in couplings.items():
         print(f"  {k2:<12} rho={c['spearman_rho']:+.3f}  p={c['perm_p_two_sided']:.4g}")
+    print("--- divergence, length-controlled (partial rho | n_tokens) ---")
+    print(f"  contest vs n_tokens rho={length_controlled['contest_vs_n_tokens']:+.3f}")
+    for k2 in ("div_mean", "div_peak", "div_last"):
+        print(f"  {k2:<12} partial_rho={length_controlled[k2]['partial_rho_given_n_tokens']:+.3f}")
     print(f"tiers r_hat: " + "  ".join(f"{t}={v['r_hat_mean']:+.3f}(n{v['n']})"
                                        for t, v in tiers.items()))
     print(f"tertile r_hat: high={tertile['r_hat_high_contest']:+.3f} "
