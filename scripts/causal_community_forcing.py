@@ -296,7 +296,7 @@ def main() -> int:
     }
     Path(args.out_summary).write_text(json.dumps(summary, indent=2))
 
-    print("\n=== Test 3: causal community forcing (zooL4nD3r, K=%d communities) ===" % K)
+    print("\n=== Test 3: causal community forcing (%s, K=%d communities) ===" % (args.repo, K))
     print("U_com^causal (interpretant movement) cell means:")
     print(f"  concrete: consensus {cells['concrete1_contested0']:.3f}  "
           f"contested {cells['concrete1_contested1']:.3f}")

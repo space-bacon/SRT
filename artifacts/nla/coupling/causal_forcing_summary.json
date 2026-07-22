@@ -1,0 +1,36 @@
+{
+  "repo": "RiverRider/srt-adapter-v1.0",
+  "backbone": "Qwen/Qwen2.5-7B",
+  "n_concepts": 40,
+  "K_communities": 24,
+  "codebook_pairwise_cos_mean": 0.46122831106185913,
+  "hypothesis": "forcing the community index moves the interpretant (MAH divergence) more where U_com is high (contested concepts)",
+  "ucom_causal_cells": {
+    "concrete1_contested0": 0.08579792305827141,
+    "concrete1_contested1": 0.08542766943573951,
+    "concrete0_contested0": 0.08651068210601806,
+    "concrete0_contested1": 0.08626197129487992
+  },
+  "contested_vs_consensus": {
+    "all": {
+      "delta": -0.00030948221683502197,
+      "cohen_d": -0.3692399659151623,
+      "perm_p": 0.2537873106344683
+    },
+    "within_abstract": {
+      "delta": -0.000248710811138142,
+      "perm_p": 0.5180240987950603,
+      "cohen_d": -0.2938739978127618
+    },
+    "within_concrete": {
+      "delta": -0.00037025362253190197,
+      "perm_p": 0.22353882305884706,
+      "cohen_d": -0.5630885380131679
+    }
+  },
+  "validate_ordinal": {
+    "spearman_ucom_causal_vs_contest_score": -0.05058684323804171,
+    "spearman_ucom_causal_vs_baseline_D": 0.17275031180868403,
+    "spearman_baseline_D_vs_contest_score": 0.5782359248077504
+  }
+}

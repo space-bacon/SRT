@@ -1859,13 +1859,31 @@ prediction is therefore confirmed for $U_{\text{com}}$, the community
 coupling the program's semiotics foregrounds, and refuted for the
 generic referential term $U_{\text{ref}}$: $\beta$ holds across two
 model families and two independently trained readouts, $\alpha$ does
-not. *Test 3 (causal $U_{\text{com}}$):* forcing the community
-index at decode time should move the interpretant only where
-$U_{\text{com}}$ is high; this closes the one open commitment (active
-intervention) in the "semiotic-infrastructure" claim. It requires a
-discrete-prototype community adapter, which the trajectory-mode
-released adapters do not provide, so it is currently blocked on
-training one. *Test 4 (diachronic), run:* a sign that drifted toward
+not. *Test 3 (causal $U_{\text{com}}$), run:* forcing the community
+index at decode time should move the interpretant more where
+$U_{\text{com}}$ is high. We tested it two ways. zooL4nD3r-v0.1, the
+one released adapter with a trained discrete community codebook ($32$
+near-orthogonal prototypes), carries a divergence channel that does
+not track contestedness at all (baseline $\rho=+0.05$): it was trained
+for community classification, not metapragmatic load, so forcing its
+codebook probes the wrong channel. On v1.0, whose divergence does
+track contestedness on this battery ($\rho=+0.58$), we elicited the
+model's own community anchors from its community head and forced each
+of $24$ into the MAH. The intervention is null: the interpretant moves
+by a near-constant amount for every concept
+($U_{\text{com}}^{\text{causal}} = 0.086 \pm 0.001$), with no
+contested-consensus gap ($d=-0.37$, $p=0.25$) and no correlation with
+the curated contestedness ($\rho=-0.05$) or the baseline load
+($\rho=+0.17$). The cause is architectural: the community-to-MAH
+pathway adds the community vector as a uniform bias to the
+interpretant, a global style knob rather than a per-sign
+disambiguator. The honest reading is that the contestedness coupling,
+robust as it is correlationally, is encoded in each sign's
+representation rather than causally produced by sensitivity to the
+community index in the released adapters; confirming the causal
+mechanism would need an adapter whose community channel modulates
+divergence per token, which none of the shipped products do. *Test 4
+(diachronic), run:* a sign that drifted toward
 contestation should, as its community underdetermination grew in
 transmission time, show rising metapragmatic load $D$. We measured $D$
 at the token positions of twenty contested political and moral signs
@@ -1890,9 +1908,10 @@ community-dispersion proxy is degenerate on this read-out (the
 prototype channel saturates at $\log K$), and a vision-tower variant
 on scanned pages failed for the same reason compounded by fixed-token
 image compression, so the diachronic term is anchored on the sign, as
-in Tests 1–2, not on a per-era magnitude. We have run Tests 1, 2, and
-4, together with the cross-*adapter* replication on Qwen (above); Test
-3 remains set up but open.
+in Tests 1–2, not on a per-era magnitude. We have now run all four
+tests; Test 3, the causal intervention, returned an informative
+negative that localizes the coupling to each sign's representation
+rather than to the community-forcing pathway.
 
 We do not claim a law. We claim a replicated dissociation and a
 falsifiable target, and we note the honest shape of the result: the
@@ -1902,10 +1921,11 @@ readout most observers would expect to carry the semiotic signal
 underdetermination and only secondarily, and conditionally, by the
 community-contestedness the program's semiotics foregrounds, while on
 gemma-4 it is the community term that carries the signal outright. In the
-program's register: contestedness here is a curated ordinal, not a
-causally measured community-decoding disagreement (the forcing
-instrument requires a discrete-prototype adapter, which the
-trajectory-mode v1.0/v8a do not provide); the community coupling now
+program's register: contestedness here is a curated ordinal, and the
+causal forcing test (Test 3) shows the community-to-MAH pathway acts as
+a uniform bias, so the coupling is representational rather than
+produced by per-sign community-forcing sensitivity; the community
+coupling now
 replicates cross-backbone (Qwen and gemma-4) while the referential
 coupling does not; $n$ is
 $40$–$94$ concepts; and the diachronic term is now built (Test 4):
