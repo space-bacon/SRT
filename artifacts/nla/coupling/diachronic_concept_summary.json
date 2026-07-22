@@ -1,0 +1,419 @@
+{
+  "backbone": "google/gemma-4-31B-it",
+  "dataset": "dell-research-harvard/AmericanStories",
+  "n_obs": 11876,
+  "n_contested_obs": 5119,
+  "n_control_obs": 6757,
+  "year_range": [
+    1770,
+    1964
+  ],
+  "contested_signs": [
+    "liberty",
+    "freedom",
+    "justice",
+    "rights",
+    "equality",
+    "tyranny",
+    "virtue",
+    "slavery",
+    "union",
+    "democracy",
+    "republic",
+    "property",
+    "religion",
+    "race",
+    "sovereignty",
+    "treason",
+    "patriotism",
+    "nation",
+    "authority",
+    "reason"
+  ],
+  "control_signs": [
+    "river",
+    "harvest",
+    "weather",
+    "horse",
+    "cattle",
+    "wheat",
+    "timber",
+    "bread",
+    "water",
+    "road",
+    "bridge",
+    "market",
+    "rain",
+    "winter",
+    "morning",
+    "harbor",
+    "ship",
+    "field",
+    "garden",
+    "iron"
+  ],
+  "diachronic": {
+    "contested_year_vs_D": 0.2144096051630125,
+    "control_year_vs_D": 0.16603559247056693,
+    "difference_in_differences": 0.04837401269244557,
+    "did_perm_p": 0.0071992800719928
+  },
+  "per_concept_drift": {
+    "liberty": {
+      "contested": 1,
+      "n": 336,
+      "year_vs_D": 0.18092345455149356,
+      "D_mean": 2.7108239276068553
+    },
+    "freedom": {
+      "contested": 1,
+      "n": 327,
+      "year_vs_D": 0.1196908387007089,
+      "D_mean": 2.517289531340293
+    },
+    "justice": {
+      "contested": 1,
+      "n": 340,
+      "year_vs_D": 0.3055081949135105,
+      "D_mean": 2.760001582257888
+    },
+    "rights": {
+      "contested": 1,
+      "n": 378,
+      "year_vs_D": 0.4399085510724128,
+      "D_mean": 2.5587680920091254
+    },
+    "equality": {
+      "contested": 1,
+      "n": 71,
+      "year_vs_D": 0.18829328052941574,
+      "D_mean": 2.737268286691585
+    },
+    "tyranny": {
+      "contested": 1,
+      "n": 75,
+      "year_vs_D": 0.3048452419730205,
+      "D_mean": 2.4759304332733154
+    },
+    "virtue": {
+      "contested": 1,
+      "n": 367,
+      "year_vs_D": 0.2206737049496481,
+      "D_mean": 2.649645442533883
+    },
+    "slavery": {
+      "contested": 1,
+      "n": 122,
+      "year_vs_D": 0.22025512477745737,
+      "D_mean": 2.6791623586513955
+    },
+    "union": {
+      "contested": 1,
+      "n": 379,
+      "year_vs_D": 0.11766677267106318,
+      "D_mean": 2.6017092120364347
+    },
+    "democracy": {
+      "contested": 1,
+      "n": 202,
+      "year_vs_D": 0.15754983128271544,
+      "D_mean": 2.6392528857335007
+    },
+    "republic": {
+      "contested": 1,
+      "n": 291,
+      "year_vs_D": 0.12207942328261456,
+      "D_mean": 2.802478781270817
+    },
+    "property": {
+      "contested": 1,
+      "n": 380,
+      "year_vs_D": 0.30497788764898276,
+      "D_mean": 2.735643225280862
+    },
+    "religion": {
+      "contested": 1,
+      "n": 194,
+      "year_vs_D": 0.28030828943242425,
+      "D_mean": 3.166952415839913
+    },
+    "race": {
+      "contested": 1,
+      "n": 350,
+      "year_vs_D": 0.2477334480826478,
+      "D_mean": 2.62589620249612
+    },
+    "sovereignty": {
+      "contested": 1,
+      "n": 41,
+      "year_vs_D": 0.5172534298170967,
+      "D_mean": 2.820546679380463
+    },
+    "treason": {
+      "contested": 1,
+      "n": 67,
+      "year_vs_D": 0.27449471491355515,
+      "D_mean": 2.849563990066301
+    },
+    "patriotism": {
+      "contested": 1,
+      "n": 106,
+      "year_vs_D": 0.11531774668354347,
+      "D_mean": 2.669425809158469
+    },
+    "nation": {
+      "contested": 1,
+      "n": 380,
+      "year_vs_D": 0.25180242095844696,
+      "D_mean": 2.544178567748321
+    },
+    "authority": {
+      "contested": 1,
+      "n": 372,
+      "year_vs_D": 0.2669457551284412,
+      "D_mean": 2.662981539323766
+    },
+    "reason": {
+      "contested": 1,
+      "n": 341,
+      "year_vs_D": 0.1299261415319448,
+      "D_mean": 2.647245618954432
+    },
+    "river": {
+      "contested": 0,
+      "n": 380,
+      "year_vs_D": 0.1379841696329765,
+      "D_mean": 2.4946828694720016
+    },
+    "harvest": {
+      "contested": 0,
+      "n": 108,
+      "year_vs_D": -0.06431081169592961,
+      "D_mean": 2.8908894812619246
+    },
+    "weather": {
+      "contested": 0,
+      "n": 365,
+      "year_vs_D": 0.2529995514497382,
+      "D_mean": 2.66871717890648
+    },
+    "horse": {
+      "contested": 0,
+      "n": 330,
+      "year_vs_D": 0.13999051972725546,
+      "D_mean": 2.827902150154114
+    },
+    "cattle": {
+      "contested": 0,
+      "n": 356,
+      "year_vs_D": 0.14024483546190042,
+      "D_mean": 2.9747606314969866
+    },
+    "wheat": {
+      "contested": 0,
+      "n": 350,
+      "year_vs_D": 0.22390885243111877,
+      "D_mean": 2.7199958266530717
+    },
+    "timber": {
+      "contested": 0,
+      "n": 290,
+      "year_vs_D": 0.136832102259745,
+      "D_mean": 2.7373575543535167
+    },
+    "bread": {
+      "contested": 0,
+      "n": 288,
+      "year_vs_D": 0.13218428505513177,
+      "D_mean": 2.8477576267388134
+    },
+    "water": {
+      "contested": 0,
+      "n": 380,
+      "year_vs_D": 0.28061973389642797,
+      "D_mean": 2.6784178950284656
+    },
+    "road": {
+      "contested": 0,
+      "n": 376,
+      "year_vs_D": 0.17439734948918112,
+      "D_mean": 2.524926858379486
+    },
+    "bridge": {
+      "contested": 0,
+      "n": 380,
+      "year_vs_D": 0.17195109520239243,
+      "D_mean": 2.391793898845974
+    },
+    "market": {
+      "contested": 0,
+      "n": 371,
+      "year_vs_D": 0.2898528885729712,
+      "D_mean": 2.5356072672615153
+    },
+    "rain": {
+      "contested": 0,
+      "n": 302,
+      "year_vs_D": 0.11114749296367366,
+      "D_mean": 2.7252213879926317
+    },
+    "winter": {
+      "contested": 0,
+      "n": 370,
+      "year_vs_D": 0.17848905699716736,
+      "D_mean": 2.7250909309129456
+    },
+    "morning": {
+      "contested": 0,
+      "n": 380,
+      "year_vs_D": 0.27451377014215494,
+      "D_mean": 2.6353317357991872
+    },
+    "harbor": {
+      "contested": 0,
+      "n": 252,
+      "year_vs_D": 0.17475087592474586,
+      "D_mean": 2.6272598192805336
+    },
+    "ship": {
+      "contested": 0,
+      "n": 366,
+      "year_vs_D": 0.13842162834239224,
+      "D_mean": 2.7124879321113964
+    },
+    "field": {
+      "contested": 0,
+      "n": 375,
+      "year_vs_D": 0.09567272147290741,
+      "D_mean": 2.742540570259094
+    },
+    "garden": {
+      "contested": 0,
+      "n": 366,
+      "year_vs_D": 0.08041259631422042,
+      "D_mean": 2.9003607197537447
+    },
+    "iron": {
+      "contested": 0,
+      "n": 372,
+      "year_vs_D": 0.23160924182360998,
+      "D_mean": 2.6623752812544503
+    }
+  },
+  "decade_means_by_group": {
+    "1770": {
+      "contested_n": 208,
+      "contested_D": 2.5093896727149305,
+      "control_n": 294,
+      "control_D": 2.5521186423950453
+    },
+    "1790": {
+      "contested_n": 213,
+      "contested_D": 2.520950608969854,
+      "control_n": 272,
+      "control_D": 2.5413685682065346
+    },
+    "1800": {
+      "contested_n": 289,
+      "contested_D": 2.563425271568826,
+      "control_n": 358,
+      "control_D": 2.5705975507224736
+    },
+    "1810": {
+      "contested_n": 293,
+      "contested_D": 2.62128060547565,
+      "control_n": 374,
+      "control_D": 2.635674162981982
+    },
+    "1820": {
+      "contested_n": 258,
+      "contested_D": 2.6272753019665562,
+      "control_n": 370,
+      "control_D": 2.6598951355831044
+    },
+    "1830": {
+      "contested_n": 292,
+      "contested_D": 2.57785550658017,
+      "control_n": 352,
+      "control_D": 2.6084890010004695
+    },
+    "1840": {
+      "contested_n": 321,
+      "contested_D": 2.5898763776939604,
+      "control_n": 361,
+      "control_D": 2.613745514705901
+    },
+    "1850": {
+      "contested_n": 317,
+      "contested_D": 2.6541258735987667,
+      "control_n": 369,
+      "control_D": 2.688745377832635
+    },
+    "1860": {
+      "contested_n": 330,
+      "contested_D": 2.648954018318292,
+      "control_n": 366,
+      "control_D": 2.6858043263518745
+    },
+    "1870": {
+      "contested_n": 284,
+      "contested_D": 2.6978577106771335,
+      "control_n": 377,
+      "control_D": 2.734214056075726
+    },
+    "1880": {
+      "contested_n": 261,
+      "contested_D": 2.7011617833170396,
+      "control_n": 381,
+      "control_D": 2.7334818483337644
+    },
+    "1890": {
+      "contested_n": 266,
+      "contested_D": 2.7063797958811424,
+      "control_n": 383,
+      "control_D": 2.744984070252501
+    },
+    "1900": {
+      "contested_n": 267,
+      "contested_D": 2.7578327343258517,
+      "control_n": 384,
+      "control_D": 2.754331127119561
+    },
+    "1910": {
+      "contested_n": 266,
+      "contested_D": 2.704110348135009,
+      "control_n": 387,
+      "control_D": 2.761882856526732
+    },
+    "1920": {
+      "contested_n": 237,
+      "contested_D": 2.7367724718423836,
+      "control_n": 367,
+      "control_D": 2.7342750233590443
+    },
+    "1930": {
+      "contested_n": 257,
+      "contested_D": 2.777864819370819,
+      "control_n": 363,
+      "control_D": 2.782310528531876
+    },
+    "1940": {
+      "contested_n": 256,
+      "contested_D": 2.799440915696323,
+      "control_n": 370,
+      "control_D": 2.770346101232477
+    },
+    "1950": {
+      "contested_n": 259,
+      "contested_D": 2.763104545103537,
+      "control_n": 358,
+      "control_D": 2.7511526196362586
+    },
+    "1960": {
+      "contested_n": 245,
+      "contested_D": 2.814288580174349,
+      "control_n": 271,
+      "control_D": 2.712383966604282
+    }
+  }
+}

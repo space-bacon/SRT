@@ -1865,13 +1865,34 @@ $U_{\text{com}}$ is high; this closes the one open commitment (active
 intervention) in the "semiotic-infrastructure" claim. It requires a
 discrete-prototype community adapter, which the trajectory-mode
 released adapters do not provide, so it is currently blocked on
-training one. *Test 4 (diachronic):* a sign that historically drifted
-from consensus to contested should show rising $U_{\text{com}}$, and
-rising $D$, across a dated corpus; we have identified suitable dated
-English corpora (AmericanStories, 1774–1963; Chronicling America),
-but a clean text-only multi-era extraction remains to be run. We have
-run Tests 1 and 2, together with the cross-*adapter* replication on
-Qwen (above); Tests 3 and 4 are set up but open.
+training one. *Test 4 (diachronic), run:* a sign that drifted toward
+contestation should, as its community underdetermination grew in
+transmission time, show rising metapragmatic load $D$. We measured $D$
+at the token positions of twenty contested political and moral signs
+(sovereignty, rights, justice, liberty, slavery, race, and so on)
+against twenty concrete controls (river, harvest, horse, iron, and so
+on) in $11{,}876$ dated AmericanStories articles spanning
+$1770$–$1964$, read out by the gemma-4 SRT-Sunstone side-channel.
+Because $D$ drifts upward for every sign across the period (OCR
+quality and language change confound the raw trend), the test is a
+difference-in-differences: the contested signs' per-year rank-drift of
+$D$ ($\rho_{\text{year}}=+0.214$) exceeds the controls' ($+0.166$) by
+$+0.048$ (permutation $p=0.007$). The decade means cross over,
+contested signs carrying less load than concrete ones early (1770s,
+$2.51$ vs $2.55$) and more late (1960s, $2.81$ vs $2.71$), with the
+crossover near $1900$–$1940$; the signs whose load rose most are the
+core contested ones (sovereignty $+0.52$, rights $+0.44$, justice,
+property, tyranny), not the controls. This confirms the conjecture's
+transmission-time prediction as an observable $D$-drift. The honest
+limit is that it is the *consequence* of rising $U_{\text{com}}$, not
+a directly measured per-era $U_{\text{com}}$: the whole-passage
+community-dispersion proxy is degenerate on this read-out (the
+prototype channel saturates at $\log K$), and a vision-tower variant
+on scanned pages failed for the same reason compounded by fixed-token
+image compression, so the diachronic term is anchored on the sign, as
+in Tests 1–2, not on a per-era magnitude. We have run Tests 1, 2, and
+4, together with the cross-*adapter* replication on Qwen (above); Test
+3 remains set up but open.
 
 We do not claim a law. We claim a replicated dissociation and a
 falsifiable target, and we note the honest shape of the result: the
@@ -1887,10 +1908,13 @@ instrument requires a discrete-prototype adapter, which the
 trajectory-mode v1.0/v8a do not provide); the community coupling now
 replicates cross-backbone (Qwen and gemma-4) while the referential
 coupling does not; $n$ is
-$40$–$94$ concepts; and the diachronic term — the actual
-transmission-time drift of one sign from consensus to contested — is
-unbuilt. The conjecture's value is that each of these gaps names a
-decisive, runnable experiment.
+$40$–$94$ concepts; and the diachronic term is now built (Test 4):
+the metapragmatic load of contested signs drifts upward faster than
+that of concrete controls across $1770$–$1964$
+(difference-in-differences $+0.048$, $p=0.007$), as a $D$-drift
+consequence rather than a directly measured per-era $U_{\text{com}}$.
+The conjecture's value is that each of these gaps names a decisive,
+runnable experiment.
 
 ---
 
