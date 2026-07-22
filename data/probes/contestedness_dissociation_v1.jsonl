@@ -1,0 +1,40 @@
+{"id": "dis_01", "concept": "a bicycle", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A bicycle, properly understood, is"}
+{"id": "dis_02", "concept": "a hammer", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A hammer, properly understood, is"}
+{"id": "dis_03", "concept": "a wooden spoon", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A wooden spoon, properly understood, is"}
+{"id": "dis_04", "concept": "a staircase", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A staircase, properly understood, is"}
+{"id": "dis_05", "concept": "a doorknob", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A doorknob, properly understood, is"}
+{"id": "dis_06", "concept": "a teapot", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A teapot, properly understood, is"}
+{"id": "dis_07", "concept": "a brick", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A brick, properly understood, is"}
+{"id": "dis_08", "concept": "a wristwatch", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A wristwatch, properly understood, is"}
+{"id": "dis_09", "concept": "a garden hose", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A garden hose, properly understood, is"}
+{"id": "dis_10", "concept": "a stapler", "domain": "everyday", "tier": 0, "concrete": 1, "contested": 0, "contest_score": 0.05, "prompt": "A stapler, properly understood, is"}
+{"id": "dis_11", "concept": "a handgun", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.90, "prompt": "A handgun, properly understood, is"}
+{"id": "dis_12", "concept": "a vaccine", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.85, "prompt": "A vaccine, properly understood, is"}
+{"id": "dis_13", "concept": "a border fence", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.88, "prompt": "A border fence, properly understood, is"}
+{"id": "dis_14", "concept": "a national flag", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.85, "prompt": "A national flag, properly understood, is"}
+{"id": "dis_15", "concept": "a nuclear reactor", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.82, "prompt": "A nuclear reactor, properly understood, is"}
+{"id": "dis_16", "concept": "an oil pipeline", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.85, "prompt": "An oil pipeline, properly understood, is"}
+{"id": "dis_17", "concept": "a slaughterhouse", "domain": "ethics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.85, "prompt": "A slaughterhouse, properly understood, is"}
+{"id": "dis_18", "concept": "a prison", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.85, "prompt": "A prison, properly understood, is"}
+{"id": "dis_19", "concept": "a surveillance camera", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.85, "prompt": "A surveillance camera, properly understood, is"}
+{"id": "dis_20", "concept": "a landmine", "domain": "politics", "tier": 2, "concrete": 1, "contested": 1, "contest_score": 0.88, "prompt": "A landmine, properly understood, is"}
+{"id": "dis_21", "concept": "the number seven", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.05, "prompt": "The number seven, properly understood, is"}
+{"id": "dis_22", "concept": "addition", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.06, "prompt": "Addition, properly understood, is"}
+{"id": "dis_23", "concept": "a prime number", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.06, "prompt": "A prime number, properly understood, is"}
+{"id": "dis_24", "concept": "the past tense", "domain": "linguistics", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.10, "prompt": "The past tense, properly understood, is"}
+{"id": "dis_25", "concept": "a right angle", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.05, "prompt": "A right angle, properly understood, is"}
+{"id": "dis_26", "concept": "an even number", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.05, "prompt": "An even number, properly understood, is"}
+{"id": "dis_27", "concept": "subtraction", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.06, "prompt": "Subtraction, properly understood, is"}
+{"id": "dis_28", "concept": "a synonym", "domain": "linguistics", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.08, "prompt": "A synonym, properly understood, is"}
+{"id": "dis_29", "concept": "the letter A", "domain": "linguistics", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.05, "prompt": "The letter A, properly understood, is"}
+{"id": "dis_30", "concept": "a triangle", "domain": "math", "tier": 0, "concrete": 0, "contested": 0, "contest_score": 0.05, "prompt": "A triangle, properly understood, is"}
+{"id": "dis_31", "concept": "freedom", "domain": "politics", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.95, "prompt": "Freedom, properly understood, is"}
+{"id": "dis_32", "concept": "justice", "domain": "ethics", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.95, "prompt": "Justice, properly understood, is"}
+{"id": "dis_33", "concept": "morality", "domain": "ethics", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.90, "prompt": "Morality, properly understood, is"}
+{"id": "dis_34", "concept": "gender", "domain": "social", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.95, "prompt": "Gender, properly understood, is"}
+{"id": "dis_35", "concept": "race", "domain": "social", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.95, "prompt": "Race, properly understood, is"}
+{"id": "dis_36", "concept": "free will", "domain": "philosophy", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.95, "prompt": "Free will, properly understood, is"}
+{"id": "dis_37", "concept": "democracy", "domain": "politics", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.90, "prompt": "Democracy, properly understood, is"}
+{"id": "dis_38", "concept": "human rights", "domain": "politics", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.90, "prompt": "Human rights, properly understood, is"}
+{"id": "dis_39", "concept": "the soul", "domain": "religion", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.92, "prompt": "The soul, properly understood, is"}
+{"id": "dis_40", "concept": "patriotism", "domain": "politics", "tier": 2, "concrete": 0, "contested": 1, "contest_score": 0.88, "prompt": "Patriotism, properly understood, is"}
