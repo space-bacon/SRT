@@ -1740,6 +1740,128 @@ absolute number is not.
 
 ---
 
+## 12.5 Two clocks, and a candidate law: metapragmatic load
+
+The SRT program distinguishes, but has not previously separated in
+*measurement*, two time scales on which an interpretant lives.
+*Token-sequence time* is the within-pass trajectory: the
+Metapragmatic Attention Head emits a per-token divergence $D(t)$,
+the Reflexive Recurrent Module integrates it, and the Bifurcation
+Estimation Network reads an order parameter $\hat{r}(t)$.
+*Transmission time* is the historical process by which each sign's
+interpretant was stabilised across the training corpus and across
+model lineages — sedimented into the frozen weights and
+materialised, in the SRT-Adapter, as the Community Discovery index.
+The first is a *readout* clock; the second is a *generative* clock.
+Mechanistic interpretability ordinarily works in the first alone and
+stops at description ("this unit responds to $X$"); the value of
+naming the second is that it converts such a description into a
+historical explanation — $D(t)$ is high *because* the sign $X$ was
+transmitted with weak referential grounding or high cross-community
+variance. In this reading the frozen model is not only an object of
+study but an instrument for the semiotic structure of its training
+culture, read out through a controlled within-pass probe.
+
+We report a first controlled measurement relating the two clocks.
+For a battery of $54$ concepts spanning the mundane (a bicycle, the
+number seven) to the deeply contested (freedom, justice,
+consciousness), each carrying a curated contestedness score in
+$[0,1]$ and presented under a uniform definitional stem
+("$\langle$concept$\rangle$, properly understood, is"), we read $D$
+at the final, shared token of the stem and $\hat{r}$ over the stem.
+Two findings, one negative and one positive, both replicated across
+two independently trained adapters on the same backbone
+(RiverRider/srt-adapter-v1.0 and v8a):
+
+1. **The bifurcation order parameter $\hat{r}$ does not track a
+   concept's contestedness** (Spearman $\rho = +0.02$; tier means
+   flat at $0.67$–$0.71$ on both adapters). The reflexivity register
+   is not a contestedness detector at the lexical-concept level. We
+   flag this because it is the readout most observers would *expect*
+   to carry the semiotic signal.
+
+2. **The metapragmatic divergence $D$ scales with interpretant
+   *underdetermination*, but a naive reading over-attributes it to
+   contestedness.** The first battery confounds abstractness with
+   contestedness (its mundane concepts are concrete, its contested
+   ones abstract). A second battery of $40$ concepts crossing
+   *concreteness* with *contestedness* in a $2\times2$ dissociates
+   two contributions. Referential underdetermination (abstractness)
+   is the robust, dominant term: abstract $-$ concrete
+   $= +0.15$ (consensus) and $+0.29$ (contested), significant on
+   both adapters. Community underdetermination (contestedness) is a
+   weaker, *conditional* term: it raises $D$ only among
+   already-abstract concepts (freedom $>$ the number seven,
+   $+0.20$, $p\approx.006$–$.010$) and vanishes among concrete
+   objects (a handgun $\approx$ a bicycle, n.s.; the concrete-
+   contested null replicates to within $0.002$ across adapters).
+
+![**Figure 12.5. Divergence tracks abstractness first, contestedness only among abstract signs.** Mean final-token MAH divergence for the $2\times2$ crossing of concreteness (concrete objects vs. abstract concepts) with contestedness (consensus vs. contested), $n=10$/cell, error bars SEM, v1.0 adapter. The abstract-vs-concrete gap is large and present in both consensus and contested rows; the contested-vs-consensus gap is significant only in the abstract row (freedom vs. the number seven) and absent in the concrete row (a handgun vs. a bicycle). The pattern reproduces on the independently trained v8a adapter (concrete-contested contrast $+0.069$ vs. $+0.071$). Divergence at the final token is used so that prompt length and token-averaging cannot drive the effect, since contested concepts are systematically shorter.](artifacts/nla/figures/coupling_dissociation_2x2.png)
+
+This licenses a candidate regularity, which we state as a *target*
+rather than an established law:
+
+> **Metapragmatic-load conjecture.** The within-pass divergence a
+> sign evokes is a monotone function of the sign's interpretant
+> underdetermination,
+> $$\mathbb{E}[D \mid \text{sign}] = D_0 + \alpha\,U_{\text{ref}} + \beta\,U_{\text{com}}, \qquad \alpha,\beta > 0,$$
+> where $U_{\text{ref}}$ is referential underdetermination (the
+> absence of a fixed object or denotation) and $U_{\text{com}}$ is
+> community underdetermination (the variance of the interpretant
+> across the model's discourse-community index). Referential
+> grounding drives $D$ to its floor; both the loss of a referent and
+> cross-community interpretant variance raise it.
+
+The two clocks enter as follows. $U_{\text{ref}}$ and $U_{\text{com}}$
+are set in transmission time — whether the corpus gave the sign a
+stable denotation, and how variously its communities used it — and
+$D(t)$ reads their sum in token-sequence time. What we can presently
+sign our names to is $\alpha>0$ robustly, and $\beta>0$ small and
+conditional on $U_{\text{ref}}$ being high: the community fork
+appears to require the absence of a concrete referent to fall back
+on. The dissociation of $D$ (load) from $\hat{r}$ (commitment) is
+itself a structural claim about the infrastructure — it carries
+separable *load* and *bifurcation* registers, and underdetermination
+drives the first, not the second.
+
+We are explicit about what would earn the conjecture the word "law,"
+and about how little of that programme is done. *Test 1 (unified
+latent):* regress $D$ on *independently measured* axes — published
+concreteness norms for $U_{\text{ref}}$, counterfactual
+community-decoding disagreement for $U_{\text{com}}$ — and show
+stable additive positive coefficients. *Test 2 (cross-backbone
+invariance):* the same signs on Qwen, Gemma, and Mistral; the
+Stage-3/4 finding that the sampling-reachable manifold is set by the
+pretrained substrate rather than the alignment stage (§11.7) *predicts*
+substrate-invariance, which is a falsifiable prediction of the
+conjecture. *Test 3 (causal $U_{\text{com}}$):* forcing the community
+index at decode time should move the interpretant only where
+$U_{\text{com}}$ is high; this closes the one open commitment (active
+intervention) in the "semiotic infrastructure" claim. *Test 4
+(diachronic):* a sign that historically drifted from consensus to
+contested should show rising $U_{\text{com}}$, and rising $D$, across
+a dated corpus. We have run the cross-*adapter* replication (above);
+Tests 1–4 are open.
+
+We do not claim a law. We claim a replicated dissociation and a
+falsifiable target, and we note the honest shape of the result: the
+readout most observers would expect to carry the semiotic signal
+(the bifurcation order parameter) does *not* move; the one that does
+(metapragmatic divergence) is driven first by referential
+underdetermination and only secondarily, and conditionally, by the
+community-contestedness the program's semiotics foregrounds. In the
+program's register: contestedness here is a curated ordinal, not a
+causally measured community-decoding disagreement (the forcing
+instrument requires a discrete-prototype adapter, which the
+trajectory-mode v1.0/v8a do not provide); the replication is
+cross-adapter on a single backbone, not cross-backbone; $n$ is
+$40$–$94$ concepts; and the diachronic term — the actual
+transmission-time drift of one sign from consensus to contested — is
+unbuilt. The conjecture's value is that each of these gaps names a
+decisive, runnable experiment.
+
+---
+
 ## 13. Honest expectations and open problems
 
 We close in the program's standard register: what we expect the
