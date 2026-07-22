@@ -129,8 +129,13 @@ def cohen_d(a, b) -> float:
 @torch.no_grad()
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--repo", default="RiverRider/zooL4nD3r-v0.1")
+    ap.add_argument("--repo", default="RiverRider/srt-adapter-v1.0")
     ap.add_argument("--probe", default="data/probes/contestedness_dissociation_v1.jsonl")
+    ap.add_argument("--anchor-source", default="auto", choices=["auto", "prototypes", "corpus"],
+                    help="auto: use trained prototypes if present, else corpus")
+    ap.add_argument("--anchor-corpus", default="data/val_200.jsonl",
+                    help="neutral probe text to elicit the model's own community vectors")
+    ap.add_argument("--n-anchors", type=int, default=24)
     ap.add_argument("--out-readouts",
                     default="artifacts/nla/coupling/causal_forcing_readouts.jsonl")
     ap.add_argument("--out-summary",
@@ -155,14 +160,47 @@ def main() -> int:
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
-    # the model's own discovered communities: the trained prototype codebook
-    protos = model.community_head.prototypes.weight.detach()  # (K, d_community)
+    # the model's own communities. zooL4nD3r has a trained prototype codebook;
+    # v1.0 is trajectory-mode (no codebook), so we elicit its communities by
+    # running its OWN community head over neutral probe text and clustering the
+    # resulting vectors. Either way the communities come from the model, not
+    # from external labels.
+    ph = model.community_head.prototypes
+    trained_protos = (ph is not None
+                      and args.anchor_source in ("auto", "prototypes"))
+    if trained_protos:
+        anchors_t = ph.weight.detach().float().cpu()
+        src = "trained prototype codebook"
+    else:
+        texts = [json.loads(x)["text"] for x in
+                 Path(args.anchor_corpus).read_text().splitlines() if x.strip()]
+        vecs = []
+        for t in texts:
+            e = tok(t, return_tensors="pt", truncation=True, max_length=args.max_seq_len)
+            oc = model(input_ids=e.input_ids.to(args.device),
+                       attention_mask=e.attention_mask.to(args.device))
+            vecs.append(oc.community_output.vector[0].float().cpu().numpy())
+        V = np.stack(vecs)
+        rng0 = np.random.default_rng(args.seed)
+        C = V[rng0.choice(len(V), args.n_anchors, replace=False)].copy()
+        for _ in range(40):
+            dd = (V ** 2).sum(1)[:, None] + (C ** 2).sum(1)[None, :] - 2 * V @ C.T
+            a = dd.argmin(1)
+            newC = np.stack([V[a == j].mean(0) if (a == j).any() else C[j]
+                             for j in range(args.n_anchors)])
+            if np.allclose(newC, C):
+                C = newC
+                break
+            C = newC
+        anchors_t = torch.tensor(C, dtype=torch.float32)
+        src = f"{args.n_anchors} k-means anchors from {len(texts)} probe passages"
+    protos = anchors_t.to(args.device)
     K = protos.shape[0]
-    protos_f = protos.float().cpu().numpy()
-    pn = protos_f / (np.linalg.norm(protos_f, axis=1, keepdims=True) + 1e-9)
+    pf = anchors_t.numpy()
+    pn = pf / (np.linalg.norm(pf, axis=1, keepdims=True) + 1e-9)
     offdiag = (pn @ pn.T)[~np.eye(K, dtype=bool)]
-    print(f"[codebook] K={K} prototypes, pairwise cos mean={offdiag.mean():+.3f} "
-          f"(separated if ~0)", flush=True)
+    print(f"[communities] K={K} ({src}); pairwise cos mean={offdiag.mean():+.3f}",
+          flush=True)
 
     items = [json.loads(l) for l in Path(args.probe).read_text().splitlines() if l.strip()]
     print(f"[probe] {len(items)} concepts", flush=True)
