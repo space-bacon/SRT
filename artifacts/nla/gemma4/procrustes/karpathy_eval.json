@@ -1,0 +1,40 @@
+{
+  "protocol": "karpathy 5k test (i2t: 5000 imgs vs 25000 caps; t2i: 25000 caps vs 5000 imgs)",
+  "backbone": "google/gemma-4-31B-it",
+  "layer": 47,
+  "n_train": 108488,
+  "n_dropped_leaked": 8799,
+  "seed": 0,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.143,
+        "r@5": 0.3064,
+        "r@10": 0.386,
+        "median_rank": 23.0
+      },
+      "t2i": {
+        "r@1": 0.0946,
+        "r@5": 0.2089,
+        "r@10": 0.2766,
+        "median_rank": 66.0
+      }
+    },
+    "linear_leakfree": {
+      "val_r@1": 0.482,
+      "epochs": 58,
+      "i2t": {
+        "r@1": 0.4164,
+        "r@5": 0.7102,
+        "r@10": 0.818,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.2922,
+        "r@5": 0.5668,
+        "r@10": 0.6849,
+        "median_rank": 4.0
+      }
+    }
+  }
+}

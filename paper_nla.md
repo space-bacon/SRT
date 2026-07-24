@@ -1669,8 +1669,28 @@ Practically, a single trained linear projection over frozen gemma-4
 L47 states reaches $0.661$ image $\to$ text $R@1$ against $5{,}000$
 captions with no vision-specific training of the backbone whatsoever,
 which upgrades the retrieval decode of §11.6.3 from "zero-training
-curiosity" to a tunable operating point on a cost/accuracy curve. One
-question remains open and scoped: the *scale floor*. Every
+curiosity" to a tunable operating point on a cost/accuracy curve.
+
+**Literature-standard protocol.** For comparability we also ran the
+Karpathy 5k-test protocol ($5{,}000$ test images against their
+$25{,}000$ captions, both directions), with a leakage control the 2017
+re-partition makes mandatory: COCO moved most of val2014 (the source
+of Karpathy test images) into train2017, so all Karpathy test and val
+image ids were excluded from the training pool ($8{,}799$ leaked pairs
+dropped, $109{,}488$ retained) and the head retrained. Result: image
+$\to$ text $R@1/R@5/R@10 = 0.416 / 0.710 / 0.818$, median rank $2$;
+text $\to$ image $0.292 / 0.567 / 0.685$, median rank $4$ (centred
+baseline: $0.143$ and $0.095$ at $R@1$). For placement, this is
+essentially the performance of fully-trained 2018-era dual encoders
+(VSE++ reports $0.413 / 0.711 / 0.812$ on the same protocol) from a
+*linear map over a frozen chat model*, and below CLIP-class zero-shot
+($\approx 0.58$ at $R@1$), which trained $400$M parameters on $400$M
+pairs. The comparison axis this artifact competes on is not rank but
+cost: two linear layers, $\approx 110$k pairs, minutes of training,
+and no new model. (`scripts/gemma4_karpathy_eval.py`,
+`artifacts/nla/gemma4/procrustes/karpathy_eval.json`.)
+
+One question remains open and scoped: the *scale floor*. Every
 cross-modal result in §11.6 lives on a $31$B host, and because
 retrieval readout requires a single prefill pass rather than
 generation, a positive replication on a $2$–$4$B multimodal host would
