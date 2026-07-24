@@ -1,0 +1,220 @@
+{
+  "backbone": "google/gemma-4-31B-it",
+  "layer": 47,
+  "d": 5376,
+  "n_images": 5000,
+  "n_eval": 1000,
+  "seed": 0,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.288,
+        "r@5": 0.523,
+        "r@10": 0.648,
+        "median_rank": 5.0
+      },
+      "t2i": {
+        "r@1": 0.173,
+        "r@5": 0.354,
+        "r@10": 0.45,
+        "median_rank": 17.0
+      },
+      "paired_cen_fve": 0.5957
+    },
+    "procrustes_n1000": {
+      "n_fit": 1000,
+      "shuffle": false,
+      "pca_k": null,
+      "fit_residual": 0.889,
+      "i2t": {
+        "r@1": 0.149,
+        "r@5": 0.356,
+        "r@10": 0.498,
+        "median_rank": 11.0
+      },
+      "t2i": {
+        "r@1": 0.109,
+        "r@5": 0.295,
+        "r@10": 0.417,
+        "median_rank": 15.0
+      },
+      "paired_cen_fve": 0.5916
+    },
+    "procrustes_n2000": {
+      "n_fit": 2000,
+      "shuffle": false,
+      "pca_k": null,
+      "fit_residual": 0.9044,
+      "i2t": {
+        "r@1": 0.186,
+        "r@5": 0.424,
+        "r@10": 0.571,
+        "median_rank": 8.0
+      },
+      "t2i": {
+        "r@1": 0.136,
+        "r@5": 0.325,
+        "r@10": 0.475,
+        "median_rank": 12.0
+      },
+      "paired_cen_fve": 0.6029
+    },
+    "procrustes_n4000": {
+      "n_fit": 4000,
+      "shuffle": false,
+      "pca_k": null,
+      "fit_residual": 0.9181,
+      "i2t": {
+        "r@1": 0.226,
+        "r@5": 0.472,
+        "r@10": 0.628,
+        "median_rank": 6.0
+      },
+      "t2i": {
+        "r@1": 0.164,
+        "r@5": 0.384,
+        "r@10": 0.533,
+        "median_rank": 9.0
+      },
+      "paired_cen_fve": 0.6111
+    },
+    "shuffled_n4000": {
+      "n_fit": 4000,
+      "shuffle": true,
+      "pca_k": null,
+      "fit_residual": 0.9557,
+      "i2t": {
+        "r@1": 0.004,
+        "r@5": 0.005,
+        "r@10": 0.008,
+        "median_rank": 840.0
+      },
+      "t2i": {
+        "r@1": 0.002,
+        "r@5": 0.006,
+        "r@10": 0.013,
+        "median_rank": 483.0
+      },
+      "paired_cen_fve": 0.5
+    },
+    "procrustes_pca256_n4000": {
+      "n_fit": 4000,
+      "shuffle": false,
+      "pca_k": 256,
+      "fit_residual": 0.9369,
+      "i2t": {
+        "r@1": 0.218,
+        "r@5": 0.455,
+        "r@10": 0.615,
+        "median_rank": 7.0
+      },
+      "t2i": {
+        "r@1": 0.119,
+        "r@5": 0.341,
+        "r@10": 0.473,
+        "median_rank": 12.0
+      },
+      "paired_cen_fve": 0.6489
+    },
+    "procrustes_pca1024_n4000": {
+      "n_fit": 4000,
+      "shuffle": false,
+      "pca_k": 1024,
+      "fit_residual": 0.93,
+      "i2t": {
+        "r@1": 0.247,
+        "r@5": 0.506,
+        "r@10": 0.656,
+        "median_rank": 5.0
+      },
+      "t2i": {
+        "r@1": 0.156,
+        "r@5": 0.385,
+        "r@10": 0.528,
+        "median_rank": 9.0
+      },
+      "paired_cen_fve": 0.6299
+    }
+  },
+  "modality_gap": {
+    "mu_cos": 0.9788,
+    "mu_img_norm": 115.25,
+    "mu_txt_norm": 137.0
+  },
+  "probes": [
+    {
+      "image": "artifacts/nla/gemma4/stereo/control.png",
+      "raw_centered": {
+        "top3": [
+          [
+            0.605,
+            "Two people riding bikes next to each other holding hands."
+          ],
+          [
+            0.6,
+            "A bathroom features a circle shaped sink and mirror."
+          ],
+          [
+            0.6,
+            "Man standing like a shadow in front of the ocean."
+          ]
+        ],
+        "expected_rank": 5
+      },
+      "procrustes": {
+        "top3": [
+          [
+            0.581,
+            "one yellow flower with a long stem inside of a blue curved vase."
+          ],
+          [
+            0.578,
+            "An open umbrella sitting on the floor in a living room."
+          ],
+          [
+            0.578,
+            "An empty kitchen with a pink bag on the counter top."
+          ]
+        ],
+        "expected_rank": 121
+      }
+    },
+    {
+      "image": "artifacts/nla/gemma4/stereo/stereogram.png",
+      "raw_centered": {
+        "top3": [
+          [
+            0.761,
+            "An abstract mosaic of tiny colored squares."
+          ],
+          [
+            0.647,
+            "An image of half a bathroom and half stairs."
+          ],
+          [
+            0.643,
+            "An orange bicycle stands out in a black and white photograph."
+          ]
+        ],
+        "expected_rank": 1
+      },
+      "procrustes": {
+        "top3": [
+          [
+            0.586,
+            "A man walking past another man who is holding a beach ball colored umbrella."
+          ],
+          [
+            0.577,
+            "A clean bathroom floor with blue and orange walls."
+          ],
+          [
+            0.576,
+            "A person with a bicycle walking past a pink building with oddly painted doors."
+          ]
+        ],
+        "expected_rank": 35
+      }
+    }
+  ]
+}

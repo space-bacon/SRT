@@ -1,0 +1,149 @@
+=== stage 1: caption L47 index (Fri Jul 24 14:40:42 UTC 2026) ===
+=== stage 2: procrustes (Fri Jul 24 14:40:42 UTC 2026) ===
+2026-07-24 14:40:45,412 procrustes downloading https://s3.amazonaws.com/images.cocodataset.org/zips/val2017.zip ...
+2026-07-24 14:40:53,830 procrustes extracting val2017.zip ...
+2026-07-24 14:40:54,758 procrustes downloading https://s3.amazonaws.com/images.cocodataset.org/annotations/annotations_trainval2017.zip ...
+2026-07-24 14:40:57,412 procrustes extracting annotations_trainval2017.zip ...
+2026-07-24 14:41:00,005 procrustes COCO val2017: 5000 images with >=5 captions
+2026-07-24 14:41:00,256 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:00,266 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:00,341 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:00,401 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:00,412 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:00,495 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:00,552 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.jinja "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:00,563 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja "HTTP/1.1 200 OK"
+2026-07-24 14:41:00,625 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/audio_tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:00,721 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:00,782 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:00,792 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:00,911 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:00,968 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.jinja "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:00,978 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,048 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/audio_tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:01,108 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:01,118 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,176 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:01,253 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:01,262 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,405 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:01,478 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:01,487 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,544 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:01,598 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:01,610 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,687 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:01,755 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:01,765 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,839 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:01,847 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:01,906 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:01,995 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-24 14:41:03,724 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-24 14:41:03,828 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:03,837 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:03,890 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:03,946 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:04,000 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:04,011 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:04,101 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:04,163 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:04,226 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:04,235 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:04,268 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-24 14:41:04,320 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:04,330 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:04,402 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:04,455 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:04,465 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:04,553 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3193.23it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  99%|█████████▉| 1180/1188 [00:00<00:00, 11796.47it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 11827.31it/s]
+2026-07-24 14:41:04,923 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:04,935 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/generation_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:29,507 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:29,516 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:29,574 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 14:41:29,584 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-24 14:41:29,645 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 14:41:29,726 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-24 14:41:31,543 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-24 14:41:48,850 procrustes images 100/5000
+2026-07-24 14:42:04,958 procrustes images 200/5000
+2026-07-24 14:42:20,888 procrustes images 300/5000
+2026-07-24 14:42:36,814 procrustes images 400/5000
+2026-07-24 14:42:52,775 procrustes images 500/5000
+2026-07-24 14:43:08,816 procrustes images 600/5000
+2026-07-24 14:43:24,829 procrustes images 700/5000
+2026-07-24 14:43:40,882 procrustes images 800/5000
+2026-07-24 14:43:56,994 procrustes images 900/5000
+2026-07-24 14:44:13,120 procrustes images 1000/5000
+2026-07-24 14:44:29,277 procrustes images 1100/5000
+2026-07-24 14:44:45,424 procrustes images 1200/5000
+2026-07-24 14:45:01,573 procrustes images 1300/5000
+2026-07-24 14:45:17,762 procrustes images 1400/5000
+2026-07-24 14:45:33,976 procrustes images 1500/5000
+2026-07-24 14:45:50,215 procrustes images 1600/5000
+2026-07-24 14:46:06,432 procrustes images 1700/5000
+2026-07-24 14:46:22,645 procrustes images 1800/5000
+2026-07-24 14:46:38,858 procrustes images 1900/5000
+2026-07-24 14:46:55,085 procrustes images 2000/5000
+2026-07-24 14:47:11,358 procrustes images 2100/5000
+2026-07-24 14:47:27,613 procrustes images 2200/5000
+2026-07-24 14:47:43,856 procrustes images 2300/5000
+2026-07-24 14:48:00,124 procrustes images 2400/5000
+2026-07-24 14:48:16,378 procrustes images 2500/5000
+2026-07-24 14:48:32,614 procrustes images 2600/5000
+2026-07-24 14:48:48,849 procrustes images 2700/5000
+2026-07-24 14:49:05,067 procrustes images 2800/5000
+2026-07-24 14:49:21,286 procrustes images 2900/5000
+2026-07-24 14:49:37,535 procrustes images 3000/5000
+2026-07-24 14:49:53,762 procrustes images 3100/5000
+2026-07-24 14:50:10,014 procrustes images 3200/5000
+2026-07-24 14:50:26,287 procrustes images 3300/5000
+2026-07-24 14:50:42,556 procrustes images 3400/5000
+2026-07-24 14:50:59,374 procrustes images 3500/5000
+2026-07-24 14:51:16,410 procrustes images 3600/5000
+2026-07-24 14:51:32,916 procrustes images 3700/5000
+2026-07-24 14:51:49,255 procrustes images 3800/5000
+2026-07-24 14:52:05,558 procrustes images 3900/5000
+2026-07-24 14:52:21,841 procrustes images 4000/5000
+2026-07-24 14:52:38,135 procrustes images 4100/5000
+2026-07-24 14:52:54,497 procrustes images 4200/5000
+2026-07-24 14:53:11,011 procrustes images 4300/5000
+2026-07-24 14:53:27,290 procrustes images 4400/5000
+2026-07-24 14:53:43,590 procrustes images 4500/5000
+2026-07-24 14:53:59,883 procrustes images 4600/5000
+2026-07-24 14:54:16,172 procrustes images 4700/5000
+2026-07-24 14:54:32,467 procrustes images 4800/5000
+2026-07-24 14:54:48,779 procrustes images 4900/5000
+2026-07-24 14:55:05,093 procrustes images 5000/5000
+2026-07-24 14:55:05,271 procrustes cap0 0/5000
+2026-07-24 14:55:08,884 procrustes cap0 640/5000
+2026-07-24 14:55:12,502 procrustes cap0 1280/5000
+2026-07-24 14:55:16,100 procrustes cap0 1920/5000
+2026-07-24 14:55:19,521 procrustes cap0 2560/5000
+2026-07-24 14:55:23,080 procrustes cap0 3200/5000
+2026-07-24 14:55:26,776 procrustes cap0 3840/5000
+2026-07-24 14:55:30,348 procrustes cap0 4480/5000
+2026-07-24 14:55:33,152 procrustes cap5 0/5000
+2026-07-24 14:55:36,758 procrustes cap5 640/5000
+2026-07-24 14:55:40,249 procrustes cap5 1280/5000
+2026-07-24 14:55:44,091 procrustes cap5 1920/5000
+2026-07-24 14:55:47,848 procrustes cap5 2560/5000
+2026-07-24 14:55:51,602 procrustes cap5 3200/5000
+2026-07-24 14:55:55,151 procrustes cap5 3840/5000
+2026-07-24 14:55:58,796 procrustes cap5 4480/5000
+2026-07-24 14:56:02,367 procrustes cached encodings -> /workspace/procrustes/encoded_L47_n5000.pt
+2026-07-24 14:56:02,371 procrustes N=5000 d=5376 fit_pool=4000 eval=1000
+2026-07-24 14:56:02,638 procrustes baseline_centered        i2t {'r@1': 0.288, 'r@5': 0.523, 'r@10': 0.648, 'median_rank': 5.0}  t2i r@1=0.173
+2026-07-24 14:56:57,518 procrustes procrustes_n1000         i2t {'r@1': 0.149, 'r@5': 0.356, 'r@10': 0.498, 'median_rank': 11.0}  t2i r@1=0.109  pair_fve=0.592  resid=0.889
+2026-07-24 14:57:19,980 procrustes procrustes_n2000         i2t {'r@1': 0.186, 'r@5': 0.424, 'r@10': 0.571, 'median_rank': 8.0}  t2i r@1=0.136  pair_fve=0.603  resid=0.904
+2026-07-24 14:57:39,387 procrustes procrustes_n4000         i2t {'r@1': 0.226, 'r@5': 0.472, 'r@10': 0.628, 'median_rank': 6.0}  t2i r@1=0.164  pair_fve=0.611  resid=0.918
+2026-07-24 14:58:09,299 procrustes shuffled_n4000           i2t {'r@1': 0.004, 'r@5': 0.005, 'r@10': 0.008, 'median_rank': 840.0}  t2i r@1=0.002  pair_fve=0.500  resid=0.956
+2026-07-24 14:58:36,519 procrustes procrustes_pca256_n4000  i2t {'r@1': 0.218, 'r@5': 0.455, 'r@10': 0.615, 'median_rank': 7.0}  t2i r@1=0.119  pair_fve=0.649  resid=0.937
+2026-07-24 14:59:03,374 procrustes procrustes_pca1024_n4000 i2t {'r@1': 0.247, 'r@5': 0.506, 'r@10': 0.656, 'median_rank': 5.0}  t2i r@1=0.156  pair_fve=0.630  resid=0.930
+2026-07-24 14:59:19,730 procrustes probe control.png: raw top1=[0.605, 'Two people riding bikes next to each other holding hands.'] | proc top1=[0.581, 'one yellow flower with a long stem inside of a blue curved vase.']
+2026-07-24 14:59:19,918 procrustes probe stereogram.png: raw top1=[0.761, 'An abstract mosaic of tiny colored squares.'] | proc top1=[0.586, 'A man walking past another man who is holding a beach ball colored umbrella.']
+2026-07-24 14:59:49,712 procrustes wrote /workspace/procrustes/procrustes_xmodal.json (+ .W.pt)
+=== ALL DONE (Fri Jul 24 14:59:51 UTC 2026) ===
