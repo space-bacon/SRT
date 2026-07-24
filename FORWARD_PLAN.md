@@ -7,6 +7,28 @@ This is the single source of truth for "what is the next thing to work on"
 across the workstreams in this repo. Supersedes the per-day handoff in
 `SESSION_HANDOFF.md` (which remains a snapshot of 2026-07-08).
 
+> **2026-07-24 addendum.**
+>
+> - The "gemma-4 BASE checkpoint verbalizer run" queue item below is
+>   **DONE** (paper_nla.md §11.7: base-vs-IT conjecture refuted; K-curves
+>   indistinguishable, slope +0.013 vs +0.015/doubling).
+> - **LAUNCHED: cross-modal Procrustes alignment** (Sunstone §11.6.4
+>   candidate). `scripts/gemma4_procrustes_xmodal.py` on the new box
+>   (ssh5:28621): fit orthogonal W (image→text) on COCO val2017 L47
+>   pairs; held-out i2t/t2i R@1/5/10 vs centered-cosine baseline;
+>   shuffled-pairs floor + train-size curve + PCA-subspace variants;
+>   boundary probes (white-heart caption rank, currently 352/10,088).
+> - **QUEUED follow-up: semiotic-load-weighted text readout.** Where
+>   truncation actually bites (long-passage pools, corpus targets — NOT
+>   COCO captions), A/B last-token vs mean-pool vs D-weighted pooling
+>   (softmax(D_t/τ) over per-token divergence from the gemma-4 read-out,
+>   the Test-4 channel) on NN-retrieval + replay anchors. Non-contiguous
+>   token *selection* is rejected on OOD grounds (BOS lesson: input-frame
+>   perturbations collapse replay); the contiguous max-load window is the
+>   fallback variant. Keep out of the Procrustes run to preserve the
+>   published §11.6.3 encoding convention in the baseline column.
+
+
 > **2026-07-08 status addendum.** Since the 235B plan below was written,
 > three workstreams completed:
 >

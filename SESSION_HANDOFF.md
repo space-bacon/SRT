@@ -35,9 +35,12 @@
 
 ## Open items
 
-- Carried over from 2026-07-08 (below): gemma-4 base checkpoint run,
-  polyseme minimal pairs, state-switchboard pilot, MTEB engv2 check,
-  ginigen leaderboard.
+- NOTE: the "gemma-4 base checkpoint run" queue item from 2026-07-08 is
+  DONE (paper_nla.md §11.7: base-vs-IT conjecture refuted; K-curves
+  indistinguishable). Remaining carry-overs: Sunstone Procrustes
+  image→text projection, polyseme minimal pairs, state-switchboard
+  pilot, MTEB engv2 check, ginigen leaderboard.
+- New box (2026-07-24): `ssh -p 28621 root@ssh5.vast.ai -L 8080:localhost:8080`.
 
 ---
 
