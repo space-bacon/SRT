@@ -1,0 +1,209 @@
+{
+  "encodings": "/workspace/procrustes/encoded_L47_n5000.pt",
+  "train_encodings": [
+    "/workspace/procrustes/train_pairs/chunk_000.pt",
+    "/workspace/procrustes/train_pairs/chunk_001.pt",
+    "/workspace/procrustes/train_pairs/chunk_002.pt",
+    "/workspace/procrustes/train_pairs/chunk_003.pt",
+    "/workspace/procrustes/train_pairs/chunk_004.pt",
+    "/workspace/procrustes/train_pairs/chunk_005.pt",
+    "/workspace/procrustes/train_pairs/chunk_006.pt",
+    "/workspace/procrustes/train_pairs/chunk_007.pt"
+  ],
+  "d": 5376,
+  "n_train_pool": 40000,
+  "n_val": 1000,
+  "n_eval": 1000,
+  "seed": 0,
+  "objective": "symmetric InfoNCE, in-batch negatives",
+  "tau": 0.05,
+  "proj_dim": 1024,
+  "hidden": 1024,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.288,
+        "r@5": 0.523,
+        "r@10": 0.648,
+        "median_rank": 5.0
+      },
+      "t2i": {
+        "r@1": 0.173,
+        "r@5": 0.354,
+        "r@10": 0.45,
+        "median_rank": 17.0
+      }
+    },
+    "linear_n5000": {
+      "kind": "linear",
+      "n_train": 5000,
+      "shuffle": false,
+      "val_r@1": 0.276,
+      "epochs": 41,
+      "i2t": {
+        "r@1": 0.409,
+        "r@5": 0.715,
+        "r@10": 0.849,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.246,
+        "r@5": 0.52,
+        "r@10": 0.645,
+        "median_rank": 5.0
+      }
+    },
+    "mlp_n5000": {
+      "kind": "mlp",
+      "n_train": 5000,
+      "shuffle": false,
+      "val_r@1": 0.203,
+      "epochs": 43,
+      "i2t": {
+        "r@1": 0.298,
+        "r@5": 0.609,
+        "r@10": 0.754,
+        "median_rank": 3.0
+      },
+      "t2i": {
+        "r@1": 0.174,
+        "r@5": 0.434,
+        "r@10": 0.563,
+        "median_rank": 8.0
+      }
+    },
+    "linear_n10000": {
+      "kind": "linear",
+      "n_train": 10000,
+      "shuffle": false,
+      "val_r@1": 0.311,
+      "epochs": 39,
+      "i2t": {
+        "r@1": 0.45,
+        "r@5": 0.76,
+        "r@10": 0.867,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.291,
+        "r@5": 0.604,
+        "r@10": 0.722,
+        "median_rank": 3.0
+      }
+    },
+    "mlp_n10000": {
+      "kind": "mlp",
+      "n_train": 10000,
+      "shuffle": false,
+      "val_r@1": 0.252,
+      "epochs": 36,
+      "i2t": {
+        "r@1": 0.355,
+        "r@5": 0.695,
+        "r@10": 0.818,
+        "median_rank": 3.0
+      },
+      "t2i": {
+        "r@1": 0.231,
+        "r@5": 0.541,
+        "r@10": 0.668,
+        "median_rank": 4.0
+      }
+    },
+    "linear_n20000": {
+      "kind": "linear",
+      "n_train": 20000,
+      "shuffle": false,
+      "val_r@1": 0.368,
+      "epochs": 39,
+      "i2t": {
+        "r@1": 0.528,
+        "r@5": 0.84,
+        "r@10": 0.921,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.365,
+        "r@5": 0.673,
+        "r@10": 0.777,
+        "median_rank": 3.0
+      }
+    },
+    "mlp_n20000": {
+      "kind": "mlp",
+      "n_train": 20000,
+      "shuffle": false,
+      "val_r@1": 0.316,
+      "epochs": 34,
+      "i2t": {
+        "r@1": 0.428,
+        "r@5": 0.773,
+        "r@10": 0.88,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.302,
+        "r@5": 0.629,
+        "r@10": 0.76,
+        "median_rank": 3.0
+      }
+    },
+    "linear_n39000": {
+      "kind": "linear",
+      "n_train": 39000,
+      "shuffle": false,
+      "val_r@1": 0.414,
+      "epochs": 46,
+      "i2t": {
+        "r@1": 0.59,
+        "r@5": 0.871,
+        "r@10": 0.937,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.404,
+        "r@5": 0.732,
+        "r@10": 0.838,
+        "median_rank": 2.0
+      }
+    },
+    "mlp_n39000": {
+      "kind": "mlp",
+      "n_train": 39000,
+      "shuffle": false,
+      "val_r@1": 0.374,
+      "epochs": 36,
+      "i2t": {
+        "r@1": 0.495,
+        "r@5": 0.823,
+        "r@10": 0.925,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.348,
+        "r@5": 0.674,
+        "r@10": 0.796,
+        "median_rank": 3.0
+      }
+    },
+    "mlp_shuffled_n39000": {
+      "kind": "mlp",
+      "n_train": 39000,
+      "shuffle": true,
+      "val_r@1": 0.004,
+      "epochs": 31,
+      "i2t": {
+        "r@1": 0.0,
+        "r@5": 0.007,
+        "r@10": 0.015,
+        "median_rank": 709.0
+      },
+      "t2i": {
+        "r@1": 0.0,
+        "r@5": 0.002,
+        "r@10": 0.01,
+        "median_rank": 490.0
+      }
+    }
+  }
+}

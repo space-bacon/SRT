@@ -1635,15 +1635,36 @@ optimizes similarity and paid for it in discrimination). A two-layer
 MLP on the same data does *not* beat the linear map ($R@1 = 0.115 /
 0.197 / 0.258$ along the $1$k/$2$k/$3.5$k train-size curve, still
 rising and data-starved at every size; shuffled-pairs control at
-$0.002$), so whatever non-linear structure exists is not learnable from
-$3{,}500$ pairs. The rungs order as: orthogonal $<$ identity $<$
-unconstrained linear, with the non-linear question open pending an
-order of magnitude more pairs. One scoping note: this rung gives up the
+$0.002$). The rungs order as: orthogonal $<$ identity $<$
+unconstrained linear. One scoping note: this rung gives up the
 zero-training property, so the headline pipeline number remains the
-centred-cosine $0.288$; the trained-linear $0.334/0.663$ is reported as
-the recoverable ceiling, not as the deployed decode.
-(`scripts/gemma4_mlp_align.py`,
-`artifacts/nla/gemma4/procrustes/mlp_align.json`.)
+centred-cosine $0.288$; the trained-linear results are reported as the
+recoverable ceiling, not as the deployed decode.
+
+**Scaling pairs by an order of magnitude confirms the linear verdict
+and keeps raising the ceiling.** Re-running the ladder with training
+pairs drawn from COCO train2017 (encoded under identical conventions;
+the val2017 eval split untouched throughout) gives, for the linear map,
+$R@1 = 0.409 / 0.450 / 0.528 / 0.590$ at $5$k$/10$k$/20$k$/39$k pairs,
+with $R@5 = 0.871$ and $R@10 = 0.937$ and median rank $1$ at the
+largest size, and text $\to$ image $R@1 = 0.404$. That is more than
+double the centred-cosine baseline, the curve has not saturated at
+$39$k pairs, and the train/eval split now also crosses COCO's own
+train/val partition, so the map is not exploiting eval-side leakage.
+The MLP tracks the linear map in parallel from below at every size
+($R@1 = 0.298 / 0.355 / 0.428 / 0.495$) and never overtakes it; the
+shuffled control stays at the floor ($R@1 = 0.000$). Within the
+measurable range, then, the cross-modal correspondence in this
+substrate is linear: eleven times more data gives the non-linear model
+every chance to reveal structure a linear map cannot express, and it
+finds none. Practically, a single trained linear projection over
+frozen gemma-4 L47 states reaches $0.59$ image $\to$ text $R@1$
+against $5{,}000$ captions with no vision-specific training of the
+backbone whatsoever, which upgrades the retrieval decode of §11.6.3
+from "zero-training curiosity" to a tunable operating point on a
+cost/accuracy curve.
+(`scripts/gemma4_mlp_align.py`, `scripts/gemma4_encode_pairs.py`,
+`artifacts/nla/gemma4/procrustes/{mlp_align,mlp_align_scaled}.json`.)
 
 **The boundary of §11.6.3 was substantially an anchor artifact.** The
 same run re-scored the synthetic boundary probes with the image-side

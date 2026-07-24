@@ -1,0 +1,289 @@
+=== stage 1: encode train2017 pairs (Fri Jul 24 15:25:28 UTC 2026) ===
+2026-07-24 15:25:31,184 encode_pairs downloading https://s3.amazonaws.com/images.cocodataset.org/zips/train2017.zip (~19GB) ...
+2026-07-24 15:31:14,137 encode_pairs extracting train2017.zip ...
+2026-07-24 15:31:37,133 encode_pairs train2017: 118287 captioned images
+2026-07-24 15:31:37,559 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:37,568 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:37,627 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:37,680 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:37,695 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:37,793 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:37,853 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.jinja "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:37,864 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja "HTTP/1.1 200 OK"
+2026-07-24 15:31:37,981 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/audio_tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:38,045 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:38,097 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:38,107 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:38,690 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:38,760 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.jinja "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:38,773 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja "HTTP/1.1 200 OK"
+2026-07-24 15:31:38,839 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/audio_tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:38,894 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:38,904 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:38,971 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:39,051 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:39,061 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:39,121 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:39,181 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:39,191 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:39,255 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:39,310 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:39,319 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:39,376 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:39,432 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:39,441 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:39,549 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:39,558 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:39,628 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:39,691 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-24 15:31:41,395 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-24 15:31:41,501 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:41,511 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:41,578 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:41,628 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:41,689 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:41,699 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/processor_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:41,786 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:41,880 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:41,938 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:41,948 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:41,980 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-24 15:31:42,042 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:42,054 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:42,206 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-24 15:31:42,267 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:42,278 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-24 15:31:42,344 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3141.80it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  98%|█████████▊| 1170/1188 [00:00<00:00, 11660.40it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 11700.77it/s]
+2026-07-24 15:31:42,887 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:31:42,897 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/generation_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:32:07,407 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:32:07,417 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/config.json "HTTP/1.1 200 OK"
+2026-07-24 15:32:07,478 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-24 15:32:07,487 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/842da3794eaa0b77d5f08bae87a17459d91ff475/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-24 15:32:07,558 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-24 15:32:07,674 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-24 15:32:09,341 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-24 15:32:41,919 encode_pairs chunk 0 images 200/5000
+2026-07-24 15:33:13,489 encode_pairs chunk 0 images 400/5000
+2026-07-24 15:33:45,235 encode_pairs chunk 0 images 600/5000
+2026-07-24 15:34:17,097 encode_pairs chunk 0 images 800/5000
+2026-07-24 15:34:49,125 encode_pairs chunk 0 images 1000/5000
+2026-07-24 15:35:21,252 encode_pairs chunk 0 images 1200/5000
+2026-07-24 15:35:53,441 encode_pairs chunk 0 images 1400/5000
+2026-07-24 15:36:25,720 encode_pairs chunk 0 images 1600/5000
+2026-07-24 15:36:58,096 encode_pairs chunk 0 images 1800/5000
+2026-07-24 15:37:30,387 encode_pairs chunk 0 images 2000/5000
+2026-07-24 15:38:02,699 encode_pairs chunk 0 images 2200/5000
+2026-07-24 15:38:34,983 encode_pairs chunk 0 images 2400/5000
+2026-07-24 15:39:07,284 encode_pairs chunk 0 images 2600/5000
+2026-07-24 15:39:39,816 encode_pairs chunk 0 images 2800/5000
+2026-07-24 15:40:12,226 encode_pairs chunk 0 images 3000/5000
+2026-07-24 15:40:44,589 encode_pairs chunk 0 images 3200/5000
+2026-07-24 15:41:16,939 encode_pairs chunk 0 images 3400/5000
+2026-07-24 15:41:49,635 encode_pairs chunk 0 images 3600/5000
+2026-07-24 15:42:21,937 encode_pairs chunk 0 images 3800/5000
+2026-07-24 15:42:54,256 encode_pairs chunk 0 images 4000/5000
+2026-07-24 15:43:26,583 encode_pairs chunk 0 images 4200/5000
+2026-07-24 15:43:59,066 encode_pairs chunk 0 images 4400/5000
+2026-07-24 15:44:31,338 encode_pairs chunk 0 images 4600/5000
+2026-07-24 15:45:03,659 encode_pairs chunk 0 images 4800/5000
+2026-07-24 15:45:35,992 encode_pairs chunk 0 images 5000/5000
+2026-07-24 15:46:04,890 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_000.pt (5000 pairs)
+2026-07-24 15:46:41,060 encode_pairs chunk 1 images 200/5000
+2026-07-24 15:47:15,357 encode_pairs chunk 1 images 400/5000
+2026-07-24 15:47:50,068 encode_pairs chunk 1 images 600/5000
+2026-07-24 15:48:24,865 encode_pairs chunk 1 images 800/5000
+2026-07-24 15:48:59,444 encode_pairs chunk 1 images 1000/5000
+2026-07-24 15:49:34,026 encode_pairs chunk 1 images 1200/5000
+2026-07-24 15:50:08,679 encode_pairs chunk 1 images 1400/5000
+2026-07-24 15:50:43,566 encode_pairs chunk 1 images 1600/5000
+2026-07-24 15:51:18,016 encode_pairs chunk 1 images 1800/5000
+2026-07-24 15:51:52,766 encode_pairs chunk 1 images 2000/5000
+2026-07-24 15:52:27,485 encode_pairs chunk 1 images 2200/5000
+2026-07-24 15:53:02,366 encode_pairs chunk 1 images 2400/5000
+2026-07-24 15:53:37,058 encode_pairs chunk 1 images 2600/5000
+2026-07-24 15:54:11,598 encode_pairs chunk 1 images 2800/5000
+2026-07-24 15:54:45,855 encode_pairs chunk 1 images 3000/5000
+2026-07-24 15:55:18,377 encode_pairs chunk 1 images 3200/5000
+2026-07-24 15:55:50,654 encode_pairs chunk 1 images 3400/5000
+2026-07-24 15:56:22,909 encode_pairs chunk 1 images 3600/5000
+2026-07-24 15:56:55,317 encode_pairs chunk 1 images 3800/5000
+2026-07-24 15:57:27,578 encode_pairs chunk 1 images 4000/5000
+2026-07-24 15:57:59,898 encode_pairs chunk 1 images 4200/5000
+2026-07-24 15:58:32,189 encode_pairs chunk 1 images 4400/5000
+2026-07-24 15:59:04,679 encode_pairs chunk 1 images 4600/5000
+2026-07-24 15:59:36,975 encode_pairs chunk 1 images 4800/5000
+2026-07-24 16:00:09,293 encode_pairs chunk 1 images 5000/5000
+2026-07-24 16:00:37,959 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_001.pt (5000 pairs)
+2026-07-24 16:01:10,173 encode_pairs chunk 2 images 200/5000
+2026-07-24 16:01:44,012 encode_pairs chunk 2 images 400/5000
+2026-07-24 16:02:16,794 encode_pairs chunk 2 images 600/5000
+2026-07-24 16:02:49,052 encode_pairs chunk 2 images 800/5000
+2026-07-24 16:03:21,325 encode_pairs chunk 2 images 1000/5000
+2026-07-24 16:03:53,782 encode_pairs chunk 2 images 1200/5000
+2026-07-24 16:04:26,013 encode_pairs chunk 2 images 1400/5000
+2026-07-24 16:04:58,243 encode_pairs chunk 2 images 1600/5000
+2026-07-24 16:05:30,687 encode_pairs chunk 2 images 1800/5000
+2026-07-24 16:06:02,958 encode_pairs chunk 2 images 2000/5000
+2026-07-24 16:06:35,755 encode_pairs chunk 2 images 2200/5000
+2026-07-24 16:07:08,048 encode_pairs chunk 2 images 2400/5000
+2026-07-24 16:07:40,535 encode_pairs chunk 2 images 2600/5000
+2026-07-24 16:08:12,811 encode_pairs chunk 2 images 2800/5000
+2026-07-24 16:08:45,120 encode_pairs chunk 2 images 3000/5000
+2026-07-24 16:09:17,430 encode_pairs chunk 2 images 3200/5000
+2026-07-24 16:09:49,945 encode_pairs chunk 2 images 3400/5000
+2026-07-24 16:10:22,270 encode_pairs chunk 2 images 3600/5000
+2026-07-24 16:10:54,575 encode_pairs chunk 2 images 3800/5000
+2026-07-24 16:11:26,883 encode_pairs chunk 2 images 4000/5000
+2026-07-24 16:11:59,405 encode_pairs chunk 2 images 4200/5000
+2026-07-24 16:12:31,740 encode_pairs chunk 2 images 4400/5000
+2026-07-24 16:13:04,848 encode_pairs chunk 2 images 4600/5000
+2026-07-24 16:13:37,427 encode_pairs chunk 2 images 4800/5000
+2026-07-24 16:14:09,734 encode_pairs chunk 2 images 5000/5000
+2026-07-24 16:14:37,696 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_002.pt (5000 pairs)
+2026-07-24 16:15:09,817 encode_pairs chunk 3 images 200/5000
+2026-07-24 16:15:41,989 encode_pairs chunk 3 images 400/5000
+2026-07-24 16:16:14,193 encode_pairs chunk 3 images 600/5000
+2026-07-24 16:16:46,630 encode_pairs chunk 3 images 800/5000
+2026-07-24 16:17:18,875 encode_pairs chunk 3 images 1000/5000
+2026-07-24 16:17:51,092 encode_pairs chunk 3 images 1200/5000
+2026-07-24 16:18:23,339 encode_pairs chunk 3 images 1400/5000
+2026-07-24 16:18:55,737 encode_pairs chunk 3 images 1600/5000
+2026-07-24 16:19:28,010 encode_pairs chunk 3 images 1800/5000
+2026-07-24 16:20:00,280 encode_pairs chunk 3 images 2000/5000
+2026-07-24 16:20:32,585 encode_pairs chunk 3 images 2200/5000
+2026-07-24 16:21:05,036 encode_pairs chunk 3 images 2400/5000
+2026-07-24 16:21:37,345 encode_pairs chunk 3 images 2600/5000
+2026-07-24 16:22:09,656 encode_pairs chunk 3 images 2800/5000
+2026-07-24 16:22:42,198 encode_pairs chunk 3 images 3000/5000
+2026-07-24 16:23:14,497 encode_pairs chunk 3 images 3200/5000
+2026-07-24 16:23:46,825 encode_pairs chunk 3 images 3400/5000
+2026-07-24 16:24:19,202 encode_pairs chunk 3 images 3600/5000
+2026-07-24 16:24:51,749 encode_pairs chunk 3 images 3800/5000
+2026-07-24 16:25:24,045 encode_pairs chunk 3 images 4000/5000
+2026-07-24 16:25:56,399 encode_pairs chunk 3 images 4200/5000
+2026-07-24 16:26:28,699 encode_pairs chunk 3 images 4400/5000
+2026-07-24 16:27:01,206 encode_pairs chunk 3 images 4600/5000
+2026-07-24 16:27:33,517 encode_pairs chunk 3 images 4800/5000
+2026-07-24 16:28:05,951 encode_pairs chunk 3 images 5000/5000
+2026-07-24 16:28:34,375 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_003.pt (5000 pairs)
+2026-07-24 16:29:06,647 encode_pairs chunk 4 images 200/5000
+2026-07-24 16:29:39,040 encode_pairs chunk 4 images 400/5000
+2026-07-24 16:30:11,384 encode_pairs chunk 4 images 600/5000
+2026-07-24 16:30:43,669 encode_pairs chunk 4 images 800/5000
+2026-07-24 16:31:16,114 encode_pairs chunk 4 images 1000/5000
+2026-07-24 16:31:48,291 encode_pairs chunk 4 images 1200/5000
+2026-07-24 16:32:20,507 encode_pairs chunk 4 images 1400/5000
+2026-07-24 16:32:52,738 encode_pairs chunk 4 images 1600/5000
+2026-07-24 16:33:25,173 encode_pairs chunk 4 images 1800/5000
+2026-07-24 16:33:57,463 encode_pairs chunk 4 images 2000/5000
+2026-07-24 16:34:29,771 encode_pairs chunk 4 images 2200/5000
+2026-07-24 16:35:02,070 encode_pairs chunk 4 images 2400/5000
+2026-07-24 16:35:34,615 encode_pairs chunk 4 images 2600/5000
+2026-07-24 16:36:06,934 encode_pairs chunk 4 images 2800/5000
+2026-07-24 16:36:39,275 encode_pairs chunk 4 images 3000/5000
+2026-07-24 16:37:11,612 encode_pairs chunk 4 images 3200/5000
+2026-07-24 16:37:44,119 encode_pairs chunk 4 images 3400/5000
+2026-07-24 16:38:16,416 encode_pairs chunk 4 images 3600/5000
+2026-07-24 16:38:48,726 encode_pairs chunk 4 images 3800/5000
+2026-07-24 16:39:21,188 encode_pairs chunk 4 images 4000/5000
+2026-07-24 16:39:53,494 encode_pairs chunk 4 images 4200/5000
+2026-07-24 16:40:25,822 encode_pairs chunk 4 images 4400/5000
+2026-07-24 16:40:58,150 encode_pairs chunk 4 images 4600/5000
+2026-07-24 16:41:30,734 encode_pairs chunk 4 images 4800/5000
+2026-07-24 16:42:03,509 encode_pairs chunk 4 images 5000/5000
+2026-07-24 16:42:31,652 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_004.pt (5000 pairs)
+2026-07-24 16:43:03,926 encode_pairs chunk 5 images 200/5000
+2026-07-24 16:43:36,291 encode_pairs chunk 5 images 400/5000
+2026-07-24 16:44:08,768 encode_pairs chunk 5 images 600/5000
+2026-07-24 16:44:42,202 encode_pairs chunk 5 images 800/5000
+2026-07-24 16:45:14,506 encode_pairs chunk 5 images 1000/5000
+2026-07-24 16:45:46,838 encode_pairs chunk 5 images 1200/5000
+2026-07-24 16:46:19,306 encode_pairs chunk 5 images 1400/5000
+2026-07-24 16:46:51,592 encode_pairs chunk 5 images 1600/5000
+2026-07-24 16:47:23,874 encode_pairs chunk 5 images 1800/5000
+2026-07-24 16:47:56,130 encode_pairs chunk 5 images 2000/5000
+2026-07-24 16:48:28,774 encode_pairs chunk 5 images 2200/5000
+2026-07-24 16:49:01,116 encode_pairs chunk 5 images 2400/5000
+2026-07-24 16:49:33,491 encode_pairs chunk 5 images 2600/5000
+2026-07-24 16:50:07,198 encode_pairs chunk 5 images 2800/5000
+2026-07-24 16:50:41,970 encode_pairs chunk 5 images 3000/5000
+2026-07-24 16:51:16,585 encode_pairs chunk 5 images 3200/5000
+2026-07-24 16:51:51,299 encode_pairs chunk 5 images 3400/5000
+2026-07-24 16:52:26,359 encode_pairs chunk 5 images 3600/5000
+2026-07-24 16:53:00,928 encode_pairs chunk 5 images 3800/5000
+2026-07-24 16:53:35,525 encode_pairs chunk 5 images 4000/5000
+2026-07-24 16:54:10,871 encode_pairs chunk 5 images 4200/5000
+2026-07-24 16:54:45,900 encode_pairs chunk 5 images 4400/5000
+2026-07-24 16:55:21,143 encode_pairs chunk 5 images 4600/5000
+2026-07-24 16:55:56,282 encode_pairs chunk 5 images 4800/5000
+2026-07-24 16:56:31,041 encode_pairs chunk 5 images 5000/5000
+2026-07-24 16:56:59,955 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_005.pt (5000 pairs)
+2026-07-24 16:57:33,385 encode_pairs chunk 6 images 200/5000
+2026-07-24 16:58:05,700 encode_pairs chunk 6 images 400/5000
+2026-07-24 16:58:38,011 encode_pairs chunk 6 images 600/5000
+2026-07-24 16:59:10,529 encode_pairs chunk 6 images 800/5000
+2026-07-24 16:59:42,795 encode_pairs chunk 6 images 1000/5000
+2026-07-24 17:00:15,072 encode_pairs chunk 6 images 1200/5000
+2026-07-24 17:00:47,316 encode_pairs chunk 6 images 1400/5000
+2026-07-24 17:01:19,787 encode_pairs chunk 6 images 1600/5000
+2026-07-24 17:01:52,063 encode_pairs chunk 6 images 1800/5000
+2026-07-24 17:02:24,396 encode_pairs chunk 6 images 2000/5000
+2026-07-24 17:02:56,705 encode_pairs chunk 6 images 2200/5000
+2026-07-24 17:03:29,195 encode_pairs chunk 6 images 2400/5000
+2026-07-24 17:04:01,516 encode_pairs chunk 6 images 2600/5000
+2026-07-24 17:04:33,828 encode_pairs chunk 6 images 2800/5000
+2026-07-24 17:05:06,132 encode_pairs chunk 6 images 3000/5000
+2026-07-24 17:05:38,614 encode_pairs chunk 6 images 3200/5000
+2026-07-24 17:06:10,909 encode_pairs chunk 6 images 3400/5000
+2026-07-24 17:06:43,243 encode_pairs chunk 6 images 3600/5000
+2026-07-24 17:07:15,783 encode_pairs chunk 6 images 3800/5000
+2026-07-24 17:07:48,111 encode_pairs chunk 6 images 4000/5000
+2026-07-24 17:08:20,423 encode_pairs chunk 6 images 4200/5000
+2026-07-24 17:08:52,703 encode_pairs chunk 6 images 4400/5000
+2026-07-24 17:09:26,057 encode_pairs chunk 6 images 4600/5000
+2026-07-24 17:09:58,458 encode_pairs chunk 6 images 4800/5000
+2026-07-24 17:10:30,835 encode_pairs chunk 6 images 5000/5000
+2026-07-24 17:10:58,931 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_006.pt (5000 pairs)
+2026-07-24 17:11:31,212 encode_pairs chunk 7 images 200/5000
+2026-07-24 17:12:03,657 encode_pairs chunk 7 images 400/5000
+2026-07-24 17:12:35,898 encode_pairs chunk 7 images 600/5000
+2026-07-24 17:13:08,149 encode_pairs chunk 7 images 800/5000
+2026-07-24 17:13:40,401 encode_pairs chunk 7 images 1000/5000
+2026-07-24 17:14:12,926 encode_pairs chunk 7 images 1200/5000
+2026-07-24 17:14:45,171 encode_pairs chunk 7 images 1400/5000
+2026-07-24 17:15:17,435 encode_pairs chunk 7 images 1600/5000
+2026-07-24 17:15:50,035 encode_pairs chunk 7 images 1800/5000
+2026-07-24 17:16:22,399 encode_pairs chunk 7 images 2000/5000
+2026-07-24 17:16:54,735 encode_pairs chunk 7 images 2200/5000
+2026-07-24 17:17:27,091 encode_pairs chunk 7 images 2400/5000
+2026-07-24 17:17:59,728 encode_pairs chunk 7 images 2600/5000
+2026-07-24 17:18:32,107 encode_pairs chunk 7 images 2800/5000
+2026-07-24 17:19:06,557 encode_pairs chunk 7 images 3000/5000
+2026-07-24 17:19:41,124 encode_pairs chunk 7 images 3200/5000
+2026-07-24 17:20:16,174 encode_pairs chunk 7 images 3400/5000
+2026-07-24 17:20:50,723 encode_pairs chunk 7 images 3600/5000
+2026-07-24 17:21:24,658 encode_pairs chunk 7 images 3800/5000
+2026-07-24 17:21:58,316 encode_pairs chunk 7 images 4000/5000
+2026-07-24 17:22:32,612 encode_pairs chunk 7 images 4200/5000
+2026-07-24 17:23:06,609 encode_pairs chunk 7 images 4400/5000
+2026-07-24 17:23:40,593 encode_pairs chunk 7 images 4600/5000
+2026-07-24 17:24:13,367 encode_pairs chunk 7 images 4800/5000
+2026-07-24 17:24:46,215 encode_pairs chunk 7 images 5000/5000
+2026-07-24 17:25:14,473 encode_pairs wrote /workspace/procrustes/train_pairs/chunk_007.pt (5000 pairs)
+2026-07-24 17:25:14,473 encode_pairs ALL CHUNKS DONE (8)
+=== stage 2: scaled alignment sweep (Fri Jul 24 17:25:16 UTC 2026) ===
+baseline_centered {'r@1': 0.288, 'r@5': 0.523, 'r@10': 0.648, 'median_rank': 5.0}
+linear_n5000             val_r@1=0.276 i2t {'r@1': 0.409, 'r@5': 0.715, 'r@10': 0.849, 'median_rank': 2.0}  t2i r@1=0.246
+mlp_n5000                val_r@1=0.203 i2t {'r@1': 0.298, 'r@5': 0.609, 'r@10': 0.754, 'median_rank': 3.0}  t2i r@1=0.174
+linear_n10000            val_r@1=0.311 i2t {'r@1': 0.45, 'r@5': 0.76, 'r@10': 0.867, 'median_rank': 2.0}  t2i r@1=0.291
+mlp_n10000               val_r@1=0.252 i2t {'r@1': 0.355, 'r@5': 0.695, 'r@10': 0.818, 'median_rank': 3.0}  t2i r@1=0.231
+linear_n20000            val_r@1=0.368 i2t {'r@1': 0.528, 'r@5': 0.84, 'r@10': 0.921, 'median_rank': 1.0}  t2i r@1=0.365
+mlp_n20000               val_r@1=0.316 i2t {'r@1': 0.428, 'r@5': 0.773, 'r@10': 0.88, 'median_rank': 2.0}  t2i r@1=0.302
+linear_n39000            val_r@1=0.414 i2t {'r@1': 0.59, 'r@5': 0.871, 'r@10': 0.937, 'median_rank': 1.0}  t2i r@1=0.404
+mlp_n39000               val_r@1=0.374 i2t {'r@1': 0.495, 'r@5': 0.823, 'r@10': 0.925, 'median_rank': 2.0}  t2i r@1=0.348
+mlp_shuffled_n39000      val_r@1=0.004 i2t {'r@1': 0.0, 'r@5': 0.007, 'r@10': 0.015, 'median_rank': 709.0}  t2i r@1=0.000
+wrote /workspace/procrustes/mlp_align_scaled.json
+=== ALL DONE (Fri Jul 24 17:26:12 UTC 2026) ===
