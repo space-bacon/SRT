@@ -7,17 +7,48 @@ This is the single source of truth for "what is the next thing to work on"
 across the workstreams in this repo. Supersedes the per-day handoff in
 `SESSION_HANDOFF.md` (which remains a snapshot of 2026-07-08).
 
-> **2026-07-24 addendum.**
+> **2026-07-24 addendum (evening update — cross-modal alignment arc COMPLETE through 39k, 118k sweep running).**
 >
-> - The "gemma-4 BASE checkpoint verbalizer run" queue item below is
->   **DONE** (paper_nla.md §11.7: base-vs-IT conjecture refuted; K-curves
->   indistinguishable, slope +0.013 vs +0.015/doubling).
-> - **LAUNCHED: cross-modal Procrustes alignment** (Sunstone §11.6.4
->   candidate). `scripts/gemma4_procrustes_xmodal.py` on the new box
->   (ssh5:28621): fit orthogonal W (image→text) on COCO val2017 L47
->   pairs; held-out i2t/t2i R@1/5/10 vs centered-cosine baseline;
->   shuffled-pairs floor + train-size curve + PCA-subspace variants;
->   boundary probes (white-heart caption rank, currently 352/10,088).
+> Results (all in paper_nla.md §11.6.4, artifacts in
+> `artifacts/nla/gemma4/procrustes/`, tensors on HF
+> `RiverRider/srt-nla-gemma4-artifacts` `procrustes/`):
+>
+> 1. **Procrustes (orthogonal): refuted.** All variants below the
+>    centred-cosine baseline (best 0.247 vs 0.288 R@1); mu_cos = 0.979.
+> 2. **Zero-training COCO benchmark banked**: i2t R@1 0.288 / R@5 0.523 /
+>    R@10 0.648, t2i 0.173 (1000 val2017 images vs 5000 captions).
+> 3. **Anchor rule refined**: natural-photo mean moves the white-heart
+>    probe 352 → 5, BUT domain match beats size (COCO mean degraded the
+>    CIFAR-thumb demo gallery; live Space keeps its in-domain mean).
+> 4. **The modality gap is anisotropic-LINEAR**: trained linear map +
+>    InfoNCE beats centring; at 39k train2017 pairs, R@1 0.590 / R@5
+>    0.871 / R@10 0.937, median rank 1, t2i 0.404 — 2× baseline,
+>    unsaturated. MLP never overtakes linear at any size (11× data).
+>
+> **RUNNING**: full 118k-pair sweep (39k/60k/90k/117k, linear+MLP,
+> auto-backup to HF) — finds the linear ceiling's saturation point and
+> gives the non-linear hypothesis its final chance.
+>
+> **New queue items (priority order):**
+> - **Small-backbone cross-modal replication ("scale floor", highest
+>   joint academic+product leverage).** Re-run anchors + pair-encode +
+>   linear head on a 2–4B multimodal host (gemma-3n / PaliGemma /
+>   Qwen-VL-2B class). Key insight: retrieval readout needs ONE prefill
+>   pass, no generation, so a 4-bit 2–4B model on a Raspberry Pi 5
+>   (8/16GB) is viable for batch tagging. If linear alignment survives
+>   at 2B the substrate claim extends dramatically downward AND
+>   "Sunstone on a $80 computer" becomes a product tier + press
+>   artifact; if not, we have found the capability's scale floor, which
+>   §11.6 currently cannot speak to. One box-day. Pipeline is generic
+>   (`gemma4_procrustes_xmodal.py` / `gemma4_encode_pairs.py` /
+>   `gemma4_mlp_align.py` all take `--backbone`).
+> - **Ship `srt-sunstone-linear-head`** as a named HF artifact: W +
+>   mu_img + mu_txt + config + R@K table card. ~22MB bf16. Retrains in
+>   minutes from the cached HF chunk tensors. See
+>   docs/CROSSMODAL_LINEAR_HEAD.md for architecture tiers.
+> - **Karpathy-split eval** before any external comparison: our protocol
+>   (val2017, 5k pool) is not the literature-standard split; cheap to
+>   add, mandatory before putting numbers next to published tables.
 > - **QUEUED follow-up: semiotic-load-weighted text readout.** Where
 >   truncation actually bites (long-passage pools, corpus targets — NOT
 >   COCO captions), A/B last-token vs mean-pool vs D-weighted pooling
@@ -25,8 +56,14 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >   the Test-4 channel) on NN-retrieval + replay anchors. Non-contiguous
 >   token *selection* is rejected on OOD grounds (BOS lesson: input-frame
 >   perturbations collapse replay); the contiguous max-load window is the
->   fallback variant. Keep out of the Procrustes run to preserve the
->   published §11.6.3 encoding convention in the baseline column.
+>   fallback variant.
+> - Carry-overs: polyseme minimal pairs, state-switchboard pilot, MTEB
+>   engv2 check, ginigen leaderboard.
+>
+> Earlier today: gemma-4 BASE run confirmed DONE (§11.7, base-vs-IT
+> conjecture refuted); §12.5 nla-law battery complete (T3 informative
+> negative, T4 passes); repo hygiene pass (README fix, pickle-load
+> holes closed, losses/dataset tests added).
 
 
 > **2026-07-08 status addendum.** Since the 235B plan below was written,

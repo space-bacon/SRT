@@ -1662,7 +1662,14 @@ frozen gemma-4 L47 states reaches $0.59$ image $\to$ text $R@1$
 against $5{,}000$ captions with no vision-specific training of the
 backbone whatsoever, which upgrades the retrieval decode of §11.6.3
 from "zero-training curiosity" to a tunable operating point on a
-cost/accuracy curve.
+cost/accuracy curve. Two questions remain open and scoped. First, the
+saturation point: the linear curve is still rising at $39$k pairs.
+Second, the *scale floor*: every cross-modal result in §11.6 lives on a
+$31$B host, and because retrieval readout requires a single prefill
+pass rather than generation, a positive replication on a $2$–$4$B
+multimodal host would simultaneously extend the substrate claim
+downward and place the capability on edge-class hardware; a negative
+would give the capability a measured floor.
 (`scripts/gemma4_mlp_align.py`, `scripts/gemma4_encode_pairs.py`,
 `artifacts/nla/gemma4/procrustes/{mlp_align,mlp_align_scaled}.json`.)
 

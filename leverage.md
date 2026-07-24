@@ -4,6 +4,32 @@ Ranked by (impact × readiness), across research, distribution, and credibility.
 Companion to [FORWARD_PLAN.md](FORWARD_PLAN.md); this is the strategic view,
 that is the operational queue.
 
+> **2026-07-24 addendum — the cross-modal linear-head arc changes the board.**
+> One box-day produced: Procrustes refuted → anchor rule (domain beats
+> size) → **the modality gap is linear** → a trained 22MB linear head
+> hits 0.59 R@1 / 0.87 R@5 on frozen gemma-4 with no vision training
+> (paper §11.6.4, docs/CROSSMODAL_LINEAR_HEAD.md). Strategic effects:
+>
+> - **Move 1 (arXiv) strengthens**: the Sunstone standalone paper now has
+>   a citable benchmark, a controlled mechanism ladder
+>   (orthogonal < identity < linear; MLP never wins), and a boundary
+>   revision. This is a complete arc, not a demo.
+> - **New product move: ship `srt-sunstone-linear-head`.** The "no new
+>   model" pitch is now quantified: cross-modal retrieval as a ~22MB
+>   auditable sidecar on an LLM the customer already runs. Backbone
+>   untouched = zero regression risk; linear = inspectable; anchors =
+>   productizable onboarding calibration ("give us 150–4,000
+>   representative images").
+> - **New credibility/press move: the scale-floor experiment.** If
+>   linear alignment survives on a 2–4B multimodal host, "Sunstone on a
+>   Raspberry Pi" is both a product tier (single prefill pass, no
+>   generation — viable on Pi-5-class hardware for batch tagging) and a
+>   better press artifact than the stereogram alone.
+> - Honest scoping for all pitches: the claim is never "beats CLIP"; it
+>   is comparable-band retrieval as a free rider on existing LLM infra,
+>   from 39k pairs and minutes of training. Karpathy-split eval required
+>   before any external number comparison.
+
 ## 1. Post the papers to arXiv (or SSRN) — stop being repository-hosted
 
 Three manuscripts exist (SRT-Adapter under [arxiv/](arxiv/paper.md),

@@ -32,6 +32,21 @@
      the repo).
 3. Local test venv created at `.venv/` (gitignored), torch 2.x CPU —
    fast suite now runnable locally, not just on remote boxes.
+4. **Cross-modal alignment arc (§11.6.4, one box-day, ssh5:28621):**
+   - Procrustes rotation hypothesis REFUTED (all variants below the
+     0.288 centred baseline; mu_cos 0.979).
+   - Zero-training COCO benchmark banked: i2t R@1 0.288/R@5 0.523/R@10
+     0.648, t2i 0.173.
+   - Anchor rule refined: natural-photo mean fixes the white-heart
+     boundary (352 → 5) but domain beats size (COCO mean degraded the
+     CIFAR-thumb gallery; demo Space kept its in-domain mean).
+   - **Modality gap is anisotropic-LINEAR**: trained linear + InfoNCE
+     at 39k train2017 pairs → R@1 0.590/R@5 0.871/R@10 0.937, median
+     rank 1; MLP never overtakes. Full 118k sweep RUNNING (auto-backup).
+   - Product/engineering write-up: `docs/CROSSMODAL_LINEAR_HEAD.md`
+     (three deployment tiers incl. the Raspberry-Pi retrieval tier and
+     the small-backbone scale-floor experiment). Strategy:
+     `leverage.md` 2026-07-24 addendum. Queue: `FORWARD_PLAN.md`.
 
 ## Open items
 
