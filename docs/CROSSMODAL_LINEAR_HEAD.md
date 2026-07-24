@@ -26,12 +26,14 @@ state = BOS-prefixed last-token L47.
 | raw cosine | nothing | (unusable: anisotropy attractor) | | | |
 | **zero-training** | two mean vectors (μ_img, μ_txt) | 0.288 | 0.523 | 0.648 | 0.173 |
 | orthogonal Procrustes | rotation W (refuted) | 0.226 | 0.472 | 0.628 | 0.164 |
-| **trained linear head** | one matrix pair, InfoNCE, 39k pairs | **0.590** | **0.871** | **0.937** | **0.404** |
-| two-layer MLP | (never beats linear) | 0.495 | 0.823 | 0.925 | 0.348 |
+| **trained linear head, 117k pairs** | one matrix pair, InfoNCE | **0.661** | **0.911** | **0.967** | **0.506** |
+| two-layer MLP, 117k pairs | (never beats linear; gap widens with data) | 0.567 | 0.887 | 0.943 | 0.448 |
 
-The linear curve was still rising at 39k pairs
-(0.409 → 0.450 → 0.528 → 0.590 at 5k/10k/20k/39k); the full-118k sweep
-locates the saturation point (`mlp_align_full.json` when complete).
+The linear curve is decelerating (+0.10 → +0.06 R@1 per doubling) but
+**still unsaturated at the full COCO train2017 supervision**, so 0.661
+is a lower bound on the linear ceiling
+(`mlp_align_full.json`; size curve: 0.409/0.450/0.528/0.55–0.59/0.611/0.638/0.661
+at 5k/10k/20k/39k/60k/90k/117k).
 
 ## Component sizes (why this deploys anywhere)
 

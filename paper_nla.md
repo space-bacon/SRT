@@ -1646,32 +1646,39 @@ and keeps raising the ceiling.** Re-running the ladder with training
 pairs drawn from COCO train2017 (encoded under identical conventions;
 the val2017 eval split untouched throughout) gives, for the linear map,
 $R@1 = 0.409 / 0.450 / 0.528 / 0.590$ at $5$k$/10$k$/20$k$/39$k pairs,
-with $R@5 = 0.871$ and $R@10 = 0.937$ and median rank $1$ at the
-largest size, and text $\to$ image $R@1 = 0.404$. That is more than
-double the centred-cosine baseline, the curve has not saturated at
-$39$k pairs, and the train/eval split now also crosses COCO's own
-train/val partition, so the map is not exploiting eval-side leakage.
-The MLP tracks the linear map in parallel from below at every size
-($R@1 = 0.298 / 0.355 / 0.428 / 0.495$) and never overtakes it; the
-shuffled control stays at the floor ($R@1 = 0.000$). Within the
-measurable range, then, the cross-modal correspondence in this
-substrate is linear: eleven times more data gives the non-linear model
-every chance to reveal structure a linear map cannot express, and it
-finds none. Practically, a single trained linear projection over
-frozen gemma-4 L47 states reaches $0.59$ image $\to$ text $R@1$
-against $5{,}000$ captions with no vision-specific training of the
-backbone whatsoever, which upgrades the retrieval decode of §11.6.3
-from "zero-training curiosity" to a tunable operating point on a
-cost/accuracy curve. Two questions remain open and scoped. First, the
-saturation point: the linear curve is still rising at $39$k pairs.
-Second, the *scale floor*: every cross-modal result in §11.6 lives on a
-$31$B host, and because retrieval readout requires a single prefill
-pass rather than generation, a positive replication on a $2$–$4$B
-multimodal host would simultaneously extend the substrate claim
-downward and place the capability on edge-class hardware; a negative
-would give the capability a measured floor.
+and extending to the full training partition,
+$R@1 = 0.553 / 0.611 / 0.638 / 0.661$ at $39$k$/60$k$/90$k$/117$k
+(the two $39$k figures differ only in the early-stopping validation
+fold; the training pairs are identical). At the full $117$k pairs the
+linear map reaches $R@5 = 0.911$, $R@10 = 0.967$, median rank $1$, and
+text $\to$ image $R@1 = 0.506$. The gain per doubling decelerates
+(from roughly $+0.10$ at small sizes to $+0.06$ near the end) but the
+curve has *still* not saturated at the full COCO supervision, so
+$0.661$ is a lower bound on the linear ceiling, not the ceiling
+itself. The train/eval split crosses COCO's own train/val partition,
+so the map is not exploiting eval-side leakage. The MLP tracks the
+linear map in parallel from below at *every* size
+($R@1 = 0.506 / 0.546 / 0.565 / 0.567$) and the linear$-$MLP gap
+*widens* with data ($0.047$ at $39$k to $0.094$ at $117$k); the
+shuffled control stays at the floor ($R@1 = 0.001$). Thirty-three
+times more data than the original probe gives the non-linear model
+every chance to reveal structure a linear map cannot express, and the
+linear map instead pulls further ahead. Within the measurable range,
+the cross-modal correspondence in this substrate is linear.
+Practically, a single trained linear projection over frozen gemma-4
+L47 states reaches $0.661$ image $\to$ text $R@1$ against $5{,}000$
+captions with no vision-specific training of the backbone whatsoever,
+which upgrades the retrieval decode of §11.6.3 from "zero-training
+curiosity" to a tunable operating point on a cost/accuracy curve. One
+question remains open and scoped: the *scale floor*. Every
+cross-modal result in §11.6 lives on a $31$B host, and because
+retrieval readout requires a single prefill pass rather than
+generation, a positive replication on a $2$–$4$B multimodal host would
+simultaneously extend the substrate claim downward and place the
+capability on edge-class hardware; a negative would give the
+capability a measured floor.
 (`scripts/gemma4_mlp_align.py`, `scripts/gemma4_encode_pairs.py`,
-`artifacts/nla/gemma4/procrustes/{mlp_align,mlp_align_scaled}.json`.)
+`artifacts/nla/gemma4/procrustes/{mlp_align,mlp_align_scaled,mlp_align_full}.json`.)
 
 **The boundary of §11.6.3 was substantially an anchor artifact.** The
 same run re-scored the synthetic boundary probes with the image-side
