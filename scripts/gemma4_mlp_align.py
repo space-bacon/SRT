@@ -41,7 +41,14 @@ torch.manual_seed(0)
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--encodings", type=Path, required=True,
-                   help="encoded_L47_n5000.pt from gemma4_procrustes_xmodal.py")
+                   help="encoded_L47_n5000.pt from gemma4_procrustes_xmodal.py "
+                        "(supplies the untouched val2017 eval split, and the "
+                        "train pool when --train-encodings is absent)")
+    p.add_argument("--train-encodings", type=Path, nargs="*", default=None,
+                   help="optional chunk .pt files (img/cap0) from "
+                        "gemma4_encode_pairs.py (e.g. COCO train2017). When "
+                        "given, ALL training/val pairs come from these and "
+                        "--encodings is used only for the eval split.")
     p.add_argument("--n-eval", type=int, default=1000)
     p.add_argument("--n-val", type=int, default=500,
                    help="validation pairs carved from the END of the fit split")
@@ -149,36 +156,56 @@ def main() -> None:
     N, d = img.shape
     n_eval = args.n_eval
     n_fit = N - n_eval
-    n_train_max = n_fit - args.n_val
 
-    # Same split geometry as the Procrustes run. Eval tail is untouchable.
-    mu_x, mu_y = img[:n_fit].mean(0), cap0[:n_fit].mean(0)
-    Xf, Yf = (img[:n_fit] - mu_x).to(device), (cap0[:n_fit] - mu_y).to(device)
-    Xval, Yval = Xf[n_train_max:], Yf[n_train_max:]
-    X_eval = (img[n_fit:] - mu_x).to(device)
-    pool5 = (cap5 - mu_y).to(device)
-    t2i_q = (cap0[n_fit:] - mu_y).to(device)
+    # Train/val pool: external chunks (train2017) or the val2017 fit split.
+    if args.train_encodings:
+        imgs, caps = [], []
+        for pth in args.train_encodings:
+            ch = torch.load(pth, map_location="cpu", weights_only=True)
+            imgs.append(ch["img"].float())
+            caps.append(ch["cap0"].float())
+        img_tr, cap_tr = torch.cat(imgs), torch.cat(caps)
+        train_src = [str(p) for p in args.train_encodings]
+    else:
+        img_tr, cap_tr = img[:n_fit], cap0[:n_fit]
+        train_src = [str(args.encodings) + "[:n_fit]"]
+    n_pool = img_tr.size(0)
+    n_train_max = n_pool - args.n_val
+
+    # Raw (uncentered) eval tensors; each run centers by ITS training means.
+    img_tr, cap_tr = img_tr.to(device), cap_tr.to(device)
+    X_eval_raw = img[n_fit:].to(device)
+    pool5_raw = cap5.to(device)
+    t2i_q_raw = cap0[n_fit:].to(device)
     hit_sets = [set(range(5 * i, 5 * i + 5)) for i in range(n_eval)]
     t2i_hits = [{i} for i in range(n_eval)]
 
     results: dict = {
-        "encodings": str(args.encodings), "d": d, "n_fit": n_fit,
+        "encodings": str(args.encodings), "train_encodings": train_src,
+        "d": d, "n_train_pool": n_pool,
         "n_val": args.n_val, "n_eval": n_eval, "seed": args.seed,
         "objective": "symmetric InfoNCE, in-batch negatives",
         "tau": args.temperature, "proj_dim": args.proj_dim,
         "hidden": args.hidden, "runs": {},
     }
 
-    # Rung 1: centered-cosine baseline (identity heads).
+    # Rung 1: centered-cosine baseline, published convention (val2017 fit means).
+    mu_x0, mu_y0 = img[:n_fit].mean(0).to(device), cap0[:n_fit].mean(0).to(device)
     results["runs"]["baseline_centered"] = {
-        "i2t": retrieval_eval(X_eval, pool5, hit_sets),
-        "t2i": retrieval_eval(t2i_q, X_eval, t2i_hits),
+        "i2t": retrieval_eval(X_eval_raw - mu_x0, pool5_raw - mu_y0, hit_sets),
+        "t2i": retrieval_eval(t2i_q_raw - mu_y0, X_eval_raw - mu_x0, t2i_hits),
     }
     print("baseline_centered", results["runs"]["baseline_centered"]["i2t"], flush=True)
 
     def run(name: str, kind: str, n_train: int, shuffle: bool = False) -> None:
         g = torch.Generator().manual_seed(args.seed)
-        Xtr, Ytr = Xf[:n_train].clone(), Yf[:n_train].clone()
+        # Center everything by THIS run's training-pool means.
+        mu_x = img_tr[:n_train].mean(0)
+        mu_y = cap_tr[:n_train].mean(0)
+        Xtr = img_tr[:n_train] - mu_x
+        Ytr = cap_tr[:n_train] - mu_y
+        Xval = img_tr[n_train_max:] - mu_x
+        Yval = cap_tr[n_train_max:] - mu_y
         if shuffle:
             Ytr = Ytr[torch.randperm(n_train, generator=g)]
         heads, fit_info = train_heads(
@@ -188,8 +215,10 @@ def main() -> None:
             patience=args.patience, device=device,
         )
         with torch.no_grad():
-            i2t = retrieval_eval(heads["img"](X_eval), heads["txt"](pool5), hit_sets)
-            t2i = retrieval_eval(heads["txt"](t2i_q), heads["img"](X_eval), t2i_hits)
+            i2t = retrieval_eval(heads["img"](X_eval_raw - mu_x),
+                                 heads["txt"](pool5_raw - mu_y), hit_sets)
+            t2i = retrieval_eval(heads["txt"](t2i_q_raw - mu_y),
+                                 heads["img"](X_eval_raw - mu_x), t2i_hits)
         rec = {"kind": kind, "n_train": n_train, "shuffle": shuffle,
                **fit_info, "i2t": i2t, "t2i": t2i}
         results["runs"][name] = rec
@@ -197,11 +226,11 @@ def main() -> None:
               f"i2t {i2t}  t2i r@1={t2i['r@1']:.3f}", flush=True)
 
     headline_n = min(args.train_sizes[-1], n_train_max)
-    # Rung 2: unconstrained linear (is the gap linear-but-not-orthogonal?)
-    run(f"linear_n{headline_n}", "linear", headline_n)
-    # Rung 3: MLP train-size curve + shuffled control
+    # Both kinds along the train-size curve + shuffled controls at headline.
     for n_train in args.train_sizes:
-        run(f"mlp_n{min(n_train, n_train_max)}", "mlp", min(n_train, n_train_max))
+        n_t = min(n_train, n_train_max)
+        run(f"linear_n{n_t}", "linear", n_t)
+        run(f"mlp_n{n_t}", "mlp", n_t)
     run(f"mlp_shuffled_n{headline_n}", "mlp", headline_n, shuffle=True)
 
     args.out.write_text(json.dumps(results, indent=2))
