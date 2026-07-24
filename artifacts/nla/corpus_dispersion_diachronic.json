@@ -1,0 +1,253 @@
+{
+  "baseline": 0.39116143398638814,
+  "eras": [
+    "1850-66",
+    "1874-90",
+    "1898-1914",
+    "1922-54"
+  ],
+  "did": 0.0045324295320183765,
+  "p": 0.6052394760523948,
+  "rows": [
+    {
+      "word": "freedom",
+      "cls": "contested",
+      "slope": 0.01927566285783605
+    },
+    {
+      "word": "liberty",
+      "cls": "contested",
+      "slope": -0.021379765388078686
+    },
+    {
+      "word": "justice",
+      "cls": "contested",
+      "slope": 0.00027234992667281023
+    },
+    {
+      "word": "rights",
+      "cls": "contested",
+      "slope": 0.04395224322305532
+    },
+    {
+      "word": "democracy",
+      "cls": "contested",
+      "slope": 0.03283861969790315
+    },
+    {
+      "word": "race",
+      "cls": "contested",
+      "slope": -0.008591737313651315
+    },
+    {
+      "word": "religion",
+      "cls": "contested",
+      "slope": 0.011219892813026988
+    },
+    {
+      "word": "property",
+      "cls": "contested",
+      "slope": -0.004749077065690966
+    },
+    {
+      "word": "labor",
+      "cls": "contested",
+      "slope": 0.0037938870013281777
+    },
+    {
+      "word": "virtue",
+      "cls": "contested",
+      "slope": 0.018147514754884176
+    },
+    {
+      "word": "progress",
+      "cls": "contested",
+      "slope": -0.018919486972855715
+    },
+    {
+      "word": "nation",
+      "cls": "contested",
+      "slope": -0.00835262896845974
+    },
+    {
+      "word": "civilization",
+      "cls": "contested",
+      "slope": 0.012593287524044516
+    },
+    {
+      "word": "bank",
+      "cls": "polysemous",
+      "slope": -0.027629584092164004
+    },
+    {
+      "word": "spring",
+      "cls": "polysemous",
+      "slope": 0.00880735970567742
+    },
+    {
+      "word": "plant",
+      "cls": "polysemous",
+      "slope": -0.030254303339117383
+    },
+    {
+      "word": "iron",
+      "cls": "polysemous",
+      "slope": 0.03163413979969011
+    },
+    {
+      "word": "seal",
+      "cls": "polysemous",
+      "slope": 0.01999252776844257
+    },
+    {
+      "word": "ring",
+      "cls": "polysemous",
+      "slope": -0.034404894879644744
+    },
+    {
+      "word": "saw",
+      "cls": "polysemous",
+      "slope": 0.007146572897483172
+    },
+    {
+      "word": "match",
+      "cls": "polysemous",
+      "slope": -0.01576078780532708
+    },
+    {
+      "word": "trunk",
+      "cls": "polysemous",
+      "slope": -0.048447722902002
+    },
+    {
+      "word": "palm",
+      "cls": "polysemous",
+      "slope": -0.04856327790333137
+    },
+    {
+      "word": "bark",
+      "cls": "polysemous",
+      "slope": -0.06564490337942208
+    },
+    {
+      "word": "river",
+      "cls": "concrete",
+      "slope": -0.009043208016519621
+    },
+    {
+      "word": "horse",
+      "cls": "concrete",
+      "slope": 0.026647559931249853
+    },
+    {
+      "word": "cotton",
+      "cls": "concrete",
+      "slope": -0.03638940407771981
+    },
+    {
+      "word": "railroad",
+      "cls": "concrete",
+      "slope": 0.02344032247451965
+    },
+    {
+      "word": "mountain",
+      "cls": "concrete",
+      "slope": 0.02043434563687101
+    },
+    {
+      "word": "bridge",
+      "cls": "concrete",
+      "slope": 0.014666502942058224
+    },
+    {
+      "word": "wagon",
+      "cls": "concrete",
+      "slope": 0.015473150960826864
+    },
+    {
+      "word": "cattle",
+      "cls": "concrete",
+      "slope": -0.015941430909874887
+    },
+    {
+      "word": "timber",
+      "cls": "concrete",
+      "slope": 0.05608437784011287
+    },
+    {
+      "word": "harbor",
+      "cls": "concrete",
+      "slope": 0.0062638084610980305
+    },
+    {
+      "word": "engine",
+      "cls": "concrete",
+      "slope": 0.029366193621186476
+    },
+    {
+      "word": "coal",
+      "cls": "concrete",
+      "slope": -0.0009985788698774422
+    },
+    {
+      "word": "number",
+      "cls": "abstract",
+      "slope": -0.0366928809689986
+    },
+    {
+      "word": "distance",
+      "cls": "abstract",
+      "slope": 0.006428758367261389
+    },
+    {
+      "word": "weather",
+      "cls": "abstract",
+      "slope": 0.01869198944069218
+    },
+    {
+      "word": "winter",
+      "cls": "abstract",
+      "slope": -0.005342511006097073
+    },
+    {
+      "word": "morning",
+      "cls": "abstract",
+      "slope": 0.012377870719770201
+    },
+    {
+      "word": "summer",
+      "cls": "abstract",
+      "slope": 0.01020763746271095
+    },
+    {
+      "word": "temperature",
+      "cls": "abstract",
+      "slope": 0.04519479601491605
+    },
+    {
+      "word": "height",
+      "cls": "abstract",
+      "slope": 0.026956915653239745
+    },
+    {
+      "word": "weight",
+      "cls": "abstract",
+      "slope": 0.0022527228949803303
+    },
+    {
+      "word": "speed",
+      "cls": "abstract",
+      "slope": 0.019449423667646293
+    },
+    {
+      "word": "length",
+      "cls": "abstract",
+      "slope": 0.03781522856038294
+    },
+    {
+      "word": "area",
+      "cls": "abstract",
+      "slope": -0.007197852356708256
+    }
+  ]
+}

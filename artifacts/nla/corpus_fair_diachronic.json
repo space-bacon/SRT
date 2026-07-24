@@ -1,0 +1,218 @@
+{
+  "baseline": 0.3842848950526677,
+  "eras": [
+    "1850-66",
+    "1874-90",
+    "1898-1914",
+    "1922-54"
+  ],
+  "did": 0.0011151480307080124,
+  "p": 0.9015098490150985,
+  "rows": [
+    {
+      "word": "freedom",
+      "cls": "contested",
+      "slope": 0.013737608857544248
+    },
+    {
+      "word": "liberty",
+      "cls": "contested",
+      "slope": -0.010990170338814564
+    },
+    {
+      "word": "justice",
+      "cls": "contested",
+      "slope": -0.0038022609115852314
+    },
+    {
+      "word": "rights",
+      "cls": "contested",
+      "slope": 0.04321159027313355
+    },
+    {
+      "word": "democracy",
+      "cls": "contested",
+      "slope": 0.011962062176694883
+    },
+    {
+      "word": "religion",
+      "cls": "contested",
+      "slope": -0.0027482544512831353
+    },
+    {
+      "word": "race",
+      "cls": "mixed",
+      "slope": 0.0026339146418079664
+    },
+    {
+      "word": "property",
+      "cls": "mixed",
+      "slope": 0.013117307888710716
+    },
+    {
+      "word": "nation",
+      "cls": "mixed",
+      "slope": -0.0036533013604525878
+    },
+    {
+      "word": "progress",
+      "cls": "mixed",
+      "slope": -0.004208553835129469
+    },
+    {
+      "word": "labor",
+      "cls": "mixed",
+      "slope": 0.02603972682967799
+    },
+    {
+      "word": "virtue",
+      "cls": "mixed",
+      "slope": -0.01554564624926098
+    },
+    {
+      "word": "character",
+      "cls": "mixed",
+      "slope": 0.03186816677556152
+    },
+    {
+      "word": "union",
+      "cls": "mixed",
+      "slope": 0.01881672538796573
+    },
+    {
+      "word": "bank",
+      "cls": "polysemous",
+      "slope": -0.014804193125598908
+    },
+    {
+      "word": "spring",
+      "cls": "polysemous",
+      "slope": 0.020275072065429767
+    },
+    {
+      "word": "plant",
+      "cls": "polysemous",
+      "slope": -0.0086947653694034
+    },
+    {
+      "word": "iron",
+      "cls": "polysemous",
+      "slope": 0.03389630128211511
+    },
+    {
+      "word": "seal",
+      "cls": "polysemous",
+      "slope": 0.04187570746579812
+    },
+    {
+      "word": "ring",
+      "cls": "polysemous",
+      "slope": -0.02881436770997924
+    },
+    {
+      "word": "saw",
+      "cls": "polysemous",
+      "slope": -0.024136587658573606
+    },
+    {
+      "word": "match",
+      "cls": "polysemous",
+      "slope": -0.0038055716616412494
+    },
+    {
+      "word": "river",
+      "cls": "concrete",
+      "slope": 0.00876466866225335
+    },
+    {
+      "word": "horse",
+      "cls": "concrete",
+      "slope": 0.026073870149700383
+    },
+    {
+      "word": "cotton",
+      "cls": "concrete",
+      "slope": -0.01290157670450337
+    },
+    {
+      "word": "railroad",
+      "cls": "concrete",
+      "slope": 0.018936580348327958
+    },
+    {
+      "word": "mountain",
+      "cls": "concrete",
+      "slope": 0.012780269660783283
+    },
+    {
+      "word": "bridge",
+      "cls": "concrete",
+      "slope": 0.012666823228307322
+    },
+    {
+      "word": "wagon",
+      "cls": "concrete",
+      "slope": 0.018978652043484544
+    },
+    {
+      "word": "engine",
+      "cls": "concrete",
+      "slope": 0.023869230070714554
+    },
+    {
+      "word": "coal",
+      "cls": "concrete",
+      "slope": -0.022076023290359913
+    },
+    {
+      "word": "timber",
+      "cls": "concrete",
+      "slope": 0.03473455996297142
+    },
+    {
+      "word": "number",
+      "cls": "abstract",
+      "slope": -0.028016394661749256
+    },
+    {
+      "word": "distance",
+      "cls": "abstract",
+      "slope": 0.012609373970390404
+    },
+    {
+      "word": "weather",
+      "cls": "abstract",
+      "slope": 0.012921780024289797
+    },
+    {
+      "word": "winter",
+      "cls": "abstract",
+      "slope": -0.009015782277615226
+    },
+    {
+      "word": "temperature",
+      "cls": "abstract",
+      "slope": 0.023072346085003026
+    },
+    {
+      "word": "height",
+      "cls": "abstract",
+      "slope": -0.001756343224175061
+    },
+    {
+      "word": "weight",
+      "cls": "abstract",
+      "slope": 0.017568969519622068
+    },
+    {
+      "word": "speed",
+      "cls": "abstract",
+      "slope": 0.013832913928601975
+    },
+    {
+      "word": "length",
+      "cls": "abstract",
+      "slope": 0.022223080612293687
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+[
+  {
+    "word": "justice",
+    "cls": "contested",
+    "n": 90,
+    "selfsim": 0.48511746525764465,
+    "disp": 0.8485095438104614
+  },
+  {
+    "word": "distance",
+    "cls": "abstract",
+    "n": 76,
+    "selfsim": 0.49502208828926086,
+    "disp": 0.832187049643172
+  },
+  {
+    "word": "plant",
+    "cls": "polysemous",
+    "n": 90,
+    "selfsim": 0.5323238372802734,
+    "disp": 0.7707149897382185
+  },
+  {
+    "word": "liberty",
+    "cls": "contested",
+    "n": 63,
+    "selfsim": 0.5331823229789734,
+    "disp": 0.7693002334405783
+  },
+  {
+    "word": "spring",
+    "cls": "polysemous",
+    "n": 90,
+    "selfsim": 0.5373541712760925,
+    "disp": 0.7624251641644251
+  },
+  {
+    "word": "number",
+    "cls": "abstract",
+    "n": 90,
+    "selfsim": 0.5397817492485046,
+    "disp": 0.7584245952211293
+  },
+  {
+    "word": "weather",
+    "cls": "abstract",
+    "n": 90,
+    "selfsim": 0.5446018576622009,
+    "disp": 0.7504812145172781
+  },
+  {
+    "word": "winter",
+    "cls": "abstract",
+    "n": 90,
+    "selfsim": 0.5523943901062012,
+    "disp": 0.7376393764221182
+  },
+  {
+    "word": "iron",
+    "cls": "polysemous",
+    "n": 90,
+    "selfsim": 0.5760948061943054,
+    "disp": 0.6985818674058172
+  },
+  {
+    "word": "cotton",
+    "cls": "concrete",
+    "n": 90,
+    "selfsim": 0.5786769390106201,
+    "disp": 0.6943265971447555
+  },
+  {
+    "word": "rights",
+    "cls": "contested",
+    "n": 53,
+    "selfsim": 0.583165168762207,
+    "disp": 0.686930141599917
+  },
+  {
+    "word": "bank",
+    "cls": "polysemous",
+    "n": 90,
+    "selfsim": 0.5849698185920715,
+    "disp": 0.683956137821284
+  },
+  {
+    "word": "freedom",
+    "cls": "contested",
+    "n": 31,
+    "selfsim": 0.5914065837860107,
+    "disp": 0.673348559723772
+  },
+  {
+    "word": "horse",
+    "cls": "concrete",
+    "n": 90,
+    "selfsim": 0.5974395871162415,
+    "disp": 0.6634063679457919
+  },
+  {
+    "word": "slavery",
+    "cls": "contested",
+    "n": 21,
+    "selfsim": 0.6037517189979553,
+    "disp": 0.6530041814624136
+  },
+  {
+    "word": "river",
+    "cls": "concrete",
+    "n": 90,
+    "selfsim": 0.6147124171257019,
+    "disp": 0.6349413101458088
+  },
+  {
+    "word": "railroad",
+    "cls": "concrete",
+    "n": 90,
+    "selfsim": 0.6430507898330688,
+    "disp": 0.5882406006135056
+  }
+]
