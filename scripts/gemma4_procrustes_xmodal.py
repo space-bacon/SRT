@@ -149,20 +149,21 @@ class Encoder:
 
     @torch.no_grad()
     def text_vs(self, texts: list[str]) -> torch.Tensor:
-        """Last-token L-layer states, BOS enforced (§11.7: bare re-encode
-        drops gemma-4 replay 0.9986 → 0.615)."""
+        """Last-token L-layer states, BOS enforced when the tokenizer has one
+        (§11.7: bare re-encode drops gemma-4 replay 0.9986 → 0.615). Qwen-style
+        tokenizers have no BOS; add_special_tokens handles their convention."""
         tok = self.tok
         bos = tok.bos_token_id
-        assert bos is not None
         ids_list = []
         for t in texts:
             ids = tok(t, truncation=True, max_length=self.max_seq_len,
                       add_special_tokens=True).input_ids
-            if ids[0] != bos:
+            if bos is not None and ids[0] != bos:
                 ids = [bos] + ids[: self.max_seq_len - 1]
             ids_list.append(ids)
         T = max(len(i) for i in ids_list)
-        pad = tok.pad_token_id if tok.pad_token_id is not None else bos
+        pad = tok.pad_token_id if tok.pad_token_id is not None else (
+            bos if bos is not None else 0)
         input_ids = torch.full((len(ids_list), T), pad, dtype=torch.long)
         attn = torch.zeros((len(ids_list), T), dtype=torch.long)
         for j, ids in enumerate(ids_list):  # right-pad

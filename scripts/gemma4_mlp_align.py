@@ -65,6 +65,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--max-epochs", type=int, default=300)
     p.add_argument("--patience", type=int, default=25)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--save-head", type=Path, default=None,
+                   help="persist the trained heads + per-run centering means "
+                        "for the HEADLINE LINEAR run to this .pt (ship-able "
+                        "artifact: {'img','txt' state_dicts, 'mu_img','mu_txt', "
+                        "'meta'})")
     p.add_argument("--out", type=Path, required=True)
     return p.parse_args()
 
@@ -197,7 +202,8 @@ def main() -> None:
     }
     print("baseline_centered", results["runs"]["baseline_centered"]["i2t"], flush=True)
 
-    def run(name: str, kind: str, n_train: int, shuffle: bool = False) -> None:
+    def run(name: str, kind: str, n_train: int, shuffle: bool = False,
+            save_to: Path | None = None) -> None:
         g = torch.Generator().manual_seed(args.seed)
         # Center everything by THIS run's training-pool means.
         mu_x = img_tr[:n_train].mean(0)
@@ -224,12 +230,24 @@ def main() -> None:
         results["runs"][name] = rec
         print(f"{name:24s} val_r@1={fit_info['val_r@1']:.3f} "
               f"i2t {i2t}  t2i r@1={t2i['r@1']:.3f}", flush=True)
+        if save_to is not None:
+            torch.save({
+                "img": {k: v.cpu() for k, v in heads["img"].state_dict().items()},
+                "txt": {k: v.cpu() for k, v in heads["txt"].state_dict().items()},
+                "mu_img": mu_x.cpu(), "mu_txt": mu_y.cpu(),
+                "meta": {"kind": kind, "n_train": n_train, "d": d,
+                         "proj_dim": args.proj_dim, "hidden": args.hidden,
+                         "tau": args.temperature, "seed": args.seed,
+                         "i2t": i2t, "t2i": t2i, **fit_info},
+            }, save_to)
+            print(f"saved head -> {save_to}", flush=True)
 
     headline_n = min(args.train_sizes[-1], n_train_max)
     # Both kinds along the train-size curve + shuffled controls at headline.
     for n_train in args.train_sizes:
         n_t = min(n_train, n_train_max)
-        run(f"linear_n{n_t}", "linear", n_t)
+        run(f"linear_n{n_t}", "linear", n_t,
+            save_to=args.save_head if n_t == headline_n else None)
         run(f"mlp_n{n_t}", "mlp", n_t)
     run(f"mlp_shuffled_n{headline_n}", "mlp", headline_n, shuffle=True)
 

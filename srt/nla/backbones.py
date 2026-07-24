@@ -57,13 +57,23 @@ def load_frozen_backbone(
     cfg = AutoConfig.from_pretrained(model_id)
     model_type = getattr(cfg, "model_type", "")
 
-    if model_type in _MULTIMODAL_TYPES:
+    # Multimodal detection: explicit known types OR a nested vision tower.
+    # Loading a multimodal checkpoint through AutoModelForCausalLM maps no
+    # weights and silently returns a random text tower (hard-learned).
+    is_multimodal = (
+        model_type in _MULTIMODAL_TYPES
+        or getattr(cfg, "vision_config", None) is not None
+    )
+
+    if is_multimodal:
         # gemma-4: Gemma4ForCausalLM does NOT map checkpoint weights
         # (keys are model.language_model.*) — must use the conditional-
         # generation class even for text-only forwards.
         import transformers
 
-        cls = getattr(transformers, "Gemma4ForConditionalGeneration", None)
+        cls = None
+        if model_type in _MULTIMODAL_TYPES:
+            cls = getattr(transformers, "Gemma4ForConditionalGeneration", None)
         if cls is None:
             from transformers import AutoModelForImageTextToText as cls  # noqa: N813
         logger.info("loading %s via %s (multimodal host)", model_id, cls.__name__)
