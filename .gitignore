@@ -50,7 +50,9 @@ private/
 **/*email_draft*.html
 **/paper_notification_email*
 **/*-email.md
+**/*-email.html
 erik-email.md
+erik-email.html
 docs/substack_*
 **/*newsletter*
 *.eml

@@ -1936,6 +1936,41 @@ consequence rather than a directly measured per-era $U_{\text{com}}$.
 The conjecture's value is that each of these gaps names a decisive,
 runnable experiment.
 
+**A sharper name for $U_{\text{com}}$: evaluative thickness, not
+contestedness.** The label we have used, *contestedness*, over-commits.
+It imports Gallie's *essentially contested concepts*, a claim about
+active social dispute, whereas every quantity we can actually measure
+is a property of the sign's *representation*, not of any dispute. Test
+3 shows the community-forcing pathway acts as a uniform bias, so the
+interpretant fork is not produced on demand from the community index;
+and a corpus-scale test of the dispute itself is null. If the readout
+tracked a widening community fork, a contested sign's contextual usage
+should splay apart in transmission time — yet measuring the
+anisotropy-adjusted self-similarity of each sign's contextual
+embeddings across four eras of AmericanStories (one occurrence per
+article, $\ge 30$ per era, base Qwen2.5-7B), the contested-minus-control
+difference-in-differences of the per-era slope is $+0.001$ (permutation
+$p=0.90$, $52$ vetted words), with vetted contested signs statistically
+indistinguishable from concrete and polysemous controls. What the
+readout *does* carry is the intrinsic property that makes a sign prone
+to dispute in the first place: Williams's *thick* concepts (justice,
+cruelty, courage), which fuse description and evaluation and cannot be
+factored into neutral fact plus separable value. Thickness predicts
+what contestedness does not — the irreducibility of Test 3: if the
+evaluation cannot be lifted out of the word, then no uniform community
+bias, and no paraphrase into thinner vocabulary, can discharge the
+load. We therefore read $U_{\text{com}}$ as *evaluative thickness*, the
+amount of frame-fixing evaluation a sign carries that a reader cannot
+decline. The measurements then separate cleanly: the instrument
+measures the *cause* — thickness, which is intrinsic, substrate-invariant
+across Qwen and gemma-4, and accrues in transmission time as Test 4's
+$D$-drift — not the *effect*, the social fork, which neither
+community-forcing, community-assignment entropy, nor diachronic
+dispersion locates in the representation. The nulls of Test 3 and of
+the diachronic dispersion are then not shortfalls but the boundary of
+the claim: the SRT readout is an instrument for a sign's thickness, not
+a detector of the disagreement that thickness tends to provoke.
+
 ---
 
 ## 13. Honest expectations and open problems
