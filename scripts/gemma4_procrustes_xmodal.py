@@ -50,8 +50,11 @@ from srt.nla import load_frozen_backbone
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 log = logging.getLogger("procrustes")
 
-COCO_IMAGES_URL = "https://images.cocodataset.org/zips/val2017.zip"
-COCO_ANN_URL = "https://images.cocodataset.org/annotations/annotations_trainval2017.zip"
+# COCO's own hostname is a CNAME to an S3 bucket whose wildcard cert does not
+# cover the dotted name (https fails with hostname mismatch). Path-style S3
+# addressing keeps a valid TLS cert.
+COCO_IMAGES_URL = "https://s3.amazonaws.com/images.cocodataset.org/zips/val2017.zip"
+COCO_ANN_URL = "https://s3.amazonaws.com/images.cocodataset.org/annotations/annotations_trainval2017.zip"
 
 
 def parse_args() -> argparse.Namespace:
