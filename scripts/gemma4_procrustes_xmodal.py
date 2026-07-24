@@ -50,8 +50,8 @@ from srt.nla import load_frozen_backbone
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 log = logging.getLogger("procrustes")
 
-COCO_IMAGES_URL = "http://images.cocodataset.org/zips/val2017.zip"
-COCO_ANN_URL = "http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
+COCO_IMAGES_URL = "https://images.cocodataset.org/zips/val2017.zip"
+COCO_ANN_URL = "https://images.cocodataset.org/annotations/annotations_trainval2017.zip"
 
 
 def parse_args() -> argparse.Namespace:
@@ -174,7 +174,7 @@ class Encoder:
         return h[rows, last].float().cpu()
 
 
-def encode_all(args, rows: list[dict]) -> dict:
+def encode_all(args, rows: list[dict], get_encoder) -> dict:
     """Encode images + captions with caching. Returns dict of tensors."""
     cache = args.work_dir / f"encoded_L{args.layer}_n{args.n_images}.pt"
     if cache.exists():
@@ -183,7 +183,7 @@ def encode_all(args, rows: list[dict]) -> dict:
 
     from PIL import Image
 
-    enc = Encoder(args)
+    enc = get_encoder()
     rows = rows[: args.n_images]
 
     img_vs, cap0_vs = [], []
@@ -271,7 +271,16 @@ def main() -> None:
     _, rows = ensure_coco(args.work_dir)
     if len(rows) < args.n_images:
         args.n_images = len(rows)
-    enc = encode_all(args, rows)
+
+    # One backbone instance shared by encoding + probes (2x 31B would OOM).
+    _enc_holder: list[Encoder] = []
+
+    def get_encoder() -> Encoder:
+        if not _enc_holder:
+            _enc_holder.append(Encoder(args))
+        return _enc_holder[0]
+
+    enc = encode_all(args, rows, get_encoder)
 
     img, cap0, cap5 = enc["img"], enc["cap0"], enc["cap5"]
     N, d = img.shape
@@ -366,7 +375,7 @@ def main() -> None:
         obj = torch.load(args.caption_targets, map_location="cpu", weights_only=False)
         big_pool = torch.stack([a[-1] for a in obj["activations"]]).float()
         big_caps = obj["sequences"]
-        e = Encoder(args)
+        e = get_encoder()
         mu_x, mu_y = X_pool[:headline_n].mean(0), Y_pool[:headline_n].mean(0)
         W = fit_procrustes(X_pool[:headline_n] - mu_x, Y_pool[:headline_n] - mu_y)
         pool_c = F.normalize(big_pool - big_pool.mean(0), dim=-1)
