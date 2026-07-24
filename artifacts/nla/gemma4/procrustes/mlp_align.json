@@ -1,0 +1,123 @@
+{
+  "encodings": "/workspace/procrustes/encoded_L47_n5000.pt",
+  "d": 5376,
+  "n_fit": 4000,
+  "n_val": 500,
+  "n_eval": 1000,
+  "seed": 0,
+  "objective": "symmetric InfoNCE, in-batch negatives",
+  "tau": 0.05,
+  "proj_dim": 1024,
+  "hidden": 1024,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.288,
+        "r@5": 0.523,
+        "r@10": 0.648,
+        "median_rank": 5.0
+      },
+      "t2i": {
+        "r@1": 0.173,
+        "r@5": 0.354,
+        "r@10": 0.45,
+        "median_rank": 17.0
+      }
+    },
+    "linear_n3500": {
+      "kind": "linear",
+      "n_train": 3500,
+      "shuffle": false,
+      "val_r@1": 0.322,
+      "epochs": 33,
+      "i2t": {
+        "r@1": 0.334,
+        "r@5": 0.663,
+        "r@10": 0.808,
+        "median_rank": 3.0
+      },
+      "t2i": {
+        "r@1": 0.21,
+        "r@5": 0.516,
+        "r@10": 0.666,
+        "median_rank": 5.0
+      }
+    },
+    "mlp_n1000": {
+      "kind": "mlp",
+      "n_train": 1000,
+      "shuffle": false,
+      "val_r@1": 0.168,
+      "epochs": 50,
+      "i2t": {
+        "r@1": 0.115,
+        "r@5": 0.349,
+        "r@10": 0.491,
+        "median_rank": 11.0
+      },
+      "t2i": {
+        "r@1": 0.087,
+        "r@5": 0.24,
+        "r@10": 0.36,
+        "median_rank": 21.0
+      }
+    },
+    "mlp_n2000": {
+      "kind": "mlp",
+      "n_train": 2000,
+      "shuffle": false,
+      "val_r@1": 0.212,
+      "epochs": 50,
+      "i2t": {
+        "r@1": 0.197,
+        "r@5": 0.471,
+        "r@10": 0.623,
+        "median_rank": 6.0
+      },
+      "t2i": {
+        "r@1": 0.136,
+        "r@5": 0.351,
+        "r@10": 0.48,
+        "median_rank": 12.0
+      }
+    },
+    "mlp_n3500": {
+      "kind": "mlp",
+      "n_train": 3500,
+      "shuffle": false,
+      "val_r@1": 0.258,
+      "epochs": 35,
+      "i2t": {
+        "r@1": 0.258,
+        "r@5": 0.571,
+        "r@10": 0.723,
+        "median_rank": 4.0
+      },
+      "t2i": {
+        "r@1": 0.175,
+        "r@5": 0.436,
+        "r@10": 0.567,
+        "median_rank": 8.0
+      }
+    },
+    "mlp_shuffled_n3500": {
+      "kind": "mlp",
+      "n_train": 3500,
+      "shuffle": true,
+      "val_r@1": 0.006,
+      "epochs": 31,
+      "i2t": {
+        "r@1": 0.002,
+        "r@5": 0.008,
+        "r@10": 0.011,
+        "median_rank": 851.0
+      },
+      "t2i": {
+        "r@1": 0.002,
+        "r@5": 0.006,
+        "r@10": 0.009,
+        "median_rank": 513.0
+      }
+    }
+  }
+}

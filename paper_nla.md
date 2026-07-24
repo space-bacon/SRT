@@ -1618,6 +1618,33 @@ manifold but compresses exactly the within-cloud structure that
 retrieval depends on. After per-modality centring, the remaining
 modality gap in this substrate is not a rigid linear transform.
 
+**But it is linear: a trained anisotropic map recovers real structure.**
+Dropping the orthogonality constraint changes the verdict. On the same
+cached pairs and the same untouched eval split, an unconstrained linear
+map trained with a symmetric InfoNCE objective ($3{,}500$ pairs, $500$
+validation pairs for early stopping) *beats* centred cosine: image
+$\to$ text $R@1 = 0.334$, $R@5 = 0.663$, $R@10 = 0.808$, median rank
+$3$, text $\to$ image $R@1 = 0.210$ (baseline $0.288 / 0.523 / 0.648 /
+5$ and $0.173$). The gain concentrates in the mid-ranks ($+0.14$ at
+$R@5$, $+0.16$ at $R@10$). Together with the Procrustes null this
+localizes the modality gap precisely: it is *anisotropic-linear*, a
+scale-and-shear between the two clouds that a rotation cannot express
+and a norm-preserving map cannot fix, which is also why the objective
+matters (InfoNCE optimizes ranking; Procrustes' least-squares objective
+optimizes similarity and paid for it in discrimination). A two-layer
+MLP on the same data does *not* beat the linear map ($R@1 = 0.115 /
+0.197 / 0.258$ along the $1$k/$2$k/$3.5$k train-size curve, still
+rising and data-starved at every size; shuffled-pairs control at
+$0.002$), so whatever non-linear structure exists is not learnable from
+$3{,}500$ pairs. The rungs order as: orthogonal $<$ identity $<$
+unconstrained linear, with the non-linear question open pending an
+order of magnitude more pairs. One scoping note: this rung gives up the
+zero-training property, so the headline pipeline number remains the
+centred-cosine $0.288$; the trained-linear $0.334/0.663$ is reported as
+the recoverable ceiling, not as the deployed decode.
+(`scripts/gemma4_mlp_align.py`,
+`artifacts/nla/gemma4/procrustes/mlp_align.json`.)
+
 **The boundary of §11.6.3 was substantially an anchor artifact.** The
 same run re-scored the synthetic boundary probes with the image-side
 mean taken from the $4{,}000$ natural fit photographs rather than from

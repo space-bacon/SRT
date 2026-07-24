@@ -1,0 +1,7 @@
+baseline_centered {'r@1': 0.288, 'r@5': 0.523, 'r@10': 0.648, 'median_rank': 5.0}
+linear_n3500             val_r@1=0.322 i2t {'r@1': 0.334, 'r@5': 0.663, 'r@10': 0.808, 'median_rank': 3.0}  t2i r@1=0.210
+mlp_n1000                val_r@1=0.168 i2t {'r@1': 0.115, 'r@5': 0.349, 'r@10': 0.491, 'median_rank': 11.0}  t2i r@1=0.087
+mlp_n2000                val_r@1=0.212 i2t {'r@1': 0.197, 'r@5': 0.471, 'r@10': 0.623, 'median_rank': 6.0}  t2i r@1=0.136
+mlp_n3500                val_r@1=0.258 i2t {'r@1': 0.258, 'r@5': 0.571, 'r@10': 0.723, 'median_rank': 4.0}  t2i r@1=0.175
+mlp_shuffled_n3500       val_r@1=0.006 i2t {'r@1': 0.002, 'r@5': 0.008, 'r@10': 0.011, 'median_rank': 851.0}  t2i r@1=0.002
+wrote /workspace/procrustes/mlp_align.json
