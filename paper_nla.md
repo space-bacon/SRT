@@ -1690,15 +1690,31 @@ cost: two linear layers, $\approx 110$k pairs, minutes of training,
 and no new model. (`scripts/gemma4_karpathy_eval.py`,
 `artifacts/nla/gemma4/procrustes/karpathy_eval.json`.)
 
-One question remains open and scoped: the *scale floor*. Every
-cross-modal result in §11.6 lives on a $31$B host, and because
-retrieval readout requires a single prefill pass rather than
-generation, a positive replication on a $2$–$4$B multimodal host would
-simultaneously extend the substrate claim downward and place the
-capability on edge-class hardware; a negative would give the
-capability a measured floor.
+**The scale floor: the capability survives, essentially undiminished,
+at 3B.** Every cross-modal result above lives on a $31$B host, so we
+replicated the full ladder on frozen **Qwen2.5-VL-3B-Instruct** (layer
+$29$ of $36$, $d = 2048$, the same $80\%$-depth heuristic), identical
+protocol and code paths. Every element of the fingerprint reproduces.
+The zero-training centred baseline works ($R@1 = 0.180$, $180\times$
+chance); orthogonal Procrustes *hurts* ($0.147$); the trained linear
+map dominates ($R@1 = 0.414 / 0.497 / 0.537 / 0.577$ at
+$5$k$/10$k$/20$k$/39$k pairs, with $R@5 = 0.870$, $R@10 = 0.955$ and
+median rank $1$ at the largest size, text $\to$ image $0.439$); the
+MLP trails the linear map at every size and the shuffled control sits
+at the floor ($0.000$). The striking comparison is at matched training
+budget: at $39$k pairs the $3$B host scores $0.577$ against the $31$B
+host's $0.553$–$0.590$ (the two-fold range reflecting early-stopping
+fold variance). Within noise, **a ten-fold reduction in host size
+costs nothing** at this pair budget. The linearly-readable cross-modal
+correspondence is not an emergent property of $31$B scale; it is a
+generic feature of multimodal LLM representation spaces down to at
+least $3$B, which places the entire capability, single-prefill readout
+included, on edge-class hardware.
 (`scripts/gemma4_mlp_align.py`, `scripts/gemma4_encode_pairs.py`,
-`artifacts/nla/gemma4/procrustes/{mlp_align,mlp_align_scaled,mlp_align_full}.json`.)
+`artifacts/nla/gemma4/procrustes/{mlp_align,mlp_align_scaled,mlp_align_full}.json`,
+`artifacts/nla/scalefloor/{procrustes_qwen3b,mlp_align_qwen3b}.json`;
+heads at `RiverRider/srt-sunstone-linear-head` and
+`RiverRider/srt-nla-gemma4-artifacts` `scalefloor/`.)
 
 **The boundary of §11.6.3 was substantially an anchor artifact.** The
 same run re-scored the synthetic boundary probes with the image-side

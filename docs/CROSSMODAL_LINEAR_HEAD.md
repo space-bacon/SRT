@@ -69,7 +69,7 @@ This is the SRT sidecar pattern taken literally: the semiotic layer is
 small enough for edge hardware while the substrate stays in the
 datacenter.
 
-### Tier 3 — fully local small backbone (open experiment, "scale floor")
+### Tier 3 — fully local small backbone (VALIDATED 2026-07-24: scale floor cleared at 3B)
 
 Key fact: retrieval readout needs **one prefill pass, not generation**.
 That changes edge arithmetic entirely: a 2–4B multimodal model at
@@ -78,15 +78,16 @@ one prefill over a few hundred image tokens is tens of seconds to ~2
 minutes on its CPU. Useless interactively; entirely usable for batch
 tagging, event labeling, or offline photo indexing.
 
-The open question is scientific: does a 2–4B host's state space have
-the same linearly-alignable cross-modal structure? Substrate
-generality is validated from 7B to 235B, but never below 7B and never
-cross-modally below 31B. The experiment is one box-day with the
-existing generic pipeline (all three scripts take `--backbone`). A
-positive extends the substrate claim dramatically downward and creates
-the "Sunstone on an $80 computer" tier; a negative gives the
-capability a measured scale floor, which the paper currently cannot
-speak to. Queued in FORWARD_PLAN.md.
+**The scale-floor experiment ran on Qwen2.5-VL-3B-Instruct (L29,
+d=2048) and the entire fingerprint replicated**: zero-training
+baseline R@1 0.180; Procrustes hurts (0.147); trained linear head
+0.577 R@1 / 0.870 R@5 / 0.955 R@10 at 39k pairs (median rank 1);
+MLP below linear at every size; shuffled floor 0.000. At matched
+training budget the 3B host matches the 31B host (0.577 vs
+0.553–0.590): **a ten-fold host reduction costs nothing.** The 3B
+head is shipped (`scalefloor/qwen3b_linear_head.pt` on the artifacts
+repo). Remaining engineering gates for the Pi: quantization-drift
+recalibration and the edge state-tap (below).
 
 ### Tier 3+ — the instrumented appliance (chat + retrieval + monitoring on one Pi)
 
