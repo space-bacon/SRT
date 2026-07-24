@@ -86,6 +86,48 @@ the "Sunstone on an $80 computer" tier; a negative gives the
 capability a measured scale floor, which the paper currently cannot
 speak to. Queued in FORWARD_PLAN.md.
 
+### Tier 3+ — the instrumented appliance (chat + retrieval + monitoring on one Pi)
+
+The most coherent version of Tier 3 is not "retrieval on a Pi" but a
+general-purpose device where **the chat model and the retrieval
+substrate are the same forward passes**. One small multimodal LLM
+serves chat natively; the SRT layer reads its hidden states for free.
+Nothing runs twice.
+
+| function | mechanism | realistic Pi-5 (16GB) performance |
+|---|---|---|
+| general chat | 2–4B multimodal model, 4-bit (1.5–2.5GB) | ~3–6 tok/s generation — slow-typing speed; fine for short answers and voice-assistant turns |
+| vision Q&A | same model, image prefill | ~30–90s per image on CPU — sluggish conversationally, fine for "what's this?" |
+| cross-modal retrieval | linear head + anchors + index on `hidden_states[L]` | near-zero marginal cost — states already exist from whatever prefill just ran |
+| SRT monitoring (regime / r̂ / divergence) | linear probes on the same states | near-zero — same tap pattern |
+
+Memory budget: 2.5GB weights + ~1GB KV cache + 22MB head + 40MB index
++ OS fits in 8GB, comfortably in 16GB.
+
+The compounding property: every chat turn produces states, and states
+feed the index, so the device accumulates a searchable memory of
+everything it has seen and said **as a byproduct of operating**.
+"Show me the photo from last week with the dog" is a retrieval query
+against an index the conversations built for free. This is the SRT
+thesis in appliance form: conversation, perception, retrieval, and
+self-monitoring as one substrate with cheap linear taps, not a model
+zoo.
+
+**Three gating items, in order (none are might-be-impossible risks):**
+
+1. **Scale floor** (the experiment; queued top of FORWARD_PLAN): does
+   linear alignment survive on a 2–4B host?
+2. **Quantization drift** (measurement): heads were trained on bf16
+   states; Q4 inference perturbs them. Expected fix is calibrating
+   anchors + head on states from the quantized runtime itself — the
+   recipe already supports this (encode pairs through the quantized
+   stack) — but it must be measured, not assumed.
+3. **State-tap in the edge runtime** (engineering): llama.cpp does not
+   expose intermediate-layer hidden states through its normal API; the
+   ggml eval-callback mechanism (or MLC/ONNX runtimes) can reach them.
+   This is the edge equivalent of `output_hidden_states=True` and is a
+   prerequisite for Tiers 3 and 3+ regardless of model choice.
+
 ## Calibration rules (hard-learned, mandatory)
 
 1. **Always center per-modality before comparing.** Raw cosine is

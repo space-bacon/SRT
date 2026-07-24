@@ -41,7 +41,14 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >   artifact; if not, we have found the capability's scale floor, which
 >   §11.6 currently cannot speak to. One box-day. Pipeline is generic
 >   (`gemma4_procrustes_xmodal.py` / `gemma4_encode_pairs.py` /
->   `gemma4_mlp_align.py` all take `--backbone`).
+>   `gemma4_mlp_align.py` all take `--backbone`). Endgame is the
+>   **instrumented appliance** (chat + retrieval + monitoring on one
+>   small host; docs/CROSSMODAL_LINEAR_HEAD.md Tier 3+), gated by three
+>   items in order: (1) this scale-floor experiment, (2) quantization
+>   drift — recalibrate anchors+head on states from the Q4 runtime
+>   itself, measure not assume, (3) state-tap in the edge runtime —
+>   llama.cpp needs the ggml eval-callback (or MLC/ONNX) to expose
+>   `hidden_states[L]`; prerequisite for any edge tier.
 > - **Ship `srt-sunstone-linear-head`** as a named HF artifact: W +
 >   mu_img + mu_txt + config + R@K table card. ~22MB bf16. Retrains in
 >   minutes from the cached HF chunk tensors. See
