@@ -1,0 +1,65 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2967.32it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  98%|█████████▊| 1160/1188 [00:00<00:00, 11599.02it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 11625.75it/s]
+caption pool: 10014
+  encoded airplane (5 images)
+  encoded bicycle (5 images)
+  encoded bird (5 images)
+  encoded bottle (5 images)
+  encoded bridge (5 images)
+  encoded bus (5 images)
+  encoded car (5 images)
+  encoded castle (5 images)
+  encoded cat (5 images)
+  encoded clock (5 images)
+  encoded cup (5 images)
+  encoded deer (5 images)
+  encoded dog (5 images)
+  encoded forest (5 images)
+  encoded frog (5 images)
+  encoded horse (5 images)
+  encoded house (5 images)
+  encoded keyboard (5 images)
+  encoded motorcycle (5 images)
+  encoded mountain (5 images)
+  encoded mushroom (5 images)
+  encoded orange (5 images)
+  encoded rocket (5 images)
+  encoded rose (5 images)
+  encoded sea (5 images)
+  encoded ship (5 images)
+  encoded sunflower (5 images)
+  encoded telephone (5 images)
+  encoded train (5 images)
+  encoded truck (5 images)
+||mu_img||=115.2 from /workspace/procrustes/procrustes_xmodal.W.pt (natural-photo mean)
+    airplane -> 0.686 | Man standing like a shadow in front of the ocean.
+     bicycle -> 0.715 | Woman standing in a parking lot with a pink bicycle
+        bird -> 0.675 | Black cat staring up as if to be fed.
+      bottle -> 0.672 | An image of half a bathroom and half stairs.
+      bridge -> 0.702 | An old black and white photo of a bridge construction.
+         bus -> 0.691 | a group of bike riders going past a yellow bus
+         car -> 0.673 | Cat resting in car bumper with grille work.
+      castle -> 0.675 | A man is on a yellow motorcycle at night with the background scene blurred.
+         cat -> 0.688 | Black cat staring up as if to be fed.
+       clock -> 0.664 | A kitchen with a empty refrigerator next to a wall under a clock.
+         cup -> 0.689 | An image of half a bathroom and half stairs.
+        deer -> 0.675 | A man is on a yellow motorcycle at night with the background scene blurred.
+         dog -> 0.705 | Kitchen scene light brown wood wood counter tops and floor with mostly brown dog
+      forest -> 0.701 | A blurry picture of a kitchen stove and tea pot.
+        frog -> 0.665 | Black cat staring up as if to be fed.
+       horse -> 0.712 | Two pictures of a woman sitting on a horse
+       house -> 0.671 | Street image of bicycles, probably somewhere in Europe.
+    keyboard -> 0.763 | A black computer keyboard with a bunch of keys on it
+  motorcycle -> 0.666 | a motorcycle with a bicycle tethered to the back of it
+    mountain -> 0.688 | Man standing like a shadow in front of the ocean.
+    mushroom -> 0.680 | An image of half a bathroom and half stairs.
+      orange -> 0.663 | A red vice grip squashing a whole orange.
+      rocket -> 0.726 | Man standing like a shadow in front of the ocean.
+        rose -> 0.633 | a bath room with two sinks a mirri and a bowl with flowers
+         sea -> 0.704 | A blurry picture of a kitchen stove and tea pot.
+        ship -> 0.684 | two bicycles parked on a dock and overlooking some boats
+   sunflower -> 0.657 | A man is on a yellow motorcycle at night with the background scene blurred.
+   telephone -> 0.727 | A hotel bathroom that also has a phone.
+       train -> 0.724 | A passenger waiting for the subway while the train is a blur.
+       truck -> 0.647 | An artist painting images on an orange truck
+updated demo/cross_modal_space/cached/gallery.json

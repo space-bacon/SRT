@@ -1627,11 +1627,18 @@ and the autostereogram's honest texture caption ("An abstract mosaic of
 tiny colored squares.") ranks $1$. Applying the Procrustes map degrades
 both again (ranks $121$ and $35$), consistent with the retrieval
 result. The practical rule generalizes the standing anisotropy lesson
-to the visual channel: the anchor population must be large and drawn
-from the query's natural domain. A mean over two dozen synthetic probes
-or $150$ gallery photos is not a substitute for a mean over thousands
-of natural images, and the difference is not marginal; it is the
-difference between "outside the domain" and "rank 5".
+to the visual channel, with one refinement a control immediately
+forced. The anchor population must be large *and drawn from the query's
+domain*, and when the two conflict, domain wins: re-scoring the demo
+gallery (CIFAR-style thumbnails) with the same $4{,}000$-photo COCO
+mean *degraded* its per-category retrievals (dog $0.778 \to 0.705$,
+truck $0.723 \to 0.647$, several categories drifting off-topic), so the
+live demo keeps its in-domain $150$-gallery-image mean. For synthetic
+graphics probed against a COCO caption pool the COCO-photo mean is the
+matched anchor and moves the heart from rank $352$ to $5$; for CIFAR
+thumbnails it is not, and $150$ in-domain images beat $4{,}000$
+out-of-domain ones
+(`artifacts/nla/gemma4/procrustes/gallery_rescore_coco_mean.log`).
 
 One honest caveat on the probe comparison: the original 88-caption pool
 augmentation was lost with the box that produced §11.6.3, so the probe
