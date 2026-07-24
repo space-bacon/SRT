@@ -33,6 +33,12 @@ def main() -> None:
     p.add_argument("--caption-targets", required=True)
     p.add_argument("--layer", type=int, default=47)
     p.add_argument("--top-k", type=int, default=3)
+    p.add_argument("--mu-img-pt", default=None,
+                   help="optional .pt with a 'mu_img' tensor (e.g. the "
+                        "procrustes .W.pt, mean over 4000 natural COCO "
+                        "photos). Overrides the gallery-derived image mean; "
+                        "§11.6.4 shows a large natural-photo mean is a much "
+                        "better anchor than a small gallery mean.")
     p.add_argument("--processor-cache", default=None)
     args = p.parse_args()
 
@@ -76,8 +82,14 @@ def main() -> None:
         per_cat_vs[c["category"]] = vs
         all_vs += vs
         print(f"  encoded {c['category']} ({len(vs)} images)", flush=True)
-    mu_img = torch.stack(all_vs).mean(0)
-    print(f"||mu_img||={float(mu_img.norm()):.1f} over {len(all_vs)} images", flush=True)
+    if args.mu_img_pt:
+        obj_w = torch.load(args.mu_img_pt, map_location="cpu", weights_only=True)
+        mu_img = obj_w["mu_img"].float().cuda()
+        print(f"||mu_img||={float(mu_img.norm()):.1f} from {args.mu_img_pt} "
+              f"(natural-photo mean)", flush=True)
+    else:
+        mu_img = torch.stack(all_vs).mean(0)
+        print(f"||mu_img||={float(mu_img.norm()):.1f} over {len(all_vs)} images", flush=True)
 
     for c in G["categories"]:
         v = torch.stack(per_cat_vs[c["category"]]).mean(0)

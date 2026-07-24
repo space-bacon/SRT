@@ -1543,19 +1543,108 @@ with $88$ programmatic shape and texture captions, its rank-one
 retrieval is "An abstract mosaic of tiny colored squares" ($0.694$),
 the honest texture report of §11.6.2 now expressed as a full sentence.
 
-The boundary is equally clean. The synthetic white-heart control ranks
-its exact caption ("A white heart shape on a black background") at
-$352/10{,}088$. Abstract synthetic graphics sit outside the photographic
-domain that both the COCO pool and the image-side mean describe, so the
-query lands among photographic near-neighbours instead. Retrieval
-decoding inherits the coverage of its pool; within coverage it is
-precise, and outside coverage it fails legibly rather than confidently.
-Two misses in the per-category run make the same point: rocket and
-mushroom, objects COCO barely describes, retrieve unrelated scenes.
+The boundary is equally clean, though §11.6.4 revises its
+interpretation. The synthetic white-heart control ranks its exact
+caption ("A white heart shape on a black background") at
+$352/10{,}088$. We initially read this as a domain limit: abstract
+synthetic graphics sit outside the photographic world that both the
+COCO pool and the image-side mean describe, so the query lands among
+photographic near-neighbours instead. The Procrustes study of §11.6.4
+shows the larger share of this failure was the *anchor*, not the
+domain: re-centring the same query by a mean over $4{,}000$ natural
+photographs moves the exact caption from rank $352$ to rank $5$.
+Retrieval decoding inherits the coverage of its pool *and the quality
+of its anisotropy anchor*; within coverage it is precise, and outside
+coverage it fails legibly rather than confidently. Two misses in the
+per-category run still stand: rocket and mushroom, objects COCO barely
+describes, retrieve unrelated scenes.
 Artifacts: `scripts/gemma4_vision_retrieval.py`,
 `scripts/augment_gallery_captions.py`, `data/caption_pool.jsonl`,
 `artifacts/nla/gemma4/{vision_caps_retrieval,vision_caps_cifar}.json`,
 `RiverRider/srt-nla-gemma4-artifacts` (caption and corpus L47 indexes).
+
+---
+
+## 11.6.4 The modality gap is not a rotation: a Procrustes test, a benchmark, and a boundary revision
+
+Everything in §11.6.1–§11.6.3 compares image states to text states
+after one linear correction: each modality is centred by its own mean.
+Centring removes the *translation* component of the modality offset but
+leaves any *rotation* between the two clouds untouched. Cross-lingual
+word-embedding alignment suggests an obvious hypothesis: two
+representation systems grown inside one substrate might differ by a
+rigid rotation, recoverable by orthogonal Procrustes. Because an
+orthogonal map cannot add information, the test is self-anchoring: any
+retrieval gain over centred cosine means information was present but
+misaligned, and a null means centred cosine already extracts everything
+a rigid linear map can.
+
+**Setup.** We paired $5{,}000$ COCO val2017 images with their first
+captions, encoded both through the frozen backbone under the §11.6.3
+conventions (image query: mean L47 state over the image soft-token
+positions; caption: BOS-prefixed last-token L47 state), split $4{,}000$
+fit / $1{,}000$ held-out by image, centred each modality by its
+fit-split mean, and fit $W = UV^\top$ from the SVD of $X^\top Y$.
+Controls: a shuffled-pairs fit (capacity floor), a train-size curve
+($1$k/$2$k/$4$k), and PCA-subspace variants ($k = 256, 1024$) to guard
+the $n < d$ regime ($d = 5376$).
+(`scripts/gemma4_procrustes_xmodal.py`.)
+
+**A benchmark first.** The evaluation harness yields, as a by-product,
+the first standard-protocol retrieval numbers for this zero-training
+pipeline: against the $5{,}000$-caption pool of the $1{,}000$ held-out
+images (a hit is any of the image's five captions), centred cosine
+alone scores image$\to$text $R@1 = 0.288$, $R@5 = 0.523$,
+$R@10 = 0.648$, median rank $5$, and text$\to$image $R@1 = 0.173$.
+Chance $R@1$ is $\approx 0.001$. No component of the pipeline is
+trained on image–text pairs.
+
+**The rotation hypothesis is refuted.** Every Procrustes variant
+*underperforms* plain centring on ranking: $R@1 = 0.149 / 0.186 /
+0.226$ along the train-size curve, $0.218$ and $0.247$ for the PCA
+variants, all below the $0.288$ baseline. The shuffled-pairs floor
+($R@1 = 0.004$) confirms the fitted map encodes real pairing structure;
+it simply adds nothing that centring had not already captured, and the
+rising train-size curve approaches the baseline from below, converging
+toward the identity map rather than past it. Two descriptive facts
+explain the null. First, the two modality means are nearly parallel
+($\cos(\mu_{img}, \mu_{txt}) = 0.979$, $\|\mu_{img}\| = 115$,
+$\|\mu_{txt}\| = 137$): the clouds sit along the same dominant axis,
+so there is little systematic rotation to find. Second, Procrustes
+*does* raise absolute paired similarity (mean paired centred fve
+$0.596 \to 0.649$ for the PCA-256 map) while *degrading* rank
+discrimination: the map pulls the image cloud bodily toward the text
+manifold but compresses exactly the within-cloud structure that
+retrieval depends on. After per-modality centring, the remaining
+modality gap in this substrate is not a rigid linear transform.
+
+**The boundary of §11.6.3 was substantially an anchor artifact.** The
+same run re-scored the synthetic boundary probes with the image-side
+mean taken from the $4{,}000$ natural fit photographs rather than from
+synthetic probes or the small demo gallery. The white-heart control's
+exact caption jumps from rank $352$ to rank $5$ (pool $\approx 10$k),
+and the autostereogram's honest texture caption ("An abstract mosaic of
+tiny colored squares.") ranks $1$. Applying the Procrustes map degrades
+both again (ranks $121$ and $35$), consistent with the retrieval
+result. The practical rule generalizes the standing anisotropy lesson
+to the visual channel: the anchor population must be large and drawn
+from the query's natural domain. A mean over two dozen synthetic probes
+or $150$ gallery photos is not a substitute for a mean over thousands
+of natural images, and the difference is not marginal; it is the
+difference between "outside the domain" and "rank 5".
+
+One honest caveat on the probe comparison: the original 88-caption pool
+augmentation was lost with the box that produced §11.6.3, so the probe
+pool here is the same $10$k COCO captions plus a reconstructed
+$14$-caption set containing the identical heart and mosaic strings
+(pool $10{,}014$ versus $10{,}088$). The two pool sizes are close
+enough that the $352 \to 5$ movement cannot be a pool artifact.
+Artifacts: `scripts/gemma4_procrustes_xmodal.py`,
+`data/probe_captions.jsonl`,
+`artifacts/nla/gemma4/procrustes/procrustes_xmodal.json`,
+`RiverRider/srt-nla-gemma4-artifacts` (`procrustes/`: results, fitted
+$W$ with both modality means, and the full $5{,}000$-pair L47 encoding
+cache).
 
 ---
 
