@@ -1,3 +1,46 @@
+# SRT — Session Handoff (2026-07-24)
+
+## What got done
+
+1. **§12.5 nla-law battery complete: all 4 tests now run.** T3 (causal
+   U_com via community-forcing) landed as an informative NEGATIVE:
+   zooL4nD3r-v0.1's divergence channel does not track contestedness
+   (wrong channel, rho=+0.05); v1.0's does (rho=+0.58) but forcing its
+   24 elicited community anchors moves the interpretant a near-constant
+   0.086±0.001 — comm_proj is a uniform style bias, not a per-sign
+   disambiguator. Coupling is representational, localized to the sign.
+   T4 (diachronic, gemma-4 over 11,876 AmericanStories articles
+   1770-1964) PASSES: contested-vs-control DiD +0.048, perm p=0.007,
+   decade crossover ~1900-1940.
+2. **Project-review hygiene pass** (full-repo code review, top-5 fixes):
+   - README Quick Start fixed (`SRTConfig.from_json`, `out.ben_output.r_hat`);
+     `srt.__version__` synced to 1.0.0.
+   - Both `torch.load(weights_only=False)` holes closed:
+     `srt_introspect/trace.py` now loads AV ckpts with
+     `weights_only=True` + `safe_globals([PosixPath])`;
+     `StateIndex.load` uses `weights_only=True`.
+   - `rho_norm` + anchor constants deduplicated — `srt/nla/metrics.py`
+     is the single source; `decoding.py` re-exports for back-compat.
+     Verified `_rollout`'s EOS-inclusive scoring convention matches
+     `centered_eval.py` (anchors consistent); documented in the docstring.
+   - New unit tests: `tests/test_losses.py` + `tests/test_dataset.py`
+     (44 tests) covering the SupCon-collapse bug class; dataset now
+     counts + warns on the `_stable_hash("")` fallback and on silent
+     r_true alignment failures. Full fast suite: 68 passed.
+   - `chain_loss([])` empty-list guard fixed (was IndexError).
+   - WIRED pitch references removed from tracked files (handled outside
+     the repo).
+3. Local test venv created at `.venv/` (gitignored), torch 2.x CPU —
+   fast suite now runnable locally, not just on remote boxes.
+
+## Open items
+
+- Carried over from 2026-07-08 (below): gemma-4 base checkpoint run,
+  polyseme minimal pairs, state-switchboard pilot, MTEB engv2 check,
+  ginigen leaderboard.
+
+---
+
 # SRT — Session Handoff (2026-07-08, night)
 
 All work committed and pushed; SRT and the SRT-Sunstone mirror in sync.
@@ -29,7 +72,7 @@ regenerable from `data/{corpus_targets,caption_pool}.jsonl` in ~8 min).
   tuned-vs-base hypothesis; highest-value next GPU job).
 - Vision boundary levers: natural-photo image-mean, Procrustes
   image→text projection.
-- Carry-overs: WIRED pitch send; MTEB engv2 status; ginigen leaderboard;
+- Carry-overs: MTEB engv2 status; ginigen leaderboard;
   arXiv posting (leverage.md 1).
 
 ---
@@ -59,8 +102,7 @@ active jobs — all data is safe on HF/git/local, spin down at will.
    push, all branches + tags) and cloned locally at
    `/Users/burtron/development/SRT-Sunstone`, synced to `7da4691`.
 4. **gptoss20b trace_pairs_L18.jsonl** committed to git (13MB).
-5. **WIRED pitch email drafted** (addressed to sandra_upson@wired.com;
-   alt: Tim Marchman). Awaiting user to add byline/credentials and send.
+5. (Press/outreach item moved out of the repo.)
 
 ## Open items
 

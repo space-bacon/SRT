@@ -1,6 +1,6 @@
 """Semiotic-Reflexive Transformer (SRT) — Adapter Architecture."""
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"  # keep in sync with pyproject.toml
 
 
 def _nla_factory():

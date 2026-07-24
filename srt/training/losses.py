@@ -36,7 +36,8 @@ def chain_loss(
         Scalar loss.
     """
     if len(divergences) < 2:
-        return torch.tensor(0.0, device=divergences[0].device)
+        device = divergences[0].device if divergences else "cpu"
+        return torch.tensor(0.0, device=device)
 
     loss = torch.tensor(0.0, device=divergences[0].device)
     for i in range(len(divergences) - 1):

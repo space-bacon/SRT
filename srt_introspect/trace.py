@@ -15,9 +15,8 @@ This is read-only at inference: we don't modify the host model's weights.
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import PosixPath, PurePosixPath
 from typing import Iterable
 
 import torch
@@ -100,7 +99,12 @@ class Trace:
         av_ckpt_path = hf_hub_download(av_repo, "best_av.pt")
         av_cfg = NLAConfig.from_json(av_cfg_path)
         av = ActivationVerbalizer(av_cfg)
-        sd = torch.load(av_ckpt_path, map_location="cpu", weights_only=False)
+        # weights_only=True prevents pickle-based code execution from a
+        # compromised/untrusted repo. The AV train scripts save
+        # cfg=vars(args), which may contain pathlib.Path values — those are
+        # the only non-primitive types, so allowlist them explicitly.
+        with torch.serialization.safe_globals([PosixPath, PurePosixPath]):
+            sd = torch.load(av_ckpt_path, map_location="cpu", weights_only=True)
         if isinstance(sd, dict):
             for wkey in ("trainable", "state_dict"):
                 if wkey in sd and isinstance(sd[wkey], dict):

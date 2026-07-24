@@ -120,14 +120,14 @@ pip install -e .
 
 ```python
 from srt.adapter import SRTAdapter
-from srt.config import build_config_from_json
+from srt.config import SRTConfig
 from safetensors.torch import load_file
 from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer
 import torch
 
 repo = "RiverRider/srt-adapter-v1.0"          # or RiverRider/srt-adapter-v8a
-cfg  = build_config_from_json(hf_hub_download(repo, "config.json"))
+cfg  = SRTConfig.from_json(hf_hub_download(repo, "config.json"))
 adap = SRTAdapter(cfg).cuda().eval()
 adap.load_state_dict(load_file(hf_hub_download(repo, "adapter.safetensors")), strict=False)
 tok  = AutoTokenizer.from_pretrained(cfg.backbone_id)
@@ -135,7 +135,7 @@ tok  = AutoTokenizer.from_pretrained(cfg.backbone_id)
 enc = tok("meaning forks here", return_tensors="pt").to("cuda")
 with torch.no_grad():
     out = adap(input_ids=enc.input_ids, attention_mask=enc.attention_mask)
-print(out.r_hat.mean().item(), out.community_output.encoded.shape)
+print(out.ben_output.r_hat.mean().item(), out.community_output.encoded.shape)
 ```
 
 See [examples/](examples/) for end-to-end loading, scoring, and sentence-encoding scripts.

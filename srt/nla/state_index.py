@@ -345,7 +345,9 @@ class StateIndex:
 
     @classmethod
     def load(cls, path: str | Path, *, device: str | torch.device = "cpu") -> "StateIndex":
-        obj = torch.load(path, map_location="cpu", weights_only=False)
+        # The saved object is pure tensors/ints/floats/strs/None, so
+        # weights_only=True loads it without pickle-deserialization risk.
+        obj = torch.load(path, map_location="cpu", weights_only=True)
         idx = cls(
             obj["d"],
             mode=obj.get("mode", "simhash"),

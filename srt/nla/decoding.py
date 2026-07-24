@@ -32,22 +32,10 @@ from dataclasses import dataclass
 import torch
 import torch.nn.functional as F
 
+# Anchors + rho_norm live in srt.nla.metrics (single source of truth);
+# re-exported here (see __all__) for backward compatibility.
+from srt.nla.metrics import PARAPHRASE_CEILING_CEN, RANDOM_FLOOR_CEN, rho_norm
 from srt.nla.verbalizer import ActivationVerbalizer
-
-# Calibrated anchors from `scripts/centered_eval.py` on Qwen2.5-7B L20
-# with pool_size=2000 of real Qwen activations. See SESSION_HANDOFF.md.
-RANDOM_FLOOR_CEN = 0.510
-PARAPHRASE_CEILING_CEN = 0.799
-
-
-def rho_norm(cen: float | torch.Tensor) -> float | torch.Tensor:
-    """Convert centered_fve to the paper's normalized ρ_norm units.
-
-    ρ_norm = 0.0 corresponds to random retrieval, 1.0 to the paraphrase
-    ceiling. Values can fall slightly below 0 or above 1 due to sampling
-    noise on small M or unusually-clean checkpoints.
-    """
-    return (cen - RANDOM_FLOOR_CEN) / (PARAPHRASE_CEILING_CEN - RANDOM_FLOOR_CEN)
 
 
 def _fve_from_cos(c: torch.Tensor) -> torch.Tensor:
@@ -70,7 +58,15 @@ def _rollout(
     temperature: float,
     eos_id: int,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """Generate (B, T) token ids and (B, T) attention mask truncated at first EOS."""
+    """Generate (B, T) token ids and (B, T) attention mask truncated at first EOS.
+
+    Convention note: the attention mask *includes* the first EOS position
+    (``pos <= first_eos``), so ``_h_last_prefix_free`` reads the hidden
+    state at the EOS token. This deliberately matches
+    ``scripts/centered_eval.py`` (which produced the RANDOM_FLOOR_CEN /
+    PARAPHRASE_CEILING_CEN anchors) — do not change one without
+    recalibrating the other.
+    """
     gen_ids = av.generate(
         v,
         max_new_tokens=max_new_tokens,

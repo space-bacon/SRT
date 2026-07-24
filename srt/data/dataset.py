@@ -36,6 +36,10 @@ class SRTAdapterDataset(Dataset):
         self.tokenizer = tokenizer
         self.max_seq_len = max_seq_len
         self.samples: list[dict[str, Any]] = []
+        # Diagnostic counters — a silently-degenerate label source looks
+        # identical to a healthy-but-slow loss, so count and warn loudly.
+        self.n_empty_community_fallback = 0
+        self.n_r_true_alignment_failures = 0
 
         path = Path(path)
         logger.info("Loading dataset from %s", path)
@@ -79,6 +83,18 @@ class SRTAdapterDataset(Dataset):
             token_r, token_mask = _align_word_labels_to_bpe(
                 words, word_r, offsets, text
             )
+            if not token_mask.any():
+                # Alignment silently produced zero supervised positions
+                # (length mismatch or span-lookup failure).
+                self.n_r_true_alignment_failures += 1
+                if self.n_r_true_alignment_failures == 1:
+                    logger.warning(
+                        "r_true alignment produced an all-False mask for a row "
+                        "with labels (len(words)=%d, len(r_true)=%d). Supervision "
+                        "is silently dropped for such rows; check "
+                        "dataset.n_r_true_alignment_failures.",
+                        len(words), len(word_r),
+                    )
             r_true[:len(token_r)] = token_r[:T]
             r_mask[:len(token_mask)] = token_mask[:T]
 
@@ -95,6 +111,18 @@ class SRTAdapterDataset(Dataset):
                 community_str = row.get(fld) or ""
                 if community_str:
                     break
+            if not community_str:
+                # Every all-empty row hashes to the SAME id — exactly the
+                # v3–v5 bug that collapsed SupCon to a zero-gradient constant.
+                self.n_empty_community_fallback += 1
+                if self.n_empty_community_fallback == 1:
+                    logger.warning(
+                        "Row has no community_id and no non-empty "
+                        "community_label/source/community field; hashing '' — "
+                        "all such rows share ONE community id. If this is "
+                        "common, SupCon will silently degenerate; check "
+                        "dataset.n_empty_community_fallback."
+                    )
             community_id = _stable_hash(community_str)
 
         # v9: archetype_id is present on rows from the archetype-generations

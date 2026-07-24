@@ -48,8 +48,6 @@ across the workstreams in this repo. Supersedes the per-day handoff in
 >   `scripts/state_switchboard_pilot.py`, smoke-tested; ~30-45 min on one
 >   GPU. Monitor+Route are the deployable product; Steer is content-axis
 >   only (GSM8K A/B showed untrained injection hurts quality).
-> - Press/outreach: WIRED pitch drafted (Sandra Upson); send decision
->   with the user.
 > - MTEB(eng, v2) full 41-task run for `v22c_a050` leaderboard
 >   submission (was launched on a since-retired box; check for partial
 >   results, relaunch if needed).

@@ -52,8 +52,6 @@ def rho_norm(cen: torch.Tensor | float) -> torch.Tensor | float:
 
     rho = 0 ↔ unrelated; rho = 1 ↔ saturates Qwen paraphrase ceiling.
     """
-    if isinstance(cen, torch.Tensor):
-        return (cen - RANDOM_FLOOR_CEN) / RHO_DENOM
     return (cen - RANDOM_FLOOR_CEN) / RHO_DENOM
 
 

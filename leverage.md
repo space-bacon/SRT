@@ -13,12 +13,7 @@ citable DOIs beyond the two SSRN theory entries. Every other move below
 cross-modal result (§11.6) is arguably a standalone short paper with a viral
 figure already made.
 
-## 2. Send the WIRED pitch
-
-Drafted, addressed to Sandra Upson, follows WIRED's pitch rules. The
-stereogram story ("the model that couldn't see the Magic Eye until we gave it
-eyes") is a tale, not a topic. Cost: 10 minutes. Add byline/credentials and
-send; queue Tim Marchman as the 2-week fallback.
+## 2. (removed — handled outside the repo)
 
 ## 3. Attack the greedy gap — RUN ON GEMMA-4, RESOLVED AS A NEGATIVE + A HYPOTHESIS
 
