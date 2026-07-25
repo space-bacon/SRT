@@ -1,7 +1,7 @@
 ---
 title: "Train Once, Read Everywhere: Substrate Invariance of the Linearly Readable Structure in Frozen Language Models"
 author: "James Burton Lancaster"
-date: "July 2026 — draft v1"
+date: "July 2026 — draft v2 (references verified)"
 geometry: margin=0.85in
 fontsize: 11pt
 ---
@@ -16,7 +16,7 @@ index is Section 14.*
 ## Abstract
 
 We report the consolidated findings of the SRT (Semiotic-Reflexive
-Transformer) research program: a three-year effort to treat frozen,
+Transformer) research program: a multi-year effort to treat frozen,
 production-scale language models not as black boxes to be fine-tuned
 but as *substrates* whose internal states carry structure that small,
 inspectable instruments can read. The program's individual results
@@ -64,9 +64,9 @@ structure: signals about meaning, divergence, reflexive awareness, and
 discourse position that a small instrument can extract without
 touching a single backbone weight.
 
-Three years of experiments support the bet, but the result that
-organizes all the others arrived last, and it is stronger than the
-bet itself. It is not merely that the structure is readable. It is
+The program's accumulated experiments support the bet, but the result
+that organizes all the others arrived last, and it is stronger than
+the bet itself. It is not merely that the structure is readable. It is
 that **what the instruments read does not depend on where or how the
 substrate runs.** The structure survives a ten-fold change in host
 scale. It survives quantization of the weights to four bits. It
@@ -198,8 +198,9 @@ a result.
 (capacity floors), train-size curves (memorization tests), held-out
 splits that are never touched by model selection, and leakage audits.
 The Karpathy benchmark run (§6.2) dropped 8,799 training pairs whose
-images the COCO 2017 re-partition had silently moved into the training
-set, and retrained before evaluating.
+images belong to the Karpathy test and validation splits but had been
+moved into train2017 by COCO's 2017 re-partition, and retrained the
+head before evaluating.
 
 **Rule 4: respect encoding conventions.** BOS-sensitivity (a bare
 re-encode drops gemma-4 replay from 0.9986 to 0.615), EOS-inclusive
@@ -246,9 +247,9 @@ bit-exact against its reference forward pass in each case.
 The 235B port required sharding across eight GPUs and a
 sliding-window-mask implementation verified byte-identical to the
 reference; the signals survived unchanged. Reflexivity correlation on
-gpt-oss-20b: Pearson 0.689. These ports established upward
-scale-generality and architecture-generality years before the
-question of *downward* invariance (§7) was posed.
+gpt-oss-20b: Pearson 0.689. These ports established upward scale- and
+architecture-generality well before the question of *downward*
+invariance (§7) was posed.
 
 ---
 
@@ -351,7 +352,7 @@ matched training budget: the 3B host's 0.577 against the 31B host's
 Within noise, **a ten-fold reduction in host size costs nothing.** The
 linearly readable cross-modal correspondence is not an emergent luxury
 of scale; it is generic to the model class down to at least 3B, and
-because retrieval readout needs a single prefill pass rather than
+because the retrieval read-out needs a single prefill pass rather than
 generation, 3B at 4-bit is Raspberry-Pi-class hardware.
 
 ### 7.2 Weight precision: bf16 → 4-bit, −0.011 R@1
@@ -507,11 +508,12 @@ rotation-like transforms, but two modalities inside one jointly
 trained substrate differ by translation and anisotropic scale. The
 retrieval baselines are the standard COCO lineage (Karpathy &
 Fei-Fei 2015; VSE++, Faghri et al. 2018; CLIP, Radford et al. 2021).
-The hidden-state diagnostic band is SAPLMA, SAR, INSIDE, and
-EigenScore. The adapter's contrastive components use supervised
-contrastive learning (Khosla et al. 2020). The theoretical frame is
-Peirce, read through Kockelman's sieving and Silverstein's
-metapragmatics (Lancaster 2025, 2026a).
+The hidden-state diagnostic band is SAPLMA (Azaria & Mitchell 2023),
+SAR (Duan et al. 2024), and INSIDE/EigenScore (Chen et al. 2024). The
+adapter's contrastive components use supervised contrastive learning
+(Khosla et al. 2020). The theoretical frame is Peirce, read through
+Kockelman's semiotic stance and Silverstein's metapragmatics
+(Lancaster 2025, 2026a).
 
 ## 12. Limitations
 
@@ -538,8 +540,8 @@ linear within a host. The practical corollary is a new class of
 artifact, small enough to ship as a configuration file, honest enough
 to audit by inspection, that grants a capability wherever its model
 class runs. The theoretical corollary is that meaning, as these
-substrates organize it, is a stable, linearly readable, realization-
-independent structure. Train once, read everywhere.
+substrates organize it, is a stable, linearly readable,
+realization-independent structure. Train once, read everywhere.
 
 ---
 
@@ -569,23 +571,44 @@ and summaries).
 
 ## References
 
+- Azaria, A., & Mitchell, T. (2023). The internal state of an LLM
+  knows when it's lying. *Findings of EMNLP*.
+- Chen, C., et al. (2024). INSIDE: LLMs' internal states retain the
+  power of hallucination detection. *ICLR*. (Source of the INSIDE and
+  EigenScore reference band.)
+- Duan, J., et al. (2024). Shifting attention to relevance: Towards
+  the predictive uncertainty quantification of free-form large
+  language models. *ACL*. (SAR.)
 - Ethayarajh, K. (2019). How contextual are contextualized word
-  representations? *EMNLP*.
+  representations? Comparing the geometry of BERT, ELMo, and GPT-2
+  embeddings. *EMNLP-IJCNLP*.
 - Faghri, F., Fleet, D. J., Kiros, J. R., & Fidler, S. (2018). VSE++:
   Improving visual-semantic embeddings with hard negatives. *BMVC*.
 - Karpathy, A., & Fei-Fei, L. (2015). Deep visual-semantic alignments
   for generating image descriptions. *CVPR*.
-- Khosla, P., et al. (2020). Supervised contrastive learning.
-  *NeurIPS*.
-- Kockelman, P. (2005). The semiotic stance. *Semiotica*.
-- Lancaster, J. B. (2025). [Stage 1 theory]. SSRN 5987495.
-- Lancaster, J. B. (2026a). [Stage 2 architecture]. SSRN 6349978.
+- Khosla, P., Teterwak, P., Wang, C., Sarna, A., Tian, Y., Isola, P.,
+  Maschinot, A., Liu, C., & Krishnan, D. (2020). Supervised
+  contrastive learning. *NeurIPS*.
+- Kockelman, P. (2005). The semiotic stance. *Semiotica*, 157(1/4),
+  233–304.
+- Lancaster, J. B. (2025). The treachery of signs: Semiotic mediation,
+  pitchfork bifurcation, and political polarization in algorithmically
+  curated societies. SSRN 5987495.
+  https://papers.ssrn.com/abstract=5987495
+- Lancaster, J. B. (2026a). The Semiotic-Reflexive Transformer: A
+  neural architecture for detecting and modulating meaning divergence
+  across interpretive communities. SSRN 6349978.
+  https://papers.ssrn.com/abstract=6349978
 - Lancaster, J. B. (2026b). The SRT-Adapter. Repository manuscript,
   `arxiv/paper.md`.
 - Lancaster, J. B. (2026c). Natural-Language Activations. Repository
   manuscript, `paper_nla.md`.
-- Peirce, C. S. Collected Papers.
-- Radford, A., et al. (2021). Learning transferable visual models from
-  natural language supervision. *ICML*.
+- Peirce, C. S. (1931–1958). *Collected Papers of Charles Sanders
+  Peirce* (C. Hartshorne, P. Weiss, & A. W. Burks, Eds.). Harvard
+  University Press.
+- Radford, A., Kim, J. W., Hallacy, C., et al. (2021). Learning
+  transferable visual models from natural language supervision.
+  *ICML*.
 - Silverstein, M. (1976). Shifters, linguistic categories, and
-  cultural description.
+  cultural description. In K. H. Basso & H. A. Selby (Eds.), *Meaning
+  in Anthropology* (pp. 11–55). University of New Mexico Press.
