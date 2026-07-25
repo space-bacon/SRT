@@ -97,16 +97,16 @@ def encode_text_states(model, processor, texts: list[str], layer: int,
                        max_seq_len: int):
     """Last-token hidden state at `layer` for each text, BOS-prefixed.
 
-    Runs the text tower manually: embed -> layers[0:layer] -> collect.
-    HF hidden_states[L] == input of block L == output of block L-1, so we
-    run exactly `layer` blocks after the embedding.
+    Uses the MLX port's built-in tap: ``capture_layer_ids`` appends the
+    running hidden state at loop entry of block ``idx``, which equals HF
+    ``hidden_states[idx]`` (embed scaling and sliding/full masks are
+    handled inside the model).
     """
     import mlx.core as mx
     import numpy as np
 
     tok = getattr(processor, "tokenizer", processor)
-    inner, layers, embed = find_text_layers(model)
-    scale = getattr(inner, "embed_scale", None)
+    lm = getattr(model, "language_model", None) or model
 
     out = []
     for t in texts:
@@ -114,14 +114,10 @@ def encode_text_states(model, processor, texts: list[str], layer: int,
         bos = getattr(tok, "bos_token_id", None) or 2
         if ids[0] != bos:
             ids = [bos] + ids[: max_seq_len - 1]
-        x = embed(mx.array([ids]))
-        if scale is not None:
-            x = x * scale
-        mask = "causal"
-        for blk in layers[:layer]:
-            x = blk(x, mask=mask)
-        mx.eval(x)
-        out.append(np.array(x[0, -1, :].astype(mx.float32)))
+        res = lm(mx.array([ids]), capture_layer_ids=[layer])
+        h = res.hidden_states[0]
+        mx.eval(h)
+        out.append(np.array(h[0, -1, :].astype(mx.float32)))
     return np.stack(out)
 
 
