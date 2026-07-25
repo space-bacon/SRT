@@ -116,20 +116,27 @@ thesis in appliance form: conversation, perception, retrieval, and
 self-monitoring as one substrate with cheap linear taps, not a model
 zoo.
 
-**Three gating items, in order (none are might-be-impossible risks):**
+**Three gating items, in order (two now CLEARED):**
 
-1. **Scale floor** (the experiment; queued top of FORWARD_PLAN): does
-   linear alignment survive on a 2–4B host?
-2. **Quantization drift** (measurement): heads were trained on bf16
-   states; Q4 inference perturbs them. Expected fix is calibrating
-   anchors + head on states from the quantized runtime itself — the
-   recipe already supports this (encode pairs through the quantized
-   stack) — but it must be measured, not assumed.
-3. **State-tap in the edge runtime** (engineering): llama.cpp does not
-   expose intermediate-layer hidden states through its normal API; the
-   ggml eval-callback mechanism (or MLC/ONNX runtimes) can reach them.
-   This is the edge equivalent of `output_hidden_states=True` and is a
-   prerequisite for Tiers 3 and 3+ regardless of model choice.
+1. **Scale floor** — CLEARED 2026-07-24: full ladder replicates on
+   Qwen2.5-VL-3B; 10× host reduction costs nothing (see Tier 3 above).
+2. **Quantization drift** — CLEARED 2026-07-25: the bf16-trained head
+   applied *unchanged* to 4-bit NF4 states scores 0.566 R@1 vs 0.577 on
+   bf16 states (a 0.011 loss); recalibrating just the two means (42KB)
+   recovers half of that (0.569/0.868/0.948). The Q4 zero-training
+   baseline is identical to bf16 (0.185 vs 0.180). No retraining needed
+   for edge deployment. Caveat: bnb NF4 on GPU proxies llama.cpp Q4 on
+   CPU (same precision class, different kernels); final on-device
+   validation still recommended.
+   (`artifacts/nla/q4/q4_drift.json`.)
+3. **State-tap in the edge runtime** (the one remaining item,
+   engineering): llama.cpp does not expose intermediate-layer hidden
+   states through its normal API; the ggml eval-callback mechanism (or
+   MLC/ONNX runtimes) can reach them. This is the edge equivalent of
+   `output_hidden_states=True` and is the sole remaining prerequisite
+   for Tiers 3 and 3+. Note that a PyTorch-CPU deployment needs no tap
+   work at all and runs today, just slowly (minutes per image on a
+   Pi 5 at full precision).
 
 ## Calibration rules (hard-learned, mandatory)
 

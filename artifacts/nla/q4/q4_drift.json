@@ -1,0 +1,59 @@
+{
+  "bf16_head": "/workspace/scalefloor/qwen3b_linear_head.pt",
+  "bf16_reference_i2t": {
+    "r@1": 0.577,
+    "r@5": 0.87,
+    "r@10": 0.955,
+    "median_rank": 1.0
+  },
+  "q4_encodings": "/workspace/q4/encoded_L29_n5000.pt",
+  "caveat": "bnb NF4 on GPU as proxy for llama.cpp Q4 on CPU; final validation on-device",
+  "state_drift": {
+    "mu_img_shift_cos": 0.9984606504440308,
+    "mu_txt_shift_cos": 0.9984866380691528
+  },
+  "runs": {
+    "baseline_q4_centered": {
+      "i2t": {
+        "r@1": 0.185,
+        "r@5": 0.43,
+        "r@10": 0.562,
+        "median_rank": 8.0
+      },
+      "t2i": {
+        "r@1": 0.149,
+        "r@5": 0.349,
+        "r@10": 0.468,
+        "median_rank": 12.0
+      }
+    },
+    "bf16_head_asis": {
+      "i2t": {
+        "r@1": 0.566,
+        "r@5": 0.857,
+        "r@10": 0.941,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.407,
+        "r@5": 0.75,
+        "r@10": 0.852,
+        "median_rank": 2.0
+      }
+    },
+    "bf16_head_mu_recal": {
+      "i2t": {
+        "r@1": 0.569,
+        "r@5": 0.868,
+        "r@10": 0.948,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.422,
+        "r@5": 0.77,
+        "r@10": 0.86,
+        "median_rank": 2.0
+      }
+    }
+  }
+}
