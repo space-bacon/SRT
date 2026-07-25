@@ -1,0 +1,89 @@
+{
+  "encodings": "/workspace/q4/encoded_L29_n5000.pt",
+  "train_encodings": [
+    "/workspace/q4/train_pairs/chunk_000.pt",
+    "/workspace/q4/train_pairs/chunk_001.pt"
+  ],
+  "d": 2048,
+  "n_train_pool": 10000,
+  "n_val": 1000,
+  "n_eval": 1000,
+  "seed": 0,
+  "objective": "symmetric InfoNCE, in-batch negatives",
+  "tau": 0.05,
+  "proj_dim": 1024,
+  "hidden": 1024,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.185,
+        "r@5": 0.43,
+        "r@10": 0.562,
+        "median_rank": 8.0
+      },
+      "t2i": {
+        "r@1": 0.149,
+        "r@5": 0.349,
+        "r@10": 0.468,
+        "median_rank": 12.0
+      }
+    },
+    "linear_n9000": {
+      "kind": "linear",
+      "n_train": 9000,
+      "shuffle": false,
+      "val_r@1": 0.374,
+      "epochs": 43,
+      "i2t": {
+        "r@1": 0.486,
+        "r@5": 0.79,
+        "r@10": 0.894,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.323,
+        "r@5": 0.627,
+        "r@10": 0.758,
+        "median_rank": 3.0
+      }
+    },
+    "mlp_n9000": {
+      "kind": "mlp",
+      "n_train": 9000,
+      "shuffle": false,
+      "val_r@1": 0.295,
+      "epochs": 44,
+      "i2t": {
+        "r@1": 0.381,
+        "r@5": 0.707,
+        "r@10": 0.83,
+        "median_rank": 2.0
+      },
+      "t2i": {
+        "r@1": 0.236,
+        "r@5": 0.535,
+        "r@10": 0.675,
+        "median_rank": 5.0
+      }
+    },
+    "mlp_shuffled_n9000": {
+      "kind": "mlp",
+      "n_train": 9000,
+      "shuffle": true,
+      "val_r@1": 0.002,
+      "epochs": 40,
+      "i2t": {
+        "r@1": 0.002,
+        "r@5": 0.009,
+        "r@10": 0.012,
+        "median_rank": 684.0
+      },
+      "t2i": {
+        "r@1": 0.0,
+        "r@5": 0.003,
+        "r@10": 0.006,
+        "median_rank": 508.0
+      }
+    }
+  }
+}
