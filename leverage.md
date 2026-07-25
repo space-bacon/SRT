@@ -4,6 +4,20 @@ Ranked by (impact × readiness), across research, distribution, and credibility.
 Companion to [FORWARD_PLAN.md](FORWARD_PLAN.md); this is the strategic view,
 that is the operational queue.
 
+> **2026-07-25 addendum — SUBSTRATE INVARIANCE is the headline.**
+> The completed arc (rotation refuted → linear verdict → Karpathy
+> placement → 3B scale floor → Q4 drift → Mac deployment, all with
+> controls) resolves into one claim, and every surface now leads with
+> it: **the readable structure inside frozen LLMs is invariant across
+> host scale, weight precision, and hardware. Train once, read
+> everywhere; from Pi-class to datacenter, tiers differ in latency and
+> cost, never in capability.** This is the organizing claim for the
+> arXiv paper (move 1), the one-sentence pitch for press (the Pi and
+> the datacenter run the SAME artifact), and the product moat (no
+> per-deployment retraining, auditable-by-inspection linear taps).
+> README hero, docs/CROSSMODAL_LINEAR_HEAD.md, and the HF model card
+> all carry it.
+
 > **2026-07-24 addendum — the cross-modal linear-head arc changes the board.**
 > One box-day produced: Procrustes refuted → anchor rule (domain beats
 > size) → **the modality gap is linear** → a trained 22MB linear head

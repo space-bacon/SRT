@@ -10,6 +10,12 @@ tags:
 
 # SRT-Sunstone Linear Head
 
+**Train once, read everywhere.** This head was trained once on
+datacenter bf16 states and reads the same structure unchanged across a
+10× host-scale reduction, 4-bit quantization (−0.01 R@1), and a change
+of silicon (CUDA → Apple-Silicon MLX, 100 % head-space agreement). One
+artifact, every deployment tier from edge to fleet.
+
 A single trained linear projection pair that turns frozen
 **gemma-4-31B-it** into an image↔text retrieval engine. No backbone
 weights are touched; the head reads layer-47 hidden states from the

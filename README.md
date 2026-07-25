@@ -1,12 +1,22 @@
 # SRT — Semiotic-Reflexive Transformer (Adapter Architecture)
 
-**Meaning forks. SRT sees it.**
+**Train once, read everywhere.**
 
-SRT-Adapter is a lightweight module that bolts semiotic awareness onto any
-frozen causal language model.  The backbone runs natively — its own embeddings,
-its own LM head, its own attention.  SRT modules are small taps that **read**
-divergence from hidden states, **track** reflexive awareness, and optionally
-**inject** semiotic corrections back into the stream.
+The structure inside frozen language models — meaning, divergence,
+reflexivity, even the bridge between images and words — is linearly
+readable, and what the taps read is **invariant across host scale (3B →
+235B), weight precision (bf16 → 4-bit), and hardware (datacenter GPU →
+the chip in your laptop)**. One small trained artifact reads the same
+structure anywhere the model runs, from Raspberry-Pi-class devices to
+server fleets. Deployment tiers differ in latency and cost, never in
+capability.
+
+SRT-Adapter is the instrument: a lightweight module that bolts semiotic
+awareness onto any frozen causal language model. The backbone runs
+natively — its own embeddings, its own LM head, its own attention. SRT
+modules are small taps that **read** divergence from hidden states,
+**track** reflexive awareness, and optionally **inject** semiotic
+corrections back into the stream. *Meaning forks. SRT sees it.*
 
 ## 30-second TL;DR
 
