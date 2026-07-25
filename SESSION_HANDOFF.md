@@ -1,3 +1,39 @@
+# SRT — Session Handoff (2026-07-25)
+
+## What got done (the invariance day)
+
+1. **Quantization gate CLEARED**: bf16-trained 3B head applied unchanged
+   to NF4 states loses 0.011 R@1; 42KB mean recal recovers half; Q4
+   baseline ≡ bf16 baseline. Native-Q4 retrain lands on the bf16 data
+   curve. (`artifacts/nla/q4/`.)
+2. **gemma-4-31B runs on the user's Mac** (M2 Ultra, 4-bit MLX, 17GB):
+   MLX gemma4 has a built-in state tap (`capture_layer_ids`), so the
+   edge-tap gate dissolved. On-device validation through the head:
+   0.984 R@1 as-is, **1.000 R@1 with mean recal** vs the datacenter
+   bf16 pool. `scripts/local_sunstone.py` (--retrieve vision path still
+   to wire; --chat sanity not yet run).
+3. **HEADLINE DECLARED: "Train once, read everywhere" (substrate
+   invariance).** Carried by README hero, leverage.md, HF model card,
+   CROSSMODAL_LINEAR_HEAD.md.
+4. **Fresh consolidated program paper**: `paper_srt_program.md` (591
+   lines, all six stages, evidence by invariance axis, negative-results
+   ledger as load-bearing). arXiv package built at `arxiv_program/`
+   (10-page PDF, tex, tarball, abstract.txt, checklist in its README).
+5. Karpathy 5k (leakage-controlled) banked the day before: 0.416/0.710/
+   0.818 ≈ VSE++ digit-for-digit.
+
+## Open items
+
+- **Pre-arXiv checklist** (arxiv_program/README.md): SSRN titles are
+  placeholders; verify VSE++/CLIP/detector-band literature numbers;
+  verify Kockelman/Silverstein citations; author read-through.
+- local_sunstone.py: wire --retrieve vision path; run --chat sanity.
+- Box ssh5:28621: all work banked to git/HF, no jobs — SAFE TO DESTROY.
+- Carry-overs: polyseme minimal pairs, switchboard pilot, MTEB engv2
+  check, ginigen leaderboard, load-weighted readout.
+
+---
+
 # SRT — Session Handoff (2026-07-24)
 
 ## What got done
