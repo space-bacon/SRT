@@ -1,57 +1,65 @@
 ---
 title: "Train Once, Read Everywhere: Substrate Invariance of the Linearly Readable Structure in Frozen Language Models"
 author: "James Burton Lancaster"
-date: "July 2026 — draft v2 (references verified; figures)"
-geometry: margin=0.85in
+date: "July 25, 2026"
+abstract: |
+  We report the consolidated findings of the SRT (Semiotic-Reflexive
+  Transformer) research program: a multi-year effort to treat frozen,
+  production-scale language models not as black boxes to be fine-tuned
+  but as *substrates* whose internal states carry structure that small,
+  inspectable instruments can read. The program's individual results
+  include a ~12M-parameter adapter that exposes per-token semiotic
+  signals from a frozen 7B backbone with zero cross-entropy degradation;
+  an activation verbalizer that recovers text from single hidden states
+  up to a calibrated paraphrase ceiling; read-out ports spanning
+  architectures from dense 3B to 94-layer 235B-parameter
+  mixture-of-experts models; and a 22MB linear head that gives a frozen
+  multimodal chat model image-to-text retrieval at the level of
+  fully-trained 2018 dual encoders on the standard COCO benchmark.
+  
+  The headline finding, established in the program's final arc, unifies
+  these results: **the readable structure is a stable property of the
+  model class, invariant along every axis a deployment can vary.** The
+  cross-modal correspondence inside a frozen multimodal LLM is
+  anisotropic-linear (a rotation cannot express it; a nonlinear model
+  finds nothing beyond it at any data scale tested, and falls further
+  behind as data grows). A head trained once on one host reads, with no
+  retraining and at most a 42KB recalibration: a host ten times smaller
+  (31B to 3B, no capability loss at matched data), the same host at
+  4-bit weight precision (a 0.011 loss in R@1 with unchanged head
+  weights), and the same computation on entirely different silicon and
+  kernels (CUDA/bf16 datacenter to Apple-Silicon/MLX-Q4, 100% head-space
+  retrieval agreement). Deployment tiers, from Raspberry-Pi-class edge
+  devices to datacenter fleets, differ in latency and cost, never in
+  capability. Train once, read everywhere.
+  
+  We present the instrument stack, the measurement discipline that made
+  the numbers trustworthy (anisotropy-corrected metrics, anchored
+  reference frames, controls at every rung), the invariance evidence,
+  and an honest ledger of the program's negative results, several of
+  which are load-bearing for the headline claim.
+geometry: margin=1in
 fontsize: 11pt
+colorlinks: true
+linkcolor: blue
+urlcolor: blue
+header-includes: |
+  \DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+  \DeclareUnicodeCharacter{2190}{\ensuremath{\leftarrow}}
+  \DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+  \DeclareUnicodeCharacter{03C1}{\ensuremath{\rho}}
+  \DeclareUnicodeCharacter{03BC}{\ensuremath{\mu}}
+  \DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+  \DeclareUnicodeCharacter{2016}{\ensuremath{\|}}
+  \DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+  \DeclareUnicodeCharacter{03B3}{\ensuremath{\gamma}}
+  \DeclareUnicodeCharacter{03B2}{\ensuremath{\beta}}
+  \DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+  \DeclareUnicodeCharacter{00B1}{\ensuremath{\pm}}
+  \DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
 ---
 
-*Companion documents: the Stage-3 SRT-Adapter manuscript, the Stage-4
-NLA manuscript, and the engineering guide, all in the program
-repository (https://github.com/space-bacon/SRT). Every number in this
-paper has a public artifact and a control behind it; the artifact
-index is Section 14.*
-
-
-## Abstract
-
-We report the consolidated findings of the SRT (Semiotic-Reflexive
-Transformer) research program: a multi-year effort to treat frozen,
-production-scale language models not as black boxes to be fine-tuned
-but as *substrates* whose internal states carry structure that small,
-inspectable instruments can read. The program's individual results
-include a ~12M-parameter adapter that exposes per-token semiotic
-signals from a frozen 7B backbone with zero cross-entropy degradation;
-an activation verbalizer that recovers text from single hidden states
-up to a calibrated paraphrase ceiling; read-out ports spanning
-architectures from dense 3B to 94-layer 235B-parameter
-mixture-of-experts models; and a 22MB linear head that gives a frozen
-multimodal chat model image-to-text retrieval at the level of
-fully-trained 2018 dual encoders on the standard COCO benchmark.
-
-The headline finding, established in the program's final arc, unifies
-these results: **the readable structure is a stable property of the
-model class, invariant along every axis a deployment can vary.** The
-cross-modal correspondence inside a frozen multimodal LLM is
-anisotropic-linear (a rotation cannot express it; a nonlinear model
-finds nothing beyond it at any data scale tested, and falls further
-behind as data grows). A head trained once on one host reads, with no
-retraining and at most a 42KB recalibration: a host ten times smaller
-(31B to 3B, no capability loss at matched data), the same host at
-4-bit weight precision (a 0.011 loss in R@1 with unchanged head
-weights), and the same computation on entirely different silicon and
-kernels (CUDA/bf16 datacenter to Apple-Silicon/MLX-Q4, 100% head-space
-retrieval agreement). Deployment tiers, from Raspberry-Pi-class edge
-devices to datacenter fleets, differ in latency and cost, never in
-capability. Train once, read everywhere.
-
-We present the instrument stack, the measurement discipline that made
-the numbers trustworthy (anisotropy-corrected metrics, anchored
-reference frames, controls at every rung), the invariance evidence,
-and an honest ledger of the program's negative results, several of
-which are load-bearing for the headline claim.
-
----
+*Companion documents: the Stage-3 SRT-Adapter manuscript, the Stage-4 NLA manuscript, and the engineering guide, all in the program repository (https://github.com/space-bacon/SRT). Every number in this paper has a public artifact and a control behind it; the artifact index is Section 14.*
 
 ## 1. Introduction
 
@@ -135,7 +143,7 @@ A ~12M-parameter module (about 0.17% of a 7B backbone) that taps the
 residual stream of frozen Qwen2.5-7B at three layers. Metapragmatic
 Attention Heads (MAH) read divergence; a GRU-based Reflexive Recurrent
 Module (RRM) integrates the divergence stream into a meta-state; a
-Bifurcation Estimation Network (BEN) emits per-token reflexivity `r̂`
+Bifurcation Estimation Network (BEN) emits per-token reflexivity $\hat{r}$
 and a regime label; a community head discovers discourse-trajectory
 structure without labels; and an optional FiLM correction
 (`h ← h·(1+γ) + β`) is injected at two layers. Because the backbone's
@@ -218,7 +226,7 @@ established, with full details in the companion manuscripts:
 - **Semantic structure**: the adapter's discourse/embedding vector
   supports competitive semantic similarity (the v1.0 product line and
   its research series).
-- **Reflexivity and regime**: per-token `r̂` and a two-class regime
+- **Reflexivity and regime**: per-token $\hat{r}$ and a two-class regime
   signal, calibrated well enough that downstream ports report
   expected-calibration errors in the fourth decimal place (§5).
 - **Recoverability of the state itself**: a single L20 hidden state is
