@@ -12,6 +12,7 @@ divergence from hidden states, **track** reflexive awareness, and optionally
 
 > - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them, exposing per-token semiotic signals (divergence, reflexivity `r̂`, regime) plus a discourse/embedding vector.
 > - **Why:** lightweight, portable instrumentation for a frozen backbone — no base-model weight updates, zero cross-entropy degradation, trains in hours at ≈0.17 % of backbone params. The released `v1.0` checkpoint targets semantic embeddings (MTEB-STS).
+> - **New (July 2026):** the same read-the-frozen-substrate recipe yields a **22 MB linear head** that turns a frozen multimodal LLM into an image↔text retrieval engine (COCO Karpathy 5k i2t R@1 = 0.416, the level of fully-trained 2018 dual encoders), validated from 31B down to 3B hosts, robust to 4-bit quantization, and running locally on a Mac. See [SRT-Sunstone](#srt-sunstone--the-read-out-reads-images-cross-modal) and [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md).
 > - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
 > - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
 
@@ -157,6 +158,7 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 | [`RiverRider/srt-adapter-qwen3-235b`](https://huggingface.co/RiverRider/srt-adapter-qwen3-235b) | Qwen3-235B-A22B-FP8 | Read-only port to a frozen frontier MoE. Held-out regime ECE 0.0005 / AUROC 0.986, community NMI 0.62. |
 | [`RiverRider/srt-adapter-gptoss20b`](https://huggingface.co/RiverRider/srt-adapter-gptoss20b) | gpt-oss-20b (MXFP4 MoE) | Full Phase A+B port. Regime ECE 0.0009 / AUROC 0.974, r̂ Pearson 0.689, community NMI 0.42. |
 | [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone) | gemma-4-31B-it (multimodal) | Text-trained community read-out that reads images zero-shot. See SRT-Sunstone below. |
+| [`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head) | gemma-4-31B-it (multimodal) | 22 MB (bf16) cross-modal retrieval head: i2t R@1 0.661 on our protocol, 0.416 Karpathy 5k. Quantization-robust; runs locally. |
 
 The 235B checkpoint shows the SRT read-out transfers across backbone scale and
 architecture (dense 7B → 94-layer, 22B-active MoE): only the ~15.9M side-channel
@@ -185,6 +187,47 @@ disparity, the read-out honestly reports texture. A simulated
 binocular-fusion front-end (`scripts/stereo_decode.py`) recovers the hidden
 figure from the same pixels, and both the generative caption and the read-out
 then name it. The capability gap is in the sensor, not the semiotics.
+
+### The modality gap is linear — and one matrix unlocks it
+
+A controlled ladder (`paper_nla.md` §11.6.4) established that after
+per-modality centering, the image↔text gap inside the frozen backbone is
+**anisotropic-linear**: an orthogonal rotation makes retrieval *worse* than
+centering alone, a single trained linear map captures the gap, and an MLP
+given 33× the data never beats the linear map (the gap *widens* with data).
+Every rung carries a shuffled-pairs control.
+
+| method (COCO val2017, 1000 imgs vs 5000 captions) | i2t R@1 | R@5 | R@10 |
+|---|---:|---:|---:|
+| centered cosine (zero training) | 0.288 | 0.523 | 0.648 |
+| orthogonal Procrustes (refuted) | 0.226 | 0.472 | 0.628 |
+| **trained linear head** (117k pairs, InfoNCE, ~22 MB) | **0.661** | **0.911** | **0.967** |
+| two-layer MLP (same data; never wins) | 0.567 | 0.887 | 0.943 |
+
+On the literature-standard **Karpathy 5k test** (leakage-controlled) the head
+scores i2t R@1/R@5/R@10 = **0.416 / 0.710 / 0.818**, matching fully-trained
+2018 dual encoders (VSE++: 0.413/0.711/0.812) from a linear map over a frozen
+chat model, with ~3,000× less pair data than CLIP-class systems. The claim is
+never "beats CLIP"; it is **no new model**: retrieval as a free rider on the
+LLM you already run.
+
+Three robustness results make this deployable anywhere:
+
+- **Scale-invariant**: the full ladder replicates on Qwen2.5-VL-**3B**
+  (linear head 0.577 R@1 at 39k pairs vs the 31B's 0.553–0.590 at the same
+  budget). A ten-fold host reduction costs nothing; the capability fits
+  edge-class hardware, retrieval needing only a single prefill pass.
+- **Quantization-robust**: the bf16-trained head applied *unchanged* to
+  4-bit NF4 states loses ~0.01 R@1; recalibrating two mean vectors (42 KB)
+  recovers half of that.
+- **Runs on a home computer**: gemma-4-31B (4-bit MLX, 17 GB) + the head on
+  an Apple-Silicon Mac, validated end-to-end — local caption states retrieve
+  their datacenter bf16 twins at **100 % R@1** through the head
+  ([scripts/local_sunstone.py](scripts/local_sunstone.py)).
+
+Engineering guide (deployment tiers, calibration rules, reproduction recipe):
+[docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md). Head:
+[`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head).
 
 - **Live demo**: <https://huggingface.co/spaces/RiverRider/srt-sunstone>
 - **Model**: [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone)
