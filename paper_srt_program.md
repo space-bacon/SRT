@@ -294,6 +294,11 @@ by any model selection; shuffled-pairs control at every rung).
 | two-layer MLP, 117k pairs | 0.567 | 0.887 | 0.943 | 0.448 |
 | shuffled-pairs control | 0.001 | 0.008 | 0.013 | 0.002 |
 
+![**Figure 1. The method ladder.** A rotation (orthogonal Procrustes)
+scores below doing nothing beyond per-modality centering; a single
+trained linear map captures the gap; a two-layer MLP with the same
+data never reaches it. Shuffled-pairs control at the floor.](arxiv_program/figs/fig1_ladder.png)
+
 Three findings. First, **a rotation cannot express the gap**: every
 orthogonal-Procrustes variant scores below doing nothing beyond
 centering, because the two modality means are nearly parallel
@@ -310,6 +315,13 @@ linear map at every training size, and the gap *widens* with data
 gives the nonlinear model every chance to reveal structure a linear
 map cannot express; it instead falls further behind.
 
+![**Figure 2. Data scaling and the scale floor in one frame.** The
+linear map absorbs data faster than the MLP at every size on both
+hosts, and the 3B host's curve tracks the 31B host's: a ten-fold
+reduction in host scale costs nothing at matched training budget. The
+two 39k markers on the 31B linear curve show early-stopping fold
+variance on identical training pairs.](arxiv_program/figs/fig2_scaling.png)
+
 On the literature-standard **Karpathy 5k test**, leakage-controlled as
 described in §3, the head scores i2t R@1/R@5/R@10 = 0.416 / 0.710 /
 0.818 (median rank 2) and t2i 0.292 / 0.567 / 0.685. This matches
@@ -319,6 +331,12 @@ using roughly three thousand times less pair data than CLIP-class
 systems. The claim is not "beats CLIP" (CLIP-class zero-shot sits near
 0.58 at R@1); the claim is **no new model**: retrieval as a free rider
 on a host the deployment already runs.
+
+![**Figure 3. Karpathy 5k placement (leakage-controlled).** The linear
+head over frozen gemma-4-31B-it matches VSE++, a fully-trained 2018
+dual encoder, essentially digit for digit, and sits below CLIP-class
+zero-shot, which trained 400M parameters on 400M
+pairs.](arxiv_program/figs/fig4_karpathy.png)
 
 ### 6.3 The anchor rule, refined
 
@@ -394,6 +412,14 @@ scoped as remaining work, turned out to require no work at all (the
 runtime exposes intermediate states natively). The full stack, a 17GB
 quantized 31B host plus the 44MB head, runs on a home computer with no
 GPU server involved.
+
+![**Figure 4. Precision and hardware invariance.** Left: the
+bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1;
+a 42KB mean recalibration recovers half. Right: across a simultaneous
+change of hardware, kernels, and quantizer, raw states drift (centered
+cosine 0.805) but the head projects the drift away, reaching 100%
+agreement with the datacenter reference after mean
+recalibration.](arxiv_program/figs/fig3_invariance.png)
 
 ---
 
