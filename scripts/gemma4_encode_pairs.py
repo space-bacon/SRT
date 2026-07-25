@@ -42,6 +42,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--backbone", default="google/gemma-4-31B-it")
     p.add_argument("--layer", type=int, default=47)
     p.add_argument("--dtype", default="bfloat16")
+    p.add_argument("--quant4", action="store_true",
+                   help="load the backbone in 4-bit NF4 (quantization-drift runs)")
     p.add_argument("--work-dir", type=Path, required=True)
     p.add_argument("--n-images", type=int, default=40000)
     p.add_argument("--chunk-size", type=int, default=5000)

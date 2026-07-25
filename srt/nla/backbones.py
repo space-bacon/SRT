@@ -46,16 +46,32 @@ def load_frozen_backbone(
     model_id: str,
     dtype: str | torch.dtype = "bfloat16",
     device: str | None = None,
+    quant4: bool = False,
 ):
     """Load a frozen backbone + tokenizer with the correct class.
 
     Returns ``(model, tokenizer)``. The model is eval-mode with
-    ``requires_grad=False`` on every parameter.
+    ``requires_grad=False`` on every parameter. With ``quant4=True`` the
+    weights load in 4-bit NF4 (bitsandbytes) — used by the quantization-
+    drift experiments; the model is device-placed by the quant loader, so
+    ``device`` is ignored in that path.
     """
     if isinstance(dtype, str):
         dtype = _DTYPE_MAP[dtype]
     cfg = AutoConfig.from_pretrained(model_id)
     model_type = getattr(cfg, "model_type", "")
+
+    extra_kw: dict = {}
+    if quant4:
+        from transformers import BitsAndBytesConfig
+
+        extra_kw["quantization_config"] = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=dtype,
+        )
+        extra_kw["device_map"] = "auto"
+        logger.info("loading %s in 4-bit NF4", model_id)
 
     # Multimodal detection: explicit known types OR a nested vision tower.
     # Loading a multimodal checkpoint through AutoModelForCausalLM maps no
@@ -78,22 +94,22 @@ def load_frozen_backbone(
             from transformers import AutoModelForImageTextToText as cls  # noqa: N813
         logger.info("loading %s via %s (multimodal host)", model_id, cls.__name__)
         try:
-            model = cls.from_pretrained(model_id, dtype=dtype)
+            model = cls.from_pretrained(model_id, dtype=dtype, **extra_kw)
         except TypeError:
-            model = cls.from_pretrained(model_id, torch_dtype=dtype)
+            model = cls.from_pretrained(model_id, torch_dtype=dtype, **extra_kw)
     else:
         from transformers import AutoModelForCausalLM
 
         logger.info("loading %s via AutoModelForCausalLM", model_id)
         try:
-            model = AutoModelForCausalLM.from_pretrained(model_id, dtype=dtype)
+            model = AutoModelForCausalLM.from_pretrained(model_id, dtype=dtype, **extra_kw)
         except TypeError:
-            model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype)
+            model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype, **extra_kw)
 
     for p in model.parameters():
         p.requires_grad = False
     model.eval()
-    if device is not None:
+    if device is not None and not quant4:
         model.to(device)
 
     tok = AutoTokenizer.from_pretrained(model_id)

@@ -62,6 +62,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--backbone", default="google/gemma-4-31B-it")
     p.add_argument("--layer", type=int, default=47)
     p.add_argument("--dtype", default="bfloat16")
+    p.add_argument("--quant4", action="store_true",
+                   help="load the backbone in 4-bit NF4 (quantization-drift runs)")
     p.add_argument("--work-dir", type=Path, required=True,
                    help="cache dir for COCO data + encoded states")
     p.add_argument("--n-images", type=int, default=5000,
@@ -126,7 +128,8 @@ class Encoder:
         proc_kw = {"cache_dir": args.processor_cache} if args.processor_cache else {}
         self.proc = AutoProcessor.from_pretrained(args.backbone, **proc_kw)
         self.backbone, self.tok = load_frozen_backbone(
-            args.backbone, args.dtype, device="cuda")
+            args.backbone, args.dtype, device="cuda",
+            quant4=getattr(args, "quant4", False))
         self.image_token_id = getattr(self.backbone.config, "image_token_id", None)
         assert self.image_token_id is not None, "backbone config lacks image_token_id"
         self.layer = args.layer
