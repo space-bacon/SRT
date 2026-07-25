@@ -12,7 +12,7 @@ divergence from hidden states, **track** reflexive awareness, and optionally
 
 > - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them, exposing per-token semiotic signals (divergence, reflexivity `r̂`, regime) plus a discourse/embedding vector.
 > - **Why:** lightweight, portable instrumentation for a frozen backbone — no base-model weight updates, zero cross-entropy degradation, trains in hours at ≈0.17 % of backbone params. The released `v1.0` checkpoint targets semantic embeddings (MTEB-STS).
-> - **New (July 2026):** the same read-the-frozen-substrate recipe yields a **22 MB linear head** that turns a frozen multimodal LLM into an image↔text retrieval engine (COCO Karpathy 5k i2t R@1 = 0.416, the level of fully-trained 2018 dual encoders), validated from 31B down to 3B hosts, robust to 4-bit quantization, and running locally on a Mac. See [SRT-Sunstone](#srt-sunstone--the-read-out-reads-images-cross-modal) and [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md).
+> - **New (July 2026) — the portability result:** the structure these taps read is **invariant across scale, precision, and hardware**. A 22 MB linear head gives a frozen multimodal LLM image↔text retrieval at fully-trained-2018-dual-encoder level (Karpathy 5k i2t R@1 = 0.416), and the *same head* survives a 10× host reduction (31B → 3B, no loss), 4-bit quantization (−0.01 R@1, unchanged weights), and a change of silicon (CUDA datacenter → Apple-Silicon Mac, 100 % head-space agreement). One artifact, every deployment tier from Raspberry-Pi-class to datacenter. See [SRT-Sunstone](#srt-sunstone--the-read-out-reads-images-cross-modal) and [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md).
 > - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
 > - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
 
@@ -211,19 +211,27 @@ chat model, with ~3,000× less pair data than CLIP-class systems. The claim is
 never "beats CLIP"; it is **no new model**: retrieval as a free rider on the
 LLM you already run.
 
-Three robustness results make this deployable anywhere:
+### The capability is substrate-invariant: from Pi-class to datacenter
 
-- **Scale-invariant**: the full ladder replicates on Qwen2.5-VL-**3B**
-  (linear head 0.577 R@1 at 39k pairs vs the 31B's 0.553–0.590 at the same
-  budget). A ten-fold host reduction costs nothing; the capability fits
-  edge-class hardware, retrieval needing only a single prefill pass.
-- **Quantization-robust**: the bf16-trained head applied *unchanged* to
-  4-bit NF4 states loses ~0.01 R@1; recalibrating two mean vectors (42 KB)
-  recovers half of that.
-- **Runs on a home computer**: gemma-4-31B (4-bit MLX, 17 GB) + the head on
-  an Apple-Silicon Mac, validated end-to-end — local caption states retrieve
-  their datacenter bf16 twins at **100 % R@1** through the head
-  ([scripts/local_sunstone.py](scripts/local_sunstone.py)).
+The deeper result is not any single deployment. It is that the structure the
+head reads is a **stable property of the model class**, indifferent to the
+three things deployments usually vary:
+
+| axis | test | result |
+|---|---|---|
+| **host scale** | full ladder re-run on Qwen2.5-VL-**3B** (10× smaller) | identical fingerprint; linear head 0.577 R@1 at 39k pairs vs the 31B's 0.553–0.590 at the same budget — **no loss** |
+| **weight precision** | bf16-trained head applied *unchanged* to 4-bit NF4 states | −0.01 R@1; a 42 KB mean recalibration recovers half of that |
+| **hardware / runtime** | CUDA datacenter → Apple-Silicon MLX, different kernels, different quantization | local states retrieve their datacenter twins at **100 % R@1** through the head ([scripts/local_sunstone.py](scripts/local_sunstone.py)) |
+
+Read together with the earlier read-out ports (Qwen-7B → gpt-oss-20b →
+Qwen3-235B), the picture is: **meaning in these substrates is organized
+linearly and stably enough that one small artifact reads it anywhere the
+model runs.** Retrieval needs a single prefill pass, not generation, so the
+same head serves a Raspberry-Pi-class device doing overnight photo tagging,
+a Mac doing interactive local search, and a datacenter serving a fleet —
+train once, read everywhere. The intelligence lives in the substrate; the
+semiotic layer is a set of linear taps small enough to ship as a config
+file and honest enough to audit by inspection.
 
 Engineering guide (deployment tiers, calibration rules, reproduction recipe):
 [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md). Head:

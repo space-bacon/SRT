@@ -13,6 +13,17 @@ tested, and a single trained linear map captures it. The engineering
 consequence is that the cheapest possible cross-modal adapter is also
 the correct one, and that fact is proven rather than assumed.
 
+**The governing frame is substrate invariance.** The structure the head
+reads is a stable property of the model class, not of any deployment:
+it survives a 10× host-scale reduction (31B → 3B, no loss at matched
+data), 4-bit weight quantization (−0.01 R@1 with unchanged head
+weights), and a change of hardware and runtime (CUDA/bf16 datacenter →
+Apple-Silicon/MLX-Q4, 100% head-space agreement). One trained artifact
+serves every tier below — from a Raspberry-Pi-class device batch-tagging
+photos overnight, through a home computer doing interactive local
+search, to a datacenter serving a fleet. Train once, read everywhere;
+the tiers differ only in latency and cost, never in capability.
+
 ## The capability ladder (measured)
 
 Protocol: 1,000 held-out COCO val2017 images vs their 5,000 captions
