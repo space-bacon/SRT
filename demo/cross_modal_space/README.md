@@ -36,16 +36,40 @@ system of meaning, independent of whether the sign arrived as a **word** or an
 
 ---
 
+## Train once, read everywhere (July 2026)
+
+The program's consolidated finding places this demo inside a larger result:
+the structure it reads is **substrate-invariant**. The cross-modal gap inside a
+frozen multimodal LLM is anisotropic-linear, so a single trained **44 MB linear
+head** turns the same frozen states into full image-text retrieval. And the head
+keeps working when everything about the deployment changes:
+
+| axis | evidence |
+|---|---|
+| **capability** | COCO i2t R@1 **0.661** / R@5 0.911 (117k pairs, frozen gemma-4-31B; zero-training baseline 0.288) |
+| **benchmark placement** | Karpathy 5k test **0.416 / 0.710 / 0.818**, matching VSE++ (2018, fully trained) digit for digit |
+| **host scale** | 31B → 3B at matched data: no capability loss |
+| **weight precision** | bf16 → 4-bit: −0.011 R@1 with unchanged head weights |
+| **hardware / runtime** | CUDA datacenter → Apple-Silicon 4-bit: **100%** head-space retrieval agreement after a 42 KB recalibration |
+
+Trained head: [`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head).
+This Space remains the **zero-training** exhibit: everything below uses only
+per-modality centering, no trained alignment at all.
+
+---
+
 ## What you can do here
 
 Pick any category in the gallery. For each one you see:
 
 - **The words it means** — the image, placed in a shared word space, retrieves
   its own words: `bicycle → bicycle`, `rose → flower`, `dog → pet`, `car → car`.
-  This is the precise, load-bearing result.- **The caption it retrieves** — the same image state picks a full *sentence*
+  This is the precise, load-bearing result.
+- **The caption it retrieves** — the same image state picks a full *sentence*
   out of **10,000 COCO captions**, open vocabulary, zero training:
   `horse → "a person riding a horse"`. The image's place in meaning space is
-  precise enough to select a whole description, not just a word.- **The discourse it evokes** — the nearest of 35 discourse communities the head
+  precise enough to select a whole description, not just a word.
+- **The discourse it evokes** — the nearest of 35 discourse communities the head
   learned from text: cars into the automotive community, deer and mushrooms into
   gardening, cats and dogs into the cozy-domestic communities. A *flavour*, not a
   label.
@@ -113,6 +137,7 @@ no model download.
 ## Links
 
 - **Model (read-out head):** [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone)
+- **Trained linear head (retrieval):** [`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head)
 - **Code & paper:** https://github.com/space-bacon/SRT
 - **Base model:** [`google/gemma-4-31B-it`](https://huggingface.co/google/gemma-4-31B-it)
 

@@ -83,6 +83,20 @@ html, body, gradio-app, .gradio-container { background: var(--bg) !important;
 .cap-card code { font-family: var(--didot) !important; background:#2a2662;
         color:#d8d0fb; padding: 1px 7px; border-radius: 6px; }
 
+/* headline results strip */
+.results-strip { background: var(--panel); border: 1px solid var(--violet);
+        border-radius: 18px; padding: 26px 28px 22px; margin: 40px 0 8px;
+        box-shadow: 0 8px 30px rgba(0,0,0,.35); text-align: center; }
+.results-strip h2 { font-size: clamp(1.3rem, 4vw, 1.75rem); margin: 0 0 4px;
+        letter-spacing: .5px; }
+.results-strip .lede { color: var(--muted); font-size: 1.04rem; margin: 0 auto 18px;
+        max-width: 720px; line-height: 1.55; }
+.stat-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.stat { flex: 1 1 180px; min-width: 0; background: rgba(255,255,255,.03);
+        border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px; }
+.stat .num { font-size: 1.7rem; color: var(--violet); }
+.stat .lbl { color: var(--muted); font-size: .96rem; line-height: 1.45; margin-top: 4px; }
+
 /* section + panels */
 .section-title { text-align:center; font-size: clamp(1.4rem, 4.2vw, 1.9rem); margin: 56px 0 4px; }
 .section-sub { text-align:center; color: var(--muted); font-size: 1.08rem; margin: 0 0 22px; }
@@ -170,6 +184,31 @@ CAPABILITIES = """
 </div>
 """
 
+RESULTS = """
+<div class="results-strip">
+  <h2>Train once, read everywhere</h2>
+  <div class="lede">The program's July 2026 finding: the structure this demo reads
+     is <b>substrate-invariant</b>. A single trained 44&nbsp;MB linear head turns the
+     same frozen states into full image&ndash;text retrieval, and it keeps working
+     when the host shrinks ten-fold, is quantized to 4-bit, or moves from a
+     datacenter GPU to a home computer.</div>
+  <div class="stat-row">
+    <div class="stat"><div class="num">0.661</div>
+      <div class="lbl">COCO image&rarr;text R@1 (117k pairs, frozen gemma-4-31B;
+      this demo's zero-training baseline: 0.288)</div></div>
+    <div class="stat"><div class="num">&#8776; VSE++</div>
+      <div class="lbl">Karpathy 5k test 0.416 / 0.710 / 0.818, matching the
+      fully-trained 2018 dual encoder, from a frozen chat model</div></div>
+    <div class="stat"><div class="num">100%</div>
+      <div class="lbl">head-space retrieval agreement, CUDA/bf16 datacenter
+      &rarr; Apple-Silicon 4-bit, after a 42&nbsp;KB recalibration</div></div>
+  </div>
+  <div class="lede" style="margin:16px auto 0">
+     Head: <a href="https://huggingface.co/RiverRider/srt-sunstone-linear-head">
+     RiverRider/srt-sunstone-linear-head</a></div>
+</div>
+"""
+
 WHY = """
 ### Why this is a *semiotic read-out*, not an image classifier
 
@@ -241,6 +280,7 @@ def build_app() -> gr.Blocks:
         gr.HTML(f"<style>{CSS}</style>")
         gr.HTML(HERO)
         gr.HTML(CAPABILITIES)
+        gr.HTML(RESULTS)
         gr.HTML("<div class='section-title'>See it read a picture</div>"
                 "<div class='section-sub'>Pick a category &mdash; the read-out "
                 "places each image in a meaning space built from words.</div>")
