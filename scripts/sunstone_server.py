@@ -224,20 +224,27 @@ def chat_trace(prompt: str, max_tokens: int, budget: int = 8) -> dict:
     the captured states give each token's place in head space. Readouts are
     observational: 'the caption this state sits nearest', not ground truth.
     """
+    gen = generate_text(prompt, max_tokens)
+    t0 = time.time()
+    tokens = _trace_tokens(prompt, gen["text"], budget)
+    return {**gen, "tokens": tokens, "trace_s": round(time.time() - t0, 2)}
+
+
+def _trace_tokens(prompt: str, gen_text: str, budget: int) -> list[dict]:
+    """Teacher-forced trace core: per-token entropy, alternatives, and
+    head-space readouts for already-generated text."""
     import mlx.core as mx
     from mlx_vlm.prompt_utils import apply_chat_template
 
-    gen = generate_text(prompt, max_tokens)
-    if not gen["text"].strip():
-        return {**gen, "tokens": [], "trace_s": 0.0}
+    if not gen_text.strip():
+        return []
 
-    t0 = time.time()
     tok = getattr(S["processor"], "tokenizer", S["processor"])
     tmpl = apply_chat_template(S["processor"], S["config"], prompt, num_images=0)
     p_ids = tok(tmpl, add_special_tokens=False).input_ids
-    full_ids = tok(tmpl + gen["text"], add_special_tokens=False).input_ids
+    full_ids = tok(tmpl + gen_text, add_special_tokens=False).input_ids
     if len(full_ids) <= len(p_ids):
-        return {**gen, "tokens": [], "trace_s": 0.0}
+        return []
 
     lm = getattr(S["model"], "language_model", None) or S["model"]
     res = lm(mx.array([full_ids]), capture_layer_ids=[TAP_LAYER])
@@ -281,8 +288,54 @@ def chat_trace(prompt: str, max_tokens: int, budget: int = 8) -> dict:
         tokens[j]["reads"] = [[gal["captions"][i], round(float(sims[j][i]), 3)]
                               for i in top3]
         tokens[j]["hot"] = True
+    return tokens
 
-    return {**gen, "tokens": tokens, "trace_s": round(time.time() - t0, 2)}
+
+def stream_trace(prompt: str, max_tokens: int, budget: int):
+    """SSE generator: live tokens with entropy as they are generated, then
+    a terminal frame carrying the full enriched trace (alternatives +
+    head-space readouts) and generation stats."""
+    import json
+
+    from mlx_vlm import stream_generate
+    from mlx_vlm.prompt_utils import apply_chat_template
+
+    tmpl = apply_chat_template(S["processor"], S["config"], prompt, num_images=0)
+    t0 = time.time()
+    acc = []
+    stats = {}
+    for r in stream_generate(S["model"], S["processor"], tmpl,
+                             max_tokens=max_tokens):
+        chunk = r.text or ""
+        if chunk:
+            acc.append(chunk)
+        ent = None
+        lp = getattr(r, "logprobs", None)
+        if lp is not None:
+            try:
+                import mlx.core as mx
+                if isinstance(lp, mx.array):
+                    lp = np.array(lp.astype(mx.float32))
+                a = np.asarray(lp, dtype=np.float32).reshape(-1)
+                if a.size > 10:
+                    ent = round(float(-np.sum(np.exp(a) * a)), 3)
+            except Exception:  # noqa: BLE001 - entropy is best-effort live
+                ent = None
+        stats = {
+            "generation_tps": round(getattr(r, "generation_tps", 0.0), 1),
+            "peak_memory_gb": round(getattr(r, "peak_memory", 0.0), 2),
+        }
+        if chunk:
+            yield ("data: " + json.dumps({"type": "token", "t": chunk,
+                                          "ent": ent}) + "\n\n")
+    text = "".join(acc)
+    t1 = time.time()
+    tokens = _trace_tokens(prompt, text, budget)
+    final = {"type": "final", "text": text, "tokens": tokens,
+             "wall_s": round(t1 - t0, 2), "trace_s": round(time.time() - t1, 2),
+             **stats}
+    yield "data: " + json.dumps(final) + "\n\n"
+    yield "event: end\ndata: {}\n\n"
 
 
 # --------------------------------------------------------------------- app
@@ -342,6 +395,17 @@ def build_app():
         _check_prompt(req.prompt)
         return chat_trace(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP),
                           budget=max(0, min(req.budget, 32)))
+
+    @app.get("/stream_trace")
+    def stream_trace_route(prompt: str, max_tokens: int = 256, budget: int = 8):
+        from fastapi.responses import StreamingResponse
+
+        _check_prompt(prompt)
+        return StreamingResponse(
+            stream_trace(prompt, min(max_tokens, MAX_TOKENS_CAP),
+                         max(0, min(budget, 32))),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
     @app.post("/caption")
     def caption(image: UploadFile = File(...),
