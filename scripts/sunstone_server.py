@@ -52,8 +52,8 @@ FULL_GALLERY = Path("artifacts/local/gallery_full.npz")
 CHAT_LOG_DIR = Path("artifacts/local/chat_logs")
 RECAL_N = 256           # captions used for the 42KB local-mean recalibration
 MAX_PROMPT_CHARS = 4000
-MAX_TOKENS_CAP = 1024
-TRACE_MAX_CTX = 3000    # skip the teacher-forced trace beyond this many tokens
+MAX_TOKENS_CAP = 4096
+TRACE_MAX_CTX = 4096    # skip the teacher-forced trace beyond this many tokens
 
 S = {}                  # server state, filled in lifespan
 SESSIONS: dict = {}     # per-session chat state: messages + KV prompt cache
@@ -78,12 +78,12 @@ def _log_turn(sid: str, role: str, content: str, **extra) -> None:
 
 class ChatReq(BaseModel):
     prompt: str
-    max_tokens: int = 256
+    max_tokens: int = 1024
 
 
 class TraceReq(BaseModel):
     prompt: str
-    max_tokens: int = 256
+    max_tokens: int = 1024
     budget: int = 8
 
 
@@ -454,7 +454,7 @@ def build_app():
                           budget=max(0, min(req.budget, 32)))
 
     @app.get("/stream_trace")
-    def stream_trace_route(prompt: str, max_tokens: int = 256, budget: int = 8,
+    def stream_trace_route(prompt: str, max_tokens: int = 1024, budget: int = 8,
                            session: str = ""):
         from fastapi.responses import StreamingResponse
 
