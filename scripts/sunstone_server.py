@@ -48,6 +48,7 @@ HEAD_FILE = "sunstone_linear_head.pt"
 CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
 LOCAL_MU_CACHE = Path("artifacts/local/local_mu_txt.npy")
+FULL_GALLERY = Path("artifacts/local/gallery_full.npz")
 RECAL_N = 256           # captions used for the 42KB local-mean recalibration
 MAX_PROMPT_CHARS = 4000
 MAX_TOKENS_CAP = 1024
@@ -101,8 +102,13 @@ def load_head():
 
 
 def load_gallery(head):
-    """Caption + image galleries from the HF bf16 calibration cache,
-    projected once into head space."""
+    """Caption + image galleries projected once into head space.
+
+    Captions and the val2017 images come from the HF bf16 calibration cache.
+    If the full-COCO index built by scripts/build_full_gallery.py is present
+    (artifacts/local/gallery_full.npz: ~122k train2017+val2017 images), it
+    replaces the 5k image gallery for /search.
+    """
     import torch
     from huggingface_hub import hf_hub_download
 
@@ -110,17 +116,27 @@ def load_gallery(head):
                    map_location="cpu", weights_only=True)
     captions = [t for caps in c["captions5"] for t in caps]      # 5000 strings
     cap_states = c["cap5"].float().numpy()                        # match rows
-    files = [Path(f).name for f in c["files"]]
     gal = {
         "captions": captions,
         "Z_txt": _project(cap_states, head["W_txt"], head["b_txt"],
                           head["mu_txt"]),
-        "files": files,
-        "Z_img": _project(c["img"].float().numpy(), head["W_img"],
-                          head["b_img"], head["mu_img"]),
         "texts_for_recal": captions[:RECAL_N],
     }
-    log.info("gallery: %d captions, %d images", len(captions), len(files))
+    if FULL_GALLERY.exists():
+        z = np.load(FULL_GALLERY, allow_pickle=False)
+        gal["Z_img"] = z["Z_img"].astype(np.float32)
+        gal["files"] = [str(f) for f in z["files"]]
+        gal["split"] = [str(s) for s in z["split"]]
+        log.info("gallery: %d captions, %d images (FULL COCO index)",
+                 len(captions), len(gal["files"]))
+    else:
+        gal["Z_img"] = _project(c["img"].float().numpy(), head["W_img"],
+                                head["b_img"], head["mu_img"])
+        gal["files"] = [Path(f).name for f in c["files"]]
+        gal["split"] = ["val2017"] * len(gal["files"])
+        log.info("gallery: %d captions, %d images (val2017 only; run "
+                 "scripts/build_full_gallery.py for the full index)",
+                 len(captions), len(gal["files"]))
     return gal
 
 
@@ -380,6 +396,7 @@ def build_app():
             "head": {k: v for k, v in S["head"]["meta"].items()
                      if k in ("kind", "n_train", "d", "proj_dim")},
             "gallery_captions": len(S["gallery"]["captions"]),
+            "gallery_images": len(S["gallery"]["files"]),
             "recalibrated": bool(S.get("mu_txt_local") is not None),
             "load_s": S["loaded_s"],
             "peak_memory_gb": round(mx.get_peak_memory() / 2**30, 2),
@@ -440,7 +457,9 @@ def build_app():
         top = np.argsort(-sims)[: max(1, min(req.k, 50))]
         return {
             "encode_s": round(time.time() - t0, 2),
+            "gallery_size": len(S["gallery"]["files"]),
             "results": [{"file": S["gallery"]["files"][i],
+                         "split": S["gallery"]["split"][i],
                          "score": round(float(sims[i]), 4)} for i in top],
         }
 
