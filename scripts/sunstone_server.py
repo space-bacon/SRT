@@ -51,9 +51,13 @@ LOCAL_MU_CACHE = Path("artifacts/local/local_mu_txt.npy")
 FULL_GALLERY = Path("artifacts/local/gallery_full.npz")
 CHAT_LOG_DIR = Path("artifacts/local/chat_logs")
 RECAL_N = 256           # captions used for the 42KB local-mean recalibration
-MAX_PROMPT_CHARS = 4000
+MAX_PROMPT_CHARS = 32000  # long pastes are the point of a long context
 MAX_TOKENS_CAP = 4096
 TRACE_MAX_CTX = 4096    # skip the teacher-forced trace beyond this many tokens
+# Working context budget. The model supports 262,144 positions and the 5:1
+# sliding-window pattern keeps KV growth to ~10 full-attention layers, so
+# ~128K fits on a 64GB Mac; 32K keeps decode snappy as the default.
+CTX_BUDGET = int(os.environ.get("SUNSTONE_CTX", "32768"))
 
 S = {}                  # server state, filled in lifespan
 SESSIONS: dict = {}     # per-session chat state: messages + KV prompt cache
@@ -338,12 +342,23 @@ def stream_trace(prompt: str, max_tokens: int, budget: int,
 
     tok = getattr(S["processor"], "tokenizer", S["processor"])
     kwargs = {}
+    ctx_tokens = 0
     if session:
         sess = _session(session)
         sess["messages"].append({"role": "user", "content": prompt})
         _log_turn(session, "user", prompt)
-        tmpl = tok.apply_chat_template(sess["messages"], tokenize=False,
-                                       add_generation_prompt=True)
+        # Trim oldest turns (in user+assistant pairs) until the templated
+        # history plus the generation budget fits the context budget.
+        while True:
+            tmpl = tok.apply_chat_template(sess["messages"], tokenize=False,
+                                           add_generation_prompt=True)
+            ctx_tokens = len(tok(tmpl, add_special_tokens=False).input_ids)
+            if ctx_tokens + max_tokens <= CTX_BUDGET or len(sess["messages"]) <= 1:
+                break
+            dropped = sess["messages"][:2]
+            sess["messages"] = sess["messages"][2:]
+            log.info("session %s: trimmed %d oldest turns (ctx %d > budget %d)",
+                     session, len(dropped), ctx_tokens, CTX_BUDGET)
         if sess["cache"] is None:
             from mlx_vlm import PromptCacheState
             sess["cache"] = PromptCacheState()
@@ -351,6 +366,7 @@ def stream_trace(prompt: str, max_tokens: int, budget: int,
     else:
         tmpl = apply_chat_template(S["processor"], S["config"], prompt,
                                    num_images=0)
+        ctx_tokens = len(tok(tmpl, add_special_tokens=False).input_ids)
 
     t0 = time.time()
     acc = []
@@ -389,6 +405,8 @@ def stream_trace(prompt: str, max_tokens: int, budget: int,
                   wall_s=round(t1 - t0, 2), **stats)
     final = {"type": "final", "text": text, "tokens": tokens,
              "wall_s": round(t1 - t0, 2), "trace_s": round(time.time() - t1, 2),
+             "ctx_tokens": ctx_tokens + len(tok(text, add_special_tokens=False).input_ids),
+             "ctx_budget": CTX_BUDGET,
              **stats}
     yield "data: " + json.dumps(final) + "\n\n"
     yield "event: end\ndata: {}\n\n"
