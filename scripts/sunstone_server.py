@@ -49,11 +49,31 @@ CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
 LOCAL_MU_CACHE = Path("artifacts/local/local_mu_txt.npy")
 FULL_GALLERY = Path("artifacts/local/gallery_full.npz")
+CHAT_LOG_DIR = Path("artifacts/local/chat_logs")
 RECAL_N = 256           # captions used for the 42KB local-mean recalibration
 MAX_PROMPT_CHARS = 4000
 MAX_TOKENS_CAP = 1024
+TRACE_MAX_CTX = 3000    # skip the teacher-forced trace beyond this many tokens
 
 S = {}                  # server state, filled in lifespan
+SESSIONS: dict = {}     # per-session chat state: messages + KV prompt cache
+
+
+def _session(sid: str) -> dict:
+    if sid not in SESSIONS:
+        SESSIONS[sid] = {"messages": [], "cache": None}
+    return SESSIONS[sid]
+
+
+def _log_turn(sid: str, role: str, content: str, **extra) -> None:
+    """Append one turn to the session's JSONL log."""
+    import json
+
+    CHAT_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    entry = {"ts": round(time.time(), 3), "role": role, "content": content,
+             **extra}
+    with open(CHAT_LOG_DIR / f"{sid}.jsonl", "a") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 class ChatReq(BaseModel):
@@ -230,36 +250,29 @@ def generate_text(prompt: str, max_tokens: int, image=None) -> dict:
 
 
 def chat_trace(prompt: str, max_tokens: int, budget: int = 8) -> dict:
-    """Chat with a per-token trace: entropy, top alternatives, and a
-    head-space readout (nearest gallery caption) for every generated token.
+    """Single-turn chat with a per-token trace (see _trace_tokens)."""
+    from mlx_vlm.prompt_utils import apply_chat_template
 
-    Same trick as the showcase demo's dense path: generate normally, then
-    ONE teacher-forced forward over prompt+output with the L47 tap. The
-    logits of that forward reproduce the decode distributions (entropy at
-    position i is the model's uncertainty when it produced token i+1), and
-    the captured states give each token's place in head space. Readouts are
-    observational: 'the caption this state sits nearest', not ground truth.
-    """
     gen = generate_text(prompt, max_tokens)
     t0 = time.time()
-    tokens = _trace_tokens(prompt, gen["text"], budget)
+    tmpl = apply_chat_template(S["processor"], S["config"], prompt, num_images=0)
+    tokens = _trace_tokens(tmpl, gen["text"], budget)
     return {**gen, "tokens": tokens, "trace_s": round(time.time() - t0, 2)}
 
 
-def _trace_tokens(prompt: str, gen_text: str, budget: int) -> list[dict]:
+def _trace_tokens(tmpl: str, gen_text: str, budget: int) -> list[dict]:
     """Teacher-forced trace core: per-token entropy, alternatives, and
-    head-space readouts for already-generated text."""
+    head-space readouts for already-generated text. ``tmpl`` is the full
+    templated prefix (chat template over the whole conversation)."""
     import mlx.core as mx
-    from mlx_vlm.prompt_utils import apply_chat_template
 
     if not gen_text.strip():
         return []
 
     tok = getattr(S["processor"], "tokenizer", S["processor"])
-    tmpl = apply_chat_template(S["processor"], S["config"], prompt, num_images=0)
     p_ids = tok(tmpl, add_special_tokens=False).input_ids
     full_ids = tok(tmpl + gen_text, add_special_tokens=False).input_ids
-    if len(full_ids) <= len(p_ids):
+    if len(full_ids) <= len(p_ids) or len(full_ids) > TRACE_MAX_CTX:
         return []
 
     lm = getattr(S["model"], "language_model", None) or S["model"]
@@ -307,21 +320,43 @@ def _trace_tokens(prompt: str, gen_text: str, budget: int) -> list[dict]:
     return tokens
 
 
-def stream_trace(prompt: str, max_tokens: int, budget: int):
+def stream_trace(prompt: str, max_tokens: int, budget: int,
+                 session: str = ""):
     """SSE generator: live tokens with entropy as they are generated, then
     a terminal frame carrying the full enriched trace (alternatives +
-    head-space readouts) and generation stats."""
+    head-space readouts) and generation stats.
+
+    With a ``session`` id, turns accumulate: the chat template covers the
+    whole conversation, a PromptCacheState reuses the KV cache across turns
+    (only new tokens prefill), and every turn is appended to a JSONL log at
+    artifacts/local/chat_logs/<session>.jsonl.
+    """
     import json
 
     from mlx_vlm import stream_generate
     from mlx_vlm.prompt_utils import apply_chat_template
 
-    tmpl = apply_chat_template(S["processor"], S["config"], prompt, num_images=0)
+    tok = getattr(S["processor"], "tokenizer", S["processor"])
+    kwargs = {}
+    if session:
+        sess = _session(session)
+        sess["messages"].append({"role": "user", "content": prompt})
+        _log_turn(session, "user", prompt)
+        tmpl = tok.apply_chat_template(sess["messages"], tokenize=False,
+                                       add_generation_prompt=True)
+        if sess["cache"] is None:
+            from mlx_vlm import PromptCacheState
+            sess["cache"] = PromptCacheState()
+        kwargs["prompt_cache_state"] = sess["cache"]
+    else:
+        tmpl = apply_chat_template(S["processor"], S["config"], prompt,
+                                   num_images=0)
+
     t0 = time.time()
     acc = []
     stats = {}
     for r in stream_generate(S["model"], S["processor"], tmpl,
-                             max_tokens=max_tokens):
+                             max_tokens=max_tokens, **kwargs):
         chunk = r.text or ""
         if chunk:
             acc.append(chunk)
@@ -346,7 +381,12 @@ def stream_trace(prompt: str, max_tokens: int, budget: int):
                                           "ent": ent}) + "\n\n")
     text = "".join(acc)
     t1 = time.time()
-    tokens = _trace_tokens(prompt, text, budget)
+    tokens = _trace_tokens(tmpl, text, budget)
+    if session:
+        sess = _session(session)
+        sess["messages"].append({"role": "assistant", "content": text})
+        _log_turn(session, "assistant", text,
+                  wall_s=round(t1 - t0, 2), **stats)
     final = {"type": "final", "text": text, "tokens": tokens,
              "wall_s": round(t1 - t0, 2), "trace_s": round(time.time() - t1, 2),
              **stats}
@@ -414,15 +454,22 @@ def build_app():
                           budget=max(0, min(req.budget, 32)))
 
     @app.get("/stream_trace")
-    def stream_trace_route(prompt: str, max_tokens: int = 256, budget: int = 8):
+    def stream_trace_route(prompt: str, max_tokens: int = 256, budget: int = 8,
+                           session: str = ""):
         from fastapi.responses import StreamingResponse
 
         _check_prompt(prompt)
         return StreamingResponse(
             stream_trace(prompt, min(max_tokens, MAX_TOKENS_CAP),
-                         max(0, min(budget, 32))),
+                         max(0, min(budget, 32)), session=session[:64]),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+    @app.post("/reset_session")
+    def reset_session(session: str = ""):
+        sid = session[:64]
+        SESSIONS.pop(sid, None)
+        return {"reset": sid}
 
     @app.post("/caption")
     def caption(image: UploadFile = File(...),
