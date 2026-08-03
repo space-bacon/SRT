@@ -10,6 +10,8 @@ against candidate hardware.
 Endpoints:
   GET  /healthz            model + head + gallery status, peak memory
   POST /chat               {"prompt": str, "max_tokens": int} -> text + tok/s
+  POST /chat_trace         chat + per-token entropy, alternatives, and
+                           head-space readouts (nearest gallery captions)
   POST /caption            multipart image (+ optional prompt) -> native VLM text
   POST /retrieve           multipart image -> top-K captions via the head
   POST /search             {"text": str} -> top-K COCO gallery images via the head
@@ -56,6 +58,12 @@ S = {}                  # server state, filled in lifespan
 class ChatReq(BaseModel):
     prompt: str
     max_tokens: int = 256
+
+
+class TraceReq(BaseModel):
+    prompt: str
+    max_tokens: int = 256
+    budget: int = 8
 
 
 class SearchReq(BaseModel):
@@ -205,6 +213,78 @@ def generate_text(prompt: str, max_tokens: int, image=None) -> dict:
     }
 
 
+def chat_trace(prompt: str, max_tokens: int, budget: int = 8) -> dict:
+    """Chat with a per-token trace: entropy, top alternatives, and a
+    head-space readout (nearest gallery caption) for every generated token.
+
+    Same trick as the showcase demo's dense path: generate normally, then
+    ONE teacher-forced forward over prompt+output with the L47 tap. The
+    logits of that forward reproduce the decode distributions (entropy at
+    position i is the model's uncertainty when it produced token i+1), and
+    the captured states give each token's place in head space. Readouts are
+    observational: 'the caption this state sits nearest', not ground truth.
+    """
+    import mlx.core as mx
+    from mlx_vlm.prompt_utils import apply_chat_template
+
+    gen = generate_text(prompt, max_tokens)
+    if not gen["text"].strip():
+        return {**gen, "tokens": [], "trace_s": 0.0}
+
+    t0 = time.time()
+    tok = getattr(S["processor"], "tokenizer", S["processor"])
+    tmpl = apply_chat_template(S["processor"], S["config"], prompt, num_images=0)
+    p_ids = tok(tmpl, add_special_tokens=False).input_ids
+    full_ids = tok(tmpl + gen["text"], add_special_tokens=False).input_ids
+    if len(full_ids) <= len(p_ids):
+        return {**gen, "tokens": [], "trace_s": 0.0}
+
+    lm = getattr(S["model"], "language_model", None) or S["model"]
+    res = lm(mx.array([full_ids]), capture_layer_ids=[TAP_LAYER])
+    logits = res.logits[0].astype(mx.float32)              # [T, V]
+    h = res.hidden_states[0][0].astype(mx.float32)         # [T, d]
+    mx.eval(logits, h)
+
+    head, gal = S["head"], S["gallery"]
+    plen = len(p_ids)
+    n_gen = len(full_ids) - plen
+
+    # Head-space projection of every generated token's own state (one matmul).
+    states = np.array(h[plen:])                            # [n_gen, d]
+    Z = _project(states, head["W_txt"], head["b_txt"], S["mu_txt_local"])
+    sims = Z @ gal["Z_txt"].T                              # [n_gen, n_captions]
+
+    tokens = []
+    ents = []
+    for j in range(n_gen):
+        i = plen - 1 + j                                   # logits that produced token i+1
+        pr = mx.softmax(logits[i])
+        ent = float(-mx.sum(pr * mx.log(pr + 1e-12)))
+        top_ids = mx.argpartition(-pr, kth=2)[:3]
+        mx.eval(top_ids)
+        alts = sorted(
+            ((tok.decode([int(t)]), round(float(pr[int(t)]), 3)) for t in top_ids),
+            key=lambda x: -x[1])
+        best = int(np.argmax(sims[j]))
+        tokens.append({
+            "t": tok.decode([full_ids[plen + j]]),
+            "ent": round(ent, 3),
+            "alts": alts,
+            "reads": [[gal["captions"][best], round(float(sims[j][best]), 3)]],
+        })
+        ents.append(ent)
+
+    # Expand readouts (top-3 captions) at the `budget` highest-entropy tokens,
+    # mirroring the showcase demo's adaptive-density verbalization scheduler.
+    for j in np.argsort(ents)[::-1][: max(0, budget)]:
+        top3 = np.argsort(-sims[j])[:3]
+        tokens[j]["reads"] = [[gal["captions"][i], round(float(sims[j][i]), 3)]
+                              for i in top3]
+        tokens[j]["hot"] = True
+
+    return {**gen, "tokens": tokens, "trace_s": round(time.time() - t0, 2)}
+
+
 # --------------------------------------------------------------------- app
 @asynccontextmanager
 async def lifespan(app):
@@ -256,6 +336,12 @@ def build_app():
     def chat(req: ChatReq):
         _check_prompt(req.prompt)
         return generate_text(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP))
+
+    @app.post("/chat_trace")
+    def chat_trace_route(req: TraceReq):
+        _check_prompt(req.prompt)
+        return chat_trace(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP),
+                          budget=max(0, min(req.budget, 32)))
 
     @app.post("/caption")
     def caption(image: UploadFile = File(...),
