@@ -304,17 +304,6 @@ def _trace_tokens(prompt: str, gen_text: str, budget: int) -> list[dict]:
         tokens[j]["reads"] = [[gal["captions"][i], round(float(sims[j][i]), 3)]
                               for i in top3]
         tokens[j]["hot"] = True
-
-    # Substrate map: 2D PCA of the tokens' head-space vectors, so the
-    # answer's trajectory through meaning space is navigable post-hoc.
-    if n_gen >= 3:
-        Zc = Z - Z.mean(0)
-        U, sv, _ = np.linalg.svd(Zc, full_matrices=False)
-        xy = U[:, :2] * sv[:2]
-        span = np.ptp(xy, axis=0)
-        xy = (xy - xy.min(0)) / (span + 1e-8)
-        for j, t in enumerate(tokens):
-            t["map"] = [round(float(xy[j, 0]), 4), round(float(xy[j, 1]), 4)]
     return tokens
 
 

@@ -507,3 +507,24 @@ Still to do (deferred):
    `pytest tests/test_nla_smoke.py -q`. Then pick item 1 / 3 / 4 from the NLA
    list based on available compute (paper = local; BoK = Blackwell day;
    backbone-check = Blackwell day).
+
+---
+
+## Parked idea (2026-08-03): substrate map v2
+
+A first cut of a navigable "substrate map" shipped briefly in BlackWindow's
+Sunstone tab (2D PCA of per-token head-space vectors, scatter + trajectory,
+click-to-inspect) and was removed the same day: with one point per token the
+map read as noise, and the per-node reactive rendering was sluggish. The idea
+is worth a second pass with a better design:
+
+- Map **spans/phrases, not tokens** (segment by entropy valleys or divergence
+  boundaries), so points are semantic units.
+- Project against a **fixed reference basis** (e.g. PCA of the 123k-image
+  gallery in head space), so positions are comparable across generations and
+  the COCO gallery itself can render as a faint background density.
+- Precompute layout server-side; render one static SVG (no per-node closures).
+- Possible tie-in: zooL4nD3r discourse communities as map regions.
+
+Removal commits: srt-adapter (PCA block in _trace_tokens), BlackWindow
+(map view). Both are one revert away if the v2 design lands.
