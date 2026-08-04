@@ -74,6 +74,18 @@ MAX_SESSIONS = int(os.environ.get("SUNSTONE_MAX_SESSIONS", "12"))
 GEN_LOCK = threading.Lock()
 GEN_QUEUE_TIMEOUT_S = int(os.environ.get("SUNSTONE_QUEUE_TIMEOUT", "300"))
 
+# Sampling. mlx-vlm defaults to temperature 0.0 (greedy), and greedy decode
+# on deep multi-turn contexts falls into repetition loops ("la la la...",
+# observed live 2026-08-04). Gemma's recommended sampling + a light
+# repetition penalty keeps long conversations stable.
+SAMPLING = {
+    "temperature": float(os.environ.get("SUNSTONE_TEMP", "0.7")),
+    "top_p": float(os.environ.get("SUNSTONE_TOP_P", "0.95")),
+    "top_k": int(os.environ.get("SUNSTONE_TOP_K", "64")),
+    "repetition_penalty": float(os.environ.get("SUNSTONE_REP_PEN", "1.1")),
+    "repetition_context_size": 64,
+}
+
 
 class _GenSlot:
     def __enter__(self):
@@ -287,7 +299,7 @@ def generate_text(prompt: str, max_tokens: int, image=None) -> dict:
     t0 = time.time()
     r = generate(S["model"], S["processor"], tmpl,
                  image=[image] if image is not None else None,
-                 max_tokens=max_tokens, verbose=False)
+                 max_tokens=max_tokens, verbose=False, **SAMPLING)
     wall = time.time() - t0
     text = getattr(r, "text", r if isinstance(r, str) else str(r))
     return {
@@ -420,7 +432,7 @@ def stream_trace(prompt: str, max_tokens: int, budget: int,
     acc = []
     stats = {}
     for r in stream_generate(S["model"], S["processor"], tmpl,
-                             max_tokens=max_tokens, **kwargs):
+                             max_tokens=max_tokens, **SAMPLING, **kwargs):
         chunk = r.text or ""
         if chunk:
             acc.append(chunk)
