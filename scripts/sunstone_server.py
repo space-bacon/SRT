@@ -63,7 +63,9 @@ CTX_BUDGET = int(os.environ.get("SUNSTONE_CTX", "32768"))
 S = {}                  # server state, filled in lifespan
 SESSIONS: dict = {}     # per-session chat state: messages + KV prompt cache
 SESSION_TTL_S = int(os.environ.get("SUNSTONE_SESSION_TTL", "3600"))
-MAX_SESSIONS = int(os.environ.get("SUNSTONE_MAX_SESSIONS", "32"))
+# Each session holds a KV cache (up to gigabytes at full 32K context), so
+# the cap is a real memory bound, not bookkeeping.
+MAX_SESSIONS = int(os.environ.get("SUNSTONE_MAX_SESSIONS", "12"))
 
 # MLX generation is NOT safe under concurrent calls (FastAPI sync endpoints
 # run in a threadpool; overlapping Metal work stalls indefinitely at 3+
@@ -82,8 +84,18 @@ class _GenSlot:
         return self
 
     def __exit__(self, *exc):
+        _clear_mlx_cache()
         GEN_LOCK.release()
         return False
+
+
+def _clear_mlx_cache() -> None:
+    """Return MLX's freed Metal buffers to the OS between generations."""
+    try:
+        import mlx.core as mx
+        (getattr(mx, "clear_cache", None) or mx.metal.clear_cache)()
+    except Exception:
+        pass
 
 
 def _sweep_sessions() -> None:
@@ -535,6 +547,7 @@ def build_app():
                     prompt, min(max_tokens, MAX_TOKENS_CAP),
                     max(0, min(budget, 32)), session=session[:64])
             finally:
+                _clear_mlx_cache()
                 GEN_LOCK.release()
 
         return StreamingResponse(
