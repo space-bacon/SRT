@@ -61,11 +61,26 @@ CTX_BUDGET = int(os.environ.get("SUNSTONE_CTX", "32768"))
 
 S = {}                  # server state, filled in lifespan
 SESSIONS: dict = {}     # per-session chat state: messages + KV prompt cache
+SESSION_TTL_S = int(os.environ.get("SUNSTONE_SESSION_TTL", "3600"))
+MAX_SESSIONS = int(os.environ.get("SUNSTONE_MAX_SESSIONS", "32"))
+
+
+def _sweep_sessions() -> None:
+    """Drop idle sessions (each holds a KV cache) and cap the total count."""
+    now = time.time()
+    for sid in [s for s, st in SESSIONS.items()
+                if now - st.get("last_used", now) > SESSION_TTL_S]:
+        SESSIONS.pop(sid, None)
+    while len(SESSIONS) > MAX_SESSIONS:
+        oldest = min(SESSIONS, key=lambda s: SESSIONS[s].get("last_used", 0))
+        SESSIONS.pop(oldest, None)
 
 
 def _session(sid: str) -> dict:
+    _sweep_sessions()
     if sid not in SESSIONS:
         SESSIONS[sid] = {"messages": [], "cache": None}
+    SESSIONS[sid]["last_used"] = time.time()
     return SESSIONS[sid]
 
 
