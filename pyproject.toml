@@ -22,13 +22,15 @@ classifiers = [
 ]
 dependencies = [
     "torch>=2.6",
-    # transformers 4.x and 5.x are both supported (the dtype/torch_dtype
-    # kwarg rename is handled at the call site). The earlier <5.0 pin was
-    # written against an early 5.x where KV-cached manual generation
-    # degenerated; re-verified working on 5.14 (Qwen2.5-7B: verbalize,
-    # cached steer/introspect streams all coherent). Prefer >=5.5: it
-    # patches the loader RCEs CVE-2026-4372 + CVE-2026-5241. If you stay
-    # on 4.x, never pass untrusted Hub IDs to from_pretrained().
+    # transformers 4.x and 5.x are both supported via two call-site shims:
+    # (1) the dtype/torch_dtype from_pretrained kwarg rename, and (2) the
+    # decoder-layer `past_key_value` -> `past_key_values` rename in
+    # adapter._cached_step (_PKV_KWARG). The old <5.0 pin's "KV-cached
+    # manual generation degenerates under 5.x" was exactly (2): the old
+    # kwarg was silently swallowed by **kwargs, the cache was never used,
+    # and every decode step saw only its own token. Fixed + verified on
+    # 5.14 (Qwen2.5-7B cached introspect/steer streams coherent). Prefer
+    # >=5.5: it patches the loader RCEs CVE-2026-4372 + CVE-2026-5241.
     "transformers>=4.40,<6.0",
     "safetensors>=0.4",
     "huggingface_hub>=0.24",
