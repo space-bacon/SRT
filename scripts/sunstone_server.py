@@ -456,6 +456,12 @@ def build_app():
 
     def _read_image(data: bytes):
         from PIL import Image
+        # Uploaded images live in RAM only (BytesIO -> PIL -> MLX tensors)
+        # and are never written to disk or logged. Cap decoded pixels so a
+        # small compressed file cannot decompress into gigabytes.
+        Image.MAX_IMAGE_PIXELS = 50_000_000
+        if len(data) > 12 * 1024 * 1024:
+            raise HTTPException(413, "image larger than 12MB")
         try:
             return Image.open(io.BytesIO(data)).convert("RGB")
         except Exception as e:
