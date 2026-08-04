@@ -27,6 +27,7 @@ Run:
 import io
 import logging
 import os
+import threading
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -63,6 +64,26 @@ S = {}                  # server state, filled in lifespan
 SESSIONS: dict = {}     # per-session chat state: messages + KV prompt cache
 SESSION_TTL_S = int(os.environ.get("SUNSTONE_SESSION_TTL", "3600"))
 MAX_SESSIONS = int(os.environ.get("SUNSTONE_MAX_SESSIONS", "32"))
+
+# MLX generation is NOT safe under concurrent calls (FastAPI sync endpoints
+# run in a threadpool; overlapping Metal work stalls indefinitely at 3+
+# streams, measured 2026-08-04). One generation runs at a time at full
+# speed; later arrivals queue here up to GEN_QUEUE_TIMEOUT_S, then 503.
+GEN_LOCK = threading.Lock()
+GEN_QUEUE_TIMEOUT_S = int(os.environ.get("SUNSTONE_QUEUE_TIMEOUT", "300"))
+
+
+class _GenSlot:
+    def __enter__(self):
+        if not GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S):
+            raise HTTPException(
+                503, "the instrument is busy with other visitors; try again"
+                     " in a moment")
+        return self
+
+    def __exit__(self, *exc):
+        GEN_LOCK.release()
+        return False
 
 
 def _sweep_sessions() -> None:
@@ -484,13 +505,15 @@ def build_app():
     @app.post("/chat")
     def chat(req: ChatReq):
         _check_prompt(req.prompt)
-        return generate_text(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP))
+        with _GenSlot():
+            return generate_text(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP))
 
     @app.post("/chat_trace")
     def chat_trace_route(req: TraceReq):
         _check_prompt(req.prompt)
-        return chat_trace(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP),
-                          budget=max(0, min(req.budget, 32)))
+        with _GenSlot():
+            return chat_trace(req.prompt, min(req.max_tokens, MAX_TOKENS_CAP),
+                              budget=max(0, min(req.budget, 32)))
 
     @app.get("/stream_trace")
     def stream_trace_route(prompt: str, max_tokens: int = 1024, budget: int = 8,
@@ -498,9 +521,24 @@ def build_app():
         from fastapi.responses import StreamingResponse
 
         _check_prompt(prompt)
+        # Take the generation slot BEFORE streaming starts so a queued
+        # visitor gets a clean 503 rather than a broken stream; release
+        # when the generator finishes or the client disconnects.
+        if not GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S):
+            raise HTTPException(
+                503, "the instrument is busy with other visitors; try again"
+                     " in a moment")
+
+        def locked_stream():
+            try:
+                yield from stream_trace(
+                    prompt, min(max_tokens, MAX_TOKENS_CAP),
+                    max(0, min(budget, 32)), session=session[:64])
+            finally:
+                GEN_LOCK.release()
+
         return StreamingResponse(
-            stream_trace(prompt, min(max_tokens, MAX_TOKENS_CAP),
-                         max(0, min(budget, 32)), session=session[:64]),
+            locked_stream(),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
@@ -515,13 +553,15 @@ def build_app():
                 prompt: str = Form("Describe this image.")):
         _check_prompt(prompt)
         img = _read_image(image.file.read())
-        return generate_text(prompt, 200, image=img)
+        with _GenSlot():
+            return generate_text(prompt, 200, image=img)
 
     @app.post("/retrieve")
     def retrieve(image: UploadFile = File(...), k: int = Form(5)):
         img = _read_image(image.file.read())
         t0 = time.time()
-        v = encode_image_local(img)
+        with _GenSlot():
+            v = encode_image_local(img)
         z = _project(v, S["head"]["W_img"], S["head"]["b_img"],
                      S["head"]["mu_img"])
         sims = S["gallery"]["Z_txt"] @ z
@@ -536,7 +576,8 @@ def build_app():
     def search(req: SearchReq):
         _check_prompt(req.text)
         t0 = time.time()
-        v = encode_text_local([req.text])[0]
+        with _GenSlot():
+            v = encode_text_local([req.text])[0]
         z = _project(v, S["head"]["W_txt"], S["head"]["b_txt"],
                      S["mu_txt_local"])
         sims = S["gallery"]["Z_img"] @ z
