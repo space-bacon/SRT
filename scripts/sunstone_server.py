@@ -545,22 +545,48 @@ def build_app():
         from fastapi.responses import StreamingResponse
 
         _check_prompt(prompt)
-        # Take the generation slot BEFORE streaming starts so a queued
-        # visitor gets a clean 503 rather than a broken stream; release
-        # when the generator finishes or the client disconnects.
-        if not GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S):
-            raise HTTPException(
-                503, "the instrument is busy with other visitors; try again"
-                     " in a moment")
 
+        # The generation slot must NOT be tied to the response generator's
+        # lifecycle: when a client disconnects, starlette abandons a sync
+        # generator SUSPENDED AT A YIELD without closing it, so even a
+        # finally inside it never runs (leaked the lock in production,
+        # 2026-08-04, twice). Instead a plain producer THREAD owns the
+        # lock — threads always run to completion, so release is
+        # guaranteed. An abandoned generation finishes in the background
+        # (bounded by max_tokens) and then frees the slot.
         def locked_stream():
-            try:
-                yield from stream_trace(
-                    prompt, min(max_tokens, MAX_TOKENS_CAP),
-                    max(0, min(budget, 32)), session=session[:64])
-            finally:
-                _clear_mlx_cache()
-                GEN_LOCK.release()
+            import json as _json
+            import queue as _queue
+
+            if not GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S):
+                yield ("data: " + _json.dumps({
+                    "type": "error",
+                    "error": "the instrument is busy with other visitors; "
+                             "try again in a moment"}) + "\n\n")
+                return
+
+            q: _queue.Queue = _queue.Queue()  # unbounded: producer never blocks
+
+            def produce():
+                try:
+                    for frame in stream_trace(
+                            prompt, min(max_tokens, MAX_TOKENS_CAP),
+                            max(0, min(budget, 32)), session=session[:64]):
+                        q.put(frame)
+                except Exception as e:  # surface, don't die silently
+                    q.put("data: " + _json.dumps(
+                        {"type": "error", "error": str(e)}) + "\n\n")
+                finally:
+                    _clear_mlx_cache()
+                    GEN_LOCK.release()
+                    q.put(None)
+
+            threading.Thread(target=produce, daemon=True).start()
+            while True:
+                frame = q.get()
+                if frame is None:
+                    break
+                yield frame
 
         return StreamingResponse(
             locked_stream(),
