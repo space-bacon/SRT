@@ -146,7 +146,13 @@ class SRTAdapter(nn.Module):
         logger.info("Loading backbone: %s in %s%s", config.backbone_id,
                     config.backbone_dtype,
                     f" (device_map={device_map})" if device_map else "")
-        load_kwargs: dict = {"torch_dtype": load_dtype}
+        # transformers renamed `torch_dtype` to `dtype` (new name available
+        # from 4.56, old name removed in 5.x); stay compatible with both.
+        import transformers as _tf
+        _dtype_key = ("dtype" if tuple(int(x) for x in
+                      _tf.__version__.split(".")[:2]) >= (4, 56)
+                      else "torch_dtype")
+        load_kwargs: dict = {_dtype_key: load_dtype}
         if device_map is not None:
             # Sharded load (multi-GPU / CPU-offload). accelerate dispatches the
             # model and attaches AlignDevicesHooks that move each module's
