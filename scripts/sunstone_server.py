@@ -103,10 +103,11 @@ def _tool_preamble() -> str:
         "post-training information (news, prices, weather, sports, recent "
         "events), or whenever the user shares a URL or asks about a "
         "specific website (pass the URL itself as the query; never guess "
-        "what a site contains). To use it, reply with ONLY this JSON on a "
-        "single line and nothing else: {\"tool\": \"web_search\", "
-        "\"query\": \"<search terms or URL>\"}. Otherwise answer "
-        "normally and never mention the tool.\n\n"
+        "what a site contains; if the user gives a bare domain like "
+        "example.com, use https://example.com as the query). To use it, "
+        "reply with ONLY this JSON on a single line and nothing else: "
+        "{\"tool\": \"web_search\", \"query\": \"<search terms or URL>\"}. "
+        "Otherwise answer normally and never mention the tool.\n\n"
     )
 
 
