@@ -1,0 +1,138 @@
+{
+  "img fresh-CUDA vs stored-calib": {
+    "A_raw_asis": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "B_mean_centered": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "C_head_shared_mu": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "D_head_per_runtime_mu": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "E_pca_top1024": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "F_random_1024": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    }
+  },
+  "img MLX-Q4 vs fresh-CUDA": {
+    "A_raw_asis": {
+      "r@1": 0.999,
+      "r@5": 1.0,
+      "r@1_rev": 0.924,
+      "r@5_rev": 0.987
+    },
+    "B_mean_centered": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "C_head_shared_mu": {
+      "r@1": 0.995,
+      "r@5": 1.0,
+      "r@1_rev": 0.998,
+      "r@5_rev": 1.0
+    },
+    "D_head_per_runtime_mu": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "E_pca_top1024": {
+      "r@1": 0.996,
+      "r@5": 1.0,
+      "r@1_rev": 0.922,
+      "r@5_rev": 0.994
+    },
+    "F_random_1024": {
+      "r@1": 0.995,
+      "r@5": 1.0,
+      "r@1_rev": 0.901,
+      "r@5_rev": 0.99
+    }
+  },
+  "img MLX-Q4 vs stored-calib": {
+    "A_raw_asis": {
+      "r@1": 0.999,
+      "r@5": 1.0,
+      "r@1_rev": 0.924,
+      "r@5_rev": 0.987
+    },
+    "B_mean_centered": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "C_head_shared_mu": {
+      "r@1": 0.995,
+      "r@5": 1.0,
+      "r@1_rev": 0.998,
+      "r@5_rev": 1.0
+    },
+    "D_head_per_runtime_mu": {
+      "r@1": 1.0,
+      "r@5": 1.0,
+      "r@1_rev": 1.0,
+      "r@5_rev": 1.0
+    },
+    "E_pca_top1024": {
+      "r@1": 0.996,
+      "r@5": 1.0,
+      "r@1_rev": 0.922,
+      "r@5_rev": 0.994
+    },
+    "F_random_1024": {
+      "r@1": 0.995,
+      "r@5": 1.0,
+      "r@1_rev": 0.901,
+      "r@5_rev": 0.99
+    }
+  },
+  "i2t_end_task": {
+    "CUDA fresh, shared mu": {
+      "r@1": 0.665,
+      "r@5": 0.918
+    },
+    "CUDA fresh, per-runtime mu": {
+      "r@1": 0.67,
+      "r@5": 0.919
+    },
+    "stored calib, shared mu": {
+      "r@1": 0.665,
+      "r@5": 0.918
+    },
+    "MLX-Q4, shared mu": {
+      "r@1": 0.401,
+      "r@5": 0.704
+    },
+    "MLX-Q4, per-runtime mu": {
+      "r@1": 0.64,
+      "r@5": 0.903
+    }
+  }
+}
