@@ -135,6 +135,11 @@ def _web_retrieve(query: str) -> tuple[str, list[dict]]:
     if re.match(r"^https?://\S+$", query.strip()):
         results = [{"url": query.strip(), "title": query.strip(),
                     "content": ""}]
+    elif re.match(r"^[A-Za-z0-9][\w-]*(\.[\w-]+)+(/\S*)?$", query.strip()):
+        # Bare domain ("sunstonenorth.com"): searching it finds namesakes
+        # (a Colorado HOA, in production); fetch the site itself.
+        url = "https://" + query.strip()
+        results = [{"url": url, "title": query.strip(), "content": ""}]
     else:
         r = requests.get(f"{SEARXNG_URL}/search",
                          params={"q": query, "format": "json"}, timeout=8)
