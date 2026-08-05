@@ -18,7 +18,10 @@ reads is a stable property of the model class, not of any deployment:
 it survives a 10× host-scale reduction (31B → 3B, no loss at matched
 data), 4-bit weight quantization (−0.01 R@1 with unchanged head
 weights), and a change of hardware and runtime (CUDA/bf16 datacenter →
-Apple-Silicon/MLX-Q4, 100% head-space agreement). One trained artifact
+Apple-Silicon/MLX-Q4: 97.0% head-space text agreement against a
+99.96% same-runtime ceiling; image states 100% through the head with a
+42KB recalibration; on-device i2t R@1 0.640 vs the datacenter's
+0.670). One trained artifact
 serves every tier below — from a Raspberry-Pi-class device batch-tagging
 photos overnight, through a home computer doing interactive local
 search, to a datacenter serving a fleet. Train once, read everywhere;
@@ -140,6 +143,17 @@ zoo.
    CPU (same precision class, different kernels); final on-device
    validation still recommended.
    (`artifacts/nla/q4/q4_drift.json`.)
+   **On-device validation DONE 2026-08-05** on the M2 Ultra / MLX-Q4
+   runtime, full protocol both sides of the boundary: text states
+   agree with the datacenter reference at 97.0% R@1 through the head
+   (n=5,000, vs a 99.96% same-runtime ceiling; subspace controls show
+   the drift concentrates in the high-variance complement the head
+   discards). Image states agree at 100% through the head with the
+   42KB per-runtime mean recalibration, and end-task i2t on-device is
+   R@1 0.640 / R@5 0.903 vs the datacenter's 0.670 / 0.919. The
+   recalibration is mandatory on the image side (skipping it costs 24
+   R@1 points).
+   (`artifacts/nla/q4/{head_space_validation_v2,image_head_space_validation}_20260805.json`.)
 3. **State-tap in the edge runtime** (the one remaining item,
    engineering): llama.cpp does not expose intermediate-layer hidden
    states through its normal API; the ggml eval-callback mechanism (or

@@ -1,3 +1,52 @@
+# SRT — Session Handoff (2026-08-05)
+
+## The reader-review arc (hardware-invariance row corrected and extended)
+
+1. **HF reader (dipankarsarkar) audited the §8 hardware row and was right
+   on every code point**: `local_sunstone.py --validate` never loaded the
+   head (dead `HEAD_REPO` constant), the old 0.984/100% numbers were
+   mean-centered raw states at a saturating pool size, there was no as-is
+   arm, and no i2t measurement existed on the MLX tier.
+2. **Round 1 (text, n=5000, both runtimes)**: fresh CUDA bf16 encode (vast
+   Blackwell) vs MLX-Q4 (M2 Ultra via server /encode_texts). Dup-aware
+   R@1: raw 0.933, centered 0.934 (inert), head+shared-mu 0.968,
+   **head+42KB recal 0.970**, vs same-runtime ceiling **0.9996** (the old
+   0.996 deficit was 17 duplicate captions, not nondeterminism).
+3. **Round 2 (reader's null + our controls)**: his isotropic-noise null
+   showed the head annihilates subspace-agnostic noise; our E arm
+   (top-1024 PCA both sides) lands at 0.922, BELOW raw, F (random-1024)
+   at raw. **Drift is pinned to the high-variance subspace the head's
+   5376→1024 projection discards.** His conjecture (drift lives in the
+   mean) inverted cleanly.
+4. **Vision tie-in complete**: 1000 eval-tail images encoded on both
+   runtimes (new server /encode_image endpoint + export script; CUDA on
+   vast). Cross-runtime image agreement 1.000 both directions through
+   head+recal; centering alone also 1.000 (image drift IS a mean shift,
+   mirror of text; token-pooling averages the subspace structure away).
+   **End-task i2t on the Mac: R@1 0.640 / R@5 0.903 vs datacenter
+   0.670 / 0.919.** Recal mandatory on images (shared-mu: 0.401).
+5. **All docs restated**: both papers + abstract + fig3 (six-bar) + PDF,
+   README, CROSSMODAL_LINEAR_HEAD.md, release card, server docstring.
+   `local_sunstone.py --retrieve` wired (2026-07-25 item closed).
+   Artifacts: `artifacts/nla/q4/{head_space_validation_v2,image_head_space_validation}_20260805.json`.
+
+## Gotchas banked
+
+- `captions5`/`cap5` pair with `files[-1000:]` (eval TAIL), not `[:1000]`.
+- raw.githubusercontent CDN serves stale files minutes after a push; add
+  `?nocache=` or verify content before running on a remote box.
+- HF release cards on the hub still carry the old numbers — re-upload
+  `release/srt-sunstone-linear-head/README.md` to the hub.
+
+## Open items
+
+- Vast box ssh6:15959 destroyed; all banked.
+- User posted rounds 1–2 replies; final image-results comment drafted.
+- Carry-overs unchanged (polyseme minimal pairs, switchboard pilot, MTEB
+  engv2 check, ginigen leaderboard, load-weighted readout).
+
+---
+
 # SRT — Session Handoff (2026-07-25)
 
 ## What got done (the invariance day)
@@ -10,7 +59,10 @@
    MLX gemma4 has a built-in state tap (`capture_layer_ids`), so the
    edge-tap gate dissolved. On-device validation through the head:
    0.984 R@1 as-is, **1.000 R@1 with mean recal** vs the datacenter
-   bf16 pool. `scripts/local_sunstone.py` (--retrieve vision path still
+   bf16 pool. [CORRECTED 2026-08-05: these numbers were mean-centered
+   raw states at n=64, not head space; see the 2026-08-05 entry. The
+   corrected figures are 0.970 head-space vs a 0.9996 ceiling.]
+   `scripts/local_sunstone.py` (--retrieve vision path still
    to wire; --chat sanity not yet run).
 3. **HEADLINE DECLARED: "Train once, read everywhere" (substrate
    invariance).** Carried by README hero, leverage.md, HF model card,

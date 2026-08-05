@@ -374,9 +374,11 @@ def encode_image_local(img) -> np.ndarray:
 
 def local_mu_txt(head, gal) -> np.ndarray:
     """The 42KB recalibration: local text mean over RECAL_N captions.
-    Validated procedure (docs/CROSSMODAL_LINEAR_HEAD.md rule 4): swapping
-    the shipped mu_txt for the runtime's own mean took cross-runtime
-    head-space agreement 0.984 -> 1.000 on this machine."""
+    Validated procedure (docs/CROSSMODAL_LINEAR_HEAD.md calibration
+    rules): per-runtime means lift cross-runtime head-space text
+    agreement 0.968 -> 0.970 (n=5000, dup-aware) and are MANDATORY on
+    the image side, where the shipped mu costs 24 i2t R@1 points
+    (0.640 -> 0.401). See artifacts/nla/q4/*_20260805.json."""
     if LOCAL_MU_CACHE.exists():
         mu = np.load(LOCAL_MU_CACHE)
         if mu.shape == head["mu_txt"].shape:

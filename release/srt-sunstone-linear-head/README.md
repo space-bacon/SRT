@@ -13,7 +13,9 @@ tags:
 **Train once, read everywhere.** This head was trained once on
 datacenter bf16 states and reads the same structure unchanged across a
 10× host-scale reduction, 4-bit quantization (−0.01 R@1), and a change
-of silicon (CUDA → Apple-Silicon MLX, 100 % head-space agreement). One
+of silicon (CUDA → Apple-Silicon MLX: 97 % head-space text agreement
+against a 99.96 % same-runtime ceiling, and on-device image→text
+retrieval within 3 R@1 points of the datacenter reference). One
 artifact, every deployment tier from edge to fleet.
 
 A single trained linear projection pair that turns frozen
