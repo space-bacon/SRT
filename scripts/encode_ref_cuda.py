@@ -148,12 +148,14 @@ def _ensure_images(img_dir: str, files: list[str]) -> list[str]:
 
 def encode_images(out_path: str, img_dir: str) -> None:
     """Fresh CUDA bf16 image states: mean of hidden_states[LAYER] over
-    image-token positions (gemma4_procrustes_xmodal.py image_v convention)."""
+    image-token positions (gemma4_procrustes_xmodal.py image_v convention).
+    Encodes the EVAL TAIL files[-IMG_N:], which is what captions5/cap5
+    cover (the producer took eval_rows = rows[-n_eval:])."""
     from PIL import Image
     from transformers import AutoProcessor, AutoModelForImageTextToText
 
     calib = load_calib()
-    paths = _ensure_images(img_dir, calib["files"][:IMG_N])
+    paths = _ensure_images(img_dir, calib["files"][-IMG_N:])
     print(f"{len(paths)} images to encode")
 
     proc = AutoProcessor.from_pretrained(BACKBONE)
@@ -182,7 +184,7 @@ def encode_images(out_path: str, img_dir: str) -> None:
                 print(f"  {i}/{len(paths)}")
     X = torch.stack(states)
     torch.save({"states": X, "layer": LAYER, "backbone": BACKBONE,
-                "files": calib["files"][:IMG_N]}, out_path)
+                "files": calib["files"][-IMG_N:]}, out_path)
     print(f"saved {tuple(X.shape)} -> {out_path}")
 
 
@@ -305,7 +307,8 @@ def analyze_images(ref_path: str, mlx_path: str | None,
     ref = torch.load(ref_path, map_location="cpu",
                      weights_only=True)["states"].numpy()
     calib = load_calib()
-    cal = calib["img"].float().numpy()[:IMG_N]
+    # eval tail: captions5/cap5 pair with the LAST IMG_N images
+    cal = calib["img"].float().numpy()[-IMG_N:]
 
     d = torch.load(hf_hub_download(HEAD_REPO, head_file),
                    map_location="cpu", weights_only=True)

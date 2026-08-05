@@ -50,7 +50,9 @@ def main():
 
     calib = torch.load(hf_hub_download(CALIB_REPO, CALIB_FILE),
                        map_location="cpu", weights_only=True)
-    names = [f.rsplit("/", 1)[-1] for f in calib["files"][:IMG_N]]
+    # eval tail: captions5/cap5 pair with the LAST IMG_N images
+    # (producer took eval_rows = rows[-n_eval:])
+    names = [f.rsplit("/", 1)[-1] for f in calib["files"][-IMG_N:]]
 
     states: list[np.ndarray] = []
     start = 0
