@@ -1,0 +1,28 @@
+{
+  "question": "||mlx_img.mean(0) - mu_img|| and is it near 14",
+  "norms": {"mu_img": 115.19, "mu_txt": 136.95},
+  "image_displacements_from_mu_img": {
+    "mlx_q4_img_mean": {"norm": 22.67, "pct_of_mu": 19.7},
+    "cuda_fresh_img_mean": {"norm": 0.42, "pct_of_mu": 0.4},
+    "stored_calib_img_mean": {"norm": 0.42, "pct_of_mu": 0.4},
+    "mlx_vs_cuda_img_mean": 22.65
+  },
+  "text_displacements_from_mu_txt": {
+    "mlx_q4_cap_mean": {"norm": 21.52, "pct_of_mu": 15.7},
+    "cuda_fresh_cap_mean": {"norm": 2.00, "pct_of_mu": 1.5},
+    "mlx_vs_cuda_cap_mean": 21.60
+  },
+  "head_space_projection_of_real_delta": {
+    "img": {"delta_norm": 22.67, "through_Wi": 90.59,
+             "random_same_norm_baseline": 142.37, "ratio_real_vs_random": 0.636,
+             "effective_random_equivalent_r": 14.4},
+    "txt": {"delta_norm": 21.52, "through_Wt": 102.11,
+             "random_same_norm_baseline": 136.53, "ratio_real_vs_random": 0.748,
+             "effective_random_equivalent_r": 16.1}
+  },
+  "check_against_reader_sweep": {
+    "reader_r14_i2t": 0.409, "measured_mlx_shared_mu_i2t": 0.401,
+    "reader_r16_t2i_interpolated": 0.483, "measured_mlx_shared_mu_t2i": 0.418,
+    "note": "image damage fully explained by mean displacement through the random-sweep model at effective r; text damage mostly NOT mean (random model predicts ~0.483, measured 0.418): ~2 of 8.5 points are mean, rest is structured per-vector drift"
+  }
+}
