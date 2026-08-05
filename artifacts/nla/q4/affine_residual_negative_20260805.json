@@ -1,0 +1,14 @@
+{
+  "question": "can a per-runtime linear map (head-space affine or Procrustes) fit on paired MLX/CUDA states close the ~6-point structured t2i residual",
+  "protocol": "fit on captions of eval-tail images 0-499 (2500 pairs), evaluate t2i on captions of images 500-999 (2500 held-out queries) vs the full 1000-image gallery (external frame)",
+  "results_t2i_heldout": {
+    "CUDA reference": {"r@1": 0.4932, "r@5": 0.8044},
+    "MLX + 42KB recal": {"r@1": 0.4240, "r@5": 0.7248},
+    "MLX + affine ridge N=64": {"r@1": 0.1136, "r@5": 0.3144},
+    "MLX + affine ridge N=256": {"r@1": 0.2172, "r@5": 0.4620},
+    "MLX + affine ridge N=1024": {"r@1": 0.1904, "r@5": 0.4300},
+    "MLX + affine ridge N=2500": {"r@1": 0.4124, "r@5": 0.7224},
+    "MLX + Procrustes N=2500": {"r@1": 0.4272, "r@5": 0.7276}
+  },
+  "conclusion": "NEGATIVE: global linear correction at 2500 pairs is a wash vs the 42KB mean (+0.3 Procrustes, -1.2 ridge); small-N overfits far below baseline. The structured residual is input-dependent, not a fixed linear transform. The 42KB per-runtime mean is essentially optimal within the linear-correction family, which upgrades 'at most a 42KB recalibration' from a convenience claim to a measured stopping point."
+}
