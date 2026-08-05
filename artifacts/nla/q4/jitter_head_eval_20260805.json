@@ -1,0 +1,11 @@
+{
+  "experiment": "(c) mean-jitter retrain: linear head, 117k train2017 pairs, --mean-jitter 30 (per-batch random constant displacement per modality, norm U(0,30); real MLX displacement is ~22)",
+  "clean_eval_same_runtime": {"i2t": [0.645, 0.916], "t2i_r1": 0.496, "note": "~2 point tax vs shipped head on clean CUDA states"},
+  "mlx_q4_eval": {
+    "shipped_head": {"no_recal": {"i2t": [0.401, 0.694], "t2i": [0.418, 0.708]},
+                      "recal":    {"i2t": [0.641, 0.905], "t2i": [0.444, 0.740]}},
+    "jitter_r30_head": {"no_recal": {"i2t": [0.447, 0.772], "t2i": [0.426, 0.750]},
+                         "recal":    {"i2t": [0.642, 0.910], "t2i": [0.445, 0.766]}}
+  },
+  "conclusion": "PARTIAL: jitter training buys +4.6 i2t / +0.8 t2i no-recal robustness (and +6-8 R@5) at zero recal-arm cost, but does NOT make the head mean-invariant; the img branch still loses ~20 points without the per-runtime mean. The 42KB recal remains mandatory. Random-direction jitter teaches partial insensitivity, not invariance to the specific runtime displacement. Checkpoint: /root/jitter_head_r30.pt on vast (pull before teardown if shipping)."
+}
