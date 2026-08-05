@@ -99,11 +99,14 @@ RETRIEVE_CHARS = 1400       # extracted chars kept per page
 def _tool_preamble() -> str:
     return (
         f"(system) Today is {time.strftime('%A, %B %d, %Y')}. You have one "
-        "tool: live web search. If, and only if, the request needs current "
-        "or post-training information (news, prices, weather, sports, "
-        "recent events), reply with ONLY this JSON on a single line and "
-        "nothing else: {\"tool\": \"web_search\", \"query\": \"<search "
-        "terms>\"}. Otherwise answer normally and never mention the tool.\n\n"
+        "tool: live web search. Use it when the request needs current or "
+        "post-training information (news, prices, weather, sports, recent "
+        "events), or whenever the user shares a URL or asks about a "
+        "specific website (pass the URL itself as the query; never guess "
+        "what a site contains). To use it, reply with ONLY this JSON on a "
+        "single line and nothing else: {\"tool\": \"web_search\", "
+        "\"query\": \"<search terms or URL>\"}. Otherwise answer "
+        "normally and never mention the tool.\n\n"
     )
 
 
@@ -122,19 +125,37 @@ def _html_to_text(html: str) -> str:
 
 
 def _web_retrieve(query: str) -> tuple[str, list[dict]]:
-    """Search SearXNG, fetch top pages, return (context_block, sources)."""
+    """Search SearXNG, fetch top pages, return (context_block, sources).
+    URL-shaped queries skip the search and fetch the page directly."""
     import concurrent.futures as cf
+    import re
 
     import requests
 
-    r = requests.get(f"{SEARXNG_URL}/search",
-                     params={"q": query, "format": "json"}, timeout=8)
-    r.raise_for_status()
-    results = [x for x in r.json().get("results", [])
-               if x.get("url", "").startswith("http")][:RETRIEVE_PAGES + 2]
+    if re.match(r"^https?://\S+$", query.strip()):
+        results = [{"url": query.strip(), "title": query.strip(),
+                    "content": ""}]
+    else:
+        r = requests.get(f"{SEARXNG_URL}/search",
+                         params={"q": query, "format": "json"}, timeout=8)
+        r.raise_for_status()
+        results = [x for x in r.json().get("results", [])
+                   if x.get("url", "").startswith("http")][:RETRIEVE_PAGES + 2]
 
     def fetch(res):
         try:
+            # SSRF guard: visitor-influenced URLs must resolve to public
+            # addresses (never loopback/LAN/tunnel services).
+            import ipaddress
+            import socket
+            from urllib.parse import urlparse
+
+            host = urlparse(res["url"]).hostname or ""
+            for info in socket.getaddrinfo(host, None):
+                ip = ipaddress.ip_address(info[4][0])
+                if (ip.is_private or ip.is_loopback or ip.is_link_local
+                        or ip.is_reserved):
+                    raise ValueError(f"non-public address: {host}")
             pr = requests.get(res["url"], timeout=5, stream=True,
                               headers={"User-Agent": "sunstone-lab/1.0"})
             raw = pr.raw.read(400_000, decode_content=True)
