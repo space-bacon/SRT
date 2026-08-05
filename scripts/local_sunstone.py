@@ -31,6 +31,7 @@ from pathlib import Path
 MODEL_ID = "mlx-community/gemma-4-31b-it-4bit"
 TAP_LAYER = 47          # hidden_states[47] in HF convention = output of block 46
 HEAD_REPO = "RiverRider/srt-sunstone-linear-head"
+HEAD_FILE = "sunstone_linear_head.pt"
 CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
 
@@ -150,19 +151,38 @@ def main() -> None:
         ref = calib["cap5"].float().numpy()[:n]                    # bf16 HF states
         loc = encode_text_states(model, processor, texts, args.layer,
                                  args.max_seq_len)                 # local Q4 states
+
+        # The linear head this validation exists to serve (2026-08-05:
+        # a reader correctly noted the head was declared but never
+        # loaded here, so "head-space agreement" was actually raw
+        # centered state space; all four arms now reported).
+        hd = torch.load(hf_hub_download(HEAD_REPO, HEAD_FILE),
+                        map_location="cpu", weights_only=True)
+        W = hd["txt"]["weight"].float().numpy()
+        b = hd["txt"]["bias"].float().numpy()
+        mu_h = hd["mu_txt"].float().numpy()
+
+        def agree_at_1(a, bb):
+            an = a / (np.linalg.norm(a, axis=1, keepdims=True) + 1e-8)
+            bn = bb / (np.linalg.norm(bb, axis=1, keepdims=True) + 1e-8)
+            return float((np.argmax(an @ bn.T, axis=1) == np.arange(len(a))).mean())
+
         mu_r, mu_l = ref.mean(0), loc.mean(0)
-        rc = ref - mu_r
-        lc = loc - mu_l
-        cos = (rc * lc).sum(1) / (np.linalg.norm(rc, axis=1)
-                                  * np.linalg.norm(lc, axis=1) + 1e-8)
+        cos = ((ref - mu_r) * (loc - mu_l)).sum(1) / (
+            np.linalg.norm(ref - mu_r, axis=1)
+            * np.linalg.norm(loc - mu_l, axis=1) + 1e-8)
         print(f"n={n}  centered cos local-vs-HF: mean={cos.mean():.4f} "
               f"p10={np.percentile(cos, 10):.4f} min={cos.min():.4f}")
-        # Retrieval agreement: does the local state pick the same nearest
-        # caption (within the first n) as the reference state does?
-        rn = rc / np.linalg.norm(rc, axis=1, keepdims=True)
-        ln = lc / np.linalg.norm(lc, axis=1, keepdims=True)
-        agree = float((np.argmax(ln @ rn.T, axis=1) == np.arange(n)).mean())
-        print(f"cross-space self-retrieval@1: {agree:.3f} (1.0 = perfect)")
+        print(f"self-retrieval@1, raw as-is:        "
+              f"{agree_at_1(loc, ref):.3f}")
+        print(f"self-retrieval@1, mean-centered:    "
+              f"{agree_at_1(loc - mu_l, ref - mu_r):.3f}")
+        print(f"self-retrieval@1, head (train mu):  "
+              f"{agree_at_1((loc - mu_h) @ W.T + b, (ref - mu_h) @ W.T + b):.3f}")
+        print(f"self-retrieval@1, head (local mu):  "
+              f"{agree_at_1((loc - mu_l) @ W.T + b, (ref - mu_r) @ W.T + b):.3f}")
+        print("(protocol: self-retrieval over the full n-pool, local queries "
+              "reference; n=5000 is the reportable setting)")
         return
 
     if args.retrieve is not None:
