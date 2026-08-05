@@ -1,0 +1,22 @@
+{
+  "stored calib cap5, shared mu": {
+    "r@1": 0.5028,
+    "r@5": 0.8078
+  },
+  "CUDA fresh, shared mu": {
+    "r@1": 0.5032,
+    "r@5": 0.808
+  },
+  "CUDA fresh, per-runtime mu": {
+    "r@1": 0.5012,
+    "r@5": 0.8054
+  },
+  "MLX-Q4, shared mu": {
+    "r@1": 0.4182,
+    "r@5": 0.708
+  },
+  "MLX-Q4, per-runtime mu": {
+    "r@1": 0.444,
+    "r@5": 0.7396
+  }
+}
