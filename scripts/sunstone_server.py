@@ -253,6 +253,11 @@ class SearchReq(BaseModel):
     k: int = 5
 
 
+class EncodeReq(BaseModel):
+    texts: list[str]
+    max_seq_len: int = 64
+
+
 # --------------------------------------------------------------------- head
 def _project(v: np.ndarray, W: np.ndarray, b: np.ndarray,
              mu: np.ndarray) -> np.ndarray:
@@ -815,6 +820,17 @@ def build_app():
                          "split": S["gallery"]["split"][i],
                          "score": round(float(sims[i]), 4)} for i in top],
         }
+
+    @app.post("/encode_texts")
+    def encode_texts(req: EncodeReq):
+        """Raw L47 last-token states for a list of texts (loopback only:
+        served off the tunnel-facing gateway, used by validation tooling
+        and head-space experiments)."""
+        if not req.texts or len(req.texts) > 512:
+            raise HTTPException(400, "1..512 texts")
+        with _GenSlot():
+            X = encode_text_local(req.texts, max_seq_len=req.max_seq_len)
+        return {"states": X.tolist(), "d": int(X.shape[1])}
 
     @app.get("/bench")
     def bench():
