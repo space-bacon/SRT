@@ -23,8 +23,10 @@ retraining and at most a 42KB recalibration: a host ten times smaller
 (31B to 3B, no capability loss at matched data), the same host at
 4-bit weight precision (a 0.011 loss in R@1 with unchanged head
 weights), and the same computation on entirely different silicon and
-kernels (CUDA/bf16 datacenter to Apple-Silicon/MLX-Q4, 100% head-space
-retrieval agreement). Deployment tiers, from Raspberry-Pi-class edge
+kernels (CUDA/bf16 datacenter to Apple-Silicon/MLX-Q4, 96.7%
+head-space retrieval agreement over the full 5,000-caption pool,
+against a 99.6% same-runtime reproducibility ceiling). Deployment
+tiers, from Raspberry-Pi-class edge
 devices to datacenter fleets, differ in latency and cost, never in
 capability. Train once, read everywhere.
 
