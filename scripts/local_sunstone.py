@@ -122,6 +122,36 @@ def encode_text_states(model, processor, texts: list[str], layer: int,
     return np.stack(out)
 
 
+def encode_image_state(model, processor, img, layer: int):
+    """Mean hidden_states[layer] over image-token positions (Sunstone
+    convention, same as sunstone_server.encode_image_local and the CUDA
+    reference in gemma4_procrustes_xmodal.image_v)."""
+    import mlx.core as mx
+    import numpy as np
+    from mlx_vlm.prompt_utils import apply_chat_template
+    from mlx_vlm.utils import prepare_inputs
+
+    cfg = getattr(model, "config", None)
+    img_tok = getattr(cfg, "image_token_id", None)
+    if img_tok is None:
+        img_tok = 258880
+    prompt = apply_chat_template(processor, cfg, "Describe this image.",
+                                 num_images=1)
+    inputs = prepare_inputs(processor, images=[img], prompts=[prompt])
+    input_ids = inputs["input_ids"]
+    kwargs = {k: v for k, v in inputs.items()
+              if k not in ("input_ids", "pixel_values", "attention_mask")}
+    res = model(input_ids, inputs.get("pixel_values"),
+                capture_layer_ids=[layer], **kwargs)
+    h = res.hidden_states[0]
+    mx.eval(h)
+    h = np.array(h[0].astype(mx.float32))
+    mask = np.array(input_ids[0]) == img_tok
+    if not mask.any():
+        raise ValueError("no image tokens in the processed prompt")
+    return h[mask].mean(0)
+
+
 def main() -> None:
     args = parse_args()
 
@@ -186,8 +216,33 @@ def main() -> None:
         return
 
     if args.retrieve is not None:
-        raise SystemExit("--retrieve lands after --validate passes; "
-                         "image-side encode needs the vision path wired")
+        import numpy as np
+        import torch
+        from PIL import Image
+        from huggingface_hub import hf_hub_download
+
+        calib = torch.load(hf_hub_download(CALIB_REPO, CALIB_FILE),
+                           map_location="cpu", weights_only=True)
+        hd = torch.load(hf_hub_download(HEAD_REPO, HEAD_FILE),
+                        map_location="cpu", weights_only=True)
+
+        def project(X, side, mu):
+            W = hd[side]["weight"].float().numpy()
+            b = hd[side]["bias"].float().numpy()
+            Z = (X - mu) @ W.T + b
+            return Z / (np.linalg.norm(Z, axis=-1, keepdims=True) + 1e-8)
+
+        captions = [c for caps in calib["captions5"] for c in caps]
+        Zt = project(calib["cap5"].float().numpy(), "txt",
+                     hd["mu_txt"].float().numpy())
+
+        img = Image.open(args.retrieve).convert("RGB")
+        v = encode_image_state(model, processor, img, args.layer)
+        z = project(v[None, :], "img", hd["mu_img"].float().numpy())[0]
+
+        sims = Zt @ z
+        for rank, i in enumerate(np.argsort(-sims)[:5], 1):
+            print(f"{rank}. [{sims[i]:.4f}] {captions[i]}")
 
 
 if __name__ == "__main__":
