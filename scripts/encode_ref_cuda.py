@@ -319,6 +319,10 @@ def analyze_images(ref_path: str, mlx_path: str | None,
     def head_img(X, mu_):
         return (X - mu_) @ Wi.T + bi
 
+    k = Wi.shape[0]
+    mu_pca, Vk = _pca_basis(cal, k)
+    Qk = _rand_basis(cal.shape[1], k)
+
     # ---- four-arm cross-runtime agreement (image states) ----
     pairs = [("img fresh-CUDA vs stored-calib", ref, cal)]
     if mlx_path:
@@ -336,6 +340,8 @@ def analyze_images(ref_path: str, mlx_path: str | None,
             "C_head_shared_mu": (head_img(X, mu_i), head_img(Y, mu_i)),
             "D_head_per_runtime_mu": (head_img(X, X.mean(0)),
                                       head_img(Y, Y.mean(0))),
+            "E_pca_top1024": ((X - mu_pca) @ Vk, (Y - mu_pca) @ Vk),
+            "F_random_1024": ((X - mu_pca) @ Qk, (Y - mu_pca) @ Qk),
         }
         results[name] = {}
         print(f"\n=== {name} (n={n}) ===")
