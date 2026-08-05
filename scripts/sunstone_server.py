@@ -49,6 +49,7 @@ HEAD_FILE = "sunstone_linear_head.pt"
 CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
 LOCAL_MU_CACHE = Path("artifacts/local/local_mu_txt.npy")
+LOCAL_MU_IMG_CACHE = Path("artifacts/local/local_mu_img.npy")
 FULL_GALLERY = Path("artifacts/local/gallery_full.npz")
 CHAT_LOG_DIR = Path("artifacts/local/chat_logs")
 RECAL_N = 256           # captions used for the 42KB local-mean recalibration
@@ -394,6 +395,26 @@ def local_mu_txt(head, gal) -> np.ndarray:
     return mu
 
 
+def local_mu_img(head) -> np.ndarray:
+    """Per-runtime image mean. MANDATORY on this runtime: the shipped
+    mu_img costs 24 i2t R@1 points on MLX-Q4 image queries (0.640 ->
+    0.401; the img branch is ~17x more mean-sensitive than txt, see
+    artifacts/nla/q4/{t2i_external_frame,mean_displacement}_20260805.json).
+    The cache is produced from 1,000 MLX-encoded COCO val2017 states
+    (scripts/export_mlx_image_states.py). Falls back to the shipped
+    mean with a loud warning if the cache is missing."""
+    if LOCAL_MU_IMG_CACHE.exists():
+        mu = np.load(LOCAL_MU_IMG_CACHE)
+        if mu.shape == head["mu_img"].shape:
+            log.info("local mu_img loaded from %s", LOCAL_MU_IMG_CACHE)
+            return mu
+    log.warning("local mu_img cache MISSING (%s) — falling back to shipped "
+                "mu_img; image retrieval will lose ~24 R@1 points. Run "
+                "scripts/export_mlx_image_states.py and save the mean.",
+                LOCAL_MU_IMG_CACHE)
+    return head["mu_img"]
+
+
 def generate_text(prompt: str, max_tokens: int, image=None) -> dict:
     from mlx_vlm import generate
     from mlx_vlm.prompt_utils import apply_chat_template
@@ -669,6 +690,7 @@ async def lifespan(app):
     S["head"] = load_head()
     S["gallery"] = load_gallery(S["head"])
     S["mu_txt_local"] = local_mu_txt(S["head"], S["gallery"])
+    S["mu_img_local"] = local_mu_img(S["head"])
     S["loaded_s"] = round(time.time() - t0, 1)
     log.info("ready in %.1fs", S["loaded_s"])
     yield
@@ -796,7 +818,7 @@ def build_app():
         with _GenSlot():
             v = encode_image_local(img)
         z = _project(v, S["head"]["W_img"], S["head"]["b_img"],
-                     S["head"]["mu_img"])
+                     S["mu_img_local"])
         sims = S["gallery"]["Z_txt"] @ z
         top = np.argsort(-sims)[: max(1, min(k, 50))]
         return {
