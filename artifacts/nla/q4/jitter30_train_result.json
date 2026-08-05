@@ -1,0 +1,17 @@
+{
+  "run": "mean-jitter r30 training sweep, 117k train2017 pairs, --mean-jitter 30",
+  "note": "reconstructed from jitter_train.log (the box was destroyed after the run completed; the original JSON existed only remotely). Numbers transcribed verbatim from the training log's final state.",
+  "baseline_centered": {"r@1": 0.288, "r@5": 0.523, "r@10": 0.648, "median_rank": 5.0},
+  "linear_n117000": {"val_r@1": 0.474,
+                      "i2t": {"r@1": 0.645, "r@5": 0.916, "r@10": 0.971, "median_rank": 1.0},
+                      "t2i_r@1": 0.496,
+                      "saved": "jitter_head_r30.pt (pulled to artifacts/local/, shipped to hub as sunstone_linear_head_v2_jitter30.pt)"},
+  "mlp_n117000": {"val_r@1": 0.426,
+                   "i2t": {"r@1": 0.572, "r@5": 0.893, "r@10": 0.958, "median_rank": 1.0},
+                   "t2i_r@1": 0.434,
+                   "note": "MLP still below linear under jitter augmentation; the linearity finding holds in this regime too"},
+  "mlp_shuffled_n117000": {"val_r@1": 0.004,
+                            "i2t": {"r@1": 0.002, "r@5": 0.004, "r@10": 0.006, "median_rank": 745.0},
+                            "t2i_r@1": 0.0,
+                            "note": "chance floor, sanity control holds"}
+}
