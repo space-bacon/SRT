@@ -46,7 +46,7 @@ import torch
 CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
 HEAD_REPO = "RiverRider/srt-sunstone-linear-head"
-HEAD_FILE = "gemma4_linear_head.pt"
+HEAD_FILE = "sunstone_linear_head.pt"
 BACKBONE = "google/gemma-4-31B-it"
 LAYER = 47
 MAX_SEQ = 64
@@ -186,16 +186,37 @@ def encode_images(out_path: str, img_dir: str) -> None:
     print(f"saved {tuple(X.shape)} -> {out_path}")
 
 
-def _retrieval(a: np.ndarray, b: np.ndarray) -> tuple[float, float]:
-    """a rows query b rows; self-match = correct. Returns (R@1, R@5)."""
+def _retrieval(a: np.ndarray, b: np.ndarray,
+               dup_groups: np.ndarray | None = None) -> tuple[float, float]:
+    """a rows query b rows; self-match = correct. Returns (R@1, R@5).
+    If dup_groups is given (int group id per row, identical texts share a
+    group), retrieving any row with the same group id counts as correct."""
     an = a / (np.linalg.norm(a, axis=1, keepdims=True) + 1e-8)
     bn = b / (np.linalg.norm(b, axis=1, keepdims=True) + 1e-8)
     sims = an @ bn.T
     order = np.argsort(-sims, axis=1)
     tgt = np.arange(len(a))
-    r1 = float((order[:, 0] == tgt).mean())
-    r5 = float((order[:, :5] == tgt[:, None]).any(1).mean())
+    if dup_groups is not None:
+        hit = dup_groups[order] == dup_groups[tgt][:, None]
+    else:
+        hit = order == tgt[:, None]
+    r1 = float(hit[:, 0].mean())
+    r5 = float(hit[:, :5].any(1).mean())
     return r1, r5
+
+
+def _pca_basis(Y: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:
+    """Top-k PCA basis of Y: returns (mu, Vk) with Vk [d, k]."""
+    mu = Y.mean(0)
+    _, _, vt = np.linalg.svd(Y - mu, full_matrices=False)
+    return mu, vt[:k].T
+
+
+def _rand_basis(d: int, k: int, seed: int = 0) -> np.ndarray:
+    """Random orthonormal k-dim basis [d, k], fixed seed."""
+    rng = np.random.default_rng(seed)
+    q, _ = np.linalg.qr(rng.standard_normal((d, k)))
+    return q
 
 
 def analyze(ref_path: str, mlx_path: str | None, head_file: str) -> None:
@@ -205,6 +226,14 @@ def analyze(ref_path: str, mlx_path: str | None, head_file: str) -> None:
     calib = load_calib()
     cal = calib["cap5"].float().numpy()
 
+    # duplicate-aware grouping: identical caption strings share a group id
+    # (13 captions occur more than once in captions5; without this, rows
+    # that lose to an identical twin are scored as misses and pollute the
+    # same-runtime floor).
+    texts = [c for caps in calib["captions5"] for c in caps]
+    seen: dict[str, int] = {}
+    dup_groups = np.array([seen.setdefault(t, len(seen)) for t in texts])
+
     d = torch.load(hf_hub_download(HEAD_REPO, head_file),
                    map_location="cpu", weights_only=True)
     W = d["txt"]["weight"].float().numpy()
@@ -213,6 +242,17 @@ def analyze(ref_path: str, mlx_path: str | None, head_file: str) -> None:
 
     def head(X, mu_):
         return (X - mu_) @ W.T + b
+
+    # Subspace-control arms (2026-08-05 reader follow-up): is the head's
+    # +3.7 a fact about where the drift lives, or would any 5376->1024
+    # projection gain? E projects both sides onto the top-1024 PCA basis
+    # of the stored reference (high-variance subspace); F onto a random
+    # orthonormal 1024-dim basis. If E lands at/below raw while the head
+    # gains, the drift is pinned to the high-variance complement of the
+    # head's row space.
+    k = W.shape[0]
+    mu_pca, Vk = _pca_basis(cal, k)
+    Qk = _rand_basis(cal.shape[1], k)
 
     pairs = [("fresh-CUDA vs stored-calib", ref, cal)]
     if mlx_path:
@@ -229,14 +269,18 @@ def analyze(ref_path: str, mlx_path: str | None, head_file: str) -> None:
             "B_mean_centered": (X - X.mean(0), Y - Y.mean(0)),
             "C_head_shared_mu": (head(X, mu), head(Y, mu)),
             "D_head_per_runtime_mu": (head(X, X.mean(0)), head(Y, Y.mean(0))),
+            "E_pca_top1024": ((X - mu_pca) @ Vk, (Y - mu_pca) @ Vk),
+            "F_random_1024": ((X - mu_pca) @ Qk, (Y - mu_pca) @ Qk),
         }
         results[name] = {}
         print(f"\n=== {name} (n={n}) ===")
         for arm, (xa, ya) in arms.items():
-            r1, r5 = _retrieval(xa, ya)
-            r1b, r5b = _retrieval(ya, xa)
+            r1, r5 = _retrieval(xa, ya, dup_groups[:n])
+            r1b, r5b = _retrieval(ya, xa, dup_groups[:n])
+            r1s, _ = _retrieval(xa, ya)          # strict, no dup credit
             results[name][arm] = {"r@1": r1, "r@5": r5,
-                                  "r@1_rev": r1b, "r@5_rev": r5b}
+                                  "r@1_rev": r1b, "r@5_rev": r5b,
+                                  "r@1_strict": r1s}
             print(f"  {arm:24s} R@1 {r1:.4f} / R@5 {r5:.4f}   "
                   f"(reverse {r1b:.4f} / {r5b:.4f})")
     print("\n" + json.dumps(results, indent=2))
