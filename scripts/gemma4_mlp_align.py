@@ -64,6 +64,17 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--batch-size", type=int, default=256)
     p.add_argument("--max-epochs", type=int, default=300)
     p.add_argument("--patience", type=int, default=25)
+    p.add_argument("--mean-jitter", type=float, default=0.0,
+                   help="mean-invariance augmentation: each batch adds one "
+                        "random constant vector per modality with norm "
+                        "~U(0, R) to the centered inputs, simulating a "
+                        "cross-runtime mean displacement. Motivation: the "
+                        "MLX-Q4 runtime displaces both modality means by "
+                        "~22 units and the img branch is ~17x more "
+                        "mean-sensitive than txt (24 vs 1.5 i2t/t2i points "
+                        "at matched norm; artifacts/nla/q4/"
+                        "mean_displacement_20260805.json). R=30 covers the "
+                        "observed displacement with margin.")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--save-head", type=Path, default=None,
                    help="persist the trained heads + per-run centering means "
@@ -109,6 +120,7 @@ def train_heads(
     Xval: torch.Tensor, Yval: torch.Tensor,        # centered val pairs
     *, hidden: int, proj_dim: int, tau: float, lr: float,
     batch_size: int, max_epochs: int, patience: int, device: str,
+    mean_jitter: float = 0.0,
 ) -> tuple[nn.ModuleDict, dict]:
     d = Xtr.size(1)
     heads = make_heads(kind, d, hidden, proj_dim).to(device)
@@ -124,8 +136,18 @@ def train_heads(
             idx = perm[j : j + batch_size]
             if idx.numel() < 8:
                 continue
-            zi = F.normalize(heads["img"](Xtr[idx]), dim=-1)
-            zt = F.normalize(heads["txt"](Ytr[idx]), dim=-1)
+            xb, yb = Xtr[idx], Ytr[idx]
+            if mean_jitter > 0:
+                # one constant displacement per modality per batch: the
+                # augmentation a cross-runtime mean shift actually applies
+                ri = torch.randn(d, device=xb.device)
+                rt = torch.randn(d, device=yb.device)
+                ri = ri / ri.norm() * (torch.rand(1, device=xb.device) * mean_jitter)
+                rt = rt / rt.norm() * (torch.rand(1, device=yb.device) * mean_jitter)
+                xb = xb + ri
+                yb = yb + rt
+            zi = F.normalize(heads["img"](xb), dim=-1)
+            zt = F.normalize(heads["txt"](yb), dim=-1)
             logits = zi @ zt.T / tau
             labels = torch.arange(idx.numel(), device=device)
             loss = 0.5 * (F.cross_entropy(logits, labels)
@@ -219,6 +241,7 @@ def main() -> None:
             hidden=args.hidden, proj_dim=args.proj_dim, tau=args.temperature,
             lr=args.lr, batch_size=args.batch_size, max_epochs=args.max_epochs,
             patience=args.patience, device=device,
+            mean_jitter=args.mean_jitter,
         )
         with torch.no_grad():
             i2t = retrieval_eval(heads["img"](X_eval_raw - mu_x),
