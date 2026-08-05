@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """Incremental backup of the Mac-only irreplaceables to Supabase Storage.
 
-Syncs (only new/changed files, compared by size + mtime metadata):
-    artifacts/local/**   -> s3://SRT/backups/artifacts_local/...
-    checkpoints/**       -> s3://SRT/backups/checkpoints/...
+Syncs (only new/changed files, compared by size + mtime metadata) every
+irreplaceable data/checkpoint tree under ~/development — corpora, raw
+crawls, checkpoints, run artifacts — to s3://SRT/backups/<set>/...
 
 Credentials come from .env (SUPABASE_URL + SUPABASE_S3_ACCESS_KEY_ID/SECRET).
 Run manually or via the com.sunstonenorth.backup LaunchAgent (daily 03:30):
@@ -23,9 +23,17 @@ PREFIX = "backups"
 # until the global limit propagates); anything bigger is stored as .partNNN
 # objects plus a .manifest.json. scripts/restore_from_supabase.py reassembles.
 CHUNK = 45 * 1024 * 1024
-SYNC_SETS = {
-    "artifacts_local": ROOT / "artifacts" / "local",
-    "checkpoints": ROOT / "checkpoints",
+DEV = ROOT.parent
+# name -> (base dir, excluded top-level subdirs). Everything irreplaceable
+# under ~/development: corpora, crawls, checkpoints, run artifacts.
+SYNC_SETS: dict[str, tuple[Path, set[str]]] = {
+    "artifacts_local": (ROOT / "artifacts" / "local", set()),
+    "artifacts": (ROOT / "artifacts", {"local"}),
+    "checkpoints": (ROOT / "checkpoints", set()),
+    "srt_adapter_data": (ROOT / "data", set()),
+    "srt_adapter_private": (ROOT / "private", set()),
+    "srt_data": (DEV / "SRT" / "data", set()),
+    "srt_checkpoints": (DEV / "SRT" / "checkpoints", set()),
 }
 
 
@@ -98,13 +106,18 @@ def main() -> int:
     s3 = client()
     uploaded = skipped = failed = 0
     bytes_up = 0
-    for name, base in SYNC_SETS.items():
+    for name, (base, excludes) in SYNC_SETS.items():
         if not base.is_dir():
             continue
         for path in sorted(base.rglob("*")):
-            if not path.is_file() or path.name.startswith("."):
+            if not path.is_file():
                 continue
-            key = f"{PREFIX}/{name}/{path.relative_to(base)}"
+            rel = path.relative_to(base)
+            if rel.parts and rel.parts[0] in excludes:
+                continue
+            if any(part.startswith(".") for part in rel.parts):
+                continue
+            key = f"{PREFIX}/{name}/{rel}"
             if not needs_upload(s3, key, path):
                 skipped += 1
                 continue
