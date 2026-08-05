@@ -128,11 +128,13 @@ retraining and at most a 42KB recalibration: a host ten times smaller
 (31B to 3B, no capability loss at matched data), the same host at 4-bit
 weight precision (a 0.011 loss in R@1 with unchanged head weights), and
 the same computation on entirely different silicon and kernels
-(CUDA/bf16 datacenter to Apple-Silicon/MLX-Q4, 96.7\% head-space
-retrieval agreement over the full 5,000-caption pool, read against a
-99.6\% same-runtime reproducibility ceiling). Deployment tiers, from
-Raspberry-Pi-class edge devices to datacenter fleets, differ in latency
-and cost, never in capability. Train once, read everywhere.
+(CUDA/bf16 datacenter to Apple-Silicon/MLX-Q4, 97.0\% head-space
+retrieval agreement over the full 5,000-caption pool against a 99.96\%
+same-runtime reproducibility ceiling, and consumer-tier image-to-text
+retrieval within three R@1 points of the datacenter reference).
+Deployment tiers, from Raspberry-Pi-class edge devices to datacenter
+fleets, differ in latency and cost, never in capability. Train once,
+read everywhere.
 
 We present the instrument stack, the measurement discipline that made
 the numbers trustworthy (anisotropy-corrected metrics, anchored
@@ -594,30 +596,56 @@ datacenter) was tested against states produced by a different
 quantization of the same model (MLX 4-bit), running under different
 kernels on a consumer machine (Apple M2 Ultra). The protocol is
 cross-runtime self-retrieval over the full 5,000-caption calibration
-pool, both directions, four arms, with the reference re-encoded fresh on
-CUDA to establish a reproducibility ceiling
-(\texttt{artifacts/nla/q4/head\_space\_validation\_20260805.json}).
+pool, both directions, six arms including two subspace controls, with
+the reference re-encoded fresh on CUDA to establish a reproducibility
+ceiling
+(\texttt{artifacts/nla/q4/head\_space\_validation\_v2\_20260805.json}).
 
 The ceiling first: re-encoding the identical captions on the identical
-CUDA runtime reproduces the stored reference at 99.6\% R@1. Bf16 kernel
-nondeterminism alone costs 0.4\%, so no cross-runtime number should be
-read against 100\%. Across the runtime boundary, raw states retrieve
-their datacenter twins at 93.0\% R@1 as-is. Mean-centering alone adds
-nothing (93.1\%). \textbf{Through the head}, agreement rises to 96.4\%,
-and to \textbf{96.7\% with the 42KB per-runtime mean recalibration}. The
-head projects away much of the subspace in which the drift lives: it
-learned a stable core of the representation, not its numerically fragile
-surface. The drift is not a mean shift; it is structure the head's
-5,376-to-1,024 projection discards.
+CUDA runtime reproduces the stored reference at 99.96\% R@1, once
+duplicate captions are scored correctly (17 of the 5,000 rows are
+string-identical to another row, and returning an identical twin is not
+an error). Kernel nondeterminism alone therefore costs about 0.04\%, and
+no cross-runtime number should be read against 100\%. Across the runtime
+boundary, raw states retrieve their datacenter twins at 93.3\% R@1
+as-is. Mean-centering alone is inert (93.4\%). \textbf{Through the
+head}, agreement rises to 96.8\%, and to \textbf{97.0\% with the 42KB
+per-runtime mean recalibration}.
+
+Two control arms pin down where the text-side drift lives. Projecting
+both sides onto the top-1024 PCA basis of the reference, the
+high-variance subspace at the head's own output dimension, lands at
+92.2\%, below raw. A random orthonormal 1024-dimensional projection
+lands at raw (93.2\%). Keeping the top tenth of the variance keeps the
+damage; the head's row space, which lives in the low-variance tail, is
+selectively clear of it. The drift is not a mean shift and not
+isotropic: it is concentrated in the high-variance subspace that the
+head's 5,376-to-1,024 projection discards.
 
 A correction is owed here. An earlier draft of this section reported
 98.4\%/100\% and attributed them to head space; a reader's code review
 established that the validation script never applied the head (it
 measured mean-centered raw states at a smaller pool, where the task
 saturates). The numbers above are from the corrected protocol, with the
-head applied, and replace the earlier figures. The capability claim for
-this tier is scoped to text-side self-retrieval until the image-side
-encode is wired on the MLX runtime.
+head applied, duplicate-aware scoring, and the subspace controls the
+same reader's null experiment called for.
+
+The image side of the same boundary closes the remaining scope. The
+1,000 evaluation images were encoded on both runtimes (mean of the
+layer-47 states over image-token positions). Cross-runtime agreement
+through the head with per-runtime means is 100.0\% R@1 in both
+directions, and mean-centering alone is also perfect: pooling over
+hundreds of image-token positions averages away the subspace structure
+that dominates single-token text drift and leaves a clean mean shift,
+the mirror image of the text-side geometry. On the end task,
+image-to-text retrieval against the 5,000-caption gallery, the consumer
+runtime reaches \textbf{R@1 0.640 / R@5 0.903} against the datacenter
+reference's 0.670 / 0.919, through the unchanged head plus the 42KB
+recalibration. The recalibration is not optional there: with the shipped
+training mean instead of the local one, R@1 drops to 0.401. The claim's
+``at most a 42KB recalibration'' clause does real work in both drift
+geometries
+(\texttt{artifacts/nla/q4/image\_head\_space\_validation\_20260805.json}).
 
 An engineering note with strategic weight: on this consumer runtime the
 ``state tap,'' the one piece of edge engineering the program had scoped
@@ -628,14 +656,14 @@ involved.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 4. Precision and hardware invariance. Left: the bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1; a 42KB mean recalibration recovers half. Right: across a simultaneous change of hardware, kernels, and quantizer, raw states agree at 93.0\% R@1 over the full 5,000 pool, mean-centering adds nothing, and the head lifts agreement to 96.7\%, against a 99.6\% same-runtime reproducibility ceiling.}]{figs/fig3_invariance.png}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 4. Precision and hardware invariance. Left: the bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1; a 42KB mean recalibration recovers half. Right: across a simultaneous change of hardware, kernels, and quantizer, raw text states agree at 93.3\% R@1 over the full 5,000 pool, centering and the subspace controls do not rescue, and the head lifts agreement to 97.0\%, against a 99.96\% same-runtime reproducibility ceiling.}]{figs/fig3_invariance.png}}
 \caption{\textbf{Figure 4. Precision and hardware invariance.} Left: the
 bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1; a
 42KB mean recalibration recovers half. Right: across a simultaneous
-change of hardware, kernels, and quantizer, raw states agree at 93.0\%
-R@1 over the full 5,000 pool, mean-centering adds nothing, and the head
-lifts agreement to 96.7\%, against a 99.6\% same-runtime reproducibility
-ceiling.}
+change of hardware, kernels, and quantizer, raw text states agree at
+93.3\% R@1 over the full 5,000 pool, centering and the subspace controls
+do not rescue, and the head lifts agreement to 97.0\%, against a 99.96\%
+same-runtime reproducibility ceiling.}
 \end{figure}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -668,8 +696,9 @@ host scale (down) & 31B → 3B & identical fingerprint; no loss at matched
 data \\
 weight precision & bf16 → 4-bit NF4 & −0.011 R@1, head unchanged \\
 hardware / runtime / quantizer & CUDA + bnb → Apple Silicon + MLX &
-96.7\% head-space agreement (n=5,000) vs a 99.6\% same-runtime ceiling;
-head +3.7 over raw, centering inert \\
+text: 97.0\% head-space agreement (n=5,000) vs a 99.96\% ceiling, drift
+pinned to the high-variance subspace the head discards; images: 100\%
+agreement via the 42KB recal, i2t R@1 0.640 vs 0.670 datacenter \\
 \end{longtable}
 }
 
