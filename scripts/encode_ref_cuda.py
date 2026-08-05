@@ -72,6 +72,10 @@ def parse_args():
                         "(default: stored calib cap5)")
     p.add_argument("--img-dir", default="val2017",
                    help="local COCO val2017 dir (downloaded if missing)")
+    p.add_argument("--analyze-t2i", action="store_true",
+                   help="t2i end task: caption queries (stored/fresh/MLX via "
+                        "--cap-states/--mlx-states) vs the stored-calib "
+                        "image gallery (external frame)")
     p.add_argument("--head-file", default=HEAD_FILE)
     return p.parse_args()
 
@@ -381,6 +385,59 @@ def analyze_images(ref_path: str, mlx_path: str | None,
     print("\n" + json.dumps(results, indent=2))
 
 
+def analyze_t2i(cap_path: str, mlx_cap_path: str | None,
+                head_file: str) -> None:
+    """Reader round 3: t2i with an EXTERNAL frame. The agreement metric
+    transforms both sides identically, so a shared-mean frame error
+    cancels; the end task scores queries against a gallery built from
+    the head's own mu_img, which the text mean never touches, so only
+    it can see a text-side frame error. Queries: the 5,000 eval-tail
+    captions; gallery: the 1,000 stored-calib image states through the
+    head (fixed). Correct hit for caption i is image i//5.
+    """
+    from huggingface_hub import hf_hub_download
+
+    calib = load_calib()
+    d = torch.load(hf_hub_download(HEAD_REPO, head_file),
+                   map_location="cpu", weights_only=True)
+    Wi = d["img"]["weight"].float().numpy()
+    bi = d["img"]["bias"].float().numpy()
+    mu_i = d["mu_img"].float().numpy()
+    Wt = d["txt"]["weight"].float().numpy()
+    bt = d["txt"]["bias"].float().numpy()
+    mu_t = d["mu_txt"].float().numpy()
+
+    def norm(Z):
+        return Z / (np.linalg.norm(Z, axis=1, keepdims=True) + 1e-8)
+
+    # fixed external frame: stored-calib eval-tail images through the head
+    gal = norm((calib["img"].float().numpy()[-IMG_N:] - mu_i) @ Wi.T + bi)
+
+    cal_cap = calib["cap5"].float().numpy()
+    arms = [("stored calib cap5, shared mu", cal_cap, mu_t)]
+    if cap_path:
+        ref_cap = torch.load(cap_path, map_location="cpu",
+                             weights_only=True)["states"].numpy()
+        arms += [("CUDA fresh, shared mu", ref_cap, mu_t),
+                 ("CUDA fresh, per-runtime mu", ref_cap, ref_cap.mean(0))]
+    if mlx_cap_path:
+        mlx_cap = np.load(mlx_cap_path)["states"]
+        arms += [("MLX-Q4, shared mu", mlx_cap, mu_t),
+                 ("MLX-Q4, per-runtime mu", mlx_cap, mlx_cap.mean(0))]
+
+    results = {}
+    print(f"\n=== t2i end task (n_cap={len(cal_cap)}, gallery={len(gal)}) ===")
+    for name, X, mu_ in arms:
+        Zq = norm((X - mu_) @ Wt.T + bt)
+        order = np.argsort(-(Zq @ gal.T), axis=1)
+        tgt = np.arange(len(X)) // 5
+        r1 = float((order[:, 0] == tgt).mean())
+        r5 = float((order[:, :5] == tgt[:, None]).any(1).mean())
+        results[name] = {"r@1": r1, "r@5": r5}
+        print(f"  {name:28s} R@1 {r1:.4f} / R@5 {r5:.4f}")
+    print("\n" + json.dumps(results, indent=2))
+
+
 def main():
     args = parse_args()
     if args.out:
@@ -392,6 +449,8 @@ def main():
     if args.analyze_images:
         analyze_images(args.analyze_images, args.mlx_img_states,
                        args.cap_states, args.head_file)
+    if args.analyze_t2i:
+        analyze_t2i(args.cap_states, args.mlx_states, args.head_file)
 
 
 if __name__ == "__main__":
