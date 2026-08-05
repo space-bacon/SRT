@@ -832,6 +832,17 @@ def build_app():
             X = encode_text_local(req.texts, max_seq_len=req.max_seq_len)
         return {"states": X.tolist(), "d": int(X.shape[1])}
 
+    @app.post("/encode_image")
+    def encode_image(image: UploadFile = File(...)):
+        """Raw L47 mean-over-image-token state for one image (loopback
+        only, same as /encode_texts: used by the cross-runtime vision
+        validation tooling). Each call is one short GenSlot, so live
+        visitors interleave rather than queue behind a batch."""
+        img = _read_image(image.file.read())
+        with _GenSlot():
+            v = encode_image_local(img)
+        return {"state": v.tolist(), "d": int(v.shape[0])}
+
     @app.get("/bench")
     def bench():
         r = generate_text(
