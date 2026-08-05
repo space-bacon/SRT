@@ -437,22 +437,31 @@ saturates). The numbers above are from the corrected protocol, with
 the head applied, duplicate-aware scoring, and the subspace controls
 the same reader's null experiment called for.
 
-The image side of the same boundary closes the remaining scope. The
-1,000 evaluation images were encoded on both runtimes (mean of the
-layer-47 states over image-token positions). Cross-runtime agreement
-through the head with per-runtime means is 100.0% R@1 in both
-directions, and mean-centering alone is also perfect: pooling over
-hundreds of image-token positions averages away the subspace
-structure that dominates single-token text drift and leaves a clean
-mean shift, the mirror image of the text-side geometry. On the end
-task, image-to-text retrieval against the 5,000-caption gallery, the
+The image side of the same boundary closes the remaining scope, and a
+further reader observation sharpened how to read it: the agreement
+metric transforms both sides identically, so a shared-mean frame error
+cancels there, while an end task scores queries against an external
+gallery frame and cannot hide it. The end tasks are therefore the
+instrument of record. The 1,000 evaluation images were encoded on both
+runtimes (mean of the layer-47 states over image-token positions). On
+image-to-text retrieval against the 5,000-caption gallery, the
 consumer runtime reaches **R@1 0.640 / R@5 0.903** against the
 datacenter reference's 0.670 / 0.919, through the unchanged head plus
-the 42KB recalibration. The recalibration is not optional there: with
-the shipped training mean instead of the local one, R@1 drops to
-0.401. The claim's "at most a 42KB recalibration" clause does real
-work in both drift geometries
-(`artifacts/nla/q4/image_head_space_validation_20260805.json`).
+the 42KB recalibration; with the shipped training mean instead of the
+local one, R@1 drops to 0.401, so the image-side mean correction is
+worth 24 points. In the reverse direction, text-to-image with the
+same external gallery frame, the consumer runtime reaches **R@1 0.444
+/ R@5 0.740** against the reference's 0.503 / 0.808; the per-runtime
+mean buys +2.6 points there (and is neutral in a same-runtime
+control), with a roughly 6-point structured residual that no mean
+correction recovers, consistent with the subspace-control finding
+above. Both sides of the boundary carry a mean-frame component that
+the 42KB recalibration fixes; the text side additionally carries the
+high-variance structured drift, and pooled image states carry almost
+none. The claim's "at most a 42KB recalibration" clause does real
+work on both sides, and the honest tier summary is end-task: i2t at
+95% of the datacenter reference, t2i at 88%
+(`artifacts/nla/q4/{image_head_space_validation,t2i_external_frame}_20260805.json`).
 
 An engineering note with strategic weight: on this consumer runtime
 the "state tap," the one piece of edge engineering the program had
@@ -480,7 +489,7 @@ ceiling.](arxiv_program/figs/fig3_invariance.png)
 | modality | text → images, within one frozen host | shared space; gap is one linear map |
 | host scale (down) | 31B → 3B | identical fingerprint; no loss at matched data |
 | weight precision | bf16 → 4-bit NF4 | −0.011 R@1, head unchanged |
-| hardware / runtime / quantizer | CUDA + bnb → Apple Silicon + MLX | text: 97.0% head-space agreement (n=5,000) vs a 99.96% ceiling, drift pinned to the high-variance subspace the head discards; images: 100% agreement via the 42KB recal, i2t R@1 0.640 vs 0.670 datacenter |
+| hardware / runtime / quantizer | CUDA + bnb → Apple Silicon + MLX | text: 97.0% head-space agreement (n=5,000) vs a 99.96% ceiling, drift pinned to the high-variance subspace the head discards; end tasks on-device: i2t R@1 0.640 vs 0.670, t2i 0.444 vs 0.503, 42KB recal load-bearing on both sides |
 
 The unification: what the SRT instruments read is not a property of a
 checkpoint, a precision, a device, or a scale. It is a property of the
