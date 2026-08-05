@@ -131,17 +131,23 @@ def fig3_invariance(out: Path) -> None:
     ax1.set_title("Quantization: −0.011 R@1,\nno retraining", fontsize=9, color=INK)
 
     # Panel B: hardware/runtime (31B head, datacenter -> Mac)
-    labels2 = ["raw states\n(centered cos)", "through head,\nunchanged",
-               "through head,\n+ mean recal"]
-    v2 = [0.805, 0.984, 1.000]
-    bars2 = ax2.bar(range(3), v2, 0.55, color=[GREY, VIOLET_LT, VIOLET])
+    # Full 5,000-caption pool, cross-runtime self-retrieval R@1
+    # (artifacts/nla/q4/head_space_validation_20260805.json)
+    labels2 = ["raw states", "mean-\ncentered", "through head,\nshared mu",
+               "through head,\n+ 42KB recal"]
+    v2 = [0.930, 0.931, 0.964, 0.967]
+    bars2 = ax2.bar(range(4), v2, 0.55,
+                    color=[GREY, GREY, VIOLET_LT, VIOLET])
     for b, v in zip(bars2, v2):
-        ax2.text(b.get_x() + b.get_width() / 2, v + 0.008, f"{v:.3f}",
-                 ha="center", fontsize=8, color=INK)
-    ax2.set_xticks(range(3), labels2, fontsize=7.5)
-    ax2.set_ylim(0.5, 1.08)
-    ax2.set_ylabel("local vs datacenter agreement")
-    ax2.set_title("Hardware: CUDA/bf16 → Apple/MLX-Q4;\nthe head projects away the drift",
+        ax2.text(b.get_x() + b.get_width() / 2, v + 0.006, f"{v:.3f}",
+                 ha="center", fontsize=7.5, color=INK)
+    ax2.axhline(0.996, color=INK, lw=0.8, ls="--", alpha=0.6)
+    ax2.text(3.35, 0.998, "same-runtime ceiling 0.996", ha="right",
+             fontsize=7, color=INK, alpha=0.8)
+    ax2.set_xticks(range(4), labels2, fontsize=7)
+    ax2.set_ylim(0.85, 1.03)
+    ax2.set_ylabel("cross-runtime R@1 (n=5,000)")
+    ax2.set_title("Hardware: CUDA/bf16 → Apple/MLX-Q4;\nhead +3.7, centering inert",
                   fontsize=9, color=INK)
     fig.tight_layout()
     fig.savefig(out / "fig3_invariance.png", bbox_inches="tight")
