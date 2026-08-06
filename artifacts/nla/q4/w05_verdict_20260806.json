@@ -1,0 +1,19 @@
+{
+  "question": "round 7 deciding arm: w=0.5 — ceiling (replace_obj stays at .785) vs in-batch (rises above .785 while macro drops)",
+  "weight_curve": {
+    "replace_obj": {"w0.5": 0.793, "w1.0": 0.785, "w1.5": 0.766, "w2.0": 0.759},
+    "macro":       {"w0.5": 0.642, "w1.0": 0.685, "w1.5": 0.682, "w2.0": 0.680},
+    "clean_i2t":   {"w0.5": 0.661, "w1.0": 0.622, "w1.5": 0.586, "w2.0": 0.580},
+    "full_table": {
+      "add_att":     {"w0.5": 0.564, "w1.0": 0.644, "w1.5": 0.653, "w2.0": 0.652},
+      "add_obj":     {"w0.5": 0.707, "w1.0": 0.713, "w1.5": 0.692, "w2.0": 0.694},
+      "replace_att": {"w0.5": 0.655, "w1.0": 0.669, "w1.5": 0.659, "w2.0": 0.659},
+      "replace_rel": {"w0.5": 0.689, "w1.0": 0.711, "w1.5": 0.709, "w2.0": 0.700},
+      "swap_att":    {"w0.5": 0.584, "w1.0": 0.670, "w1.5": 0.691, "w2.0": 0.682},
+      "swap_obj":    {"w0.5": 0.506, "w1.0": 0.604, "w1.5": 0.604, "w2.0": 0.616}
+    }
+  },
+  "verdict": "IN-BATCH WINS, by the reader's own discriminating prediction: replace_obj 0.793 > 0.785 (and > the fitted ceiling 0.7695) at w=0.5 while macro drops to 0.642. The full curve is stronger evidence than the single arm: replace_obj is smoothly monotone decreasing in weight across all four points, which a ceiling cannot produce. replace_obj's four-head flatness at w=1.0 was a force balance (in-batch support vs hard-negative pressure), not a ceiling.",
+  "headroom_law_status": "survives as an empirical regularity for gain MAGNITUDE (Spearman -1.000 stands as data) but its ceiling interpretation fails at replace_obj; the .685->.719->.740 any-family extrapolation is therefore not guaranteed",
+  "bonus": "w=0.5 is a Pareto point: clean i2t 0.661 (v1-level) with macro 0.642 (+1.1 over v1); the compositionality/retrieval frontier now has four measured points"
+}
