@@ -470,6 +470,24 @@ work on both sides, and the honest tier summary is end-task: i2t at
 95% of the datacenter reference, t2i at 88%
 (`artifacts/nla/q4/{image_head_space_validation,t2i_external_frame}_20260805.json`).
 
+A final refinement, again reader-supplied, fixes the units for all of
+this. A constant displacement competes with the query it is added to,
+so the meaningful knob is not its raw norm but rho, the displacement's
+head-space gain divided by the median head-space query norm. In those
+units the two branches respond essentially identically to matched
+displacement, and the apparent image/text asymmetry in end-task damage
+is explained by the query-norm gap alone: the same cross-runtime mean
+delta (raw norms 22.7 and 21.5) lands at rho 1.33 on the image branch
+and 0.35 on the text branch. There is one displacement, arriving
+unequally, not two drift geometries. The same instrument also
+characterized a jitter-augmented retraining of the head: training
+against random-direction displacements bought 3.0x rho headroom
+against random directions but only 1.47x against the real, structured
+direction, which is measured evidence that augmentation priors for
+runtime drift should be drawn from measured drift families, not
+isotropic noise
+(`artifacts/nla/q4/round5_v2_direction_20260806.json`).
+
 An engineering note with strategic weight: on this consumer runtime
 the "state tap," the one piece of edge engineering the program had
 scoped as remaining work, turned out to require no work at all (the
@@ -659,6 +677,21 @@ and summaries).
 
 **Demos:** `RiverRider/srt-sunstone`, `RiverRider/srt-showcase`,
 `RiverRider/srt-nla-gptoss20b-trace`, `srt-adapter-v1.0-demo`.
+
+## Acknowledgments
+
+The hardware-and-runtime section (7.3) owes its final form to Dipankar
+Sarkar, who reviewed the invariance evidence in public over five
+rounds: a code review that established the original validation never
+applied the head; an isotropic-noise null and subspace controls that
+turned "the head avoids the drift" from asserted into measured; the
+observation that same-transform agreement metrics structurally cancel
+frame errors that end tasks expose, which also surfaced a
+mean-calibration bug in the deployed system; an analytic decomposition
+of the mean-swap arm; and the rho normalization that put both modality
+branches in common units. Every correction was accompanied by
+reproductions run from the published artifacts alone. The section's
+remaining errors are ours.
 
 ## References
 
