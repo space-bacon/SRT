@@ -481,6 +481,28 @@ runtime drift should be drawn from measured drift families, not
 isotropic noise
 (`artifacts/nla/q4/round5_v2_direction_20260806.json`).
 
+Acting on that evidence closes the loop. A head retrained with the
+measured drift family itself, each training sample perturbed by a real
+per-vector cross-runtime residual (3,000 measured MLX-minus-CUDA
+pairs, scaled U(0, 1.5)), internalizes the drift outright. On held-out
+data whose residuals were never seen in training: image-to-text with
+**no calibration at all reaches R@1 0.636**, matching what the
+original head needed the recalibration to achieve (0.634);
+text-to-image reaches 0.469 against the original head's 0.424 ceiling,
+the first crack in the structured residual after post-hoc affine
+correction and isotropic jitter both failed; the cross-runtime gap
+narrows to 0.2 R@1 points on image-to-text; and clean same-runtime
+performance improves rather than degrades (0.679 vs 0.661), the
+augmentation acting as a regularizer. The residual is learnable
+structure that generalizes across inputs. The deployment ladder this
+yields: with no target-runtime knowledge the drift-trained head works
+uncalibrated; with 200 unpaired states the 42KB recalibration closes
+most of the rest; with 3,000 paired encodes a drift-trained head
+essentially removes the runtime boundary
+(`artifacts/nla/q4/v3_drift_head_eval_20260806.json`;
+`sunstone_linear_head_v3_drift.pt` is the shipped artifact and now
+serves the public demo).
+
 An engineering note with strategic weight: on this consumer runtime
 the "state tap," the one piece of edge engineering the program had
 scoped as remaining work, turned out to require no work at all (the
