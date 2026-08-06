@@ -1,0 +1,23 @@
+{
+  "experiment": "v3 drift-family head: linear, 117k train2017 pairs, augmented with MEASURED per-vector residuals (mlx-cuda) from eval-tail images 0-499 (500 img + 2500 txt residuals, per-sample draws, scale U(0,1.5), prob 0.5)",
+  "leakage_control": "residuals from first half only; ALL numbers below scored on held-out images 500-999 / captions 2500-4999",
+  "clean_eval_full": {"i2t": [0.679, 0.917], "t2i_r1": 0.510, "note": "BETTER than v1 0.661 and v2 0.645 clean; drift aug acts as regularizer"},
+  "held_out_comparison": {
+    "v1":        {"no_recal": {"i2t": [0.390, 0.682], "t2i": [0.399, 0.694]},
+                   "recal":    {"i2t": [0.634, 0.898], "t2i": [0.424, 0.725]},
+                   "cuda_ref": {"i2t": [0.668, 0.910], "t2i": [0.493, 0.804]}},
+    "v2_jitter": {"no_recal": {"i2t": [0.430, 0.756], "t2i": [0.420, 0.752]},
+                   "recal":    {"i2t": [0.616, 0.918], "t2i": [0.437, 0.768]},
+                   "cuda_ref": {"i2t": [0.620, 0.910], "t2i": [0.496, 0.820]}},
+    "v3_drift":  {"no_recal": {"i2t": [0.636, 0.892], "t2i": [0.469, 0.786]},
+                   "recal":    {"i2t": [0.658, 0.906], "t2i": [0.467, 0.788]},
+                   "cuda_ref": {"i2t": [0.660, 0.910], "t2i": [0.506, 0.820]}}
+  },
+  "findings": [
+    "no-recal i2t 0.636 matches v1 WITH recal (0.634): the mean displacement is internalized by training against the measured family",
+    "t2i 0.469 breaks the 0.444 wall (+4.5 over v1 recal): first method to crack the structured residual (affine failed, isotropic jitter failed)",
+    "cross-runtime gap nearly closed: v3 recal i2t 0.658 vs own CUDA ref 0.660 (0.2 points); t2i gap 3.9 points (was 6.9 on v1)",
+    "no clean-performance tax: v3 CUDA ref 0.660/0.506 vs v1 0.668/0.493 (wash)",
+    "cost: requires ~3000 PAIRED encodes from the target runtime at training time, vs 200 unpaired for the 42KB recal; the residual is learnable structure, not noise"
+  ]
+}
