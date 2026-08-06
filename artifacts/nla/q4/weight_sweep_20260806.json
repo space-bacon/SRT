@@ -1,0 +1,9 @@
+{
+  "experiment": "hard-neg-weight sweep on the v5 recipe (K=3, full-pool)",
+  "sugarcrepe": {
+    "w1.0": {"macro": 0.685, "swap_att": 0.670, "swap_obj": 0.604, "replace_obj": 0.785, "clean_i2t": 0.622, "clean_t2i": 0.504},
+    "w1.5": {"macro": 0.682, "swap_att": 0.691, "swap_obj": 0.604, "replace_obj": 0.766, "clean_i2t": 0.586, "clean_t2i": 0.517}
+  },
+  "finding": "SATURATED at w=1.0: w=1.5 redistributes (swap_att +2.1, replace_obj -1.9, macro flat -0.3) while clean i2t pays 3.6 more points. The macro gap to CLIP-B/32 (~0.73) is not reachable by pressure on noun-swap-dominated negatives; consistent with reader round-6 mechanism (object identity already enforced by in-batch negatives). Next lever: relation/attribute negative families (v6), not weight.",
+  "w2.0_status": "running for curve completeness; expected worse on macro"
+}
