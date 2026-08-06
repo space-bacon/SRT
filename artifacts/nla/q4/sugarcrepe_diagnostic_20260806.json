@@ -1,0 +1,12 @@
+{
+  "question": "is the compositional signal absent from L47 states, or discarded by the head",
+  "metric": "mean cosine(positive caption, hard negative caption) — lower = better separated",
+  "results": {
+    "swap_obj":    {"raw_centered": 0.396, "head_space": 0.537},
+    "swap_att":    {"raw_centered": 0.498, "head_space": 0.613},
+    "replace_obj": {"raw_centered": 0.582, "head_space": 0.614},
+    "replace_rel": {"raw_centered": 0.485, "head_space": 0.590}
+  },
+  "finding": "ANSWERED: the signal is IN the substrate. Raw L47 states separate word-order swaps MORE than object replacements (0.396 vs 0.582); the head compresses precisely the swap axis (+0.14 similarity vs +0.03 for replaces). The compositionality failure is the objective's, not the encoder's: InfoNCE with random in-batch negatives never penalizes projecting syntax away.",
+  "v4_implication": "leaderboard attack is viable: retrain the head with compositional hard negatives (rule-based swap/replace perturbations of the 117k training captions added to the InfoNCE denominator). The ceiling exists; the training recipe just has to stop discarding it."
+}
