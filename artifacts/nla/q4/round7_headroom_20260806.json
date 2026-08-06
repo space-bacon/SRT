@@ -1,0 +1,12 @@
+{
+  "source": "reader round 7: headroom law + the deciding w=0.5 arm",
+  "his_findings": [
+    "NF4 decomposition: rho/ratio recovers each head's random baseline; MLX-to-NF4 baseline ratio is 3.03 in all three heads = the norm ratio 3.05. The magnitude consolation is the norm ratio and nothing else; the head contributes none of it",
+    "family training bound: v3's trained-family rho (0.118) lands ON the untrained-family level (0.121), not below — family training pulls the trained family down to the generic floor, bounding what a both-families v6 can buy",
+    "HEADROOM LAW: cumulative v1->v5 SugarCrepe gains sorted by v1 starting score fall monotonically; Spearman -1.000 on 7 splits (exact p=2.0e-4); OLS gain = 30.1 - 39.1*v1, r2=0.90, x-intercept 0.7695. Where each split landed is predicted by where it started, not by what was trained. Retires his own in-batch object-identity mechanism (replace_obj starts at .784, ceiling is .7695, no room)",
+    "the discriminating observation: at w=1.5 replace_obj was the ONLY split that fell (-1.9), its first movement in four heads. Ceiling-pinned splits should not care about weight; in-batch-supported splits should fall when hard negatives gain relative weight",
+    "if headroom wins: repeating the 39% closure twice runs macro .685 -> .719 -> .740, past CLIP-B/32, on ANY negative family"
+  ],
+  "deciding_arm": "w=0.5: ceiling hypothesis predicts replace_obj stays at .785; in-batch hypothesis predicts it rises above .785 while macro drops",
+  "status": "w=0.5 training launched (v5 recipe, K=3), concurrent with v6 chain (relation/attribute negatives, 473k encoding)"
+}
