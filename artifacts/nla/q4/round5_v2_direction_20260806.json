@@ -1,0 +1,11 @@
+{
+  "question": "||(mlx_img.mean(0) - mu_img) @ Wi_v2.T|| — did jitter training make v2 relatively more sensitive to the real displacement direction",
+  "mu_img_byte_identical_v1_v2": true,
+  "delta_norm": 22.67,
+  "v1":  {"real_gain": 90.59,  "random_baseline": 142.74, "ratio_real_vs_random": 0.635, "median_q": 67.63,  "rho_real": 1.339, "rho_random": 2.111},
+  "v2_jitter30": {"real_gain": 219.03, "random_baseline": 169.37, "ratio_real_vs_random": 1.293, "median_q": 240.86, "rho_real": 0.909, "rho_random": 0.703},
+  "decomposition_v1_to_v2": {"median_q_growth": 3.56, "random_gain_growth": 1.19, "real_gain_growth": 2.42,
+                              "rho_random_headroom": 3.00, "rho_real_headroom": 1.47},
+  "reader_inversion_estimate": {"real_gain": 251, "ratio": 1.49},
+  "conclusion": "Reader's conclusion CONFIRMED in direction, modestly overestimated in magnitude (219/1.293 vs predicted 251/1.49). Jitter suppressed random directions 3.00x in rho but the real direction only 1.47x; the real/random excitation ratio crossed 1.0 (0.635 -> 1.293), i.e., the real displacement now excites v2 MORE than a random direction of equal norm. v2 still beats v1 against the real displacement in absolute rho (0.909 vs 1.339) which is why the end-task gain is +4.6 not +38, but the mechanism is scale plus preferential armoring of directions that do not occur. Random-jitter augmentation is the wrong prior for structured runtime drift."
+}
