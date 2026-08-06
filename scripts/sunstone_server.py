@@ -45,7 +45,9 @@ log = logging.getLogger("sunstone")
 MODEL_ID = os.environ.get("SUNSTONE_MODEL", "mlx-community/gemma-4-31b-it-4bit")
 TAP_LAYER = int(os.environ.get("SUNSTONE_LAYER", "47"))
 HEAD_REPO = "RiverRider/srt-sunstone-linear-head"
-HEAD_FILE = "sunstone_linear_head.pt"
+HEAD_FILE = "sunstone_linear_head_v3_drift.pt"   # v3: drift-family trained,
+# no-recal i2t 0.636 (v1 needed recal for 0.634), t2i 0.469 vs v1's 0.424,
+# clean eval improves; artifacts/nla/q4/v3_drift_head_eval_20260806.json
 CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
 LOCAL_MU_CACHE = Path("artifacts/local/local_mu_txt.npy")

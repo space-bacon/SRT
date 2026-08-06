@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 log = logging.getLogger("gallery")
 
 HEAD_REPO = "RiverRider/srt-sunstone-linear-head"
-HEAD_FILE = "sunstone_linear_head.pt"
+HEAD_FILE = "sunstone_linear_head_v3_drift.pt"
 ART_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 VAL_FILE = "procrustes/encoded_L47_n5000.pt"
 OUT = Path("artifacts/local/gallery_full.npz")
