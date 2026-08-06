@@ -1,0 +1,16 @@
+{
+  "experiment": "v6: relation/attribute-first negatives (K=4: spatial preposition replace 75,786 + amod adjective transfer 54,894 + noun swap + adj/verb replace; 473,148 encoded), full-pool, w=1.0, drift recipe retained",
+  "sugarcrepe_v5_vs_v6": {
+    "replace_rel": {"v5": 0.711, "v6": 0.758, "delta": 4.7, "trained_axis": true},
+    "add_att":     {"v5": 0.644, "v6": 0.695, "delta": 5.1, "trained_axis": true},
+    "swap_att":    {"v5": 0.670, "v6": 0.692, "delta": 2.2, "trained_axis": true},
+    "replace_att": {"v5": 0.669, "v6": 0.681, "delta": 1.2, "trained_axis": true},
+    "swap_obj":    {"v5": 0.604, "v6": 0.600, "delta": -0.4, "trained_axis": false},
+    "add_obj":     {"v5": 0.713, "v6": 0.704, "delta": -0.9, "trained_axis": false},
+    "replace_obj": {"v5": 0.785, "v6": 0.787, "delta": 0.2, "trained_axis": false},
+    "macro":       {"v5": 0.685, "v6": 0.703}
+  },
+  "clean_eval": {"i2t": [0.613, 0.898], "t2i_r1": 0.515},
+  "headroom_check": "Spearman(v5 start, v5->v6 gain) ~ -0.25 vs his -1.000 cumulative; the most-headroom split (swap_obj 0.604) FELL while mid-headroom replace_rel gained most. Second independent verdict for mix-specificity, consistent with the w=0.5 replace_obj result",
+  "cumulative": "v1 0.631 -> v4 0.662 -> v5 0.685 -> v6 0.703; gap to CLIP-B/32 ~0.73 now 2.7 points; all four trained axes moved, all three untrained axes flat or slightly down"
+}
