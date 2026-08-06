@@ -75,6 +75,22 @@ def parse_args() -> argparse.Namespace:
                         "at matched norm; artifacts/nla/q4/"
                         "mean_displacement_20260805.json). R=30 covers the "
                         "observed displacement with margin.")
+    p.add_argument("--drift-residuals-img", type=Path, default=None,
+                   help="npz with 'residuals' [N,d]: measured per-vector "
+                        "cross-runtime drift (mlx - cuda) for image states. "
+                        "v3 recipe (round 5): train against the measured "
+                        "drift family, not isotropic noise. Isotropic "
+                        "jitter armored random directions 3.0x but the "
+                        "real direction only 1.47x "
+                        "(artifacts/nla/q4/round5_v2_direction_20260806.json).")
+    p.add_argument("--drift-residuals-txt", type=Path, default=None,
+                   help="same, for text states")
+    p.add_argument("--drift-prob", type=float, default=0.5,
+                   help="per-batch probability of applying drift-residual "
+                        "augmentation (per-sample residual draws, scaled "
+                        "~U(0, drift-scale))")
+    p.add_argument("--drift-scale", type=float, default=1.5,
+                   help="max residual scale multiplier")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--save-head", type=Path, default=None,
                    help="persist the trained heads + per-run centering means "
@@ -121,6 +137,9 @@ def train_heads(
     *, hidden: int, proj_dim: int, tau: float, lr: float,
     batch_size: int, max_epochs: int, patience: int, device: str,
     mean_jitter: float = 0.0,
+    drift_img: torch.Tensor | None = None,        # [N,d] measured residuals
+    drift_txt: torch.Tensor | None = None,
+    drift_prob: float = 0.5, drift_scale: float = 1.5,
 ) -> tuple[nn.ModuleDict, dict]:
     d = Xtr.size(1)
     heads = make_heads(kind, d, hidden, proj_dim).to(device)
@@ -137,6 +156,18 @@ def train_heads(
             if idx.numel() < 8:
                 continue
             xb, yb = Xtr[idx], Ytr[idx]
+            if drift_img is not None and torch.rand(1).item() < drift_prob:
+                # measured-drift-family augmentation (v3): per-sample
+                # residual draws simulate "this input arrived from the
+                # other runtime" (round 5: isotropic jitter armors random
+                # directions 3.0x but the real one only 1.47x)
+                ri = drift_img[torch.randint(len(drift_img), (idx.numel(),))]
+                xb = xb + ri.to(xb.device) * (torch.rand(idx.numel(), 1,
+                                              device=xb.device) * drift_scale)
+            if drift_txt is not None and torch.rand(1).item() < drift_prob:
+                rt = drift_txt[torch.randint(len(drift_txt), (idx.numel(),))]
+                yb = yb + rt.to(yb.device) * (torch.rand(idx.numel(), 1,
+                                              device=yb.device) * drift_scale)
             if mean_jitter > 0:
                 # one constant displacement per modality per batch: the
                 # augmentation a cross-runtime mean shift actually applies
@@ -177,6 +208,17 @@ def main() -> None:
     torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     args.out.parent.mkdir(parents=True, exist_ok=True)
+
+    import numpy as np
+    drift_img = drift_txt = None
+    if args.drift_residuals_img is not None:
+        drift_img = torch.from_numpy(
+            np.load(args.drift_residuals_img)["residuals"]).float()
+        print(f"drift residuals img: {tuple(drift_img.shape)}", flush=True)
+    if args.drift_residuals_txt is not None:
+        drift_txt = torch.from_numpy(
+            np.load(args.drift_residuals_txt)["residuals"]).float()
+        print(f"drift residuals txt: {tuple(drift_txt.shape)}", flush=True)
 
     enc = torch.load(args.encodings, map_location="cpu", weights_only=True)
     img, cap0, cap5 = enc["img"].float(), enc["cap0"].float(), enc["cap5"].float()
@@ -242,6 +284,8 @@ def main() -> None:
             lr=args.lr, batch_size=args.batch_size, max_epochs=args.max_epochs,
             patience=args.patience, device=device,
             mean_jitter=args.mean_jitter,
+            drift_img=drift_img, drift_txt=drift_txt,
+            drift_prob=args.drift_prob, drift_scale=args.drift_scale,
         )
         with torch.no_grad():
             i2t = retrieval_eval(heads["img"](X_eval_raw - mu_x),
