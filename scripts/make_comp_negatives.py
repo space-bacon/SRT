@@ -38,6 +38,14 @@ def parse_args():
     p.add_argument("--k-negs", type=int, default=1,
                    help="negatives per caption: 1 = swap only (v4); "
                         "3 = swap + noun-replace + verb/adj-perturb (v5)")
+    p.add_argument("--recipe", default="v5", choices=["v5", "v6"],
+                   help="v6 = relation/attribute families first "
+                        "(preposition replace, adjective transfer between "
+                        "noun chunks), then order (noun swap), then "
+                        "attribute replace. Reader round-6 mechanism: "
+                        "object identity is already enforced by in-batch "
+                        "negatives; relations and attributes are the "
+                        "discarded axes.")
     p.add_argument("--seed", type=int, default=0)
     return p.parse_args()
 
@@ -125,10 +133,56 @@ def replace_word(doc, pos: str, vocab: list[str],
     return out, f"replace_{pos.lower()}"
 
 
+SPATIAL_PREPS = ["on", "in", "under", "above", "behind", "beside",
+                 "over", "near", "below", "inside", "outside", "against",
+                 "across", "around", "between", "beneath"]
+
+
+def prep_replace(doc, rng: random.Random) -> tuple[str, str] | None:
+    """Relation negative: swap one spatial preposition for another."""
+    cands = [t.i for t in doc
+             if t.pos_ == "ADP" and t.text.lower() in SPATIAL_PREPS]
+    if not cands:
+        return None
+    i = rng.choice(cands)
+    old = doc[i].text.lower()
+    new = rng.choice([p for p in SPATIAL_PREPS if p != old])
+    toks = [t.text for t in doc]
+    toks[i] = new
+    out = " ".join(toks).replace(" ,", ",").replace(" .", ".")
+    return out, "prep_replace"
+
+
+def adj_transfer(doc, rng: random.Random) -> tuple[str, str] | None:
+    """Attribute negative: move an adjective from one noun to another
+    ("a red car and a blue door" -> "a blue car and a red door" style
+    reassignment, or one-way move when only one ADJ exists)."""
+    pairs = [(t.i, t.head.i) for t in doc
+             if t.pos_ == "ADJ" and t.dep_ == "amod" and t.head.pos_ == "NOUN"]
+    nouns = [t.i for t in doc if t.pos_ == "NOUN"]
+    if not pairs or len(nouns) < 2:
+        return None
+    adj_i, noun_i = rng.choice(pairs)
+    targets = [n for n in nouns
+               if n != noun_i and doc[n].text.lower() != doc[noun_i].text.lower()]
+    if not targets:
+        return None
+    tgt = rng.choice(targets)
+    toks = [t.text for t in doc]
+    adj = toks[adj_i]
+    del toks[adj_i]
+    tgt_pos = tgt if tgt < adj_i else tgt - 1
+    toks.insert(tgt_pos, adj)
+    out = " ".join(toks).replace(" ,", ",").replace(" .", ".")
+    return out, "adj_transfer"
+
+
 def gen_k(doc, caption: str, vocab_noun: list[str], vocab_verb: list[str],
           vocab_adj: list[str], rng: random.Random, k: int,
-          kinds: dict) -> list[str]:
-    """k diverse negatives: swap, noun-replace, verb/adj perturb."""
+          kinds: dict, recipe: str = "v5") -> list[str]:
+    """k diverse negatives. v5: order-first. v6: relations/attributes
+    first (round-6 mechanism: object identity is already enforced by
+    in-batch negatives; the discarded axes are relations and attributes)."""
     negs: list[str] = []
 
     def add(res):
@@ -138,12 +192,22 @@ def gen_k(doc, caption: str, vocab_noun: list[str], vocab_verb: list[str],
             return True
         return False
 
-    add(perturb(doc, rng))                                   # 1: swap
-    if len(negs) < k:
-        add(replace_word(doc, "NOUN", vocab_noun, rng))      # 2: noun replace
-    if len(negs) < k:
-        if not add(replace_word(doc, "VERB", vocab_verb, rng)):  # 3: verb
-            add(replace_word(doc, "ADJ", vocab_adj, rng))        #    or adj
+    if recipe == "v6":
+        add(prep_replace(doc, rng))                          # relation
+        if len(negs) < k:
+            add(adj_transfer(doc, rng))                      # attribute move
+        if len(negs) < k:
+            add(perturb(doc, rng))                           # order (swap)
+        if len(negs) < k:
+            if not add(replace_word(doc, "ADJ", vocab_adj, rng)):
+                add(replace_word(doc, "VERB", vocab_verb, rng))
+    else:
+        add(perturb(doc, rng))                               # 1: swap
+        if len(negs) < k:
+            add(replace_word(doc, "NOUN", vocab_noun, rng))  # 2: noun replace
+        if len(negs) < k:
+            if not add(replace_word(doc, "VERB", vocab_verb, rng)):
+                add(replace_word(doc, "ADJ", vocab_adj, rng))
     while len(negs) < k:                                     # last resort
         if not add(replace_word(doc, "NOUN", vocab_noun, rng)):
             negs.append(caption)                             # identity pad
@@ -201,10 +265,10 @@ def main():
         flat: list[str] = []
         for k, doc in enumerate(docs):
             flat.extend(gen_k(doc, caps[k], vn, vv, va, rng,
-                              args.k_negs, kinds))
+                              args.k_negs, kinds, recipe=args.recipe))
             if (k + 1) % 20000 == 0:
                 print(f"  {k + 1}/{len(caps)}", flush=True)
-        out = args.work_dir / f"comp_negatives_k{args.k_negs}.json"
+        out = args.work_dir / f"comp_negatives_{args.recipe}_k{args.k_negs}.json"
         out.write_text(json.dumps({"negatives": flat, "k": args.k_negs,
                                    "stats": kinds}))
         sample = [(caps[i], " | ".join(flat[i * args.k_negs:(i + 1) * args.k_negs]))
