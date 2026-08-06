@@ -1,0 +1,17 @@
+{
+  "experiment": "v5: K=3 diverse negatives per caption (noun-swap + vocab noun-replace + verb/adj-replace, 354,861 encoded), full-pool inclusion (each image scores against B*K=768 compositional negatives per batch), drift recipe retained",
+  "sugarcrepe": {
+    "add_att":     {"v1": 0.572, "v4": 0.582, "v5": 0.644},
+    "add_obj":     {"v1": 0.682, "v4": 0.709, "v5": 0.713},
+    "replace_att": {"v1": 0.632, "v4": 0.652, "v5": 0.669},
+    "replace_obj": {"v1": 0.784, "v4": 0.784, "v5": 0.785},
+    "replace_rel": {"v1": 0.676, "v4": 0.706, "v5": 0.711},
+    "swap_att":    {"v1": 0.569, "v4": 0.640, "v5": 0.670},
+    "swap_obj":    {"v1": 0.502, "v4": 0.559, "v5": 0.604},
+    "macro":       {"v1": 0.631, "v4": 0.662, "v5": 0.685}
+  },
+  "clean_eval": {"v5_i2t": [0.622, 0.908], "v5_t2i_r1": 0.504},
+  "trajectory": "macro 0.631 -> 0.662 -> 0.685 in two iterations; swap_obj 0.502 -> 0.604 (now at CLIP-B/32's ~0.61 level on that split); add_att jumped +6.2 from negative-type diversity (replace-type negatives generalized to the add splits)",
+  "trade": "clean i2t declines 0.679 (v3) -> 0.640 (v4) -> 0.622 (v5); t2i flat 0.504. The compositionality/retrieval trade is roughly 3 SugarCrepe points per 2 clean i2t points at weight=1.0",
+  "gap_to_clip_b32": "macro 0.685 vs ~0.73; remaining levers: --hard-neg-weight sweep (dial exists, untuned), K>3, LLM-fluency-filtered negatives, curriculum (hard negs late in training)"
+}
