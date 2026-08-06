@@ -91,6 +91,13 @@ def parse_args() -> argparse.Namespace:
                         "~U(0, drift-scale))")
     p.add_argument("--drift-scale", type=float, default=1.5,
                    help="max residual scale multiplier")
+    p.add_argument("--hard-neg-states", type=Path, default=None,
+                   help=".pt with 'states' [N,d]: L47 states of "
+                        "compositional hard-negative captions, ROW-ALIGNED "
+                        "with the training pairs. v4 recipe (SugarCrepe "
+                        "diagnostic): each sample's perturbed caption "
+                        "joins its InfoNCE denominator so the head cannot "
+                        "project the word-order axis away.")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--save-head", type=Path, default=None,
                    help="persist the trained heads + per-run centering means "
@@ -140,6 +147,7 @@ def train_heads(
     drift_img: torch.Tensor | None = None,        # [N,d] measured residuals
     drift_txt: torch.Tensor | None = None,
     drift_prob: float = 0.5, drift_scale: float = 1.5,
+    hard_neg: torch.Tensor | None = None,         # [n,d] row-aligned with Ytr
 ) -> tuple[nn.ModuleDict, dict]:
     d = Xtr.size(1)
     heads = make_heads(kind, d, hidden, proj_dim).to(device)
@@ -181,8 +189,19 @@ def train_heads(
             zt = F.normalize(heads["txt"](yb), dim=-1)
             logits = zi @ zt.T / tau
             labels = torch.arange(idx.numel(), device=device)
-            loss = 0.5 * (F.cross_entropy(logits, labels)
-                          + F.cross_entropy(logits.T, labels))
+            if hard_neg is not None:
+                # per-sample compositional negative: same nouns, different
+                # syntax. Appended as one extra column per row of the i2t
+                # logits so discarding word order becomes a training error.
+                nb = hard_neg[idx].to(xb.device)
+                zn = F.normalize(heads["txt"](nb), dim=-1)
+                extra = (zi * zn).sum(-1, keepdim=True) / tau
+                loss = 0.5 * (F.cross_entropy(
+                                  torch.cat([logits, extra], dim=1), labels)
+                              + F.cross_entropy(logits.T, labels))
+            else:
+                loss = 0.5 * (F.cross_entropy(logits, labels)
+                              + F.cross_entropy(logits.T, labels))
             opt.zero_grad()
             loss.backward()
             opt.step()
@@ -219,6 +238,12 @@ def main() -> None:
         drift_txt = torch.from_numpy(
             np.load(args.drift_residuals_txt)["residuals"]).float()
         print(f"drift residuals txt: {tuple(drift_txt.shape)}", flush=True)
+
+    hard_neg_all = None
+    if args.hard_neg_states is not None:
+        hard_neg_all = torch.load(args.hard_neg_states, map_location="cpu",
+                                  weights_only=True)["states"].float()
+        print(f"hard negatives: {tuple(hard_neg_all.shape)}", flush=True)
 
     enc = torch.load(args.encodings, map_location="cpu", weights_only=True)
     img, cap0, cap5 = enc["img"].float(), enc["cap0"].float(), enc["cap5"].float()
@@ -276,6 +301,12 @@ def main() -> None:
         Ytr = cap_tr[:n_train] - mu_y
         Xval = img_tr[n_train_max:] - mu_x
         Yval = cap_tr[n_train_max:] - mu_y
+        hard_neg = None
+        if hard_neg_all is not None:
+            if len(hard_neg_all) < n_train:
+                raise SystemExit(f"hard-neg rows {len(hard_neg_all)} < "
+                                 f"n_train {n_train}; alignment broken")
+            hard_neg = (hard_neg_all[:n_train] - mu_y.cpu()).to(device)
         if shuffle:
             Ytr = Ytr[torch.randperm(n_train, generator=g)]
         heads, fit_info = train_heads(
@@ -286,6 +317,7 @@ def main() -> None:
             mean_jitter=args.mean_jitter,
             drift_img=drift_img, drift_txt=drift_txt,
             drift_prob=args.drift_prob, drift_scale=args.drift_scale,
+            hard_neg=hard_neg,
         )
         with torch.no_grad():
             i2t = retrieval_eval(heads["img"](X_eval_raw - mu_x),
