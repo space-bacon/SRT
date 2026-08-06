@@ -1,0 +1,12 @@
+{
+  "source": "reader round 6 (dipankarsarkar), audit of the four 2026-08-06 artifacts",
+  "corrections_accepted": [
+    "post table mislabel: v3 'recal t2i 0.469' cell is the no-recal number; recal t2i is 0.467",
+    "structural reframe: on v3 the 42KB recal buys +2.2 i2t / -0.2 t2i vs +24.4 / +2.5 on v1 — recal and drift-training are SUBSTITUTES for the mean component, not ladder steps (papers restated)",
+    "'clean eval improves (0.679 vs 0.661)' crossed eval sets (full-pool vs card protocol); leakage-controlled comparison is 0.660 vs 0.668 on 500 images = noise. Honest claim: no measurable clean tax (papers restated)",
+    "diagnostic re-read: the odd one out is replace_obj (+0.032 compression), not swaps-vs-replaces (replace_rel +0.105 sits inside the swap range); v4's movement is broad, not targeted (largest point gains on smallest splits; largest SE effect on the axis with 0.39% of negatives)",
+    "mechanism: in-batch InfoNCE negatives already force object identity (they differ mostly by object), so replace_obj had nothing to recover; consistent with replace_obj flat in v4 (-0.8) AND v5 (+0.1)"
+  ],
+  "his_experiment_request": "rho of the bnb-NF4 delta against v3's W (third-runtime family transfer without retraining): if drift family is a property of the quantization grid, v3 shows suppressed rho vs a family it never saw; if kernel ordering, rho returns at v1 levels",
+  "status": "NF4 encode of the 5000 calib captions queued on the box (gemma-4-31B bnb NF4), rho computation to follow"
+}

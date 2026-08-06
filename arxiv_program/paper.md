@@ -498,14 +498,17 @@ original head needed the recalibration to achieve (0.634);
 text-to-image reaches 0.469 against the original head's 0.424 ceiling,
 the first crack in the structured residual after post-hoc affine
 correction and isotropic jitter both failed; the cross-runtime gap
-narrows to 0.2 R@1 points on image-to-text; and clean same-runtime
-performance improves rather than degrades (0.679 vs 0.661), the
-augmentation acting as a regularizer. The residual is learnable
-structure that generalizes across inputs. The deployment ladder this
-yields: with no target-runtime knowledge the drift-trained head works
-uncalibrated; with 200 unpaired states the 42KB recalibration closes
-most of the rest; with 3,000 paired encodes a drift-trained head
-essentially removes the runtime boundary
+narrows to 0.2 R@1 points on image-to-text; and there is no
+measurable clean-performance tax (leakage-controlled same-runtime
+reference 0.660 vs the original head's 0.668, inside noise at this
+sample size). The residual is learnable
+structure that generalizes across inputs. On the drift-trained head
+the 42KB recalibration adds +2.2 i2t and nothing on t2i, against
++24.4 and +2.5 on the original head: the recalibration and
+drift-trained retraining are substitutes for the mean component, not
+steps of a ladder, and the choice between them is a data-availability
+question (200 unpaired states versus 3,000 paired encodes from the
+target runtime)
 (`artifacts/nla/q4/v3_drift_head_eval_20260806.json`;
 `sunstone_linear_head_v3_drift.pt` is the shipped artifact and now
 serves the public demo).
