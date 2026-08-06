@@ -1,0 +1,22 @@
+{
+  "experiment": "v4 compositional head: v3 drift recipe + per-sample rule-based hard negative (118,287 spacy noun/adj swaps of the training captions, aligned, extra InfoNCE column in the i2t direction)",
+  "negative_stats": {"swap_noun": 117058, "swap_adj": 463, "swap_content": 752, "identity": 14},
+  "sugarcrepe": {
+    "add_att":     {"v1": 0.572, "v3": 0.559, "v4": 0.582},
+    "add_obj":     {"v1": 0.682, "v3": 0.692, "v4": 0.709},
+    "replace_att": {"v1": 0.632, "v3": 0.634, "v4": 0.652},
+    "replace_obj": {"v1": 0.784, "v3": 0.792, "v4": 0.784},
+    "replace_rel": {"v1": 0.676, "v3": 0.684, "v4": 0.706},
+    "swap_att":    {"v1": 0.569, "v3": 0.595, "v4": 0.640},
+    "swap_obj":    {"v1": 0.502, "v3": 0.494, "v4": 0.559},
+    "macro":       {"v1": 0.631, "v3": 0.636, "v4": 0.662}
+  },
+  "clean_eval": {"v4_i2t": [0.640, 0.915], "v4_t2i_r1": 0.504,
+                  "note": "~4 pts i2t vs v3 (0.679) traded for compositionality; t2i flat"},
+  "reference_points": {"clip_vit_b32_macro": "~0.73", "clip_vit_b32_swap_obj": "~0.61"},
+  "findings": [
+    "targeted transfer confirmed: swaps moved most (+6.5/+4.5), the exact axis the negatives train; every split improved or held",
+    "one round of 99%-noun-swap rule negatives is not yet CLIP-level (macro 0.662 vs ~0.73); the diagnostic ceiling (raw-state swap separation 0.396) implies headroom remains",
+    "iteration levers not yet used: multiple negatives per sample, replace-type negatives, t2i-direction hard negatives, LLM-fluency-filtered perturbations"
+  ]
+}
