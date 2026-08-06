@@ -1,0 +1,21 @@
+{
+  "question": "round 6: does the drift family transfer across runtimes — rho of the bnb-NF4 delta against v3's W (family = quantization grid vs kernel ordering)",
+  "protocol": "gemma-4-31B loaded in bnb NF4 on the same CUDA box, 5000 calib captions encoded (nf4_cap_states.pt); delta = pool mean minus each head's mu_txt; gain = ||delta @ Wt.T||; rand = random direction at matched norm; rho = gain / median head-space ||q||",
+  "delta_geometry": {
+    "nf4_delta_norm_vs_mu_v1": 7.06,
+    "mlx_delta_norm_vs_mu_v1": 21.52,
+    "nf4_vs_fresh_cuda_mean": 6.53,
+    "cos_nf4_delta_vs_mlx_delta": 0.083
+  },
+  "rho_table": {
+    "v1":       {"mlx_ratio": 0.749, "mlx_rho": 0.346, "nf4_ratio": 0.862, "nf4_rho": 0.131},
+    "v3_drift": {"mlx_ratio": 0.298, "mlx_rho": 0.118, "nf4_ratio": 0.925, "nf4_rho": 0.121},
+    "v5_comp":  {"mlx_ratio": 0.815, "mlx_rho": 0.333, "nf4_ratio": 0.845, "nf4_rho": 0.114}
+  },
+  "findings": [
+    "ANSWER: kernel ordering, not quantization grid. The NF4 delta is essentially orthogonal to the MLX delta (cos 0.083) — each runtime pair is its own drift family in direction",
+    "v3's suppression is family-specific: it nulls the trained MLX direction 2.5x below random (ratio 0.298 vs v1's 0.749) but shows ZERO suppression of the never-seen NF4 direction (0.925, random-level)",
+    "mitigating practical fact: the NF4 displacement is 3x smaller in norm (7.06 vs 21.52) — same-silicon quantization drifts far less than cross-silicon kernels, so the untransferred family matters less",
+    "BONUS: v5's compositional training largely overwrote v3's drift-nulling (MLX ratio 0.815 vs v3's 0.298) — the two augmentations compete for the same head capacity; the demo correctly serves v3, and a v6 would need to re-verify cross-runtime arms after compositional training"
+  ]
+}
