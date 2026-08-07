@@ -353,6 +353,46 @@ the query's domain, and when domain and size conflict, domain wins:
 150 in-domain images beat 4,000 out-of-domain ones. Practically this
 makes anchoring a calibration step, not a constant.
 
+### 6.4 What the head keeps is chosen by the objective, and capacity
+is a budget
+
+Compositionality benchmarks probe whether a retrieval system
+distinguishes "a horse eating grass" from "grass eating a horse."
+CLIP-class dual encoders famously sit near chance on the word-order
+splits of SugarCrepe. The shipped head inherits the same failure
+(swap splits at 0.50 to 0.57), which is at first surprising, because a
+diagnostic on the raw layer-47 states shows the substrate separates
+word-order swaps *more* sharply than object replacements (mean
+positive-negative cosine 0.396 vs 0.582). The information survives to
+the tap; the head discards it, because InfoNCE with random in-batch
+negatives never charges for discarding syntax. The failure belongs to
+the objective, not the encoder.
+
+Fixing the objective recovers most of it. Adding rule-based
+compositional perturbations of each training caption as explicit
+hard negatives (noun swaps, then vocabulary replaces, then spatial
+preposition replaces and dependency-parsed adjective transfers, up to
+K=4 per caption, full-pool in the InfoNCE denominator) moves
+SugarCrepe macro accuracy from 0.631 to 0.705 across three retraining
+rounds, with each round's gains landing on the trained axes (relation
+negatives moved replace_rel +4.7; attribute negatives moved add_att
++5.1; untrained axes stayed flat). A weight sweep gives the trade a
+measured frontier: from retrieval-first (clean i2t 0.661, macro
+0.642) to compositionality-first (clean 0.622, macro 0.705).
+
+The arc ends at a wall that is itself a finding. The union of both
+negative families does not compose: per split it lands at
+approximately max of the parents, not the sum of their exclusive
+gains (macro 0.705 vs 0.703/0.685). Together with the drift result
+above (compositional training erased the drift-trained head's
+family-nulling) this is the third independent instance of
+augmentations competing for the same 1,024 projection dimensions.
+A 22 MB linear head on a frozen chat model closes 60% of the gap to
+CLIP ViT-B/32 on SugarCrepe by objective repair alone; the remainder
+is a capacity question, not a data question
+(`artifacts/nla/q4/sugarcrepe_*.json`,
+`artifacts/nla/q4/w05_verdict_20260806.json`).
+
 ---
 
 ## 7. Invariance axis three: scale downward, precision, and hardware
@@ -593,6 +633,15 @@ headline could not be trusted without them.
    error, corrected and re-scoped in §6.3. We keep the original claim
    visible in the record because the correction is itself a finding
    about measurement discipline.
+7. **Negative families do not compose.** The union of two hard-negative
+   families that individually moved their own SugarCrepe axes lands at
+   approximately the per-split maximum of its parents, not the sum of
+   their exclusive gains, and compositional training erases a
+   drift-trained head's family-nulling. Three independent instances of
+   augmentations competing for the same 1,024 projection dimensions
+   (§6.4, §7.3): the linear head's capacity is a budget, and every
+   trained property spends from it.
+
 
 ---
 
