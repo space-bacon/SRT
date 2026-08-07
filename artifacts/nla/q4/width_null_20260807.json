@@ -1,0 +1,8 @@
+{
+  "experiment": "v8 width sweep: proj_dim 2048 and 4096 (hidden matched), union K=7 negatives + drift recipe, vs v7's 1024",
+  "sugarcrepe_macro": {"pd1024_v7": 0.705, "pd2048": 0.698, "pd4096": 0.705},
+  "per_split_pd4096_vs_v7": "within noise on every split (largest delta 1.1 points, both directions)",
+  "clean_eval": {"pd2048_i2t_t2i": [0.617, 0.520], "pd4096_i2t_t2i": [0.608, 0.523], "mlp_pd4096_i2t": 0.545},
+  "finding": "CLEAN NULL: quadrupling projection width buys zero SugarCrepe macro and ~nothing clean. The similarity is a bilinear form whose rank went 1024 -> 4096 with no effect, so the 0.705 wall is NOT dimensional capacity. The equilibrium among competing constraints is set by the objective and data, not by rank. The earlier 'capacity is a budget' framing is corrected to constraint competition: adding width does not buy more constraint satisfaction because the constraints conflict in the data itself (a caption and its perturbation share an image-side target; no projection of any rank can separate what the image state does not distinguish).",
+  "implication": "remaining routes past 0.705: image-side representation (single mean-pooled vector may not encode relations the negatives probe), joint/ITM scoring, or accept 0.705 as the frozen-mean-pooled-state ceiling and report it. The image side is now the prime suspect: the text tower distinguishes the perturbations (diagnostic), the image pooling may not."
+}

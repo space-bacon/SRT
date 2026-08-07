@@ -1,0 +1,111 @@
+{
+  "encodings": "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/encoded_L47_n5000.pt",
+  "train_encodings": [
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_000.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_001.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_002.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_003.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_004.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_005.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_006.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_007.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_008.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_009.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_010.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_011.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_012.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_013.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_014.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_015.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_016.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_017.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_018.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_019.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_020.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_021.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_022.pt",
+    "/workspace/.hf_home/hub/models--RiverRider--srt-nla-gemma4-artifacts/snapshots/37e6533296c459723993fba8ebcd20c5c0f5de03/procrustes/train_pairs/chunk_023.pt"
+  ],
+  "d": 5376,
+  "n_train_pool": 118287,
+  "n_val": 1000,
+  "n_eval": 1000,
+  "seed": 0,
+  "objective": "symmetric InfoNCE, in-batch negatives",
+  "tau": 0.05,
+  "proj_dim": 2048,
+  "hidden": 2048,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.288,
+        "r@5": 0.523,
+        "r@10": 0.648,
+        "median_rank": 5.0
+      },
+      "t2i": {
+        "r@1": 0.173,
+        "r@5": 0.354,
+        "r@10": 0.45,
+        "median_rank": 17.0
+      }
+    },
+    "linear_n117000": {
+      "kind": "linear",
+      "n_train": 117000,
+      "shuffle": false,
+      "val_r@1": 0.455,
+      "epochs": 52,
+      "i2t": {
+        "r@1": 0.61,
+        "r@5": 0.899,
+        "r@10": 0.957,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.513,
+        "r@5": 0.819,
+        "r@10": 0.913,
+        "median_rank": 1.0
+      }
+    },
+    "mlp_n117000": {
+      "kind": "mlp",
+      "n_train": 117000,
+      "shuffle": false,
+      "val_r@1": 0.382,
+      "epochs": 41,
+      "i2t": {
+        "r@1": 0.53,
+        "r@5": 0.861,
+        "r@10": 0.931,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.432,
+        "r@5": 0.778,
+        "r@10": 0.875,
+        "median_rank": 2.0
+      }
+    },
+    "mlp_shuffled_n117000": {
+      "kind": "mlp",
+      "n_train": 117000,
+      "shuffle": true,
+      "val_r@1": 0.003,
+      "epochs": 37,
+      "i2t": {
+        "r@1": 0.001,
+        "r@5": 0.003,
+        "r@10": 0.008,
+        "median_rank": 704.0
+      },
+      "t2i": {
+        "r@1": 0.001,
+        "r@5": 0.005,
+        "r@10": 0.012,
+        "median_rank": 471.0
+      }
+    }
+  }
+}
