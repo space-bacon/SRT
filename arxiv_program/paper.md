@@ -387,18 +387,26 @@ negatives moved replace_rel +4.7; attribute negatives moved add_att
 measured frontier: from retrieval-first (clean i2t 0.661, macro
 0.642) to compositionality-first (clean 0.622, macro 0.705).
 
-The arc ends at a wall that is itself a finding. The union of both
-negative families does not compose: per split it lands at
-approximately max of the parents, not the sum of their exclusive
-gains (macro 0.705 vs 0.703/0.685). Together with the drift result
-above (compositional training erased the drift-trained head's
-family-nulling) this is the third independent instance of
-augmentations competing for the same 1,024 projection dimensions.
-A 22 MB linear head on a frozen chat model closes 60% of the gap to
-CLIP ViT-B/32 on SugarCrepe by objective repair alone; the remainder
-is a capacity question, not a data question
+The arc ends at a wall that is itself a finding, twice over. The
+union of both negative families does not compose: per split it lands
+at approximately max of the parents, not the sum of their exclusive
+gains (macro 0.705 vs 0.703/0.685). The natural reading, that the
+1,024 projection dimensions are a capacity budget, was then tested
+directly and refuted: retraining at proj_dim 2,048 and 4,096 with the
+same union negatives reproduces macro 0.705 exactly (0.698/0.705),
+so quadrupling the rank of the bilinear similarity buys nothing. The
+competition among trained properties (drift-nulling versus
+compositional margins versus clean retrieval) is a property of the
+objective and the data, not of width: a caption and its perturbation
+share one image-side target, and no projection of any rank can
+separate what the pooled image state does not distinguish. A 22 MB
+linear head on a frozen chat model closes 60% of the gap to CLIP
+ViT-B/32 on SugarCrepe by objective repair alone; the remainder now
+points at the image-side representation, since the text tower
+demonstrably distinguishes the perturbations and mean pooling may not
 (`artifacts/nla/q4/sugarcrepe_*.json`,
-`artifacts/nla/q4/w05_verdict_20260806.json`).
+`artifacts/nla/q4/w05_verdict_20260806.json`,
+`artifacts/nla/q4/width_null_20260807.json`).
 
 ---
 
@@ -640,14 +648,15 @@ headline could not be trusted without them.
    error, corrected and re-scoped in §6.3. We keep the original claim
    visible in the record because the correction is itself a finding
    about measurement discipline.
-7. **Negative families do not compose.** The union of two hard-negative
-   families that individually moved their own SugarCrepe axes lands at
-   approximately the per-split maximum of its parents, not the sum of
-   their exclusive gains, and compositional training erases a
-   drift-trained head's family-nulling. Three independent instances of
-   augmentations competing for the same 1,024 projection dimensions
-   (§6.4, §7.3): the linear head's capacity is a budget, and every
-   trained property spends from it.
+7. **Negative families do not compose, and width does not rescue
+   them.** The union of two hard-negative families that individually
+   moved their own SugarCrepe axes lands at approximately the
+   per-split maximum of its parents, and compositional training erases
+   a drift-trained head's family-nulling. The obvious explanation,
+   1,024 dimensions as a capacity budget, was tested and refuted:
+   projections of rank 2,048 and 4,096 reproduce macro 0.705 exactly.
+   The competition among trained properties lives in the objective and
+   the data, not the width (§6.4, §7.3).
 
 ---
 
