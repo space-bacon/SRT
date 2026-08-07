@@ -568,23 +568,31 @@ intermediate weights dominated on both axes by w=1.0.
 The arc ends at a wall that is itself a finding, twice over. The union
 of both negative families does not compose: per split it lands at
 approximately max of the parents, not the sum of their exclusive gains
-(macro 0.705 vs 0.703/0.685), though the union run raised the per-batch
-negative count 1.75x alongside the mix change, so mix and pressure are
-partially confounded in that comparison (a pressure-matched union at K=4
-is the deconfounding control). The natural reading of the wall, that the
-1,024 projection dimensions are a capacity budget, was then tested
-directly and refuted: retraining at proj\_dim 2,048 and 4,096 with the
-same union negatives reproduces macro 0.705 exactly (0.698/0.705), so
-quadrupling the rank of the bilinear similarity buys nothing. The
-competition among trained properties (drift-nulling versus compositional
-margins versus clean retrieval) is a property of the objective and the
-data, not of width: a caption and its perturbation share one image-side
-target, and no projection of any rank can separate what the pooled image
-state does not distinguish. A 22 MB linear head on a frozen chat model
-closes 75\% of the gap to CLIP ViT-B/32 on SugarCrepe by objective
-repair alone; the remainder now points at the image-side representation,
-since the text tower demonstrably distinguishes the perturbations and
-mean pooling may not (\texttt{artifacts/nla/q4/sugarcrepe\_*.json},
+(macro 0.705 vs 0.703/0.685). Because the union run raised the per-batch
+negative count 1.75x alongside the mix change, mix and pressure were
+deconfounded with a pressure-matched control: the union subsampled to
+K=4 (same pool size as either parent, both families present) lands at
+macro 0.689, below the specialized parent. Mixing at fixed budget
+dilutes (replace\_rel 0.758 to 0.735, add\_att 0.695 to 0.659), and the
+union's small edge over the specialized parent was pressure buying back
+that dilution, not families composing. The two levers separate cleanly:
+the mix chooses which axes move, and the count pays for coverage, with
+the count lever cheaper in clean retrieval per unit of macro (the
+pressure-matched union also keeps clean i2t at 0.628 versus the full
+union's 0.600). The natural reading of the wall, that the 1,024
+projection dimensions are a capacity budget, was then tested directly
+and refuted: retraining at proj\_dim 2,048 and 4,096 with the same union
+negatives reproduces macro 0.705 exactly (0.698/0.705), so quadrupling
+the rank of the bilinear similarity buys nothing. The competition among
+trained properties (drift-nulling versus compositional margins versus
+clean retrieval) is a property of the objective and the data, not of
+width: a caption and its perturbation share one image-side target, and
+no projection of any rank can separate what the pooled image state does
+not distinguish. A 22 MB linear head on a frozen chat model closes 75\%
+of the gap to CLIP ViT-B/32 on SugarCrepe by objective repair alone; the
+remainder now points at the image-side representation, since the text
+tower demonstrably distinguishes the perturbations and mean pooling may
+not (\texttt{artifacts/nla/q4/sugarcrepe\_*.json},
 \texttt{artifacts/nla/q4/w05\_verdict\_20260806.json},
 \texttt{artifacts/nla/q4/width\_null\_20260807.json}).
 

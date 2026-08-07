@@ -387,10 +387,18 @@ by w=1.0.
 The arc ends at a wall that is itself a finding, twice over. The
 union of both negative families does not compose: per split it lands
 at approximately max of the parents, not the sum of their exclusive
-gains (macro 0.705 vs 0.703/0.685), though the union run raised the
-per-batch negative count 1.75x alongside the mix change, so mix and
-pressure are partially confounded in that comparison (a
-pressure-matched union at K=4 is the deconfounding control). The
+gains (macro 0.705 vs 0.703/0.685). Because the union run raised the
+per-batch negative count 1.75x alongside the mix change, mix and
+pressure were deconfounded with a pressure-matched control: the union
+subsampled to K=4 (same pool size as either parent, both families
+present) lands at macro 0.689, below the specialized parent. Mixing
+at fixed budget dilutes (replace_rel 0.758 to 0.735, add_att 0.695 to
+0.659), and the union's small edge over the specialized parent was
+pressure buying back that dilution, not families composing. The two
+levers separate cleanly: the mix chooses which axes move, and the
+count pays for coverage, with the count lever cheaper in clean
+retrieval per unit of macro (the pressure-matched union also keeps
+clean i2t at 0.628 versus the full union's 0.600). The
 natural reading of the wall, that the
 1,024 projection dimensions are a capacity budget, was then tested
 directly and refuted: retraining at proj_dim 2,048 and 4,096 with the

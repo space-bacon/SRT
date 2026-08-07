@@ -61,3 +61,4 @@ docs/substack_*
 /script.py
 
 .venv-adapter/
+artifacts/local/

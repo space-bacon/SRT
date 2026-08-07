@@ -44,6 +44,40 @@ correspondence in this substrate is linear (paper §11.6.4,
   cosine is dominated by the anisotropy attractor)
 - `meta` — training config + eval numbers
 
+`sunstone_linear_head_v2_jitter30.pt` — same format, same protocol,
+trained with mean-jitter augmentation (each batch perturbed by a
+random constant displacement per modality, norm ~U(0, 30), covering
+the ~22-unit mean displacement a runtime change actually produces).
+
+`sunstone_linear_head_v3_drift.pt` — same format, trained with
+**measured drift-family augmentation**: each training sample is
+perturbed by a real per-vector cross-runtime residual (MLX-Q4 minus
+CUDA-bf16, 3,000 measured pairs, scaled ~U(0, 1.5)). On held-out
+cross-runtime data this internalizes the runtime drift: **no-recal
+i2t R@1 0.636** (v1 needs the recalibration to reach 0.634), t2i
+0.469 vs v1's 0.424 ceiling, and clean same-runtime performance
+*improves* (i2t 0.679 vs 0.661). The residual augmentation acts as a
+regularizer.
+
+**Which to use.** The three heads form a ladder of target-runtime
+knowledge:
+
+| you have | use | cross-runtime behavior |
+|---|---|---|
+| nothing | v3 | i2t 0.636 / t2i 0.469 with zero calibration |
+| ~200 unpaired states from your runtime (42KB mean recal) | v3 + recal | i2t 0.658, within 0.2 points of same-runtime |
+| generic caution, no target runtime known | v2 | degrades most gracefully across arbitrary runtimes |
+| exact v1 reproduction | v1 + recal | the paper's reference numbers |
+
+The per-runtime mean recalibration (average ~200 states from your own
+runtime, use instead of the shipped `mu_*`) is still recommended with
+every head; with v1 it is load-bearing (skipping it costs ~24 i2t R@1
+points, a failure mode invisible to same-transform agreement metrics
+and only visible on end-task retrieval). The drift analysis behind all
+of this is in `artifacts/nla/q4/*_2026080[56].json` in the repo,
+developed through a public five-round review exchange on the release
+thread.
+
 ## Usage
 
 ```python

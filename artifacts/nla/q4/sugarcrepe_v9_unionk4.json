@@ -1,0 +1,10 @@
+{
+ "replace_obj": 0.776,
+ "replace_att": 0.6612,
+ "replace_rel": 0.7354,
+ "swap_obj": 0.5918,
+ "swap_att": 0.6847,
+ "add_obj": 0.7139,
+ "add_att": 0.659,
+ "macro": 0.6889
+}

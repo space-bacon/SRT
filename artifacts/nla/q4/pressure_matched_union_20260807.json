@@ -1,0 +1,28 @@
+{
+ "experiment": "v9: pressure-matched union control (his round-8 requested experiment). K=4 subsample of the K=7 union: v5 noun_swap + noun_replace + v6 prep_replace + adj_transfer (473,148 states = same pool size as v6), w=1.0, drift recipe",
+ "sugarcrepe": {
+  "replace_obj": 0.776,
+  "replace_att": 0.6612,
+  "replace_rel": 0.7354,
+  "swap_obj": 0.5918,
+  "swap_att": 0.6847,
+  "add_obj": 0.7139,
+  "add_att": 0.659,
+  "macro": 0.6889
+ },
+ "ladder_macro": {
+  "v5": 0.685,
+  "v6": 0.703,
+  "v7_K7": 0.705,
+  "v9_K4_union": 0.689
+ },
+ "clean_eval": {
+  "i2t": [
+   0.628,
+   0.901
+  ],
+  "t2i_r1": 0.517,
+  "val_r1": 0.462
+ },
+ "finding": "THIRD OUTCOME, neither branch of the dichotomy: at matched pressure the union lands BELOW the specialized parent (0.689 vs v6 0.703), at v5's level. Mixing at fixed budget DILUTES: v6's targeted axes give back their gains (replace_rel 0.758->0.735, add_att 0.695->0.659). v7's +0.002 over v6 was pressure buying back the dilution cost of mixing, not composition. Levers separate cleanly: mix chooses WHICH axes move, count pays for coverage. Count is also the cheaper lever in clean tax: v9 clean i2t 0.628 vs v7 0.600 at same w, confirming his weight-vs-count pricing asymmetry from the other side."
+}

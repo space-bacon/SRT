@@ -1,0 +1,56 @@
+2026-08-06 09:17:22,285 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-sunstone-linear-head/resolve/main/sunstone_linear_head_v3_drift.pt "HTTP/1.1 302 Found"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-06 09:17:22,286 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-06 09:17:24,624 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/encoded_L47_n5000.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:25,701 val2017: 5000 images
+2026-08-06 09:17:25,749 HTTP Request: GET https://huggingface.co/api/models/RiverRider/srt-nla-gemma4-artifacts/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-06 09:17:25,749 train2017: 24 chunks
+2026-08-06 09:17:25,795 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_000.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:31,155 chunk 1/24 done (total 10000 images)
+2026-08-06 09:17:31,224 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_001.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:35,101 chunk 2/24 done (total 15000 images)
+2026-08-06 09:17:35,143 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_002.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:40,771 chunk 3/24 done (total 20000 images)
+2026-08-06 09:17:40,840 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_003.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:47,918 chunk 4/24 done (total 25000 images)
+2026-08-06 09:17:47,987 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_004.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:50,598 chunk 5/24 done (total 30000 images)
+2026-08-06 09:17:50,649 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_005.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:56,219 chunk 6/24 done (total 35000 images)
+2026-08-06 09:17:56,302 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_006.pt "HTTP/1.1 302 Found"
+2026-08-06 09:17:59,811 chunk 7/24 done (total 40000 images)
+2026-08-06 09:17:59,851 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_007.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:03,806 chunk 8/24 done (total 45000 images)
+2026-08-06 09:18:03,868 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_008.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:07,444 chunk 9/24 done (total 50000 images)
+2026-08-06 09:18:07,597 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_009.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:12,714 chunk 10/24 done (total 55000 images)
+2026-08-06 09:18:12,787 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_010.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:17,707 chunk 11/24 done (total 60000 images)
+2026-08-06 09:18:17,755 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_011.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:21,409 chunk 12/24 done (total 65000 images)
+2026-08-06 09:18:21,485 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_012.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:24,993 chunk 13/24 done (total 70000 images)
+2026-08-06 09:18:25,051 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_013.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:30,748 chunk 14/24 done (total 75000 images)
+2026-08-06 09:18:30,816 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_014.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:34,805 chunk 15/24 done (total 80000 images)
+2026-08-06 09:18:34,901 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_015.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:40,370 chunk 16/24 done (total 85000 images)
+2026-08-06 09:18:40,445 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_016.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:45,393 chunk 17/24 done (total 90000 images)
+2026-08-06 09:18:45,521 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_017.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:49,315 chunk 18/24 done (total 95000 images)
+2026-08-06 09:18:49,361 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_018.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:52,379 chunk 19/24 done (total 100000 images)
+2026-08-06 09:18:52,426 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_019.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:56,201 chunk 20/24 done (total 105000 images)
+2026-08-06 09:18:56,237 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_020.pt "HTTP/1.1 302 Found"
+2026-08-06 09:18:59,394 chunk 21/24 done (total 110000 images)
+2026-08-06 09:18:59,439 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_021.pt "HTTP/1.1 302 Found"
+2026-08-06 09:19:04,172 chunk 22/24 done (total 115000 images)
+2026-08-06 09:19:04,270 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_022.pt "HTTP/1.1 302 Found"
+2026-08-06 09:19:07,328 chunk 23/24 done (total 120000 images)
+2026-08-06 09:19:07,387 HTTP Request: HEAD https://huggingface.co/RiverRider/srt-nla-gemma4-artifacts/resolve/main/procrustes/train_pairs/chunk_023.pt "HTTP/1.1 302 Found"
+2026-08-06 09:19:12,284 chunk 24/24 done (total 123287 images)
+2026-08-06 09:19:19,276 wrote artifacts/local/gallery_full.npz: Z_img (123287, 1024) fp16, 123287 files
