@@ -379,18 +379,26 @@ Fixing the objective recovers most of it. Adding rule-based
 compositional perturbations of each training caption as explicit
 hard negatives (noun swaps, then vocabulary replaces, then spatial
 preposition replaces and dependency-parsed adjective transfers, up to
-K=4 per caption, full-pool in the InfoNCE denominator) moves
-SugarCrepe macro accuracy from 0.631 to 0.705 across three retraining
-rounds, with each round's gains landing on the trained axes (relation
-negatives moved replace_rel +4.7; attribute negatives moved add_att
-+5.1; untrained axes stayed flat). A weight sweep gives the trade a
-measured frontier: from retrieval-first (clean i2t 0.661, macro
-0.642) to compositionality-first (clean 0.622, macro 0.705).
+K=7 per caption, full-pool in the InfoNCE denominator) moves
+SugarCrepe macro accuracy from 0.631 to 0.705 across four retraining
+rounds, with gains landing mostly on the trained axes (relation
+negatives moved replace_rel +4.7 and attribute negatives moved
+add_att +5.1, neither reachable by reweighting the previous mix; the
+swap_att gain, by contrast, was 95% available from the weight dial
+alone, so per-axis attribution requires the dial as a control). A
+weight sweep gives the trade a measured frontier: from retrieval-first
+(clean i2t 0.661, macro 0.642) to compositionality-first (clean
+0.600, macro 0.705), with intermediate weights dominated on both axes
+by w=1.0.
 
 The arc ends at a wall that is itself a finding, twice over. The
 union of both negative families does not compose: per split it lands
 at approximately max of the parents, not the sum of their exclusive
-gains (macro 0.705 vs 0.703/0.685). The natural reading, that the
+gains (macro 0.705 vs 0.703/0.685), though the union run raised the
+per-batch negative count 1.75x alongside the mix change, so mix and
+pressure are partially confounded in that comparison (a
+pressure-matched union at K=4 is the deconfounding control). The
+natural reading of the wall, that the
 1,024 projection dimensions are a capacity budget, was then tested
 directly and refuted: retraining at proj_dim 2,048 and 4,096 with the
 same union negatives reproduces macro 0.705 exactly (0.698/0.705),
@@ -400,7 +408,7 @@ compositional margins versus clean retrieval) is a property of the
 objective and the data, not of width: a caption and its perturbation
 share one image-side target, and no projection of any rank can
 separate what the pooled image state does not distinguish. A 22 MB
-linear head on a frozen chat model closes 60% of the gap to CLIP
+linear head on a frozen chat model closes 75% of the gap to CLIP
 ViT-B/32 on SugarCrepe by objective repair alone; the remainder now
 points at the image-side representation, since the text tower
 demonstrably distinguishes the perturbations and mean pooling may not

@@ -1,0 +1,12 @@
+{
+  "source": "reader round 8: paper-vs-artifact audit at commit b3b46535",
+  "corrections_accepted": [
+    "frontier endpoint was two runs stitched (0.622 clean from v5/w1.0 grafted onto 0.705 macro from v7 whose own clean is 0.600); corrected to measured endpoints w=0.5 (0.661, 0.642) and v7 (0.600, 0.705), intermediates dominated by w=1.0",
+    "'three retraining rounds / K=4' described v6 but the 0.705 is v7 (K=7, fourth round); corrected",
+    "correction in our favor: gap closure is 75%, not 60% ((0.705-0.631)/(0.73-0.631))",
+    "trained-axis overclaim scoped: replace_rel and replace_att get 0% from the weight dial, add_att 18%, but swap_att was 95% available from w=1.5 on the OLD mix (0.691 vs v6's 0.692) — per-axis attribution requires the dial as control",
+    "sharpest catch: v7 was a 1.75x pressure step AND a mix step (K 4->7 at same nominal w); count and weight price differently (1.5x weight costs 3.6 clean, 1.75x K costs 1.3); 'families do not compose' was read off a run where both levers moved"
+  ],
+  "his_experiment": "pressure-matched union: K=4 subsample of the K=7 union (v5 noun_swap + noun_replace, v6 prep_replace + adj_transfer), same per-batch pool as v6. If it lands at max(v5,v6), composition is dead and the wall is real; if it beats 0.705, the wall was pressure",
+  "status": "v9_unionk4 launched (pid 8388)"
+}
