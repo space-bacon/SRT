@@ -114,14 +114,15 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
-def make_heads(kind: str, d: int, hidden: int, out_dim: int) -> nn.ModuleDict:
-    def head() -> nn.Module:
+def make_heads(kind: str, d_img: int, d_txt: int, hidden: int,
+               out_dim: int) -> nn.ModuleDict:
+    def head(d: int) -> nn.Module:
         if kind == "linear":
             return nn.Linear(d, out_dim, bias=True)
         return nn.Sequential(
             nn.Linear(d, hidden), nn.GELU(), nn.Linear(hidden, out_dim),
         )
-    return nn.ModuleDict({"img": head(), "txt": head()})
+    return nn.ModuleDict({"img": head(d_img), "txt": head(d_txt)})
 
 
 def retrieval_eval(q: torch.Tensor, pool: torch.Tensor,
@@ -156,8 +157,8 @@ def train_heads(
     hard_neg: torch.Tensor | None = None,         # [n, K, d] row-aligned
     hard_neg_weight: float = 1.0,
 ) -> tuple[nn.ModuleDict, dict]:
-    d = Xtr.size(1)
-    heads = make_heads(kind, d, hidden, proj_dim).to(device)
+    d_img, d_txt = Xtr.size(1), Ytr.size(1)
+    heads = make_heads(kind, d_img, d_txt, hidden, proj_dim).to(device)
     opt = torch.optim.AdamW(heads.parameters(), lr=lr, weight_decay=1e-4)
     n = Xtr.size(0)
     best_val, best_state, bad, epochs_run = -1.0, None, 0, 0
@@ -186,8 +187,8 @@ def train_heads(
             if mean_jitter > 0:
                 # one constant displacement per modality per batch: the
                 # augmentation a cross-runtime mean shift actually applies
-                ri = torch.randn(d, device=xb.device)
-                rt = torch.randn(d, device=yb.device)
+                ri = torch.randn(d_img, device=xb.device)
+                rt = torch.randn(d_txt, device=yb.device)
                 ri = ri / ri.norm() * (torch.rand(1, device=xb.device) * mean_jitter)
                 rt = rt / rt.norm() * (torch.rand(1, device=yb.device) * mean_jitter)
                 xb = xb + ri
@@ -202,7 +203,8 @@ def train_heads(
                 # caption as a candidate, so same-nouns-different-syntax
                 # becomes a training error batch-wide.
                 B = idx.numel()
-                nb = hard_neg[idx].reshape(B * hard_neg.size(1), d).to(xb.device)
+                nb = hard_neg[idx].reshape(
+                    B * hard_neg.size(1), hard_neg.size(-1)).to(xb.device)
                 zn = F.normalize(heads["txt"](nb), dim=-1)
                 extra = (zi @ zn.T) * hard_neg_weight / tau     # [B, B*K]
                 loss = 0.5 * (F.cross_entropy(
@@ -260,7 +262,8 @@ def main() -> None:
 
     enc = torch.load(args.encodings, map_location="cpu", weights_only=True)
     img, cap0, cap5 = enc["img"].float(), enc["cap0"].float(), enc["cap5"].float()
-    N, d = img.shape
+    N, d_img = img.shape
+    d_txt = cap0.size(1)
     n_eval = args.n_eval
     n_fit = N - n_eval
 
@@ -289,7 +292,7 @@ def main() -> None:
 
     results: dict = {
         "encodings": str(args.encodings), "train_encodings": train_src,
-        "d": d, "n_train_pool": n_pool,
+        "d_img": d_img, "d_txt": d_txt, "n_train_pool": n_pool,
         "n_val": args.n_val, "n_eval": n_eval, "seed": args.seed,
         "objective": "symmetric InfoNCE, in-batch negatives",
         "tau": args.temperature, "proj_dim": args.proj_dim,
@@ -297,12 +300,18 @@ def main() -> None:
     }
 
     # Rung 1: centered-cosine baseline, published convention (val2017 fit means).
-    mu_x0, mu_y0 = img[:n_fit].mean(0).to(device), cap0[:n_fit].mean(0).to(device)
-    results["runs"]["baseline_centered"] = {
-        "i2t": retrieval_eval(X_eval_raw - mu_x0, pool5_raw - mu_y0, hit_sets),
-        "t2i": retrieval_eval(t2i_q_raw - mu_y0, X_eval_raw - mu_x0, t2i_hits),
-    }
-    print("baseline_centered", results["runs"]["baseline_centered"]["i2t"], flush=True)
+    # Undefined for mixed-tower runs (d_img != d_txt): no shared space
+    # exists without a trained map, which is the point of the control.
+    if d_img == d_txt:
+        mu_x0, mu_y0 = img[:n_fit].mean(0).to(device), cap0[:n_fit].mean(0).to(device)
+        results["runs"]["baseline_centered"] = {
+            "i2t": retrieval_eval(X_eval_raw - mu_x0, pool5_raw - mu_y0, hit_sets),
+            "t2i": retrieval_eval(t2i_q_raw - mu_y0, X_eval_raw - mu_x0, t2i_hits),
+        }
+        print("baseline_centered", results["runs"]["baseline_centered"]["i2t"], flush=True)
+    else:
+        results["runs"]["baseline_centered"] = None
+        print("baseline_centered skipped (d_img != d_txt)", flush=True)
 
     def run(name: str, kind: str, n_train: int, shuffle: bool = False,
             save_to: Path | None = None) -> None:
@@ -347,7 +356,8 @@ def main() -> None:
                 "img": {k: v.cpu() for k, v in heads["img"].state_dict().items()},
                 "txt": {k: v.cpu() for k, v in heads["txt"].state_dict().items()},
                 "mu_img": mu_x.cpu(), "mu_txt": mu_y.cpu(),
-                "meta": {"kind": kind, "n_train": n_train, "d": d,
+                "meta": {"kind": kind, "n_train": n_train,
+                         "d_img": d_img, "d_txt": d_txt,
                          "proj_dim": args.proj_dim, "hidden": args.hidden,
                          "tau": args.temperature, "seed": args.seed,
                          "i2t": i2t, "t2i": t2i, **fit_info},
