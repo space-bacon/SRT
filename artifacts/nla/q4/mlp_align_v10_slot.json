@@ -1,0 +1,21 @@
+{
+  "n_train": 117000,
+  "n_slots": 5,
+  "d": 5376,
+  "proj_dim": 1024,
+  "tau": 0.05,
+  "objective": "symmetric InfoNCE, max-over-slots image similarity",
+  "val_r@1": 0.46,
+  "i2t": {
+    "r@1": 0.608,
+    "r@5": 0.888,
+    "r@10": 0.963,
+    "median_rank": 1.0
+  },
+  "t2i": {
+    "r@1": 0.505,
+    "r@5": 0.81,
+    "r@10": 0.911,
+    "median_rank": 1.0
+  }
+}

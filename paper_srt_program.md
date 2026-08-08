@@ -408,14 +408,31 @@ competition among trained properties (drift-nulling versus
 compositional margins versus clean retrieval) is a property of the
 objective and the data, not of width: a caption and its perturbation
 share one image-side target, and no projection of any rank can
-separate what the pooled image state does not distinguish. A 22 MB
-linear head on a frozen chat model closes 75% of the gap to CLIP
-ViT-B/32 on SugarCrepe by objective repair alone; the remainder now
-points at the image-side representation, since the text tower
-demonstrably distinguishes the perturbations and mean pooling may not
-(`artifacts/nla/q4/sugarcrepe_*.json`,
+separate what the pooled image state does not distinguish. The last
+candidate, pooling itself, was then tested and also eliminated. A
+diagnostic on raw states was encouraging: scoring SugarCrepe by the
+maximum over four contiguous image-token bands instead of the global
+mean lifted exactly the order-sensitive splits (swap_obj +6.5 points
+from chance, swap_att +3.2, replace_rel +2.3), suggesting the mean
+was destroying real spatial signal. But the trained version of that
+hypothesis, a five-slot multi-vector head (four token bands plus the
+global mean per image, per-slot centering, max-over-slots InfoNCE,
+the same union negatives, re-encoding all 118,287 training images)
+lands at macro 0.702, inside the 0.703-0.705 band. Whatever spatial
+signal max-over-bands exposes on raw states, the trained linear
+readout already extracts an equivalent amount from the pooled state.
+With mixing, pressure, width, and pooling all eliminated, the wall is
+the backbone's layer-47 image representation itself: the
+compositional information needed to beat 0.705 is not linearly
+recoverable from the image-side states at any pooling granularity
+tested, even though the text tower demonstrably distinguishes the
+perturbations. A 22 MB linear head on a frozen chat model closes 75%
+of the gap to CLIP ViT-B/32 on SugarCrepe by objective repair alone;
+the remainder is a property of the frozen representation, not of the
+readout (`artifacts/nla/q4/sugarcrepe_*.json`,
 `artifacts/nla/q4/w05_verdict_20260806.json`,
-`artifacts/nla/q4/width_null_20260807.json`).
+`artifacts/nla/q4/width_null_20260807.json`,
+`artifacts/nla/q4/slot_pool_verdict_20260807.json`).
 
 ---
 

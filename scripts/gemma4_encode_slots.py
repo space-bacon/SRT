@@ -83,7 +83,7 @@ def run_chunks(args, proc, model, img_tok) -> None:
         files, ref_img = ch["files"], ch["img"].float()
         rows = []
         for i in range(0, len(files), args.batch):
-            batch = [os.path.join(args.img_dir, f)
+            batch = [os.path.join(args.img_dir, os.path.basename(f))
                      for f in files[i:i + args.batch]]
             rows.append(encode_batch(proc, model, img_tok, batch))
             if (i // args.batch) % 50 == 0:
@@ -108,7 +108,8 @@ def run_eval(args, proc, model, img_tok) -> None:
     ref_img = calib["img"].float()[-args.n_eval:]
     rows = []
     for i in range(0, len(files), args.batch):
-        batch = [os.path.join(args.img_dir, f) for f in files[i:i + args.batch]]
+        batch = [os.path.join(args.img_dir, os.path.basename(f))
+                 for f in files[i:i + args.batch]]
         rows.append(encode_batch(proc, model, img_tok, batch))
         if (i // args.batch) % 20 == 0:
             print(f"  eval {i + len(batch)}/{len(files)}", flush=True)

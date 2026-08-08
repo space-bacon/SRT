@@ -1,0 +1,32 @@
+{
+  "date": "2026-08-07",
+  "experiment": "v10 multi-vector (slot) pooling head on gemma-4-31B L47",
+  "hypothesis": "the 0.705 SugarCrepe macro wall is caused by mean pooling destroying spatial signal (pilot showed raw max-over-band gains of +6.5 swap_obj, +3.2 swap_att, +2.3 replace_rel)",
+  "design": {
+    "slots": "5 per image: 4 contiguous 65-token bands of the 260 image tokens + global mean, fp16, L47",
+    "train_pool": "118287 COCO train2017 images, slots [118287,5,5376]",
+    "head": "slot_linear proj_dim=1024, per-slot-index centering mu_img [5,5376], max-over-slots InfoNCE, tau=0.05, hard negs v6 K=4 w=1.0, drift residual recipe",
+    "training": "60+ epochs, best val_r@1 0.460, i2t r@1 0.608 r@5 0.888, t2i r@1 0.505"
+  },
+  "sugarcrepe": {
+    "replace_obj": 0.778,
+    "replace_att": 0.674,
+    "replace_rel": 0.749,
+    "swap_obj": 0.645,
+    "swap_att": 0.692,
+    "add_obj": 0.696,
+    "add_att": 0.679,
+    "macro": 0.7018
+  },
+  "ladder": {
+    "v1": 0.631,
+    "v5": 0.685,
+    "v6": 0.703,
+    "v7_K7": 0.705,
+    "v9_unionK4": 0.689,
+    "v10_slot": 0.702,
+    "clip_reference": 0.73
+  },
+  "verdict": "NULL. The trained multi-vector head lands at 0.702, inside the v6-v7 band (0.703-0.705). The pilot's raw-state gains do not survive a trained head: whatever spatial signal max-over-bands exposes on raw states, the trained linear readout already extracts an equivalent amount from the mean-pooled state. Pooling is eliminated as the cause of the wall. Combined with the width null (pd2048 0.698 / pd4096 0.705) and the pressure-matched mixing result (v9 0.689), the remaining explanation is the backbone's L47 image representation itself: the compositional information needed to beat ~0.705 is not linearly recoverable from L47 image-side states at any pooling granularity we tested.",
+  "note_retrieval": "val_r@1 0.460 for v10 vs ~0.44-range for mean-pooled heads suggests slots help generic retrieval slightly, but this does not transfer to compositional discrimination."
+}
