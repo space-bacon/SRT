@@ -51,7 +51,14 @@ def infer_dims(n: int, w: int, h: int) -> tuple[int, int]:
         err = abs(c / r - w / h)
         if best is None or err < best[0]:
             best = (err, r, c)
-    return best[1], best[2]
+    r, c = best[1], best[2]
+    # Reviewer round-10 (dipankarsarkar): prime n factors only as 1xn/nx1,
+    # the aspect test then picks nx1, c=1 makes TR/BR empty slices -> NaN
+    # quadrant means. Fail loudly instead. (Empirical count over all 124,847
+    # encoded images: zero such cases; the vision tower emits n = rows*cols
+    # of a genuine aspect-matched grid.)
+    assert r >= 2 and c >= 2, f"degenerate grid {r}x{c} for n={n}, {w}x{h}"
+    return r, c
 
 
 def encode_batch(proc, model, img_tok, paths: list[str]) -> torch.Tensor:
