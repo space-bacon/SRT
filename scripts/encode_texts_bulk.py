@@ -13,8 +13,6 @@ import os
 
 import torch
 
-BACKBONE = "google/gemma-4-31B-it"
-LAYER = 47
 MAX_SEQ = 64
 BATCH = 32
 BLOCK = 5000
@@ -24,6 +22,8 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--texts", required=True, help="json file with a list")
     p.add_argument("--key", default=None, help="key if the json is a dict")
+    p.add_argument("--backbone", default="google/gemma-4-31B-it")
+    p.add_argument("--layer", type=int, default=47)
     p.add_argument("--out", required=True)
     return p.parse_args()
 
@@ -45,10 +45,10 @@ def main():
         print(f"resuming: {sum(b.size(0) for b in blocks)} done", flush=True)
     done = sum(b.size(0) for b in blocks)
 
-    proc = AutoProcessor.from_pretrained(BACKBONE)
+    proc = AutoProcessor.from_pretrained(args.backbone)
     tok = getattr(proc, "tokenizer", proc)
     model = AutoModelForImageTextToText.from_pretrained(
-        BACKBONE, dtype=torch.bfloat16, device_map="auto")
+        args.backbone, dtype=torch.bfloat16, device_map="auto")
     model.eval()
     bos = tok.bos_token_id
 
@@ -71,7 +71,7 @@ def main():
             attn[j, : len(ids)] = 1
         out = model(input_ids=input_ids.cuda(), attention_mask=attn.cuda(),
                     output_hidden_states=True, use_cache=False)
-        h = out.hidden_states[LAYER]
+        h = out.hidden_states[args.layer]
         last = attn.sum(-1) - 1
         rows = torch.arange(h.size(0))
         buf.append(h[rows.cuda(), last.cuda()].float().cpu())
@@ -84,7 +84,8 @@ def main():
             print(f"  {total}/{len(texts)} (checkpointed)", flush=True)
 
     X = torch.cat(blocks)
-    torch.save({"states": X, "layer": LAYER, "backbone": BACKBONE}, args.out)
+    torch.save({"states": X, "layer": args.layer, "backbone": args.backbone},
+               args.out)
     os.remove(part)
     print(f"saved {tuple(X.shape)} -> {args.out}", flush=True)
 

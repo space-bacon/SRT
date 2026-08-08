@@ -45,8 +45,13 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--work-dir", default="sugarcrepe")
     p.add_argument("--img-dir", default="val2017")
+    p.add_argument("--backbone", default=BACKBONE)
+    p.add_argument("--layer", type=int, default=LAYER)
     p.add_argument("--score-only", action="store_true",
                    help="skip encoding, just score from caches")
+    p.add_argument("--encode-only", action="store_true",
+                   help="encode caches and exit (cross-backbone runs "
+                        "score with their own heads)")
     return p.parse_args()
 
 
@@ -207,7 +212,9 @@ def score(data, img_states, txt_states) -> None:
 
 
 def main():
+    global BACKBONE, LAYER
     args = parse_args()
+    BACKBONE, LAYER = args.backbone, args.layer
     os.makedirs(args.work_dir, exist_ok=True)
     data = fetch_data(args.work_dir)
     files = sorted({it["filename"] for s in data.values() for it in s.values()})
@@ -228,6 +235,9 @@ def main():
         img_states = {str(k): v for k, v in zip(z["files"], z["states"])}
         z = np.load(txt_cache, allow_pickle=True)
         txt_states = {str(k): v for k, v in zip(z["texts"], z["states"])}
+    if args.encode_only:
+        print("ENCODE_ONLY_DONE", flush=True)
+        return
     score(data, img_states, txt_states)
 
 
