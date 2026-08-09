@@ -1,0 +1,99 @@
+{
+  "encodings": "mixed/encoded_mixed_n5000.pt",
+  "train_encodings": [
+    "mixed/chunk_000.pt",
+    "mixed/chunk_001.pt",
+    "mixed/chunk_002.pt",
+    "mixed/chunk_003.pt",
+    "mixed/chunk_004.pt",
+    "mixed/chunk_005.pt",
+    "mixed/chunk_006.pt",
+    "mixed/chunk_007.pt",
+    "mixed/chunk_008.pt",
+    "mixed/chunk_009.pt",
+    "mixed/chunk_010.pt",
+    "mixed/chunk_011.pt",
+    "mixed/chunk_012.pt",
+    "mixed/chunk_013.pt",
+    "mixed/chunk_014.pt",
+    "mixed/chunk_015.pt",
+    "mixed/chunk_016.pt",
+    "mixed/chunk_017.pt",
+    "mixed/chunk_018.pt",
+    "mixed/chunk_019.pt",
+    "mixed/chunk_020.pt",
+    "mixed/chunk_021.pt",
+    "mixed/chunk_022.pt",
+    "mixed/chunk_023.pt"
+  ],
+  "d_img": 5376,
+  "d_txt": 2048,
+  "n_train_pool": 118287,
+  "n_val": 500,
+  "n_eval": 1000,
+  "seed": 0,
+  "objective": "symmetric InfoNCE, in-batch negatives",
+  "tau": 0.05,
+  "proj_dim": 1024,
+  "hidden": 1024,
+  "runs": {
+    "baseline_centered": null,
+    "linear_n117787": {
+      "kind": "linear",
+      "n_train": 117787,
+      "shuffle": false,
+      "val_r@1": 0.608,
+      "epochs": 69,
+      "i2t": {
+        "r@1": 0.611,
+        "r@5": 0.892,
+        "r@10": 0.95,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.508,
+        "r@5": 0.816,
+        "r@10": 0.92,
+        "median_rank": 1.0
+      }
+    },
+    "mlp_n117787": {
+      "kind": "mlp",
+      "n_train": 117787,
+      "shuffle": false,
+      "val_r@1": 0.544,
+      "epochs": 40,
+      "i2t": {
+        "r@1": 0.542,
+        "r@5": 0.859,
+        "r@10": 0.952,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.45,
+        "r@5": 0.786,
+        "r@10": 0.877,
+        "median_rank": 2.0
+      }
+    },
+    "mlp_shuffled_n117787": {
+      "kind": "mlp",
+      "n_train": 117787,
+      "shuffle": true,
+      "val_r@1": 0.012,
+      "epochs": 87,
+      "i2t": {
+        "r@1": 0.002,
+        "r@5": 0.004,
+        "r@10": 0.009,
+        "median_rank": 624.0
+      },
+      "t2i": {
+        "r@1": 0.0,
+        "r@5": 0.003,
+        "r@10": 0.005,
+        "median_rank": 478.0
+      }
+    }
+  }
+}

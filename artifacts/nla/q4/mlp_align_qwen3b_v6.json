@@ -1,0 +1,112 @@
+{
+  "encodings": "qwen3b/encoded_L29_n5000.pt",
+  "train_encodings": [
+    "qwen3b/train_pairs/chunk_000.pt",
+    "qwen3b/train_pairs/chunk_001.pt",
+    "qwen3b/train_pairs/chunk_002.pt",
+    "qwen3b/train_pairs/chunk_003.pt",
+    "qwen3b/train_pairs/chunk_004.pt",
+    "qwen3b/train_pairs/chunk_005.pt",
+    "qwen3b/train_pairs/chunk_006.pt",
+    "qwen3b/train_pairs/chunk_007.pt",
+    "qwen3b/train_pairs/chunk_008.pt",
+    "qwen3b/train_pairs/chunk_009.pt",
+    "qwen3b/train_pairs/chunk_010.pt",
+    "qwen3b/train_pairs/chunk_011.pt",
+    "qwen3b/train_pairs/chunk_012.pt",
+    "qwen3b/train_pairs/chunk_013.pt",
+    "qwen3b/train_pairs/chunk_014.pt",
+    "qwen3b/train_pairs/chunk_015.pt",
+    "qwen3b/train_pairs/chunk_016.pt",
+    "qwen3b/train_pairs/chunk_017.pt",
+    "qwen3b/train_pairs/chunk_018.pt",
+    "qwen3b/train_pairs/chunk_019.pt",
+    "qwen3b/train_pairs/chunk_020.pt",
+    "qwen3b/train_pairs/chunk_021.pt",
+    "qwen3b/train_pairs/chunk_022.pt",
+    "qwen3b/train_pairs/chunk_023.pt"
+  ],
+  "d_img": 2048,
+  "d_txt": 2048,
+  "n_train_pool": 118287,
+  "n_val": 500,
+  "n_eval": 1000,
+  "seed": 0,
+  "objective": "symmetric InfoNCE, in-batch negatives",
+  "tau": 0.05,
+  "proj_dim": 1024,
+  "hidden": 1024,
+  "runs": {
+    "baseline_centered": {
+      "i2t": {
+        "r@1": 0.18,
+        "r@5": 0.426,
+        "r@10": 0.563,
+        "median_rank": 8.0
+      },
+      "t2i": {
+        "r@1": 0.145,
+        "r@5": 0.344,
+        "r@10": 0.49,
+        "median_rank": 11.0
+      }
+    },
+    "linear_n117787": {
+      "kind": "linear",
+      "n_train": 117787,
+      "shuffle": false,
+      "val_r@1": 0.606,
+      "epochs": 48,
+      "i2t": {
+        "r@1": 0.6,
+        "r@5": 0.886,
+        "r@10": 0.958,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.53,
+        "r@5": 0.827,
+        "r@10": 0.917,
+        "median_rank": 1.0
+      }
+    },
+    "mlp_n117787": {
+      "kind": "mlp",
+      "n_train": 117787,
+      "shuffle": false,
+      "val_r@1": 0.558,
+      "epochs": 35,
+      "i2t": {
+        "r@1": 0.57,
+        "r@5": 0.891,
+        "r@10": 0.961,
+        "median_rank": 1.0
+      },
+      "t2i": {
+        "r@1": 0.478,
+        "r@5": 0.798,
+        "r@10": 0.895,
+        "median_rank": 2.0
+      }
+    },
+    "mlp_shuffled_n117787": {
+      "kind": "mlp",
+      "n_train": 117787,
+      "shuffle": true,
+      "val_r@1": 0.004,
+      "epochs": 29,
+      "i2t": {
+        "r@1": 0.001,
+        "r@5": 0.005,
+        "r@10": 0.011,
+        "median_rank": 735.0
+      },
+      "t2i": {
+        "r@1": 0.0,
+        "r@5": 0.004,
+        "r@10": 0.013,
+        "median_rank": 500.0
+      }
+    }
+  }
+}
