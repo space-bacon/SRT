@@ -428,18 +428,67 @@ the same union negatives, re-encoding all 118,287 training images)
 lands at macro 0.702, inside the 0.703-0.705 band. Whatever spatial
 signal max-over-bands exposes on raw states, the trained linear
 readout already extracts an equivalent amount from the pooled state.
-With mixing, pressure, width, and pooling all eliminated, the wall is
-the backbone's layer-47 image representation itself: the
-compositional information needed to beat 0.705 is not linearly
-recoverable from the image-side states at any pooling granularity
-tested, even though the text tower demonstrably distinguishes the
-perturbations. A 22 MB linear head on a frozen chat model closes 75%
-of the gap to CLIP ViT-B/32 on SugarCrepe by objective repair alone;
-the remainder is a property of the frozen representation, not of the
-readout (`artifacts/nla/q4/sugarcrepe_*.json`,
+A fifth lever closed the within-pair elimination: re-encoding the
+decomposition as 2x2 spatial quadrants (calibration first established
+that the backbone's image tokens form a row-major, aspect-matched
+grid of variable dimensions) reproduces swap_obj at 0.645 to the
+third digit, and retraining on the swap-family negatives alone
+regresses (macro 0.682, swap_obj 0.633): concentrating the objective
+on the permutation axis extracts nothing further.
+
+External review then exposed two flaws in the aggregate itself, and
+repairing them reversed the attribution. First, the two add splits
+are 99% solvable by caption length alone (the negative is longer by
+construction; SugarCrepe's adversarial refinement controlled
+plausibility and fluency, not length), so the seven-split macro
+blends a text-side artifact into the measurement. Restated over the
+five length-clean splits the band is unchanged (0.69-0.71), and the
+trained heads score 0.66-0.71 on the add splits rather than 0.99,
+confirming that InfoNCE deletes length as a nuisance feature rather
+than exploiting it. Second, and decisively: every head in the
+elimination read gemma-4 states on both sides, so nothing in it could
+separate an image-side limit from a text-side one. A 2x2 tower
+factorial with Qwen2.5-VL-3B (layer 29, d=2048) as the second
+backbone, identical recipe in every cell (117,787 pairs, the same
+negative families re-encoded in whichever space the text tower lives
+in), settles the question. Clean five-split macro: gemma/gemma 0.704,
+gemma-image with qwen-text 0.665, qwen-image with gemma-text 0.690,
+qwen/qwen 0.661. Swapping the text tower costs 2.9 to 3.9 points;
+swapping the image tower costs 0.4 to 1.4. The band the elimination
+attributed to the image representation is set roughly 3.5x more
+strongly by the text representation, and a 10x smaller image tower
+read through gemma's text tower loses only 1.4 points. Two structures
+survive every cell: swap_att follows the text tower (0.69 and 0.66
+under gemma text against 0.61 under qwen text), the clearest
+single-split tower fingerprint, while swap_obj moves in no cell at
+all (0.600, 0.604, 0.620, 0.604), an object-permutation floor
+invariant to which model sits on either side.
+
+The correct summary of the wall is therefore not an image-side
+ceiling but a division of labor that is uniform across towers: the
+linear readout recovers the scene's inventory nearly in full and its
+arrangement hardly at all. Three direct measurements support that
+characterization. Scoring 80 COCO category prompts against 1,560
+annotated images through the head gives mean per-category detection
+AUC 0.883 and per-image R-precision 0.543 against a 0.038 chance
+floor, so most object types present in a scene are recoverable from
+the single 1,024-dimensional vector. The worst-ranked of each image's
+five reference captions still lands at median rank 44 of 5,000, so
+the vector answers to every description of the scene rather than to a
+dominant subject. And retrieval is flat in scene complexity (r@5
+0.906 at one annotated category, 0.887 at six or more). A 22 MB
+linear head on a frozen chat model closes 75% of the gap to CLIP
+ViT-B/32 on SugarCrepe by objective repair alone; the remaining gap
+is a property of the frozen pair, dominated by the text side, with an
+arrangement floor that no tested combination of towers, objectives,
+or decompositions moves (`artifacts/nla/q4/sugarcrepe_*.json`,
 `artifacts/nla/q4/w05_verdict_20260806.json`,
 `artifacts/nla/q4/width_null_20260807.json`,
-`artifacts/nla/q4/slot_pool_verdict_20260807.json`).
+`artifacts/nla/q4/slot_pool_verdict_20260807.json`,
+`artifacts/nla/q4/sugarcrepe_mixed_v6.json`,
+`artifacts/nla/q4/sugarcrepe_qwen3b_v6.json`,
+`artifacts/nla/q4/sugarcrepe_cell4_v6.json`,
+`artifacts/nla/q4/inventory_A_multilabel.json`).
 
 ---
 
@@ -690,6 +739,16 @@ headline could not be trusted without them.
    projections of rank 2,048 and 4,096 reproduce macro 0.705 exactly.
    The competition among trained properties lives in the objective and
    the data, not the width (§6.4, §7.3).
+8. **The wall was attributed to the wrong tower.** Five levers
+   eliminated within a single backbone pair supported "the wall is
+   the layer-47 image representation." A 2x2 tower factorial with a
+   second backbone reversed the attribution: the text tower sets the
+   band roughly 3.5x more strongly than the image tower, the
+   seven-split macro carried a caption-length artifact on its two add
+   splits, and the object-permutation floor moves in no cell. An
+   elimination inside one pair cannot attribute a limit to either
+   side of the pair; both correction and method are due to external
+   review (§6.4).
 
 ---
 
