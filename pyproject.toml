@@ -53,10 +53,11 @@ target-version = "py310"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["srt*", "srt_introspect*"]
+include = ["srt*", "srt_introspect*", "sunstone_sidecar*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
     "slow: tests that download or instantiate real (tiny) HF models",
+    "integration: tests that need a GPU or full backbone download",
 ]
