@@ -29,3 +29,5 @@ from .index import Index
 
 __version__ = "0.1.0.dev0"
 __all__ = ["Sidecar", "Index", "HEAD_REGISTRY", "load_head", "__version__"]
+# MLXTap and calibrate helpers are importable from their modules directly;
+# kept out of the top level so `import sunstone_sidecar` never requires mlx.

@@ -1,11 +1,17 @@
 """The Sidecar: three verbs on top of a tap, a head, and an index."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Union
+
 import numpy as np
 
 from .heads import load_head, project
 from .index import Index
 from .taps import TransformersTap, read_image_vector, read_text_vector
+
+if TYPE_CHECKING:
+    from .mlx_tap import MLXTap
+    AnyTap = Union[TransformersTap, "MLXTap"]
 
 # Default tag vocabulary: the 80 COCO categories, the set on which the
 # whole-scene inventory reading was measured (detection AUC 0.883,
@@ -39,7 +45,7 @@ class Sidecar:
                                                          a pass you already ran
     """
 
-    def __init__(self, head: dict, tap: TransformersTap | None,
+    def __init__(self, head: dict, tap: "AnyTap | None",
                  backbone: str):
         self.head = head
         self.tap = tap
@@ -63,6 +69,18 @@ class Sidecar:
         head = load_head(backbone)
         tap = TransformersTap.attach(model, processor, head["layer"])
         return cls(head, tap, backbone)
+
+    @classmethod
+    def from_mlx(cls, model_id: str, backbone: str | None = None) -> "Sidecar":
+        """Apple Silicon tier via mlx-vlm (e.g.
+        'mlx-community/gemma-4-31b-it-4bit'). `backbone` names the head
+        to load when the mlx repo id differs from the registry key;
+        run calibrate() after construction for full cross-runtime
+        accuracy (the 42KB fix)."""
+        from .mlx_tap import MLXTap
+        head = load_head(backbone or model_id)
+        tap = MLXTap.from_pretrained(model_id, head["layer"])
+        return cls(head, tap, backbone or model_id)
 
     @classmethod
     def headless(cls, backbone: str) -> "Sidecar":
@@ -147,8 +165,28 @@ class Sidecar:
         order = np.argsort(-sims)[:k]
         return [(vocab[i], float(sims[i])) for i in order]
 
+    # --------------------------------------------------------- calibration
+    def calibrate(self, images=None, texts=None,
+                  save_to: str | None = None) -> dict:
+        """Measure this runtime's modality means on your own data and
+        swap them into the head (the 42KB cross-runtime fix; ~256
+        samples recommended). Returns the calibration dict."""
+        from .calibrate import apply_calibration, measure_means, \
+            save_calibration
+        cal = measure_means(self._need_tap(), images=images, texts=texts)
+        self.head = apply_calibration(self.head, cal)
+        self._vocab_z = None      # vocab cache used old means
+        if save_to:
+            save_calibration(cal, save_to)
+        return cal
+
+    def load_calibration(self, path: str) -> None:
+        from .calibrate import apply_calibration, load_calibration
+        self.head = apply_calibration(self.head, load_calibration(path))
+        self._vocab_z = None
+
     # ------------------------------------------------------------ plumbing
-    def _need_tap(self) -> TransformersTap:
+    def _need_tap(self) -> "AnyTap":
         if self.tap is None:
             raise RuntimeError("this Sidecar is headless; use read(), or "
                                "construct with from_pretrained/attach")
