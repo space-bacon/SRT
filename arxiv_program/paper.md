@@ -457,12 +457,31 @@ qwen/qwen 0.661. Swapping the text tower costs 2.9 to 3.9 points;
 swapping the image tower costs 0.4 to 1.4. The band the elimination
 attributed to the image representation is set roughly 3.5x more
 strongly by the text representation, and a 10x smaller image tower
-read through gemma's text tower loses only 1.4 points. Two structures
-survive every cell: swap_att follows the text tower (0.69 and 0.66
-under gemma text against 0.61 under qwen text), the clearest
-single-split tower fingerprint, while swap_obj moves in no cell at
-all (0.600, 0.604, 0.620, 0.604), an object-permutation floor
-invariant to which model sits on either side.
+read through gemma's text tower loses only 1.4 points. Continued
+review then imposed a second discipline on the per-split numbers: a
+blind word-order prior (bigram log-counts over the benchmark's own
+4,345 unique positive captions, leave-one-out by caption text) scores
+0.660 on the clean five splits with no image, no head, and no
+encoder, so every split is reported here as margin over that prior.
+The factorial sharpens under the discipline: margin over blind is
++0.044 for gemma/gemma and +0.031 for qwen-image/gemma-text, but
++0.006 and +0.001 for the two qwen-text cells, so essentially all
+alignment signal beyond a bigram counter lives in the gemma-text
+column. Two per-split observations from the raw table must be
+restated accordingly. swap_att, which follows the text tower in raw
+accuracy (0.69 and 0.66 under gemma text against 0.61 under qwen
+text), is itself largely solvable by the blind prior (0.67-0.69), so
+the raw effect is consistent with either better alignment or the
+bigger text model's stronger word-order prior showing through, and
+we no longer read it as a tower fingerprint. And swap_obj, which
+moves in no cell (0.600, 0.604, 0.620, 0.604), is underpowered at
+n=245 rather than demonstrably invariant: one cell's 95% interval is
+about ±6 points and the smallest resolvable cell difference (8.6
+points) exceeds the largest tower effect seen anywhere in the table,
+so an effect of realistic size would be invisible there. Its margin
+over blind is the most uniformly positive after replace_obj (+0.055
+to +0.076 in all four cells) but no single cell clears the prior
+with confidence.
 
 The correct summary of the wall is therefore not an image-side
 ceiling but a division of labor that is uniform across towers: the
@@ -488,7 +507,9 @@ or decompositions moves (`artifacts/nla/q4/sugarcrepe_*.json`,
 `artifacts/nla/q4/sugarcrepe_mixed_v6.json`,
 `artifacts/nla/q4/sugarcrepe_qwen3b_v6.json`,
 `artifacts/nla/q4/sugarcrepe_cell4_v6.json`,
-`artifacts/nla/q4/inventory_A_multilabel.json`).
+`artifacts/nla/q4/inventory_A_multilabel.json`,
+`artifacts/nla/q4/blind_bigram_prior.json`,
+`artifacts/nla/q4/margin_over_blind.json`).
 
 ---
 
@@ -745,10 +766,13 @@ headline could not be trusted without them.
    second backbone reversed the attribution: the text tower sets the
    band roughly 3.5x more strongly than the image tower, the
    seven-split macro carried a caption-length artifact on its two add
-   splits, and the object-permutation floor moves in no cell. An
-   elimination inside one pair cannot attribute a limit to either
-   side of the pair; both correction and method are due to external
-   review (§6.4).
+   splits, and a blind word-order prior then showed the swap_att
+   "tower fingerprint" to be largely the text prior showing through,
+   with the swap_obj "floor" underpowered at n=245 rather than
+   invariant. An elimination inside one pair cannot attribute a limit
+   to either side of the pair, and raw split accuracy cannot be
+   attributed to alignment without a blind-prior margin; both
+   corrections and both methods are due to external review (§6.4).
 
 ---
 

@@ -1,0 +1,14 @@
+{
+  "blind": {
+    "replace_obj": 0.6734261501210653,
+    "replace_att": 0.6903553299492385,
+    "replace_rel": 0.7226173541963016,
+    "swap_obj": 0.5448979591836735,
+    "swap_att": 0.6674174174174174,
+    "add_obj": 0.6122696411251213,
+    "add_att": 0.9472543352601156
+  },
+  "clean5": 0.6597428421735392,
+  "tokenizer": "[a-z]+ lowercase",
+  "pool": "bigram log(count+1) mean, LOO by caption text"
+}
