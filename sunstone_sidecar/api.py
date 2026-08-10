@@ -140,8 +140,18 @@ class Sidecar:
             n += 1
         return n
 
-    def search(self, query: str, k: int = 8) -> list[tuple[str, float]]:
-        """Text-to-image search over the index. LLM-grade queries."""
+    def search(self, query: str, k: int = 8,
+               shape_query: bool = True) -> list[tuple[str, float]]:
+        """Text-to-image search over the index. LLM-grade queries.
+
+        The head speaks caption: short keyword queries ("bear") land
+        outside its text distribution and score near zero, while
+        caption-shaped queries score decisively. With shape_query=True
+        (default), queries of three words or fewer are wrapped as
+        "a photo of {query}". Pass shape_query=False to send your text
+        verbatim."""
+        if shape_query and len(query.split()) <= 3:
+            query = f"a photo of {query}"
         return self.index.search(self.encode_text(query), k=k)
 
     def similar(self, img, k: int = 8) -> list[tuple[str, float]]:
