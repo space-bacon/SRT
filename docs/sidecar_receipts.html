@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sunstone Sidecar · Receipts</title>
+<meta name="description" content="Zero-marginal image search, tagging, and dedup from the VLM you already run. Every number on this page is banked, adversarially reviewed, and reproducible from the open repository.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f2; --ink:#4a423b; --terra:#b0603e; --muted:#8b8178;
+    --line:#e7dfd5; --panel:#ffffff;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.65 Inter,system-ui,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 20px 80px}
+  .kicker{font:600 11px/1 Inter;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--terra);margin-bottom:14px}
+  h1{font:700 44px/1.15 "Playfair Display",serif;margin:0 0 10px}
+  h2{font:600 26px/1.3 "Playfair Display",serif;margin:44px 0 6px}
+  .sub{color:var(--muted);font-size:18px;margin:0 0 8px}
+  p{margin:10px 0}
+  a{color:var(--terra)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14.5px}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{font-weight:600;background:#f4eee6}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;margin:16px 0}
+  .good{color:#3d7a44;font-weight:600} .bad{color:#a04533;font-weight:600}
+  code,pre{font:13.5px/1.5 ui-monospace,Menlo,monospace;background:#f4eee6;
+    border-radius:6px}
+  code{padding:1.5px 6px} pre{padding:14px 16px;overflow-x:auto;border:1px solid var(--line)}
+  .foot{color:var(--muted);font-size:13.5px;margin-top:40px;border-top:1px solid var(--line);padding-top:18px}
+  .pill{display:inline-block;background:#f4eee6;border:1px solid var(--line);
+    border-radius:999px;padding:2px 12px;font-size:12.5px;color:var(--muted);margin:2px 4px 2px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="kicker">Sunstone North · Lab · Receipts</div>
+<h1>Sunstone Sidecar</h1>
+<p class="sub">Your VLM already knows what's in every image. Start asking it.</p>
+
+<p>Every image your pipeline sends through a vision-language model already paid
+for a full forward pass. Sidecar reads that pass with a <strong>44MB linear
+head</strong> (one matrix multiply, microseconds) and gives you image search,
+whole-scene tagging, and dedup at <strong>zero marginal model cost</strong>.
+No second model, no embedding API, no data leaving the box.</p>
+
+<pre>pip install sunstone-sidecar
+
+from sunstone_sidecar import Sidecar
+side = Sidecar.attach(model, processor, "google/gemma-4-31B-it")
+side.index_images(paths)
+side.search("a dog catching a frisbee at the beach")
+side.tag(image)          # whole-scene inventory
+</pre>
+
+<h2>The scope card</h2>
+<div class="card">
+<p><span class="good">Reads inventory:</span> what is in the image. Objects,
+scenes, contents, described any way you like. This is measured and strong.</p>
+<p><span class="bad">Does not read arrangement:</span> who is doing what to
+whom. "Dog chasing cat" vs "cat chasing dog" is out of scope for the linear
+head on every backbone pair we tested. Route arrangement questions to the host
+model's generative path; it scores ~0.90 on the same benchmark. Most
+production queries are inventory queries.</p>
+<p>One usage note: <em>the head speaks caption</em>. "A photo of a bear"
+beats "bear" decisively; the library shapes short queries automatically.</p>
+</div>
+
+<h2>Whole-scene reading (the core capability)</h2>
+<table>
+<tr><th>measurement</th><th class="num">result</th><th class="num">chance</th></tr>
+<tr><td>Detection AUC, mean over 80 COCO object categories, 1,560 annotated images</td><td class="num">0.883</td><td class="num">0.500</td></tr>
+<tr><td>Per-image recovery of the full annotated object list (R-precision)</td><td class="num">0.543</td><td class="num">0.038</td></tr>
+<tr><td>Median rank of the <em>worst</em> of each image's 5 reference captions (pool 5,000)</td><td class="num">44</td><td class="num">2,500</td></tr>
+<tr><td>Search r@5 in busy scenes (6+ object categories vs 1)</td><td class="num">0.887 vs 0.906</td><td class="num">flat</td></tr>
+</table>
+<p>The vector answers to every description of the scene, not one dominant
+subject, and does not degrade as scenes get crowded.</p>
+
+<h2>Retrieval</h2>
+<table>
+<tr><th>benchmark</th><th class="num">result</th></tr>
+<tr><td>COCO i2t R@1, 123,287-image pool, one linear head</td><td class="num">0.661</td></tr>
+<tr><td>Karpathy 5K test, leakage-controlled (i2t R@1/5/10)</td><td class="num">0.416 / 0.710 / 0.818</td></tr>
+<tr><td>Same protocol, VSE++ (a fully-trained 2018 dual encoder)</td><td class="num">0.413 / 0.711 / 0.812</td></tr>
+<tr><td>Search latency over 123K images, one desktop machine, end to end</td><td class="num">0.2–0.3 s</td></tr>
+</table>
+
+<h2>Train once, read everywhere (enforced by a unit test)</h2>
+<table>
+<tr><th>axis</th><th>change</th><th class="num">cost</th></tr>
+<tr><td>Precision</td><td>bf16 → 4-bit NF4, head unchanged</td><td class="num">−0.011 R@1</td></tr>
+<tr><td>Hardware/runtime</td><td>CUDA → Apple MLX, after a 42KB recalibration</td><td class="num">≈ 0</td></tr>
+<tr><td>Host scale</td><td>31B → 3B backbone, same recipe</td><td class="num">≈ 0 at matched data</td></tr>
+<tr><td>Cross-model bridge</td><td>index built on gemma, searched via qwen text</td><td class="num">−5 pts R@1</td></tr>
+</table>
+<p>The package ships with an acceptance test: vectors encoded on a Mac CPU
+today must match the datacenter-GPU vectors the published numbers were
+computed from at cos &gt; 0.999. It passes.</p>
+
+<h2>Compositional honesty (margins over a blind prior)</h2>
+<p>During public review, a reader showed that parts of the standard
+compositionality benchmark are solvable by a text-only word-order prior with
+no image at all. So we report margins over that blind prior, not raw
+accuracy. SugarCrepe, five length-clean splits:</p>
+<table>
+<tr><th>configuration</th><th class="num">raw macro</th><th class="num">margin over blind</th></tr>
+<tr><td>blind word-order prior (no image, no model)</td><td class="num">0.660</td><td class="num">—</td></tr>
+<tr><td>gemma images × gemma text (shipped)</td><td class="num">0.704</td><td class="num">+0.044</td></tr>
+<tr><td>qwen images × gemma text</td><td class="num">0.690</td><td class="num">+0.031</td></tr>
+<tr><td>gemma images × qwen text</td><td class="num">0.665</td><td class="num">+0.006</td></tr>
+<tr><td>qwen images × qwen text</td><td class="num">0.661</td><td class="num">+0.001</td></tr>
+</table>
+<p>Where object identity is at stake (replace_obj), the shipped head clears
+the blind prior by +9.4 points (z = 6.0). This is the honest boundary of the
+product, published on purpose: it is why the scope card above exists.</p>
+
+<h2>Why these numbers can be trusted</h2>
+<p>Every result on this page comes from a banked JSON artifact in the open
+repository, and the whole program went through <strong>twelve rounds of public
+adversarial review</strong> on Hugging Face, during which a reader replicated
+our numbers from the artifacts, found real errors, and we corrected the papers
+in place with the ledger of corrections kept visible. The reviewer's blind
+baselines are now part of our reporting standard.</p>
+<p>
+<span class="pill">artifacts/nla/q4/*.json</span>
+<span class="pill">12-round review thread</span>
+<span class="pill">program paper + corrections ledger</span>
+</p>
+
+<div class="foot">
+<a href="https://lab.sunstonenorth.com">← Back to the Lab</a> ·
+<a href="https://huggingface.co/RiverRider/srt-sunstone-linear-head">heads on Hugging Face</a> ·
+<a href="https://github.com/space-bacon/SRT">repository</a> ·
+<a href="https://huggingface.co/posts/RiverRider/705276260622091">the review thread</a><br>
+Sunstone North · custom heads, runtime calibration, and cross-model migration bridges: hello@sunstonenorth.com
+</div>
+
+</div></body>
+</html>
