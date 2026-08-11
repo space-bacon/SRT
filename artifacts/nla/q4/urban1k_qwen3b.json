@@ -1,0 +1,31 @@
+{
+  "i2t_r1": 0.034,
+  "t2i_r1": 0.021,
+  "backbone": "Qwen2.5-VL-3B-Instruct",
+  "max_seq_len": 256,
+  "clip_b32_baseline": {
+    "i2t": 0.55,
+    "t2i": 0.426
+  },
+  "verdict": "NEGATIVE. Head fails Urban1k (i2t 0.034 vs CLIP-B/32 0.550).",
+  "diagnostics": {
+    "trained_regime_64tok": {
+      "i2t": 0.047,
+      "t2i": 0.048
+    },
+    "first_sentence_only": {
+      "i2t": 0.099,
+      "t2i": 0.094
+    },
+    "pool_centered": {
+      "i2t": 0.064,
+      "t2i": 0.07
+    },
+    "anisotropy_projected": {
+      "img": 0.348,
+      "txt": 0.667
+    },
+    "matched_pair_cos": 0.156
+  },
+  "mechanism": "Not text length, not mean shift. All 1,000 items share one inventory (street, buildings, cars, people, signs): txt anisotropy 0.667 means the head maps every urban caption to nearly the same vector. The head reads inventory; when inventory is constant across the pool, it has nothing left to discriminate. Urban1k is within-category fine-grained discrimination, i.e., the published out-of-scope regime, not a long-query benchmark for this head."
+}
