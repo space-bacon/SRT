@@ -1,7 +1,7 @@
 ---
 title: "Train Once, Read Everywhere: Substrate Invariance of the Linearly Readable Structure in Frozen Language Models"
 author: "James Burton Lancaster"
-date: "July 25, 2026"
+date: "August 11, 2026"
 abstract: |
   We report the consolidated findings of the SRT (Semiotic-Reflexive
   Transformer) research program: a multi-year effort to treat frozen,
@@ -360,8 +360,7 @@ the query's domain, and when domain and size conflict, domain wins:
 150 in-domain images beat 4,000 out-of-domain ones. Practically this
 makes anchoring a calibration step, not a constant.
 
-### 6.4 What the head keeps is chosen by the objective, and capacity
-is a budget
+### 6.4 What the head keeps is chosen by the objective
 
 Compositionality benchmarks probe whether a retrieval system
 distinguishes "a horse eating grass" from "grass eating a horse."
@@ -689,6 +688,29 @@ runtime exposes intermediate states natively). The full stack, a 17GB
 quantized 31B host plus the 44MB head, runs on a home computer with no
 GPU server involved.
 
+### 7.4 Across model families: the cross-vendor bridge
+
+The factorial of §6.4 also yields the program's strongest
+cross-family result, and it deserves its own axis. The mixed cells
+pair towers from different organizations, trained with no shared
+lineage, data, or weights: Google's gemma-4-31B on one side and
+Alibaba's Qwen2.5-VL-3B on the other, connected by the same single
+linear map after per-modality centering. Retrieval through the
+bridge: gemma images searched by qwen text reaches i2t R@1 0.611
+against the matched gemma pair's 0.661, and qwen images searched by
+gemma text reaches 0.600, with MLP and shuffled controls behaving as
+on every other rung. Two model families that categorically never
+distilled each other align through one 44MB artifact at a five-point
+cost. This extends the invariance claim across the last axis a
+deployment can vary, the vendor, and it carries a practical
+corollary: an image index built on one backbone survives migration to
+another for the cost of a linear calibration rather than a
+fleet-wide re-encode. It also supplies a measured caution for the
+current policy debate: representational similarity between
+independently trained models is the norm, not forensic evidence of
+copying (`artifacts/nla/q4/mlp_align_mixed_v6.json`,
+`artifacts/nla/q4/mlp_align_cell4_v6.json`).
+
 ![**Figure 4. Precision and hardware invariance.** Left: the
 bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1;
 a 42KB mean recalibration recovers half. Right: across a simultaneous
@@ -709,6 +731,7 @@ ceiling.](figs/fig3_invariance.png)
 | host scale (down) | 31B → 3B | identical fingerprint; no loss at matched data |
 | weight precision | bf16 → 4-bit NF4 | −0.011 R@1, head unchanged |
 | hardware / runtime / quantizer | CUDA + bnb → Apple Silicon + MLX | text: 97.0% head-space agreement (n=5,000) vs a 99.96% ceiling, drift pinned to the high-variance subspace the head discards; end tasks on-device: i2t R@1 0.640 vs 0.670, t2i 0.444 vs 0.503, 42KB recal load-bearing on both sides |
+| model family (vendor) | gemma-4 image tower × Qwen2.5-VL text tower, and the reverse | one linear map bridges unrelated families: i2t R@1 0.611 / 0.600 vs 0.661 matched |
 
 The unification: what the SRT instruments read is not a property of a
 checkpoint, a precision, a device, or a scale. It is a property of the
@@ -843,11 +866,11 @@ Kockelman's semiotic stance and Silverstein's metapragmatics
 ## 12. Limitations
 
 The invariance evidence spans 3B to 235B, three architectures, two
-quantization schemes, and two hardware stacks; it does not yet span
-model *families* trained by different organizations on the
-cross-modal axis (the linear-gap ladder is validated on gemma-4 and
-Qwen2.5-VL; the ceiling numbers are gemma-4's). The linear ceiling at
-full COCO supervision is a lower bound, not a measured plateau.
+quantization schemes, two hardware stacks, and one cross-vendor
+family pair (gemma-4 × Qwen2.5-VL, both directions); other family
+pairs are unmeasured, and the ceiling numbers are gemma-4's. The
+linear ceiling at full COCO supervision is a lower bound, not a
+measured plateau.
 Sub-3B hosts are untested. The 4-bit hardware result uses NF4 and
 MLX-Q4; other quantizers should track but are unmeasured. Retrieval
 quality inherits pool coverage, and anchoring is a genuine calibration
@@ -896,18 +919,20 @@ and summaries).
 
 ## Acknowledgments
 
-The hardware-and-runtime section (7.3) owes its final form to Dipankar
-Sarkar, who reviewed the invariance evidence in public over five
-rounds: a code review that established the original validation never
-applied the head; an isotropic-noise null and subspace controls that
-turned "the head avoids the drift" from asserted into measured; the
-observation that same-transform agreement metrics structurally cancel
-frame errors that end tasks expose, which also surfaced a
-mean-calibration bug in the deployed system; an analytic decomposition
-of the mean-swap arm; and the rho normalization that put both modality
-branches in common units. Every correction was accompanied by
-reproductions run from the published artifacts alone. The section's
-remaining errors are ours.
+The compositionality arc (§6.4) and the hardware-and-runtime section
+(§7.3) owe their final form to Dipankar Sarkar, who reviewed the
+program in public over thirteen rounds, reproducing our numbers from
+the published artifacts alone at every step. His contributions
+include: a code review that established the original cross-runtime
+validation never applied the head; the subspace controls and the rho
+normalization of §7.3; the prediction, correct to the third digit, of
+the slot-pooling null; the caption-length audit and the blind
+word-order prior that reset how every SugarCrepe split in this paper
+is reported; the power analysis that reclassified the swap_obj floor;
+and the mean-image ablation control that inverted our reading of the
+qwen-text cells. Two reporting conventions used here, margins over
+blind priors stated as intervals and per-cell ablation controls, are
+his. The remaining errors are ours.
 
 ## References
 
