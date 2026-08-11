@@ -88,6 +88,30 @@ beats "bear" decisively; the library shapes short queries automatically.</p>
 <p>The vector answers to every description of the scene, not one dominant
 subject, and does not degrade as scenes get crowded.</p>
 
+<h2>The captured pass, in plain terms</h2>
+<p>An embedding turns an image into a vector that captures its meaning, so a
+computer can search, deduplicate, and compare at scale. Everyone else sells
+embeddings as a separate step: a second model to run, or an API to call per
+image. A vision-language model already builds a complete internal reading of
+every image it looks at, then throws it away. Sidecar keeps it: one matrix
+multiply converts the model's own reading into the embedding.</p>
+<div class="card">
+<p><strong>Example.</strong> An insurer processes 50,000 claim photos a day;
+a VLM already drafts the damage description for each. At that moment the
+model's hidden state contains a full reading of the photo. Sidecar converts
+it to an embedding in <strong>45 microseconds</strong>. The same pipeline now
+also has search ("claims with water-damaged ceilings"), fraud dedup ("this
+garage appears in 14 other claims"), and clustering, with zero additional
+model work, and the model that indexed the photos can answer questions about
+them.</p>
+</div>
+<table>
+<tr><th>method</th><th class="num">per image</th><th class="num">vs Sidecar</th></tr>
+<tr><td>Sidecar, captured pass</td><td class="num"><strong>45 µs</strong></td><td class="num">—</td></tr>
+<tr><td>CLIP ViT-B/32, self-hosted (measured, same machine)</td><td class="num">30 ms</td><td class="num">~670x slower</td></tr>
+<tr><td>Cloud embedding API (typical round-trip)</td><td class="num">100–500 ms</td><td class="num">~2,000–11,000x slower</td></tr>
+</table>
+
 <h2>Speed (measured, one desktop machine)</h2>
 <table>
 <tr><th>operation</th><th class="num">time</th></tr>
