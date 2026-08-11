@@ -43,13 +43,17 @@
 
 <div class="kicker">Sunstone North · Lab · Receipts</div>
 <h1>Sunstone Sidecar</h1>
-<p class="sub">Your VLM already knows what's in every image. Start asking it.</p>
+<p class="sub">Image search with the intelligence of a language model.</p>
 
-<p>Every image your pipeline sends through a vision-language model already paid
-for a full forward pass. Sidecar reads that pass with a <strong>44MB linear
-head</strong> (one matrix multiply, microseconds) and gives you image search,
-whole-scene tagging, and dedup at <strong>zero marginal model cost</strong>.
-No second model, no embedding API, no data leaving the box.</p>
+<p>One frozen vision-language model and a <strong>44MB linear head</strong> are
+a complete image-understanding system. It embeds any image, searches by
+meaning rather than keywords, tags whole scenes against any vocabulary, and
+the same model that indexed your images can answer questions about them,
+because retriever and reasoner share one brain. It runs standalone on
+anything from a datacenter GPU to a Mac. And inside a service that already
+uses a VLM, the embedding cost drops to <strong>45 microseconds per
+image</strong>, because the model's reading is captured rather than
+recomputed.</p>
 
 <pre>pip install sunstone-sidecar
 
@@ -83,6 +87,21 @@ beats "bear" decisively; the library shapes short queries automatically.</p>
 </table>
 <p>The vector answers to every description of the scene, not one dominant
 subject, and does not degrade as scenes get crowded.</p>
+
+<h2>Speed (measured, one desktop machine)</h2>
+<table>
+<tr><th>operation</th><th class="num">time</th></tr>
+<tr><td>Search a 123,287-image index, end to end including the text query</td><td class="num">0.2–0.3 s</td></tr>
+<tr><td>Search math alone over 123,287 vectors</td><td class="num">21 ms</td></tr>
+<tr><td>Embed an image, GPU tier</td><td class="num">≈ 0.25 s</td></tr>
+<tr><td>Embed an image inside an existing VLM service (captured pass)</td><td class="num">45 µs</td></tr>
+</table>
+<p>A dedicated CLIP encoder embeds a standalone image faster (30 ms on the
+same CPU). It also reads 77 tokens of near-keywords, cannot follow "the kind
+of cluttered desk you'd see in a startup office", cannot answer a single
+question about anything it indexed, and is one more model fleet to operate.
+Speed per embed is the only row it wins, and captured-pass deployment removes
+even that.</p>
 
 <h2>Retrieval</h2>
 <table>
