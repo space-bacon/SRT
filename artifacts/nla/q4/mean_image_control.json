@@ -1,0 +1,30 @@
+{
+  "control": "mean-image ablation (reviewer round-13): image replaced by the split's mean raw image vector; same head, same texts",
+  "cells": {
+    "gemma-img x qwen-txt": {
+      "per_split": {
+        "replace_obj": 0.6108,
+        "replace_att": 0.6764,
+        "replace_rel": 0.7297,
+        "swap_obj": 0.7224,
+        "swap_att": 0.7237,
+        "add_obj": 0.598,
+        "add_att": 0.8613
+      },
+      "macro5": 0.6926
+    },
+    "qwen-img x qwen-txt": {
+      "per_split": {
+        "replace_obj": 0.6047,
+        "replace_att": 0.6726,
+        "replace_rel": 0.7262,
+        "swap_obj": 0.7143,
+        "swap_att": 0.7162,
+        "add_obj": 0.5946,
+        "add_att": 0.8598
+      },
+      "macro5": 0.6868
+    }
+  },
+  "pending": "gemma-text cells need gemma sc txt states (re-encode next box)"
+}

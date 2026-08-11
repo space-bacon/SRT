@@ -463,11 +463,28 @@ blind word-order prior (bigram log-counts over the benchmark's own
 4,345 unique positive captions, leave-one-out by caption text) scores
 0.660 on the clean five splits with no image, no head, and no
 encoder, so every split is reported here as margin over that prior.
-The factorial sharpens under the discipline: margin over blind is
-+0.044 for gemma/gemma and +0.031 for qwen-image/gemma-text, but
-+0.006 and +0.001 for the two qwen-text cells, so essentially all
-alignment signal beyond a bigram counter lives in the gemma-text
-column. Two per-split observations from the raw table must be
+The margin view sets an absolute floor and only that: the prior is
+blind to both towers, so it takes one value per split in every cell,
+and tower comparisons live in the raw table unchanged. Against the
+floor, the picture is: the gemma-text cells clear it (+0.044 and
++0.031 on the clean five) while the qwen-text cells sit on it (+0.006
+and +0.001), and the baseline itself carries error that point margins
+conceal. Two independent rebuilds of the prior agree within ±0.02 per
+split, which on swap_obj (n=245, prior CI ±0.062) means every cell's
+margin interval straddles zero against both rebuilds
+(`artifacts/nla/q4/prior_comparison.json`). The control that does
+adjudicate per cell, due to the same review, is mean-image ablation:
+the same head and texts with every image replaced by the split's mean
+image vector. On the qwen-text cells it is decisive in an unexpected
+direction: the ablation outscores the real images on the clean-five
+macro (0.693 vs 0.665 mixed; 0.687 vs 0.661 matched), with real
+images adding roughly +15 points on replace_obj and subtracting
+roughly 11 on the swap splits, where the trained text projection's
+caption prior alone scores 0.71+. Image content contributes exactly
+where object identity is at stake and degrades the text prior
+everywhere subtler
+(`artifacts/nla/q4/mean_image_control.json`; gemma-text cells pending
+re-encode). Two per-split observations from the raw table must be
 restated accordingly. swap_att, which follows the text tower in raw
 accuracy (0.69 and 0.66 under gemma text against 0.61 under qwen
 text), is itself largely solvable by the blind prior (0.67-0.69), so
@@ -479,9 +496,10 @@ n=245 rather than demonstrably invariant: one cell's 95% interval is
 about ±6 points and the smallest resolvable cell difference (8.6
 points) exceeds the largest tower effect seen anywhere in the table,
 so an effect of realistic size would be invisible there. Its margin
-over blind is the most uniformly positive after replace_obj (+0.055
-to +0.076 in all four cells) but no single cell clears the prior
-with confidence.
+over blind is directionally positive in all four cells but the
+interval straddles zero in every cell against both rebuilds of the
+prior; the split neither confirms nor rules out an image contribution
+at this n.
 
 The correct summary of the wall is therefore not an image-side
 ceiling but a division of labor that is uniform across towers: the

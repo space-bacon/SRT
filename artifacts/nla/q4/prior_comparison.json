@@ -1,0 +1,77 @@
+{
+  "note": "two independent rebuilds of the blind bigram prior (tokenizer choice differs); 95% normal-approx CIs; margins reported as intervals vs BOTH rebuilds",
+  "per_split": {
+    "replace_obj": {
+      "prior_ours": 0.6734,
+      "prior_his": 0.674,
+      "n": 1652,
+      "ci95_ours": 0.0226
+    },
+    "replace_att": {
+      "prior_ours": 0.6904,
+      "prior_his": 0.682,
+      "n": 788,
+      "ci95_ours": 0.0323
+    },
+    "replace_rel": {
+      "prior_ours": 0.7226,
+      "prior_his": 0.721,
+      "n": 1406,
+      "ci95_ours": 0.0234
+    },
+    "swap_obj": {
+      "prior_ours": 0.5449,
+      "prior_his": 0.565,
+      "n": 245,
+      "ci95_ours": 0.0624
+    },
+    "swap_att": {
+      "prior_ours": 0.6674,
+      "prior_his": 0.685,
+      "n": 666,
+      "ci95_ours": 0.0358
+    }
+  },
+  "swap_obj_margins": {
+    "gemma/gemma": {
+      "vs_ours": [
+        -0.032,
+        0.143
+      ],
+      "vs_his": [
+        -0.052,
+        0.122
+      ]
+    },
+    "gemma-img/qwen-txt": {
+      "vs_ours": [
+        -0.028,
+        0.147
+      ],
+      "vs_his": [
+        -0.048,
+        0.126
+      ]
+    },
+    "qwen-img/gemma-txt": {
+      "vs_ours": [
+        -0.012,
+        0.162
+      ],
+      "vs_his": [
+        -0.032,
+        0.142
+      ]
+    },
+    "qwen/qwen": {
+      "vs_ours": [
+        -0.028,
+        0.147
+      ],
+      "vs_his": [
+        -0.048,
+        0.126
+      ]
+    }
+  }
+}
