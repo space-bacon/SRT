@@ -1,0 +1,95 @@
+{
+  "agreement": {
+    "15": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0483,
+      "dom_vs_delta": 0.0925,
+      "shuffled_auc": 0.5095,
+      "shuffled_vs_delta": -0.0101,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "16": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0601,
+      "dom_vs_delta": 0.0417,
+      "shuffled_auc": 0.4656,
+      "shuffled_vs_delta": -0.0008,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "24": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0412,
+      "dom_vs_delta": 0.0591,
+      "shuffled_auc": 0.5019,
+      "shuffled_vs_delta": 0.0331,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "32": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0724,
+      "dom_vs_delta": 0.0682,
+      "shuffled_auc": 0.4737,
+      "shuffled_vs_delta": -0.0176,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "40": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.1204,
+      "dom_vs_delta": 0.1281,
+      "shuffled_auc": 0.5263,
+      "shuffled_vs_delta": -0.0111,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "48": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0803,
+      "dom_vs_delta": 0.0887,
+      "shuffled_auc": 0.5234,
+      "shuffled_vs_delta": -0.0127,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "56": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.2104,
+      "dom_vs_delta": 0.5095,
+      "shuffled_auc": 0.4891,
+      "shuffled_vs_delta": -0.0033,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "64": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.2586,
+      "dom_vs_delta": 0.2174,
+      "shuffled_auc": 0.5005,
+      "shuffled_vs_delta": 0.008,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    }
+  },
+  "propensity": {
+    "base": 0.3918,
+    "abl": -0.3914,
+    "abl+2.0delta": 2.0823,
+    "abl+2.0rand": -0.5188,
+    "abl+4.0delta": 2.2943,
+    "abl+4.0rand": -0.4635
+  },
+  "alphas": [
+    0.0,
+    2.0,
+    4.0
+  ],
+  "corpus": {
+    "refusal": 120,
+    "compliance": 120,
+    "neutral_prompts": 40
+  },
+  "auc_bug_note": "the lr_auc field was computed with an inverted rank formula and equals 1-AUC; lr_auc_TRUE is the correct value. The probe separates the register perfectly (AUC 1.0) while the shuffled control sits at chance. Fixed in the script."
+}

@@ -1,0 +1,115 @@
+{
+  "agreement": {
+    "15": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0483,
+      "dom_vs_delta": 0.0925,
+      "shuffled_auc": 0.5095,
+      "shuffled_vs_delta": -0.0101,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "16": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0601,
+      "dom_vs_delta": 0.0417,
+      "shuffled_auc": 0.4656,
+      "shuffled_vs_delta": -0.0008,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "24": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0412,
+      "dom_vs_delta": 0.0591,
+      "shuffled_auc": 0.5019,
+      "shuffled_vs_delta": 0.0331,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "32": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0724,
+      "dom_vs_delta": 0.0682,
+      "shuffled_auc": 0.4737,
+      "shuffled_vs_delta": -0.0176,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "40": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.1204,
+      "dom_vs_delta": 0.1281,
+      "shuffled_auc": 0.5263,
+      "shuffled_vs_delta": -0.0111,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "48": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.0803,
+      "dom_vs_delta": 0.0887,
+      "shuffled_auc": 0.5234,
+      "shuffled_vs_delta": -0.0127,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "56": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.2104,
+      "dom_vs_delta": 0.5095,
+      "shuffled_auc": 0.4891,
+      "shuffled_vs_delta": -0.0033,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    },
+    "64": {
+      "lr_auc": 0.0,
+      "lr_vs_delta": 0.2586,
+      "dom_vs_delta": 0.2174,
+      "shuffled_auc": 0.5005,
+      "shuffled_vs_delta": 0.008,
+      "lr_auc_TRUE": 1.0,
+      "shuffled_auc_note": "chance, unaffected by the inversion"
+    }
+  },
+  "propensity": {
+    "base": 0.3918,
+    "abl": -0.3914,
+    "abl+0.25delta": -0.1433,
+    "abl+0.25rand": -0.4429,
+    "abl+0.5delta": 0.3424,
+    "abl+0.5rand": -0.4813,
+    "abl+0.75delta": 0.7924,
+    "abl+0.75rand": -0.5024,
+    "abl+1.0delta": 1.0945,
+    "abl+1.0rand": -0.5363
+  },
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "corpus": {
+    "refusal": 120,
+    "compliance": 120,
+    "neutral_prompts": 40
+  },
+  "auc_bug_note": "the lr_auc field was computed with an inverted rank formula and equals 1-AUC; lr_auc_TRUE is the correct value. The probe separates the register perfectly (AUC 1.0) while the shuffled control sits at chance. Fixed in the script.",
+  "interpretation": {
+    "correction_to_earlier_headline": "we published alpha=4 as the operating point on the basis of cross-entropy (97% of the refusal-CE gap recovered). Refusal PROPENSITY on neutral prompts shows that is ~8x too strong. Base sits at +0.3918, abliterated at -0.3914, and alpha=0.5 lands at +0.3424, matching base. By alpha=4 the model is at +2.2943, nearly 6x the base disposition to refuse, on prompts about gardening and guitar tuning.",
+    "why_CE_misled": "cross-entropy on refusal-register text keeps improving with more steering because more steering makes refusal text likelier in absolute terms. It never asks whether the model has begun refusing things it should not. The disposition measure does.",
+    "calibrated_operating_point": {
+      "alpha": 0.5,
+      "propensity": 0.3424,
+      "base_propensity": 0.3918,
+      "generic_dce_at_this_alpha": -0.0136,
+      "note": "calibrated restoration is essentially free"
+    },
+    "null": "matched-norm random direction stays at -0.44 to -0.54 across the whole alpha range",
+    "probe_finding": "with n=120/class the label-shuffled control collapses to ~0.00 (it was 0.14-0.33 at n=26), so the earlier 'probe barely beats shuffled' was a small-sample artifact of ours. Difference-of-means reaches cos 0.51 with the true direction at L56; logistic regression reaches 0.26 despite perfect classification, because the target IS a difference of means.",
+    "lesson": "a behavioural eval was not a formality. It moved the recommended steering coefficient by 8x and prevented shipping a setting that over-refuses innocuous requests."
+  }
+}

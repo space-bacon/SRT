@@ -118,7 +118,8 @@ def inventory(head, mu_i, mu_t, img, cat_states, labels, device="cuda:0"):
         order = np.argsort(-s)
         yy = y[order]
         pos, neg = yy.sum(), (1 - yy).sum()
-        aucs.append(float((np.cumsum(1 - yy)[yy == 1].sum()) / (pos * neg)))
+        above = np.cumsum(1 - yy)
+        aucs.append(float((neg - above[yy == 1]).sum() / (pos * neg)))
     rp = []
     for i in range(len(S)):
         r = int(labels[i].sum())
