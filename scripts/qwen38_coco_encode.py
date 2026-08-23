@@ -36,6 +36,10 @@ def parse_args():
     p.add_argument("--base", default=BASE)
     p.add_argument("--abl", default=ABL)
     p.add_argument("--layer", type=int, default=LAYER)
+    p.add_argument("--layers", type=int, nargs="*", default=None,
+                   help="keep several candidate read-out layers; the layer is then "
+                        "chosen on validation instead of borrowed from the "
+                        "abliteration sweep, whose peak is a different objective")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--limit", type=int, default=None)
     p.add_argument("--out-dir", default="/root/qwen38_coco")
@@ -51,7 +55,7 @@ def load(name: str, device: str):
 
 
 @torch.no_grad()
-def encode_images(files, img_dir, proc, model, device, layer, batch):
+def encode_images(files, img_dir, proc, model, device, layers, batch):
     from PIL import Image
     img_tok = getattr(model.config, "image_token_id", None)
     assert img_tok is not None, "no image_token_id on config"
@@ -65,17 +69,17 @@ def encode_images(files, img_dir, proc, model, device, layer, batch):
             msgs, add_generation_prompt=True, tokenize=True, return_dict=True,
             return_tensors="pt", padding=True).to(device)
         res = model(**enc, output_hidden_states=True, use_cache=False)
-        h = res.hidden_states[layer]
         for b in range(len(chunk)):
             mask = enc["input_ids"][b] == img_tok
-            out.append(h[b][mask].float().mean(0).cpu())
+            out.append(torch.stack([res.hidden_states[l][b][mask].float().mean(0).cpu()
+                                    for l in layers]))
         if (i // batch) % 25 == 0:
             print(f"  img {min(i + batch, len(files))}/{len(files)}", flush=True)
-    return torch.stack(out)
+    return torch.stack(out)                              # [n, n_layers, d]
 
 
 @torch.no_grad()
-def encode_captions(texts, proc, model, device, layer, batch):
+def encode_captions(texts, proc, model, device, layers, batch):
     tok = getattr(proc, "tokenizer", proc)
     bos = tok.bos_token_id
     out = []
@@ -98,20 +102,34 @@ def encode_captions(texts, proc, model, device, layer, batch):
                     output_hidden_states=True, use_cache=False)
         last = (attn.sum(-1) - 1).to(device)
         rows = torch.arange(len(chunk), device=device)
-        out.append(res.hidden_states[layer][rows, last].float().cpu())
+        out.append(torch.stack([res.hidden_states[l][rows, last].float().cpu()
+                                for l in layers], dim=1))
         if (i // batch) % 40 == 0:
             print(f"  cap {min(i + batch, len(texts))}/{len(texts)}", flush=True)
-    return torch.cat(out)
+    return torch.cat(out)                                # [n, n_layers, d]
 
 
-def verify_batching(files, img_dir, proc, model, device, layer, batch):
-    """Batched and one-at-a-time must agree, or the speedup is silently corrupting."""
+def verify_batching(files, img_dir, proc, model, device, layers, batch, tol=0.999):
+    """Per-layer batched-vs-sequential agreement.
+
+    Batching stability is layer-dependent: L48 agrees at 0.9996 while the worst
+    layer in the same run sits at 0.9986. Rather than relax the tolerance, we
+    report every layer and return the ones a read-out may legitimately use.
+    """
     probe = files[: batch * 2]
-    b = encode_images(probe, img_dir, proc, model, device, layer, batch)
-    s = encode_images(probe, img_dir, proc, model, device, layer, 1)
-    cos = torch.nn.functional.cosine_similarity(b, s, dim=-1)
-    print(f"  batching check: min cos {cos.min():.6f} over {len(probe)} images", flush=True)
-    assert cos.min() > 0.999, f"batched != sequential (min cos {cos.min():.6f})"
+    b = encode_images(probe, img_dir, proc, model, device, layers, batch)
+    s = encode_images(probe, img_dir, proc, model, device, layers, 1)
+    cos = torch.nn.functional.cosine_similarity(b, s, dim=-1)   # [n, n_layers]
+    ok = []
+    print("  batching check (per layer, min cos over probe images):", flush=True)
+    for k, l in enumerate(layers):
+        m = cos[:, k].min().item()
+        flag = "ok" if m > tol else "UNSTABLE"
+        print(f"    L{l:<3d} {m:.6f}  {flag}", flush=True)
+        if m > tol:
+            ok.append(l)
+    assert ok, f"no layer reaches batching tolerance {tol}"
+    return ok, {str(l): round(cos[:, k].min().item(), 6) for k, l in enumerate(layers)}
 
 
 def main() -> None:
@@ -125,14 +143,20 @@ def main() -> None:
 
     proc_b, model_b = load(args.base, "cuda:0")
     proc_a, model_a = load(args.abl, "cuda:1")
+    layers = args.layers if args.layers else [args.layer]
+    print(f"read-out layers: {layers}", flush=True)
 
     if args.what == "images":
-        verify_batching(files, args.img_dir, proc_b, model_b, "cuda:0", args.layer, args.batch)
-        B = encode_images(files, args.img_dir, proc_b, model_b, "cuda:0", args.layer, args.batch)
-        A = encode_images(files, args.img_dir, proc_a, model_a, "cuda:1", args.layer, args.batch)
-        torch.save({"base": B, "abl": A, "files": files, "layer": args.layer},
+        stable, cos_by_layer = verify_batching(
+            files, args.img_dir, proc_b, model_b, "cuda:0", layers, args.batch)
+        B = encode_images(files, args.img_dir, proc_b, model_b, "cuda:0", layers, args.batch)
+        A = encode_images(files, args.img_dir, proc_a, model_a, "cuda:1", layers, args.batch)
+        torch.save({"base": B, "abl": A, "files": files, "layers": layers,
+                    "batching_stable_layers": stable,
+                    "batching_cos_by_layer": cos_by_layer},
                    out_dir / "images.pt")
         print(f"saved images base {tuple(B.shape)} abl {tuple(A.shape)}", flush=True)
+        print(f"batching-stable layers: {stable}", flush=True)
     else:
         by_img: dict[int, list[str]] = {}
         for a in ann["annotations"]:
@@ -144,8 +168,8 @@ def main() -> None:
                 texts.append(c)
                 owner.append(f)
         print(f"{len(texts)} captions over {len(files)} images", flush=True)
-        B = encode_captions(texts, proc_b, model_b, "cuda:0", args.layer, args.batch)
-        A = encode_captions(texts, proc_a, model_a, "cuda:1", args.layer, args.batch)
+        B = encode_captions(texts, proc_b, model_b, "cuda:0", layers, args.batch)
+        A = encode_captions(texts, proc_a, model_a, "cuda:1", layers, args.batch)
         torch.save({"base": B, "abl": A, "texts": texts, "owner": owner,
                     "layer": args.layer}, out_dir / "captions.pt")
         print(f"saved captions base {tuple(B.shape)} abl {tuple(A.shape)}", flush=True)

@@ -65,3 +65,7 @@ artifacts/local/
 
 # SugarCrepe working dir: benchmark JSON is fetched, state caches are large (publish to HF instead)
 sugarcrepe/*.npz
+
+# Fetched third-party benchmark data and large state caches (published to HF, not git)
+sugarcrepe/
+artifacts/nla/q4/qwen3b_caches/
