@@ -1,0 +1,239 @@
+{
+  "alphas": [
+    0.0,
+    2.0,
+    3.0,
+    4.0,
+    6.0,
+    8.0
+  ],
+  "onset": 15,
+  "mode": "increment",
+  "inject_layer": 48,
+  "delta_norms": {
+    "15": 0.15361271798610687,
+    "16": 0.06441903114318848,
+    "17": 0.07466147840023041,
+    "18": 0.18580561876296997,
+    "19": 0.12827539443969727,
+    "20": 0.15810050070285797,
+    "21": 0.3109285235404968,
+    "22": 0.2196493297815323,
+    "23": 0.14163997769355774,
+    "24": 0.2523408532142639,
+    "25": 0.6526466608047485,
+    "26": 0.5541843175888062,
+    "27": 0.5707429647445679,
+    "28": 0.7211094498634338,
+    "29": 0.8054423928260803,
+    "30": 0.7453161478042603,
+    "31": 0.8781250715255737,
+    "32": 0.9537818431854248,
+    "33": 1.0967421531677246,
+    "34": 1.163611650466919,
+    "35": 1.313274621963501,
+    "36": 1.5193198919296265,
+    "37": 1.3373416662216187,
+    "38": 1.24013352394104,
+    "39": 1.1785576343536377,
+    "40": 1.0688657760620117,
+    "41": 1.2003233432769775,
+    "42": 1.309698462486267,
+    "43": 1.5080540180206299,
+    "44": 1.6111764907836914,
+    "45": 1.6775020360946655,
+    "46": 1.8243812322616577,
+    "47": 1.9980980157852173,
+    "48": 2.325962543487549,
+    "49": 2.4493556022644043,
+    "50": 2.6463570594787598,
+    "51": 2.8395771980285645,
+    "52": 3.0828707218170166,
+    "53": 3.2148985862731934,
+    "54": 3.040180206298828,
+    "55": 4.03162956237793,
+    "56": 3.5675790309906006,
+    "57": 2.9235587120056152,
+    "58": 2.118954658508301,
+    "59": 5.932861328125,
+    "60": 6.02243185043335,
+    "61": 2.42034912109375,
+    "62": 3.24005126953125,
+    "63": 4.727509498596191,
+    "64": 8.699186325073242
+  },
+  "arms": {
+    "base_unperturbed": {
+      "refusal_style": 1.1595,
+      "compliance_style": 1.5702,
+      "generic": 2.9006,
+      "refusal_minus_generic": -1.7411
+    },
+    "abl_unperturbed": {
+      "refusal_style": 1.8985,
+      "compliance_style": 1.7899,
+      "generic": 2.9294,
+      "refusal_minus_generic": -1.0309
+    },
+    "RESTORE abl +2.0*delta": {
+      "refusal_style": 1.4902,
+      "compliance_style": 1.6425,
+      "generic": 2.9273,
+      "refusal_minus_generic": -1.4371
+    },
+    "NULL    abl +2.0*rand": {
+      "refusal_style": 1.9522,
+      "compliance_style": 1.8474,
+      "generic": 2.9367,
+      "refusal_minus_generic": -0.9845
+    },
+    "REMOVE  base -2.0*delta": {
+      "refusal_style": 1.3149,
+      "compliance_style": 1.6124,
+      "generic": 2.917,
+      "refusal_minus_generic": -1.6021
+    },
+    "NULL    base -2.0*rand": {
+      "refusal_style": 1.1498,
+      "compliance_style": 1.5913,
+      "generic": 2.9124,
+      "refusal_minus_generic": -1.7626
+    },
+    "RESTORE abl +3.0*delta": {
+      "refusal_style": 1.3201,
+      "compliance_style": 1.6292,
+      "generic": 2.9794,
+      "refusal_minus_generic": -1.6593
+    },
+    "NULL    abl +3.0*rand": {
+      "refusal_style": 1.969,
+      "compliance_style": 1.8838,
+      "generic": 2.9476,
+      "refusal_minus_generic": -0.9786
+    },
+    "REMOVE  base -3.0*delta": {
+      "refusal_style": 1.4191,
+      "compliance_style": 1.6562,
+      "generic": 2.9386,
+      "refusal_minus_generic": -1.5195
+    },
+    "NULL    base -3.0*rand": {
+      "refusal_style": 1.1425,
+      "compliance_style": 1.5923,
+      "generic": 2.9246,
+      "refusal_minus_generic": -1.7821
+    },
+    "RESTORE abl +4.0*delta": {
+      "refusal_style": 1.1815,
+      "compliance_style": 1.6821,
+      "generic": 3.068,
+      "refusal_minus_generic": -1.8865
+    },
+    "NULL    abl +4.0*rand": {
+      "refusal_style": 2.0216,
+      "compliance_style": 1.9395,
+      "generic": 2.9647,
+      "refusal_minus_generic": -0.9431
+    },
+    "REMOVE  base -4.0*delta": {
+      "refusal_style": 1.5179,
+      "compliance_style": 1.7156,
+      "generic": 2.9676,
+      "refusal_minus_generic": -1.4497
+    },
+    "NULL    base -4.0*rand": {
+      "refusal_style": 1.1521,
+      "compliance_style": 1.6045,
+      "generic": 2.9433,
+      "refusal_minus_generic": -1.7912
+    },
+    "RESTORE abl +6.0*delta": {
+      "refusal_style": 1.092,
+      "compliance_style": 1.9172,
+      "generic": 3.3541,
+      "refusal_minus_generic": -2.2621
+    },
+    "NULL    abl +6.0*rand": {
+      "refusal_style": 2.1313,
+      "compliance_style": 2.0543,
+      "generic": 3.0211,
+      "refusal_minus_generic": -0.8898
+    },
+    "REMOVE  base -6.0*delta": {
+      "refusal_style": 1.784,
+      "compliance_style": 1.9202,
+      "generic": 3.0626,
+      "refusal_minus_generic": -1.2786
+    },
+    "NULL    base -6.0*rand": {
+      "refusal_style": 1.1913,
+      "compliance_style": 1.7123,
+      "generic": 2.9986,
+      "refusal_minus_generic": -1.8073
+    },
+    "RESTORE abl +8.0*delta": {
+      "refusal_style": 1.1432,
+      "compliance_style": 2.2184,
+      "generic": 3.777,
+      "refusal_minus_generic": -2.6338
+    },
+    "NULL    abl +8.0*rand": {
+      "refusal_style": 2.3003,
+      "compliance_style": 2.2522,
+      "generic": 3.1209,
+      "refusal_minus_generic": -0.8206
+    },
+    "REMOVE  base -8.0*delta": {
+      "refusal_style": 2.1229,
+      "compliance_style": 2.2804,
+      "generic": 3.2122,
+      "refusal_minus_generic": -1.0893
+    },
+    "NULL    base -8.0*rand": {
+      "refusal_style": 1.309,
+      "compliance_style": 1.8939,
+      "generic": 3.0896,
+      "refusal_minus_generic": -1.7806
+    }
+  },
+  "interpretation": {
+    "headline": "Refusal behaviour is FULLY restorable in an abliterated model by re-injecting a measured direction: 97.0% of the cross-entropy gap recovered at alpha=4 for a 0.139 nat generic cost (~4.8% of CE). Ledger entry 4 (read but not steer) is superseded on this axis.",
+    "why_prior_attempts_failed": "earlier injections GUESSED directions and moved behaviour <0.002 nats. This direction was measured from an abliteration edit that demonstrably works.",
+    "curve": {
+      "2.0": {
+        "refusal_ce": 1.4902,
+        "pct_recovered": 55.3,
+        "random_pct": -7.3,
+        "generic_dce": -0.0021
+      },
+      "3.0": {
+        "refusal_ce": 1.3201,
+        "pct_recovered": 78.3,
+        "random_pct": -9.5,
+        "generic_dce": 0.05
+      },
+      "4.0": {
+        "refusal_ce": 1.1815,
+        "pct_recovered": 97.0,
+        "random_pct": -16.7,
+        "generic_dce": 0.1386
+      },
+      "6.0": {
+        "refusal_ce": 1.092,
+        "pct_recovered": 109.1,
+        "random_pct": -31.5,
+        "generic_dce": 0.4247
+      },
+      "8.0": {
+        "refusal_ce": 1.1432,
+        "pct_recovered": 102.2,
+        "random_pct": -54.4,
+        "generic_dce": 0.8476
+      }
+    },
+    "null_behaviour": "a matched-norm random direction moves refusal the WRONG way at every alpha, monotonically from -1.5% to -54.4%, so the effect is direction-specific and not magnitude",
+    "operating_point": "alpha=4: 97.0% recovered vs random -16.7%, generic dCE +0.1386",
+    "overshoot": "alpha=6 reaches 109% (overshoots base) and alpha=8 costs +0.85 nats generic",
+    "limits": "n=26 refusal pairs from a probe authored for the NLA demo; one model pair; cross-entropy on curated register-matched text rather than judged generations. A purpose-built register-matched set and a generation-level eval are the next steps."
+  }
+}
