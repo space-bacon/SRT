@@ -471,18 +471,50 @@ and +0.001), and the baseline itself carries error that point margins
 conceal. Two independent rebuilds of the prior agree within ±0.02 per
 split, which on swap_obj (n=245, prior CI ±0.062) means every cell's
 margin interval straddles zero against both rebuilds
-(`artifacts/nla/q4/prior_comparison.json`). The control that does
-adjudicate per cell, due to the same review, is mean-image ablation:
-the same head and texts with every image replaced by the split's mean
-image vector. On the qwen-text cells it is decisive in an unexpected
-direction: the ablation outscores the real images on the clean-five
-macro (0.693 vs 0.665 mixed; 0.687 vs 0.661 matched), with real
-images adding roughly +15 points on replace_obj and subtracting
-roughly 11 on the swap splits, where the trained text projection's
-caption prior alone scores 0.71+. Image content contributes exactly
-where object identity is at stake and degrades the text prior
-everywhere subtler
-(`artifacts/nla/q4/mean_image_control.json`; gemma-text cells pending
+(`artifacts/nla/q4/prior_comparison.json`). A third control was
+proposed by the same review and then withdrawn by it: mean-image
+ablation, the same head and texts with every image replaced by the
+split's mean image vector. It outscores the real images on the
+clean-five macro (0.693 vs 0.665 mixed; 0.687 vs 0.661 matched),
+which we first read as image content degrading a text prior on every
+split subtler than object identity. Three arms retire that reading.
+Substituting a *different* split's mean image reproduces the ablation
+everywhere (clean-five 0.691 mixed, 0.689 matched) and on swap_obj
+exceeds it (0.730 and 0.725 against 0.722 and 0.714), so the ablation
+is not measuring the images it replaces. A random direction in head
+space scores at chance (0.495 to 0.505), so the effect is specific to
+the direction image means occupy and not to fixed directions in
+general. And a regression of the fixed-direction score on caption
+length and mean unigram log-frequency accounts for the add splits
+almost exactly (0.99) but not the swaps (0.56 to 0.59 against the
+ablation's 0.71 to 0.72). What the ablation prices is a learned
+generic-image direction in text space along which the benchmark's
+human captions outscore its generated foils. That is a property of
+the text head and the foil construction, not of image content, and it
+is blind to both towers in the same way the bigram prior is.
+Candidate position exchange, proposed to separate word-order
+competence from a candidate-set artifact, cannot decide it either:
+each candidate is scored independently against the image and the two
+scores are compared, so the scorer carries no positional term and
+exchange maps accuracy to its complement identically (verified to
+1e-9 on every split in both cells).
+
+The control that does adjudicate per cell is the one null that is not
+blind to the towers: real images, the trained head, and the
+image-to-caption pairing deranged. Averaged over 20 derangements the
+clean-five macro falls from 0.665 to 0.598 in the mixed cell and from
+0.661 to 0.591 in the matched cell, so image identity is worth +6.6
+and +7.0 points against a null that holds everything fixed except
+which image goes with which caption. The margin is concentrated
+rather than distributed: on the matched cell it is +20.7 on
+replace_obj, +8.6 on replace_rel and +7.4 on replace_att, against
+−0.2 on swap_obj and −1.4 on swap_att. Image identity contributes
+where object identity is at stake and is worth nothing on the
+arrangement splits, which is the division of labor the inventory
+measurements below report, reached from an independent direction
+(`scripts/sugarcrepe_controls.py`,
+`artifacts/nla/q4/controls_*.json`,
+`artifacts/nla/q4/mean_image_control.json`; gemma-text cells pending
 re-encode). Two per-split observations from the raw table must be
 restated accordingly. swap_att, which follows the text tower in raw
 accuracy (0.69 and 0.66 under gemma text against 0.61 under qwen
@@ -814,6 +846,22 @@ headline could not be trusted without them.
    to either side of the pair, and raw split accuracy cannot be
    attributed to alignment without a blind-prior margin; both
    corrections and both methods are due to external review (§6.4).
+9. **Three of our four SugarCrepe nulls were blind to the thing they
+   were nulling.** The blind bigram prior, the mean-image ablation,
+   and a random fixed direction never open an image, and on swap_obj
+   two of them sit 17.8 points apart, so the sign of "does image
+   content help" was being set by which null we chose rather than by
+   any measurement. The mean-image ablation in particular is
+   reproduced by *another* split's mean image and defeated by a random
+   direction, so it prices a learned generic-image direction in text
+   space, not image content. Candidate position exchange cannot
+   arbitrate because it is an identity for an independent-scoring
+   cosine. Only a null that keeps real images and the trained head
+   while destroying the pairing varies per cell, and against it the
+   heads clear by +6.6 to +7.0 clean-five points. Rounds 12 and 13 of
+   the review also shipped their controls as result files with no code
+   path, which is the same failure the review opened with; all nulls
+   now live in one script (§6.4).
 
 ---
 
@@ -911,6 +959,7 @@ and summaries).
 (`srt/`, `srt_introspect/`), the experiment scripts
 (`scripts/gemma4_procrustes_xmodal.py`, `gemma4_encode_pairs.py`,
 `gemma4_mlp_align.py`, `gemma4_karpathy_eval.py`, `q4_drift_eval.py`,
+`sugarcrepe_controls.py` (every benchmark null, one scorer),
 `local_sunstone.py`), and the engineering guide
 (`docs/CROSSMODAL_LINEAR_HEAD.md`).
 
@@ -921,7 +970,7 @@ and summaries).
 
 The compositionality arc (§6.4) and the hardware-and-runtime section
 (§7.3) owe their final form to Dipankar Sarkar, who reviewed the
-program in public over thirteen rounds, reproducing our numbers from
+program in public over fourteen rounds, reproducing our numbers from
 the published artifacts alone at every step. His contributions
 include: a code review that established the original cross-runtime
 validation never applied the head; the subspace controls and the rho
@@ -929,10 +978,12 @@ normalization of §7.3; the prediction, correct to the third digit, of
 the slot-pooling null; the caption-length audit and the blind
 word-order prior that reset how every SugarCrepe split in this paper
 is reported; the power analysis that reclassified the swap_obj floor;
-and the mean-image ablation control that inverted our reading of the
-qwen-text cells. Two reporting conventions used here, margins over
-blind priors stated as intervals and per-cell ablation controls, are
-his. The remaining errors are ours.
+the mean-image ablation, which he proposed and then withdrew on the
+grounds that it is blind to the towers it was meant to separate, and
+whose withdrawal is what forced the pairing-derangement null that
+replaced it. Two reporting conventions used here, margins over
+blind priors stated as intervals and per-cell controls that are not
+blind to either tower, are his. The remaining errors are ours.
 
 ## References
 
