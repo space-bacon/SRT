@@ -1,0 +1,168 @@
+{
+  "alphas": [
+    0.0,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "onset": 15,
+  "mode": "increment",
+  "inject_layer": 48,
+  "delta_norms": {
+    "15": 0.15361271798610687,
+    "16": 0.06441903114318848,
+    "17": 0.07466147840023041,
+    "18": 0.18580561876296997,
+    "19": 0.12827539443969727,
+    "20": 0.15810050070285797,
+    "21": 0.3109285235404968,
+    "22": 0.2196493297815323,
+    "23": 0.14163997769355774,
+    "24": 0.2523408532142639,
+    "25": 0.6526466608047485,
+    "26": 0.5541843175888062,
+    "27": 0.5707429647445679,
+    "28": 0.7211094498634338,
+    "29": 0.8054423928260803,
+    "30": 0.7453161478042603,
+    "31": 0.8781250715255737,
+    "32": 0.9537818431854248,
+    "33": 1.0967421531677246,
+    "34": 1.163611650466919,
+    "35": 1.313274621963501,
+    "36": 1.5193198919296265,
+    "37": 1.3373416662216187,
+    "38": 1.24013352394104,
+    "39": 1.1785576343536377,
+    "40": 1.0688657760620117,
+    "41": 1.2003233432769775,
+    "42": 1.309698462486267,
+    "43": 1.5080540180206299,
+    "44": 1.6111764907836914,
+    "45": 1.6775020360946655,
+    "46": 1.8243812322616577,
+    "47": 1.9980980157852173,
+    "48": 2.325962543487549,
+    "49": 2.4493556022644043,
+    "50": 2.6463570594787598,
+    "51": 2.8395771980285645,
+    "52": 3.0828707218170166,
+    "53": 3.2148985862731934,
+    "54": 3.040180206298828,
+    "55": 4.03162956237793,
+    "56": 3.5675790309906006,
+    "57": 2.9235587120056152,
+    "58": 2.118954658508301,
+    "59": 5.932861328125,
+    "60": 6.02243185043335,
+    "61": 2.42034912109375,
+    "62": 3.24005126953125,
+    "63": 4.727509498596191,
+    "64": 8.699186325073242
+  },
+  "arms": {
+    "base_unperturbed": {
+      "refusal_style": 1.1595,
+      "compliance_style": 1.5702,
+      "generic": 2.9006,
+      "refusal_minus_generic": -1.7411
+    },
+    "abl_unperturbed": {
+      "refusal_style": 1.8985,
+      "compliance_style": 1.7899,
+      "generic": 2.9294,
+      "refusal_minus_generic": -1.0309
+    },
+    "RESTORE abl +0.5*delta": {
+      "refusal_style": 1.8073,
+      "compliance_style": 1.7351,
+      "generic": 2.9158,
+      "refusal_minus_generic": -1.1085
+    },
+    "NULL    abl +0.5*rand": {
+      "refusal_style": 1.9095,
+      "compliance_style": 1.8007,
+      "generic": 2.9287,
+      "refusal_minus_generic": -1.0192
+    },
+    "REMOVE  base -0.5*delta": {
+      "refusal_style": 1.1911,
+      "compliance_style": 1.5809,
+      "generic": 2.9016,
+      "refusal_minus_generic": -1.7105
+    },
+    "NULL    base -0.5*rand": {
+      "refusal_style": 1.1398,
+      "compliance_style": 1.5791,
+      "generic": 2.9018,
+      "refusal_minus_generic": -1.762
+    },
+    "RESTORE abl +1.0*delta": {
+      "refusal_style": 1.7079,
+      "compliance_style": 1.692,
+      "generic": 2.9101,
+      "refusal_minus_generic": -1.2022
+    },
+    "NULL    abl +1.0*rand": {
+      "refusal_style": 1.919,
+      "compliance_style": 1.8078,
+      "generic": 2.9305,
+      "refusal_minus_generic": -1.0115
+    },
+    "REMOVE  base -1.0*delta": {
+      "refusal_style": 1.2236,
+      "compliance_style": 1.5892,
+      "generic": 2.9047,
+      "refusal_minus_generic": -1.6811
+    },
+    "NULL    base -1.0*rand": {
+      "refusal_style": 1.1483,
+      "compliance_style": 1.5807,
+      "generic": 2.9043,
+      "refusal_minus_generic": -1.756
+    },
+    "RESTORE abl +2.0*delta": {
+      "refusal_style": 1.4902,
+      "compliance_style": 1.6425,
+      "generic": 2.9273,
+      "refusal_minus_generic": -1.4371
+    },
+    "NULL    abl +2.0*rand": {
+      "refusal_style": 1.9522,
+      "compliance_style": 1.8474,
+      "generic": 2.9367,
+      "refusal_minus_generic": -0.9845
+    },
+    "REMOVE  base -2.0*delta": {
+      "refusal_style": 1.3149,
+      "compliance_style": 1.6124,
+      "generic": 2.917,
+      "refusal_minus_generic": -1.6021
+    },
+    "NULL    base -2.0*rand": {
+      "refusal_style": 1.1498,
+      "compliance_style": 1.5913,
+      "generic": 2.9124,
+      "refusal_minus_generic": -1.7626
+    }
+  },
+  "interpretation": {
+    "claim": "First successful causal intervention in the SRT program. Ledger entry 4 (read but not steer) is superseded for this axis.",
+    "why_it_works": "Prior injections guessed directions and moved behaviour <0.002 nats. This direction was MEASURED from an abliteration edit that demonstrably works: mu_base - mu_abl, per-layer increments so the running sum reproduces the observed cumulative profile.",
+    "dose_response": {
+      "0.5": 12.3,
+      "1.0": 25.8,
+      "2.0": 55.3
+    },
+    "matched_norm_random_null": {
+      "0.5": -1.5,
+      "1.0": -2.8,
+      "2.0": -7.3
+    },
+    "collateral": "generic dCE -0.0136 / -0.0193 / -0.0021: capability untouched at every alpha",
+    "bidirectional": "subtracting delta from BASE raises refusal CE 1.1595 -> 1.3149 at alpha=2 (removes refusal) while the random null stays flat at 1.14-1.15",
+    "register_selectivity": "at alpha=2 refusal moves 0.408 nats vs compliance 0.147, a 2.8x ratio, matching the register-selectivity of the original weight edit",
+    "cumulative_mode_failure": "injecting the CUMULATIVE delta at every layer compounds it ~50x and destroys the model (generic CE 2.93 -> 5.67) while a matched-norm random direction does almost nothing (2.93 -> 2.95). Banked in qwen38_steer_cumulative_failure.json: the model is far more sensitive to this specific direction than to a random one of equal norm, which is itself the evidence that the delta lies in a functionally load-bearing subspace.",
+    "limits": "n=26 refusal pairs from a probe authored for the NLA demo; one model pair; CE not generations."
+  }
+}
