@@ -45,6 +45,8 @@ def parse_args():
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--out", type=Path, default=Path("/root/qwen38_capability_battery.json"))
     p.add_argument("--save-head", type=Path, default=Path("/root/qwen38_head.pt"))
+    p.add_argument("--select-epochs", type=int, default=25,
+                   help="shorter fits for the layer-selection pass")
     return p.parse_args()
 
 
@@ -155,6 +157,34 @@ def main() -> None:
     print(f"{n_img} images, {len(C['texts'])} captions | train {len(tr_imgs)} "
           f"eval {len(eval_img)} images / {len(ev_cap)} captions", flush=True)
 
+    # Read-out layer selection. L48 was the abliteration sweep's peak-rho layer,
+    # which maximises the refusal-edit signal, not read-out quality; those are
+    # different objectives. Select on held-out retrieval instead, and only among
+    # layers whose batched encode matched the sequential one.
+    layer_scan = {}
+    if I["base"].dim() == 3:
+        layers = I.get("layers", list(range(I["base"].shape[1])))
+        stable = I.get("batching_stable_layers", layers)
+        print(f"\nlayer selection over batching-stable layers {stable}", flush=True)
+        sel = argparse.Namespace(**{**vars(args), "epochs": args.select_epochs})
+        for k, l in enumerate(layers):
+            if l not in stable:
+                print(f"  L{l:<3d} skipped (batching-unstable)", flush=True)
+                continue
+            Xi, Xt = I["base"][tr_imgs, k], C["base"][tr_pairs, k]
+            h, mi, mt = fit(Xi, Xt, Xi.shape[1], Xt.shape[1], sel, device=dev)
+            r = retrieval(h, mi, mt, I["base"][eval_img, k], C["base"][ev_cap, k],
+                          owner_all[ev_cap] - n_train, device=dev)
+            layer_scan[l] = r
+            print(f"  L{l:<3d} i2t R@1 {r['i2t_r@1']:.4f}  R@5 {r['i2t_r@5']:.4f}  "
+                  f"t2i R@1 {r['t2i_r@1']:.4f}", flush=True)
+        best = max(layer_scan, key=lambda l: layer_scan[l]["i2t_r@1"])
+        bi = layers.index(best)
+        print(f"selected read-out layer L{best}\n", flush=True)
+        I = {"base": I["base"][:, bi], "abl": I["abl"][:, bi], "layer": best}
+        C = {"base": C["base"][:, bi], "abl": C["abl"][:, bi],
+             "texts": C["texts"], "owner": C["owner"]}
+
     # 80 COCO category prompts, encoded by reusing caption states is not possible,
     # so inventory runs only if a category-state file was produced separately.
     cat_path = args.coco_dir / "categories.pt"
@@ -210,6 +240,8 @@ def main() -> None:
                "n_train_images": len(tr_imgs), "n_eval_images": len(eval_img),
                "n_eval_captions": len(ev_cap),
                "reference_gemma4_karpathy_i2t_r@1": 0.416,
+               "reference_gemma4_matched_n3500_i2t_r@1": 0.334,
+               "layer_scan": layer_scan,
                "results": results}
     args.out.write_text(json.dumps(payload, indent=2))
     head, mu_i, mu_t = heads["base"]

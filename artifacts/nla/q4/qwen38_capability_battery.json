@@ -1,0 +1,137 @@
+{
+  "backbone_base": "Qwen/Qwen3.8-27B",
+  "backbone_abl": "JonathanColetti/Qwen3.8-27B-Uncensored",
+  "layer": 60,
+  "proj_dim": 1024,
+  "tau": 0.05,
+  "n_train_images": 4000,
+  "n_eval_images": 1000,
+  "n_eval_captions": 5001,
+  "reference_gemma4_karpathy_i2t_r@1": 0.416,
+  "reference_gemma4_matched_n3500_i2t_r@1": 0.334,
+  "layer_scan": {
+    "24": {
+      "i2t_r@1": 0.325,
+      "i2t_r@5": 0.674,
+      "i2t_r@10": 0.811,
+      "t2i_r@1": 0.2224,
+      "t2i_r@5": 0.5195,
+      "t2i_r@10": 0.6527
+    },
+    "32": {
+      "i2t_r@1": 0.335,
+      "i2t_r@5": 0.656,
+      "i2t_r@10": 0.795,
+      "t2i_r@1": 0.2046,
+      "t2i_r@5": 0.4911,
+      "t2i_r@10": 0.6263
+    },
+    "40": {
+      "i2t_r@1": 0.336,
+      "i2t_r@5": 0.639,
+      "i2t_r@10": 0.779,
+      "t2i_r@1": 0.2104,
+      "t2i_r@5": 0.4801,
+      "t2i_r@10": 0.6267
+    },
+    "44": {
+      "i2t_r@1": 0.27,
+      "i2t_r@5": 0.596,
+      "i2t_r@10": 0.736,
+      "t2i_r@1": 0.1748,
+      "t2i_r@5": 0.4367,
+      "t2i_r@10": 0.5851
+    },
+    "48": {
+      "i2t_r@1": 0.241,
+      "i2t_r@5": 0.564,
+      "i2t_r@10": 0.718,
+      "t2i_r@1": 0.1508,
+      "t2i_r@5": 0.4015,
+      "t2i_r@10": 0.5347
+    },
+    "60": {
+      "i2t_r@1": 0.416,
+      "i2t_r@5": 0.751,
+      "i2t_r@10": 0.861,
+      "t2i_r@1": 0.2973,
+      "t2i_r@5": 0.6107,
+      "t2i_r@10": 0.7383
+    }
+  },
+  "results": {
+    "base_head_on_base": {
+      "i2t_r@1": 0.433,
+      "i2t_r@5": 0.745,
+      "i2t_r@10": 0.844,
+      "t2i_r@1": 0.2661,
+      "t2i_r@5": 0.5703,
+      "t2i_r@10": 0.6903
+    },
+    "abl_head_on_abl": {
+      "i2t_r@1": 0.41,
+      "i2t_r@5": 0.722,
+      "i2t_r@10": 0.85,
+      "t2i_r@1": 0.2667,
+      "t2i_r@5": 0.5593,
+      "t2i_r@10": 0.6795
+    },
+    "base_head_on_abl": {
+      "i2t_r@1": 0.413,
+      "i2t_r@5": 0.739,
+      "i2t_r@10": 0.852,
+      "t2i_r@1": 0.2581,
+      "t2i_r@5": 0.5595,
+      "t2i_r@10": 0.6689
+    },
+    "base_head_on_abl_recal": {
+      "i2t_r@1": 0.414,
+      "i2t_r@5": 0.736,
+      "i2t_r@10": 0.851,
+      "t2i_r@1": 0.2609,
+      "t2i_r@5": 0.5593,
+      "t2i_r@10": 0.6711
+    },
+    "abl_head_on_base": {
+      "i2t_r@1": 0.418,
+      "i2t_r@5": 0.731,
+      "i2t_r@10": 0.847,
+      "t2i_r@1": 0.2707,
+      "t2i_r@5": 0.5655,
+      "t2i_r@10": 0.6867
+    },
+    "abl_head_on_base_recal": {
+      "i2t_r@1": 0.422,
+      "i2t_r@5": 0.723,
+      "i2t_r@10": 0.85,
+      "t2i_r@1": 0.2683,
+      "t2i_r@5": 0.5645,
+      "t2i_r@10": 0.6885
+    },
+    "shuffled_control": {
+      "i2t_r@1": 0.001,
+      "i2t_r@5": 0.005,
+      "i2t_r@10": 0.011,
+      "t2i_r@1": 0.0008,
+      "t2i_r@5": 0.0056,
+      "t2i_r@10": 0.011
+    },
+    "chance_i2t_r@1": 0.0002
+  },
+  "interpretation": {
+    "read_out_layer_selected": 60,
+    "layer_confound_resolved": "L48 was borrowed from the abliteration peak-rho sweep, a different objective. On validation it is nearly the WORST layer for read-out (0.241 vs L60's 0.416), so the earlier 'Qwen3.8 is a weaker substrate' reading was a layer artifact and is withdrawn.",
+    "matched_scale_comparison": {
+      "qwen38_n4000_i2t_r@1": 0.433,
+      "gemma4_n3500_i2t_r@1": 0.334,
+      "delta": 0.099,
+      "relative": "+30%"
+    },
+    "transfer_claim": "base-fit head reads the abliterated model at 0.413 against that model's own head at 0.410, and the 42KB recal moves it only to 0.414. One artifact serves both variants at no measurable cost at the shipping layer.",
+    "controls": {
+      "shuffled_i2t_r@1": 0.001,
+      "chance_i2t_r@1": 0.0002
+    },
+    "limits": "n=4,000 training pairs. gemma reaches 0.661 at n=117,000, so this is a matched-scale comparison and NOT a ceiling; Qwen3.8 at full training scale is unmeasured. Eval pool is 1,000 held-out images against 5,001 captions, the published procrustes protocol, NOT Karpathy-5k."
+  }
+}
