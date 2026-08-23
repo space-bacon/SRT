@@ -68,6 +68,15 @@ CELLS: dict[str, dict] = {
         "img_slot": None,
         "txt": "sugarcrepe/txt_states.npz",
     },
+    # Rebuilt head: the original gemma/gemma v6 head existed neither locally nor
+    # in the published artifact repo. Regenerated from the published pair chunks
+    # plus a seed-0 rebuild of the v6 negatives (counts matched to the item).
+    "gemma-img_x_gemma-txt": {
+        "head": "checkpoints/gemma4_readout/gemma_v6_head.pt",
+        "img": "sugarcrepe/img_states.npz",
+        "img_slot": None,
+        "txt": "sugarcrepe/txt_states.npz",
+    },
 }
 
 
