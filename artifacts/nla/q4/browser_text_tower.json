@@ -1,0 +1,113 @@
+{
+  "text_tower": "Qwen/Qwen3-0.6B",
+  "text_layer": 28,
+  "d_txt": 1024,
+  "image_states": "/root/qwen38_coco_ls/images.pt",
+  "image_layer": 52,
+  "proj_dim": 1024,
+  "n_train": 4000,
+  "n_eval_images": 1000,
+  "n_eval_captions": 5001,
+  "layer_scan": {
+    "4": {
+      "i2t_r@1": 0.204,
+      "i2t_r@5": 0.489,
+      "i2t_r@10": 0.627,
+      "t2i_r@1": 0.1052,
+      "t2i_r@5": 0.3027,
+      "t2i_r@10": 0.4093
+    },
+    "7": {
+      "i2t_r@1": 0.21,
+      "i2t_r@5": 0.485,
+      "i2t_r@10": 0.626,
+      "t2i_r@1": 0.1118,
+      "t2i_r@5": 0.3141,
+      "t2i_r@10": 0.4313
+    },
+    "10": {
+      "i2t_r@1": 0.19,
+      "i2t_r@5": 0.484,
+      "i2t_r@10": 0.657,
+      "t2i_r@1": 0.1212,
+      "t2i_r@5": 0.3217,
+      "t2i_r@10": 0.4527
+    },
+    "13": {
+      "i2t_r@1": 0.195,
+      "i2t_r@5": 0.494,
+      "i2t_r@10": 0.638,
+      "t2i_r@1": 0.116,
+      "t2i_r@5": 0.3099,
+      "t2i_r@10": 0.4277
+    },
+    "16": {
+      "i2t_r@1": 0.196,
+      "i2t_r@5": 0.465,
+      "i2t_r@10": 0.61,
+      "t2i_r@1": 0.1154,
+      "t2i_r@5": 0.2969,
+      "t2i_r@10": 0.4175
+    },
+    "19": {
+      "i2t_r@1": 0.197,
+      "i2t_r@5": 0.462,
+      "i2t_r@10": 0.604,
+      "t2i_r@1": 0.1098,
+      "t2i_r@5": 0.3047,
+      "t2i_r@10": 0.4227
+    },
+    "22": {
+      "i2t_r@1": 0.244,
+      "i2t_r@5": 0.571,
+      "i2t_r@10": 0.707,
+      "t2i_r@1": 0.1602,
+      "t2i_r@5": 0.3899,
+      "t2i_r@10": 0.5189
+    },
+    "25": {
+      "i2t_r@1": 0.308,
+      "i2t_r@5": 0.632,
+      "i2t_r@10": 0.771,
+      "t2i_r@1": 0.1974,
+      "t2i_r@5": 0.4545,
+      "t2i_r@10": 0.5887
+    },
+    "28": {
+      "i2t_r@1": 0.382,
+      "i2t_r@5": 0.713,
+      "i2t_r@10": 0.824,
+      "t2i_r@1": 0.2509,
+      "t2i_r@5": 0.5321,
+      "t2i_r@10": 0.6667
+    }
+  },
+  "bridge": {
+    "i2t_r@1": 0.356,
+    "i2t_r@5": 0.681,
+    "i2t_r@10": 0.794,
+    "t2i_r@1": 0.2294,
+    "t2i_r@5": 0.4909,
+    "t2i_r@10": 0.6207
+  },
+  "shuffled_control": {
+    "i2t_r@1": 0.002,
+    "i2t_r@5": 0.007,
+    "i2t_r@10": 0.008,
+    "t2i_r@1": 0.0008,
+    "t2i_r@5": 0.004,
+    "t2i_r@10": 0.0074
+  },
+  "chance_i2t_r@1": 0.0002,
+  "browser_payload_mb": {
+    "text_model_q4": 420,
+    "text_head": 2.1,
+    "gallery_1k_images_fp16": 2.0
+  },
+  "interpretation": {
+    "claim": "the cross-modal linear bridge survives down to a 0.6B TEXT tower. i2t R@1 0.356 against 0.433 for the matched 27B text tower on identical images at identical training scale: 82% retention at 45x fewer text-tower parameters. Shuffled control 0.002, chance 0.0002.",
+    "why_this_rung": "the browser plan's standing blocker was that no sub-3B rung existed and linearity that small was unknown. The tower factorial showed the TEXT side dominates, so this tests the ladder on the side that matters.",
+    "deployment": "asymmetric by design, justified by the program's cross-vendor bridge result: images encoded offline through a large VLM and shipped as a gallery, text encoded IN-BROWSER through Qwen3-0.6B via candle-wasm (Rust, already upstream as candle-wasm-examples/quant-qwen3). One linear map joins them. After a ~424MB one-time download every query is a matmul on the visitor's own silicon, no server.",
+    "limits": "(1) the read-out layer was selected on the SAME eval pool it is reported on; the scan is monotone toward the end so the bias is modest, but a val/test split is the correct protocol and was not used. (2) the 60-epoch final fit (0.356) scored BELOW the 25-epoch selection fit (0.382), so we are overfitting at 60 epochs on 4,000 pairs and the epoch count needs tuning. The lower number is reported as the headline. (3) n=4,000 training pairs, not a ceiling."
+  }
+}
