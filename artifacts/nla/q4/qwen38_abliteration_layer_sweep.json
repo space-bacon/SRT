@@ -1,0 +1,493 @@
+{
+  "experiment": "Qwen3.8-27B base vs abliterated, paired encode (both models resident, identical batches)",
+  "base": "Qwen/Qwen3.8-27B",
+  "abl": "JonathanColetti/Qwen3.8-27B-Uncensored",
+  "n_texts": 2000,
+  "source": "SugarCrepe caption pool",
+  "n_hidden_states": 65,
+  "d_model": 5120,
+  "untouched_layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "onset_layer": 15,
+  "peak_rho_layer": 48,
+  "peak_rho": 0.074,
+  "min_cos_any_layer": 0.9949,
+  "reference_rho_cross_runtime": {
+    "MLX_Q4_v1_head": 1.334,
+    "MLX_Q4_v2_head": 0.909,
+    "bnb_NF4_v1_head": 0.749
+  },
+  "note": "rho = ||mu_abl - mu_base|| / median ||q||, the round-5 review convention. Abliteration displacement peaks ~18x below MLX-Q4 cross-runtime drift.",
+  "per_layer": [
+    {
+      "layer": 0,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 0.676,
+      "rho": 0.0
+    },
+    {
+      "layer": 1,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 10.39,
+      "rho": 0.0
+    },
+    {
+      "layer": 2,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 11.927,
+      "rho": 0.0
+    },
+    {
+      "layer": 3,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 11.087,
+      "rho": 0.0
+    },
+    {
+      "layer": 4,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 17.649,
+      "rho": 0.0
+    },
+    {
+      "layer": 5,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 21.053,
+      "rho": 0.0
+    },
+    {
+      "layer": 6,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 23.341,
+      "rho": 0.0
+    },
+    {
+      "layer": 7,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 24.878,
+      "rho": 0.0
+    },
+    {
+      "layer": 8,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 28.75,
+      "rho": 0.0
+    },
+    {
+      "layer": 9,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 32.117,
+      "rho": 0.0
+    },
+    {
+      "layer": 10,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 35.087,
+      "rho": 0.0
+    },
+    {
+      "layer": 11,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 37.753,
+      "rho": 0.0
+    },
+    {
+      "layer": 12,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 43.002,
+      "rho": 0.0
+    },
+    {
+      "layer": 13,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 47.195,
+      "rho": 0.0
+    },
+    {
+      "layer": 14,
+      "cos": 1.0,
+      "disp_norm": 0.0,
+      "mu_base_norm": 49.431,
+      "rho": 0.0
+    },
+    {
+      "layer": 15,
+      "cos": 1.0,
+      "disp_norm": 0.154,
+      "mu_base_norm": 53.41,
+      "rho": 0.0027
+    },
+    {
+      "layer": 16,
+      "cos": 1.0,
+      "disp_norm": 0.199,
+      "mu_base_norm": 57.328,
+      "rho": 0.0033
+    },
+    {
+      "layer": 17,
+      "cos": 1.0,
+      "disp_norm": 0.252,
+      "mu_base_norm": 63.125,
+      "rho": 0.0038
+    },
+    {
+      "layer": 18,
+      "cos": 1.0,
+      "disp_norm": 0.424,
+      "mu_base_norm": 64.213,
+      "rho": 0.0062
+    },
+    {
+      "layer": 19,
+      "cos": 0.9999,
+      "disp_norm": 0.462,
+      "mu_base_norm": 64.733,
+      "rho": 0.0065
+    },
+    {
+      "layer": 20,
+      "cos": 0.9999,
+      "disp_norm": 0.509,
+      "mu_base_norm": 59.253,
+      "rho": 0.0076
+    },
+    {
+      "layer": 21,
+      "cos": 0.9999,
+      "disp_norm": 0.362,
+      "mu_base_norm": 54.804,
+      "rho": 0.0057
+    },
+    {
+      "layer": 22,
+      "cos": 0.9999,
+      "disp_norm": 0.491,
+      "mu_base_norm": 59.948,
+      "rho": 0.0071
+    },
+    {
+      "layer": 23,
+      "cos": 0.9999,
+      "disp_norm": 0.49,
+      "mu_base_norm": 65.997,
+      "rho": 0.0066
+    },
+    {
+      "layer": 24,
+      "cos": 0.9998,
+      "disp_norm": 0.654,
+      "mu_base_norm": 61.219,
+      "rho": 0.0093
+    },
+    {
+      "layer": 25,
+      "cos": 0.9997,
+      "disp_norm": 1.2,
+      "mu_base_norm": 62.739,
+      "rho": 0.0166
+    },
+    {
+      "layer": 26,
+      "cos": 0.9996,
+      "disp_norm": 1.555,
+      "mu_base_norm": 66.832,
+      "rho": 0.0205
+    },
+    {
+      "layer": 27,
+      "cos": 0.9995,
+      "disp_norm": 1.859,
+      "mu_base_norm": 70.8,
+      "rho": 0.0234
+    },
+    {
+      "layer": 28,
+      "cos": 0.9992,
+      "disp_norm": 2.268,
+      "mu_base_norm": 66.223,
+      "rho": 0.0301
+    },
+    {
+      "layer": 29,
+      "cos": 0.9991,
+      "disp_norm": 2.323,
+      "mu_base_norm": 66.664,
+      "rho": 0.0304
+    },
+    {
+      "layer": 30,
+      "cos": 0.9991,
+      "disp_norm": 2.313,
+      "mu_base_norm": 70.081,
+      "rho": 0.0288
+    },
+    {
+      "layer": 31,
+      "cos": 0.9991,
+      "disp_norm": 2.677,
+      "mu_base_norm": 77.913,
+      "rho": 0.0304
+    },
+    {
+      "layer": 32,
+      "cos": 0.9988,
+      "disp_norm": 3.153,
+      "mu_base_norm": 74.444,
+      "rho": 0.037
+    },
+    {
+      "layer": 33,
+      "cos": 0.9985,
+      "disp_norm": 3.634,
+      "mu_base_norm": 75.819,
+      "rho": 0.0418
+    },
+    {
+      "layer": 34,
+      "cos": 0.9982,
+      "disp_norm": 4.115,
+      "mu_base_norm": 74.601,
+      "rho": 0.0481
+    },
+    {
+      "layer": 35,
+      "cos": 0.9979,
+      "disp_norm": 4.5,
+      "mu_base_norm": 75.878,
+      "rho": 0.0517
+    },
+    {
+      "layer": 36,
+      "cos": 0.9977,
+      "disp_norm": 4.107,
+      "mu_base_norm": 68.454,
+      "rho": 0.0509
+    },
+    {
+      "layer": 37,
+      "cos": 0.9974,
+      "disp_norm": 4.416,
+      "mu_base_norm": 69.142,
+      "rho": 0.0541
+    },
+    {
+      "layer": 38,
+      "cos": 0.9974,
+      "disp_norm": 4.621,
+      "mu_base_norm": 73.914,
+      "rho": 0.0534
+    },
+    {
+      "layer": 39,
+      "cos": 0.9977,
+      "disp_norm": 4.582,
+      "mu_base_norm": 78.643,
+      "rho": 0.051
+    },
+    {
+      "layer": 40,
+      "cos": 0.9974,
+      "disp_norm": 4.605,
+      "mu_base_norm": 74.209,
+      "rho": 0.0541
+    },
+    {
+      "layer": 41,
+      "cos": 0.9971,
+      "disp_norm": 4.731,
+      "mu_base_norm": 72.819,
+      "rho": 0.0567
+    },
+    {
+      "layer": 42,
+      "cos": 0.9967,
+      "disp_norm": 5.044,
+      "mu_base_norm": 71.623,
+      "rho": 0.0617
+    },
+    {
+      "layer": 43,
+      "cos": 0.9967,
+      "disp_norm": 5.124,
+      "mu_base_norm": 74.547,
+      "rho": 0.0606
+    },
+    {
+      "layer": 44,
+      "cos": 0.9963,
+      "disp_norm": 5.559,
+      "mu_base_norm": 75.368,
+      "rho": 0.0639
+    },
+    {
+      "layer": 45,
+      "cos": 0.996,
+      "disp_norm": 5.801,
+      "mu_base_norm": 76.582,
+      "rho": 0.0653
+    },
+    {
+      "layer": 46,
+      "cos": 0.9958,
+      "disp_norm": 5.985,
+      "mu_base_norm": 79.34,
+      "rho": 0.0652
+    },
+    {
+      "layer": 47,
+      "cos": 0.9955,
+      "disp_norm": 6.712,
+      "mu_base_norm": 82.909,
+      "rho": 0.0701
+    },
+    {
+      "layer": 48,
+      "cos": 0.995,
+      "disp_norm": 7.434,
+      "mu_base_norm": 86.938,
+      "rho": 0.074
+    },
+    {
+      "layer": 49,
+      "cos": 0.9949,
+      "disp_norm": 7.628,
+      "mu_base_norm": 90.54,
+      "rho": 0.0724
+    },
+    {
+      "layer": 50,
+      "cos": 0.9949,
+      "disp_norm": 7.54,
+      "mu_base_norm": 92.857,
+      "rho": 0.0689
+    },
+    {
+      "layer": 51,
+      "cos": 0.9951,
+      "disp_norm": 8.296,
+      "mu_base_norm": 104.228,
+      "rho": 0.0679
+    },
+    {
+      "layer": 52,
+      "cos": 0.9952,
+      "disp_norm": 8.192,
+      "mu_base_norm": 109.942,
+      "rho": 0.0623
+    },
+    {
+      "layer": 53,
+      "cos": 0.9952,
+      "disp_norm": 8.599,
+      "mu_base_norm": 120.094,
+      "rho": 0.059
+    },
+    {
+      "layer": 54,
+      "cos": 0.9953,
+      "disp_norm": 8.892,
+      "mu_base_norm": 135.368,
+      "rho": 0.0536
+    },
+    {
+      "layer": 55,
+      "cos": 0.9973,
+      "disp_norm": 10.906,
+      "mu_base_norm": 248.347,
+      "rho": 0.0423
+    },
+    {
+      "layer": 56,
+      "cos": 0.996,
+      "disp_norm": 9.83,
+      "mu_base_norm": 180.411,
+      "rho": 0.046
+    },
+    {
+      "layer": 57,
+      "cos": 0.996,
+      "disp_norm": 9.931,
+      "mu_base_norm": 189.064,
+      "rho": 0.0436
+    },
+    {
+      "layer": 58,
+      "cos": 0.9963,
+      "disp_norm": 10.19,
+      "mu_base_norm": 209.178,
+      "rho": 0.0411
+    },
+    {
+      "layer": 59,
+      "cos": 0.9983,
+      "disp_norm": 12.933,
+      "mu_base_norm": 431.031,
+      "rho": 0.0304
+    },
+    {
+      "layer": 60,
+      "cos": 0.9961,
+      "disp_norm": 10.445,
+      "mu_base_norm": 217.348,
+      "rho": 0.0398
+    },
+    {
+      "layer": 61,
+      "cos": 0.9965,
+      "disp_norm": 10.777,
+      "mu_base_norm": 243.077,
+      "rho": 0.0375
+    },
+    {
+      "layer": 62,
+      "cos": 0.9964,
+      "disp_norm": 11.34,
+      "mu_base_norm": 249.689,
+      "rho": 0.0377
+    },
+    {
+      "layer": 63,
+      "cos": 0.997,
+      "disp_norm": 12.773,
+      "mu_base_norm": 304.19,
+      "rho": 0.0357
+    },
+    {
+      "layer": 64,
+      "cos": 0.9964,
+      "disp_norm": 6.279,
+      "mu_base_norm": 115.103,
+      "rho": 0.0447
+    }
+  ]
+}
