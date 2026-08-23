@@ -62,3 +62,6 @@ docs/substack_*
 
 .venv-adapter/
 artifacts/local/
+
+# SugarCrepe working dir: benchmark JSON is fetched, state caches are large (publish to HF instead)
+sugarcrepe/*.npz

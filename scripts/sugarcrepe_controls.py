@@ -47,11 +47,26 @@ CELLS: dict[str, dict] = {
         "img_slot": 4,  # global mean; the encoder asserts cos>0.99 vs the L47 state
         "txt": "artifacts/nla/q4/qwen3b_caches/sc_txt_states_qwen3b.npz",
     },
+    # Same cell, but reading the original one-at-a-time image cache instead of
+    # the batched 2x2 encoder's global-mean slot. The two differ by ~18 item
+    # flips on 7,511 (the reviewer's measured re-encode floor).
+    "gemma-img_x_qwen-txt_origproto": {
+        "head": "checkpoints/gemma4_readout/mixed_v6_head.pt",
+        "img": "sugarcrepe/img_states.npz",
+        "img_slot": None,
+        "txt": "artifacts/nla/q4/qwen3b_caches/sc_txt_states_qwen3b.npz",
+    },
     "qwen-img_x_qwen-txt": {
         "head": "checkpoints/gemma4_readout/qwen3b_v6_head.pt",
         "img": "artifacts/nla/q4/qwen3b_caches/sc_img_states_qwen3b.npz",
         "img_slot": None,
         "txt": "artifacts/nla/q4/qwen3b_caches/sc_txt_states_qwen3b.npz",
+    },
+    "qwen-img_x_gemma-txt": {
+        "head": "checkpoints/gemma4_readout/cell4_v6_head.pt",
+        "img": "artifacts/nla/q4/qwen3b_caches/sc_img_states_qwen3b.npz",
+        "img_slot": None,
+        "txt": "sugarcrepe/txt_states.npz",
     },
 }
 
