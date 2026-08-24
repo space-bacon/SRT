@@ -28,11 +28,27 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 from collections import Counter
 from pathlib import Path
 
 import numpy as np
 import torch
+
+
+def normalise(text: str) -> str:
+    """Strip the provenance formatting: trailing period, leading capital."""
+    t = text.strip()
+    while t.endswith("."):
+        t = t[:-1].rstrip()
+    return (t[:1].lower() + t[1:]) if t else t
+
+
+def words(text: str, strip_punct: bool) -> list[str]:
+    """Whitespace split keeps `water.` and `water` apart, which is how the
+    trailing period got inside the shipped prior's final bigram."""
+    return (re.findall(r"[a-z0-9']+", text.lower()) if strip_punct
+            else text.lower().split())
 
 ROOT = Path(__file__).resolve().parent.parent
 SPLITS = ["add_att", "add_obj", "replace_att", "replace_obj",
@@ -88,7 +104,7 @@ def load_items(work_dir: Path) -> dict[str, list[dict]]:
     return out
 
 
-def load_cell(cfg: dict) -> tuple[dict, dict, dict]:
+def load_cell(cfg: dict, txt_override: str | None = None) -> tuple[dict, dict, dict]:
     head = torch.load(ROOT / cfg["head"], map_location="cpu", weights_only=True)
     h = {
         "Wi": head["img"]["weight"].float().numpy(),
@@ -103,7 +119,7 @@ def load_cell(cfg: dict) -> tuple[dict, dict, dict]:
     if cfg["img_slot"] is not None:
         states = states[:, cfg["img_slot"], :]
     img = {f: states[i].astype(np.float32) for i, f in enumerate(iz["files"])}
-    tz = np.load(ROOT / cfg["txt"])
+    tz = np.load(ROOT / (txt_override or cfg["txt"]))
     # Bind once: indexing an NpzFile re-reads the whole array every time.
     tstates, tnames = tz["states"], tz["texts"]
     txt = {t: tstates[i].astype(np.float32) for i, t in enumerate(tnames)}
@@ -122,12 +138,12 @@ def unit(z: np.ndarray) -> np.ndarray:
     return z / (np.linalg.norm(z, axis=-1, keepdims=True) + 1e-8)
 
 
-def gather(items: list[dict], img: dict, txt: dict):
+def gather(items: list[dict], img: dict, txt: dict, key=lambda s: s):
     """Rows of (image state, positive text state, negative text state)."""
     vi, vp, vn = [], [], []
     for it in items:
-        a, p, n = (img.get(it["filename"]), txt.get(it["caption"]),
-                   txt.get(it["negative_caption"]))
+        a, p, n = (img.get(it["filename"]), txt.get(key(it["caption"])),
+                   txt.get(key(it["negative_caption"])))
         if a is None or p is None or n is None:
             continue
         vi.append(a)
@@ -157,7 +173,8 @@ def ci95(p: float, n: int) -> float:
     return 1.96 * math.sqrt(max(p * (1 - p), 1e-12) / max(n, 1))
 
 
-def bigram_prior(items_by_split: dict[str, list[dict]]) -> dict[str, float]:
+def bigram_prior(items_by_split: dict[str, list[dict]],
+                 strip_punct: bool = False) -> dict[str, float]:
     """Reviewer's round-12 prior: mean log(count+1) per bigram over the
     benchmark's own positive captions, leave-one-out by caption TEXT (not by
     item id; 3,166 positives recur across splits and leaking them is worth
@@ -169,13 +186,13 @@ def bigram_prior(items_by_split: dict[str, list[dict]]) -> dict[str, float]:
             c = it["caption"]
             if c in per_caption:
                 continue
-            toks = c.lower().split()
+            toks = words(c, strip_punct)
             bg = Counter(zip(toks, toks[1:]))
             per_caption[c] = bg
             counts.update(bg)
 
     def score(text: str, held_out: str) -> float:
-        toks = text.lower().split()
+        toks = words(text, strip_punct)
         bgs = list(zip(toks, toks[1:]))
         if not bgs:
             return 0.0
@@ -194,12 +211,13 @@ def bigram_prior(items_by_split: dict[str, list[dict]]) -> dict[str, float]:
     return out
 
 
-def caption_stats(texts: list[str], corpus: Counter) -> np.ndarray:
+def caption_stats(texts: list[str], corpus: Counter,
+                  strip_punct: bool = False) -> np.ndarray:
     """[n_words, mean unigram log-freq] per caption, for the typicality
     regression."""
     rows = []
     for t in texts:
-        toks = t.lower().split()
+        toks = words(t, strip_punct)
         rows.append([len(toks),
                      float(np.mean([math.log(corpus[w] + 1) for w in toks]))
                      if toks else 0.0])
@@ -214,19 +232,26 @@ def main() -> None:
     ap.add_argument("--exchange", action="store_true",
                     help="verify that candidate position exchange is an identity "
                          "for this scorer (it is; see exchange_is_tautological)")
+    ap.add_argument("--txt", default=None,
+                    help="override the cell's text-state cache")
+    ap.add_argument("--normalise", action="store_true",
+                    help="key states by the normalised caption and strip "
+                         "punctuation in the blind prior; needs a cache "
+                         "encoded from normalised text (round 16)")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
     cfg = CELLS[args.cell]
     items = load_items(Path(args.work_dir))
-    h, img, txt = load_cell(cfg)
+    h, img, txt = load_cell(cfg, args.txt)
     rng = np.random.default_rng(0)
+    key = normalise if args.normalise else (lambda s: s)
 
-    prior = bigram_prior(items)
+    prior = bigram_prior(items, args.normalise)
     corpus = Counter(w for its in items.values() for it in its
-                     for w in it["caption"].lower().split())
+                     for w in words(it["caption"], args.normalise))
 
-    rows = {s: gather(items[s], img, txt) for s in SPLITS}
+    rows = {s: gather(items[s], img, txt, key) for s in SPLITS}
     split_mean_img = {s: proj_img(rows[s][0].mean(0, keepdims=True), h)
                       for s in SPLITS}
 
@@ -276,8 +301,8 @@ def main() -> None:
         g_dir = unit(mean_img)[0]
         s_pos = unit(zp) @ g_dir
         s_neg = unit(zn) @ g_dir
-        X = np.concatenate([caption_stats([it["caption"] for it in items[s]][:n], corpus),
-                            caption_stats([it["negative_caption"] for it in items[s]][:n], corpus)])
+        X = np.concatenate([caption_stats([it["caption"] for it in items[s]][:n], corpus, args.normalise),
+                            caption_stats([it["negative_caption"] for it in items[s]][:n], corpus, args.normalise)])
         y = np.concatenate([s_pos, s_neg])
         Xd = np.column_stack([np.ones(len(X)), X])
         beta, *_ = np.linalg.lstsq(Xd, y, rcond=None)
@@ -303,10 +328,12 @@ def main() -> None:
     print("\nclean-5 macro:", json.dumps(macro))
 
     out = Path(args.out or ROOT / "artifacts" / "nla" / "q4"
-               / f"controls_{args.cell}.json")
+               / f"controls_{'norm_' if args.normalise else ''}{args.cell}.json")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(
-        {"cell": args.cell, "clean5_macro": macro, "per_split": res}, indent=2))
+        {"cell": args.cell, "normalised": args.normalise,
+         "txt_cache": args.txt or CELLS[args.cell]["txt"],
+         "clean5_macro": macro, "per_split": res}, indent=2))
     print(f"wrote {out}")
 
 
