@@ -46,6 +46,9 @@ def parse_args():
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--device", default="cuda:0")
     p.add_argument("--out", required=True)
+    p.add_argument("--gallery-out", default=None,
+                   help="write the 123K gallery re-projected through the new head")
+    p.add_argument("--report", default=None, help="json comparison against the old head")
     return p.parse_args()
 
 
@@ -235,6 +238,64 @@ def main() -> None:
         },
     }, a.out)
     print(f"wrote {a.out}", flush=True)
+
+    # The number that matters is retrieval against the gallery the demo
+    # actually searches, not against the 5,000 val images alone. Project
+    # everything through the new head and score val captions on all 123,287.
+    if a.gallery_out or a.report:
+        with torch.no_grad():
+            def proj_img(X):
+                out = []
+                for i in range(0, len(X), 8192):
+                    z = head.img((X[i:i + 8192] - mi).to(dev))
+                    out.append(F.normalize(z, dim=-1).cpu())
+                return torch.cat(out)
+
+            Zt_all = proj_img(img_train)
+            Zv_all = proj_img(img_val)
+            Zg = torch.cat([Zt_all, Zv_all]).numpy()
+            gkeys = ([f"train2017/{files[i]}" for i in keep]
+                     + [f"val2017/{f}" for f in val_files])
+            print(f"gallery {Zg.shape}", flush=True)
+
+            zt = F.normalize(head.txt((cap_val[:, bi] - mt).to(dev)), dim=-1)
+            # val images sit after the train block
+            gold = torch.as_tensor(val_owner + len(Zt_all), device=dev)
+            G = torch.from_numpy(Zg).to(dev)
+            hits = {1: 0, 5: 0, 10: 0}
+            ranks = []
+            for i in range(0, len(zt), 512):
+                S = zt[i:i + 512] @ G.T
+                g = gold[i:i + 512]
+                gs = S.gather(1, g[:, None])
+                r = (S > gs).sum(1)
+                ranks.append(r.cpu())
+                for k in hits:
+                    hits[k] += (r < k).sum().item()
+            ranks = torch.cat(ranks)
+            full = {f"r@{k}": round(hits[k] / len(zt), 4) for k in (1, 5, 10)}
+            full["median_rank"] = float(ranks.median().item() + 1)
+            print(f"full gallery ({Zg.shape[0]}) t2i {full}", flush=True)
+
+        if a.gallery_out:
+            np.savez_compressed(a.gallery_out,
+                                Z_img=Zg.astype(np.float16), files=np.array(gkeys))
+            print(f"wrote {a.gallery_out}", flush=True)
+        if a.report:
+            Path(a.report).write_text(json.dumps({
+                "new_head": {"n_train": len(train_texts), "text_layer": best,
+                             "val_only": real, "full_gallery": full,
+                             "shuffled_control": shuf, "layer_scan": scan},
+                "old_head_for_reference": {
+                    "n_train": 4000, "text_layer": 28,
+                    "full_gallery": {"r@1": 0.0148, "r@5": 0.0406,
+                                     "r@10": 0.0666, "median_rank": 596.0},
+                },
+                "note": ("both scored on val2017 captions against the full "
+                         "123,287-image gallery; the old head trained inside "
+                         "val2017 while this one never sees a val image"),
+            }, indent=2))
+            print(f"wrote {a.report}", flush=True)
 
 
 if __name__ == "__main__":
