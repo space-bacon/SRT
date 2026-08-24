@@ -206,6 +206,26 @@ This is query-side steering only. It does not touch generation.
 - **Generation quality is not evaluated.** A 0.6B model answers; we make no claim about how well.
 - COCO licensing applies to the images; the gallery here contains projected vectors and keys, not photographs.
 
+## Running it on a phone
+
+The browser tier runs on iOS Safari, but only because the model is parsed
+directly out of a Blob rather than staged in WebAssembly memory first.
+
+Staging is the obvious implementation and it is fatal here. The 382 MB file
+exists twice while candle converts it into tensors, and wasm linear memory
+grows but never shrinks, so the doubled peak is the permanent footprint rather
+than a spike. iOS terminates the tab. Reading through a Blob with
+`FileReaderSync` costs the model only its tensors.
+
+Smaller payloads do not substitute for this. Shrinking the gallery from 130 MB
+to 2 MB changed nothing, and candle cannot read llama.cpp's i-quants, so the
+smallest usable quantization is Q2\_K at 296 MB, 22% under Q4\_0. The copies
+were the problem, not the size.
+
+Smaller gallery shards are published anyway for memory-constrained tiers:
+`gallery_20k_v3.srtidx` (21 MB) and `gallery_2k_v3.srtidx` (2.1 MB). Recall
+improves as the pool shrinks, so quote the pool size with any number from them.
+
 ## Reproducing
 
 Every number above is backed by a committed JSON artifact in
