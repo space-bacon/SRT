@@ -15,6 +15,11 @@
 
 use crate::normalize;
 
+/// Calibrated steering strength: strong effect, query still in charge.
+///
+/// Measured rather than chosen. See [`Axis::apply`] for the dose-response.
+pub const DEFAULT_ALPHA: f32 = 0.5;
+
 #[derive(Clone)]
 pub struct Axis {
     v: Vec<f32>,
@@ -66,10 +71,26 @@ impl Axis {
     /// `normalize(q + alpha * axis)`.
     ///
     /// Alpha is in units of the normalized axis against a normalized query, so
-    /// it is comparable across heads. Calibrate it against a behavioural
-    /// measure on neutral inputs, never against likelihood on target-class
-    /// text alone: on one measured axis those two disagreed by 8x, and the
-    /// likelihood-derived setting was the wrong one.
+    /// it is comparable across heads. **Calibrate it against retention, not
+    /// against how well the steering appears to work.** Class purity rises
+    /// monotonically with alpha all the way to 0.9, but past alpha ~1 that is
+    /// the axis replacing the query rather than steering it, and every query
+    /// starts returning the same results.
+    ///
+    /// Measured on real image retrieval, three text-defined contrasts, 32
+    /// matched-norm random controls per point:
+    ///
+    /// | alpha | class lift | neighbourhood retained |
+    /// |---|---|---|
+    /// | 0.25 | ~2x | 0.93 |
+    /// | 0.50 | 10-30x | 0.61-0.77 |
+    /// | 0.75 | 20-40x | 0.31-0.51 |
+    /// | 1.00 | 30-160x | 0.13-0.29 |
+    /// | 2.00 | 37-220x | 0.01-0.03 (query erased) |
+    ///
+    /// [`DEFAULT_ALPHA`] is the calibrated setting. Use
+    /// [`Index::retention`](crate::Index::retention) to re-derive it for a new
+    /// head or gallery rather than inheriting it.
     pub fn apply(&self, query: &[f32], alpha: f32) -> Vec<f32> {
         let mut out: Vec<f32> = query
             .iter()

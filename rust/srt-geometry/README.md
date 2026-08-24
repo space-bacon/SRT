@@ -34,20 +34,50 @@ Two things about collecting it, both learned by getting them wrong:
 
 `Axis` acts on the projected query rather than the residual stream, so it costs one vector addition and no re-encode, and the artifact is about 2KB. `Axis::random_like` produces a matched-norm random direction, because a steering claim means nothing until you have shown a random axis does not reproduce it.
 
-Calibrate `alpha` against a behavioural measurement on neutral inputs. Setting it from likelihood on target-class text is a known trap: on one measured axis the two disagreed by a factor of eight.
+The mechanism is validated on real data by `scripts/headspace_axis_validation.py`: axes are built from **captions** and applied to **image** queries, so a positive result is a claim about a shared space and not about memorised neighbours, and the captions used to build an axis are held out from the images evaluated. Three text-defined contrasts, 32 matched-norm random controls per point, top-20 class purity:
+
+| alpha | animal←vehicle | food←sport | indoor←outdoor | random control | retention |
+|---|---|---|---|---|---|
+| 0 | 0.024 | 0.004 | 0.009 | same | 1.00 |
+| 0.5 | 0.252 | 0.117 | 0.128 | 0.009–0.024 | 0.61–0.77 |
+| 1.0 | 0.744 | 0.640 | 0.587 | 0.010–0.025 | 0.13–0.29 |
+| 2.0 | 0.908 | 0.851 | 0.895 | 0.013–0.029 | 0.01–0.03 |
+
+The random control never moves off baseline at any alpha (z-scores of the real axis run 12 to 520), so the direction is carrying meaning rather than degrading the query into a class prior.
+
+**The high-alpha numbers are not the result.** At alpha 2 retention is 0.01, which means the axis has replaced the query and every search returns the same images. That is why `Index::retention` exists and why `DEFAULT_ALPHA` is 0.5 rather than the alpha with the best-looking purity. Re-derive it per head and per gallery; do not inherit it.
 
 ## Verification
 
-The port is pinned to the Python path that produced every published number. `scripts/export_head_safetensors.py` writes both a loadable head and a fixture of real states with their expected projections; `cargo test` fails if the Rust read-out drifts from it. A second implementation of the geometry is only worth having if it is checked against the first.
+The port is pinned to the Python path that produced every published number, at two levels.
+
+`scripts/export_head_safetensors.py` writes a loadable head plus real states with their expected projections, checking the projection itself. `scripts/retrieval_reference.py` runs the whole deployment path on real SugarCrepe images and COCO captions and writes both the result and a replay fixture, checking the thing that actually ships. Rust reproduces the Python ranking exactly across 64 queries × top-10, with score drift under 5e-3.
+
+Reference numbers, 1,542 images against 1,541 deduplicated captions:
+
+| | R@1 | R@5 | R@10 |
+|---|---|---|---|
+| i2t | 0.394 | 0.691 | 0.796 |
+| shuffled control | 0.001 | 0.007 | 0.009 |
+
+One detail worth keeping: the reference scores against the **fp16** index that ships, not the fp32 vectors it was built from. Those two disagree on near-ties, and reporting the fp32 number would be reporting a gallery no deployment ever holds.
 
 ```
 python scripts/export_head_safetensors.py \
     --head checkpoints/gemma4_readout/qwen3b_v6_head.pt \
-    --states artifacts/.../states.npz --modality txt \
-    --out rust/srt-geometry/tests/fixtures
+    --states artifacts/nla/q4/qwen3b_caches/sc_txt_states_qwen3b.npz \
+    --modality txt --out rust/srt-geometry/tests/fixtures
+python scripts/retrieval_reference.py --cell qwen3b
+python scripts/headspace_axis_validation.py
 cargo test -p srt-geometry
 cargo build --target wasm32-unknown-unknown --release
 ```
+
+Fixtures are ~20MB and gitignored, so the tests skip when they are absent. `SRT_REQUIRE_FIXTURES=1` turns a missing fixture into a failure, because a skip that passes silently is the same hazard the tests exist to catch.
+
+## Galleries
+
+`scripts/export_index_srtidx.py` writes the `SRTIDX01` file the Rust index reads, from either pre-projected vectors or raw states plus a head. It prints the index's own mean pairwise cosine on the way out: head space should be close to isotropic, and a high value there means the projection is not doing its job and every retrieval score will read as suspiciously high. Measured 0.021 on the COCO val gallery and 0.041 on SugarCrepe.
 
 ## Where the rest is
 

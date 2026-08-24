@@ -1,0 +1,320 @@
+{
+  "head": "qwen3b_v6_head.pt",
+  "n_images": 1542,
+  "topk": 20,
+  "seeds": 32,
+  "contrasts": {
+    "animal_vs_vehicle": {
+      "n_class_a_images": 217,
+      "n_class_b_images": 150,
+      "n_axis_captions": [
+        1554,
+        834
+      ],
+      "baseline_class_a_in_topk": 0.0243,
+      "best_alpha": 2.0,
+      "best_class_a_in_topk": 0.9083,
+      "lift": 0.884,
+      "operating_point": {
+        "alpha": 0.5,
+        "class_a_in_topk": 0.2517,
+        "random_mean": 0.0243,
+        "random_sd": 0.0021,
+        "z_vs_random": 108.13,
+        "retention": 0.6087,
+        "random_retention": 0.9436
+      },
+      "dose_response": [
+        {
+          "alpha": 0.0,
+          "class_a_in_topk": 0.0243,
+          "random_mean": 0.0243,
+          "random_sd": 0.0,
+          "z_vs_random": null,
+          "retention": 1.0,
+          "random_retention": 1.0
+        },
+        {
+          "alpha": 0.1,
+          "class_a_in_topk": 0.0347,
+          "random_mean": 0.0243,
+          "random_sd": 0.0009,
+          "z_vs_random": 11.87,
+          "retention": 0.9467,
+          "random_retention": 0.9863
+        },
+        {
+          "alpha": 0.2,
+          "class_a_in_topk": 0.059,
+          "random_mean": 0.0246,
+          "random_sd": 0.0009,
+          "z_vs_random": 37.81,
+          "retention": 0.8917,
+          "random_retention": 0.9755
+        },
+        {
+          "alpha": 0.3,
+          "class_a_in_topk": 0.0943,
+          "random_mean": 0.0244,
+          "random_sd": 0.0014,
+          "z_vs_random": 50.82,
+          "retention": 0.8227,
+          "random_retention": 0.9632
+        },
+        {
+          "alpha": 0.4,
+          "class_a_in_topk": 0.159,
+          "random_mean": 0.0237,
+          "random_sd": 0.0014,
+          "z_vs_random": 98.67,
+          "retention": 0.7253,
+          "random_retention": 0.9538
+        },
+        {
+          "alpha": 0.5,
+          "class_a_in_topk": 0.2517,
+          "random_mean": 0.0243,
+          "random_sd": 0.0021,
+          "z_vs_random": 108.13,
+          "retention": 0.6087,
+          "random_retention": 0.9436
+        },
+        {
+          "alpha": 0.75,
+          "class_a_in_topk": 0.5547,
+          "random_mean": 0.0241,
+          "random_sd": 0.0034,
+          "z_vs_random": 157.65,
+          "retention": 0.3093,
+          "random_retention": 0.9135
+        },
+        {
+          "alpha": 1.0,
+          "class_a_in_topk": 0.744,
+          "random_mean": 0.0254,
+          "random_sd": 0.0056,
+          "z_vs_random": 128.46,
+          "retention": 0.13,
+          "random_retention": 0.8858
+        },
+        {
+          "alpha": 2.0,
+          "class_a_in_topk": 0.9083,
+          "random_mean": 0.0286,
+          "random_sd": 0.0087,
+          "z_vs_random": 100.72,
+          "retention": 0.0097,
+          "random_retention": 0.7824
+        }
+      ]
+    },
+    "food_vs_sport": {
+      "n_class_a_images": 152,
+      "n_class_b_images": 152,
+      "n_axis_captions": [
+        1029,
+        785
+      ],
+      "baseline_class_a_in_topk": 0.0039,
+      "best_alpha": 2.0,
+      "best_class_a_in_topk": 0.851,
+      "lift": 0.8471,
+      "operating_point": {
+        "alpha": 0.5,
+        "class_a_in_topk": 0.1174,
+        "random_mean": 0.0045,
+        "random_sd": 0.0008,
+        "z_vs_random": 145.9,
+        "retention": 0.7668,
+        "random_retention": 0.9556
+      },
+      "dose_response": [
+        {
+          "alpha": 0.0,
+          "class_a_in_topk": 0.0039,
+          "random_mean": 0.0039,
+          "random_sd": 0.0,
+          "z_vs_random": null,
+          "retention": 1.0,
+          "random_retention": 1.0
+        },
+        {
+          "alpha": 0.1,
+          "class_a_in_topk": 0.0076,
+          "random_mean": 0.004,
+          "random_sd": 0.0001,
+          "z_vs_random": 45.18,
+          "retention": 0.9734,
+          "random_retention": 0.9896
+        },
+        {
+          "alpha": 0.2,
+          "class_a_in_topk": 0.0168,
+          "random_mean": 0.0041,
+          "random_sd": 0.0002,
+          "z_vs_random": 56.74,
+          "retention": 0.9365,
+          "random_retention": 0.9811
+        },
+        {
+          "alpha": 0.3,
+          "class_a_in_topk": 0.0326,
+          "random_mean": 0.0042,
+          "random_sd": 0.0003,
+          "z_vs_random": 90.36,
+          "retention": 0.8931,
+          "random_retention": 0.9728
+        },
+        {
+          "alpha": 0.4,
+          "class_a_in_topk": 0.0622,
+          "random_mean": 0.0045,
+          "random_sd": 0.0006,
+          "z_vs_random": 89.2,
+          "retention": 0.8414,
+          "random_retention": 0.9635
+        },
+        {
+          "alpha": 0.5,
+          "class_a_in_topk": 0.1174,
+          "random_mean": 0.0045,
+          "random_sd": 0.0008,
+          "z_vs_random": 145.9,
+          "retention": 0.7668,
+          "random_retention": 0.9556
+        },
+        {
+          "alpha": 0.75,
+          "class_a_in_topk": 0.3757,
+          "random_mean": 0.005,
+          "random_sd": 0.0011,
+          "z_vs_random": 327.21,
+          "retention": 0.478,
+          "random_retention": 0.9329
+        },
+        {
+          "alpha": 1.0,
+          "class_a_in_topk": 0.6398,
+          "random_mean": 0.005,
+          "random_sd": 0.0012,
+          "z_vs_random": 521.93,
+          "retention": 0.1951,
+          "random_retention": 0.9156
+        },
+        {
+          "alpha": 2.0,
+          "class_a_in_topk": 0.851,
+          "random_mean": 0.0061,
+          "random_sd": 0.003,
+          "z_vs_random": 280.77,
+          "retention": 0.003,
+          "random_retention": 0.834
+        }
+      ]
+    },
+    "indoor_vs_outdoor": {
+      "n_class_a_images": 194,
+      "n_class_b_images": 258,
+      "n_axis_captions": [
+        1355,
+        1828
+      ],
+      "baseline_class_a_in_topk": 0.0089,
+      "best_alpha": 2.0,
+      "best_class_a_in_topk": 0.8952,
+      "lift": 0.8863,
+      "operating_point": {
+        "alpha": 0.75,
+        "class_a_in_topk": 0.3502,
+        "random_mean": 0.009,
+        "random_sd": 0.0011,
+        "z_vs_random": 301.5,
+        "retention": 0.5116,
+        "random_retention": 0.9132
+      },
+      "dose_response": [
+        {
+          "alpha": 0.0,
+          "class_a_in_topk": 0.0089,
+          "random_mean": 0.0089,
+          "random_sd": 0.0,
+          "z_vs_random": null,
+          "retention": 1.0,
+          "random_retention": 1.0
+        },
+        {
+          "alpha": 0.1,
+          "class_a_in_topk": 0.014,
+          "random_mean": 0.0088,
+          "random_sd": 0.0002,
+          "z_vs_random": 29.4,
+          "retention": 0.9558,
+          "random_retention": 0.9868
+        },
+        {
+          "alpha": 0.2,
+          "class_a_in_topk": 0.0207,
+          "random_mean": 0.0086,
+          "random_sd": 0.0002,
+          "z_vs_random": 52.31,
+          "retention": 0.9136,
+          "random_retention": 0.9752
+        },
+        {
+          "alpha": 0.3,
+          "class_a_in_topk": 0.039,
+          "random_mean": 0.0088,
+          "random_sd": 0.0005,
+          "z_vs_random": 66.65,
+          "retention": 0.8622,
+          "random_retention": 0.9636
+        },
+        {
+          "alpha": 0.4,
+          "class_a_in_topk": 0.0746,
+          "random_mean": 0.0086,
+          "random_sd": 0.0007,
+          "z_vs_random": 96.79,
+          "retention": 0.8039,
+          "random_retention": 0.9522
+        },
+        {
+          "alpha": 0.5,
+          "class_a_in_topk": 0.1275,
+          "random_mean": 0.0087,
+          "random_sd": 0.0008,
+          "z_vs_random": 152.99,
+          "retention": 0.7347,
+          "random_retention": 0.9423
+        },
+        {
+          "alpha": 0.75,
+          "class_a_in_topk": 0.3502,
+          "random_mean": 0.009,
+          "random_sd": 0.0011,
+          "z_vs_random": 301.5,
+          "retention": 0.5116,
+          "random_retention": 0.9132
+        },
+        {
+          "alpha": 1.0,
+          "class_a_in_topk": 0.5872,
+          "random_mean": 0.0096,
+          "random_sd": 0.0015,
+          "z_vs_random": 384.27,
+          "retention": 0.294,
+          "random_retention": 0.8886
+        },
+        {
+          "alpha": 2.0,
+          "class_a_in_topk": 0.8952,
+          "random_mean": 0.0128,
+          "random_sd": 0.0041,
+          "z_vs_random": 215.88,
+          "retention": 0.0246,
+          "random_retention": 0.7854
+        }
+      ]
+    }
+  }
+}

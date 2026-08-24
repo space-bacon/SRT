@@ -1,0 +1,17 @@
+{
+  "cell": "qwen3b",
+  "n_images": 1542,
+  "n_captions": 1541,
+  "i2t": {
+    "r@1": 0.3943,
+    "r@5": 0.6913,
+    "r@10": 0.7964
+  },
+  "median_rank": 2.0,
+  "note": "one positive caption per image, captions deduplicated across splits",
+  "shuffled_control": {
+    "r@1": 0.0006,
+    "r@5": 0.0065,
+    "r@10": 0.0091
+  }
+}

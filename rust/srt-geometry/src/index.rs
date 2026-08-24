@@ -79,8 +79,33 @@ impl Index {
         scored.into_iter().map(|(i, s)| (self.keys[i].as_str(), s)).collect()
     }
 
-    pub fn save<P: AsRef<Path>>(&self, path: P) -> Result<(), Error> {
-        let mut f = std::fs::File::create(path)?;
+    /// Share of each query's unsteered top-k that survives steering, averaged.
+    ///
+    /// This is the calibration procedure for [`Axis`](crate::Axis) alpha, and
+    /// it is the measurement that stops a steering slider from lying. Class
+    /// purity keeps improving as alpha grows, so optimising for it alone walks
+    /// straight past the point where the axis has replaced the query and every
+    /// search returns the same thing. Retention near 1 means nothing happened;
+    /// retention near 0 means the query no longer matters. Pick the largest
+    /// alpha that still holds roughly half the neighbourhood.
+    ///
+    /// Re-derive this per head and per gallery. Inheriting an alpha measured
+    /// somewhere else is how the earlier 8x overshoot happened.
+    pub fn retention(&self, queries: &[Vec<f32>], axis: &crate::Axis, alpha: f32, k: usize) -> f32 {
+        if queries.is_empty() {
+            return 0.0;
+        }
+        let mut total = 0.0f32;
+        for q in queries {
+            let before: Vec<&str> = self.search(q, k).into_iter().map(|(s, _)| s).collect();
+            let after = self.search(&axis.apply(q, alpha), k);
+            let kept = after.iter().filter(|(s, _)| before.contains(s)).count();
+            total += kept as f32 / k.max(1) as f32;
+        }
+        total / queries.len() as f32
+    }
+
+    pub fn save<P: AsRef<Path>>(&self, path: P) -> Result<(), Error> {        let mut f = std::fs::File::create(path)?;
         f.write_all(MAGIC)?;
         f.write_all(&(self.dim as u32).to_le_bytes())?;
         f.write_all(&(self.keys.len() as u32).to_le_bytes())?;
