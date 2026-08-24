@@ -117,5 +117,42 @@
     "normalised": 0.1184
    }
   }
+ },
+ "re_encode_floor_per_arm": {
+  "note": "fresh raw re-encode minus the shipped cache, measured on EVERY arm and on the margin, not just the real arm. Largest magnitude anywhere is 0.0042; the normalisation effect on the margin is 19x to 276x it.",
+  "cells": {
+   "qwen-img_x_qwen-txt": {
+    "real": -0.0004,
+    "derangement": 0.0001,
+    "mean_image": -0.001,
+    "margin": -0.0004,
+    "normalisation_effect_on_margin": 0.1165,
+    "swap_obj_margin_items_of_245": -1.5
+   },
+   "gemma-img_x_qwen-txt": {
+    "real": 0.002,
+    "derangement": 0.0007,
+    "mean_image": 0.0027,
+    "margin": 0.0014,
+    "normalisation_effect_on_margin": 0.117,
+    "swap_obj_margin_items_of_245": -0.3
+   },
+   "gemma-img_x_gemma-txt": {
+    "real": 0.003,
+    "derangement": 0.0007,
+    "mean_image": -0.0032,
+    "margin": 0.0022,
+    "normalisation_effect_on_margin": 0.0426,
+    "swap_obj_margin_items_of_245": 0.7
+   },
+   "qwen-img_x_gemma-txt": {
+    "real": -0.0011,
+    "derangement": -0.0002,
+    "mean_image": -0.0042,
+    "margin": -0.0009,
+    "normalisation_effect_on_margin": 0.0336,
+    "swap_obj_margin_items_of_245": 0.8
+   }
+  }
  }
 }
