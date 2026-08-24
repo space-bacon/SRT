@@ -95,12 +95,27 @@ an image, and on `swap_obj` two of them sit 17.8 points apart, so the *sign* of
 "does image content help" was being set by null choice rather than measurement.
 The mean-image ablation is reproduced by *another* split's mean image and
 defeated by a random direction, so it prices a learned generic-image direction
-in text space, not image content. Candidate position exchange cannot arbitrate
-either: it is an identity for an independent-scoring cosine.
+in text space, not image content. Its apparent win over real images was the
+caption formatting and does not survive normalisation. Candidate position
+exchange cannot arbitrate either: it is an identity for an independent-scoring
+cosine.
 
 Use `shuffle_pair` (real images, trained head, pairing deranged over 20 seeds).
-It is the only null that varies per cell. Against it the heads clear by +6.5 to
-+13.0 clean-five points, and the margin sorts by text tower, not image tower.
+It is the only null that varies per cell. Against it, on normalised captions,
+the heads clear by +16.3 to +18.6 clean-five points.
+
+**Normalise the captions first.** SugarCrepe pairs a human COCO caption with a
+model-generated foil and the generator punctuates: the foil is the dotted one in
+1,384 of the 1,384 pairs where the two differ, no counter-example in 7,511.
+States cached under the raw caption carry that signature. Stripping it reverses
+three conclusions we published: both swap splits go from at or below their
+deranged control to about ten points above it, the mean-image ablation stops
+outscoring real images, and the text-tower asymmetry inverts and shrinks to
+under a point on raw accuracy. The un-normalised numbers are kept because they
+are what other work quoting SugarCrepe is comparable to, not because they are
+the better measurement. Normalised state caches are published here as
+`q4/sugarcrepe_txt_norm_*.npz`, with `q4/sugarcrepe_txt_reenc_*.npz` as the
+same-session re-encode control (floor 0.0042 on any arm).
 
 ### `scalefloor/` — 31B to 3B, no capability loss at matched data
 

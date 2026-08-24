@@ -540,11 +540,13 @@ Compositionality benchmarks probe whether a retrieval system
 distinguishes ``a horse eating grass'' from ``grass eating a horse.''
 CLIP-class dual encoders famously sit near chance on the word-order
 splits of SugarCrepe. The shipped head inherits the same failure (swap
-splits at 0.50 to 0.57), which is at first surprising, because a
-diagnostic on the raw layer-47 states shows the substrate separates
-word-order swaps \emph{more} sharply than object replacements (mean
-positive-negative cosine 0.396 vs 0.582). The information survives to
-the tap; the head discards it, because InfoNCE with random in-batch
+splits at 0.50 to 0.57, on the un-normalised captions this section
+reports throughout; §6.4 records what stripping the benchmark's
+provenance formatting does to them), which is at first surprising,
+because a diagnostic on the raw layer-47 states shows the substrate
+separates word-order swaps \emph{more} sharply than object replacements
+(mean positive-negative cosine 0.396 vs 0.582). The information survives
+to the tap; the head discards it, because InfoNCE with random in-batch
 negatives never charges for discarding syntax. The failure belongs to
 the objective, not the encoder.
 
@@ -620,34 +622,57 @@ states on both sides, so nothing in it could separate an image-side
 limit from a text-side one. A 2x2 tower factorial with Qwen2.5-VL-3B
 (layer 29, d=2048) as the second backbone, identical recipe in every
 cell (117,787 pairs, the same negative families re-encoded in whichever
-space the text tower lives in), settles the question. Clean five-split
-macro: gemma/gemma 0.704, gemma-image with qwen-text 0.665, qwen-image
-with gemma-text 0.690, qwen/qwen 0.661. Swapping the text tower costs
-2.9 to 3.9 points; swapping the image tower costs 0.4 to 1.4. The band
-the elimination attributed to the image representation is set roughly
-3.5x more strongly by the text representation, and a 10x smaller image
-tower read through gemma's text tower loses only 1.4 points. Continued
-review then imposed a second discipline on the per-split numbers: a
-blind word-order prior (bigram log-counts over the benchmark's own 4,345
-unique positive captions, leave-one-out by caption text) scores 0.660 on
-the clean five splits with no image, no head, and no encoder, so every
-split is reported here as margin over that prior. The margin view sets
-an absolute floor and only that: the prior is blind to both towers, so
-it takes one value per split in every cell, and tower comparisons live
-in the raw table unchanged. Against the floor, the picture is: the
-gemma-text cells clear it (+0.044 and +0.031 on the clean five) while
-the qwen-text cells sit on it (+0.006 and +0.001), and the baseline
-itself carries error that point margins conceal. Two independent
-rebuilds of the prior agree within ±0.02 per split, which on swap\_obj
-(n=245, prior CI ±0.062) means every cell's margin interval straddles
-zero against both rebuilds
+space the text tower lives in), settles the question, but only once a
+formatting artifact is taken out of it. SugarCrepe's positives are human
+COCO captions and its foils are model-generated, and the generator
+punctuates: the foil is the one ending in a period in 1,384 of the 1,384
+pairs where the two differ, with no counter-example in 7,511. The cached
+text states were keyed by the raw caption, so that signature sat inside
+every text encoding we scored. Re-encoding both candidates with the
+trailing period stripped and the first character lowercased, raw and
+normalised on one machine in one session so the re-encode floor divides
+out, changes the table. Un-normalised clean five-split macro:
+gemma/gemma 0.704, gemma-image with qwen-text 0.665, qwen-image with
+gemma-text 0.690, qwen/qwen 0.661, which is the column comparable to
+other work quoting SugarCrepe and is also the contaminated one.
+Normalised: 0.746, 0.755, 0.746, 0.750. Every cell gains 5 to 9 points,
+and the asymmetry the un-normalised table showed (text 2.9 to 3.9
+points, image 0.4 to 1.4) does not survive it: swapping either tower now
+moves the macro by under a point. The artifact was not neutral across
+towers, and reading its removal as a tower property is the error
+recorded in ledger entry 10. Continued review then imposed a second
+discipline on the per-split numbers: a blind word-order prior (bigram
+log-counts over the benchmark's own 4,345 unique positive captions,
+leave-one-out by caption text) scores 0.658 on the clean five splits
+with no image, no head, and no encoder, so every split is reported here
+as margin over that prior. That prior needed correcting for the same
+artifact: tokenising on whitespace keeps \texttt{water.} and
+\texttt{water} apart, so the trailing period rode inside its final
+bigram. It scored 0.663, and on swap\_obj exactly 140/245, which is the
+number a rule reading only punctuation and capitalisation obtains.
+Stripping punctuation puts it at 0.658 and swap\_obj at 0.543. The
+margin view sets an absolute floor and only that: the prior is blind to
+both towers, so it takes one value per split in every cell, and tower
+comparisons live in the raw table unchanged. Against the corrected floor
+all four cells clear it by similar amounts (+0.088 to +0.097 on the
+clean five), where the contaminated pairing had the gemma-text cells
+clearing it (+0.044 and +0.031) while the qwen-text cells sat on it
+(+0.006 and +0.001). The baseline itself carries error that point
+margins conceal. Two independent rebuilds of the prior agree within
+±0.02 per split, which on swap\_obj (n=245, prior CI ±0.062) means every
+cell's margin interval straddles zero against both rebuilds
 (\texttt{artifacts/nla/q4/prior\_comparison.json}). A third control was
 proposed by the same review and then withdrawn by it: mean-image
 ablation, the same head and texts with every image replaced by the
 split's mean image vector. It outscores the real images on the
 clean-five macro (0.693 vs 0.665 mixed; 0.687 vs 0.661 matched), which
 we first read as image content degrading a text prior on every split
-subtler than object identity. Three arms retire that reading.
+subtler than object identity. Three arms retire that reading, and
+normalisation retires the inversion itself: with the formatting stripped
+the real images beat the ablation in all four cells, by +0.100 and
++0.098 in the gemma-text cells and +0.125 and +0.118 in the qwen-text
+cells. The inversion existed only in the contaminated column, and only
+under the text tower that carried more of the contamination.
 Substituting a \emph{different} split's mean image reproduces the
 ablation everywhere (clean-five 0.691 mixed, 0.689 matched) and on
 swap\_obj exceeds it (0.730 and 0.725 against 0.722 and 0.714), so the
@@ -657,30 +682,40 @@ to the direction image means occupy and not to fixed directions in
 general. And a regression of the fixed-direction score on caption length
 and mean unigram log-frequency accounts for the add splits almost
 exactly (0.99) but not the swaps (0.56 to 0.59 against the ablation's
-0.71 to 0.72). What the ablation prices is a learned generic-image
-direction in text space along which the benchmark's human captions
-outscore its generated foils. That is a property of the text head and
-the foil construction, not of image content, and it is blind to both
-towers in the same way the bigram prior is. Candidate position exchange,
-proposed to separate word-order competence from a candidate-set
-artifact, cannot decide it either: each candidate is scored
-independently against the image and the two scores are compared, so the
-scorer carries no positional term and exchange maps accuracy to its
-complement identically (verified to 1e-9 on every split in both cells).
+0.71 to 0.72). That last arm is reported as tied rather than as
+evidence: on a swap split the foil is a reordering of the positive, so
+both regressors are equal by construction on 64.5\% of swap\_obj and
+59.6\% of swap\_att, and the regression has no variance to fit there.
+The add splits are the only place it was asked a question. What survives
+from the other two arms is that the ablation prices a learned
+generic-image direction in text space along which the benchmark's human
+captions outscore its generated foils. That is a property of the text
+head and the foil construction, not of image content, and it is blind to
+both towers in the same way the bigram prior is. Candidate position
+exchange, proposed to separate word-order competence from a
+candidate-set artifact, cannot decide it either: each candidate is
+scored independently against the image and the two scores are compared,
+so the scorer carries no positional term and exchange maps accuracy to
+its complement identically (verified to 1e-9 on every split in both
+cells).
 
 The control that does adjudicate per cell is the one null that is not
 blind to the towers: real images, the trained head, and the
-image-to-caption pairing deranged. Averaged over 20 derangements the
-clean-five macro falls from 0.665 to 0.598 in the mixed cell and from
-0.661 to 0.591 in the matched cell, so image identity is worth +6.6 and
-+7.0 points against a null that holds everything fixed except which
-image goes with which caption. The margin is concentrated rather than
-distributed: on the matched cell it is +20.7 on replace\_obj, +8.6 on
-replace\_rel and +7.4 on replace\_att, against −0.2 on swap\_obj and
-−1.4 on swap\_att. Image identity contributes where object identity is
-at stake and is worth nothing on the arrangement splits, which is the
-division of labor the inventory measurements below report, reached from
-an independent direction (\texttt{scripts/sugarcrepe\_controls.py},
+image-to-caption pairing deranged. On normalised text, averaged over 20
+derangements, the clean-five macro falls from 0.755 to 0.570 in the
+mixed cell and from 0.750 to 0.564 in the matched cell, so image
+identity is worth +18.5 and +18.6 points against a null that holds
+everything fixed except which image goes with which caption. On the
+contaminated column the same margins read +6.6 and +7.0. The margin is
+concentrated rather than distributed, but it is not confined: on the
+matched cell it is +34.7 on replace\_obj, +21.0 on replace\_rel and
++17.7 on replace\_att, against +10.2 on swap\_obj and +9.6 on swap\_att.
+The earlier reading, that image identity is worth nothing on the
+arrangement splits (−0.2 and −1.4), was the formatting. Object identity
+still dominates by roughly three to one, which is the division of labor
+the inventory measurements below report, reached from an independent
+direction, but arrangement is no longer zero and the papers no longer
+say it is (\texttt{scripts/sugarcrepe\_controls.py},
 \texttt{artifacts/nla/q4/controls\_*.json},
 \texttt{artifacts/nla/q4/mean\_image\_control.json}; gemma-text cells
 pending re-encode). Two per-split observations from the raw table must
@@ -702,11 +737,16 @@ contribution at this n.
 The correct summary of the wall is therefore not an image-side ceiling
 but a division of labor that is uniform across towers: the linear
 readout recovers the scene's inventory nearly in full and its
-arrangement hardly at all. Three direct measurements support that
-characterization. Scoring 80 COCO category prompts against 1,560
-annotated images through the head gives mean per-category detection AUC
-0.883 and per-image R-precision 0.543 against a 0.038 chance floor, so
-most object types present in a scene are recoverable from the single
+arrangement far less well. The stronger form of that sentence, that
+arrangement is not recovered at all, was an artifact of the caption
+formatting and does not survive normalisation, which puts both swap
+splits about ten points above their own deranged control. Three direct
+measurements support the weaker characterization, and none of them
+passes through a caption comparison, so none is touched by the
+formatting. Scoring 80 COCO category prompts against 1,560 annotated
+images through the head gives mean per-category detection AUC 0.883 and
+per-image R-precision 0.543 against a 0.038 chance floor, so most object
+types present in a scene are recoverable from the single
 1,024-dimensional vector. The worst-ranked of each image's five
 reference captions still lands at median rank 44 of 5,000, so the vector
 answers to every description of the scene rather than to a dominant
@@ -714,8 +754,10 @@ subject. And retrieval is flat in scene complexity (r@5 0.906 at one
 annotated category, 0.887 at six or more). A 22 MB linear head on a
 frozen chat model closes 75\% of the gap to CLIP ViT-B/32 on SugarCrepe
 by objective repair alone; the remaining gap is a property of the frozen
-pair, dominated by the text side, with an arrangement floor that no
-tested combination of towers, objectives, or decompositions moves
+pair, with arrangement read markedly less well than inventory across
+every combination of towers, objectives, and decompositions tested. The
+earlier claim that the text side dominates the gap, and that the
+arrangement floor is immovable, both rested on the un-normalised column
 (\texttt{artifacts/nla/q4/sugarcrepe\_*.json},
 \texttt{artifacts/nla/q4/w05\_verdict\_20260806.json},
 \texttt{artifacts/nla/q4/width\_null\_20260807.json},
@@ -1002,7 +1044,6 @@ headline could not be trusted without them.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   \textbf{The greedy gap.} On every host, greedy decoding from the
   activation verbalizer collapses far below retrieval; on
@@ -1054,16 +1095,19 @@ headline could not be trusted without them.
   \textbf{The wall was attributed to the wrong tower.} Five levers
   eliminated within a single backbone pair supported ``the wall is the
   layer-47 image representation.'' A 2x2 tower factorial with a second
-  backbone reversed the attribution: the text tower sets the band
-  roughly 3.5x more strongly than the image tower, the seven-split macro
-  carried a caption-length artifact on its two add splits, and a blind
-  word-order prior then showed the swap\_att ``tower fingerprint'' to be
-  largely the text prior showing through, with the swap\_obj ``floor''
-  underpowered at n=245 rather than invariant. An elimination inside one
-  pair cannot attribute a limit to either side of the pair, and raw
-  split accuracy cannot be attributed to alignment without a blind-prior
-  margin; both corrections and both methods are due to external review
-  (§6.4).
+  backbone reversed the attribution: the text tower appeared to set the
+  band roughly 3.5x more strongly than the image tower. Entry 10
+  supersedes that figure, which was measuring the caption formatting
+  rather than the tower; what survives is that an elimination inside one
+  pair cannot attribute a limit to either side of the pair. The
+  seven-split macro carried a caption-length artifact on its two add
+  splits, and a blind word-order prior then showed the swap\_att ``tower
+  fingerprint'' to be largely the text prior showing through, with the
+  swap\_obj ``floor'' underpowered at n=245 rather than invariant. An
+  elimination inside one pair cannot attribute a limit to either side of
+  the pair, and raw split accuracy cannot be attributed to alignment
+  without a blind-prior margin; both corrections and both methods are
+  due to external review (§6.4).
 \item
   \textbf{Three of our four SugarCrepe nulls were blind to the thing
   they were nulling.} The blind bigram prior, the mean-image ablation,
@@ -1080,6 +1124,31 @@ headline could not be trusted without them.
   clean-five points. Rounds 12 and 13 of the review also shipped their
   controls as result files with no code path, which is the same failure
   the review opened with; all nulls now live in one script (§6.4).
+\item
+  \textbf{A benchmark's formatting was inside three of our conclusions.}
+  SugarCrepe pairs a human COCO caption with a model-generated foil, and
+  the generator punctuates: across 7,511 pairs the foil is the dotted
+  one in 1,384 of the 1,384 cases where the two differ, with no
+  counter-example. Because text states were cached under the raw
+  caption, that provenance signature was inside every encoding we
+  scored, and it was not neutral. Re-encoding with the trailing period
+  stripped, raw and normalised in one session so the re-encode floor
+  divides out at 0.0042 on any arm, reverses three published claims.
+  Both swap splits move from at or below their deranged control to about
+  ten points above it, so ``image identity is worth nothing on the
+  arrangement splits'' was formatting. The mean-image ablation stops
+  outscoring real images in every cell, so the round-13 inversion was
+  formatting. And the text-tower asymmetry inverts, so ``the wall is set
+  roughly 3.5x more strongly by the text representation'' was measuring
+  which tower had absorbed more of the artifact. Our own blind prior was
+  reading the same tell, scoring exactly 140/245 on swap\_obj, the
+  number a punctuation-only rule obtains. The lesson is narrower than
+  ``check your nulls'': a benchmark that pairs human text against
+  generated text carries a provenance channel that any text encoder can
+  read, and normalising it belongs in the harness rather than the data,
+  because the comparable column is the contaminated one (§6.4,
+  \texttt{scripts/sugarcrepe\_encode\_norm.py},
+  \texttt{artifacts/nla/q4/controls\_norm\_summary.json}).
 \end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

@@ -91,13 +91,18 @@ one annotated category, 0.887 at six or more).
 
 The clean characterisation, uniform across every backbone pairing we have
 tested: **the linear read-out recovers a scene's inventory nearly in full and
-its arrangement hardly at all.**
+its arrangement far less well.** The stronger version of that line, that
+arrangement is not recovered at all, turned out to be a property of the
+benchmark's caption formatting rather than of the read-out. See the note below.
 
 Against the one benchmark null that is not blind to the model (real images, the
-trained head, image-to-caption pairing deranged over 20 seeds), image identity
-is worth **+6.5 to +13.0** points of five-split SugarCrepe macro depending on
-the text tower, and essentially all of it is object identity: +20.7 on
-replace_obj, and zero or slightly negative on both word-order swap splits.
+trained head, image-to-caption pairing deranged over 20 seeds), and on
+normalised captions, image identity is worth **+16.3 to +18.6** points of
+five-split SugarCrepe macro. Object identity dominates it by roughly three to
+one (+34.7 on replace_obj against +10.2 and +9.6 on the two word-order swap
+splits), but the swaps are no longer zero. On un-normalised captions the same
+margins read +6.5 to +13.0 with the swaps at or just below zero, which is what
+this card said before the formatting was measured.
 
 ## Compositional variants
 
@@ -126,18 +131,26 @@ Three cautions, all found by external review, all costly to ignore:
 
 1. **The two `add` splits are 99% solvable by caption length alone**, because the
    negative is longer by construction. Report the five length-clean splits.
-2. **A blind bigram prior over the benchmark's own captions scores 0.660** on
+2. **A blind bigram prior over the benchmark's own captions scores 0.658** on
    those five splits with no image, no head and no encoder. Quote margins over
-   that prior, as intervals, not raw accuracy.
-3. **`swap_obj` is underpowered** at n=245: its 95% interval is about six points,
+   that prior, as intervals, not raw accuracy. Strip punctuation when building
+   it: on whitespace tokens the trailing period rides inside the final bigram,
+   which put our own prior at 0.663 and at exactly 140/245 on `swap_obj`, the
+   same score a rule reading only punctuation obtains.
+3. **Normalise the candidates before encoding.** The foil is model-generated and
+   ends in a period; the human caption often does not, with no counter-example
+   in 7,511 pairs. Stripping it moved three of our published conclusions,
+   including the sign of the tower comparison.
+4. **`swap_obj` is underpowered** at n=245: its 95% interval is about six points,
    wider than any tower effect measured anywhere in this program. Do not quote it
    as a floor.
 
 And a caution about nulls themselves. A mean-image ablation looks like a control
 but is reproduced by *another* split's mean image and defeated by a random
 direction, so it prices a learned generic-image direction in text space rather
-than image content. Candidate position exchange cannot arbitrate either: it is
-an identity for an independent-scoring cosine.
+than image content. Its apparent win over real images was the caption
+formatting and does not survive normalisation. Candidate position exchange
+cannot arbitrate either: it is an identity for an independent-scoring cosine.
 
 ## Usage
 
