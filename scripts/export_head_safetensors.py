@@ -32,6 +32,10 @@ def parse_args():
     p.add_argument("--modality", choices=["img", "txt"], default="txt",
                    help="which side the fixture states belong to")
     p.add_argument("--n-fixture", type=int, default=8)
+    p.add_argument("--sides", default="img,txt",
+                   help="which projections to include; a text-only runtime "
+                        "searches a gallery that was projected elsewhere")
+    p.add_argument("--dtype", choices=["f32", "f16"], default="f32")
     p.add_argument("--out", type=Path, required=True)
     return p.parse_args()
 
@@ -49,12 +53,16 @@ def main() -> None:
         "mu_img": d["mu_img"].float().contiguous(),
         "mu_txt": d["mu_txt"].float().contiguous(),
     }
+    sides = {s.strip() for s in args.sides.split(",") if s.strip()}
+    keep = {k: v for k, v in tensors.items() if k.split(".")[0].replace("mu_", "") in sides}
+    if args.dtype == "f16":
+        keep = {k: v.half().contiguous() for k, v in keep.items()}
+
     from safetensors.torch import save_file
     st_path = args.out / "head.safetensors"
-    save_file(tensors, str(st_path))
-    print(f"wrote {st_path} "
-          f"(img {tuple(tensors['img.weight'].shape)}, "
-          f"txt {tuple(tensors['txt.weight'].shape)})")
+    save_file(keep, str(st_path))
+    print(f"wrote {st_path} ({sorted(sides)}, {args.dtype}, "
+          f"{st_path.stat().st_size / 1e6:.1f} MB)")
 
     if args.states is None:
         return
@@ -65,7 +73,6 @@ def main() -> None:
     W = tensors[f"{side}.weight"].numpy()
     b = tensors[f"{side}.bias"].numpy()
     mu = tensors[mu_key].numpy()
-
     proj = (states - mu) @ W.T + b
     proj /= np.linalg.norm(proj, axis=1, keepdims=True) + 1e-8
 

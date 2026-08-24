@@ -34,6 +34,7 @@ def parse_args():
     p.add_argument("--head", type=Path, help="head .pt, required with --states")
     p.add_argument("--modality", choices=["img", "txt"], default="img")
     p.add_argument("--split", default=None, help="keep only rows with this split value")
+    p.add_argument("--start", type=int, default=0, help="skip this many rows")
     p.add_argument("--limit", type=int, default=0, help="0 = all")
     p.add_argument("--out", type=Path, required=True)
     return p.parse_args()
@@ -90,6 +91,8 @@ def main() -> None:
     else:
         Z, keys, prov = load_projected(a.projected, a.split)
 
+    if a.start:
+        Z, keys = Z[a.start :], keys[a.start :]
     if a.limit:
         Z, keys = Z[: a.limit], keys[: a.limit]
 

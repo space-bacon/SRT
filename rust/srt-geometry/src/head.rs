@@ -39,10 +39,16 @@ impl Proj {
 /// `txt.bias`, `mu_img`, `mu_txt`. Export a published `.pt` head to this
 /// format with `scripts/export_head_safetensors.py`; the exporter also emits
 /// reference projections so a port can be checked rather than trusted.
+///
+/// Either side may be omitted. A runtime that only encodes text does not need
+/// the image projection, because the gallery it searches was projected
+/// elsewhere and ships already in read-out space. Dropping the unused side and
+/// storing fp16 takes a typical head from ~24MB to ~2MB, which is the
+/// difference between a page a phone will load and one it will not.
 #[derive(Clone)]
 pub struct Head {
-    img: Proj,
-    txt: Proj,
+    img: Option<Proj>,
+    txt: Option<Proj>,
 }
 
 impl Head {
@@ -73,7 +79,10 @@ impl Head {
             Ok((v, t.shape().to_vec()))
         };
 
-        let mk = |wn: &str, bn: &str, mn: &str| -> Result<Proj, Error> {
+        let mk = |wn: &str, bn: &str, mn: &str| -> Result<Option<Proj>, Error> {
+            if st.tensor(wn).is_err() {
+                return Ok(None);
+            }
             let (w, ws) = get(wn)?;
             let (b, _) = get(bn)?;
             let (mu, _) = get(mn)?;
@@ -87,24 +96,45 @@ impl Head {
             if b.len() != d_out {
                 return Err(Error::Shape { expected: d_out, got: b.len() });
             }
-            Ok(Proj { w, b, mu, d_in, d_out })
+            Ok(Some(Proj { w, b, mu, d_in, d_out }))
         };
 
-        Ok(Head {
+        let head = Head {
             img: mk("img.weight", "img.bias", "mu_img")?,
             txt: mk("txt.weight", "txt.bias", "mu_txt")?,
-        })
+        };
+        if head.img.is_none() && head.txt.is_none() {
+            return Err(Error::Format("head has neither modality".into()));
+        }
+        Ok(head)
+    }
+
+    fn side(&self, m: Modality) -> Result<&Proj, Error> {
+        match m {
+            Modality::Image => &self.img,
+            Modality::Text => &self.txt,
+        }
+        .as_ref()
+        .ok_or_else(|| Error::Format(format!("head carries no {m:?} projection")))
+    }
+
+    pub fn has(&self, m: Modality) -> bool {
+        match m {
+            Modality::Image => self.img.is_some(),
+            Modality::Text => self.txt.is_some(),
+        }
     }
 
     pub fn proj_dim(&self) -> usize {
-        self.txt.d_out
+        self.txt
+            .as_ref()
+            .or(self.img.as_ref())
+            .map(|p| p.d_out)
+            .unwrap_or(0)
     }
 
     pub fn input_dim(&self, m: Modality) -> usize {
-        match m {
-            Modality::Image => self.img.d_in,
-            Modality::Text => self.txt.d_in,
-        }
+        self.side(m).map(|p| p.d_in).unwrap_or(0)
     }
 
     /// Center by the modality anchor, project, then L2-normalize.
@@ -113,10 +143,7 @@ impl Head {
     /// dominant shared direction, so uncentered cosine puts unrelated items
     /// far above zero and compresses the differences that matter.
     pub fn project(&self, state: &[f32], m: Modality) -> Vec<f32> {
-        let p = match m {
-            Modality::Image => &self.img,
-            Modality::Text => &self.txt,
-        };
+        let p = self.side(m).expect("head carries this modality");
         assert_eq!(state.len(), p.d_in, "state dim {} != head {}", state.len(), p.d_in);
         let mut out = vec![0.0f32; p.d_out];
         p.apply(state, &mut out);
@@ -127,14 +154,19 @@ impl Head {
     /// Replace a modality anchor with one measured on the local runtime.
     ///
     /// This is the whole per-runtime fix: a mean vector, nothing more. It is
-    /// load-bearing. On one measured cross-runtime pair, omitting it cost 24
-    /// i2t R@1 points, and the loss was invisible to agreement metrics that
-    /// apply the same transform to both sides. Only an end task showed it.
+    /// load-bearing, and not subtly. Measured on a quantized runtime against
+    /// the fp16 one its head was fit on, text-to-image R@1 read 0.008 with the
+    /// head as-is and 0.229 after 4KB of anchor, matching the reference. The
+    /// failure is silent: rankings look confident either way, and no metric
+    /// that applies the same transform to both sides of a comparison will show
+    /// it. Only an end task does.
     pub fn recalibrate(&mut self, mu: &[f32], m: Modality) -> Result<(), Error> {
         let p = match m {
             Modality::Image => &mut self.img,
             Modality::Text => &mut self.txt,
-        };
+        }
+        .as_mut()
+        .ok_or_else(|| Error::Format(format!("head carries no {m:?} projection")))?;
         if mu.len() != p.d_in {
             return Err(Error::Shape { expected: p.d_in, got: mu.len() });
         }
@@ -143,9 +175,6 @@ impl Head {
     }
 
     pub fn anchor(&self, m: Modality) -> &[f32] {
-        match m {
-            Modality::Image => &self.img.mu,
-            Modality::Text => &self.txt.mu,
-        }
+        self.side(m).map(|p| p.mu.as_slice()).unwrap_or(&[])
     }
 }

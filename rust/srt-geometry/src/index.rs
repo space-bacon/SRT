@@ -46,6 +46,11 @@ impl Index {
         self.dim
     }
 
+    /// Key at a row position, for callers holding integer ground truth.
+    pub fn key(&self, row: usize) -> Option<&str> {
+        self.keys.get(row).map(|s| s.as_str())
+    }
+
     /// Add a projected, normalized vector. Normalization is enforced here
     /// rather than assumed, because a single unnormalized row silently
     /// outranks everything else.

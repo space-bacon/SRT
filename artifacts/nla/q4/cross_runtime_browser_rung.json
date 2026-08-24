@@ -1,0 +1,31 @@
+{
+  "anchors": {
+    "bytes": 4096,
+    "n": 200,
+    "source": "drawn from training-split images, disjoint from the eval gallery"
+  },
+  "captions": 5001,
+  "encode_rate_per_s": 13.5,
+  "gallery": 1000,
+  "question": "does a read-out head survive a change of runtime, and does the anchor close the gap",
+  "reference_runtime": "pytorch fp16 Qwen3-0.6B L28",
+  "t2i": {
+    "candle_q4_as_is": {
+      "r@1": 0.015396920615876825,
+      "r@10": 0.08958208358328335,
+      "r@5": 0.05678864227154569
+    },
+    "candle_q4_recalibrated": {
+      "r@1": 0.1951609678064387,
+      "r@10": 0.5456908618276345,
+      "r@5": 0.4321135772845431
+    },
+    "pytorch_fp16": {
+      "r@1": 0.23,
+      "r@10": 0.6215,
+      "r@5": 0.4907
+    }
+  },
+  "tap_layer": 28,
+  "test_runtime": "Qwen3-0.6B Q4_0 (gguf, 28 layers, hidden 1024)"
+}
