@@ -146,7 +146,7 @@ We built the browser tier and measured it. A visitor loads a page; a
 0.6B quantized model downloads once and stays cached; from then on the
 visitor can converse with it, and every message they send also searches
 a gallery of 123,287 photographs, because the vector that searches is a
-read-out on a hidden state the reply already computed. There is no
+read-out on a hidden state of the same frozen model. There is no
 inference server. Nothing the visitor types leaves the tab.
 
 The three findings we report are all of the same character: each is a
@@ -179,22 +179,33 @@ invisible to the metric one would naturally reach for.
 
 \section{2. The deployment}\label{the-deployment}
 
-\subsection{2.1 One forward pass, two
-jobs}\label{one-forward-pass-two-jobs}
+\subsection{2.1 One model, two jobs}\label{one-model-two-jobs}
 
 The usual way to put conversation and search on one page is two models:
 a language model for the dialogue and an embedding model for the index.
 We ship one. The tokens the visitor reads and the vector that searches
-the gallery come from the same layers on the same pass, because the
-read-out head consumes a state the generation already computed.
+the gallery come out of the same frozen weights, because the read-out
+head consumes a hidden state of that model rather than an embedding from
+another.
 
 This is not an optimisation. It is the program's claim made operational:
 if retrieval is a read-out on the representation rather than a separate
-skill, then a model that can talk can also search, and the search costs
-one matrix multiply on top of the talking. In the deployed system the
-retrieved images are posted to the page \emph{before} the sentence is,
-because the state they read is ready as soon as the prompt is encoded
-and the reply is still being sampled.
+skill, then a model that can talk can also search. In the deployed
+system the retrieved images are posted to the page \emph{before} the
+sentence is, because the read that produces them finishes long before
+generation does.
+
+We are precise about what is shared, because the tidier claim is false.
+The deployment reads the message twice through the same weights: once
+bare for the read-out, and once inside the chat template for generation.
+It does not reuse generation's prefill, and we measured what doing so
+would cost. Handing the head the templated prompt instead of the bare
+message moves the median rank of the correct photograph from 187 to
+41,014 out of 123,287, and the two projected vectors have a cosine of
+0.10. The head is fitted on one distribution of hidden states and chat
+formatting is a different one, which is the lesson of §3 arriving by
+another route. A design wanting one shared prefill must fit the head on
+templated states or carry a correction between the two.
 
 \subsection{2.2 An asymmetry that shapes
 everything}\label{an-asymmetry-that-shapes-everything}

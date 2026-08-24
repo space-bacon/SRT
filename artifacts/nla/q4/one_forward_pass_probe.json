@@ -1,0 +1,26 @@
+{
+ "question": "can retrieval reuse the hidden state that generation already computes, making it literally one forward pass",
+ "answer": "no. The read-out is fitted on plain text, and the chat template moves the state far enough that retrieval collapses.",
+ "runtime": "candle Q4_0 with shipped text anchor, mean-pooled L28",
+ "gallery": "gallery_123k_v3.srtidx, 123287 images",
+ "captions": 300,
+ "results": {
+  "raw_user_text": {"R@1": 0.0267, "R@5": 0.0833, "R@10": 0.12, "median_rank": 187},
+  "chat_templated_prompt": {"R@1": 0.0, "R@5": 0.0, "R@10": 0.0, "median_rank": 41014}
+ },
+ "cos_raw_vs_templated": 0.1,
+ "template": "<|im_start|>system\\n{system}<|im_end|>\\n<|im_start|>user\\n{user}<|im_end|>\\n<|im_start|>assistant\\n<think>\\n\\n</think>\\n\\n",
+ "implication": [
+  "chat() must and does encode the user's message separately from the generation prompt, so the browser demo performs two forward passes per turn, not one",
+  "the second pass is a short prefill over the user's message, far cheaper than generation, but it is not free and it is not 'one matrix multiply'",
+  "the page previously claimed 'the same forward pass searches' and 'a hidden state the reply already computed'. Both were false and have been corrected."
+ ],
+ "why_it_matters_beyond_this_demo": (
+  "This is the same failure family as the runtime anchor. A linear read-out fitted on one "
+  "distribution of hidden states does not transfer to another without correction, and chat "
+  "formatting is a distribution change large enough to be fatal. Any design that hopes to share "
+  "a single prefill between generation and retrieval has to fit the head on templated states, or "
+  "carry a correction between the two."
+ ),
+ "note": "An earlier run of this comparison used gallery.npz, which was projected by an older head, and produced near-random numbers for both arms. Mismatched head and gallery is silent: the vectors are the right shape and the scores look plausible."
+}
