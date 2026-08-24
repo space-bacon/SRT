@@ -103,6 +103,41 @@ fn rust_reproduces_the_python_recall() {
 }
 
 #[test]
+fn python_int8_index_loads_and_ranks_like_f16_on_real_data() {
+    // Cross-language and cross-precision at once: the file is written by
+    // Python, read by Rust, and must not reorder against the f16 index built
+    // from the identical vectors. int8 is what a 123K gallery has to use, so
+    // "free" needs checking on real retrieval rather than on a synthetic set.
+    let Some(c) = load() else { return };
+    let p = fixtures().join("captions_int8.srtidx");
+    if !p.exists() {
+        eprintln!("SKIPPED: re-run scripts/retrieval_reference.py to emit the int8 index");
+        return;
+    }
+    let i8idx = Index::load(p).expect("int8 index");
+    assert_eq!(i8idx.precision(), srt_geometry::Precision::Int8);
+    assert_eq!(i8idx.len(), c.index.len());
+    assert!(
+        i8idx.resident_bytes() < c.index.resident_bytes(),
+        "int8 should be smaller: {} vs {}",
+        i8idx.resident_bytes(),
+        c.index.resident_bytes()
+    );
+
+    let queries = c.fx["queries"].as_array().unwrap();
+    let mut agree_top1 = 0usize;
+    for q in queries {
+        let z = c.head.project(&state_of(q), Modality::Image);
+        if i8idx.search(&z, 1)[0].0 == c.index.search(&z, 1)[0].0 {
+            agree_top1 += 1;
+        }
+    }
+    let rate = agree_top1 as f64 / queries.len() as f64;
+    eprintln!("int8 vs f16 top-1 agreement {rate:.4} over {} queries", queries.len());
+    assert!(rate > 0.98, "int8 changed the top result too often: {rate:.4}");
+}
+
+#[test]
 fn recalibrating_with_a_wrong_anchor_degrades_real_retrieval() {
     // The 42KB is load-bearing, and this is the demonstration rather than the
     // assertion. A head pointed at the wrong anchor still returns confident

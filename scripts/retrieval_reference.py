@@ -136,6 +136,9 @@ def main() -> None:
     a.out_fixtures.mkdir(parents=True, exist_ok=True)
     idx_path = a.out_fixtures / "captions.srtidx"
     write_index(idx_path, Zt, np.array(captions))
+    # Same vectors at int8, so the Rust side can check that the compact format
+    # a large gallery needs does not reorder anything.
+    write_index(a.out_fixtures / "captions_int8.srtidx", Zt, np.array(captions), "int8")
 
     q = np.linspace(0, len(files) - 1, a.n_queries).astype(int)
     fixture = {

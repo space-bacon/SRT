@@ -22,35 +22,45 @@ from pathlib import Path
 
 import numpy as np
 
-MAGIC = b"SRTIDX01"
+MAGIC_F16 = b"SRTIDX01"
+MAGIC_I8 = b"SRTIDX02"
 
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
     src = p.add_mutually_exclusive_group(required=True)
-    src.add_argument("--projected", type=Path,
-                     help="npz with head-space vectors (Z_img or Z) and files")
+    src.add_argument("--projected", type=Path, nargs="+",
+                     help="one or more npz of head-space vectors (Z_img or Z) and files; "
+                          "several are concatenated, which is how sharded encodes merge")
     src.add_argument("--states", type=Path, help="npz with raw states + files/texts")
     p.add_argument("--head", type=Path, help="head .pt, required with --states")
     p.add_argument("--modality", choices=["img", "txt"], default="img")
     p.add_argument("--split", default=None, help="keep only rows with this split value")
     p.add_argument("--start", type=int, default=0, help="skip this many rows")
     p.add_argument("--limit", type=int, default=0, help="0 = all")
+    p.add_argument("--dtype", choices=["f16", "int8"], default="f16",
+                   help="int8 costs nothing measurable and quarters resident memory; "
+                        "use it for anything a browser has to hold")
     p.add_argument("--out", type=Path, required=True)
     return p.parse_args()
 
 
-def load_projected(path: Path, split: str | None):
-    z = np.load(path, allow_pickle=True)
-    key = "Z_img" if "Z_img" in z.files else "Z"
-    Z = z[key].astype(np.float32)
-    keys = np.array([str(f) for f in z["files"]])
-    if split is not None:
-        if "split" not in z.files:
-            raise SystemExit(f"{path} has no split array")
-        m = z["split"] == split
-        Z, keys = Z[m], keys[m]
-    return Z, keys, f"{path.name}:{key}"
+def load_projected(paths: list[Path], split: str | None):
+    Zs, keys = [], []
+    for path in paths:
+        z = np.load(path, allow_pickle=True)
+        key = "Z_img" if "Z_img" in z.files else "Z"
+        Z = z[key].astype(np.float32)
+        k = np.array([str(f) for f in z["files"]])
+        if split is not None:
+            if "split" not in z.files:
+                raise SystemExit(f"{path} has no split array")
+            m = z["split"] == split
+            Z, k = Z[m], k[m]
+        Zs.append(Z)
+        keys.append(k)
+    prov = f"{len(paths)} file(s), first {paths[0].name}"
+    return np.concatenate(Zs), np.concatenate(keys), prov
 
 
 def load_states(path: Path, head_path: Path, modality: str):
@@ -68,14 +78,24 @@ def load_states(path: Path, head_path: Path, modality: str):
     return Z, keys, f"{path.name} via {head_path.name}[{modality}]"
 
 
-def write_index(out: Path, Z: np.ndarray, keys: np.ndarray) -> None:
+def write_index(out: Path, Z: np.ndarray, keys: np.ndarray, dtype: str = "f16") -> None:
     Z = Z / (np.linalg.norm(Z, axis=1, keepdims=True) + 1e-8)
     n, dim = Z.shape
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("wb") as f:
-        f.write(MAGIC)
-        f.write(struct.pack("<II", dim, n))
-        f.write(Z.astype(np.float16).tobytes(order="C"))
+        if dtype == "f16":
+            f.write(MAGIC_F16)
+            f.write(struct.pack("<II", dim, n))
+            f.write(Z.astype(np.float16).tobytes(order="C"))
+        else:
+            # Symmetric per-row scale; rows are unit-norm so one scale suffices.
+            scale = np.abs(Z).max(axis=1, keepdims=True) / 127.0
+            scale = np.maximum(scale, 1e-12)
+            q = np.clip(np.rint(Z / scale), -127, 127).astype(np.int8)
+            f.write(MAGIC_I8)
+            f.write(struct.pack("<II", dim, n))
+            f.write(scale.astype(np.float32).ravel().tobytes(order="C"))
+            f.write(q.tobytes(order="C"))
         for k in keys:
             enc = str(k).encode("utf-8")
             f.write(struct.pack("<I", len(enc)))
@@ -96,9 +116,9 @@ def main() -> None:
     if a.limit:
         Z, keys = Z[: a.limit], keys[: a.limit]
 
-    write_index(a.out, Z, keys)
+    write_index(a.out, Z, keys, a.dtype)
     mb = a.out.stat().st_size / 1e6
-    print(f"wrote {a.out}: {Z.shape[0]} x {Z.shape[1]}, {mb:.1f} MB")
+    print(f"wrote {a.out}: {Z.shape[0]} x {Z.shape[1]} {a.dtype}, {mb:.1f} MB")
     print(f"  source: {prov}")
 
     # Anisotropy of the index itself. Head-space vectors should be close to

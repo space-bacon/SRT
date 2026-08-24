@@ -1,0 +1,36 @@
+{
+  "n_images": 1000,
+  "n_captions": 5001,
+  "variants": {
+    "f32": {
+      "t2i": {
+        "r@1": 0.23,
+        "r@5": 0.4907,
+        "r@10": 0.6215
+      },
+      "delta_r@1_vs_f32": 0.0,
+      "bytes_per_vector": 4096,
+      "gallery_123k_mb": 505.0
+    },
+    "f16": {
+      "t2i": {
+        "r@1": 0.23,
+        "r@5": 0.4907,
+        "r@10": 0.6215
+      },
+      "delta_r@1_vs_f32": 0.0,
+      "bytes_per_vector": 2048,
+      "gallery_123k_mb": 252.5
+    },
+    "int8_per_row": {
+      "t2i": {
+        "r@1": 0.2306,
+        "r@5": 0.4903,
+        "r@10": 0.6209
+      },
+      "delta_r@1_vs_f32": 0.0006,
+      "bytes_per_vector": 1028,
+      "gallery_123k_mb": 126.7
+    }
+  }
+}

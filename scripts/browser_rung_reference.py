@@ -128,6 +128,7 @@ def main() -> None:
         a.model, torch_dtype=torch.float16).to(a.device).eval()
 
     S_txt = encode(model, tok, texts, a.layer, a.device, a.batch)
+    np.save(a.out_replay.parent / "ref_text_states.npy", S_txt)
     Z_txt = unit((S_txt - mt) @ Wt.T + bt)
 
     # fp16 index, because that is what ships

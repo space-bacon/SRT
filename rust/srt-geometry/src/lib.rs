@@ -37,7 +37,7 @@ mod index;
 
 pub use axis::{Axis, DEFAULT_ALPHA};
 pub use head::{Head, Modality};
-pub use index::Index;
+pub use index::{Index, Precision};
 
 use std::fmt;
 
