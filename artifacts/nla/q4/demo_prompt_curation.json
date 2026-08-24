@@ -1,0 +1,72 @@
+{
+ "question": "which prompts should the demo ship, judged by looking at what they retrieve",
+ "gallery": "gallery_123k_v3.srtidx, 123287 rows",
+ "runtime": "candle Q4_0 with shipped text anchor, via BlackWindow runtime example encode_text",
+ "method": "encode offline, search the full gallery, fetch the top thumbnails by byte range and look at them. Scores alone are not enough to choose a prompt: two of these score in the same band as the ones we kept and retrieve something unrelated.",
+ "kept": [
+  {
+   "prompt": "an empty road at dusk with the lights just coming on",
+   "top": 0.524,
+   "spread": 0.059,
+   "cos_to_centroid": 0.713,
+   "retrieved": "traffic lights against a darkening sky, street lamps lit",
+   "role": "default prompt, the strongest verified match in the set"
+  },
+  {
+   "prompt": "a train pulling into a station on a rainy afternoon",
+   "top": 0.461,
+   "spread": 0.064,
+   "cos_to_centroid": -0.359,
+   "retrieved": "a train at a platform, passengers waiting, overcast",
+   "role": "chip: weather and a place"
+  },
+  {
+   "prompt": "a dog asleep in a patch of afternoon sunlight",
+   "top": 0.407,
+   "spread": 0.048,
+   "cos_to_centroid": -0.392,
+   "retrieved": "dogs asleep on cushions",
+   "role": "chip: a quiet scene"
+  },
+  {
+   "prompt": "Tell me about semiosis inside your frozen state",
+   "top": 0.403,
+   "spread": 0.054,
+   "cos_to_centroid": 0.650,
+   "retrieved": "bodies curled inside suitcases, drawers and containers",
+   "role": "chip: abstract wording resolving onto its physical sense"
+  },
+  {
+   "prompt": "what are you thinking about right now",
+   "top": 0.412,
+   "spread": 0.043,
+   "cos_to_centroid": 0.747,
+   "retrieved": "the gallery's hubs, mostly single portraits",
+   "role": "chip: the honest failure mode"
+  }
+ ],
+ "rejected": [
+  {
+   "prompt": "somewhere warm to sleep",
+   "top": 0.403,
+   "cos_to_centroid": 0.730,
+   "retrieved": "sheep being sheared",
+   "why": "lexical association from warm to wool, not the intended sense"
+  },
+  {
+   "prompt": "a body that has stopped moving",
+   "top": 0.401,
+   "cos_to_centroid": 0.690,
+   "retrieved": "oxen pulling a cart",
+   "why": "unrelated, despite scoring in the same band as prompts that work"
+  },
+  {
+   "prompt": "steam rising from a cup on a cold morning",
+   "top": 0.406,
+   "spread": 0.024,
+   "cos_to_centroid": 0.773,
+   "why": "flattest spread in the set, not inspected, not shipped"
+  }
+ ],
+ "note": "A theory was tested and dropped here. Cosine to the gallery centroid looked like it might measure how grounded a query is, since the two most concrete prompts are negative and the ungrounded one is +0.747. It does not: the best match in the set sits at +0.713. Specificity and alignment with the average image are different things, and only the pictures settled it."
+}
