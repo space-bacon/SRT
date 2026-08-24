@@ -1,0 +1,19 @@
+{
+ "question": "does the head-space prefer a caption over the same words with two nouns swapped",
+ "runtime": "candle Q4_0 with shipped text anchor (the browser's runtime)",
+ "pairs": 141,
+ "accuracy": 0.4681,
+ "ci95": [
+  0.3857,
+  0.5504
+ ],
+ "chance": 0.5,
+ "z_vs_chance": -0.76,
+ "symmetric_pairs_excluded": true,
+ "margin_true_minus_swapped": {
+  "mean": -0.00389,
+  "sd": 0.02567,
+  "median": -0.00124
+ },
+ "reading": "indistinguishable from chance: the space scores the words and not their arrangement. This bounds what the read-out represents; it does not affect any retrieval number, which never depended on word order."
+}

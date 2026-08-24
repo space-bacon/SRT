@@ -601,6 +601,27 @@ so handing the head L22, L25 and L28 lets it use the deltas that a
 single-layer read-out cannot see, and the forward already computes them.
 Measured: +0.004, at a cost of 4 MB. Dropped.
 
+\textbf{The shared space does not represent word order.} For 141 COCO
+captions we built the minimal pair that separates structure from
+vocabulary: the true caption against the same words with two noun
+phrases exchanged, \emph{a woman walking a horse} against \emph{a horse
+walking a woman}. Symmetric coordinations were excluded, because \emph{a
+giraffe and a zebra} and \emph{a zebra and a giraffe} describe the same
+photograph and would drive the score to chance by construction; 99 of
+240 candidates went that way. Scored through the browser's own runtime,
+accuracy is \textbf{0.468} (95\% CI 0.386 to 0.550, z = −0.76 against
+chance), with a mean margin of −0.004 in favour of the \emph{swapped}
+caption. The read-out scores the words and not their arrangement.
+
+This bounds what the correspondence represents and it costs none of the
+retrieval numbers, which never depended on word order. It is consistent
+with the literature that motivated SugarCrepe: contrastively trained
+dual encoders behave like bags of words on exactly this test, and a
+linear head on frozen backbones inherits that rather than repairing it.
+Anyone extending this work to tasks where binding matters, \emph{the cat
+on the mat} against \emph{the mat on the cat}, should treat this as the
+boundary it is.
+
 \textbf{Abliteration is not a lever for read-out.} On the image side, a
 head trained and scored on an abliterated 27B tower reached i2t R@1
 0.410 against 0.433 for base-on-base, and heads transferred across the

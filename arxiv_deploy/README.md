@@ -26,6 +26,7 @@ end task.
 | int8 index is free (§6.1) | `artifacts/nla/q4/gallery_precision_cost.json` |
 | six-arm ablation, registered predictions (§7) | `artifacts/nla/q4/browser_head_v2_arms.json` |
 | final head at deployment scale (§7) | `artifacts/nla/q4/browser_head_v3_report.json` |
+| word-order swap probe, at chance (§8) | `artifacts/nla/q4/swap_probe.json`, `swap_probe_pairs.json` |
 | abliteration prior (§8) | `artifacts/nla/q4/` abliteration battery + geometry reports |
 
 Reproduction scripts live in `scripts/` (`browser_rung_reference.py`,
