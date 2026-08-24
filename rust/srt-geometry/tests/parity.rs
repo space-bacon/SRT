@@ -68,7 +68,7 @@ fn projection_matches_python_reference() {
             .iter().map(|x| x.as_f64().unwrap() as f32).collect();
         let want: Vec<f32> = e.as_array().unwrap()
             .iter().map(|x| x.as_f64().unwrap() as f32).collect();
-        let got = head.project(&state, modality);
+        let got = head.project(&state, modality).unwrap();
         let c = cosine(&got, &want);
         worst = worst.min(c);
         let max_abs = got.iter().zip(&want).map(|(a, b)| (a - b).abs()).fold(0.0f32, f32::max);
@@ -86,14 +86,14 @@ fn recalibration_changes_the_projection_and_is_the_only_state_it_changes() {
     head1.recalibrate(&shifted, Modality::Text).unwrap();
 
     let state: Vec<f32> = (0..d).map(|i| ((i % 17) as f32 - 8.0) * 0.01).collect();
-    let a = head0.project(&state, Modality::Text);
-    let b = head1.project(&state, Modality::Text);
+    let a = head0.project(&state, Modality::Text).unwrap();
+    let b = head1.project(&state, Modality::Text).unwrap();
     assert!(cosine(&a, &b) < 0.9999, "anchor swap must move the projection");
 
     // the image side is untouched by a text-side recalibration
     let si: Vec<f32> = (0..head0.input_dim(Modality::Image)).map(|i| (i as f32) * 1e-3).collect();
-    let ia = head0.project(&si, Modality::Image);
-    let ib = head1.project(&si, Modality::Image);
+    let ia = head0.project(&si, Modality::Image).unwrap();
+    let ib = head1.project(&si, Modality::Image).unwrap();
     assert!(cosine(&ia, &ib) > 0.99999, "image side must be unaffected");
 }
 

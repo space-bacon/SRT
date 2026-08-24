@@ -25,7 +25,7 @@
 //! use srt_geometry::{Head, Index, Modality};
 //! # let state: Vec<f32> = Vec::new(); // a backbone hidden state, tapped mid-stack
 //! let head = Head::from_safetensors_path("sunstone_head.safetensors")?;
-//! let q = head.project(&state, Modality::Text);
+//! let q = head.project(&state, Modality::Text)?;
 //! let idx = Index::load("gallery.bin")?;
 //! for (key, score) in idx.search(&q, 5) { println!("{score:.4} {key}"); }
 //! # Ok::<(), srt_geometry::Error>(())

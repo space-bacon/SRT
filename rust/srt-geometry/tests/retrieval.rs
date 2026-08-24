@@ -56,7 +56,7 @@ fn rust_reproduces_the_python_ranking_and_scores() {
 
     let mut worst_score_gap = 0.0f32;
     for q in queries {
-        let z = c.head.project(&state_of(q), Modality::Image);
+        let z = c.head.project(&state_of(q), Modality::Image).unwrap();
         let got = c.index.search(&z, topk);
         let want = q["expect"].as_array().unwrap();
         assert_eq!(got.len(), want.len());
@@ -81,7 +81,7 @@ fn rust_reproduces_the_python_recall() {
     let queries = c.fx["queries"].as_array().unwrap();
     let (mut r1, mut r5) = (0usize, 0usize);
     for q in queries {
-        let z = c.head.project(&state_of(q), Modality::Image);
+        let z = c.head.project(&state_of(q), Modality::Image).unwrap();
         let hits = c.index.search(&z, 5);
         let gold = q["gold"].as_str().unwrap();
         if hits[0].0 == gold {
@@ -127,7 +127,7 @@ fn python_int8_index_loads_and_ranks_like_f16_on_real_data() {
     let queries = c.fx["queries"].as_array().unwrap();
     let mut agree_top1 = 0usize;
     for q in queries {
-        let z = c.head.project(&state_of(q), Modality::Image);
+        let z = c.head.project(&state_of(q), Modality::Image).unwrap();
         if i8idx.search(&z, 1)[0].0 == c.index.search(&z, 1)[0].0 {
             agree_top1 += 1;
         }
@@ -149,7 +149,7 @@ fn recalibrating_with_a_wrong_anchor_degrades_real_retrieval() {
         let hit = queries
             .iter()
             .filter(|q| {
-                let z = head.project(&state_of(q), Modality::Image);
+                let z = head.project(&state_of(q), Modality::Image).unwrap();
                 c.index.search(&z, 1)[0].0 == q["gold"].as_str().unwrap()
             })
             .count();
@@ -180,7 +180,7 @@ fn a_head_space_axis_reorders_real_retrieval_and_a_random_axis_does_not() {
 
     let zs: Vec<Vec<f32>> = queries
         .iter()
-        .map(|q| c.head.project(&state_of(q), Modality::Image))
+        .map(|q| c.head.project(&state_of(q), Modality::Image).unwrap())
         .collect();
     let (half, rest) = zs.split_at(zs.len() / 2);
     let axis = Axis::from_contrast("first_half", half, rest);
@@ -221,7 +221,7 @@ fn retention_falls_with_alpha_and_exposes_the_query_erasure_point() {
         .as_array()
         .unwrap()
         .iter()
-        .map(|q| c.head.project(&state_of(q), Modality::Image))
+        .map(|q| c.head.project(&state_of(q), Modality::Image).unwrap())
         .collect();
     let (half, rest) = zs.split_at(zs.len() / 2);
     let axis = Axis::from_contrast("first_half", half, rest);

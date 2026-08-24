@@ -23,8 +23,12 @@ from export_index_srtidx import write_index
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--chunks", type=Path, required=True, help="dir of shard*_chunk*.npz")
+    p.add_argument("--chunk-prefix", default="train2017",
+                   help="split these chunks came from; keys become prefix/name so a "
+                        "page can build an image URL without guessing")
     p.add_argument("--also", type=Path, nargs="*", default=[],
                    help="extra projected npz to fold in, e.g. the val2017 gallery")
+    p.add_argument("--also-prefix", default="val2017")
     p.add_argument("--dtype", choices=["f16", "int8"], default="int8")
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--keys-out", type=Path, default=None,
@@ -35,20 +39,25 @@ def parse_args():
 
 def main() -> None:
     a = parse_args()
-    files = sorted(a.chunks.glob("shard*_chunk*.npz")) if a.chunks.exists() else []
-    files += list(a.also)
-    if not files:
+    chunk_files = sorted(a.chunks.glob("shard*_chunk*.npz")) if a.chunks.exists() else []
+    sources = [(f, a.chunk_prefix) for f in chunk_files]
+    sources += [(f, a.also_prefix) for f in a.also]
+    if not sources:
         raise SystemExit(f"no chunks under {a.chunks}")
 
     Zs, keys = [], []
-    for f in files:
+    for f, prefix in sources:
         z = np.load(f, allow_pickle=True)
         key = "Z_img" if "Z_img" in z.files else "Z"
         Zs.append(z[key].astype(np.float32))
-        keys.append(np.array([str(x) for x in z["files"]]))
+        # COCO train and val ids are disjoint but the filename does not say
+        # which, so the split is carried in the key rather than inferred.
+        keys.append(np.array([
+            str(x) if "/" in str(x) else f"{prefix}/{x}" for x in z["files"]
+        ]))
     Z = np.concatenate(Zs)
     K = np.concatenate(keys)
-    print(f"{len(files)} sources -> {Z.shape[0]} vectors, dim {Z.shape[1]}")
+    print(f"{len(sources)} sources -> {Z.shape[0]} vectors, dim {Z.shape[1]}")
 
     if len({z.shape[1] for z in Zs}) != 1:
         raise SystemExit("chunks disagree on width")

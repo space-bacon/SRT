@@ -142,13 +142,19 @@ impl Head {
     /// The centering step is not a preprocessing nicety. These states carry a
     /// dominant shared direction, so uncentered cosine puts unrelated items
     /// far above zero and compresses the differences that matter.
-    pub fn project(&self, state: &[f32], m: Modality) -> Vec<f32> {
-        let p = self.side(m).expect("head carries this modality");
-        assert_eq!(state.len(), p.d_in, "state dim {} != head {}", state.len(), p.d_in);
+    ///
+    /// Returns an error rather than panicking on a width mismatch: pairing a
+    /// head with the wrong backbone is a realistic deployment mistake, and in
+    /// WebAssembly a panic aborts the module and takes the worker with it.
+    pub fn project(&self, state: &[f32], m: Modality) -> Result<Vec<f32>, Error> {
+        let p = self.side(m)?;
+        if state.len() != p.d_in {
+            return Err(Error::Shape { expected: p.d_in, got: state.len() });
+        }
         let mut out = vec![0.0f32; p.d_out];
         p.apply(state, &mut out);
         normalize(&mut out);
-        out
+        Ok(out)
     }
 
     /// Replace a modality anchor with one measured on the local runtime.
