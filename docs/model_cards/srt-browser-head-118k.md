@@ -35,13 +35,21 @@ A **2.1 MB linear head** that lets a 0.6B-parameter quantized language model,
 running entirely in a web browser, search 123,287 photographs that a
 27B-parameter model encoded offline.
 
+**Try it: [0.6B reads 27B](https://huggingface.co/spaces/RiverRider/0.6b-reads-27b).**
+Static files, no inference server, works offline after the first load.
+
 The large model is never downloaded and never runs. It encoded the gallery
 once and left behind a file. The small model meets it in that space.
 
-The head reads a hidden state the model **already computed while replying to
-you**. Chat and retrieval come from one forward pass, so search costs one
-matrix multiply on top of generation — not a second model, not a second
-encoder, not a server round-trip.
+The head reads a hidden state from **the same frozen weights that write the
+reply**: one model doing two jobs, with no second encoder, no extra
+parameters, and no server round-trip. It is a second read of your message
+rather than a reuse of the generation pass. We tried to merge them and
+measured that it does not work. The head needs your bare message; handing it
+the chat-formatted prompt instead moves the correct photograph from median
+rank 187 to 41,014 of 123,287 on the probe used for that test, and the two
+encodings share a cosine of 0.10. Two passes are forced, and each is one
+matrix multiply on top of a hidden state the model was computing anyway.
 
 ## What it does
 
