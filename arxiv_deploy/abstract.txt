@@ -1,0 +1,33 @@
+A companion paper established that the linearly readable structure in a
+frozen language model is invariant along every axis a deployment can
+vary, and that a head trained once transfers across model scale, weight
+precision, and silicon with at most a small recalibration. That result
+makes browser- and edge-tier deployment possible. This paper reports
+what happens when you actually build it, and finds that possibility and
+correctness are separated by three failures that only an end task can
+see.
+
+We ship a single 0.6B-parameter quantized language model into a web
+browser where it does two jobs from one forward pass: it answers the
+visitor, and the hidden state that answer was computed from is read out
+to search 123,287 photographs that a 27B-parameter model encoded
+offline. The large model is never downloaded and never runs.
+
+Three findings. First, the recalibration is load-bearing and its absence
+is silent: moving a head from PyTorch/fp16 to candle/Q4_0 in
+WebAssembly drops text-to-image R@1 from 0.230 to 0.0154, a fifteen-fold
+collapse that a 4 KB mean vector restores to 0.195, and which no
+agreement metric can detect because agreement applies the same transform
+to both sides of the comparison. Second, retrieval quality reported on
+small pools does not survive deployment scale: the same head and
+captions score R@1 0.2306 against 1,000 images and 0.0148 against the
+123,287 actually searched. Third, steering a read-out must be calibrated
+on retention, not on effect size: class purity rises monotonically to
+0.9 while the query's own neighbourhood collapses to 0.01, so optimising
+the visible effect optimises the query away.
+
+We report the payload accounting that makes the tier real (int8 index
+storage is free: R@1 0.2306 against 0.2300 at a quarter the resident
+memory), an ablation in which four of six registered predictions were
+wrong, and a negative-results ledger in which the intervention we
+expected to be free and helpful was the most harmful thing we tried.
