@@ -1,0 +1,90 @@
+{
+  "gallery": "gallery_123k_v3.srtidx",
+  "n_images": 123287,
+  "k": 6,
+  "conversation": [
+    "Tell me about a dog asleep in the afternoon sun",
+    "Where else could dogs sleep?",
+    "what about cats"
+  ],
+  "variants": {
+    "t2_message_only": {
+      "top_score": 0.4191,
+      "top_key": "train2017/000000033634.jpg",
+      "top6": [
+        "train2017/000000033634.jpg",
+        "train2017/000000122572.jpg",
+        "train2017/000000490081.jpg",
+        "train2017/000000396106.jpg",
+        "train2017/000000523245.jpg",
+        "train2017/000000046608.jpg"
+      ]
+    },
+    "t2_with_prev_message": {
+      "top_score": 0.3298,
+      "top_key": "train2017/000000084448.jpg",
+      "top6": [
+        "train2017/000000084448.jpg",
+        "train2017/000000251135.jpg",
+        "train2017/000000492352.jpg",
+        "train2017/000000519716.jpg",
+        "train2017/000000182758.jpg",
+        "train2017/000000075586.jpg"
+      ]
+    },
+    "t2_reply_as_query": {
+      "top_score": 0.2145,
+      "top_key": "train2017/000000006414.jpg",
+      "top6": [
+        "train2017/000000006414.jpg",
+        "train2017/000000276365.jpg",
+        "train2017/000000356314.jpg",
+        "train2017/000000072120.jpg",
+        "train2017/000000432247.jpg",
+        "train2017/000000008775.jpg"
+      ]
+    },
+    "t3_message_only": {
+      "top_score": 0.4141,
+      "top_key": "train2017/000000033634.jpg",
+      "top6": [
+        "train2017/000000033634.jpg",
+        "train2017/000000490081.jpg",
+        "train2017/000000046608.jpg",
+        "train2017/000000122572.jpg",
+        "train2017/000000057617.jpg",
+        "train2017/000000523245.jpg"
+      ]
+    },
+    "t3_with_prev_message": {
+      "top_score": 0.4239,
+      "top_key": "train2017/000000011635.jpg",
+      "top6": [
+        "train2017/000000011635.jpg",
+        "train2017/000000033634.jpg",
+        "train2017/000000252810.jpg",
+        "train2017/000000281591.jpg",
+        "train2017/000000030973.jpg",
+        "train2017/000000553533.jpg"
+      ]
+    },
+    "t3_reply_as_query": {
+      "top_score": 0.2443,
+      "top_key": "train2017/000000008775.jpg",
+      "top6": [
+        "train2017/000000008775.jpg",
+        "train2017/000000230321.jpg",
+        "train2017/000000072120.jpg",
+        "train2017/000000356314.jpg",
+        "train2017/000000511963.jpg",
+        "train2017/000000031524.jpg"
+      ]
+    }
+  },
+  "top6_overlap_between_followups": {
+    "message_only": 5,
+    "with_prev_message": 0,
+    "reply_as_query": 3
+  },
+  "note": "Short follow-ups collapse onto the same images and onto content unrelated to the conversation. Prepending the previous user message separates them and restores topical hits. Deployed in the browser demo below eight words."
+}
