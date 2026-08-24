@@ -63,6 +63,9 @@ def parse_args():
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--device", default="cuda:0")
     p.add_argument("--save-head", default=None)
+    p.add_argument("--gallery-out", default=None,
+                   help="re-project all 123K images through this head; a new head "
+                        "invalidates the old gallery")
     p.add_argument("--out", required=True)
     return p.parse_args()
 
@@ -287,6 +290,43 @@ def main() -> None:
         "n_images": len(kept_files),
         "n_train_captions": len(train_texts),
     }
+
+    # Val-only overstates what a visitor sees: the deployed gallery has 123,287
+    # images, so every caption competes against 122,287 more distractors.
+    if a.gallery_out:
+        with torch.no_grad():
+            def proj(X):
+                out = []
+                for i in range(0, len(X), 8192):
+                    z = head.img((X[i:i + 8192] - mi).to(dev))
+                    out.append(F.normalize(z, dim=-1).cpu())
+                return torch.cat(out)
+
+            Zt_all, Zv_all = proj(img_train), proj(img_val)
+            Zg = torch.cat([Zt_all, Zv_all])
+            gkeys = ([f"train2017/{f}" for f in kept_files]
+                     + [f"val2017/{f}" for f in val_files])
+
+            zt = F.normalize(head.txt((cap_val - mt).to(dev)), dim=-1)
+            gold = torch.as_tensor(val_owner + len(Zt_all), device=dev)
+            G = Zg.to(dev)
+            hits, ranks = {1: 0, 5: 0, 10: 0}, []
+            for i in range(0, len(zt), 512):
+                S = zt[i:i + 512] @ G.T
+                g = gold[i:i + 512]
+                r = (S > S.gather(1, g[:, None])).sum(1)
+                ranks.append(r.cpu())
+                for k in hits:
+                    hits[k] += (r < k).sum().item()
+            ranks = torch.cat(ranks)
+            full = {f"r@{k}": round(hits[k] / len(zt), 4) for k in (1, 5, 10)}
+            full["median_rank"] = float(ranks.median().item() + 1)
+            result["full_gallery"] = full
+            print(f"full gallery ({len(Zg)}) t2i {full}", flush=True)
+
+        np.savez_compressed(a.gallery_out, Z_img=Zg.numpy().astype(np.float16),
+                            files=np.array(gkeys))
+        print(f"wrote {a.gallery_out}", flush=True)
     Path(a.out).write_text(json.dumps(result, indent=2))
     print(f"wrote {a.out}", flush=True)
 

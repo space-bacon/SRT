@@ -1,0 +1,264 @@
+{
+  "question": "what improves the browser bridge without growing the 380MB payload",
+  "baseline_note": "all arms share the image side; only the text read-out and fit change",
+  "arms": {
+    "all": {
+      "config": {
+        "captions_per_image": 5,
+        "text_layers": [
+          22,
+          25,
+          28
+        ],
+        "pooling": "last",
+        "img_head": "mlp",
+        "epochs": 40,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.4636,
+        "i2t_r@5": 0.7688,
+        "i2t_r@10": 0.8586,
+        "t2i_r@1": 0.3414,
+        "t2i_r@5": 0.6341,
+        "t2i_r@10": 0.7457
+      },
+      "shipped_text_head_mb": 6.29
+    },
+    "baseline": {
+      "config": {
+        "captions_per_image": 1,
+        "text_layers": [
+          28
+        ],
+        "pooling": "last",
+        "img_head": "linear",
+        "epochs": 20,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.4236,
+        "i2t_r@5": 0.7164,
+        "i2t_r@10": 0.823,
+        "t2i_r@1": 0.297,
+        "t2i_r@5": 0.573,
+        "t2i_r@10": 0.6915
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "best20": {
+      "config": {
+        "captions_per_image": 5,
+        "text_layers": [
+          28
+        ],
+        "pooling": "mean",
+        "img_head": "linear",
+        "epochs": 20,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.5222,
+        "i2t_r@5": 0.8008,
+        "i2t_r@10": 0.8872,
+        "t2i_r@1": 0.3851,
+        "t2i_r@5": 0.6728,
+        "t2i_r@10": 0.7816
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "best40": {
+      "config": {
+        "captions_per_image": 5,
+        "text_layers": [
+          28
+        ],
+        "pooling": "mean",
+        "img_head": "linear",
+        "epochs": 40,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.5318,
+        "i2t_r@5": 0.8126,
+        "i2t_r@10": 0.8962,
+        "t2i_r@1": 0.3983,
+        "t2i_r@5": 0.6856,
+        "t2i_r@10": 0.7893
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "best40_final": {
+      "config": {
+        "captions_per_image": 5,
+        "text_layers": [
+          28
+        ],
+        "pooling": "mean",
+        "img_head": "linear",
+        "epochs": 40,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.5348,
+        "i2t_r@5": 0.8124,
+        "i2t_r@10": 0.8952,
+        "t2i_r@1": 0.3985,
+        "t2i_r@5": 0.6856,
+        "t2i_r@10": 0.7887
+      },
+      "shipped_text_head_mb": 2.1,
+      "full_gallery": {
+        "r@1": 0.1108,
+        "r@5": 0.251,
+        "r@10": 0.3373,
+        "median_rank": 33.0
+      }
+    },
+    "captions5": {
+      "config": {
+        "captions_per_image": 5,
+        "text_layers": [
+          28
+        ],
+        "pooling": "last",
+        "img_head": "linear",
+        "epochs": 20,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.4552,
+        "i2t_r@5": 0.748,
+        "i2t_r@10": 0.8464,
+        "t2i_r@1": 0.3347,
+        "t2i_r@5": 0.6187,
+        "t2i_r@10": 0.7322
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "epochs40": {
+      "config": {
+        "captions_per_image": 1,
+        "text_layers": [
+          28
+        ],
+        "pooling": "last",
+        "img_head": "linear",
+        "epochs": 40,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.4112,
+        "i2t_r@5": 0.7072,
+        "i2t_r@10": 0.8186,
+        "t2i_r@1": 0.2919,
+        "t2i_r@5": 0.5639,
+        "t2i_r@10": 0.6804
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "imgmlp": {
+      "config": {
+        "captions_per_image": 1,
+        "text_layers": [
+          28
+        ],
+        "pooling": "last",
+        "img_head": "mlp",
+        "epochs": 20,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.3154,
+        "i2t_r@5": 0.5998,
+        "i2t_r@10": 0.7194,
+        "t2i_r@1": 0.215,
+        "t2i_r@5": 0.4581,
+        "t2i_r@10": 0.5742
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "layers3": {
+      "config": {
+        "captions_per_image": 1,
+        "text_layers": [
+          22,
+          25,
+          28
+        ],
+        "pooling": "last",
+        "img_head": "linear",
+        "epochs": 20,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.4192,
+        "i2t_r@5": 0.7232,
+        "i2t_r@10": 0.8268,
+        "t2i_r@1": 0.2998,
+        "t2i_r@5": 0.5788,
+        "t2i_r@10": 0.6957
+      },
+      "shipped_text_head_mb": 6.29
+    },
+    "meanpool": {
+      "config": {
+        "captions_per_image": 1,
+        "text_layers": [
+          28
+        ],
+        "pooling": "mean",
+        "img_head": "linear",
+        "epochs": 20,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.4668,
+        "i2t_r@5": 0.7518,
+        "i2t_r@10": 0.8618,
+        "t2i_r@1": 0.3434,
+        "t2i_r@5": 0.6314,
+        "t2i_r@10": 0.7467
+      },
+      "shipped_text_head_mb": 2.1
+    },
+    "smoke": {
+      "config": {
+        "captions_per_image": 5,
+        "text_layers": [
+          22,
+          28
+        ],
+        "pooling": "mean",
+        "img_head": "mlp",
+        "epochs": 2,
+        "text_model": "Qwen/Qwen3-0.6B"
+      },
+      "val_only": {
+        "i2t_r@1": 0.3368,
+        "i2t_r@5": 0.6512,
+        "i2t_r@10": 0.7798,
+        "t2i_r@1": 0.2623,
+        "t2i_r@5": 0.5487,
+        "t2i_r@10": 0.6764
+      },
+      "shipped_text_head_mb": 4.2
+    }
+  },
+  "predictions_registered_before_running": {
+    "captions5": "biggest single gain",
+    "layers3": "positive but modest",
+    "meanpool": "could go either way",
+    "imgmlp": "unknown, and free",
+    "epochs40": "small positive",
+    "all": "better than any single lever, less than their sum"
+  },
+  "outcome": {
+    "wrong_predictions": 4,
+    "meanpool": "biggest single lever (+0.043 i2t), not captions5 (+0.032)",
+    "imgmlp": "worst arm (-0.108); free capacity on the image side overfits",
+    "epochs40": "-0.012 with one caption, +0.010 with five; the confound was real",
+    "layers3": "null (+0.004) and costs 4MB, dropped",
+    "combination": "super-additive: +0.043 and +0.032 separately, +0.108 together"
+  }
+}

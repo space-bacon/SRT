@@ -45,14 +45,17 @@ def main() -> None:
     args.out.mkdir(parents=True, exist_ok=True)
     d = torch.load(args.head, map_location="cpu", weights_only=True)
 
+    # v2 heads may carry a non-linear image side under "img_state", which has
+    # no safetensors equivalent here and is never shipped anyway.
     tensors = {
-        "img.weight": d["img"]["weight"].float().contiguous(),
-        "img.bias": d["img"]["bias"].float().contiguous(),
         "txt.weight": d["txt"]["weight"].float().contiguous(),
         "txt.bias": d["txt"]["bias"].float().contiguous(),
-        "mu_img": d["mu_img"].float().contiguous(),
         "mu_txt": d["mu_txt"].float().contiguous(),
     }
+    if isinstance(d.get("img"), dict) and "weight" in d["img"]:
+        tensors["img.weight"] = d["img"]["weight"].float().contiguous()
+        tensors["img.bias"] = d["img"]["bias"].float().contiguous()
+        tensors["mu_img"] = d["mu_img"].float().contiguous()
     sides = {s.strip() for s in args.sides.split(",") if s.strip()}
     keep = {k: v for k, v in tensors.items() if k.split(".")[0].replace("mu_", "") in sides}
     if args.dtype == "f16":

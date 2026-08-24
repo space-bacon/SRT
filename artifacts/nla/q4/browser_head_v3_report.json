@@ -1,0 +1,30 @@
+{
+  "arm": "best40_final",
+  "config": {
+    "captions_per_image": 5,
+    "text_layers": [
+      28
+    ],
+    "pooling": "mean",
+    "img_head": "linear",
+    "epochs": 40,
+    "text_model": "Qwen/Qwen3-0.6B"
+  },
+  "val_only": {
+    "i2t_r@1": 0.5348,
+    "i2t_r@5": 0.8124,
+    "i2t_r@10": 0.8952,
+    "t2i_r@1": 0.3985,
+    "t2i_r@5": 0.6856,
+    "t2i_r@10": 0.7887
+  },
+  "shipped_text_head_mb": 2.1,
+  "n_images": 118287,
+  "n_train_captions": 591435,
+  "full_gallery": {
+    "r@1": 0.1108,
+    "r@5": 0.251,
+    "r@10": 0.3373,
+    "median_rank": 33.0
+  }
+}
