@@ -5,26 +5,23 @@
  "method": "encode offline, search the full gallery, fetch the top thumbnails by byte range and look at them. Scores alone are not enough to choose a prompt: two of these score in the same band as the ones we kept and retrieve something unrelated.",
  "kept": [
   {
-   "prompt": "an empty road at dusk with the lights just coming on",
-   "top": 0.524,
-   "spread": 0.059,
-   "cos_to_centroid": 0.713,
-   "retrieved": "traffic lights against a darkening sky, street lamps lit",
-   "role": "default prompt, the strongest verified match in the set"
+   "prompt": "a child asleep on a parent's shoulder",
+   "top": 0.538,
+   "spread": 0.067,
+   "retrieved": "a parent and child lying asleep together",
+   "role": "default prompt, the strongest match of 31 candidates tested"
   },
   {
-   "prompt": "a train pulling into a station on a rainy afternoon",
-   "top": 0.461,
-   "spread": 0.064,
-   "cos_to_centroid": -0.359,
-   "retrieved": "a train at a platform, passengers waiting, overcast",
-   "role": "chip: weather and a place"
+   "prompt": "a bicycle left out in the rain",
+   "top": 0.472,
+   "spread": 0.062,
+   "retrieved": "a bicycle lying abandoned on wet ground",
+   "role": "chip: a scene with weather in it"
   },
   {
    "prompt": "a dog asleep in a patch of afternoon sunlight",
    "top": 0.407,
    "spread": 0.048,
-   "cos_to_centroid": -0.392,
    "retrieved": "dogs asleep on cushions",
    "role": "chip: a quiet scene"
   },
@@ -32,7 +29,6 @@
    "prompt": "Tell me about semiosis inside your frozen state",
    "top": 0.403,
    "spread": 0.054,
-   "cos_to_centroid": 0.650,
    "retrieved": "bodies curled inside suitcases, drawers and containers",
    "role": "chip: abstract wording resolving onto its physical sense"
   },
@@ -40,7 +36,6 @@
    "prompt": "what are you thinking about right now",
    "top": 0.412,
    "spread": 0.043,
-   "cos_to_centroid": 0.747,
    "retrieved": "the gallery's hubs, mostly single portraits",
    "role": "chip: the honest failure mode"
   }
@@ -49,14 +44,14 @@
   {
    "prompt": "somewhere warm to sleep",
    "top": 0.403,
-   "cos_to_centroid": 0.730,
+   "cos_to_centroid": 0.73,
    "retrieved": "sheep being sheared",
    "why": "lexical association from warm to wool, not the intended sense"
   },
   {
    "prompt": "a body that has stopped moving",
    "top": 0.401,
-   "cos_to_centroid": 0.690,
+   "cos_to_centroid": 0.69,
    "retrieved": "oxen pulling a cart",
    "why": "unrelated, despite scoring in the same band as prompts that work"
   },
@@ -66,7 +61,28 @@
    "spread": 0.024,
    "cos_to_centroid": 0.773,
    "why": "flattest spread in the set, not inspected, not shipped"
+  },
+  {
+   "prompt": "somewhere you would stop to rest",
+   "top": 0.415,
+   "retrieved": "sheep being sheared",
+   "why": "same hub as 'somewhere warm to sleep'"
+  },
+  {
+   "prompt": "everything you own, carried at once",
+   "top": 0.408,
+   "retrieved": "sheep being sheared",
+   "why": "same hub again"
+  },
+  {
+   "prompt": "a cat sitting exactly where it should not",
+   "top": 0.408,
+   "retrieved": "cattle in a paddock",
+   "why": "charming prompt, unrelated result"
   }
  ],
- "note": "A theory was tested and dropped here. Cosine to the gallery centroid looked like it might measure how grounded a query is, since the two most concrete prompts are negative and the ungrounded one is +0.747. It does not: the best match in the set sits at +0.713. Specificity and alignment with the average image are different things, and only the pictures settled it."
+ "note": "A theory was tested and dropped here. Cosine to the gallery centroid looked like it might measure how grounded a query is, since the two most concrete prompts are negative and the ungrounded one is +0.747. It does not: the best match in the set sits at +0.713. Specificity and alignment with the average image are different things, and only the pictures settled it.",
+ "scores_measured_on": "gallery_123k_v3, the gallery the demo loads by default",
+ "ordering_caveat": "On the full 123,287 gallery the ungrounded question (0.412) outscores the frozen-state question (0.403), the reverse of their order on the 20,000 shard. Top score alone does not separate a grounded query from a hub query; the demo copy was corrected to say so.",
+ "candidates_tested": 31
 }
