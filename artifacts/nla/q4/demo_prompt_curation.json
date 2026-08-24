@@ -5,25 +5,26 @@
  "method": "encode offline, search the full gallery, fetch the top thumbnails by byte range and look at them. Scores alone are not enough to choose a prompt: two of these score in the same band as the ones we kept and retrieve something unrelated.",
  "kept": [
   {
-   "prompt": "a child asleep on a parent's shoulder",
-   "top": 0.538,
-   "spread": 0.067,
-   "retrieved": "a parent and child lying asleep together",
-   "role": "default prompt, the strongest match of 31 candidates tested"
+   "prompt": "Tell me about a dog asleep in the afternoon sun",
+   "top": 0.486,
+   "spread": 0.04,
+   "retrieved": "two dogs asleep on cushions",
+   "reply": "the model answers in prose about dogs and warmth, so both halves of the page answer the same question",
+   "role": "default prompt"
   },
   {
-   "prompt": "a bicycle left out in the rain",
-   "top": 0.472,
-   "spread": 0.062,
-   "retrieved": "a bicycle lying abandoned on wet ground",
-   "role": "chip: a scene with weather in it"
+   "prompt": "Tell me about a bicycle left out in the rain",
+   "top": 0.485,
+   "spread": 0.122,
+   "retrieved": "a bicycle and a suitcase abandoned in weather beside a railway",
+   "role": "chip: a scene with weather in it. Widest spread of 51 prompts tested."
   },
   {
-   "prompt": "a dog asleep in a patch of afternoon sunlight",
-   "top": 0.407,
-   "spread": 0.048,
-   "retrieved": "dogs asleep on cushions",
-   "role": "chip: a quiet scene"
+   "prompt": "Tell me about a room where the light is going",
+   "top": 0.498,
+   "spread": 0.072,
+   "retrieved": "a lit table lamp beside a bed in a darkening room",
+   "role": "chip: a room, described sideways"
   },
   {
    "prompt": "Tell me about semiosis inside your frozen state",
@@ -84,5 +85,14 @@
  "note": "A theory was tested and dropped here. Cosine to the gallery centroid looked like it might measure how grounded a query is, since the two most concrete prompts are negative and the ungrounded one is +0.747. It does not: the best match in the set sits at +0.713. Specificity and alignment with the average image are different things, and only the pictures settled it.",
  "scores_measured_on": "gallery_123k_v3, the gallery the demo loads by default",
  "ordering_caveat": "On the full 123,287 gallery the ungrounded question (0.412) outscores the frozen-state question (0.403), the reverse of their order on the 20,000 shard. Top score alone does not separate a grounded query from a hub query; the demo copy was corrected to say so.",
- "candidates_tested": 31
+ "candidates_tested": 51,
+ "excluded_by_policy": {
+  "rule": "no prompts involving children",
+  "dropped": [
+   "a child asleep on a parent's shoulder (0.538, the highest score measured)",
+   "Tell me about children playing in the snow (0.487, retrieved an exact match)"
+  ],
+  "why": "both worked well; a public demo should not be steering strangers' queries towards photographs of children"
+ },
+ "form_finding": "Question forms retrieve worse than request forms. 'Where do cats decide to sleep?' scores 0.444 and returns bighorn sheep, while 'Tell me about a dog asleep in the afternoon sun' scores 0.486 and returns sleeping dogs. Interrogatives add function words that name nothing, which dilutes the physical content the head can use. 'Tell me about X' keeps the noun phrase intact and still reads as something the model is being asked."
 }
