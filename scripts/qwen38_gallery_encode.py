@@ -40,6 +40,11 @@ def parse_args():
     p.add_argument("--shard", type=int, default=0)
     p.add_argument("--shards", type=int, default=1)
     p.add_argument("--limit", type=int, default=0)
+    p.add_argument("--save-raw", action="store_true",
+                   help="also keep the pre-projection states. Projecting on the "
+                        "box saves bandwidth but throws away the only thing a "
+                        "new head can be fitted on, which then costs a whole "
+                        "re-encode. Keep them when the head might change.")
     p.add_argument("--verify", default=None,
                    help="npz of already-shipped gallery vectors to reproduce before starting")
     p.add_argument("--verify-img-dir", default=None)
@@ -148,8 +153,11 @@ def main() -> None:
         V = np.concatenate(vecs)
         Z = (V - mu) @ W.T + b
         Z /= np.linalg.norm(Z, axis=1, keepdims=True) + 1e-8
-        np.savez_compressed(path, Z_img=Z.astype(np.float16), files=np.array(names))
-        print(f"  wrote {path} {Z.shape}", flush=True)
+        out_arrays = {"Z_img": Z.astype(np.float16), "files": np.array(names)}
+        if a.save_raw:
+            out_arrays["raw"] = V.astype(np.float16)
+        np.savez_compressed(path, **out_arrays)
+        print(f"  wrote {path} {Z.shape}" + (" +raw" if a.save_raw else ""), flush=True)
 
     (out / f"shard{a.shard}.done").write_text(json.dumps({
         "model": a.model, "layer": a.layer, "n": len(mine), "head": Path(a.head).name,
