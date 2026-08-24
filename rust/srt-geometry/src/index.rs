@@ -138,8 +138,12 @@ impl Index {
         }
     }
 
-    /// Top-k by dot product, descending.
-    pub fn search(&self, query: &[f32], k: usize) -> Vec<(&str, f32)> {
+    /// Top-k as (row, score), descending.
+    ///
+    /// Rows rather than keys because a deployment usually has side-files laid
+    /// out in gallery order, and addressing them by position beats shipping a
+    /// second key-to-offset map the size of the key table.
+    pub fn search_rows(&self, query: &[f32], k: usize) -> Vec<(usize, f32)> {
         if query.len() != self.dim || self.keys.is_empty() {
             return Vec::new();
         }
@@ -152,7 +156,15 @@ impl Index {
         });
         scored.truncate(k);
         scored.sort_unstable_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
-        scored.into_iter().map(|(i, s)| (self.keys[i].as_str(), s)).collect()
+        scored
+    }
+
+    /// Top-k by dot product, descending.
+    pub fn search(&self, query: &[f32], k: usize) -> Vec<(&str, f32)> {
+        self.search_rows(query, k)
+            .into_iter()
+            .map(|(i, s)| (self.keys[i].as_str(), s))
+            .collect()
     }
 
     /// Share of each query's unsteered top-k that survives steering, averaged.

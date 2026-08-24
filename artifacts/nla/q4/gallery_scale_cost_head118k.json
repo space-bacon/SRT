@@ -1,0 +1,27 @@
+{
+  "n_captions": 5001,
+  "variants": {
+    "eval_only_1000": {
+      "gallery": 1000,
+      "t2i": {
+        "r@1": 0.4959,
+        "r@5": 0.8166,
+        "r@10": 0.8978,
+        "r@50": 0.9822
+      },
+      "median_rank": 2.0
+    },
+    "full_123287": {
+      "gallery": 123287,
+      "t2i": {
+        "r@1": 0.0628,
+        "r@5": 0.1568,
+        "r@10": 0.2222,
+        "r@50": 0.4253
+      },
+      "median_rank": 79.0
+    }
+  },
+  "r@1_cost_of_scale": -0.4331,
+  "note": "same captions and same gold, only the distractor pool grows; the full gallery is what the demo actually searches"
+}
