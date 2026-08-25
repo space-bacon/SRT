@@ -1,0 +1,38 @@
+{
+ "anchors": {
+  "bytes": 4096,
+  "n": 200,
+  "source": "drawn from training-split images, disjoint from the eval gallery"
+ },
+ "captions": 5001,
+ "encode_rate_per_s": 15.4,
+ "gallery": 123287,
+ "question": "does a read-out head survive a change of runtime, and does the anchor close the gap",
+ "reference_runtime": "pytorch fp16 Qwen3-0.6B L28",
+ "t2i": {
+  "candle_q4_as_is": {
+   "r@1": 0.0,
+   "r@10": 0.0001999600079984003,
+   "r@5": 0.0
+  },
+  "candle_q4_recalibrated": {
+   "r@1": 0.03499300139972006,
+   "r@10": 0.15176964607078583,
+   "r@5": 0.10617876424715057
+  },
+  "pytorch_fp16": {
+   "r@1": 0.1092,
+   "r@10": 0.3307,
+   "r@5": 0.2442
+  }
+ },
+ "tap_layer": 28,
+ "test_runtime": "Qwen3-0.6B Q4_0 (gguf, 28 layers, hidden 1024)",
+ "pooling": "mean",
+ "head_sha256": "09c7322a7114a174432279c8c3970260499ca1a27c5c909021f81c1f63831c4d",
+ "head_note": "the bytes that ship: identical to head_v3.safetensors in the model repo and to the Space's head.safetensors",
+ "index": "gallery_123k_v3.srtidx (SRTIDX02, int8, 123,287 rows) - the shipped gallery",
+ "recovery_vs_reference_r@1": 0.3204,
+ "supersedes": "cross_runtime_browser_rung.json, which measured an earlier 4,000-image head against a 1,000-image pool and reported 84.9% recovery",
+ "pooling_note": "browser_rung's Tap::new defaults to Pooling::Last; the shipped head is mean-pooled. The first attempt at this measurement inherited that default and read 0.0136 recalibrated, which was a pooling mismatch and not a quantization result. --mean is now explicit."
+}

@@ -1,0 +1,13 @@
+{
+ "runtime": "pytorch fp16 Qwen/Qwen3-0.6B L28 on mps",
+ "head": "/Users/burtron/development/BlackWindow/wasm/dist/head.safetensors",
+ "index": "artifacts/local/browser/gallery_123k_v3.srtidx",
+ "n_images": 123287,
+ "n_captions": 5001,
+ "t2i": {
+  "r@1": 0.1092,
+  "r@5": 0.2442,
+  "r@10": 0.3307
+ },
+ "median_rank": 36.0
+}

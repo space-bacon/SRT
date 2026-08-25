@@ -56,8 +56,8 @@ matrix multiply on top of a hidden state the model was computing anyway.
 | | |
 |---|---|
 | Text-to-image retrieval, 123,287-image gallery | R@1 **0.1108**, R@5 0.2510, R@10 0.3373, **median rank 33** |
-| Image-to-text, 1,000-image val pool | R@1 **0.5348**, R@5 0.8124, R@10 0.8952 |
-| Text-to-image, 1,000-image val pool | R@1 **0.3985**, R@5 0.6856, R@10 0.7887 |
+| Image-to-text, 5,000-image val pool | R@1 **0.5348**, R@5 0.8124, R@10 0.8952 |
+| Text-to-image, 5,000-image val pool | R@1 **0.3985**, R@5 0.6856, R@10 0.7887 |
 | Shuffled-pair control | 0.0002 |
 
 Median rank 33 out of 123,287 puts the correct image in the top **0.027%**
@@ -66,10 +66,12 @@ of the gallery, which is the number we would ask you to look at. R@1 on a
 good answers to a caption, and the metric scores a better match than the
 gold image as a miss.
 
-**Always read a retrieval number with its pool size.** The same head and
-captions score R@1 0.4959 against 1,000 images and 0.0628 against 123,287.
-Numbers quoted without a pool size are uninterpretable, including our own
-earlier ones.
+**Always read a retrieval number with its pool size, and with the head it was
+measured on.** The v2 head and its captions score R@1 0.4959 against 1,000
+images and 0.0628 against 123,287, which is the cost of pool size on one head,
+not a figure for the head that ships. Numbers quoted without a pool size are
+uninterpretable, and numbers quoted without a checkpoint are worse; both
+mistakes are ours and both were caught in public review.
 
 ## Files
 
@@ -93,14 +95,33 @@ A head fitted against PyTorch/fp16 states does **not** transfer unchanged to
 candle/Q4\_0, and the failure is silent — you get confidently ranked results
 with plausible scores that are simply the wrong images.
 
+Measured on **the head and gallery that ship**, mean-pooled as the browser
+pools, 5,001 val captions against all 123,287 images:
+
 | runtime | t2i R@1 | R@5 | R@10 |
 |---|---|---|---|
-| PyTorch fp16 (reference) | 0.2300 | 0.4907 | 0.6215 |
-| candle Q4\_0, head as-is | **0.0154** | 0.0568 | 0.0896 |
-| candle Q4\_0, + 4 KB anchor | **0.1952** | 0.4321 | 0.5457 |
+| PyTorch fp16 (reference) | 0.1092 | 0.2442 | 0.3307 |
+| candle Q4\_0, head as-is | **0.0000** | 0.0000 | 0.0002 |
+| candle Q4\_0, + 4 KB anchor | **0.0350** | 0.1062 | 0.1518 |
 
-A fifteen-fold collapse, recovered by one 4,096-byte mean vector measured on
-200 held-out sentences. No retraining.
+Without the anchor the read-out is at zero: not degraded, gone. The 4,096-byte
+mean vector measured on 200 held-out sentences takes it to **32% of the fp16
+reference**. That is the number to plan a port around, and it is much less than
+the 85% this card previously advertised.
+
+That 85% (0.2300 → 0.0154 → 0.1952) was real but was measured on an earlier
+4,000-image head against a 1,000-image pool, and it was published here as
+though it described the deployment. It does not. Recovery degrades sharply with
+pool size, because the residual error the anchor cannot remove competes against
+123,287 distractors instead of 999. Caught in public review by
+[@dipankarsarkar](https://huggingface.co/dipankarsarkar), who traced the head
+identity through the artifact chain.
+
+Two things follow for anyone porting this. The anchor is still the difference
+between a working system and a dead one, so it is not optional. And it is not
+sufficient: a read-out crossing runtimes should be measured end-to-end at the
+pool size it will actually serve, because both the collapse and the repair look
+completely different at 1,000 images than at 123,287.
 
 This failure is invisible to agreement metrics, which is why we flag it
 loudly. Agreement applies the **same transform to both sides** of its
@@ -173,6 +194,11 @@ int8 storage is **free** on this task:
 | f32 | 0.2300 | 505 MB |
 | f16 | 0.2300 | 252 MB |
 | **int8, per-row scale** | **0.2306** | **127 MB** |
+
+Those three rows are the earlier 4,000-image head against a 1,000-image pool,
+which is fine for the question they answer, because all three arms share a head
+and a pool and only the storage changes. Read them as "quantizing the gallery
+costs nothing", not as a figure for the shipped head.
 
 The reader is [`srt-geometry`](https://github.com/space-bacon/SRT), a Rust
 crate with no model dependency that builds for both native and
