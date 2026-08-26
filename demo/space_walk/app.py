@@ -267,9 +267,10 @@ def cross(a, b):
 # intersects the viewport, the IntersectionObserver never fires, and the image
 # never loads: the map stays blank forever. Pinning the width breaks the cycle.
 CSS = (".said textarea { font-size: 18px !important; line-height: 1.5 !important; }\n"
-       ".image-frame { width: 100% !important; }\n"
+       ".image-container, .image-frame { width: 100% !important; height: auto !important;"
+       " aspect-ratio: 1 / 1 !important; }\n"
        ".image-frame img { width: 100% !important; height: 100% !important;"
-       " object-fit: contain !important; }\n"
+       " object-fit: fill !important; }\n"
        "footer { display: none !important; }")
 
 # Belt and braces for the same problem: if a browser has already skipped the
@@ -302,7 +303,7 @@ with gr.Blocks(title="A map of what a 27B understood") as demo:
     )
     with gr.Row():
         with gr.Column(scale=3):
-            canvas = gr.Image(value=_BASE, type="pil", height=H, show_label=False,
+            canvas = gr.Image(value=_BASE, type="pil", show_label=False,
                               interactive=False)
         with gr.Column(scale=2):
             said = gr.Textbox(label="what is here", lines=5, elem_classes="said")
