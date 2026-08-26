@@ -1,0 +1,56 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 400,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.045,
+   "r@5": 0.1475,
+   "r@10": 0.21,
+   "median_rank": 67.5,
+   "sample": [
+    "A man and woman are sitting in a living room. A man and woman are sitting in a living room. A man and woman are sitting in a living room.",
+    "A brown bear is sitting on a grassy field. A brown bear is sitting on a grassy field. A brown bear is sitting on a grassy field.",
+    "A bed with a blue blanket and a blue chair in a bedroom. A bedroom with a bed, a window, and a bookshelf. A bedroom with a bed, a window, and a bookshelf.",
+    "A stop sign on a street corner with a tree in the background. A stop sign on a street corner with a tree in the background. A stop sign on a street corner with a tree in the background.",
+    "A group of brown teddy bears sitting together. A group of brown teddy bears sitting together. A group of brown teddy bears sitting together."
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 62823.0,
+   "sample": [
+    "A young girl riding a horse on a large tree. A young girl riding a horse on a large tree. A young girl riding a horse on a large tree.",
+    "A man and woman are sitting in a living room. A man and woman are sitting in a living room. A man and woman are sitting in a living room.",
+    "A brown bear is sitting on a grassy field. A brown bear is sitting on a grassy field. A brown bear is sitting on a grassy field.",
+    "A bed with a blue blanket and a blue chair in a bedroom. A bedroom with a bed, a window, and a bookshelf. A bedroom with a bed, a window, and a bookshelf.",
+    "A stop sign on a street corner with a tree in the background. A stop sign on a street corner with a tree in the background. A stop sign on a street corner with a tree in the background."
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 58736.5,
+   "sample": [
+    "A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile.",
+    "A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile.",
+    "A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile.",
+    "A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile.",
+    "A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile. A man is sitting on a bench with a snowmobile."
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.0925,
+   "r@5": 0.235,
+   "r@10": 0.3125,
+   "median_rank": 44.5
+  }
+ },
+ "variant": "EOS, three reference captions joined per target; stopped at step 16k of 53k",
+ "finding": "Failed, and stopped early. Joining three captions produced length by repetition: the model emits the single most likely caption three times, because given only the image vector it cannot know which three of the five references it is meant to produce, so the lowest-loss strategy is the mode repeated. Median 68 against 46 for one caption and 25 for no EOS, so repetition is worse than brevity.",
+ "what_this_says_about_the_headline": "The ladder is no-EOS 25, EOS-1 46, EOS-3 68, human caption 39. The no-EOS advantage is not eloquence and not repetition: left running it continues the reading with further plausible scene detail, and enough of that detail is right that retrieval improves. The metric rewards saying more true things about the scene, so median 25 beating a human caption at 39 is partly a length effect and should keep that caveat wherever it is quoted."
+}
