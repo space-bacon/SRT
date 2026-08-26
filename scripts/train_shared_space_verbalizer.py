@@ -119,8 +119,11 @@ def main():
         rng.shuffle(pairs)
         for i in range(0, len(pairs) - a.batch + 1, a.batch):
             chunk = pairs[i:i + a.batch]
-            ids = tok([c for _, c in chunk], return_tensors="pt", padding=True,
-                      truncation=True, max_length=a.max_len).to(dev)
+            # Append EOS: without it no target ever contains a stop token, the
+            # model never learns that a caption ends, and generation loops the
+            # last clause until the budget runs out.
+            ids = tok([c + tok.eos_token for _, c in chunk], return_tensors="pt",
+                      padding=True, truncation=True, max_length=a.max_len).to(dev)
             v = V[[j for j, _ in chunk]]
             wte = emb(ids["input_ids"])
             soft = pre(v).to(wte.dtype)
