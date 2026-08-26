@@ -187,10 +187,12 @@ then read back from wherever it landed:</p>
 could serve. Your own photograph is different. No notes exist for it yet, and
 making them needs the 31-billion-parameter model running at that moment.</p>
 
-<p>The Lab runs one. A gemma-4-31B is served from that same desktop, so when you
-drop in a picture it is encoded here, live, into the same 1,024-dimensional space
-the gallery was built in. The marker lands among its actual neighbours rather
-than near words about it.</p>
+<p>The Lab runs one, though not the way that sentence usually implies. The
+gemma-4-31B here is quantized to four bits and served from that same desktop, an
+Apple M2 Ultra with 64&nbsp;GB of memory. When you drop in a picture it is
+encoded here, live, into the same 1,024-dimensional space the gallery was built
+in. The marker lands among its actual neighbours rather than near words about
+it.</p>
 
 {embed("lab_upload.gif",
        "Uploading a photograph: encoded by the live 31B, lands on the map, described in a sentence",
@@ -298,7 +300,7 @@ are retrieved from the full 123,287-image gallery.</p>
 <p>None of this required retraining the 31B or touching one of its weights. It
 was frozen throughout. The instruments are small trained artifacts that read a
 hidden state the model computed anyway, which is why the whole thing fits
-on one desktop.</p>
+on one desktop, four-bit host and all.</p>
 
 <p>If you
 already run a multimodal model, every forward pass already produces this record
