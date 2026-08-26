@@ -308,6 +308,10 @@ def make_openwater(out, cols=4, cell=400):
     Every coordinate here is derived from the two region centres it sits
     between, so the caption is true by construction. Writing the pairs down
     from memory produced captions that named the wrong neighbours.
+
+    This figure deliberately does NOT claim these points are empty. Whether a
+    point is genuinely somewhere no photograph sits is a measurement, not a
+    look, and it lives in `scripts/probe_open_water.py`. Most of these are not.
     """
     xy, labels = load()
 
@@ -340,9 +344,9 @@ def make_openwater(out, cols=4, cell=400):
     W, H = cols * cell, rows_n * (cell + CAPH) + 116
     im = Image.new("RGB", (W, H), IVORY)
     d = ImageDraw.Draw(im, "RGBA")
-    d.text((38, 32), "EIGHT PLACES WITH NO PHOTOGRAPH IN THEM",
+    d.text((38, 32), "EIGHT MIDPOINTS BETWEEN NAMED REGIONS",
            font=font(20, 1), fill=TERRA)
-    d.text((36, 60), "and the sentence that comes back",
+    d.text((36, 60), "and the sentence the map returns there",
            font=font(36, 2, didot=True), fill=INK)
 
     base = base_map(xy, cell - 36, 14, dot=1.1, alpha=62)

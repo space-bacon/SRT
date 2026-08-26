@@ -55,44 +55,36 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>Nobody put snowboarding there</h3>
+<h3>The result we nearly published</h3>
 
-<p><em>We drew a map of how one frozen 31-billion-parameter model saw 40,000
-photographs. Then we clicked the empty spaces between the islands, and a
-382&nbsp;MB model with no eyes told us what belongs in them.</em></p>
+<p><em>We built a map of how one frozen 31-billion-parameter model saw 40,000
+photographs. Then we found something striking in it. Then we found out why it
+was wrong.</em></p>
 
-<p>There is a new instrument on the Sunstone North Lab, and the short version is
-this. We took 40,000 photographs, showed each one to a very large model, and
-kept the private working notes it made while looking. Those notes are nothing
-but long lists of numbers. We then arranged the 40,000 lists on a flat sheet so
-that photographs the model had seen as similar ended up near one another. That
-sheet is the map, and it organised itself: animals gathered in the west,
-transport in the southwest, sport along the north, kitchens and bathrooms down
-in the southeast. Nobody sorted them.</p>
+<p>Start with what the instrument is, because the rest of this only makes sense
+once that is clear.</p>
 
-<p>Then comes the part that surprised us. Most of that sheet is empty. You can
-put a finger down in a spot where there is no photograph at all, and a second,
-much smaller model will write you a sentence describing the scene that belongs
-there.</p>
+<p>We showed 40,000 photographs to a very large model and kept the private
+working notes it made while looking. Those notes are nothing but long lists of
+numbers. We arranged the lists on a flat sheet so that photographs the model had
+seen as similar ended up near one another. That sheet is the map, and it
+organised itself: animals gathered in the west, transport in the southwest,
+sport along the north, kitchens and bathrooms down in the southeast. Nobody
+sorted them.</p>
 
-<p>Here is the one that made us stop. The skiing photographs form an island. So
-do the skateboarding photographs. Between them is a gap with nothing in it. We
-clicked the gap, and the small model wrote:</p>
+<p>Then a second, much smaller model reads any point you touch and writes a
+sentence about what is there. It has no eyes. There is no vision component
+anywhere inside it. It has never been shown a photograph in its life. It is
+reading somebody else&rsquo;s handwriting and telling you what it says.</p>
 
-<blockquote><p>A man is doing a trick on a snowboard.</p></blockquote>
+<p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
+&middot; pane 04</p>
 
-<p>Nobody put snowboarding on this map. There is no snowboarding island, no
-snowboarding label, and no photograph at the spot we clicked. It is simply where
-the arithmetic of the other two lands.</p>
-
-{embed("fig_blend.png",
-       "Zoomed: the skiing island, the skateboarding island, and the empty "
-       "midpoint between them, which reads as snowboarding")}
-
-{embed("lab_05_border.png",
-       "The same click in the Lab: the reader writes snowboarding",
-       caption="The same click in the Lab, live under pane 04 at "
-               "lab.sunstonenorth.com.")}
+{embed("fig_poster.png",
+       "The map: 40,000 photographs of a 123,287-image gallery in two "
+       "dimensions, region names written by the reader",
+       caption="Every dot is a photograph. Nothing arranged that. It is where "
+               "the photographs fell.")}
 
 <h3>How this works, without the jargon</h3>
 
@@ -119,27 +111,11 @@ not.</p>
 
 <p><strong>Second, we taught a small model to read the notes back.</strong> A
 frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in front of it, takes one of
-those 1,024-number lists and writes an English sentence about it. It has no
-eyes. There is no vision component anywhere inside it. It has never been shown a
-photograph in its life. It is reading somebody else&rsquo;s handwriting and
-telling you what it says.</p>
+those 1,024-number lists and writes an English sentence about it.</p>
 
-<p>The map is what you get when all 40,000 lists are laid on a sheet by
-similarity. And because the reader wants a list of numbers rather than a
-picture, you can point at a bare patch of sheet, average the lists surrounding
-it, and hand the reader that average. No photograph ever had those exact
-numbers. It writes a sentence anyway.</p>
-
-<p>The map holds 40,000 photographs drawn from a gallery of 123,287, and you can
-stand anywhere on it.
-<a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
-&middot; pane 04</p>
-
-{embed("fig_poster.png",
-       "The map: 40,000 photographs of a 123,287-image gallery in two "
-       "dimensions, region names written by the reader",
-       caption="Every dot is a photograph. Nothing arranged that. It is where "
-               "the photographs fell.")}
+{embed("lab_01_map.png",
+       "The map instrument running in the Lab, pane 04",
+       caption="The same map inside the Lab, live.")}
 
 <h3>We did not name the regions</h3>
 
@@ -149,56 +125,80 @@ are reading are the machine&rsquo;s account of its own filing system, arrived at
 without us, months after the big model made the notes and on a different
 computer.</p>
 
-{embed("lab_01_map.png",
-       "The map instrument running in the Lab, pane 04",
-       caption="The same map inside the Lab, live.")}
+<h3>The thing we thought we had</h3>
 
-<h3>It keeps doing this</h3>
+<p>Most of the map looks empty. The islands are where photographs cluster and
+the space between them looks like open water. Click there anyway and the reader
+still answers.</p>
 
-<p>The snowboard was not a lucky click. Most of the map is empty: the islands
-are where photographs cluster and the space between them holds none at all.
-Click there anyway and the reader still answers, because a point in that space
-is a scene rather than a picture.</p>
+<p>Between the skiing photographs and the skateboarding photographs there is a
+gap. There is no snowboarding island and no snowboarding label anywhere on the
+map. We clicked the gap and the reader wrote:</p>
 
-<p>Every panel below is a real click on the midpoint between two named regions.
-Each coordinate is derived from the two region centres rather than picked by
-hand, so the caption under each panel is true by construction:</p>
+<blockquote><p>A man is doing a trick on a snowboard.</p></blockquote>
+
+<p>We had the headline written. Skiing on one side, skateboarding on the other,
+and the space between them composing a third thing that nobody had put there.
+A map that does arithmetic.</p>
+
+<h3>Then we measured it</h3>
+
+<p>Before publishing we went to check the obvious objection, which is whether
+that spot is actually empty. It is not, and the way it is not is instructive.</p>
+
+<p>Clicking does not read empty space. It cannot. The instrument takes the 48
+nearest photographs to wherever you touched and averages their number-lists, so
+every click is an average of real photographs. The question is only whether that
+average lands somewhere a photograph already sits.</p>
+
+<p>So we asked what the nearest photographs to that average actually are. All
+eight of them are snowboarding photographs. The closest one matches at 0.92, and
+its own human caption reads &ldquo;A person a snowboard in the air doing a
+trick.&rdquo; The reader had written &ldquo;A man is doing a trick on a
+snowboard.&rdquo;</p>
+
+<p>It was describing photographs that are there. COCO, the photograph set, has a
+snowboarding category, and those pictures sit between skiing and skateboarding
+exactly where anyone would file them. Our clustering only names 24 regions, so
+snowboarding never got a label of its own. The flattening onto two dimensions
+happened to leave a small hole at that spot, so it looked like open water on
+screen.</p>
+
+<p>Three things lined up: no label, a visual gap, and a correct sentence. We
+checked the first two and assumed the third.</p>
+
+<h3>What is actually true</h3>
+
+<p>We built the measurement we should have had first. For any point it asks two
+questions that can fail. Does the averaged vector match some real photograph as
+well as a real photograph matches its own nearest neighbour, in which case it
+simply is that photograph? And where do the 48 contributing photographs come
+from, since half from each neighbour is a blend and forty-seven from one is not?</p>
+
+<p>Run against the eight midpoints we had planned to publish, only one is both
+genuinely mixed and genuinely novel. It is the midpoint between the kitchen
+region and the plate-of-food region, its contributors split 52 to 48 between
+them, its best match in the whole gallery weaker than 60% of photographs manage
+with their own neighbour, and it returns:</p>
+
+<blockquote><p>A bowl of fruit and a knife sitting on a table.</p></blockquote>
+
+<p>That one is real, and it is a good deal less exciting than snowboarding. The
+snowboard result scored in the 94th percentile for matching an existing
+photograph, and its neighbours were 98% skiing. It was retrieval wearing the
+costume of arithmetic.</p>
 
 {embed("fig_openwater.png",
-       "Eight midpoints between named regions, each with the sentence it returns",
-       width=740)}
+       "Eight midpoints between named regions, each with the sentence the map "
+       "returns there",
+       width=740,
+       caption="Eight real clicks. Most of them are describing photographs that "
+               "are genuinely there, which is the instrument working correctly "
+               "rather than the instrument being clever.")}
 
-<p>Four of those are genuine blends. Three lean to one parent instead of
-combining both, and the motorcycle-and-bus midpoint moves sideways to a parking
-meter. We are showing all eight rather than the four that worked, because not
-every midpoint is meaningful and a demo that only shows its wins is selling
-something.</p>
-
-<h3>Then walk across it</h3>
-
-<p>If the space between regions is readable, you can travel through it. This is
-a straight line from the bathroom island to the giraffe island, sampled six
-times. Neither endpoint appears in the middle:</p>
-
-{embed("fig_walk.gif",
-       "Six stops along a straight line from the bathroom island to the giraffe "
-       "island, each with the sentence it returns",
-       caption="Domestic interior, to rail, to road, to water, to wildlife. Six "
-               "coherent scenes, four of them nowhere near either end.")}
-
-<p>That is the difference between a map and an index. An index can only return
-things it holds.</p>
-
-<p>Another, from snow to surf:</p>
-
-<blockquote><p>
-0% &middot; A man riding skis down a snowy slope.<br />
-20% &middot; A young boy holding a frisbee in a park.<br />
-40% &middot; A man flying a kite on a beach.<br />
-60% &middot; A man carrying a surfboard in the ocean.<br />
-80% &middot; A person standing on a beach with birds flying above.<br />
-100% &middot; A group of people paddling in a body of water.
-</p></blockquote>
+<p>The map is not doing arithmetic. It is a browsable index of one model&rsquo;s
+reading of 40,000 photographs, and you can stand anywhere in it and get a
+description. That is a smaller claim and it is the one that survives.</p>
 
 <h3>Type something and watch where it lands</h3>
 
@@ -229,10 +229,11 @@ actual neighbours rather than near words about it.</p>
 
 <h3>The control is in the panel, not the footnote</h3>
 
-<p>A sentence that sounds right proves nothing. A caption prior would also
-produce plausible sentences about photographs. So the instrument shows the eight
-photographs nearest wherever the marker landed, every time, without being
-asked.</p>
+<p>A sentence that sounds right proves nothing, which is the whole lesson of the
+snowboard. So the instrument shows the eight photographs nearest wherever the
+marker landed, every time, without being asked. If we had been looking at that
+panel instead of at the empty-looking gap, we would have seen eight snowboarders
+and caught this a week earlier.</p>
 
 {embed("lab_03_neighbours.png",
        "The eight photographs nearest the uploaded cat picture: all eight are cats",
@@ -263,49 +264,27 @@ writes fluent, plausible English, and that lands nowhere too. So the sentences
 are not a caption habit it learned and repeats. They follow the particular
 numbers they were given.</p>
 
-<ul>
-<li>The reader&rsquo;s sentence retrieves the picture it was written from at
-<strong>median rank 64</strong>, the top 0.05% of the pool.</li>
-<li>A human caption of the same photograph, one the head has never seen, gets
-<strong>median 45</strong>.</li>
-<li>Handed another photograph&rsquo;s point, the same reader scores at
-<strong>chance</strong>: median 55,866.</li>
-<li>Handed the average of all points, also chance: 59,135.</li>
-</ul>
+<h3>A second thing we got wrong, in the other direction</h3>
 
-<p>Counted per photograph instead of per median, the reader places the image
-above the human who was looking at it <strong>17% of the time</strong>. A second
-human describing the same photograph beats the first <strong>20% of the
-time</strong>. The reader sits inside the spread between two people rather than
-below a line.</p>
+<p>The same week we found the snowboard problem, we found one that had been
+making us look worse than we are.</p>
 
-<h3>The correction we made while writing this</h3>
+<p>We had been quoting a human caption at median rank 8 against our reader&rsquo;s
+64, and calling that the gap we fall short of. That figure is contaminated. The
+shortening step was trained on pairs made from each photograph&rsquo;s
+<em>first</em> caption, and the pool we score against contains those same
+photographs, so scoring that exact caption measures a pair the system was
+explicitly taught to align.</p>
 
-<p>An earlier draft of this post quoted the human caption at median rank 8 and
-called it the ceiling we fall short of. That figure is contaminated, and the
-reason is worth stating plainly. The shortening step was trained on pairs made
-from each photograph&rsquo;s <em>first</em> caption, and the pool we score
-against contains those same photographs. So scoring that exact caption is not
-measuring a human. It is measuring a pair the system was explicitly trained to
-put in the same place, which it is very good at, because we taught it to be.</p>
+<p>Score a different human&rsquo;s description of the same photograph, one the
+system never saw, and the honest reference is 45. Rebuild the whole thing with
+the evaluation photographs held out of every training step and the two come out
+level: the reader at 46, a human at 48, and a second human at 57. Counted per
+photograph, the reader places the image above the human on 49.6% of them, where
+a second human manages 48.0%.</p>
 
-<p>Use a different caption of the same photograph, one the system never saw, and
-the honest human reference is 45. We had been quoting a number that made our own
-result look considerably worse than it is.</p>
-
-<p>The arm stays in the evaluation, because it has a job. It runs first and
-aborts the whole run if human captions cannot retrieve their own images. A
-reader pointed at the wrong space still produces perfectly fluent sentences over
-a completely dead test, and that failure looks like a result rather than a bug.
-It is a smoke alarm, not a scoreboard, and we had been reading it as a
-scoreboard.</p>
-
-<p>A different reader in the same family, one that reads the big model&rsquo;s
-raw notes rather than this shortened 1,024-number version, does beat the human
-caption outright: median rank 20 of 123,287 against 39. Part of that margin is
-length. It keeps talking, the extra detail about the scene is often right, and a
-retrieval metric rewards naming more true things. We quote it with that caveat
-attached every time.</p>
+<p>So one error had us claiming arithmetic we could not do, and the other had us
+conceding a gap that was not there. We are publishing both.</p>
 
 <h3>What the map carries, and what it does not</h3>
 
@@ -316,17 +295,8 @@ less well: per-category detection AUC <strong>0.883</strong> across the 80 COCO
 categories, and per-image recovery of the full annotated object list at
 <strong>0.543</strong> against a 0.038 chance floor, about fourteen times.</p>
 
-<p>That asymmetry is the honest description of the whole instrument. The map
-knows what is in a scene and is much weaker on how the scene is arranged. When
-you click open water and a coherent sentence comes back, what you are watching
-is inventory arithmetic rather than a model picturing a photograph.</p>
-
-<h3>What you are actually looking at</h3>
-
-<p>The room has 1,024 dimensions. The map is a two-dimensional projection, so
-what you see is neighbourhood structure and the coordinates mean nothing on
-their own. Three numbers are in play and they are not interchangeable: 40,000
-photographs are laid out on the map, a click reads the average of the roughly
+<p>Three numbers are in play on the map itself and they are not interchangeable:
+40,000 photographs are laid out on it, a click reads the average of the roughly
 forty-eight nearest of those, and the eight neighbours shown beside the sentence
 are retrieved from the full 123,287-image gallery.</p>
 
@@ -334,50 +304,25 @@ are retrieved from the full 123,287-image gallery.</p>
 was frozen throughout. The instruments are small trained artifacts that read a
 hidden state the model had already computed.</p>
 
-<h3>What we tested while writing this</h3>
-
-<p>Writing this turned up something we did not expect. The head was fitted on
-one caption per image, the first of COCO&rsquo;s five. That is what contaminated
-the number above, and it raises a second question. A head only ever asked to
-match one description of a scene is never required to keep the rest of it. If
-that were costing the reader, showing the head all five captions should improve
-what the map can put into words without changing the reader at all.</p>
-
-<p>We ran it while writing, and said we would publish it either way. It is a
-negative result, so here it is. Showing the head all five captions improves the
-space a great deal. It barely improves the reader:</p>
-
-<table>
-<tr><th align="left">median rank</th><th align="right">one caption</th><th align="right">all five</th></tr>
-<tr><td>a human caption</td><td align="right">57</td><td align="right">39</td></tr>
-<tr><td>a second human caption</td><td align="right">48</td><td align="right">28</td></tr>
-<tr><td>the reader</td><td align="right">46</td><td align="right">40</td></tr>
-</table>
-
-<p>Everyone gets better and the reader gets better least, so it actually loses
-ground: at one caption it edges a human 49.6% of the time, and at five captions
-only 44.8%. Whatever is limiting the reader, it is not how many descriptions the
-space was built from. The space and the sentence-writing turn out to be
-separable problems, which is worth knowing and is not what we expected to
-find.</p>
-
 <h3>Press the buttons</h3>
 
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
-is the Lab, pane 04. Click the empty water. Upload something of your own.</p>
+is the Lab, pane 04. Click anywhere. Upload something of your own. The eight
+nearest photographs are always on screen, so you can check the sentence against
+them the way we should have.</p>
 
 <p><a href="https://huggingface.co/spaces/RiverRider/walk-the-space">walk-the-space</a>
 runs the same idea over a different model&rsquo;s gallery, hosted, with no upload
 needed.</p>
 
 <p><a href="https://github.com/space-bacon/SRT">github.com/space-bacon/SRT</a> has
-the code, checkpoints, artifacts, and the negative results.</p>
+the code, checkpoints, artifacts, and the negative results, including the
+measurement that killed the headline of this post.</p>
 
 <p>The reader, the map and its evaluation are on
 <a href="https://huggingface.co/RiverRider/srt-sunstone-linear-head">Hugging Face</a>,
 so the numbers above can be checked rather than taken.</p>
 """
-
 
 HEAD = """<!doctype html><meta charset="utf-8">
 <title>Lab map post - select all and copy into Substack</title>
