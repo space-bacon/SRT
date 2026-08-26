@@ -142,7 +142,7 @@ between two named regions:</p>
                "the gallery is weaker than 60% of photographs manage with their "
                "own nearest neighbour.")}
 
-<h3>Six stops on a line across the map</h3>
+<h3>Every stop on the way is its own scene</h3>
 
 <p>If any point can be read, so can every point on a line drawn between two of
 them. This line runs from the bathroom region in the southeast to the giraffe
@@ -153,6 +153,11 @@ region in the west, read at six evenly spaced stops along the way:</p>
        "giraffe region, each with the sentence it returns",
        caption="Domestic interior, to rail, to road, to water, to wildlife. Six "
                "coherent scenes, four of them nowhere near either end.")}
+
+<p>The line does not fade from one end to the other. It crosses whatever else
+lies between them and reads each thing correctly on the way. There is no dead
+ground on the map, so any point you land on has something to say, and you can
+search by moving as well as by typing.</p>
 
 <h3>The map runs in both directions</h3>
 
