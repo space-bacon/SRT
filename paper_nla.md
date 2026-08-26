@@ -1880,6 +1880,24 @@ position, which is what it looks like when words track the vector rather than
 a learned prior over captions. The mean arm emits a single sentence for every
 input, which is what zero information looks like.
 
+Repeating the experiment on the **Qwen3.8-27B** states that actually built the
+gallery closes the loop, and the comparison between the two is more
+informative than either alone:
+
+| states verbalized | scoring gallery built by | R@1 | median rank |
+|---|---|---|---|
+| Qwen3.8-27B layer 52 | the same tower | 0.123 | **20** |
+| gemma-4-31B layer 47 | an unrelated tower | 0.120 | 25 |
+| (human reference caption) | | 0.101 | 39 |
+
+The matched pair is better, but only by five ranks in 123,287. That near-parity
+is the load-bearing observation. If the matched result were being carried by a
+representation the two towers share, rather than by the sentence being
+descriptive, the matched arm should dominate the cross-model arm. It does not.
+The cross-model arm, which has no shared representation available to it at all,
+reaches essentially the same place, so what the sentence carries is the content
+of the photograph.
+
 The trained reader passes the human reference caption, and the reason is worth
 stating plainly because the headline invites a stronger reading than the
 evidence supports. This is not better captioning. It is a register match. The
@@ -1898,9 +1916,8 @@ Artifacts: `artifacts/nla/verbalizer/verb_eval_{full,val2017,val2017_3ep}.json`;
 scripts `build_fullstate_pairs.py`, `train_shared_space_verbalizer.py`,
 `eval_shared_space_verbalizer.py`. The raw states required no re-encode: they
 are published at `RiverRider/srt-nla-gemma4-artifacts` (`procrustes/train_pairs/`)
-and, for the 27B, at `RiverRider/srt-qwen38-coco-states` (`raw118k/`). The
-matched-backbone run, verbalizing the same 27B states that built the gallery,
-is in flight at the time of writing.
+and, for the 27B, at `RiverRider/srt-qwen38-coco-states` (`raw118k/` for
+train2017, `qwen38_coco_ls/images.pt` for the val2017 states at layer 52).
 
 ---
 

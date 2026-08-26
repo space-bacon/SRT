@@ -78,7 +78,7 @@ def main():
     tok = AutoTokenizer.from_pretrained(a.model)
     model = AutoModelForCausalLM.from_pretrained(a.model, dtype=torch.float32).to(dev).eval()
     emb = model.get_input_embeddings()
-    pre = Prefix(ck["d_in"], ck["d_model"], ck["n_tok"]).to(dev)
+    pre = Prefix(ck["d_in"], ck["d_model"], ck["n_tok"], ck.get("hidden", 2048)).to(dev)
     pre.load_state_dict(ck["prefix"]); pre.eval()
 
     h = load_file(a.head)

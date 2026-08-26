@@ -48,6 +48,8 @@ def parse():
     p.add_argument("--caps", default="/tmp/val_caps.json")
     p.add_argument("--model", default="Qwen/Qwen3-0.6B")
     p.add_argument("--np", dest="n_tok", type=int, default=16)
+    p.add_argument("--hidden", type=int, default=2048,
+                   help="prefix width; 512 keeps it small enough to ship to a browser")
     p.add_argument("--holdout", type=int, default=1000)
     p.add_argument("--epochs", type=int, default=3)
     p.add_argument("--batch", type=int, default=32)
@@ -101,13 +103,13 @@ def main():
     sd = float(np.linalg.norm(vecs[train_idx] - mu, axis=1).mean()) or 1.0
     print(f"input d={vecs.shape[1]} ||mu||={np.linalg.norm(mu):.2f} mean_radius={sd:.2f}", flush=True)
 
-    pre = Prefix(vecs.shape[1], d_model, a.n_tok).to(dev)
+    pre = Prefix(vecs.shape[1], d_model, a.n_tok, a.hidden).to(dev)
     opt = torch.optim.AdamW(pre.parameters(), lr=a.lr)
     V = torch.tensor((vecs - mu) / sd, device=dev, dtype=torch.float32)
 
     def save(tag: str) -> None:
         torch.save({"prefix": pre.state_dict(), "n_tok": a.n_tok, "d_in": vecs.shape[1],
-                    "d_model": d_model, "mu": mu, "sd": sd,
+                    "d_model": d_model, "hidden": a.hidden, "mu": mu, "sd": sd,
                     "test_idx": test_idx.tolist(),
                     "images": [meta["images"][i] for i in test_idx]}, a.out)
         print(f"saved {a.out} ({tag})", flush=True)

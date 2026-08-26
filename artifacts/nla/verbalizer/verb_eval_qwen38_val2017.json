@@ -1,0 +1,56 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 1000,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.123,
+   "r@5": 0.291,
+   "r@10": 0.391,
+   "median_rank": 20.0,
+   "sample": [
+    "A living room with a television and a table. A red chair is in the corner. A red vase is on the",
+    "A bear is looking at the camera. He is in a field. The camera is looking at him. The camera is",
+    "A bedroom with a bed, a window, a bookshelf, and a window with a flower. A bookcase is",
+    "A stop sign on a street corner with trees in the background. A street sign is on the side of the street.",
+    "Three teddy bears are sitting on top of each other. One is wearing a red scarf. The other two are wearing"
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.002,
+   "median_rank": 63541.0,
+   "sample": [
+    "A cat laying on top of a laptop computer. The laptop is on a desk. The cat is on the desk.",
+    "A living room with a television and a table. A red chair is in the corner. A red vase is on the",
+    "A bear is looking at the camera. He is in a field. The camera is looking at him. The camera is",
+    "A bedroom with a bed, a window, a bookshelf, and a window with a flower. A bookcase is",
+    "A stop sign on a street corner with trees in the background. A street sign is on the side of the street."
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 59911.0,
+   "sample": [
+    "A man is sitting on a bike in front of a white wall. The bike is parked in front of the wall.",
+    "A man is sitting on a bike in front of a white wall. The bike is parked in front of the wall.",
+    "A man is sitting on a bike in front of a white wall. The bike is parked in front of the wall.",
+    "A man is sitting on a bike in front of a white wall. The bike is parked in front of the wall.",
+    "A man is sitting on a bike in front of a white wall. The bike is parked in front of the wall."
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.101,
+   "r@5": 0.238,
+   "r@10": 0.327,
+   "median_rank": 39.0
+  }
+ },
+ "backbone": "Qwen3.8-27B layer 52 (the tower that built the gallery)",
+ "epochs": 3,
+ "note": "Matched-backbone arm: the states verbalized and the gallery doing the scoring come from the same model family, unlike the gemma-4-31B run. Matched reaches median 20 against the cross-model 25, a gap of 5 ranks in 123,287. The near-parity is the point: if a shared representation were carrying the result, the matched arm would be far ahead, and it is not."
+}

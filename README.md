@@ -414,6 +414,12 @@ result: the *foreign* arm is the real arm's vectors rolled by one position and
 it returns the real arm's captions rolled by one position, while the *mean* arm
 emits a single sentence for every input.
 
+Running it again on the **Qwen3.8-27B** states that actually built the gallery
+reaches **median 20**, against **25** for the cross-model gemma run. Five ranks
+in 123,287. That near-parity matters: if a representation shared between the
+two towers were carrying the result rather than the sentence being descriptive,
+the matched pair should dominate. It does not.
+
 **Read the human-caption row carefully.** This is not better captioning. It is
 a register match: the model enumerates whole-scene inventory, which this head
 recovers well (detection AUC 0.883 over 80 COCO categories), while the human
