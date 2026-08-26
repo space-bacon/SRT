@@ -55,11 +55,11 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>The empty water has names</h3>
+<h3>The model already had a map. We only drew it.</h3>
 
-<p><em>A map of 40,000 photographs, arranged by how one frozen
-31-billion-parameter model saw them. The interesting part turned out to be the
-spaces between things.</em></p>
+<p><em>40,000 photographs, arranged by how one frozen 31-billion-parameter model
+saw them. Stand in the empty spaces between them and a 382&nbsp;MB model with no
+eyes will tell you what belongs there.</em></p>
 
 <p>There is a new instrument on the Sunstone North Lab, and the short version is
 this. We took 40,000 photographs, showed each one to a very large model, and
@@ -109,6 +109,14 @@ each list from 5,376 numbers down to 1,024, and it is trained so that a
 photograph and a sentence describing that photograph come out in nearly the same
 place. Picture, meet caption, in one shared filing system.</p>
 
+<p>That shortening step is a single linear layer, which matters more than it
+sounds. A linear map can rotate a space, stretch it and pick out directions
+within it. What it cannot do is invent structure that was not already there. So
+the islands on this map are not something we built into the data. They were
+already sitting in the model&rsquo;s notes, and a linear view was enough to find
+them. Flattening the result onto a screen is our doing. The neighbourhoods are
+not.</p>
+
 <p><strong>Second, we taught a small model to read the notes back.</strong> A
 frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in front of it, takes one of
 those 1,024-number lists and writes an English sentence about it. It has no
@@ -120,7 +128,7 @@ telling you what it says.</p>
 similarity. And because the reader wants a list of numbers rather than a
 picture, you can point at a bare patch of sheet, average the lists surrounding
 it, and hand the reader that average. No photograph ever had those exact
-numbers. It writes a sentence anyway. That is what the title means.</p>
+numbers. It writes a sentence anyway.</p>
 
 <p>The map holds 40,000 photographs drawn from a gallery of 123,287, and you can
 stand anywhere on it.
