@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **The Lab-map reader re-measured without contamination, and it reaches
+  human parity.** Refit the sunstone head from the same gemma L47 states with
+  the 5,000 evaluation images held out of HEAD training as well as reader
+  training, then retrained the reader on the resulting space. The first
+  caption falls from median 8 to **57** and the two human references become
+  indistinguishable, which is what two people describing one photograph should
+  look like. Against a pool of 118,287: first human caption median 57, second
+  human 48, **the reader 46**, both controls at chance (57,494 and 59,681).
+  Per photograph the reader ranks the image above the first human caption on
+  **49.6%** of images where a second human manages 48.0%, and that
+  human-to-human arm is symmetric to the decimal, which is the validity check.
+  The reader is inside the human band, not below a ceiling. These are not the
+  deployed figures; the Lab still serves the shipped head.
+  `artifacts/nla/verbalizer/caption_coverage/`.
+- **Caption coverage in head training is worth about a third of retrieval
+  rank.** The shipped head saw one caption per image, the first of COCO's five.
+  Refitting with all five resampled per epoch, changing nothing else, moves
+  unseen-caption retrieval from median 60/53 to **40/34** on a training loss
+  that is higher (1.22 against 0.51): matching any of five descriptions is the
+  harder objective and the one that generalises. Scripts
+  `encode_captions_l47.py` (banks all five captions as raw L47 states,
+  resumable) and `refit_sunstone_head.py` (`--mode cap0|all5`). Whether the
+  gain carries through to the reader is still measuring.
 - **A map of the gallery you can stand anywhere on**, served as pane
   **04 · Stand somewhere**. All 118,287 COCO train2017 images projected through
   the sunstone head into one 1,024-d space and laid out in two dimensions. A
@@ -140,7 +163,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   card and the artifact's own `caveat` and `supersedes` fields, and the eval
   now carries an uncontaminated `second_human_caption` arm plus per-item ranks.
   Unlike every other correction in this list, this one had been making the
-  result look **worse** than it measured.
+  result look **worse** than it measured. Confirmed experimentally the same
+  day: holding the evaluation images out of head training moves the first
+  caption from median 8 to 57 while the second caption barely moves, so the
+  entire advantage was memorisation.
 - **`srt-browser-head-118k` model card advertised the wrong recovery figure.**
   The published table reported 0.2300/0.0154/0.1952 and "85% recovery", which
   were measured on an earlier 4,000-image head against a 1,000-image pool, not

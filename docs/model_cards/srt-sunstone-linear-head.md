@@ -132,6 +132,59 @@ above the first human caption on 17.0% of images, where a second human
 beats the first on 20.0%. Both control arms sit at chance, which is what
 makes the reader's number mean anything.
 
+### Re-measured with the evaluation images held out of head training
+
+The arm above is a wiring control precisely because this head never held
+the evaluation images out of its *own* training. To find what the reader
+is actually worth, we refit the head from the same gemma L47 states with
+the same 5,000 images held out of head training as well as reader
+training, then retrained the reader on the resulting space. Nothing else
+changed.
+
+The contamination disappears exactly as predicted. The first caption
+falls from median 8 to 57, and the two human references become
+indistinguishable, which is what two people describing one photograph
+should look like:
+
+| arm | R@1 | median rank |
+|---|---:|---:|
+| first human caption | 0.100 | 57 |
+| second human caption | 0.080 | 48 |
+| **the reader** | 0.074 | **46** |
+| another photograph's point | 0.000 | 57,494 |
+| the mean point | 0.000 | 59,681 |
+
+Counted per photograph against the first human caption, **the reader wins
+49.6%** of images (tie 4.2%). A second human wins 48.0% (tie 4.0%), and
+that human-to-human arm is symmetric to the decimal, which is the
+validity check on the comparison. The reader sits inside the
+human-to-human band rather than below a ceiling.
+
+**These are not the deployed numbers.** The Lab serves the shipped head
+and its reader, whose figures are the table above. The refit head is a
+measurement, not a release.
+
+### Caption coverage in head training
+
+The refit made a second question cheap. This head was fitted on one
+caption per image, the first of COCO's five, and a head only ever asked
+to match one description of a scene is never required to keep the rest of
+it. Refitting with all five, resampled per epoch, changing nothing else:
+
+| head fitted on | unseen caption_0 | unseen caption_1 |
+|---|---:|---:|
+| one caption per image | median 60 | median 53 |
+| all five, resampled per epoch | median **40** | median **34** |
+
+About a third better at placing a caption it has never seen, on a
+training loss that is *higher* (1.22 against 0.51). Matching any of five
+descriptions is the harder objective and the one that generalises.
+Whether that carries through to the reader is being measured now.
+
+Artifacts for both: `artifacts/nla/verbalizer/caption_coverage/` in
+`space-bacon/SRT`. Scripts: `scripts/encode_captions_l47.py`,
+`scripts/refit_sunstone_head.py`, `scripts/eval_sunstone_verbalizer.py`.
+
 ## What the head reads, and what it does not
 
 Measured directly against COCO annotations rather than against a competing
