@@ -60,7 +60,8 @@ def body() -> str:
 <p>There is a new instrument on the Sunstone North Lab. It is a map of 40,000
 photographs drawn from a gallery of 123,287, laid out by how one frozen
 31-billion-parameter model read them. You can stand anywhere on it, including
-the empty water where no photograph has ever been, and hear what is there.</p>
+the empty water where no photograph has ever been, and it will write you a
+sentence.</p>
 
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04</p>
@@ -74,7 +75,7 @@ the empty water where no photograph has ever been, and hear what is there.</p>
 <h3>We did not name the regions</h3>
 
 <p>Every label on that map was written by the machine. We handed a frozen
-382&nbsp;MB Qwen3-0.6B the centre of each region and printed what it said. That
+382&nbsp;MB Qwen3-0.6B the centre of each region and printed what it wrote. That
 0.6B has no vision path. It has never seen a photograph in its life. It is
 reading a 1,024-number record a much larger model left behind, months ago, on a
 different machine.</p>
@@ -97,7 +98,7 @@ skateboarding island there is a gap. No photograph lives in it. Click it:</p>
        "midpoint between them, which reads as snowboarding")}
 
 {embed("lab_05_border.png",
-       "The same click in the Lab: the reader says snowboarding",
+       "The same click in the Lab: the reader writes snowboarding",
        caption="Skiing on one side, skateboarding on the other, and the space "
                "between them is snowboarding. Nobody put that there.")}
 
@@ -107,7 +108,7 @@ centres rather than picked by hand, so the caption under each panel is true by
 construction:</p>
 
 {embed("fig_openwater.png",
-       "Eight midpoints between named regions, each read aloud",
+       "Eight midpoints between named regions, each with the sentence it returns",
        width=740)}
 
 <p>Four of those are genuine blends. Three lean to one parent instead of
@@ -124,7 +125,7 @@ times. Neither endpoint appears in the middle:</p>
 
 {embed("fig_walk.gif",
        "Six stops along a straight line from the bathroom island to the giraffe "
-       "island, each read aloud",
+       "island, each with the sentence it returns",
        caption="Domestic interior, to rail, to road, to water, to wildlife. Six "
                "coherent scenes, four of them nowhere near either end.")}
 
@@ -142,7 +143,7 @@ things it holds.</p>
 100% &middot; A group of people paddling in a body of water.
 </p></blockquote>
 
-<h3>Say something and watch where it lands</h3>
+<h3>Type something and watch where it lands</h3>
 
 <p>The map runs in both directions. Type a sentence and it is placed on the map
 by meaning, then read back from wherever it landed:</p>
@@ -165,7 +166,7 @@ when you drop in a picture it is encoded here, live, into the same
 actual neighbours rather than near words about it.</p>
 
 {embed("lab_upload.gif",
-       "Uploading a photograph: encoded by the live 31B, lands on the map, read aloud",
+       "Uploading a photograph: encoded by the live 31B, lands on the map, described in a sentence",
        caption="2.0 seconds to encode on the 31B, 0.7 seconds for the 0.6B to "
                "read it: &ldquo;Two cats are laying on a couch.&rdquo;")}
 
@@ -226,7 +227,7 @@ that failure looks like a result rather than a bug.</p>
 than this 1,024-dimensional space, does beat the human caption outright: median
 rank 20 of 123,287 against 39. Part of that margin is length. It keeps talking,
 the extra detail about the scene is often right, and a retrieval metric rewards
-saying more true things. We quote it with that caveat attached every time.</p>
+naming more true things. We quote it with that caveat attached every time.</p>
 
 <h3>What the map carries, and what it does not</h3>
 
@@ -249,7 +250,7 @@ one caption per image, the first of COCO&rsquo;s five. That is what contaminated
 the number above, and it raises a second question. A head only ever asked to
 match one description of a scene is never required to keep the rest of it. If
 that is costing the reader, then showing the head all five captions should
-improve what the map can say without changing the reader at all.</p>
+improve what the map can put into words without changing the reader at all.</p>
 
 <p>That experiment is running as this goes out: same backbone states, same
 images, same split, same reader recipe, with caption coverage the only thing

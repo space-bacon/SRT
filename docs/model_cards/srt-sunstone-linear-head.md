@@ -91,7 +91,7 @@ pane 04.
   each written by the reader below rather than by us.
 - `sunstone_verbalizer.pt`: a ~36M-parameter prefix (16 soft tokens,
   hidden 2048) that conditions a frozen Qwen3-0.6B on one 1,024-d point
-  and has it say what is there. The 0.6B has no vision path and never
+  and has it write what is there. The 0.6B has no vision path and never
   sees a photograph. It reads the record the 31B left behind.
 
 Because the reader takes a point rather than a picture, it answers

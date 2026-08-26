@@ -342,7 +342,7 @@ def make_openwater(out, cols=4, cell=400):
     d = ImageDraw.Draw(im, "RGBA")
     d.text((38, 32), "EIGHT PLACES WITH NO PHOTOGRAPH IN THEM",
            font=font(20, 1), fill=TERRA)
-    d.text((36, 60), "and what the reader says is there",
+    d.text((36, 60), "and the sentence that comes back",
            font=font(36, 2, didot=True), fill=INK)
 
     base = base_map(xy, cell - 36, 14, dot=1.1, alpha=62)
