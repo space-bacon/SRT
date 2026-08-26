@@ -217,6 +217,19 @@ def main():
                "text_convention": f"BOS-prefixed last-token L{a.layer}, gemma-4 is BOS-sensitive",
                "head": a.head_file, "reader_backbone": "Qwen/Qwen3-0.6B",
                "n_prefix_tokens": ck["n_tok"], "arms": results,
+               "caveat": "gold_caption_harness_control is a WIRING CONTROL and must "
+                         "not be quoted as a human ceiling. The head was fitted on "
+                         "train2017 pairs built from each image's FIRST caption and "
+                         "this gallery IS train2017, so that arm scores a pair the "
+                         "head was trained to align. The uncontaminated human "
+                         "reference is second_human_caption.",
+               "supersedes": {
+                   "file": "sunstone_verb_eval.json before 2026-08-26",
+                   "what_was_wrong": "same numbers, wrong label: the median-8 gold "
+                                     "arm was presented as the human ceiling the "
+                                     "reader falls short of. Against an unseen "
+                                     "caption of the same photograph the human "
+                                     "reference is median 45, not 8."},
                "head_to_head": comparisons,
                "per_item_ranks": {k: [int(x) + 1 for x in v] for k, v in ranks.items()}},
               open(a.out, "w"), indent=1)

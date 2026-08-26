@@ -78,6 +78,53 @@ of this is in `artifacts/nla/q4/*_2026080[56].json` in the repo,
 developed through a public fourteen-round review exchange on the
 release thread.
 
+## The map and its reader
+
+Three files here turn the head into an instrument you can stand inside.
+It is served live at [lab.sunstonenorth.com](https://lab.sunstonenorth.com),
+pane 04.
+
+- `space_map.npz`: a two-dimensional projection of all 118,287 COCO
+  train2017 images in this head's 1,024-d space.
+- `space_map_labels.json`: 24 region names, each written by the reader
+  below rather than by us.
+- `sunstone_verbalizer.pt`: a ~36M-parameter prefix (16 soft tokens,
+  hidden 2048) that conditions a frozen Qwen3-0.6B on one 1,024-d point
+  and has it say what is there. The 0.6B has no vision path and never
+  sees a photograph. It reads the record the 31B left behind.
+
+Because the reader takes a point rather than a picture, it answers
+anywhere on the map, including the open water between clusters where no
+photograph exists. The empty gap between the skiing and skateboarding
+regions reads as "A man is doing a trick on a snowboard."
+
+### Results (`sunstone_verb_eval.json`)
+
+500 held-out points retrieved against the full 118,287 gallery, so
+chance is a median rank of 59,143:
+
+| arm | R@1 | R@10 | median rank |
+|---|---:|---:|---:|
+| first COCO caption (**the head trained on this**) | 0.212 | 0.554 | 8 |
+| a second COCO caption of the same image (unseen) | 0.074 | 0.254 | 45 |
+| the reader | 0.042 | 0.194 | 64 |
+| another image's point | 0.000 | 0.000 | 55,866 |
+| the mean of all points | 0.000 | 0.002 | 59,135 |
+
+**Do not read the first row as a human ceiling.** This head was fitted
+on train2017 pairs built from each image's *first* caption, and the
+gallery is train2017, so that arm scores a pair the head was trained to
+align. Its job is to be a wiring control: it runs first and aborts the
+evaluation if human captions cannot retrieve their own images, because a
+reader pointed at the wrong space emits fluent sentences over a dead
+harness and that failure reads like a result. The honest human reference
+is the second caption, at median 45.
+
+Counted per photograph instead of per median, the reader ranks the image
+above the first human caption on 17.0% of images, where a second human
+beats the first on 20.0%. Both control arms sit at chance, which is what
+makes the reader's number mean anything.
+
 ## What the head reads, and what it does not
 
 Measured directly against COCO annotations rather than against a competing
