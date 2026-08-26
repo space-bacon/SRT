@@ -55,27 +55,29 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>A 382 MB model reads what a 31-billion-parameter model worked out</h3>
+<h3>A 382 MB model reads the notes a 31-billion-parameter model leaves behind</h3>
 
-<p><em>The notes are what the big model worked out and would otherwise have
-discarded. Handed them and nothing else, the small one writes a sentence that
+<p><em>The notes are what the big model computes and would otherwise discard.
+Handed them and nothing else, the small one writes a sentence that
 finds the right photograph in the top 0.05% of 118,287.</em></p>
 
 <p>When a large model looks at a photograph it does not keep the picture. It
 builds a working impression: a list of several thousand numbers it uses to
 answer whatever is asked next. The technical name is a hidden state. Think of it
 as the model&rsquo;s working notes on the image, written in numbers rather than
-words, and normally thrown away the instant the answer is produced.</p>
+words. It is a record of what the model made of the picture, and it is normally
+thrown away the instant the answer is produced.</p>
 
 <p>Every time a multimodal model looks at
-anything it works out what it is looking at, in enough detail to answer
-questions about it, and then throws that work away. You paid for it. It is gone
+anything it builds one of these records, in enough detail to answer
+questions about it, and then discards it. You paid for that. It is gone
 before you could use it for anything else.</p>
 
-<p>We kept the notes for 123,287 photographs, and then taught something very
+<p>We kept the notes for a gallery of 123,287 photographs, the standard COCO
+image set, and then taught something very
 small to read them. A frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in
 front of it, takes one of those number-lists and writes an English sentence
-about a photograph it was never given.</p>
+about a photograph it was never given. We call it the reader.</p>
 
 <p>The reader&rsquo;s blindness is the point rather than a curiosity. If it could
 see, you could never tell whether its sentence came from the record or from the
@@ -179,12 +181,13 @@ then read back from wherever it landed:</p>
                "snow country, and the eight photographs nearest that spot are "
                "all skiing. The match is on meaning; the words never met.")}
 
-<h3>The half only the Lab can do</h3>
+<h3>Your own photograph needs the big model live</h3>
 
-<p>A hosted demo can show you a map. It cannot read <em>your</em> photograph into
-it, because that needs the big model running, right now, on the other end.</p>
+<p>Everything above comes from notes computed months ago, which a static page
+could serve. Your own photograph is different. No notes exist for it yet, and
+making them needs the 31-billion-parameter model running at that moment.</p>
 
-<p>The Lab has one. A gemma-4-31B is served from that same desktop, so when you
+<p>The Lab runs one. A gemma-4-31B is served from that same desktop, so when you
 drop in a picture it is encoded here, live, into the same 1,024-dimensional space
 the gallery was built in. The marker lands among its actual neighbours rather
 than near words about it.</p>
