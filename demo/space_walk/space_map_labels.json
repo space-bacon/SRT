@@ -1,0 +1,150 @@
+{
+ "regions": [
+  {
+   "x": -0.31356140971183777,
+   "y": -0.1357841193675995,
+   "n": 2921,
+   "text": "A street sign with a red light on it."
+  },
+  {
+   "x": 0.1858401745557785,
+   "y": -0.2955338656902313,
+   "n": 1711,
+   "text": "A computer monitor sitting on a desk with a mouse and a keyboard."
+  },
+  {
+   "x": 0.43334904313087463,
+   "y": 0.6288791298866272,
+   "n": 1316,
+   "text": "A baseball player is getting ready to hit the ball."
+  },
+  {
+   "x": -0.7433165311813354,
+   "y": 0.5120089054107666,
+   "n": 717,
+   "text": "A large elephant with a small elephant behind it."
+  },
+  {
+   "x": -0.06707913428544998,
+   "y": 0.4494302272796631,
+   "n": 1783,
+   "text": "A man riding a surfboard on a wave in the ocean."
+  },
+  {
+   "x": 0.57923424243927,
+   "y": -0.36981427669525146,
+   "n": 1152,
+   "text": "A pizza with cheese and toppings on a plate."
+  },
+  {
+   "x": 0.2853386700153351,
+   "y": -0.06719473004341125,
+   "n": 3073,
+   "text": "A man holding a cell phone in his hand."
+  },
+  {
+   "x": -0.8432711958885193,
+   "y": -0.20563282072544098,
+   "n": 964,
+   "text": "A large airplane is sitting on the runway."
+  },
+  {
+   "x": 0.0779295563697815,
+   "y": 0.8556129932403564,
+   "n": 1458,
+   "text": "A man riding skis down a snow covered slope."
+  },
+  {
+   "x": 0.042498260736465454,
+   "y": -0.42612940073013306,
+   "n": 1745,
+   "text": "A room with a bed and a chair."
+  },
+  {
+   "x": 0.06961167603731155,
+   "y": 0.04000742360949516,
+   "n": 1978,
+   "text": "A woman is sitting on a bench with an umbrella."
+  },
+  {
+   "x": 0.5570113062858582,
+   "y": -0.5584431886672974,
+   "n": 2525,
+   "text": "A plate of food with a bowl of vegetables and a bowl of cereal."
+  },
+  {
+   "x": -0.5415792465209961,
+   "y": 0.3777199387550354,
+   "n": 1912,
+   "text": "A herd of horses standing in a field."
+  },
+  {
+   "x": -0.014352487400174141,
+   "y": -0.1624336540699005,
+   "n": 2182,
+   "text": "A cat laying on a couch with a dog on top of it."
+  },
+  {
+   "x": 0.4320825934410095,
+   "y": 0.26352760195732117,
+   "n": 1164,
+   "text": "A man on a skateboard doing a trick."
+  },
+  {
+   "x": -0.5205094814300537,
+   "y": -0.3178057372570038,
+   "n": 1095,
+   "text": "A train traveling down the tracks near a train station."
+  },
+  {
+   "x": 0.4276784360408783,
+   "y": -0.21275565028190613,
+   "n": 2046,
+   "text": "A young man and a woman at a table with a large cake."
+  },
+  {
+   "x": -0.6768304109573364,
+   "y": 0.19461199641227722,
+   "n": 904,
+   "text": "A bird standing on a rock in the middle of a pond."
+  },
+  {
+   "x": -0.2782026529312134,
+   "y": 0.09021113812923431,
+   "n": 2986,
+   "text": "A red and white bus is parked on a street."
+  },
+  {
+   "x": -0.05181095749139786,
+   "y": -0.6705040335655212,
+   "n": 1232,
+   "text": "A bathroom with a toilet, sink, and a mirror."
+  },
+  {
+   "x": -0.9406693577766418,
+   "y": 0.4502439498901367,
+   "n": 1399,
+   "text": "A couple of giraffes standing in a field."
+  },
+  {
+   "x": 0.147918239235878,
+   "y": 0.35869738459587097,
+   "n": 1379,
+   "text": "A man flying a kite in the air while standing on a beach."
+  },
+  {
+   "x": 0.2948381304740906,
+   "y": -0.5131471753120422,
+   "n": 1256,
+   "text": "A kitchen with a stove, refrigerator, and a sink."
+  },
+  {
+   "x": 0.6570130586624146,
+   "y": 0.5204195976257324,
+   "n": 1102,
+   "text": "A man holding a tennis racquet on a tennis court."
+  }
+ ],
+ "n_points": 40000,
+ "n_gallery": 123287
+}

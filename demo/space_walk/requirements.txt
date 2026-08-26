@@ -3,4 +3,5 @@ torch
 transformers
 safetensors
 numpy
+pillow
 huggingface_hub
