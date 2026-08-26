@@ -13,17 +13,20 @@
   "candle_q4_as_is": {
    "r@1": 0.0,
    "r@10": 0.0001999600079984003,
-   "r@5": 0.0
+   "r@5": 0.0,
+   "median_rank": 44578.0
   },
   "candle_q4_recalibrated": {
    "r@1": 0.03499300139972006,
    "r@10": 0.15176964607078583,
-   "r@5": 0.10617876424715057
+   "r@5": 0.10617876424715057,
+   "median_rank": 176.0
   },
   "pytorch_fp16": {
    "r@1": 0.1092,
    "r@10": 0.3307,
-   "r@5": 0.2442
+   "r@5": 0.2442,
+   "median_rank": 36.0
   }
  },
  "tap_layer": 28,
@@ -34,5 +37,6 @@
  "index": "gallery_123k_v3.srtidx (SRTIDX02, int8, 123,287 rows) - the shipped gallery",
  "recovery_vs_reference_r@1": 0.3204,
  "supersedes": "cross_runtime_browser_rung.json, which measured an earlier 4,000-image head against a 1,000-image pool and reported 84.9% recovery",
- "pooling_note": "browser_rung's Tap::new defaults to Pooling::Last; the shipped head is mean-pooled. The first attempt at this measurement inherited that default and read 0.0136 recalibrated, which was a pooling mismatch and not a quantization result. --mean is now explicit."
+ "pooling_note": "browser_rung's Tap::new defaults to Pooling::Last; the shipped head is mean-pooled. The first attempt at this measurement inherited that default and read 0.0136 recalibrated, which was a pooling mismatch and not a quantization result. --mean is now explicit.",
+ "median_rank_note": "1-based, over the 123,287-image gallery. The anchor moves the median from 44,578 (chance is ~61,644) to 176, which is the top 0.14% of the gallery, against 36 for the fp16 reference. R@1 recovery of 32% understates the anchored arm: the correct image is usually near the top, just not at it."
 }
