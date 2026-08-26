@@ -1,0 +1,55 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 1000,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.087,
+   "r@5": 0.204,
+   "r@10": 0.291,
+   "median_rank": 46.0,
+   "sample": [
+    "A living room with a television, a table, and a sink.",
+    "A brown bear standing in a grassy field.",
+    "A bedroom with a bed, desk, and bookshelf.",
+    "A stop sign on a street corner with a tree in the background.",
+    "Three brown teddy bears are sitting next to each other."
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.001,
+   "r@10": 0.001,
+   "median_rank": 63569.0,
+   "sample": [
+    "A black and white cat laying on a laptop.",
+    "A living room with a television, a table, and a sink.",
+    "A brown bear standing in a grassy field.",
+    "A bedroom with a bed, desk, and bookshelf.",
+    "A stop sign on a street corner with a tree in the background."
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 61537.5,
+   "sample": [
+    "A man is sitting on a bench next to a black and white car.",
+    "A man is sitting on a bench next to a black and white car.",
+    "A man is sitting on a bench next to a black and white car.",
+    "A man is sitting on a bench next to a black and white car.",
+    "A man is sitting on a bench next to a black and white car."
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.101,
+   "r@5": 0.238,
+   "r@10": 0.327,
+   "median_rank": 39.0
+  }
+ },
+ "variant": "EOS appended to targets, one caption per target",
+ "finding": "Teaching the model to stop cost nearly half the retrieval performance: median 46 against 25 for the same recipe without EOS, and below the human caption it previously beat. The text is strictly better, stopping on its own in 11-15 tokens with no repetition and no trimming. The cause is that the earlier model scored well by rambling: it enumerated whole-scene inventory for the full 32-token budget, and this head rewards inventory. Saying its piece in eleven tokens names fewer objects. The fix is not to remove EOS but to give it more to say, so the next run joins three of each image reference captions into one target."
+}

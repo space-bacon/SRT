@@ -55,6 +55,10 @@ def parse():
     p.add_argument("--batch", type=int, default=32)
     p.add_argument("--lr", type=float, default=3e-4)
     p.add_argument("--max-len", type=int, default=32)
+    p.add_argument("--caps-per-target", type=int, default=1,
+                   help="join this many of an image's captions into one target; "
+                        "one caption teaches the model to stop after naming a "
+                        "few objects, which reads well and retrieves poorly")
     p.add_argument("--device", default="auto")
     p.add_argument("--bf16", action="store_true")
     p.add_argument("--save-every", type=int, default=2000)
@@ -83,9 +87,20 @@ def main():
     rng = np.random.default_rng(0)
     order = rng.permutation(n_img)
     test_idx, train_idx = order[: a.holdout], order[a.holdout:]
-    pairs = [(i, c) for i in train_idx for c in caps[i]]
+    # Each image has five reference captions describing different aspects of
+    # the same scene. Rotating a window over them keeps one example per
+    # caption while making each target name more of the scene.
+    k = max(1, a.caps_per_target)
+    pairs = []
+    for i in train_idx:
+        cs = caps[i]
+        if not cs:
+            continue
+        for j in range(len(cs)):
+            joined = " ".join(cs[(j + t) % len(cs)] for t in range(min(k, len(cs))))
+            pairs.append((i, joined))
     print(f"{n_img} images -> {len(train_idx)} train / {len(test_idx)} held out; "
-          f"{len(pairs)} training captions", flush=True)
+          f"{len(pairs)} training targets of {k} caption(s) each", flush=True)
 
     tok = AutoTokenizer.from_pretrained(a.model)
     wdtype = torch.bfloat16 if a.bf16 else torch.float32
@@ -95,6 +110,18 @@ def main():
         p.requires_grad_(False)
     emb = model.get_input_embeddings()
     d_model = emb.weight.size(1)
+
+    # Truncation silently eats the stop token, which is exactly the bug this
+    # training is meant to fix, so check before spending an hour on it.
+    probe = tok([c + tok.eos_token for _, c in pairs[:512]], truncation=True,
+                max_length=a.max_len)["input_ids"]
+    kept = sum(1 for ids in probe if ids and ids[-1] == tok.eos_token_id)
+    print(f"targets ending in EOS: {kept}/{len(probe)} at max_len={a.max_len}",
+          flush=True)
+    if kept < len(probe):
+        raise SystemExit(
+            f"{len(probe) - kept} of {len(probe)} sampled targets lose their "
+            f"stop token to truncation; raise --max-len above {a.max_len}")
 
     # Raw large-model states are strongly anisotropic; centre and scale on the
     # train split only, and carry the statistics in the checkpoint so eval and
