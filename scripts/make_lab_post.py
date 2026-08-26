@@ -58,8 +58,8 @@ def body() -> str:
 <h3>A 382 MB model reads what a 31B saw</h3>
 
 <p><em>It has no eyes and has never been shown a photograph. Handed the working
-notes a 31-billion-parameter model left behind, it writes a description of the
-scene, and against a held-out human caption it comes out level.</em></p>
+notes a 31-billion-parameter model left behind, it writes a sentence that finds
+the right photograph in the top 0.05% of 118,287.</em></p>
 
 <p>When a large model looks at a photograph it does not keep the picture. It
 builds a working impression: a list of several thousand numbers it uses to
@@ -74,9 +74,9 @@ about a photograph it cannot see and was never shown. It is reading somebody
 else&rsquo;s handwriting and telling you what it says.</p>
 
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
-&middot; pane 04. It runs on a desktop computer in a room in Canada.</p>
+&middot; pane 04. The whole thing is served from one desktop computer.</p>
 
-<h3>The room has a shape, and nobody arranged it</h3>
+<h3>The map has a shape, and nobody arranged it</h3>
 
 <p>A second trained piece shortens each list from 5,376 numbers to 1,024, in a
 way that puts a photograph and a sentence describing it in nearly the same
@@ -218,21 +218,27 @@ photographs, so scoring that exact caption measures a pair the system was
 explicitly taught to align. It is a wiring check, not a ceiling.</p>
 
 <p>Score a different person&rsquo;s description of the same photograph, one the
-system never saw, and the honest reference is 45. Rebuild the whole thing with
-the evaluation photographs held out of <em>every</em> training step and the two
-come level:</p>
+system never saw, and the honest reference for the instrument above is 45
+against its 64. So on the version you can go and click, a human still wins.</p>
+
+<p>Then we rebuilt the whole thing with the evaluation photographs held out of
+<em>every</em> training step, not just the reader&rsquo;s, which is what should
+have been true the first time. On that rebuild the three come out together:</p>
 
 <table>
 <tr><th align="left">arm</th><th align="right">median rank of 118,287</th></tr>
-<tr><td>a human caption</td><td align="right">48</td></tr>
 <tr><td><strong>the reader</strong></td><td align="right"><strong>46</strong></td></tr>
-<tr><td>a second human caption</td><td align="right">57</td></tr>
+<tr><td>a second person&rsquo;s caption</td><td align="right">48</td></tr>
+<tr><td>the first person&rsquo;s caption</td><td align="right">57</td></tr>
 </table>
 
 <p>Counted per photograph rather than per median, the reader places the image
-above the human on <strong>49.6%</strong> of them. A second human manages
-<strong>48.0%</strong>. It sits inside the spread between two people describing
-the same picture.</p>
+above the first person&rsquo;s caption on <strong>49.6%</strong> of them. A
+second person manages <strong>48.0%</strong>. It sits inside the spread between
+two people describing the same picture.</p>
+
+<p>That rebuild is a measurement, not a release. The Lab serves the instrument
+in the table before it, and the two should not be quoted as one number.</p>
 
 <h3>What it carries, and what it does not</h3>
 
@@ -256,6 +262,12 @@ are retrieved from the full 123,287-image gallery.</p>
 was frozen throughout. The instruments are small trained artifacts that read a
 hidden state the model had already computed, which is why the whole thing fits
 on one desktop.</p>
+
+<p>That is the shape of the thing, and it is the part worth taking away. If you
+already run a multimodal model, every forward pass already produces this record
+and you are already paying for it. A linear read-out turns it into search,
+tagging and description without a second model in the stack, without a
+fine-tune, and without the original model changing by one weight.</p>
 
 <h3>Press the buttons</h3>
 
