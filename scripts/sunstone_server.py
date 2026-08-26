@@ -273,6 +273,11 @@ class EncodeReq(BaseModel):
     max_seq_len: int = 64
 
 
+class MapPointReq(BaseModel):
+    x: float
+    y: float
+
+
 # --------------------------------------------------------------------- head
 def _project(v: np.ndarray, W: np.ndarray, b: np.ndarray,
              mu: np.ndarray) -> np.ndarray:
@@ -443,6 +448,159 @@ def describe_state(v: np.ndarray, max_tokens: int) -> str:
     # than a trailing fragment. Display only, nothing is re-ranked or rewritten.
     cut = text.rfind(".")
     return text[: cut + 1] if cut > 0 else text
+
+
+# ----------------------------------------------------------------- the map
+# A 2-D layout of the gallery that a visitor can point at. The reader used
+# here is NOT the one /describe uses: that one reads raw 5376-d gemma states,
+# this one reads the 1024-d head space the gallery itself lives in, which is
+# what a point on the map actually is. Training a reader on one space and
+# serving it the other produces fluent sentences over a dead harness, which
+# looks like a result rather than a bug.
+MAP_NPZ = Path(os.environ.get("SUNSTONE_MAP", "artifacts/local/space_map.npz"))
+MAP_LABELS = Path(os.environ.get("SUNSTONE_MAP_LABELS",
+                                 "artifacts/local/space_map_labels.json"))
+MAP_VERB_CKPT = Path(os.environ.get(
+    "SUNSTONE_MAP_VERBALIZER",
+    "checkpoints/sunstone_verbalizer/sunstone_verbalizer.pt"))
+MAP_PX = 1000           # rendered dot field, square, transparent background
+MAP_MAX_TOKENS = 32
+
+
+def load_map() -> dict:
+    """Layout, regions, and the reader that speaks the gallery's own space."""
+    import json as _json
+    import sys
+
+    import torch
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from train_shared_space_verbalizer import Prefix
+
+    for p in (MAP_NPZ, MAP_LABELS, MAP_VERB_CKPT):
+        if not p.exists():
+            raise HTTPException(503, f"map asset missing: {p}")
+
+    z = np.load(MAP_NPZ)
+    xy = z["xy"].astype(np.float32)
+    rows = z["rows"].astype(np.int64)
+    labels = _json.load(open(MAP_LABELS))
+
+    n_gal = len(S["gallery"]["files"])
+    if rows.max() >= n_gal:
+        raise HTTPException(500, "map rows do not index this gallery; the map "
+                                 "and gallery_full.npz are out of step")
+    # Gallery row -> map point, so a retrieved neighbour can be drawn.
+    row_to_pt = np.full(n_gal, -1, np.int32)
+    row_to_pt[rows] = np.arange(len(rows), dtype=np.int32)
+
+    ck = torch.load(MAP_VERB_CKPT, map_location="cpu", weights_only=False)
+    if ck["d_in"] != S["gallery"]["Z_img"].shape[1]:
+        raise HTTPException(500, f"map reader wants {ck['d_in']}-d, gallery is "
+                                 f"{S['gallery']['Z_img'].shape[1]}-d")
+    pre = Prefix(ck["d_in"], ck["d_model"], ck["n_tok"], ck.get("hidden", 2048))
+    pre.load_state_dict(ck["prefix"])
+    pre.to(VERB_DEVICE).eval()
+    if "verbalizer" not in S:
+        S["verbalizer"] = load_verbalizer()
+    log.info("map ready: %d points, %d regions, reader d_in=%d",
+             len(rows), len(labels["regions"]), ck["d_in"])
+    return {"xy": xy, "rows": rows, "row_to_pt": row_to_pt,
+            "regions": labels["regions"], "n_gallery": int(labels["n_gallery"]),
+            "prefix": pre, "mu": ck["mu"], "sd": ck["sd"], "d_in": ck["d_in"]}
+
+
+def map_say(v: np.ndarray, max_tokens: int = 32) -> str:
+    """What the 0.6B says is at this point in the gallery's space."""
+    import torch
+
+    m, vb = S["map"], S["verbalizer"]
+    u = v / (np.linalg.norm(v) + 1e-8)
+    x = torch.tensor((u - m["mu"]) / m["sd"], dtype=torch.float32,
+                     device=VERB_DEVICE).unsqueeze(0)
+    with torch.no_grad():
+        soft = m["prefix"](x)
+        out = vb["model"].generate(
+            inputs_embeds=soft,
+            attention_mask=torch.ones(soft.shape[:2], dtype=torch.long,
+                                      device=VERB_DEVICE),
+            max_new_tokens=max_tokens, do_sample=False,
+            pad_token_id=vb["tok"].eos_token_id)
+    text = vb["tok"].decode(out[0], skip_special_tokens=True).strip()
+    # The reader restates itself; drop exact repeats for display only.
+    seen, kept = set(), []
+    for s in (p.strip() for p in text.split(".")):
+        if s and s.lower() not in seen:
+            seen.add(s.lower())
+            kept.append(s)
+    return ". ".join(kept[:2]) + "." if kept else text
+
+
+def map_locate(v: np.ndarray, k: int = 64, n_near: int = 8) -> dict:
+    """Where a 1024-d point sits on the map, and what is around it.
+
+    A point has no coordinates of its own: the layout was fitted, not solved.
+    It is placed where its nearest neighbours already sit, sharpened so a
+    close match dominates rather than dragging the marker to the centroid of
+    everything.
+    """
+    m = S["map"]
+    u = (v / (np.linalg.norm(v) + 1e-8)).astype(np.float32)
+    sims = S["gallery"]["Z_img"] @ u
+    on_map = sims[m["rows"]]
+    k = min(k, len(on_map))
+    top = np.argpartition(-on_map, k - 1)[:k]
+    w = np.maximum(on_map[top], 0.0) ** 8
+    w = w / (w.sum() + 1e-8)
+    xy = (m["xy"][top] * w[:, None]).sum(0)
+
+    near = np.argsort(-sims)[:n_near]
+    return {
+        "x": float(xy[0]), "y": float(xy[1]),
+        "near": [{"file": S["gallery"]["files"][i],
+                  "split": S["gallery"]["split"][i],
+                  "score": round(float(sims[i]), 4)} for i in near],
+    }
+
+
+def map_vector_at(x: float, y: float, k: int = 48) -> np.ndarray:
+    """The reading of a spot: the mean record of the photographs nearest it.
+
+    Most of the map is empty, so this is usually a vector no photograph has.
+    That is the point of a map rather than an index.
+    """
+    m = S["map"]
+    d2 = ((m["xy"] - np.array([x, y], np.float32)) ** 2).sum(1)
+    k = min(k, len(d2))
+    idx = np.argpartition(d2, k - 1)[:k]
+    v = S["gallery"]["Z_img"][m["rows"][idx]].mean(0)
+    return v / (np.linalg.norm(v) + 1e-8)
+
+
+def map_png() -> bytes:
+    """The dot field, drawn once. Transparent so the page owns the palette."""
+    from io import BytesIO
+
+    from PIL import Image, ImageDraw
+
+    if "map_png" in S:
+        return S["map_png"]
+    ss = 2                                   # supersample, then downscale
+    im = Image.new("RGBA", (MAP_PX * ss, MAP_PX * ss), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    pad = 26 * ss
+    span = MAP_PX * ss - 2 * pad
+    for px, py in S["map"]["xy"]:
+        cx = pad + (px + 1.0) * 0.5 * span
+        cy = pad + (1.0 - (py + 1.0) * 0.5) * span
+        d.ellipse((cx - 2 * ss, cy - 2 * ss, cx + 2 * ss, cy + 2 * ss),
+                  fill=(196, 106, 66, 150))
+    im = im.resize((MAP_PX, MAP_PX), Image.LANCZOS)
+    buf = BytesIO()
+    im.save(buf, "PNG", optimize=True)
+    S["map_png"] = buf.getvalue()
+    log.info("map png: %d KB", len(S["map_png"]) // 1024)
+    return S["map_png"]
 
 
 def local_mu_txt(head, gal) -> np.ndarray:
@@ -939,6 +1097,84 @@ def build_app():
                 S["verbalizer"] = load_verbalizer()
             text = describe_state(S["verbalizer"]["mu"], n)
         return {"text": text, "reader": VERB_MODEL}
+
+    @app.get("/map")
+    def map_meta():
+        """The layout and its region names, which the reader wrote itself."""
+        if "map" not in S:
+            S["map"] = load_map()
+        m = S["map"]
+        return {
+            "n_points": int(len(m["xy"])),
+            "n_gallery": m["n_gallery"],
+            "px": MAP_PX,
+            "regions": m["regions"],
+            "reader": VERB_MODEL,
+            "host": MODEL_ID,
+        }
+
+    @app.get("/map.png")
+    def map_image():
+        from fastapi.responses import Response
+
+        if "map" not in S:
+            S["map"] = load_map()
+        return Response(map_png(), media_type="image/png",
+                        headers={"Cache-Control": "public, max-age=86400"})
+
+    @app.post("/map/read")
+    def map_read(req: MapPointReq):
+        """What is at a spot on the map, most of which holds no photograph."""
+        if "map" not in S:
+            S["map"] = load_map()
+        t0 = time.time()
+        with _GenSlot():
+            v = map_vector_at(req.x, req.y)
+            near = map_locate(v)["near"]
+            text = map_say(v, MAP_MAX_TOKENS)
+        return {"text": text, "x": req.x, "y": req.y, "near": near,
+                "read_s": round(time.time() - t0, 2), "reader": VERB_MODEL}
+
+    @app.post("/map/say")
+    def map_say_text(req: SearchReq):
+        """Where a sentence lands, and what the reader says once it is there."""
+        _check_prompt(req.text)
+        if "map" not in S:
+            S["map"] = load_map()
+        t0 = time.time()
+        with _GenSlot():
+            raw = encode_text_local([req.text])[0]
+            v = _project(raw, S["head"]["W_txt"], S["head"]["b_txt"],
+                         S["mu_txt_local"])
+            spot = map_locate(v)
+            text = map_say(v, MAP_MAX_TOKENS)
+        return {**spot, "text": text, "encode_s": round(time.time() - t0, 2),
+                "reader": VERB_MODEL}
+
+    @app.post("/map/locate")
+    def map_locate_image(image: UploadFile = File(...)):
+        """Put your own photograph on the map.
+
+        This is the half only the Lab can do: a live gemma-4-31B reads the
+        picture into the same 1024-d space the gallery was built in, so the
+        marker lands among its neighbours rather than near a caption of it.
+        """
+        if "map" not in S:
+            S["map"] = load_map()
+        img = _read_image(image.file.read())
+        t0 = time.time()
+        with _GenSlot():
+            raw = encode_image_local(img)
+            v = _project(raw, S["head"]["W_img"], S["head"]["b_img"],
+                         S["mu_img_local"])
+            encode_s = round(time.time() - t0, 2)
+            t1 = time.time()
+            spot = map_locate(v)
+            text = map_say(v, MAP_MAX_TOKENS)
+        return {**spot, "text": text, "encode_s": encode_s,
+                "read_s": round(time.time() - t1, 2),
+                "state_dim": int(raw.shape[-1]), "reader": VERB_MODEL,
+                "host": MODEL_ID}
 
     @app.post("/search")
     def search(req: SearchReq):
