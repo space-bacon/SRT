@@ -67,7 +67,7 @@ answer whatever is asked next. The technical name is a hidden state. Think of it
 as the model&rsquo;s private notes on the image, written in its own handwriting,
 and normally thrown away the instant the answer is produced.</p>
 
-<p>That last part is the interesting one. Every time a multimodal model looks at
+<p>Every time a multimodal model looks at
 anything it works out what it is looking at, in enough detail to answer
 questions about it, and then throws that work away. You paid for it. It is gone
 before you could use it for anything else.</p>
@@ -102,8 +102,8 @@ photographs the model saw as similar land near one another, and the sheet
 organises itself. Animals gather in the west, transport in the southwest, sport
 along the north, kitchens and bathrooms down in the southeast.</p>
 
-<p>That shortening step is a single linear layer, which matters more than it
-sounds. A linear map can rotate a space, stretch it and pick out directions
+<p>That shortening step is a single linear layer.
+A linear map can rotate a space, stretch it and pick out directions
 within it. What it cannot do is invent structure that was not already there. So
 the islands came with the notes, and a linear view was enough to find them. The
 flattening onto a screen is ours. The arrangement is the model&rsquo;s.</p>
@@ -218,8 +218,8 @@ particular numbers they were given.</p>
 
 <h3>Level with a human, once you measure it properly</h3>
 
-<p>The obvious comparison is a person. Ours was wrong for a while and it was
-wrong against us, so it is worth showing how.</p>
+<p>The obvious comparison is a person. Ours was wrong for a while, and it was
+wrong against us.</p>
 
 <p>We had been quoting a human caption at median rank 8 against the
 reader&rsquo;s 64 and calling that the gap. That figure is contaminated. The
@@ -248,7 +248,7 @@ above the first person&rsquo;s caption on <strong>49.6%</strong> of them. A
 second person manages <strong>48.0%</strong>. It sits inside the spread between
 two people describing the same picture.</p>
 
-<p>That is the part worth sitting with. A 382&nbsp;MB model, with no vision of
+<p>A 382&nbsp;MB model, with no vision of
 any kind, describing a photograph it cannot see about as well as a person who is
 looking straight at it. Not because it is a good captioner, but because the
 record it was handed already contained the scene.</p>
@@ -265,7 +265,7 @@ per-category detection AUC <strong>0.883</strong> across the 80 categories, and
 per-image recovery of the full annotated object list at <strong>0.543</strong>
 against a 0.038 chance floor, about fourteen times.</p>
 
-<p>That asymmetry is the honest description of the whole instrument. It knows
+<p>It knows
 what is in a scene. It is much weaker on how the scene is arranged. Ask it what
 is there and it is reliable; ask it who is doing what to whom and it is not.</p>
 
@@ -279,7 +279,7 @@ was frozen throughout. The instruments are small trained artifacts that read a
 hidden state the model had already computed, which is why the whole thing fits
 on one desktop.</p>
 
-<p>That is the shape of the thing, and it is the part worth taking away. If you
+<p>If you
 already run a multimodal model, every forward pass already produces this record
 and you are already paying for it. A linear read-out turns it into search,
 tagging and description without a second model in the stack, without a
