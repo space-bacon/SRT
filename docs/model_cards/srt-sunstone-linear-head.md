@@ -84,10 +84,11 @@ Three files here turn the head into an instrument you can stand inside.
 It is served live at [lab.sunstonenorth.com](https://lab.sunstonenorth.com),
 pane 04.
 
-- `space_map.npz`: a two-dimensional projection of all 118,287 COCO
-  train2017 images in this head's 1,024-d space.
-- `space_map_labels.json`: 24 region names, each written by the reader
-  below rather than by us.
+- `space_map.npz`: a two-dimensional layout of 40,000 photographs sampled
+  from the served 123,287-image gallery and positioned by this head's
+  1,024-d space.
+- `space_map_labels.json`: 24 region names covering those 40,000 points,
+  each written by the reader below rather than by us.
 - `sunstone_verbalizer.pt`: a ~36M-parameter prefix (16 soft tokens,
   hidden 2048) that conditions a frozen Qwen3-0.6B on one 1,024-d point
   and has it say what is there. The 0.6B has no vision path and never
@@ -98,9 +99,15 @@ anywhere on the map, including the open water between clusters where no
 photograph exists. The empty gap between the skiing and skateboarding
 regions reads as "A man is doing a trick on a snowboard."
 
+Three pools are in play and they are not interchangeable. The marker is
+positioned among the **40,000** mapped points, a click averages the ~48
+nearest of those, the eight neighbours shown beside the sentence are
+retrieved from all **123,287** gallery images, and the evaluation below
+scores against the **118,287** train2017 subset.
+
 ### Results (`sunstone_verb_eval.json`)
 
-500 held-out points retrieved against the full 118,287 gallery, so
+500 held-out points retrieved against the 118,287 train2017 images, so
 chance is a median rank of 59,143:
 
 | arm | R@1 | R@10 | median rank |

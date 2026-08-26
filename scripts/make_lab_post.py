@@ -57,10 +57,10 @@ def body() -> str:
     return f"""
 <h3>A map of what a 31B has read</h3>
 
-<p>There is a new instrument on the Sunstone North Lab. It is a map of 123,287
-photographs, laid out by how one frozen 31-billion-parameter model read them.
-You can stand anywhere on it, including the empty water where no photograph has
-ever been, and hear what is there.</p>
+<p>There is a new instrument on the Sunstone North Lab. It is a map of 40,000
+photographs drawn from a gallery of 123,287, laid out by how one frozen
+31-billion-parameter model read them. You can stand anywhere on it, including
+the empty water where no photograph has ever been, and hear what is there.</p>
 
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04</p>
@@ -101,23 +101,20 @@ skateboarding island there is a gap. No photograph lives in it. Click it:</p>
        caption="Skiing on one side, skateboarding on the other, and the space "
                "between them is snowboarding. Nobody put that there.")}
 
-<p>It keeps doing this. Every row below is a real click on the border between
-two named regions:</p>
+<p>It keeps doing this. Every panel below is a real click on the midpoint
+between two named regions. Each coordinate is derived from the two region
+centres rather than picked by hand, so the caption under each panel is true by
+construction:</p>
 
-<table>
-<tr><th align="left">between</th><th align="left">the reader says</th></tr>
-<tr><td>skiing &amp; skateboarding</td><td>A man is doing a trick on a snowboard.</td></tr>
-<tr><td>a kite on a beach &amp; a frisbee</td><td>A young boy playing with a frisbee on a beach.</td></tr>
-<tr><td>a living room &amp; a cat on a bed</td><td>A cat sitting on a chair watching a TV.</td></tr>
-<tr><td>a kitchen &amp; a plate of food</td><td>A bowl of fruit and a knife sitting on a table.</td></tr>
-<tr><td>a bathroom &amp; a living room</td><td>A toilet sitting on the side of the street.</td></tr>
-<tr><td>a motorcycle &amp; a cat</td><td>A dog riding on a surfboard on a beach.</td></tr>
-</table>
+{embed("fig_openwater.png",
+       "Eight midpoints between named regions, each read aloud",
+       width=740)}
 
-<p>The last two are the honest ones. A toilet on the side of the street is not a
-photograph anyone took, and a dog on a surfboard is the map blurring rather than
-reasoning. We are showing you those on purpose. Not every midpoint is
-meaningful, and a demo that only shows its wins is selling something.</p>
+<p>Four of those are genuine blends. Three lean to one parent instead of
+combining both, and the motorcycle-and-bus midpoint moves sideways to a parking
+meter. We are showing all eight rather than the four that worked, because not
+every midpoint is meaningful and a demo that only shows its wins is selling
+something.</p>
 
 <h3>Then walk across it</h3>
 
@@ -190,6 +187,10 @@ asked.</p>
 <p>Measured on 500 held-out photographs against a pool of 118,287, so chance is
 a median rank of 59,143:</p>
 
+{embed("fig_ladder.png",
+       "Every arm of the reader evaluation on one log axis, with the chance "
+       "wall marked", width=740)}
+
 <ul>
 <li>The reader&rsquo;s sentence retrieves the picture it was written from at
 <strong>median rank 64</strong>, the top 0.05% of the pool.</li>
@@ -227,12 +228,43 @@ rank 20 of 123,287 against 39. Part of that margin is length. It keeps talking,
 the extra detail about the scene is often right, and a retrieval metric rewards
 saying more true things. We quote it with that caveat attached every time.</p>
 
+<h3>What the map carries, and what it does not</h3>
+
+<p>The head this map is built on was measured against COCO&rsquo;s own
+annotations rather than against a competing caption, so no text prior can reach
+it. It recovers a scene&rsquo;s inventory nearly in full and its arrangement far
+less well: per-category detection AUC <strong>0.883</strong> across the 80 COCO
+categories, and per-image recovery of the full annotated object list at
+<strong>0.543</strong> against a 0.038 chance floor, about fourteen times.</p>
+
+<p>That asymmetry is the honest description of the whole instrument. The map
+knows what is in a scene and is much weaker on how the scene is arranged. When
+you click open water and a coherent sentence comes back, what you are watching
+is inventory arithmetic rather than a model picturing a photograph.</p>
+
+<h3>What we are testing next</h3>
+
+<p>Writing this turned up something we did not expect. The head was fitted on
+one caption per image, the first of COCO&rsquo;s five. That is what contaminated
+the number above, and it raises a second question. A head only ever asked to
+match one description of a scene is never required to keep the rest of it. If
+that is costing the reader, then showing the head all five captions should
+improve what the map can say without changing the reader at all.</p>
+
+<p>That experiment is running as this goes out: same backbone states, same
+images, same split, same reader recipe, with caption coverage the only thing
+that moves. It also holds the evaluation images out of the head&rsquo;s own
+training, which is the thing that should have been true the first time. We will
+publish it either way.</p>
+
 <h3>What you are actually looking at</h3>
 
 <p>The room has 1,024 dimensions. The map is a two-dimensional projection, so
-what you see is neighbourhood structure and the coordinates mean nothing on their
-own. A click reads the average of the roughly forty-eight photographs nearest
-that spot, which in open water is a vector no photograph has.</p>
+what you see is neighbourhood structure and the coordinates mean nothing on
+their own. Three numbers are in play and they are not interchangeable: 40,000
+photographs are laid out on the map, a click reads the average of the roughly
+forty-eight nearest of those, and the eight neighbours shown beside the sentence
+are retrieved from the full 123,287-image gallery.</p>
 
 <p>None of this required retraining the 31B or touching one of its weights. It
 was frozen throughout. The instruments are small trained artifacts that read a

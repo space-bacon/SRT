@@ -243,11 +243,131 @@ def make_blend(out, size=1180):
     print(f"wrote {out}", flush=True)
 
 
+def make_ladder(out, size=1420):
+    """Every arm of the reader evaluation on one log axis.
+
+    A table hides how far apart these are. On a log axis the two control
+    arms sit against the chance wall and the three real arms are crushed
+    into the left margin, which is the actual result.
+    """
+    rows = [
+        ("The image's own first caption", 8, "the head was trained on this pair", True),
+        ("A second human caption of it", 45, "never seen by the head", False),
+        ("The reader, from the point alone", 64, "no photograph, no caption", False),
+        ("Another photograph's point", 55866, "control", False),
+        ("The average of every point", 59135, "control", False),
+    ]
+    POOL, CHANCE = 118287, 59143
+    CAP = 176
+    im = Image.new("RGB", (size, CAP + len(rows) * 96 + 108), IVORY)
+    d = ImageDraw.Draw(im, "RGBA")
+    d.text((54, 46), "WHAT THE READER RECOVERS", font=font(21, 1), fill=TERRA)
+    d.text((52, 76), "Median rank of the right photograph",
+           font=font(44, 2, didot=True), fill=INK)
+    d.text((54, 138), f"in a pool of {POOL:,}. Further left is better.",
+           font=font(21, 2), fill=MUTED)
+
+    x0, x1 = 560, size - 130
+    lg = lambda r: (np.log10(max(r, 1)) / np.log10(POOL))
+
+    # The chance wall: anything landing in here has recovered nothing.
+    cx = x0 + lg(CHANCE) * (x1 - x0)
+    d.rectangle((cx, CAP - 26, x1 + 46, CAP + len(rows) * 96 - 30),
+                fill=(196, 106, 66, 26))
+    d.line((cx, CAP - 26, cx, CAP + len(rows) * 96 - 30), fill=TERRA + (140,), width=2)
+    d.text((cx + 10, CAP - 50), f"CHANCE  {CHANCE:,}", font=font(16, 1), fill=TERRA)
+
+    for i, (label, rank, note, trained) in enumerate(rows):
+        y = CAP + i * 96
+        d.text((54, y - 8), label, font=font(25, 10), fill=INK)
+        d.text((54, y + 26), note, font=font(18, 2),
+               fill=TERRA if trained else MUTED)
+        px = x0 + lg(rank) * (x1 - x0)
+        d.line((x0, y + 8, px, y + 8), fill=INK + (58,), width=3)
+        r = 12
+        d.ellipse((px - r, y + 8 - r, px + r, y + 8 + r),
+                  fill=TERRA if trained else INK,
+                  outline=IVORY, width=3)
+        d.text((px + 24, y - 6), f"{rank:,}", font=font(27, 1),
+               fill=TERRA if trained else INK)
+
+    y = CAP + len(rows) * 96 + 4
+    d.line((54, y, size - 54, y), fill=(226, 216, 205), width=2)
+    d.text((54, y + 20),
+           "The top row is not a human ceiling. The head was fitted on each "
+           "image's first caption, so that arm scores a pair it was trained to "
+           "align.",
+           font=font(19, 2), fill=MUTED)
+    im.save(out, quality=95)
+    print(f"wrote {out}", flush=True)
+
+
+def make_openwater(out, cols=4, cell=400):
+    """Midpoints between named regions, each read aloud.
+
+    Every coordinate here is derived from the two region centres it sits
+    between, so the caption is true by construction. Writing the pairs down
+    from memory produced captions that named the wrong neighbours.
+    """
+    xy, labels = load()
+
+    def find(kw):
+        hits = [r for r in labels if kw.lower() in r["text"].lower()]
+        if not hits:
+            raise SystemExit(f"no region matching {kw!r}")
+        return max(hits, key=lambda r: r["n"])
+
+    pairs = [("skiing", "skiing", "skateboard", "skateboarding"),
+             ("kite", "a kite on a beach", "frisbee", "a frisbee"),
+             ("living room", "a living room", "cat sitting on a bed", "a cat on a bed"),
+             ("kitchen", "a kitchen", "plate of food", "a plate of food"),
+             ("giraffes", "giraffes", "elephants", "elephants"),
+             ("tennis", "tennis", "baseball", "baseball"),
+             ("motorcycle", "a motorcycle", "bus is parked", "a parked bus"),
+             ("jetliner", "a jetliner", "train traveling", "a train")]
+
+    spots = []
+    for ka, na, kb, nb in pairs:
+        a, b = find(ka), find(kb)
+        mx, my = (a["x"] + b["x"]) / 2, (a["y"] + b["y"]) / 2
+        said = read_at(mx, my)
+        spots.append((mx, my, f"between {na} and {nb}", said))
+        print(f"  ({mx:+.2f},{my:+.2f}) {na} + {nb}\n      {a['text']}\n"
+              f"      {b['text']}\n      -> {said}", flush=True)
+
+    rows_n = (len(spots) + cols - 1) // cols
+    CAPH = 128
+    W, H = cols * cell, rows_n * (cell + CAPH) + 116
+    im = Image.new("RGB", (W, H), IVORY)
+    d = ImageDraw.Draw(im, "RGBA")
+    d.text((38, 32), "EIGHT PLACES WITH NO PHOTOGRAPH IN THEM",
+           font=font(20, 1), fill=TERRA)
+    d.text((36, 60), "and what the reader says is there",
+           font=font(36, 2, didot=True), fill=INK)
+
+    base = base_map(xy, cell - 36, 14, dot=1.1, alpha=62)
+    for i, (x, y, where, said) in enumerate(spots):
+        cxp, cyp = (i % cols) * cell, 116 + (i // cols) * (cell + CAPH)
+        im.paste(base, (cxp + 18, cyp))
+        px, py = to_px(x, y, cell - 36, 14)
+        marker(d, cxp + 18 + px, cyp + py, r=8)
+        for k, t in enumerate(wrap(d, where.upper(), font(13, 1), cell - 50)[:2]):
+            d.text((cxp + 20, cyp + cell - 42 + k * 17), t,
+                   font=font(13, 1), fill=TERRA)
+        for k, t in enumerate(wrap(d, said, font(19, 10), cell - 52)[:3]):
+            d.text((cxp + 20, cyp + cell + 2 + k * 25), t,
+                   font=font(19, 10), fill=INK)
+    im.save(out, quality=95)
+    print(f"wrote {out}", flush=True)
+
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--walk", action="store_true")
     p.add_argument("--poster", action="store_true")
     p.add_argument("--blend", action="store_true")
+    p.add_argument("--ladder", action="store_true")
+    p.add_argument("--openwater", action="store_true")
     p.add_argument("--outdir", default="artifacts/marketing/lab_map_post")
     a = p.parse_args()
     if a.walk:
@@ -256,3 +376,7 @@ if __name__ == "__main__":
         make_poster(f"{a.outdir}/fig_poster.png")
     if a.blend:
         make_blend(f"{a.outdir}/fig_blend.png")
+    if a.ladder:
+        make_ladder(f"{a.outdir}/fig_ladder.png")
+    if a.openwater:
+        make_openwater(f"{a.outdir}/fig_openwater.png")
