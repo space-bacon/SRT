@@ -89,7 +89,7 @@ still answers questions today. Compute once, read for as long as you like.</p>
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04. The whole thing is served from one desktop computer.</p>
 
-<h3>The shape was already in the notes</h3>
+<h3>The notes sort themselves</h3>
 
 <p>What follows is a map, and the map is a demonstration rather than the
 product. What it demonstrates is that the discarded record is rich enough to
@@ -105,7 +105,7 @@ along the north, kitchens and bathrooms down in the southeast.</p>
 
 <p>That shortening step is a single linear layer.
 A linear map can rotate a space, stretch it and pick out directions
-within it. What it cannot do is invent structure that was not already there. So
+within it. What it cannot do is invent structure the notes did not contain. So
 the islands came with the notes, and a linear view was enough to find them. The
 flattening onto a screen is ours. The arrangement is the model&rsquo;s.</p>
 
@@ -115,7 +115,7 @@ flattening onto a screen is ours. The arrangement is the model&rsquo;s.</p>
        caption="Every dot is a photograph, sitting where the model&rsquo;s "
                "reading of it put it.")}
 
-<h3>The reader named the regions too</h3>
+<h3>The reader named the regions</h3>
 
 <p>Every label on that map was written by the same small reader. We handed it
 the centre of each of the 24 regions and printed what came back. The names you
@@ -277,7 +277,7 @@ are retrieved from the full 123,287-image gallery.</p>
 
 <p>None of this required retraining the 31B or touching one of its weights. It
 was frozen throughout. The instruments are small trained artifacts that read a
-hidden state the model had already computed, which is why the whole thing fits
+hidden state the model computed anyway, which is why the whole thing fits
 on one desktop.</p>
 
 <p>If you
