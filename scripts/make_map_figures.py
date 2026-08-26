@@ -179,10 +179,20 @@ def make_poster(out, size=1500, pad=54):
 
 
 def make_blend(out, size=1180):
-    """Two islands and the empty gap between them, read aloud.
+    """Skiing, the skiing/skateboard midpoint, and skateboarding.
 
-    The clearest single frame in the instrument: skiing on one side,
-    skateboarding on the other, and no photograph at all in between.
+    RETIRED, and do not restore it without re-measuring. This was published as
+    a blend of two regions reading as a third thing with no photograph in it.
+    That was false. All eight gallery photographs nearest the midpoint are
+    snowboarding shots, the nearest at cos 0.9242 captioned "A person a
+    snowboard in the air doing a trick". The midpoint reads as snowboarding
+    because snowboarding photographs are sitting there. It was retrieval.
+
+    Three things made it look otherwise: the 24 region labels include no
+    snowboarding label, the UMAP projection has a hole at that coordinate so
+    the nearest plotted dot is 0.094 away, and the returned sentence was
+    correct. Emptiness is a measurement in the 1024-d space, never something
+    you can see in a 2-d projection. See probe_open_water.py.
     """
     xy, labels = load()
     a = next(r for r in labels if "skiing" in r["text"])

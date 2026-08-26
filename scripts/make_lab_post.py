@@ -106,7 +106,7 @@ along the north, kitchens and bathrooms down in the southeast.</p>
 <p>That shortening step is a single linear layer.
 A linear map can rotate a space, stretch it and pick out directions
 within it. What it cannot do is invent structure the notes did not contain. So
-the islands came with the notes, and a linear view was enough to find them. The
+the regions came with the notes, and a linear view was enough to find them. The
 flattening onto a screen is ours. The arrangement is the model&rsquo;s.</p>
 
 {embed("fig_poster.png",
@@ -126,7 +126,7 @@ months after the big model made the notes and on a different computer.</p>
 
 <p>Touch any point and the instrument
 averages the number-lists of the 48 nearest photographs and hands that average
-to the reader, so a point between two islands returns a sentence for a place
+to the reader, so a point between two regions returns a sentence for a place
 rather than for a picture. Here are eight of them, each one the midpoint
 between two named regions:</p>
 
@@ -142,15 +142,15 @@ between two named regions:</p>
                "the gallery is weaker than 60% of photographs manage with their "
                "own nearest neighbour.")}
 
-<h3>A straight line from bathroom to giraffe</h3>
+<h3>Six stops on a line across the map</h3>
 
-<p>If any point can be read, so can every point along a line between two of
-them. This is a straight line from the bathroom island to the giraffe island,
-sampled six times:</p>
+<p>If any point can be read, so can every point on a line drawn between two of
+them. This line runs from the bathroom region in the southeast to the giraffe
+region in the west, read at six evenly spaced stops along the way:</p>
 
 {embed("fig_walk.gif",
-       "Six stops along a straight line from the bathroom island to the giraffe "
-       "island, each with the sentence it returns",
+       "Six stops along a line across the map, from the bathroom region to the "
+       "giraffe region, each with the sentence it returns",
        caption="Domestic interior, to rail, to road, to water, to wildlife. Six "
                "coherent scenes, four of them nowhere near either end.")}
 
