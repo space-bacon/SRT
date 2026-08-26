@@ -1,0 +1,55 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 1000,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.12,
+   "r@5": 0.24,
+   "r@10": 0.35,
+   "median_rank": 25.0,
+   "sample": [
+    "A living room with a television, coffee table, and a dining table. The floor is covered with yellow tiles. The",
+    "A brown bear standing in a grassy field. The bear is looking at the camera. The bear is sitting in the",
+    "A bedroom with a bed, a desk, and a window. A bookshelf is in the corner. A window is",
+    "A stop sign sitting on a street corner. The street is empty. The sign is in the middle of the street.",
+    "A group of teddy bears sitting on a table. The bears are all wearing the same color. The bears are all"
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 62970.5,
+   "sample": [
+    "A cat laying on a laptop on a desk. The laptop is on a table. The cat is on the desk.",
+    "A living room with a television, coffee table, and a dining table. The floor is covered with yellow tiles. The",
+    "A brown bear standing in a grassy field. The bear is looking at the camera. The bear is sitting in the",
+    "A bedroom with a bed, a desk, and a window. A bookshelf is in the corner. A window is",
+    "A stop sign sitting on a street corner. The street is empty. The sign is in the middle of the street."
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 59407.5,
+   "sample": [
+    "A man is sitting on a bench near a bike. The bike is parked. The man is wearing a hat. The",
+    "A man is sitting on a bench near a bike. The bike is parked. The man is wearing a hat. The",
+    "A man is sitting on a bench near a bike. The bike is parked. The man is wearing a hat. The",
+    "A man is sitting on a bench near a bike. The bike is parked. The man is wearing a hat. The",
+    "A man is sitting on a bench near a bike. The bike is parked. The man is wearing a hat. The"
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.101,
+   "r@5": 0.238,
+   "r@10": 0.327,
+   "median_rank": 39.0
+  }
+ },
+ "epochs": 3,
+ "gold_note": "gold is captions[0], ONE human reference per image, not best-of-5. The generated captions win by enumerating whole-scene inventory redundantly, which is the register this head reads best (detection AUC 0.883 over 80 COCO categories); the human references often foreground arrangement or oddity (\"a woman stands\", \"mounted upside-down\"), which the head is documented not to recover. This is a retrieval result in one instrument, NOT a claim that the model captions images better than people."
+}
