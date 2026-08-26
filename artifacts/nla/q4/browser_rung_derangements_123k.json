@@ -1,0 +1,112 @@
+{
+ "anchors": {
+  "bytes": 4096,
+  "n": 200,
+  "source": "drawn from training-split images, disjoint from the eval gallery"
+ },
+ "captions": 5001,
+ "derangement_note": "the *_mismatched rows are ONE deterministic pairing (jump half the caption list, walk until the image differs), which proves the pairing is valid but not that its floor is typical. The *_spread rows are independent random derangements, same queries and same gallery, each verified to leave no caption on its own photograph. Analytic chance over this gallery is (123287+1)/2 = 61,644 and the standard error of a median over 5,001 draws is N/(2*sqrt(n)) = 872.",
+ "encode_rate_per_s": 14.9,
+ "gallery": 123287,
+ "mismatched_note": "each caption scored against a DIFFERENT photograph: same queries, same gallery, pairing broken. This is the empirical floor for this query distribution, which analytic chance cannot supply when the queries are collapsed. Rolling by one position does NOT work here: COCO gives five captions per image and the replay is grouped by image, so caps[i+1] is the same photo 80% of the time.",
+ "question": "does a read-out head survive a change of runtime, and does the anchor close the gap",
+ "reference_runtime": "pytorch fp16 Qwen3-0.6B L28",
+ "t2i": {
+  "candle_q4_as_is": {
+   "median_rank": 44578.0,
+   "r@1": 0.0,
+   "r@10": 0.0001999600079984003,
+   "r@5": 0.0
+  },
+  "candle_q4_as_is_mismatched": {
+   "median_rank": 64481.0,
+   "r@1": 0.0,
+   "r@10": 0.0,
+   "r@5": 0.0
+  },
+  "candle_q4_as_is_mismatched_spread": {
+   "max_r@1_over_derangements": 0.0,
+   "median_max": 65733.0,
+   "median_mean": 65087.6,
+   "median_min": 64408.0,
+   "median_sd": 363.6,
+   "medians": [
+    64471.0,
+    65370.0,
+    65466.0,
+    65487.0,
+    64925.0,
+    64805.0,
+    64609.0,
+    65193.0,
+    65174.0,
+    64408.0,
+    64805.0,
+    64903.0,
+    64704.0,
+    65089.0,
+    65039.0,
+    65359.0,
+    65733.0,
+    65485.0,
+    65393.0,
+    65333.0
+   ],
+   "n": 20
+  },
+  "candle_q4_recalibrated": {
+   "median_rank": 176.0,
+   "r@1": 0.03499300139972006,
+   "r@10": 0.15176964607078583,
+   "r@5": 0.10617876424715057
+  },
+  "candle_q4_recalibrated_mismatched": {
+   "median_rank": 59071.0,
+   "r@1": 0.0,
+   "r@10": 0.0,
+   "r@5": 0.0
+  },
+  "candle_q4_recalibrated_mismatched_spread": {
+   "max_r@1_over_derangements": 0.0001999600079984003,
+   "median_max": 62719.0,
+   "median_mean": 61717.8,
+   "median_min": 60646.0,
+   "median_sd": 593.4,
+   "medians": [
+    61886.0,
+    62587.0,
+    62300.0,
+    62205.0,
+    61836.0,
+    62719.0,
+    61819.0,
+    62229.0,
+    61007.0,
+    61711.0,
+    60646.0,
+    61395.0,
+    60915.0,
+    61357.0,
+    62309.0,
+    61178.0,
+    61972.0,
+    62165.0,
+    60847.0,
+    61272.0
+   ],
+   "n": 20
+  },
+  "pytorch_fp16": {
+   "r@1": 0.1092,
+   "r@10": 0.3307,
+   "r@5": 0.2442
+  }
+ },
+ "tap_layer": 28,
+ "test_runtime": "Qwen3-0.6B Q4_0 (gguf, 28 layers, hidden 1024)",
+ "supersedes": {
+  "file": "browser_rung_mismatched_123k.json",
+  "what_was_wrong": "its floors are a SINGLE deterministic pairing. The as-is floor 64,481 survives (-1.67 SD of a 20-derangement mean of 65,088), but the anchored floor 59,071 does not: it sits outside the entire range of twenty (60,646..62,719), 4.46 SD below a mean of 61,718."
+ },
+ "floor_is_not_a_gallery_draw": "replay_123k.json holds 5,001 captions over 1,000 distinct images at gallery rows 122,287-123,286, the last 1,000 of the index. Every mismatched pairing permutes caps[].gold, so every floor draws from that fixed 1,000-image pool rather than from the 123,287 gallery. The floor therefore measures how an arm ranks the val2017 pool, which is arm-dependent, and analytic chance over the whole gallery (61,644) is not its reference. It also explains why the observed spreads (364, 593) are tighter than the uniform-draw SE of 872: across derangements the same 1,000 images reshuffle among the same 5,001 queries."
+}
