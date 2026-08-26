@@ -438,7 +438,11 @@ def describe_state(v: np.ndarray, max_tokens: int) -> str:
                                       device=VERB_DEVICE),
             max_new_tokens=max_tokens, do_sample=False,
             pad_token_id=vb["tok"].eos_token_id)
-    return vb["tok"].decode(out[0], skip_special_tokens=True).strip()
+    text = vb["tok"].decode(out[0], skip_special_tokens=True).strip()
+    # The token budget usually lands mid-clause; show whole sentences rather
+    # than a trailing fragment. Display only, nothing is re-ranked or rewritten.
+    cut = text.rfind(".")
+    return text[: cut + 1] if cut > 0 else text
 
 
 def local_mu_txt(head, gal) -> np.ndarray:
@@ -920,6 +924,21 @@ def build_app():
             "state_dim": int(v.shape[-1]),
             "tap_layer": TAP_LAYER,
         }
+
+    @app.get("/describe_baseline")
+    def describe_baseline(max_tokens: int = 32):
+        """What the reader says when handed no record: the training mean.
+
+        The control for /describe. Centred, this vector is the origin, so the
+        sentence carries the caption prior and nothing about any photograph.
+        If it reads like a real description, the panel beside it means nothing.
+        """
+        n = max(8, min(int(max_tokens), VERB_MAX_TOKENS))
+        with _GenSlot():
+            if "verbalizer" not in S:
+                S["verbalizer"] = load_verbalizer()
+            text = describe_state(S["verbalizer"]["mu"], n)
+        return {"text": text, "reader": VERB_MODEL}
 
     @app.post("/search")
     def search(req: SearchReq):
