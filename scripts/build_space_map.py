@@ -29,6 +29,9 @@ from train_shared_space_verbalizer import Prefix  # noqa: E402
 def parse():
     p = argparse.ArgumentParser()
     p.add_argument("--index", default="artifacts/local/browser/gallery_123k_v3.srtidx")
+    p.add_argument("--npz", default=None,
+                   help="gallery_full.npz (Z_img) instead of a .srtidx; this is "
+                        "the form the Lab's own gallery is stored in")
     p.add_argument("--ckpt", default="checkpoints/fullstate_verbalizer/gallery_verbalizer.pt")
     p.add_argument("--model", default="Qwen/Qwen3-0.6B")
     p.add_argument("--n", type=int, default=40000, help="points to lay out")
@@ -45,7 +48,11 @@ def main():
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     a = parse()
-    gal, keys = load_index(a.index)
+    if a.npz:
+        z = np.load(a.npz, allow_pickle=True)
+        gal = z["Z_img"].astype(np.float32)
+    else:
+        gal, _ = load_index(a.index)
     rng = np.random.default_rng(a.seed)
     sel = rng.choice(len(gal), min(a.n, len(gal)), replace=False)
     sel.sort()
