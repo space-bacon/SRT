@@ -34,10 +34,12 @@
 mod axis;
 mod head;
 mod index;
+mod verbalizer;
 
 pub use axis::{Axis, DEFAULT_ALPHA};
 pub use head::{Head, Modality};
 pub use index::{Index, Precision};
+pub use verbalizer::Verbalizer;
 
 use std::fmt;
 

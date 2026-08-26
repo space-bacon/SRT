@@ -124,6 +124,51 @@ impl Index {
         Ok(())
     }
 
+    /// The stored vector for one row, dequantized and unit-normalized as
+    /// `add` left it.
+    ///
+    /// A deployment that already holds the index holds a record for every item
+    /// in it, so anything that reads records, a verbalizer for instance, needs
+    /// no further download.
+    pub fn row(&self, row: usize) -> Option<Vec<f32>> {
+        if row >= self.keys.len() {
+            return None;
+        }
+        let mut v = match &self.store {
+            Store::F16(d) => d[row * self.dim..(row + 1) * self.dim]
+                .iter()
+                .map(|x| x.to_f32())
+                .collect::<Vec<f32>>(),
+            Store::Int8 { data, scale } => data[row * self.dim..(row + 1) * self.dim]
+                .iter()
+                .map(|x| *x as f32 * scale[row])
+                .collect::<Vec<f32>>(),
+        };
+        crate::normalize(&mut v);
+        Some(v)
+    }
+
+    /// Element-wise mean of every stored vector, normalized.
+    ///
+    /// The control for a verbalizer: what a reader says when handed the
+    /// average of all records rather than any one of them.
+    pub fn mean_row(&self) -> Vec<f32> {
+        let mut acc = vec![0f32; self.dim];
+        for i in 0..self.keys.len() {
+            if let Some(v) = self.row(i) {
+                for (a, x) in acc.iter_mut().zip(&v) {
+                    *a += *x;
+                }
+            }
+        }
+        let n = self.keys.len().max(1) as f32;
+        for a in acc.iter_mut() {
+            *a /= n;
+        }
+        crate::normalize(&mut acc);
+        acc
+    }
+
     fn row_score(&self, i: usize, query: &[f32]) -> f32 {
         match &self.store {
             Store::F16(v) => {

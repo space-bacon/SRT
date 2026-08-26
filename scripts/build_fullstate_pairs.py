@@ -1,18 +1,22 @@
 #!/usr/bin/env python
-"""Assemble raw large-model image states and their COCO captions.
+"""Assemble large-model image records and their COCO captions.
 
-Two sources, both already published, so neither costs a re-encode:
+Three sources, none of which costs a re-encode:
 
     gemma31b  procrustes/train_pairs/chunk_*.pt, gemma-4-31B layer-47, 5376-d
     qwen38    raw118k/shard*_chunk*.npz, Qwen3.8-27B, 5120-d
+    gallery   the shipped .srtidx itself, 1024-d
 
-The qwen38 states are the ones that built the shipped 123,287-image gallery, so
-a verbalizer trained on them is scored by the same model family that indexed
-the photographs. The chunks carry the caption's STATE but not its words, so
-caption text comes from the COCO annotations, joined on file basename.
+The first two are raw hidden states. The third is the head's projection of
+them, which is what the browser already holds for all 123,287 images: reading
+it costs no extra download, so every image in the gallery becomes describable
+rather than a curated handful. It is a lossy summary of the raw state, so it
+is a narrower claim, and the vectors are dequantized from int8 and L2
+normalized here exactly as the runtime does it, because a verbalizer trained
+on a different representation than it is served would silently underperform.
 
-Output is the pair of files the verbalizer trainer reads, so the only thing
-that changes downstream is the width of the vector.
+The chunks carry the caption's STATE but not its words, so caption text comes
+from the COCO annotations, joined on file basename.
 """
 from __future__ import annotations
 
@@ -27,9 +31,11 @@ import torch
 
 def parse():
     p = argparse.ArgumentParser()
-    p.add_argument("--source", choices=("gemma31b", "qwen38"), default="gemma31b")
+    p.add_argument("--source", choices=("gemma31b", "qwen38", "gallery"), default="gemma31b")
     p.add_argument("--repo", default=None)
     p.add_argument("--chunks", type=int, default=24)
+    p.add_argument("--index", default="/root/gallery_123k_v3.srtidx")
+    p.add_argument("--key-prefix", default="train2017/")
     p.add_argument("--cache", default="/root/.hf_home")
     p.add_argument("--coco", default="/root/annotations/captions_train2017.json")
     p.add_argument("--out-vecs", default="/root/full_img_vecs.npy")
@@ -40,6 +46,19 @@ def parse():
 def iter_chunks(a):
     """Yield (label, states, filenames) per published chunk."""
     from huggingface_hub import hf_hub_download
+
+    if a.source == "gallery":
+        import sys
+        from pathlib import Path as _P
+        sys.path.insert(0, str(_P(__file__).resolve().parent))
+        from eval_shared_space_verbalizer import load_index
+
+        gal, pos = load_index(a.index)      # already dequantized and normalized
+        rows = [(k, i) for k, i in pos.items() if k.startswith(a.key_prefix)]
+        rows.sort(key=lambda kv: kv[1])
+        idx = np.array([i for _, i in rows])
+        yield a.index, gal[idx], [k.split("/", 1)[1] for k, _ in rows]
+        return
 
     if a.source == "gemma31b":
         repo = a.repo or "RiverRider/srt-nla-gemma4-artifacts"
