@@ -98,16 +98,25 @@ with plausible scores that are simply the wrong images.
 Measured on **the head and gallery that ship**, mean-pooled as the browser
 pools, 5,001 val captions against all 123,287 images:
 
-| runtime | t2i R@1 | R@5 | R@10 |
-|---|---|---|---|
-| PyTorch fp16 (reference) | 0.1092 | 0.2442 | 0.3307 |
-| candle Q4\_0, head as-is | **0.0000** | 0.0000 | 0.0002 |
-| candle Q4\_0, + 4 KB anchor | **0.0350** | 0.1062 | 0.1518 |
+| runtime | t2i R@1 | R@5 | R@10 | median rank |
+|---|---|---|---|---|
+| PyTorch fp16 (reference) | 0.1092 | 0.2442 | 0.3307 | 36 |
+| candle Q4\_0, head as-is | **0.0000** | 0.0000 | 0.0002 | 44,578 |
+| candle Q4\_0, + 4 KB anchor | **0.0350** | 0.1062 | 0.1518 | **176** |
 
-Without the anchor the read-out is at zero: not degraded, gone. The 4,096-byte
-mean vector measured on 200 held-out sentences takes it to **32% of the fp16
-reference**. That is the number to plan a port around, and it is much less than
-the 85% this card previously advertised.
+Without the anchor the read-out is at zero: not degraded, gone. Chance median
+over this gallery is about 61,644, and the unanchored arm sits at 44,578, so it
+is at chance by median as well as by recall. The 4,096-byte mean vector measured
+on 200 held-out sentences takes it to **32% of the fp16 reference** at R@1.
+That is the number to plan a port around, and it is much less than the 85% this
+card previously advertised.
+
+Read the median column alongside it, because R@1 alone is harsh on this arm.
+After recalibration the median correct image sits at 176 of 123,287, the top
+0.14% of the gallery. The anchored Q4 read-out usually puts the right photo
+near the top; it is just rarely first. Whether that is usable depends entirely
+on the product: it is weak for "I feel lucky" and perfectly serviceable behind
+a grid of results or a reranker.
 
 That 85% (0.2300 → 0.0154 → 0.1952) was real but was measured on an earlier
 4,000-image head against a 1,000-image pool, and it was published here as
