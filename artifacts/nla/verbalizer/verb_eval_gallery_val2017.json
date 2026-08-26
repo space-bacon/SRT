@@ -1,0 +1,56 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 1000,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.161,
+   "r@5": 0.331,
+   "r@10": 0.423,
+   "median_rank": 18.0,
+   "sample": [
+    "A living room with a television and a table. A person is sitting on the table. A person is standing in front",
+    "A brown bear standing in the grass. He has a big smile. He is looking at the camera. He is a",
+    "A bedroom with a bed, a desk, and a window. A tree is in the window. A book is on",
+    "A stop sign on a street corner with a tree in the background. A car is parked in front of the stop sign",
+    "A group of teddy bears sitting together. One is wearing a hat. Another is wearing a scarf. The third is"
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 64085.0,
+   "sample": [
+    "A cat laying on a laptop computer on a desk.  The laptop is on a desk.  The cat is on",
+    "A living room with a television and a table. A person is sitting on the table. A person is standing in front",
+    "A brown bear standing in the grass. He has a big smile. He is looking at the camera. He is a",
+    "A bedroom with a bed, a desk, and a window. A tree is in the window. A book is on",
+    "A stop sign on a street corner with a tree in the background. A car is parked in front of the stop sign"
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 61977.5,
+   "sample": [
+    "A man sitting on a bench with a bike in the background. A couple of people are standing in the background. A",
+    "A man sitting on a bench with a bike in the background. A couple of people are standing in the background. A",
+    "A man sitting on a bench with a bike in the background. A couple of people are standing in the background. A",
+    "A man sitting on a bench with a bike in the background. A couple of people are standing in the background. A",
+    "A man sitting on a bench with a bike in the background. A couple of people are standing in the background. A"
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.101,
+   "r@5": 0.238,
+   "r@10": 0.327,
+   "median_rank": 39.0
+  }
+ },
+ "input": "the shipped gallery vector (1024-d, dequantized int8, L2 normalized)",
+ "epochs": 3,
+ "comparability_warning": "NOT comparable to the raw-state runs (median 20 and 25). Here the verbalizer reads the gallery row itself, which is also the retrieval target, so the input contains the answer more directly than a raw hidden state does and the median is a weaker measure of description quality. The controls still discriminate and training was cross-entropy on captions rather than on retrieval, so the reading is real; but this number belongs to the browser demo, where whole-gallery coverage costs no extra download, and NOT in a table beside the raw-state results."
+}
