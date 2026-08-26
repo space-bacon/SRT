@@ -55,19 +55,43 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>A map of what a 31B has read</h3>
+<h3>The empty water has names</h3>
 
-<p>There is a new instrument on the Sunstone North Lab. It is a map of 40,000
-photographs drawn from a gallery of 123,287, laid out by how one frozen
-31-billion-parameter model read them. You can stand anywhere on it, including
-the empty water where no photograph has ever been, and it will write you a
-sentence.</p>
+<p><em>A map of 40,000 photographs, laid out by how one frozen
+31-billion-parameter model read them. The interesting part is the water between
+the islands.</em></p>
+
+<p>Between the skiing photographs and the skateboarding photographs there is a
+gap. No photograph has ever been in it. We clicked it anyway, and a frozen
+382&nbsp;MB model that has never seen a picture in its life wrote back:</p>
+
+<blockquote><p>A man is doing a trick on a snowboard.</p></blockquote>
+
+<p>Nobody put snowboarding there. It is where the arithmetic of the other two
+puts it.</p>
+
+{embed("fig_blend.png",
+       "Zoomed: the skiing island, the skateboarding island, and the empty "
+       "midpoint between them, which reads as snowboarding")}
+
+{embed("lab_05_border.png",
+       "The same click in the Lab: the reader writes snowboarding",
+       caption="The same click in the Lab, live under pane 04 at "
+               "lab.sunstonenorth.com.")}
+
+<h3>What you are standing on</h3>
+
+<p>The map holds 40,000 photographs drawn from a gallery of 123,287, positioned
+by how the big model read them rather than by any tag, caption or category. You
+can stand anywhere on it, including everywhere no photograph has ever been, and
+it will write you a sentence.</p>
 
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04</p>
 
 {embed("fig_poster.png",
-       "The map: 123,287 photographs in two dimensions, region names written by the reader",
+       "The map: 40,000 photographs of a 123,287-image gallery in two "
+       "dimensions, region names written by the reader",
        caption="Every dot is a photograph. Animals to the west, transport to the "
                "southwest, sport along the north, domestic interiors down the "
                "southeast. Nothing arranged that. It is where the photographs fell.")}
@@ -84,28 +108,16 @@ different machine.</p>
        "The map instrument running in the Lab, pane 04",
        caption="The same map inside the Lab, live.")}
 
-<h3>Now click where there is nothing</h3>
+<h3>It keeps doing this</h3>
 
-<p>Most of the map is empty. The islands are where photographs cluster and the
-space between them holds none at all. Click there anyway and the reader still
-answers, because a point in that space is a scene rather than a picture.</p>
+<p>The snowboard was not a lucky click. Most of the map is empty: the islands
+are where photographs cluster and the space between them holds none at all.
+Click there anyway and the reader still answers, because a point in that space
+is a scene rather than a picture.</p>
 
-<p>Here is the one that made us stop. Between the skiing island and the
-skateboarding island there is a gap. No photograph lives in it. Click it:</p>
-
-{embed("fig_blend.png",
-       "Zoomed: the skiing island, the skateboarding island, and the empty "
-       "midpoint between them, which reads as snowboarding")}
-
-{embed("lab_05_border.png",
-       "The same click in the Lab: the reader writes snowboarding",
-       caption="Skiing on one side, skateboarding on the other, and the space "
-               "between them is snowboarding. Nobody put that there.")}
-
-<p>It keeps doing this. Every panel below is a real click on the midpoint
-between two named regions. Each coordinate is derived from the two region
-centres rather than picked by hand, so the caption under each panel is true by
-construction:</p>
+<p>Every panel below is a real click on the midpoint between two named regions.
+Each coordinate is derived from the two region centres rather than picked by
+hand, so the caption under each panel is true by construction:</p>
 
 {embed("fig_openwater.png",
        "Eight midpoints between named regions, each with the sentence it returns",
@@ -243,6 +255,19 @@ knows what is in a scene and is much weaker on how the scene is arranged. When
 you click open water and a coherent sentence comes back, what you are watching
 is inventory arithmetic rather than a model picturing a photograph.</p>
 
+<h3>What you are actually looking at</h3>
+
+<p>The room has 1,024 dimensions. The map is a two-dimensional projection, so
+what you see is neighbourhood structure and the coordinates mean nothing on
+their own. Three numbers are in play and they are not interchangeable: 40,000
+photographs are laid out on the map, a click reads the average of the roughly
+forty-eight nearest of those, and the eight neighbours shown beside the sentence
+are retrieved from the full 123,287-image gallery.</p>
+
+<p>None of this required retraining the 31B or touching one of its weights. It
+was frozen throughout. The instruments are small trained artifacts that read a
+hidden state the model had already computed.</p>
+
 <h3>What we are testing next</h3>
 
 <p>Writing this turned up something we did not expect. The head was fitted on
@@ -257,19 +282,6 @@ images, same split, same reader recipe, with caption coverage the only thing
 that moves. It also holds the evaluation images out of the head&rsquo;s own
 training, which is the thing that should have been true the first time. We will
 publish it either way.</p>
-
-<h3>What you are actually looking at</h3>
-
-<p>The room has 1,024 dimensions. The map is a two-dimensional projection, so
-what you see is neighbourhood structure and the coordinates mean nothing on
-their own. Three numbers are in play and they are not interchangeable: 40,000
-photographs are laid out on the map, a click reads the average of the roughly
-forty-eight nearest of those, and the eight neighbours shown beside the sentence
-are retrieved from the full 123,287-image gallery.</p>
-
-<p>None of this required retraining the 31B or touching one of its weights. It
-was frozen throughout. The instruments are small trained artifacts that read a
-hidden state the model had already computed.</p>
 
 <h3>Press the buttons</h3>
 
