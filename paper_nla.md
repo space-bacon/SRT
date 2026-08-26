@@ -1838,6 +1838,72 @@ checkpoints at `RiverRider/srt-nla-av-gemma4` (`base_ce/`).
 
 ---
 
+## 11.8 A 0.6B verbalizes a 31B's raw state, scored by an index it did not build
+
+Every verbalizer in this paper so far reads a state produced by its own
+backbone. That design answers whether a model can report its own interior,
+but it leaves the more useful question untouched: can a *small* model put
+words to a *large* model's reading? We test it directly, and we score it
+with an instrument that shares no weights with either model.
+
+The reader is a frozen Qwen3-0.6B. The only trained parameters are a prefix
+MLP, roughly 44.5M, mapping one raw gemma-4-31B layer-47 image state at full
+width ($d = 5376$) to sixteen soft tokens in the 0.6B's embedding space.
+Training is cross-entropy on COCO captions for 118,287 train2017 images,
+591,753 captions, three epochs. Nothing about the photograph reaches the 0.6B
+except through that single vector, which the 31B produced and which the 0.6B
+has never had an image with which to make.
+
+Scoring deliberately avoids the model's own space. We generate a caption from
+a held-out state, re-encode it with the shipped browser text head (Qwen3-0.6B
+layer 28, mean-pooled), and retrieve against the full 123,287-image gallery.
+That gallery was built by a *Qwen3.8-27B* image tower. The state being
+verbalized and the index doing the scoring therefore come from unrelated
+models, so no shared representation can carry the result: the sentence has to
+be genuinely descriptive to find the photograph.
+
+Measured on the 5,000 val2017 images, which are held out of both head training
+and verbalizer training:
+
+| arm | R@1 | median rank |
+|---|---|---|
+| the image's own state, 3 epochs | 0.120 | **25** |
+| the image's own state, 1 epoch | 0.084 | 45 |
+| a human reference caption | 0.101 | 39 |
+| another image's state | 0.000 | 62,970 |
+| the mean state | 0.000 | 59,408 |
+
+Chance median over this gallery is about 61,644, so both controls sit at
+chance. The controls are the result. The foreign arm is the real arm's vectors
+rolled by one position, and it returns the real arm's captions rolled by one
+position, which is what it looks like when words track the vector rather than
+a learned prior over captions. The mean arm emits a single sentence for every
+input, which is what zero information looks like.
+
+The trained reader passes the human reference caption, and the reason is worth
+stating plainly because the headline invites a stronger reading than the
+evidence supports. This is not better captioning. It is a register match. The
+generated sentences enumerate whole-scene inventory redundantly, which is what
+this head recovers well (§11.6.4: detection AUC $0.883$ across eighty COCO
+categories, arrangement essentially unrecovered). The human references keep
+foregrounding arrangement and oddity, "a woman stands in the dining area",
+"a stop sign mounted upside-down on its post", which is exactly the
+information the head is documented not to carry. The humans encode more; the
+instrument reads less of it. The comparison is also against one reference
+caption rather than the best of five. What the result does establish is that
+a 382MB model can put words to a 31B's internal state specific enough to
+identify the photograph among 123,287 candidates, at a median rank of 25.
+
+Artifacts: `artifacts/nla/verbalizer/verb_eval_{full,val2017,val2017_3ep}.json`;
+scripts `build_fullstate_pairs.py`, `train_shared_space_verbalizer.py`,
+`eval_shared_space_verbalizer.py`. The raw states required no re-encode: they
+are published at `RiverRider/srt-nla-gemma4-artifacts` (`procrustes/train_pairs/`)
+and, for the 27B, at `RiverRider/srt-qwen38-coco-states` (`raw118k/`). The
+matched-backbone run, verbalizing the same 27B states that built the gallery,
+is in flight at the time of writing.
+
+---
+
 ## 12. NLA as Stage 4 of the SRT program
 
 We now connect Stage 4 explicitly to Stages 1–3 (Lancaster, 2025;

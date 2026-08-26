@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **A 0.6B verbalizes a 31B's raw internal state** (`paper_nla.md` §11.8). A
+  frozen Qwen3-0.6B with a 44.5M prefix MLP reads one raw gemma-4-31B L47 image
+  state (d=5376) and writes a caption; re-encoding that caption through the
+  shipped browser head retrieves the correct photograph from all 123,287 images
+  at **median rank 25** (R@1 0.120), past the single human reference caption
+  (median 39). Controls sit at chance: another image's state 62,970, the mean
+  state 59,408. The gallery was built by an unrelated Qwen3.8-27B tower, so no
+  shared representation carries the result. The win over the human caption is a
+  register effect, not caption quality: the model enumerates whole-scene
+  inventory, which this head reads well, while the human references foreground
+  arrangement, which it does not recover. Raw states needed no re-encode.
+  Scripts: `build_fullstate_pairs.py`, `train_shared_space_verbalizer.py`,
+  `eval_shared_space_verbalizer.py`; artifacts `artifacts/nla/verbalizer/`.
+- **Median rank for the anchored Q4 browser arm at deployment scale**
+  (`artifacts/nla/q4/cross_runtime_browser_rung_123k.json`). The measurement
+  promised in public review: fp16 reference median 36, Q4 head as-is 44,578
+  (chance ~61,644), Q4 plus the 4KB anchor **176**, the top 0.14% of the
+  gallery. R@1 recovery of 32% understates the anchored arm, whose correct
+  image is usually near the top and rarely first; that distinction decides
+  whether a port is viable. `browser_rung` now reports median alongside recall.
+- **Tunnel watchdog for the public lab** (`scripts/wg_keepalive.sh`,
+  `deploy/com.sunstonenorth.wireguard.plist`). lab.sunstonenorth.com proxies
+  every `/api/*` call through WireGuard to the machine holding the models, so
+  when the tunnel drops the site still returns 200 and only the demo hangs.
+  Nothing restarted it. Liveness is checked by route presence rather than
+  `wg show`, which needs root and would report a healthy tunnel as down.
 - **Open-vocabulary caption retrieval on the gemma-4 visual channel**
   (`paper_nla.md` §11.6.3): an image's mean L47 state retrieves full sentences
   from 10k COCO captions with zero training (5/5 CIFAR natural images on-topic
@@ -78,6 +104,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pass is never lost to a cheap post-processing failure.
 
 ### Fixed
+- **`srt-browser-head-118k` model card advertised the wrong recovery figure.**
+  The published table reported 0.2300/0.0154/0.1952 and "85% recovery", which
+  were measured on an earlier 4,000-image head against a 1,000-image pool, not
+  on the deployment. Corrected to 0.1092/0.0000/0.0350, i.e. 32%, against all
+  123,287 images on the head and gallery that ship, with the median-rank column
+  added. Found in public review by
+  [@dipankarsarkar](https://huggingface.co/dipankarsarkar).
 - SDPA `is_causal` parity on deep MoE backbones: passing an explicit additive
   causal mask diverged from the backbone's own `is_causal` fast path, and the
   bf16 epsilon was amplified by 94-layer discrete expert routing into real
