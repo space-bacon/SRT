@@ -122,12 +122,12 @@ the centre of each of the 24 regions and printed what came back. The names you
 are reading are the machine&rsquo;s account of its own filing system, written
 months after the big model made the notes and on a different computer.</p>
 
-<h3>Stand anywhere on it</h3>
+<h3>Every point has a sentence, not just the photographs</h3>
 
-<p>You are not limited to the photographs. Touch any point and the instrument
+<p>Touch any point and the instrument
 averages the number-lists of the 48 nearest photographs and hands that average
-to the reader, so you can stand between two islands and get a sentence for a
-place rather than for a picture. Here are eight of them, each one the midpoint
+to the reader, so a point between two islands returns a sentence for a place
+rather than for a picture. Here are eight of them, each one the midpoint
 between two named regions:</p>
 
 {embed("fig_openwater.png",
@@ -142,10 +142,10 @@ between two named regions:</p>
                "the gallery is weaker than 60% of photographs manage with their "
                "own nearest neighbour.")}
 
-<h3>Or walk across it</h3>
+<h3>A straight line from bathroom to giraffe</h3>
 
-<p>If any point can be read, you can travel between two and read what you pass
-through. This is a straight line from the bathroom island to the giraffe island,
+<p>If any point can be read, so can every point along a line between two of
+them. This is a straight line from the bathroom island to the giraffe island,
 sampled six times:</p>
 
 {embed("fig_walk.gif",
@@ -154,9 +154,9 @@ sampled six times:</p>
        caption="Domestic interior, to rail, to road, to water, to wildlife. Six "
                "coherent scenes, four of them nowhere near either end.")}
 
-<h3>Type something and watch where it lands</h3>
+<h3>The map runs in both directions</h3>
 
-<p>The map runs in both directions. Type a sentence and it is placed by meaning,
+<p>Type a sentence and it is placed by meaning,
 then read back from wherever it landed:</p>
 
 {embed("lab_04_sentence.png",
