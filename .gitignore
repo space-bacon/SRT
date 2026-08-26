@@ -69,3 +69,7 @@ sugarcrepe/*.npz
 # Fetched third-party benchmark data and large state caches (published to HF, not git)
 sugarcrepe/
 artifacts/nla/q4/qwen3b_caches/
+
+# generated: base64-inlined copy of the marketing images, regenerable and
+# duplicates every asset beside it
+artifacts/marketing/**/post.html
