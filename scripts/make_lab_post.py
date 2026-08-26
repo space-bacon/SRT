@@ -64,8 +64,8 @@ finds the right photograph in the top 0.05% of 118,287.</em></p>
 <p>When a large model looks at a photograph it does not keep the picture. It
 builds a working impression: a list of several thousand numbers it uses to
 answer whatever is asked next. The technical name is a hidden state. Think of it
-as the model&rsquo;s private notes on the image, written in its own handwriting,
-and normally thrown away the instant the answer is produced.</p>
+as the model&rsquo;s working notes on the image, written in numbers rather than
+words, and normally thrown away the instant the answer is produced.</p>
 
 <p>Every time a multimodal model looks at
 anything it works out what it is looking at, in enough detail to answer
@@ -283,7 +283,7 @@ per-category detection AUC <strong>0.883</strong> across the 80 categories, and
 per-image recovery of the full annotated object list at <strong>0.543</strong>
 against a 0.038 chance floor, about fourteen times.</p>
 
-<p>It knows
+<p>It recovers
 what is in a scene. It is much weaker on how the scene is arranged. Ask it what
 is there and it is reliable; ask it who is doing what to whom and it is not.</p>
 
