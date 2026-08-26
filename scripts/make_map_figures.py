@@ -15,9 +15,12 @@ running model server.
 from __future__ import annotations
 
 import argparse
+import io
 import json
+import ssl
 import urllib.request
 
+import certifi
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
@@ -28,17 +31,40 @@ TERRA, TERRA_SOFT = (196, 106, 66), (196, 106, 66, 120)
 PANEL = (243, 238, 231)
 
 SERVER = "http://127.0.0.1:8765"
+# same source the Lab frontend uses (sunstone_panel.rs COCO_BASE)
+COCO_BASE = "https://s3.amazonaws.com/images.cocodataset.org"
+_THUMBS: dict[tuple, Image.Image] = {}
+
+
+def thumb(split, fname, size):
+    """Centre-cropped square of a gallery photograph, fetched once."""
+    key = (split, fname, size)
+    if key not in _THUMBS:
+        url = f"{COCO_BASE}/{split}/{fname}"
+        ctx = ssl.create_default_context(cafile=certifi.where())
+        with urllib.request.urlopen(url, timeout=60, context=ctx) as r:
+            im = Image.open(io.BytesIO(r.read())).convert("RGB")
+        w, h = im.size
+        s = min(w, h)
+        im = im.crop(((w - s) // 2, (h - s) // 2,
+                      (w - s) // 2 + s, (h - s) // 2 + s))
+        _THUMBS[key] = im.resize((size, size), Image.LANCZOS)
+    return _THUMBS[key]
 
 
 def font(size, idx=0, didot=False):
     return ImageFont.truetype(DIDOT if didot else HELV, size, index=idx)
 
 
-def read_at(x, y):
+def read_at_full(x, y):
     req = urllib.request.Request(
         f"{SERVER}/map/read", data=json.dumps({"x": x, "y": y}).encode(),
         headers={"content-type": "application/json"})
-    return json.load(urllib.request.urlopen(req, timeout=120))["text"]
+    return json.load(urllib.request.urlopen(req, timeout=120))
+
+
+def read_at(x, y):
+    return read_at_full(x, y)["text"]
 
 
 def wrap(draw, text, f, width):
@@ -313,15 +339,17 @@ def make_ladder(out, size=1420):
 
 
 def make_openwater(out, cols=4, cell=400):
-    """Midpoints between named regions, each read aloud.
+    """Midpoints between named regions, each with the sentence the map returns.
 
     Every coordinate here is derived from the two region centres it sits
     between, so the caption is true by construction. Writing the pairs down
     from memory produced captions that named the wrong neighbours.
 
-    This figure deliberately does NOT claim these points are empty. Whether a
-    point is genuinely somewhere no photograph sits is a measurement, not a
-    look, and it lives in `scripts/probe_open_water.py`. Most of these are not.
+    Each panel also carries the single nearest gallery photograph, so a reader
+    can see what the sentence is describing. This figure deliberately does NOT
+    claim these points are empty. Whether a point is genuinely somewhere no
+    photograph sits is a measurement, not a look, and it lives in
+    `scripts/probe_open_water.py`. Most of these are not.
     """
     xy, labels = load()
 
@@ -344,10 +372,12 @@ def make_openwater(out, cols=4, cell=400):
     for ka, na, kb, nb in pairs:
         a, b = find(ka), find(kb)
         mx, my = (a["x"] + b["x"]) / 2, (a["y"] + b["y"]) / 2
-        said = read_at(mx, my)
-        spots.append((mx, my, f"between {na} and {nb}", said))
+        got = read_at_full(mx, my)
+        said, near0 = got["text"], got["near"][0]
+        spots.append((mx, my, f"between {na} and {nb}", said, near0))
         print(f"  ({mx:+.2f},{my:+.2f}) {na} + {nb}\n      {a['text']}\n"
-              f"      {b['text']}\n      -> {said}", flush=True)
+              f"      {b['text']}\n      -> {said}\n"
+              f"      nearest {near0['file']} cos {near0['score']}", flush=True)
 
     rows_n = (len(spots) + cols - 1) // cols
     CAPH = 128
@@ -356,15 +386,25 @@ def make_openwater(out, cols=4, cell=400):
     d = ImageDraw.Draw(im, "RGBA")
     d.text((38, 32), "EIGHT MIDPOINTS BETWEEN NAMED REGIONS",
            font=font(20, 1), fill=TERRA)
-    d.text((36, 60), "and the sentence the map returns there",
+    d.text((36, 60), "the sentence the map returns, and the nearest photograph",
            font=font(36, 2, didot=True), fill=INK)
 
     base = base_map(xy, cell - 36, 14, dot=1.1, alpha=62)
-    for i, (x, y, where, said) in enumerate(spots):
+    TH = 84
+    for i, (x, y, where, said, near0) in enumerate(spots):
         cxp, cyp = (i % cols) * cell, 116 + (i // cols) * (cell + CAPH)
         im.paste(base, (cxp + 18, cyp))
         px, py = to_px(x, y, cell - 36, 14)
-        marker(d, cxp + 18 + px, cyp + py, r=8)
+        mxp, myp = cxp + 18 + px, cyp + py
+        # nearest photograph, pinned up-right of the marker and kept in-cell
+        tx = int(min(max(mxp + 12, cxp + 22), cxp + cell - TH - 22))
+        ty = int(min(max(myp - 12 - TH, cyp + 10), cyp + cell - 52 - TH))
+        d.line([mxp, myp, tx + TH // 2, ty + TH // 2], fill=TERRA_SOFT, width=2)
+        d.rectangle([tx - 4, ty - 4, tx + TH + 3, ty + TH + 3], fill=IVORY)
+        im.paste(thumb(near0["split"], near0["file"], TH), (tx, ty))
+        d.rectangle([tx - 4, ty - 4, tx + TH + 3, ty + TH + 3],
+                    outline=TERRA, width=2)
+        marker(d, mxp, myp, r=8)
         for k, t in enumerate(wrap(d, where.upper(), font(13, 1), cell - 50)[:2]):
             d.text((cxp + 20, cyp + cell - 42 + k * 17), t,
                    font=font(13, 1), fill=TERRA)

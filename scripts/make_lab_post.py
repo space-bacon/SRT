@@ -136,12 +136,14 @@ between two named regions:</p>
 
 {embed("fig_openwater.png",
        "Eight midpoints between named regions, each with the sentence the map "
-       "returns there",
+       "returns and a thumbnail of the nearest gallery photograph",
        width=740,
-       caption="Most of these are describing photographs that genuinely sit "
-               "nearby, which is the instrument working rather than the "
-               "instrument being clever. The midpoint between the kitchen and "
-               "the plate of food is the one that is not: its neighbours split "
+       caption="Each thumbnail is the single closest photograph in the gallery "
+               "to that spot, so you can check the sentence against it. Most "
+               "are describing photographs that genuinely sit nearby, which is "
+               "the instrument working rather than the instrument being clever. "
+               "The midpoint between the kitchen and the plate of food is the "
+               "one that is not: its neighbours split "
                "52 to 48 between the two regions and its best match anywhere in "
                "the gallery is weaker than 60% of photographs manage with their "
                "own nearest neighbour.")}
