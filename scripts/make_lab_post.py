@@ -76,7 +76,7 @@ else&rsquo;s handwriting and telling you what it says.</p>
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04. The whole thing is served from one desktop computer.</p>
 
-<h3>The map has a shape, and nobody arranged it</h3>
+<h3>The shape was already in the notes</h3>
 
 <p>A second trained piece shortens each list from 5,376 numbers to 1,024, in a
 way that puts a photograph and a sentence describing it in nearly the same
@@ -88,23 +88,21 @@ along the north, kitchens and bathrooms down in the southeast.</p>
 <p>That shortening step is a single linear layer, which matters more than it
 sounds. A linear map can rotate a space, stretch it and pick out directions
 within it. What it cannot do is invent structure that was not already there. So
-the islands are not something we built into the data. They were already sitting
-in the model&rsquo;s notes and a linear view was enough to find them. Flattening
-the result onto a screen is our doing. The neighbourhoods are not.</p>
+the islands came with the notes, and a linear view was enough to find them. The
+flattening onto a screen is ours. The arrangement is the model&rsquo;s.</p>
 
 {embed("fig_poster.png",
        "The map: 40,000 photographs of a 123,287-image gallery in two "
        "dimensions, region names written by the reader",
-       caption="Every dot is a photograph. Nothing arranged that. It is where "
-               "the photographs fell.")}
+       caption="Every dot is a photograph, sitting where the model&rsquo;s "
+               "reading of it put it.")}
 
-<h3>We did not name the regions either</h3>
+<h3>The reader named the regions too</h3>
 
 <p>Every label on that map was written by the same small reader. We handed it
 the centre of each of the 24 regions and printed what came back. The names you
-are reading are the machine&rsquo;s account of its own filing system, arrived at
-without us, months after the big model made the notes and on a different
-computer.</p>
+are reading are the machine&rsquo;s account of its own filing system, written
+months after the big model made the notes and on a different computer.</p>
 
 {embed("lab_01_map.png",
        "The map instrument running in the Lab, pane 04",
@@ -152,7 +150,7 @@ then read back from wherever it landed:</p>
        "are all skiing",
        caption="&ldquo;a man riding skis down a snowy slope&rdquo; lands in the "
                "snow country, and the eight photographs nearest that spot are "
-               "all skiing. Nothing matched on words.")}
+               "all skiing. The match is on meaning; the words never met.")}
 
 <h3>The half only the Lab can do</h3>
 
