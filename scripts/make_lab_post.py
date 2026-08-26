@@ -334,20 +334,32 @@ are retrieved from the full 123,287-image gallery.</p>
 was frozen throughout. The instruments are small trained artifacts that read a
 hidden state the model had already computed.</p>
 
-<h3>What we are testing next</h3>
+<h3>What we tested while writing this</h3>
 
 <p>Writing this turned up something we did not expect. The head was fitted on
 one caption per image, the first of COCO&rsquo;s five. That is what contaminated
 the number above, and it raises a second question. A head only ever asked to
 match one description of a scene is never required to keep the rest of it. If
-that is costing the reader, then showing the head all five captions should
-improve what the map can put into words without changing the reader at all.</p>
+that were costing the reader, showing the head all five captions should improve
+what the map can put into words without changing the reader at all.</p>
 
-<p>That experiment is running as this goes out: same backbone states, same
-images, same split, same reader recipe, with caption coverage the only thing
-that moves. It also holds the evaluation images out of the head&rsquo;s own
-training, which is the thing that should have been true the first time. We will
-publish it either way.</p>
+<p>We ran it while writing, and said we would publish it either way. It is a
+negative result, so here it is. Showing the head all five captions improves the
+space a great deal. It barely improves the reader:</p>
+
+<table>
+<tr><th align="left">median rank</th><th align="right">one caption</th><th align="right">all five</th></tr>
+<tr><td>a human caption</td><td align="right">57</td><td align="right">39</td></tr>
+<tr><td>a second human caption</td><td align="right">48</td><td align="right">28</td></tr>
+<tr><td>the reader</td><td align="right">46</td><td align="right">40</td></tr>
+</table>
+
+<p>Everyone gets better and the reader gets better least, so it actually loses
+ground: at one caption it edges a human 49.6% of the time, and at five captions
+only 44.8%. Whatever is limiting the reader, it is not how many descriptions the
+space was built from. The space and the sentence-writing turn out to be
+separable problems, which is worth knowing and is not what we expected to
+find.</p>
 
 <h3>Press the buttons</h3>
 

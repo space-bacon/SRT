@@ -179,11 +179,37 @@ it. Refitting with all five, resampled per epoch, changing nothing else:
 About a third better at placing a caption it has never seen, on a
 training loss that is *higher* (1.22 against 0.51). Matching any of five
 descriptions is the harder objective and the one that generalises.
-Whether that carries through to the reader is being measured now.
+
+**It does not carry through to the reader, and that is the useful part.**
+Retraining the reader on each space with the identical recipe:
+
+| arm | cap0 head | all5 head | change |
+|---|---:|---:|---:|
+| first human caption | 57 | 39 | +32% |
+| second human caption | 48 | 28 | +41% |
+| the reader | 46 | 40 | **+12%** |
+
+Everyone improves and the reader improves least, so its standing against
+a human goes backwards: it beats the first human caption on 49.6% of
+images under `cap0` but only 44.8% under `all5`, while human-versus-human
+moves 48.0% to 50.4%. At `cap0` the reader is at parity; at `all5` it is
+below.
+
+So the head's caption coverage is **not** the reader's bottleneck. The
+text-side organisation of the space and the reader's generative quality
+are largely separable. The early tell was that reader cross-entropy was
+near-identical across both arms at matched steps, ~1.9 to 2.0, while the
+head-level retrieval gain was large.
+
+For anyone deploying this: refitting to `all5` materially improves
+text-to-image placement and neighbour retrieval, and does not much
+improve the sentences a reader writes. Those are separate decisions.
 
 Artifacts for both: `artifacts/nla/verbalizer/caption_coverage/` in
-`space-bacon/SRT`. Scripts: `scripts/encode_captions_l47.py`,
-`scripts/refit_sunstone_head.py`, `scripts/eval_sunstone_verbalizer.py`.
+`space-bacon/SRT`, mirrored here under `caption_coverage/`. Scripts:
+`scripts/encode_captions_l47.py`, `scripts/refit_sunstone_head.py`,
+`scripts/run_caption_coverage_ab.sh`,
+`scripts/eval_sunstone_verbalizer.py`.
 
 ## What the head reads, and what it does not
 

@@ -26,10 +26,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Refitting with all five resampled per epoch, changing nothing else, moves
   unseen-caption retrieval from median 60/53 to **40/34** on a training loss
   that is higher (1.22 against 0.51): matching any of five descriptions is the
-  harder objective and the one that generalises. Scripts
-  `encode_captions_l47.py` (banks all five captions as raw L47 states,
-  resumable) and `refit_sunstone_head.py` (`--mode cap0|all5`). Whether the
-  gain carries through to the reader is still measuring.
+  harder objective and the one that generalises. **It does not carry through to
+  the reader.** Retraining the reader on each space with the identical recipe
+  moves the reader 46 to 40 (+12%) while the first human caption moves 57 to 39
+  (+32%) and the second moves 48 to 28 (+41%). Everyone improves, the reader
+  improves least, so its standing goes backwards: it beats the first human on
+  49.6% of images under `cap0` and 44.8% under `all5`, against human-versus-human
+  of 48.0% and 50.4%. The head's caption coverage is therefore **not** the
+  reader's bottleneck; text-side organisation of the space and the reader's
+  generative quality are largely separable. Scripts `encode_captions_l47.py`,
+  `refit_sunstone_head.py` (`--mode cap0|all5`) and
+  `run_caption_coverage_ab.sh`.
 - **A map of the gallery you can stand anywhere on**, served as pane
   **04 · Stand somewhere**. All 118,287 COCO train2017 images projected through
   the sunstone head into one 1,024-d space and laid out in two dimensions. A
