@@ -261,8 +261,34 @@ def cross(a, b):
                "\n".join(lines), shots(near))
 
 
+# The map image must be given an explicit width. Gradio renders it with
+# loading="lazy" inside a flex frame that is sized by the image's intrinsic
+# width, so before the file loads the box is 0 x 760. A zero-area box never
+# intersects the viewport, the IntersectionObserver never fires, and the image
+# never loads: the map stays blank forever. Pinning the width breaks the cycle.
 CSS = (".said textarea { font-size: 18px !important; line-height: 1.5 !important; }\n"
+       ".image-frame { width: 100% !important; }\n"
+       ".image-frame img { width: 100% !important; height: 100% !important;"
+       " object-fit: contain !important; }\n"
        "footer { display: none !important; }")
+
+# Belt and braces for the same problem: if a browser has already skipped the
+# lazy load before our CSS lands, only re-arming the element recovers it.
+HEAD = """<script>
+(function () {
+  function eager(root) {
+    (root.querySelectorAll ? root.querySelectorAll("img") : []).forEach(function (i) {
+      if (i.loading === "lazy") i.loading = "eager";
+    });
+  }
+  new MutationObserver(function (ms) {
+    ms.forEach(function (m) {
+      m.addedNodes.forEach(function (n) { if (n.nodeType === 1) eager(n); });
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+  eager(document);
+})();
+</script>"""
 
 with gr.Blocks(title="A map of what a 27B understood") as demo:
     gr.Markdown(
@@ -313,4 +339,6 @@ with gr.Blocks(title="A map of what a 27B understood") as demo:
     )
 
 if __name__ == "__main__":
-    demo.queue(default_concurrency_limit=2).launch(css=CSS, theme=gr.themes.Soft())
+    # Gradio 6 moved css, theme and head off the Blocks constructor onto launch().
+    demo.queue(default_concurrency_limit=2).launch(
+        css=CSS, head=HEAD, theme=gr.themes.Soft())
