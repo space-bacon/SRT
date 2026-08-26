@@ -23,6 +23,7 @@ corrections back into the stream. *Meaning forks. SRT sees it.*
 > - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them, exposing per-token semiotic signals (divergence, reflexivity `r̂`, regime) plus a discourse/embedding vector.
 > - **Why:** lightweight, portable instrumentation for a frozen backbone — no base-model weight updates, zero cross-entropy degradation, trains in hours at ≈0.17 % of backbone params. The released `v1.0` checkpoint targets semantic embeddings (MTEB-STS).
 > - **New (July 2026) — the portability result:** the structure these taps read is **invariant across scale, precision, and hardware**. A 22 MB linear head gives a frozen multimodal LLM image↔text retrieval at fully-trained-2018-dual-encoder level (Karpathy 5k i2t R@1 = 0.416), and the *same head* survives a 10× host reduction (31B → 3B, no loss), 4-bit quantization (−0.01 R@1, unchanged weights), and a change of silicon (CUDA datacenter → Apple-Silicon Mac: 97.0% head-space text agreement against a 99.96% same-runtime ceiling, and on-device image→text retrieval within 3 R@1 points of the datacenter reference, 0.640 vs 0.670). One artifact, every deployment tier from Raspberry-Pi-class to datacenter. See [SRT-Sunstone](#srt-sunstone--the-read-out-reads-images-cross-modal) and [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md).
+> - **New (August 2026) — a small model reads a large one:** a frozen **Qwen3-0.6B** (382 MB at Q4), handed one **raw gemma-4-31B** hidden state and nothing else, writes a sentence that retrieves the right photograph out of **123,287** at **median rank 25**, against 39 for a human reference caption. The gallery was built by an unrelated 27B tower, so no shared representation carries it, and both controls (another image's state, the mean state) sit at chance. The human-caption comparison is a register effect, not a captioning claim; see [§11.8](paper_nla.md) for why. [Details below](#a-06b-puts-words-to-a-31bs-internal-state).
 > - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
 > - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
 
@@ -340,6 +341,43 @@ not surface them on the first try. The bag-of-K self-distillation
 attempt to close that gap (Lever B) returned a clean negative result
 (`paper_nla.md` §6); deploy-time best-of-K oracle rerank (Lever A)
 remains the only mechanism that closes the gap on this backbone.
+
+### A 0.6B puts words to a 31B's internal state
+
+Every verbalizer above reads a state produced by its own backbone. This one
+reads across models: a **frozen Qwen3-0.6B** (382 MB at Q4) with a 44.5M
+prefix MLP is handed one **raw gemma-4-31B layer-47 image state** (d = 5376)
+and writes a sentence. Nothing about the photograph reaches the small model
+except that vector, which the 31B produced and which the 0.6B has never had
+an image with which to make.
+
+Scoring stays outside both models. The generated caption is re-encoded with
+the shipped browser head and retrieved against all **123,287** gallery images,
+a gallery built by an unrelated **Qwen3.8-27B** tower. No shared representation
+can carry the result. On val2017, held out of both head and verbalizer
+training:
+
+| arm | R@1 | median rank |
+|---|---|---|
+| the image's own state | **0.120** | **25** |
+| a human reference caption | 0.101 | 39 |
+| another image's state | 0.000 | 62,970 |
+| the mean state | 0.000 | 59,408 |
+
+Chance median is ~61,644, so both controls sit at chance. The controls are the
+result: the *foreign* arm is the real arm's vectors rolled by one position and
+it returns the real arm's captions rolled by one position, while the *mean* arm
+emits a single sentence for every input.
+
+**Read the human-caption row carefully.** This is not better captioning. It is
+a register match: the model enumerates whole-scene inventory, which this head
+recovers well (detection AUC 0.883 over 80 COCO categories), while the human
+references foreground arrangement and oddity ("a woman *stands*", "mounted
+*upside-down*"), which the same head is documented *not* to recover. Gold is
+one reference caption, not best-of-five. What the number does establish is that
+a 382 MB model can describe a 31B's reading precisely enough to identify the
+photograph among 123,287 candidates. Details and caveats:
+[`paper_nla.md`](paper_nla.md) §11.8.
 
 ### HF artifacts
 
