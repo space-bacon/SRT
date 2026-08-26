@@ -57,18 +57,33 @@ def body() -> str:
     return f"""
 <h3>The empty water has names</h3>
 
-<p><em>A map of 40,000 photographs, laid out by how one frozen
-31-billion-parameter model read them. The interesting part is the water between
-the islands.</em></p>
+<p><em>A map of 40,000 photographs, arranged by how one frozen
+31-billion-parameter model saw them. The interesting part turned out to be the
+spaces between things.</em></p>
 
-<p>Between the skiing photographs and the skateboarding photographs there is a
-gap. No photograph has ever been in it. We clicked it anyway, and a frozen
-382&nbsp;MB model that has never seen a picture in its life wrote back:</p>
+<p>There is a new instrument on the Sunstone North Lab, and the short version is
+this. We took 40,000 photographs, showed each one to a very large model, and
+kept the private working notes it made while looking. Those notes are nothing
+but long lists of numbers. We then arranged the 40,000 lists on a flat sheet so
+that photographs the model had seen as similar ended up near one another. That
+sheet is the map, and it organised itself: animals gathered in the west,
+transport in the southwest, sport along the north, kitchens and bathrooms down
+in the southeast. Nobody sorted them.</p>
+
+<p>Then comes the part that surprised us. Most of that sheet is empty. You can
+put a finger down in a spot where there is no photograph at all, and a second,
+much smaller model will write you a sentence describing the scene that belongs
+there.</p>
+
+<p>Here is the one that made us stop. The skiing photographs form an island. So
+do the skateboarding photographs. Between them is a gap with nothing in it. We
+clicked the gap, and the small model wrote:</p>
 
 <blockquote><p>A man is doing a trick on a snowboard.</p></blockquote>
 
-<p>Nobody put snowboarding there. It is where the arithmetic of the other two
-puts it.</p>
+<p>Nobody put snowboarding on this map. There is no snowboarding island, no
+snowboarding label, and no photograph at the spot we clicked. It is simply where
+the arithmetic of the other two lands.</p>
 
 {embed("fig_blend.png",
        "Zoomed: the skiing island, the skateboarding island, and the empty "
@@ -79,30 +94,52 @@ puts it.</p>
        caption="The same click in the Lab, live under pane 04 at "
                "lab.sunstonenorth.com.")}
 
-<h3>What you are standing on</h3>
+<h3>How this works, without the jargon</h3>
 
-<p>The map holds 40,000 photographs drawn from a gallery of 123,287, positioned
-by how the big model read them rather than by any tag, caption or category. You
-can stand anywhere on it, including everywhere no photograph has ever been, and
-it will write you a sentence.</p>
+<p>When a large model looks at a photograph it does not keep the picture. It
+builds a working impression: a list of several thousand numbers that it uses to
+answer whatever is asked next. The technical name is a hidden state. Think of it
+as the model&rsquo;s private notes on the image, written in its own handwriting,
+and normally thrown away the instant the answer is produced.</p>
 
-<p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
+<p>We kept the notes, and then did two things with them.</p>
+
+<p><strong>First, we shortened them.</strong> A small trained matrix squeezes
+each list from 5,376 numbers down to 1,024, and it is trained so that a
+photograph and a sentence describing that photograph come out in nearly the same
+place. Picture, meet caption, in one shared filing system.</p>
+
+<p><strong>Second, we taught a small model to read the notes back.</strong> A
+frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in front of it, takes one of
+those 1,024-number lists and writes an English sentence about it. It has no
+eyes. There is no vision component anywhere inside it. It has never been shown a
+photograph in its life. It is reading somebody else&rsquo;s handwriting and
+telling you what it says.</p>
+
+<p>The map is what you get when all 40,000 lists are laid on a sheet by
+similarity. And because the reader wants a list of numbers rather than a
+picture, you can point at a bare patch of sheet, average the lists surrounding
+it, and hand the reader that average. No photograph ever had those exact
+numbers. It writes a sentence anyway. That is what the title means.</p>
+
+<p>The map holds 40,000 photographs drawn from a gallery of 123,287, and you can
+stand anywhere on it.
+<a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04</p>
 
 {embed("fig_poster.png",
        "The map: 40,000 photographs of a 123,287-image gallery in two "
        "dimensions, region names written by the reader",
-       caption="Every dot is a photograph. Animals to the west, transport to the "
-               "southwest, sport along the north, domestic interiors down the "
-               "southeast. Nothing arranged that. It is where the photographs fell.")}
+       caption="Every dot is a photograph. Nothing arranged that. It is where "
+               "the photographs fell.")}
 
 <h3>We did not name the regions</h3>
 
-<p>Every label on that map was written by the machine. We handed a frozen
-382&nbsp;MB Qwen3-0.6B the centre of each region and printed what it wrote. That
-0.6B has no vision path. It has never seen a photograph in its life. It is
-reading a 1,024-number record a much larger model left behind, months ago, on a
-different machine.</p>
+<p>Every label on that map was written by the same small reader. We handed it
+the centre of each of the 24 regions and printed what came back. The names you
+are reading are the machine&rsquo;s account of its own filing system, arrived at
+without us, months after the big model made the notes and on a different
+computer.</p>
 
 {embed("lab_01_map.png",
        "The map instrument running in the Lab, pane 04",
@@ -204,6 +241,20 @@ a median rank of 59,143:</p>
        "Every arm of the reader evaluation on one log axis, with the chance "
        "wall marked", width=740)}
 
+<p>In plain terms, the test runs like this. Take a photograph the reader has
+never seen. Hand it only the numbers, never the picture, and let it write a
+sentence. Now take that sentence and ask which of 118,287 photographs it best
+describes. Half the time the correct photograph comes back in the top 64. If the
+sentence carried nothing at all you would expect it to land around 59,143, which
+is the middle of the pile.</p>
+
+<p>The two controls are the reason to believe the first number. Hand the reader
+some <em>other</em> photograph&rsquo;s numbers and its sentence lands at 55,866,
+which is nowhere. Hand it the average of every photograph at once and it still
+writes fluent, plausible English, and that lands nowhere too. So the sentences
+are not a caption habit it learned and repeats. They follow the particular
+numbers they were given.</p>
+
 <ul>
 <li>The reader&rsquo;s sentence retrieves the picture it was written from at
 <strong>median rank 64</strong>, the top 0.05% of the pool.</li>
@@ -220,26 +271,33 @@ human describing the same photograph beats the first <strong>20% of the
 time</strong>. The reader sits inside the spread between two people rather than
 below a line.</p>
 
-<p>One correction we are making in public, because we found it while writing
-this. An earlier draft quoted the human caption at median rank 8 and called it a
-ceiling. That figure is contaminated. The head was trained on COCO train2017
-pairs using each image&rsquo;s <em>first</em> caption, and the gallery is
-train2017, so scoring that exact caption measures a pair the head was fitted to
-align. It reads about six times better than a caption of the same photograph the
-head never saw. The honest human reference is the 45 above, and we had been
-quoting a number that made our own result look worse than it is.</p>
+<h3>The correction we made while writing this</h3>
 
-<p>Both controls are dead, which is what makes the first number mean anything. A
-gold-caption arm runs before every evaluation and aborts the run if human
-captions cannot retrieve their own images, because a reader pointed at the wrong
-space produces perfectly fluent sentences over a completely dead harness, and
-that failure looks like a result rather than a bug.</p>
+<p>An earlier draft of this post quoted the human caption at median rank 8 and
+called it the ceiling we fall short of. That figure is contaminated, and the
+reason is worth stating plainly. The shortening step was trained on pairs made
+from each photograph&rsquo;s <em>first</em> caption, and the pool we score
+against contains those same photographs. So scoring that exact caption is not
+measuring a human. It is measuring a pair the system was explicitly trained to
+put in the same place, which it is very good at, because we taught it to be.</p>
 
-<p>A different reader in the same family, one that reads raw hidden states rather
-than this 1,024-dimensional space, does beat the human caption outright: median
-rank 20 of 123,287 against 39. Part of that margin is length. It keeps talking,
-the extra detail about the scene is often right, and a retrieval metric rewards
-naming more true things. We quote it with that caveat attached every time.</p>
+<p>Use a different caption of the same photograph, one the system never saw, and
+the honest human reference is 45. We had been quoting a number that made our own
+result look considerably worse than it is.</p>
+
+<p>The arm stays in the evaluation, because it has a job. It runs first and
+aborts the whole run if human captions cannot retrieve their own images. A
+reader pointed at the wrong space still produces perfectly fluent sentences over
+a completely dead test, and that failure looks like a result rather than a bug.
+It is a smoke alarm, not a scoreboard, and we had been reading it as a
+scoreboard.</p>
+
+<p>A different reader in the same family, one that reads the big model&rsquo;s
+raw notes rather than this shortened 1,024-number version, does beat the human
+caption outright: median rank 20 of 123,287 against 39. Part of that margin is
+length. It keeps talking, the extra detail about the scene is often right, and a
+retrieval metric rewards naming more true things. We quote it with that caveat
+attached every time.</p>
 
 <h3>What the map carries, and what it does not</h3>
 
