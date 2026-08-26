@@ -1,0 +1,82 @@
+{
+ "question": "does layer 47 of the 31B hold a modality-agnostic space, or does the trained head create the shared space",
+ "design": "same model, same layer, same 5376 dims, same images: the verbalizer was trained on image states and is here handed the caption states of the very same scenes",
+ "n_scored": 208,
+ "gallery": 123287,
+ "chance_median_rank": 61643,
+ "geometry": {
+  "raw_cos_img_to_its_caption": 0.9023,
+  "raw_cos_img_to_other_caption": 0.8923,
+  "centred_cos_img_to_its_caption": 0.2168,
+  "centred_cos_img_to_other_caption": -0.0072,
+  "raw_anisotropy_within_images": 0.9875,
+  "raw_anisotropy_within_captions": 0.8387,
+  "cos_between_cloud_means": 0.9797,
+  "norm_mu_img": 115.59,
+  "norm_mu_cap": 137.62
+ },
+ "arms": {
+  "gold_caption_harness_control": {
+   "r@1": 0.1394,
+   "r@10": 0.4038,
+   "median_rank": 22.0,
+   "sample": [
+    "A toy dinosaur standing on a sink next to a running faucet.",
+    "There is a small bus with several people standing next to it.",
+    "Food in a bowl with carrots and drinks around it"
+   ]
+  },
+  "image_state": {
+   "r@1": 0.0673,
+   "r@10": 0.3125,
+   "median_rank": 36.0,
+   "degenerate_outputs": 0,
+   "sample": [
+    "A toothbrush and a toothbrush holder sitting in front of a sink.",
+    "A group of people standing in front of a bus.",
+    "A plate of food with noodles and carrots.",
+    "A large airplane is flying over an airport.",
+    "A plate of food with a spoon in it."
+   ]
+  },
+  "caption_state_image_frame": {
+   "r@1": 0.024,
+   "r@10": 0.0288,
+   "median_rank": 7897.5,
+   "degenerate_outputs": 5,
+   "sample": [
+    "Lip, and, and, and, and, and, and, and, and, and, and, and",
+    "\u5bcc\u8c6a\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b\u8d2b",
+    "Three, one, one, one, one, one, one, one, one, one, one, one,",
+    "\u9ed1\u585e\u516c\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111\u8111",
+    "A couple of different types of skates skates on the skates."
+   ]
+  },
+  "caption_state_own_frame": {
+   "r@1": 0.0192,
+   "r@10": 0.0673,
+   "median_rank": 758.5,
+   "degenerate_outputs": 0,
+   "sample": [
+    "A small dog standing on a sink with a water jug on the sink.",
+    "A group of people standing around a parked bus.",
+    "A table with a plate of food, a cup of coffee, and a plate of carrots.",
+    "A plane sitting in a parking lot.",
+    "Two animals are sitting on a couch in a room."
+   ]
+  },
+  "image_state_own_frame": {
+   "r@1": 0.0673,
+   "r@10": 0.3221,
+   "median_rank": 44.5,
+   "degenerate_outputs": 0,
+   "sample": [
+    "A toothbrush and a toothbrush holder sitting in front of a sink.",
+    "A group of people standing in front of a bus.",
+    "A plate of food with noodles and carrots.",
+    "A large airplane is flying over an airport.",
+    "A plate of food with a spoon in it."
+   ]
+  }
+ }
+}
