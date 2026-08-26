@@ -50,6 +50,18 @@ HEAD_FILE = "sunstone_linear_head_v3_drift.pt"   # v3: drift-family trained,
 # clean eval improves; artifacts/nla/q4/v3_drift_head_eval_20260806.json
 CALIB_REPO = "RiverRider/srt-nla-gemma4-artifacts"
 CALIB_FILE = "procrustes/encoded_L47_n5000.pt"
+# The reader. gemma-4 writes the record; a frozen Qwen3-0.6B says what is in
+# it, through a prefix trained on 118,287 COCO images (paper_nla.md 11.8).
+# It is a different and much smaller model than the host, loaded lazily so the
+# chat path is never delayed by weights it does not use.
+VERB_CKPT = Path(os.environ.get(
+    "SUNSTONE_VERBALIZER",
+    "checkpoints/fullstate_verbalizer/fullstate_verbalizer_3ep.pt"))
+VERB_MODEL = os.environ.get("SUNSTONE_VERBALIZER_MODEL", "Qwen/Qwen3-0.6B")
+# CPU by default: MLX already holds the GPU, and a 0.6B decoding 32 tokens is
+# cheap enough that contending for Metal is the worse trade.
+VERB_DEVICE = os.environ.get("SUNSTONE_VERBALIZER_DEVICE", "cpu")
+VERB_MAX_TOKENS = 48
 LOCAL_MU_CACHE = Path("artifacts/local/local_mu_txt.npy")
 LOCAL_MU_IMG_CACHE = Path("artifacts/local/local_mu_img.npy")
 FULL_GALLERY = Path("artifacts/local/gallery_full.npz")
@@ -373,6 +385,60 @@ def encode_image_local(img) -> np.ndarray:
     if not mask.any():
         raise ValueError("no image tokens in the processed prompt")
     return h[mask].mean(0)
+
+
+def load_verbalizer() -> dict:
+    """The 0.6B that reads a gemma-4 record aloud.
+
+    Not a second copy of the host: a 382MB model whose only input is the
+    5376-d state, mapped to soft tokens by the trained prefix. The train-split
+    mean and radius ride along in the checkpoint because the prefix was fit in
+    that frame, and feeding it an uncentred vector silently degrades it.
+    """
+    import sys
+
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from train_shared_space_verbalizer import Prefix
+
+    if not VERB_CKPT.exists():
+        raise HTTPException(503, f"verbalizer checkpoint not found: {VERB_CKPT}")
+    ck = torch.load(VERB_CKPT, map_location="cpu", weights_only=False)
+    tok = AutoTokenizer.from_pretrained(VERB_MODEL)
+    model = AutoModelForCausalLM.from_pretrained(VERB_MODEL, dtype=torch.float32)
+    model.to(VERB_DEVICE).eval()
+    pre = Prefix(ck["d_in"], ck["d_model"], ck["n_tok"], ck.get("hidden", 2048))
+    pre.load_state_dict(ck["prefix"])
+    pre.to(VERB_DEVICE).eval()
+    log.info("verbalizer ready: d_in=%d n_tok=%d on %s",
+             ck["d_in"], ck["n_tok"], VERB_DEVICE)
+    return {"tok": tok, "model": model, "prefix": pre, "mu": ck["mu"],
+            "sd": ck["sd"], "d_in": ck["d_in"], "n_tok": ck["n_tok"]}
+
+
+def describe_state(v: np.ndarray, max_tokens: int) -> str:
+    """Put words to one hidden state. Nothing about the image reaches the
+    0.6B except this vector."""
+    import torch
+
+    vb = S["verbalizer"]
+    if v.shape[-1] != vb["d_in"]:
+        raise HTTPException(
+            500, f"state is {v.shape[-1]}-d but the verbalizer reads "
+                 f"{vb['d_in']}-d; checkpoint and tap layer disagree")
+    x = torch.tensor((v - vb["mu"]) / vb["sd"], dtype=torch.float32,
+                     device=VERB_DEVICE).unsqueeze(0)
+    with torch.no_grad():
+        soft = vb["prefix"](x)
+        out = vb["model"].generate(
+            inputs_embeds=soft,
+            attention_mask=torch.ones(soft.shape[:2], dtype=torch.long,
+                                      device=VERB_DEVICE),
+            max_new_tokens=max_tokens, do_sample=False,
+            pad_token_id=vb["tok"].eos_token_id)
+    return vb["tok"].decode(out[0], skip_special_tokens=True).strip()
 
 
 def local_mu_txt(head, gal) -> np.ndarray:
@@ -827,6 +893,32 @@ def build_app():
             "encode_s": round(time.time() - t0, 2),
             "results": [{"caption": S["gallery"]["captions"][i],
                          "score": round(float(sims[i]), 4)} for i in top],
+        }
+
+    @app.post("/describe")
+    def describe(image: UploadFile = File(...), max_tokens: int = Form(32)):
+        """What the 0.6B reads in gemma-4's record of this image.
+
+        Two models, one vector between them: the 31B encodes, the 0.6B says
+        what is there. The 0.6B never sees the photograph.
+        """
+        img = _read_image(image.file.read())
+        n = max(8, min(int(max_tokens), VERB_MAX_TOKENS))
+        t0 = time.time()
+        with _GenSlot():
+            v = encode_image_local(img)
+            encode_s = round(time.time() - t0, 2)
+            if "verbalizer" not in S:
+                S["verbalizer"] = load_verbalizer()
+            t1 = time.time()
+            text = describe_state(v, n)
+        return {
+            "text": text,
+            "encode_s": encode_s,
+            "describe_s": round(time.time() - t1, 2),
+            "reader": VERB_MODEL,
+            "state_dim": int(v.shape[-1]),
+            "tap_layer": TAP_LAYER,
         }
 
     @app.post("/search")
