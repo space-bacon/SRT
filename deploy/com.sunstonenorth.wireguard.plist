@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.sunstonenorth.wireguard</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/burtron/development/srt-adapter/scripts/wg_keepalive.sh</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StartInterval</key>
+    <integer>60</integer>
+    <key>StandardOutPath</key>
+    <string>/var/log/sunstone-wg.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/log/sunstone-wg.log</string>
+</dict>
+</plist>
