@@ -1,0 +1,187 @@
+{
+ "question": "is a clicked point on the map arithmetic or retrieval",
+ "k": 48,
+ "note": "every click averages the k nearest MAPPED photographs, so no click reads empty space. Novelty is the averaged vector's best match in the gallery, expressed as a percentile of the cosine real photographs achieve with their own nearest neighbour. Low percentile means the point sits where no photograph sits.",
+ "gallery_nn_cosine": {
+  "median": 0.8009,
+  "p5": 0.6353,
+  "p95": 0.9288,
+  "n": 2000
+ },
+ "map": "artifacts/local/space_map.npz",
+ "gallery": "artifacts/local/gallery_full.npz",
+ "ckpt": "checkpoints/sunstone_verbalizer/sunstone_verbalizer.pt",
+ "probes": [
+  {
+   "between": [
+    "A man skiing down a snowy hill.",
+    "A man on a skateboard doing a trick."
+   ],
+   "midpoint": [
+    -0.5113314390182495,
+    0.43554818630218506
+   ],
+   "sentence": "A man is doing a trick on a snowboard.",
+   "novelty_best_cos": 0.9242,
+   "novelty_pct_of_real_nn": 93.8,
+   "frac_from_parent_a": 0.979,
+   "frac_from_parent_b": 0.021,
+   "frac_from_elsewhere": 0.0,
+   "mean_pairwise_cos_of_48": 0.5748,
+   "novel_words": [
+    "snowboard"
+   ]
+  },
+  {
+   "between": [
+    "A man flying a kite on a beach.",
+    "A man is trying to catch a frisbee."
+   ],
+   "midpoint": [
+    -0.024088837206363678,
+    0.433712899684906
+   ],
+   "sentence": "A young boy playing with a frisbee on a beach.",
+   "novelty_best_cos": 0.814,
+   "novelty_pct_of_real_nn": 55.5,
+   "frac_from_parent_a": 0.0,
+   "frac_from_parent_b": 1.0,
+   "frac_from_elsewhere": 0.0,
+   "mean_pairwise_cos_of_48": 0.4414,
+   "novel_words": [
+    "boy",
+    "playing"
+   ]
+  },
+  {
+   "between": [
+    "A living room with a couch, table, and a chair.",
+    "A cat sitting on a bed next to a laptop."
+   ],
+   "midpoint": [
+    -0.026311572641134262,
+    -0.25315070152282715
+   ],
+   "sentence": "A cat sitting on a chair watching a TV.",
+   "novelty_best_cos": 0.904,
+   "novelty_pct_of_real_nn": 89.0,
+   "frac_from_parent_a": 0.75,
+   "frac_from_parent_b": 0.25,
+   "frac_from_elsewhere": 0.0,
+   "mean_pairwise_cos_of_48": 0.5383,
+   "novel_words": [
+    "tv",
+    "watching"
+   ]
+  },
+  {
+   "between": [
+    "A kitchen with a refrigerator and a bunch of bananas.",
+    "A plate of food with a sandwich and a cup of coffee."
+   ],
+   "midpoint": [
+    -0.4884558320045471,
+    -0.4861508905887604
+   ],
+   "sentence": "A bowl of fruit and a knife sitting on a table.",
+   "novelty_best_cos": 0.776,
+   "novelty_pct_of_real_nn": 40.3,
+   "frac_from_parent_a": 0.521,
+   "frac_from_parent_b": 0.479,
+   "frac_from_elsewhere": -0.0,
+   "mean_pairwise_cos_of_48": 0.3,
+   "novel_words": [
+    "bowl",
+    "fruit",
+    "knife",
+    "table"
+   ]
+  },
+  {
+   "between": [
+    "Two giraffes standing in a field next to trees.",
+    "A couple of elephants walking in a field."
+   ],
+   "midpoint": [
+    0.8339352607727051,
+    0.5516080856323242
+   ],
+   "sentence": "A herd of elephants walking through a field.",
+   "novelty_best_cos": 0.9285,
+   "novelty_pct_of_real_nn": 94.9,
+   "frac_from_parent_a": 0.021,
+   "frac_from_parent_b": 0.979,
+   "frac_from_elsewhere": 0.0,
+   "mean_pairwise_cos_of_48": 0.6319,
+   "novel_words": [
+    "herd",
+    "through"
+   ]
+  },
+  {
+   "between": [
+    "A man playing tennis on a tennis court.",
+    "A baseball player is swinging at a ball."
+   ],
+   "midpoint": [
+    -0.2737535834312439,
+    0.8817117214202881
+   ],
+   "sentence": "A baseball player is swinging a bat.",
+   "novelty_best_cos": 0.8537,
+   "novelty_pct_of_real_nn": 72.1,
+   "frac_from_parent_a": 0.188,
+   "frac_from_parent_b": 0.812,
+   "frac_from_elsewhere": 0.0,
+   "mean_pairwise_cos_of_48": 0.3741,
+   "novel_words": [
+    "bat"
+   ]
+  },
+  {
+   "between": [
+    "A man riding a motorcycle on a street.",
+    "A bus is parked on the side of the street."
+   ],
+   "midpoint": [
+    0.27398520708084106,
+    -0.08877307176589966
+   ],
+   "sentence": "A parking meter sitting on the side of a street.",
+   "novelty_best_cos": 0.903,
+   "novelty_pct_of_real_nn": 88.8,
+   "frac_from_parent_a": 0.0,
+   "frac_from_parent_b": 0.0,
+   "frac_from_elsewhere": 1.0,
+   "mean_pairwise_cos_of_48": 0.2911,
+   "novel_words": [
+    "meter",
+    "parking"
+   ]
+  },
+  {
+   "between": [
+    "A large jetliner flying in the air.",
+    "A train traveling down train tracks near a train station."
+   ],
+   "midpoint": [
+    0.5658192038536072,
+    -0.5319117307662964
+   ],
+   "sentence": "A plane flying through the sky with its wings out.",
+   "novelty_best_cos": 0.8107,
+   "novelty_pct_of_real_nn": 53.8,
+   "frac_from_parent_a": 1.0,
+   "frac_from_parent_b": 0.0,
+   "frac_from_elsewhere": 0.0,
+   "mean_pairwise_cos_of_48": 0.4727,
+   "novel_words": [
+    "out",
+    "plane",
+    "sky",
+    "through",
+    "wings"
+   ]
+  }
+ ]
+}
