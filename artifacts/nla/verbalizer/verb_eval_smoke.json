@@ -1,0 +1,53 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 100,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.09,
+   "r@5": 0.19,
+   "r@10": 0.27,
+   "median_rank": 64.0,
+   "sample": [
+    "A black bear in a field of grass and trees.  The bear is looking at the camera.  The bear is",
+    "A man flying a kite on a beach. A kite is flying. A man is flying a kite. A kite is",
+    "A skier is standing on a snow covered slope. The snow is covered in a white blanket. The skier is",
+    "Two polar bears playing together on a snowy ground.  The bears are in a snow covered area.  One is on",
+    "A desk with a computer, a monitor, a keyboard, and a phone. A cup of coffee is on the table"
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 67898.5,
+   "sample": [
+    "A woman sitting on a couch with a laptop. She is looking at the screen. The laptop is on. The woman",
+    "A black bear in a field of grass and trees.  The bear is looking at the camera.  The bear is",
+    "A man flying a kite on a beach. A kite is flying. A man is flying a kite. A kite is",
+    "A skier is standing on a snow covered slope. The snow is covered in a white blanket. The skier is",
+    "Two polar bears playing together on a snowy ground.  The bears are in a snow covered area.  One is on"
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 71588.0,
+   "sample": [
+    "A man standing on a bench next to a white and black bike. The bike is parked on the ground. The man",
+    "A man standing on a bench next to a white and black bike. The bike is parked on the ground. The man",
+    "A man standing on a bench next to a white and black bike. The bike is parked on the ground. The man",
+    "A man standing on a bench next to a white and black bike. The bike is parked on the ground. The man",
+    "A man standing on a bench next to a white and black bike. The bike is parked on the ground. The man"
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.1,
+   "r@5": 0.25,
+   "r@10": 0.36,
+   "median_rank": 20.0
+  }
+ }
+}

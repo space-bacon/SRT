@@ -1,0 +1,53 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 1000,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.084,
+   "r@5": 0.204,
+   "r@10": 0.293,
+   "median_rank": 45.0,
+   "sample": [
+    "A living room with a television, a fireplace, and a table. A man is sitting on the couch. A woman",
+    "A brown bear with a big smile is looking at the camera.  The bear is on a hillside.  The",
+    "A bedroom with a bed, a desk, a window, and a bookshelf. A book is on the desk.",
+    "A stop sign in front of a street with a tree in the background. The tree is a big tree. The street",
+    "A group of brown and red teddy bears. The brown ones are on the left. The red ones are on the"
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 60955.5,
+   "sample": [
+    "A cat laying on top of a laptop computer.  The laptop is on a desk.  The cat is on the",
+    "A living room with a television, a fireplace, and a table. A man is sitting on the couch. A woman",
+    "A brown bear with a big smile is looking at the camera.  The bear is on a hillside.  The",
+    "A bedroom with a bed, a desk, a window, and a bookshelf. A book is on the desk.",
+    "A stop sign in front of a street with a tree in the background. The tree is a big tree. The street"
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 62501.0,
+   "sample": [
+    "A man standing on a bench next to a basket of pineapples. A man is holding a basket of pineapp",
+    "A man standing on a bench next to a basket of pineapples. A man is holding a basket of pineapp",
+    "A man standing on a bench next to a basket of pineapples. A man is holding a basket of pineapp",
+    "A man standing on a bench next to a basket of pineapples. A man is holding a basket of pineapp",
+    "A man standing on a bench next to a basket of pineapples. A man is holding a basket of pineapp"
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.101,
+   "r@5": 0.238,
+   "r@10": 0.327,
+   "median_rank": 39.0
+  }
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "question": "can the 0.6B put words to a vector only the 27B saw",
+ "n_heldout_scored": 1000,
+ "gallery": 123287,
+ "n_prefix_tokens": 16,
+ "arms": {
+  "real": {
+   "r@1": 0.071,
+   "r@5": 0.192,
+   "r@10": 0.263,
+   "median_rank": 47.0,
+   "sample": [
+    "A black bear walking through a field of grass.  The bear is in the middle of a field.  The bear",
+    "A person flying a kite on a beach. The kite is high above the ground. The person is standing on the beach",
+    "A woman on skis in the snow. She is holding a sign. She is posing for the camera. The sign",
+    "Two polar bears are playing in the snow. One is on the ground. The other is on top of the snow.",
+    "A desk with a computer, coffee, and a drink. A monitor is on the desk. A keyboard is on the"
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 61070.0,
+   "sample": [
+    "A snowboarder is flying through the air on a mountain.  The snowboarder is wearing a helmet.",
+    "A black bear walking through a field of grass.  The bear is in the middle of a field.  The bear",
+    "A person flying a kite on a beach. The kite is high above the ground. The person is standing on the beach",
+    "A woman on skis in the snow. She is holding a sign. She is posing for the camera. The sign",
+    "Two polar bears are playing in the snow. One is on the ground. The other is on top of the snow."
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@5": 0.0,
+   "r@10": 0.0,
+   "median_rank": 56954.5,
+   "sample": [
+    "A man is standing on a bench next to a basket.  A man is holding a basket.  A man is",
+    "A man is standing on a bench next to a basket.  A man is holding a basket.  A man is",
+    "A man is standing on a bench next to a basket.  A man is holding a basket.  A man is",
+    "A man is standing on a bench next to a basket.  A man is holding a basket.  A man is",
+    "A man is standing on a bench next to a basket.  A man is holding a basket.  A man is"
+   ]
+  },
+  "gold_caption": {
+   "r@1": 0.126,
+   "r@5": 0.283,
+   "r@10": 0.372,
+   "median_rank": 22.0
+  }
+ }
+}
