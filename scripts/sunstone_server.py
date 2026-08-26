@@ -923,6 +923,19 @@ async def lifespan(app):
     S["mu_img_local"] = local_mu_img(S["head"])
     S["loaded_s"] = round(time.time() - t0, 1)
     log.info("ready in %.1fs", S["loaded_s"])
+
+    # Warm the map off-thread. Loading its reader takes ~30s, and doing that
+    # lazily meant the first visitor to open the pane watched a spinner for
+    # the whole of it. Failures are logged and left lazy: a missing map asset
+    # must not stop the chat and search paths from serving.
+    def _warm():
+        try:
+            S["map"] = load_map()
+            map_png()
+        except Exception as e:                                # noqa: BLE001
+            log.warning("map not warmed (%s); it will load on first request", e)
+
+    threading.Thread(target=_warm, name="map-warm", daemon=True).start()
     yield
 
 
