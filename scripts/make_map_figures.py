@@ -169,6 +169,88 @@ def make_walk(out, size=980, pad=34):
     print(f"wrote {out}", flush=True)
 
 
+def make_morph(out, size=840, pad=34, n=18, t0=0.195, t1=0.402):
+    """One short stretch of the walk line, sampled 18 times instead of once.
+
+    The walk figure takes six stops a long way apart, which only shows that
+    the ends differ. This magnifies the in-between: over roughly a sixth of
+    the map's width the sentence changes one element at a time rather than
+    cutting from one scene to another. The inset says where on the map this
+    is happening, because at this magnification nothing else would.
+    """
+    xy, labels = load()
+    a, b = (0.01, -0.62), (0.88, 0.66)
+    pts_xy = [(a[0] + (b[0] - a[0]) * (t0 + (t1 - t0) * i / (n - 1)),
+               a[1] + (b[1] - a[1]) * (t0 + (t1 - t0) * i / (n - 1)))
+              for i in range(n)]
+    reads = [read_at_full(*p) for p in pts_xy]
+    says = [r["text"] for r in reads]
+    nears = [r["near"][0] for r in reads]
+    for p, s in zip(pts_xy, says):
+        print(f"  ({p[0]:+.3f},{p[1]:+.3f}) -> {s}", flush=True)
+
+    # zoomed view: render large, crop a square window around the segment
+    BIG = 3000
+    big = base_map(xy, BIG, pad, dot=3.0, alpha=80)
+    sb = [to_px(*p, BIG, pad) for p in pts_xy]
+    cx = (min(p[0] for p in sb) + max(p[0] for p in sb)) / 2
+    cy = (min(p[1] for p in sb) + max(p[1] for p in sb)) / 2
+    half = max(max(p[0] for p in sb) - min(p[0] for p in sb),
+               max(p[1] for p in sb) - min(p[1] for p in sb)) / 2 + 300
+    box = (int(cx - half), int(cy - half), int(cx + half), int(cy + half))
+    view = big.crop(box).resize((size, size), Image.LANCZOS)
+    sc = size / (box[2] - box[0])
+    seg = [((p[0] - box[0]) * sc, (p[1] - box[1]) * sc) for p in sb]
+
+    # locator: the whole map, small, with this segment marked
+    LOC = 190
+    loc = base_map(xy, LOC, 6, dot=0.7, alpha=95)
+    ld = ImageDraw.Draw(loc, "RGBA")
+    ld.line([to_px(*a, LOC, 6), to_px(*b, LOC, 6)], fill=INK + (70,), width=1)
+    ld.line([to_px(*p, LOC, 6) for p in pts_xy], fill=INK, width=3)
+
+    CAP = 150
+    f_cap, f_small, f_pct = font(30, 0), font(17, 10), font(15, 1)
+    TH = 150
+    frames, durs = [], []
+    for i, text in enumerate(says):
+        im = Image.new("RGB", (size, size + CAP), IVORY)
+        im.paste(view, (0, 0))
+        d = ImageDraw.Draw(im, "RGBA")
+        d.line(seg, fill=INK + (70,), width=3)
+        d.line(seg[: i + 1], fill=INK, width=6)
+        mxp, myp = seg[i]
+        tx = int(min(max(mxp + 20, 16), size - TH - 16))
+        ty = int(min(max(myp - 20 - TH, LOC + 26), size - TH - 16))
+        d.line([mxp, myp, tx + TH // 2, ty + TH // 2], fill=TERRA_SOFT, width=3)
+        d.rectangle([tx - 5, ty - 5, tx + TH + 4, ty + TH + 4], fill=IVORY)
+        im.paste(thumb(nears[i]["split"], nears[i]["file"], TH), (tx, ty))
+        d.rectangle([tx - 5, ty - 5, tx + TH + 4, ty + TH + 4],
+                    outline=TERRA, width=3)
+        marker(d, mxp, myp)
+        d.rectangle((14, 14, 14 + LOC + 1, 14 + LOC + 1), fill=IVORY)
+        im.paste(loc, (15, 15))
+        d.rectangle((14, 14, 14 + LOC + 1, 14 + LOC + 1),
+                    outline=(214, 203, 191), width=2)
+        d.text((15, 14 + LOC + 11), "WHERE THIS IS", font=font(12, 1), fill=MUTED)
+        d.rectangle((0, size, size, size + CAP), fill=PANEL)
+        d.line((0, size, size, size), fill=(226, 216, 205), width=2)
+        fresh = i == 0 or text != says[i - 1]
+        d.text((34, size + 22), f"SAMPLE {i + 1} OF {n}", font=f_pct, fill=TERRA)
+        for k, line in enumerate(wrap(d, text, f_cap, size - 68)[:2]):
+            d.text((34, size + 48 + k * 38), line, font=f_cap,
+                   fill=INK if fresh else MUTED)
+        d.text((size - 34, size + 22), "lab.sunstonenorth.com", font=f_small,
+               fill=MUTED, anchor="ra")
+        frames.append(im.quantize(colors=64, method=Image.MEDIANCUT))
+        durs.append(1500 if fresh else 700)
+    durs[-1] = 3200
+
+    frames[0].save(out, save_all=True, append_images=frames[1:],
+                   duration=durs, loop=0, optimize=True)
+    print(f"wrote {out}", flush=True)
+
+
 def make_poster(out, size=1500, pad=54):
     """The whole map at a size where the reader's own names are readable."""
     xy, labels = load()
@@ -430,6 +512,7 @@ def make_openwater(out, cols=4, cell=400):
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--walk", action="store_true")
+    p.add_argument("--morph", action="store_true")
     p.add_argument("--poster", action="store_true")
     p.add_argument("--blend", action="store_true")
     p.add_argument("--ladder", action="store_true")
@@ -438,6 +521,8 @@ if __name__ == "__main__":
     a = p.parse_args()
     if a.walk:
         make_walk(f"{a.outdir}/fig_walk.gif")
+    if a.morph:
+        make_morph(f"{a.outdir}/fig_morph.gif")
     if a.poster:
         make_poster(f"{a.outdir}/fig_poster.png")
     if a.blend:

@@ -174,6 +174,25 @@ region in the northeast, read at six evenly spaced stops along the way:</p>
 lies between them and reads each thing correctly on the way. Every stop is
 somewhere, so you can search this map by moving as well as by typing.</p>
 
+<h3>Closer up, it changes one thing at a time</h3>
+
+<p>Six stops that far apart only establish that the ends differ. Take the
+stretch between the second and third of them, about a sixth of the map&rsquo;s
+width, and sample it eighteen times instead of once:</p>
+
+{embed("fig_morph.gif",
+       "Eighteen samples along a short stretch of the same line, magnified, "
+       "each with the sentence it returns and the nearest photograph",
+       caption="Eleven distinct sentences over eighteen samples. A train "
+               "becomes a queue at a food truck, the food truck becomes a "
+               "truck in a parking lot, the truck picks up a fire truck, the "
+               "fire truck becomes a fire hydrant with a car beside it, and "
+               "the car ends at a red light.")}
+
+<p>Every step keeps most of the previous scene and changes one part of it.
+That is what makes a midpoint between two regions readable at all. The ground
+between named places is filled with more places, not with noise.</p>
+
 <h3>The map runs in both directions</h3>
 
 <p>Type a sentence and it is placed by meaning,
