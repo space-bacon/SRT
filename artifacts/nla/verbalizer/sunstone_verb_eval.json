@@ -1,0 +1,53 @@
+{
+ "question": "can a 0.6B say what is at a point in the Lab's own space",
+ "gallery": 118287,
+ "gallery_note": "train2017 sunstone-head projections, L2 normalized, the same representation the Lab serves",
+ "n_scored": 500,
+ "text_convention": "BOS-prefixed last-token L47, gemma-4 is BOS-sensitive",
+ "head": "sunstone_linear_head_v3_drift.pt",
+ "reader_backbone": "Qwen/Qwen3-0.6B",
+ "n_prefix_tokens": 16,
+ "arms": {
+  "gold_caption_harness_control": {
+   "r@1": 0.212,
+   "r@10": 0.554,
+   "median_rank": 7.5
+  },
+  "real": {
+   "r@1": 0.042,
+   "r@10": 0.194,
+   "median_rank": 64.0,
+   "sample": [
+    "A black bear walking through a forest.",
+    "A man flying a kite on a beach.",
+    "A woman standing on a ski slope with a sign.",
+    "Two polar bears are playing in the snow.",
+    "A computer monitor and keyboard are on a desk."
+   ]
+  },
+  "foreign": {
+   "r@1": 0.0,
+   "r@10": 0.0,
+   "median_rank": 55866.0,
+   "sample": [
+    "A box of food and a box of microwave in a box",
+    "A black bear walking through a forest.",
+    "A man flying a kite on a beach.",
+    "A woman standing on a ski slope with a sign.",
+    "Two polar bears are playing in the snow."
+   ]
+  },
+  "mean": {
+   "r@1": 0.0,
+   "r@10": 0.002,
+   "median_rank": 59135.0,
+   "sample": [
+    "A man is standing on a bench next to a car.",
+    "A man is standing on a bench next to a car.",
+    "A man is standing on a bench next to a car.",
+    "A man is standing on a bench next to a car.",
+    "A man is standing on a bench next to a car."
+   ]
+  }
+ }
+}
