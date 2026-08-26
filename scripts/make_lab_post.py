@@ -230,7 +230,7 @@ is nowhere. Hand it the average of every photograph at once and it still writes
 fluent, plausible English, and that lands nowhere too. The sentences follow the
 particular numbers they were given.</p>
 
-<h3>Level with a human, once you measure it properly</h3>
+<h3>Top of the human range, once you measure it properly</h3>
 
 <p>The obvious comparison is a person. Ours was wrong for a while, and it was
 wrong against us.</p>
@@ -248,7 +248,8 @@ against its 64. So on the version you can go and click, a human still wins.</p>
 
 <p>Then we rebuilt the whole thing with the evaluation photographs held out of
 <em>every</em> training step, not just the reader&rsquo;s, which is what should
-have been true the first time. On that rebuild the three come out together:</p>
+have been true the first time. On that rebuild the reader comes out top of the
+three:</p>
 
 <table>
 <tr><th align="left">arm</th><th align="right">median rank of 118,287</th></tr>
@@ -259,14 +260,17 @@ have been true the first time. On that rebuild the three come out together:</p>
 
 <p>Counted per photograph rather than per median, the reader places the image
 above the first person&rsquo;s caption on <strong>49.6%</strong> of them. A
-second person manages <strong>48.0%</strong>. It sits inside the spread between
-two people describing the same picture.</p>
+second person manages <strong>48.0%</strong>. The reader beats a human caption
+slightly more often than another human does.</p>
 
 <p>A 382&nbsp;MB model describing a
-photograph from numbers alone, about as well as a person who is
+photograph from numbers alone, as well as a person who is
 looking straight at it. Not because it is a good captioner, but because the
 record it was handed already contained the scene.</p>
-
+<p>The margins are small and we are not going to inflate them. Two ranks out of
+118,287 and 1.6 points of win rate put the reader at the top of the human band
+rather than clear of it. The claim is parity, and parity is the result. The
+ordering inside that band runs our way on both measures.</p>
 <p>That rebuild is a measurement, not a release. The Lab serves the instrument
 in the table before it, and the two should not be quoted as one number.</p>
 
@@ -284,7 +288,7 @@ what is in a scene. It is much weaker on how the scene is arranged. Ask it what
 is there and it is reliable; ask it who is doing what to whom and it is not.</p>
 
 <p>Three numbers are in play on the map and they are not interchangeable: 40,000
-photographs are laid out on it, a click reads the average of the roughly
+photographs are laid out on it, a click reads the average of the
 forty-eight nearest of those, and the eight neighbours shown beside the sentence
 are retrieved from the full 123,287-image gallery.</p>
 
