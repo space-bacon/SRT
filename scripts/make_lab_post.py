@@ -55,11 +55,11 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>The model already had a map. We only drew it.</h3>
+<h3>Nobody put snowboarding there</h3>
 
-<p><em>40,000 photographs, arranged by how one frozen 31-billion-parameter model
-saw them. Stand in the empty spaces between them and a 382&nbsp;MB model with no
-eyes will tell you what belongs there.</em></p>
+<p><em>We drew a map of how one frozen 31-billion-parameter model saw 40,000
+photographs. Then we clicked the empty spaces between the islands, and a
+382&nbsp;MB model with no eyes told us what belongs in them.</em></p>
 
 <p>There is a new instrument on the Sunstone North Lab, and the short version is
 this. We took 40,000 photographs, showed each one to a very large model, and
