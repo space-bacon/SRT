@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   arrangement, which it does not recover. Raw states needed no re-encode.
   Scripts: `build_fullstate_pairs.py`, `train_shared_space_verbalizer.py`,
   `eval_shared_space_verbalizer.py`; artifacts `artifacts/nla/verbalizer/`.
+  Checkpoints released as
+  [`RiverRider/srt-verbalizer-v1`](https://huggingface.co/RiverRider/srt-verbalizer-v1)
+  (matched 27B reader median 20, cross-model 31B reader 25, a gallery-vector
+  reader for index-only deployments, and an EOS variant that writes better and
+  scores worse). Served live as **04 · Read the record** at
+  [lab.sunstonenorth.com](https://lab.sunstonenorth.com).
 - **Median rank for the anchored Q4 browser arm at deployment scale**
   (`artifacts/nla/q4/cross_runtime_browser_rung_123k.json`). The measurement
   promised in public review: fp16 reference median 36, Q4 head as-is 44,578

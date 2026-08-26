@@ -176,6 +176,7 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 | [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone) | gemma-4-31B-it (multimodal) | Text-trained community read-out that reads images zero-shot. See SRT-Sunstone below. |
 | [`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head) | gemma-4-31B-it (multimodal) | 22 MB (bf16) cross-modal retrieval head: i2t R@1 0.661 on our protocol, 0.416 Karpathy 5k. Quantization-robust; runs locally. |
 | [`RiverRider/srt-browser-head-118k`](https://huggingface.co/RiverRider/srt-browser-head-118k) | Qwen3-0.6B text × Qwen3.8-27B image | 2.1 MB head for the browser tier. Search 123,287 photographs from a tab, offline. Ships with the 4 KB runtime anchor, without which the cross-runtime read-out is at chance. |
+| [`RiverRider/srt-verbalizer-v1`](https://huggingface.co/RiverRider/srt-verbalizer-v1) | frozen Qwen3-0.6B reading gemma-4-31B / Qwen3.8-27B states | ~44M prefix that turns one raw hidden state into a sentence. Median rank 20 of 123,287 against 39 for a human caption; both controls at chance. Four checkpoints incl. a documented negative. |
 
 The 235B checkpoint shows the SRT read-out transfers across backbone scale and
 architecture (dense 7B → 94-layer, 22B-active MoE): only the ~15.9M side-channel
@@ -428,7 +429,11 @@ references foreground arrangement and oddity ("a woman *stands*", "mounted
 one reference caption, not best-of-five. What the number does establish is that
 a 382 MB model can describe a 31B's reading precisely enough to identify the
 photograph among 123,287 candidates. Details and caveats:
-[`paper_nla.md`](paper_nla.md) §11.8.
+[`paper_nla.md`](paper_nla.md) §11.8. Checkpoints:
+[`RiverRider/srt-verbalizer-v1`](https://huggingface.co/RiverRider/srt-verbalizer-v1).
+Live under **04 · Read the record** at
+[lab.sunstonenorth.com](https://lab.sunstonenorth.com), where you can upload
+your own photograph and see the same reader given no record beside it.
 
 ### HF artifacts
 

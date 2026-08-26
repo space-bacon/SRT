@@ -1914,7 +1914,8 @@ identify the photograph among 123,287 candidates, at a median rank of 25.
 
 Artifacts: `artifacts/nla/verbalizer/verb_eval_{full,val2017,val2017_3ep}.json`;
 scripts `build_fullstate_pairs.py`, `train_shared_space_verbalizer.py`,
-`eval_shared_space_verbalizer.py`. The raw states required no re-encode: they
+`eval_shared_space_verbalizer.py`; checkpoints at
+`RiverRider/srt-verbalizer-v1`. The raw states required no re-encode: they
 are published at `RiverRider/srt-nla-gemma4-artifacts` (`procrustes/train_pairs/`)
 and, for the 27B, at `RiverRider/srt-qwen38-coco-states` (`raw118k/` for
 train2017, `qwen38_coco_ls/images.pt` for the val2017 states at layer 52).
