@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **A map of the gallery you can stand anywhere on**, served as pane
+  **04 · Stand somewhere**. All 118,287 COCO train2017 images projected through
+  the sunstone head into one 1,024-d space and laid out in two dimensions. A
+  ~36M-parameter prefix on a frozen Qwen3-0.6B reads any point and says what is
+  there, including the open water between clusters where no photograph exists:
+  the empty gap between the skiing and skateboarding regions reads as "A man is
+  doing a trick on a snowboard." Every region name on the map was written by
+  that reader rather than by us. Uploading a photograph encodes it through the
+  Lab's live gemma-4-31B into the same space in about two seconds, and the
+  eight nearest photographs are always shown beside the sentence so a caption
+  prior cannot pass unnoticed. Map and reader assets on
+  [`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head);
+  server in `scripts/sunstone_server.py`, figures via
+  `scripts/make_map_figures.py`.
 - **A 0.6B verbalizes a 31B's raw internal state** (`paper_nla.md` §11.8). A
   frozen Qwen3-0.6B with a 44.5M prefix MLP reads one raw gemma-4-31B L47 image
   state (d=5376) and writes a caption; re-encoding that caption through the
@@ -14,17 +28,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   at **median rank 25** (R@1 0.120), past the single human reference caption
   (median 39). Controls sit at chance: another image's state 62,970, the mean
   state 59,408. The gallery was built by an unrelated Qwen3.8-27B tower, so no
-  shared representation carries the result. The win over the human caption is a
-  register effect, not caption quality: the model enumerates whole-scene
+  shared representation carries the result. The win over the human caption is
+  register and length, not caption quality: the model enumerates whole-scene
   inventory, which this head reads well, while the human references foreground
-  arrangement, which it does not recover. Raw states needed no re-encode.
+  arrangement, which it does not recover, and the metric rewards naming more
+  true things about a scene than a single reference caption names. Raw states
+  needed no re-encode.
   Scripts: `build_fullstate_pairs.py`, `train_shared_space_verbalizer.py`,
   `eval_shared_space_verbalizer.py`; artifacts `artifacts/nla/verbalizer/`.
   Checkpoints released as
   [`RiverRider/srt-verbalizer-v1`](https://huggingface.co/RiverRider/srt-verbalizer-v1)
   (matched 27B reader median 20, cross-model 31B reader 25, a gallery-vector
   reader for index-only deployments, and an EOS variant that writes better and
-  scores worse). Served live as **04 · Read the record** at
+  scores worse). Served live as **02 · Read an image** at
   [lab.sunstonenorth.com](https://lab.sunstonenorth.com).
 - **Median rank for the anchored Q4 browser arm at deployment scale**
   (`artifacts/nla/q4/cross_runtime_browser_rung_123k.json`). The measurement
@@ -110,6 +126,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pass is never lost to a cheap post-processing failure.
 
 ### Fixed
+- **The Lab-map reader's "human ceiling" was a memorised training pair.**
+  `sunstone_verb_eval.json` reported a gold-caption arm at median rank 8 and
+  the prose around it called that the ceiling the reader falls short of. The
+  sunstone head was fitted on COCO train2017 pairs built from each image's
+  *first* caption (`gemma4_encode_pairs.py` writes `caption: caps[0]`) and the
+  eval gallery is train2017, so that arm scored a pair the head had been
+  trained to align. A second caption of the same photograph, which the head
+  never saw, lands at median **45**, against the reader's 64. Counted per
+  photograph, the reader ranks the image above the first human caption on
+  **17.0%** of images, where a second human beats the first on **20.0%**. The
+  arm is a wiring control and is now labelled as one in the script, the model
+  card and the artifact's own `caveat` and `supersedes` fields, and the eval
+  now carries an uncontaminated `second_human_caption` arm plus per-item ranks.
+  Unlike every other correction in this list, this one had been making the
+  result look **worse** than it measured.
 - **`srt-browser-head-118k` model card advertised the wrong recovery figure.**
   The published table reported 0.2300/0.0154/0.1952 and "85% recovery", which
   were measured on an earlier 4,000-image head against a 1,000-image pool, not

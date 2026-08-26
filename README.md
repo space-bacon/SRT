@@ -421,17 +421,22 @@ in 123,287. That near-parity matters: if a representation shared between the
 two towers were carrying the result rather than the sentence being descriptive,
 the matched pair should dominate. It does not.
 
-**Read the human-caption row carefully.** This is not better captioning. It is
-a register match: the model enumerates whole-scene inventory, which this head
+**Read the human-caption row carefully.** This is not better captioning. Two
+measurable things produce it, neither of them superior description. The first
+is register: the model enumerates whole-scene inventory, which this head
 recovers well (detection AUC 0.883 over 80 COCO categories), while the human
 references foreground arrangement and oddity ("a woman *stands*", "mounted
-*upside-down*"), which the same head is documented *not* to recover. Gold is
+*upside-down*"), which the same head is documented *not* to recover. The second
+is length: the metric rewards naming more true things about a scene, and a
+human reference names one scene once. The EOS checkpoint that stops on its own
+in eleven tokens drops to median 46, below the human caption it used to beat,
+which is that mechanism showing up directly. Gold is
 one reference caption, not best-of-five. What the number does establish is that
 a 382 MB model can describe a 31B's reading precisely enough to identify the
 photograph among 123,287 candidates. Details and caveats:
 [`paper_nla.md`](paper_nla.md) §11.8. Checkpoints:
 [`RiverRider/srt-verbalizer-v1`](https://huggingface.co/RiverRider/srt-verbalizer-v1).
-Live under **04 · Read the record** at
+Live under **02 · Read an image** at
 [lab.sunstonenorth.com](https://lab.sunstonenorth.com), where you can upload
 your own photograph and see the same reader given no record beside it.
 

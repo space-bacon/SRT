@@ -212,8 +212,8 @@ sentence for display, or use `gemma4_31b_L47_eos.pt`.
 ## Try it
 
 The Sunstone Lab serves this live at
-[lab.sunstonenorth.com](https://lab.sunstonenorth.com) under **04 · Read the
-record**: upload a photograph, gemma-4-31B encodes it, and this model says what
+[lab.sunstonenorth.com](https://lab.sunstonenorth.com) under **02 · Read an
+image**: upload a photograph, gemma-4-31B encodes it, and this model says what
 is in the record beside the same reader given no record at all. Warm latency is
 about 2 s to encode and 2 s to read.
 
