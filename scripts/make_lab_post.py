@@ -67,16 +67,33 @@ answer whatever is asked next. The technical name is a hidden state. Think of it
 as the model&rsquo;s private notes on the image, written in its own handwriting,
 and normally thrown away the instant the answer is produced.</p>
 
+<p>That last part is the interesting one. Every time a multimodal model looks at
+anything it works out what it is looking at, in enough detail to answer
+questions about it, and then throws that work away. You paid for it. It is gone
+before you could use it for anything else.</p>
+
 <p>We kept the notes for 123,287 photographs, and then taught something very
 small to read them. A frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in
 front of it, takes one of those number-lists and writes an English sentence
-about a photograph it cannot see and was never shown. It is reading somebody
-else&rsquo;s handwriting and telling you what it says.</p>
+about a photograph it cannot see and was never shown.</p>
+
+<p>The reader having no eyes is the point rather than a curiosity. If it could
+see, you could never tell whether its sentence came from the record or from the
+picture. It cannot see, so everything it says came out of the numbers.</p>
+
+<p>The notes turn out to be durable, too. The 31B did its looking once, months
+ago, on a different machine, and has not run since. The record it left behind
+still answers questions today. Compute once, read for as long as you like.</p>
 
 <p><a href="https://lab.sunstonenorth.com"><strong>lab.sunstonenorth.com</strong></a>
 &middot; pane 04. The whole thing is served from one desktop computer.</p>
 
 <h3>The shape was already in the notes</h3>
+
+<p>What follows is a map, and the map is a demonstration rather than the
+product. What it demonstrates is that the discarded record is rich enough to
+search, to describe and to navigate, using components small enough to run
+alongside whatever you already have.</p>
 
 <p>A second trained piece shortens each list from 5,376 numbers to 1,024, in a
 way that puts a photograph and a sentence describing it in nearly the same
@@ -230,6 +247,11 @@ have been true the first time. On that rebuild the three come out together:</p>
 above the first person&rsquo;s caption on <strong>49.6%</strong> of them. A
 second person manages <strong>48.0%</strong>. It sits inside the spread between
 two people describing the same picture.</p>
+
+<p>That is the part worth sitting with. A 382&nbsp;MB model, with no vision of
+any kind, describing a photograph it cannot see about as well as a person who is
+looking straight at it. Not because it is a good captioner, but because the
+record it was handed already contained the scene.</p>
 
 <p>That rebuild is a measurement, not a release. The Lab serves the instrument
 in the table before it, and the two should not be quoted as one number.</p>
