@@ -50,6 +50,8 @@ def parse():
     p.add_argument("--caps", default="/root/full_caps.json")
     p.add_argument("--head-repo", default="RiverRider/srt-sunstone-linear-head")
     p.add_argument("--head-file", default="sunstone_linear_head_v3_drift.pt")
+    p.add_argument("--head-path", default=None,
+                   help="local head checkpoint, bypassing the Hub download")
     p.add_argument("--tower", default="google/gemma-4-31B-it")
     p.add_argument("--layer", type=int, default=47)
     p.add_argument("--n", type=int, default=500)
@@ -75,7 +77,7 @@ def main():
     test = list(ck["test_idx"])[: a.n]
     print(f"gallery {gal.shape}, scoring {len(test)} held-out points", flush=True)
 
-    d = torch.load(hf_hub_download(a.head_repo, a.head_file),
+    d = torch.load(a.head_path or hf_hub_download(a.head_repo, a.head_file),
                    map_location="cpu", weights_only=True)
     Wt = d["txt"]["weight"].float().numpy()
     bt = d["txt"]["bias"].float().numpy()
@@ -215,7 +217,7 @@ def main():
                                "the same representation the Lab serves",
                "n_scored": len(test),
                "text_convention": f"BOS-prefixed last-token L{a.layer}, gemma-4 is BOS-sensitive",
-               "head": a.head_file, "reader_backbone": "Qwen/Qwen3-0.6B",
+               "head": a.head_path or a.head_file, "reader_backbone": "Qwen/Qwen3-0.6B",
                "n_prefix_tokens": ck["n_tok"], "arms": results,
                "caveat": "gold_caption_harness_control is a WIRING CONTROL and must "
                          "not be quoted as a human ceiling. The head was fitted on "
