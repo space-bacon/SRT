@@ -55,11 +55,11 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>A 382 MB model reads what a 31B saw</h3>
+<h3>A 382 MB model reads what a 31-billion-parameter model worked out</h3>
 
-<p><em>Handed the working notes a 31-billion-parameter model left behind, a
-frozen 382&nbsp;MB model writes a sentence that finds the right photograph in
-the top 0.05% of 118,287. Its only input is numbers.</em></p>
+<p><em>The notes are what the big model worked out and would otherwise have
+discarded. Handed them and nothing else, the small one writes a sentence that
+finds the right photograph in the top 0.05% of 118,287.</em></p>
 
 <p>When a large model looks at a photograph it does not keep the picture. It
 builds a working impression: a list of several thousand numbers it uses to
