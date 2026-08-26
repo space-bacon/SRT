@@ -1,6 +1,6 @@
 ---
-title: Walk the space
-emoji: 🚶
+title: A map of what a 27B understood
+emoji: 🗺️
 colorFrom: indigo
 colorTo: pink
 sdk: gradio
@@ -15,28 +15,52 @@ tags:
   - embeddings
   - activation-verbalization
   - vision-language
-short_description: Hear what is anywhere in a 27B's semantic space
+short_description: Click anywhere in a 27B's understanding and hear it
 ---
 
-# Walk the space
+# A map of what a 27B understood
 
 A **Qwen3.8-27B** read 123,287 photographs into a 1024-dimensional room, months
 ago, on a datacenter GPU. It is not running here and never will again. What
 survives is about **a kilobyte per photograph**.
 
-A **2.1 MB** linear head puts your sentences into that same room. And a frozen
-**Qwen3-0.6B**, which has no vision path and has never seen a photograph, says
-what is at any point in it.
+This is that room, flattened to a page. Every dot is a photograph. **Click
+anywhere** and a frozen **Qwen3-0.6B**, which has no vision path and has never
+seen a photograph, says what is at that spot.
 
-That last part is what turns the room into a place rather than a lookup table.
-You can stand where a photograph is, where your own words are, or **halfway
-between two photographs, where nothing is at all**, and hear what is there.
+Every region name on the map was written the same way. We did not label the
+continents. We handed the reader each cluster's centre and printed what it said.
+
+## What is on it
+
+The layout has structure you can navigate by. Animals to the west, transport to
+the southwest, sport and open air along the north, domestic interiors down the
+southeast. Nothing arranged that. It is where the photographs fell.
+
+```
+A couple of giraffes standing in a field
+A herd of horses standing in a field
+A man riding skis down a snow covered slope
+A red and white bus is parked on the street
+A room with a bed and a chair
+A bathroom with a toilet, sink, and a mirror
+```
+
+Those are region names, not captions we chose.
 
 ## What you can do
 
-**Travel.** Give it two sentences and cross the ground between them. Every point
-in the middle is a scene that does not exist, and the reader describes it
-anyway:
+**Click.** Anywhere, including the empty water between continents. The reader
+takes the mean of the ~48 nearest photographs and describes it. Points between
+regions are scenes no photograph shows, and it describes them anyway.
+
+**Fly.** Type a sentence and a marker travels to where it belongs. *"a dog
+asleep in the afternoon sun"* lands in the dog country and the eight nearest
+photographs are all sleeping dogs. *"a man riding skis down a snowy slope"*
+arrives at (0.10, 0.90) against a ski-region centre of (0.08, 0.86).
+
+**Cross.** Two sentences, and it walks the ground between them, reading aloud as
+it goes. The middle of the walk is somewhere nothing lives:
 
 ```
 0.00  A dog sleeping in a bed in the sun.
@@ -46,36 +70,22 @@ anyway:
 1.00  A red bus crossing a bridge in the rain.
 ```
 
-**Arithmetic.** An axis is the difference between two groups of words. Add it to
-where you are standing, and listen to where you end up:
-
-```
-−1.0  toward vehicles   A car is going down a street with a train coming.
- 0.0  your sentence     A group of people walking down a street. A car is coming.
-+1.0  toward animals    A large animal is running down a street. A dog is running.
-```
-
-**Round trip.** Type a sentence with no destination. It is encoded to 1,024
-numbers by one model and read back by another that never saw your text. *"A red
-bus crossing a bridge in the rain"* comes back as *"A red bus crossing a bridge
-in the rain."*
-
 ## Why this is not an ordinary embedding demo
 
-Vector arithmetic is decades old and cached image embeddings are ordinary. Three
-things here are not.
+Projections of embedding spaces are old, and cached image embeddings are
+ordinary. Three things here are not.
 
-**The reader is a stranger to the writer.** It is not a decoder trained
-jointly with its encoder. It is a separate, 45× smaller model reading a foreign
+**The regions named themselves.** Every UMAP scatterplot you have seen was
+labelled by a human reading the cluster, or by the dataset's own metadata. These
+names came out of a 0.6B model that was handed a centroid and asked what it was.
+
+**The reader is a stranger to the writer.** It is not a decoder trained jointly
+with its encoder. It is a separate, 45× smaller model reading a foreign
 network's interior, and the controls show a shared representation is not what
 carries it: hand the reader another photograph's point and it scores at chance.
 
-**Arbitrary points speak, not just stored ones.** The midpoint between two
-photographs is somewhere no photograph lives. It still says something coherent,
-and something that belongs to neither end.
-
-**The large model is a finished file.** Its understanding did not need to be
-recomputed. It needed to be stored in a format something else could read.
+**Arbitrary points speak, not just stored ones.** That is what makes this a map
+rather than an index. You can stand where nothing is and still get an answer.
 
 Which is the actual claim: machine understanding of an image compresses to about
 a kilobyte, and that kilobyte is enough for a much smaller, unrelated model to
@@ -94,6 +104,11 @@ photographs ──► Qwen3.8-27B (once, offline) ────┘
 The reader is a prefix network that turns one point into 16 soft tokens, which
 a frozen Qwen3-0.6B speaks from. Only the prefix was trained; the backbone is
 untouched, and it is the same weights that encode your query.
+
+The map itself is UMAP (`n_neighbors=25`, `min_dist=0.12`, cosine) over 40,000
+of the photographs, with 24 k-means regions. Two dimensions cannot carry 1,024,
+so what you are looking at is neighbourhood structure. The coordinates mean
+nothing on their own.
 
 ## The honest part
 
