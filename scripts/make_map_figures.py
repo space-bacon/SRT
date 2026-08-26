@@ -121,9 +121,12 @@ def make_walk(out, size=980, pad=34):
     xy, labels = load()
     stops = [(0.01, -0.62), (0.18, -0.36), (0.36, -0.10),
              (0.53, 0.15), (0.71, 0.40), (0.88, 0.66)]
-    says = [read_at(*s) for s in stops]
-    for s, t in zip(stops, says):
-        print(f"  {s} -> {t}", flush=True)
+    reads = [read_at_full(*s) for s in stops]
+    says = [r["text"] for r in reads]
+    nears = [r["near"][0] for r in reads]
+    for s, t, n in zip(stops, says, nears):
+        print(f"  {s} -> {t}\n      nearest {n['file']} cos {n['score']}",
+              flush=True)
 
     base = base_map(xy, size, pad, dot=1.9, alpha=78)
     CAP = 150
@@ -132,6 +135,7 @@ def make_walk(out, size=980, pad=34):
     f_pct = font(15, 1)
 
     frames = []
+    TH = 150
     for i, ((mx, my), text) in enumerate(zip(stops, says)):
         im = Image.new("RGB", (size, size + CAP), IVORY)
         im.paste(base, (0, 0))
@@ -142,7 +146,15 @@ def make_walk(out, size=980, pad=34):
         for px, py in pts[:-1]:
             d.ellipse((px - 6, py - 6, px + 6, py + 6), fill=(250, 247, 242, 220))
             d.ellipse((px - 6, py - 6, px + 6, py + 6), outline=INK + (150,), width=2)
-        marker(d, *pts[-1])
+        mxp, myp = pts[-1]
+        tx = int(min(max(mxp + 18, 16), size - TH - 16))
+        ty = int(min(max(myp - 18 - TH, 16), size - TH - 16))
+        d.line([mxp, myp, tx + TH // 2, ty + TH // 2], fill=TERRA_SOFT, width=3)
+        d.rectangle([tx - 5, ty - 5, tx + TH + 4, ty + TH + 4], fill=IVORY)
+        im.paste(thumb(nears[i]["split"], nears[i]["file"], TH), (tx, ty))
+        d.rectangle([tx - 5, ty - 5, tx + TH + 4, ty + TH + 4],
+                    outline=TERRA, width=3)
+        marker(d, mxp, myp)
         d.rectangle((0, size, size, size + CAP), fill=PANEL)
         d.line((0, size, size, size), fill=(226, 216, 205), width=2)
         d.text((34, size + 22), f"STOP {i + 1} OF {len(stops)}", font=f_pct, fill=TERRA)

@@ -104,8 +104,9 @@ alongside whatever you already have.</p>
 way that puts a photograph and a sentence describing it in nearly the same
 place. Lay 40,000 of those shortened lists on a flat sheet, positioned so that
 photographs the model saw as similar land near one another, and the sheet
-organises itself. Animals gather in the west, transport in the southwest, sport
-along the north, kitchens and bathrooms down in the southeast.</p>
+organises itself. Animals gather in the northeast, transport in the southeast, sport
+across the north and northwest, food and kitchens in the southwest, and the
+domestic rooms due south.</p>
 
 <p>That shortening step is a single linear layer.
 A linear map can rotate a space, stretch it and pick out directions
@@ -160,8 +161,8 @@ as a scene. Thin ground reads as a distant crowd.</p>
 <h3>Every stop on the way is its own scene</h3>
 
 <p>If any point can be read, so can every point on a line drawn between two of
-them. This line runs from the bathroom region in the southeast to the giraffe
-region in the west, read at six evenly spaced stops along the way:</p>
+them. This line runs from the bathroom region due south to the giraffe
+region in the northeast, read at six evenly spaced stops along the way:</p>
 
 {embed("fig_walk.gif",
        "Six stops along a line across the map, from the bathroom region to the "
