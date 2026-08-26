@@ -23,6 +23,7 @@ corrections back into the stream. *Meaning forks. SRT sees it.*
 > - **What:** a ~12 M-parameter adapter that observes a frozen LLM at 3 layers and injects a FiLM correction at 2 of them, exposing per-token semiotic signals (divergence, reflexivity `r̂`, regime) plus a discourse/embedding vector.
 > - **Why:** lightweight, portable instrumentation for a frozen backbone — no base-model weight updates, zero cross-entropy degradation, trains in hours at ≈0.17 % of backbone params. The released `v1.0` checkpoint targets semantic embeddings (MTEB-STS).
 > - **New (July 2026) — the portability result:** the structure these taps read is **invariant across scale, precision, and hardware**. A 22 MB linear head gives a frozen multimodal LLM image↔text retrieval at fully-trained-2018-dual-encoder level (Karpathy 5k i2t R@1 = 0.416), and the *same head* survives a 10× host reduction (31B → 3B, no loss), 4-bit quantization (−0.01 R@1, unchanged weights), and a change of silicon (CUDA datacenter → Apple-Silicon Mac: 97.0% head-space text agreement against a 99.96% same-runtime ceiling, and on-device image→text retrieval within 3 R@1 points of the datacenter reference, 0.640 vs 0.670). One artifact, every deployment tier from Raspberry-Pi-class to datacenter. See [SRT-Sunstone](#srt-sunstone--the-read-out-reads-images-cross-modal) and [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md).
+> - **New (August 2026) — the whole system runs in a browser tab:** a **382 MB** Qwen3-0.6B and a **2.1 MB** head, in WebAssembly on the CPU, search **123,287** photographs a 27B model encoded offline. No server, no GPU, no API key, and it works with the network off. The 27B never runs at inference; what ships is its reading. Crossing runtimes needs a **4 KB** anchor, without which the read-out is at chance rather than merely degraded. [Try it](https://huggingface.co/spaces/RiverRider/0.6b-reads-27b), [details below](#the-browser-tier-the-whole-system-in-a-tab).
 > - **New (August 2026) — a small model reads a large one:** a frozen **Qwen3-0.6B** (382 MB at Q4), handed one **raw gemma-4-31B** hidden state and nothing else, writes a sentence that retrieves the right photograph out of **123,287** at **median rank 25**, against 39 for a human reference caption. The gallery was built by an unrelated 27B tower, so no shared representation carries it, and both controls (another image's state, the mean state) sit at chance. The human-caption comparison is a register effect, not a captioning claim; see [§11.8](paper_nla.md) for why. [Details below](#a-06b-puts-words-to-a-31bs-internal-state).
 > - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
 > - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
@@ -154,6 +155,10 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 
 ### Live demos
 
+- **0.6B reads 27B, entirely in your browser** (no server, no GPU, works offline
+  once loaded): <https://huggingface.co/spaces/RiverRider/0.6b-reads-27b>
+- **Sunstone Lab** (gemma-4-31B-it chat, captioning, and retrieval on one
+  frozen backbone): <https://lab.sunstonenorth.com>
 - **SRT-Sunstone** (gemma-4-31B-it cross-modal read-out): <https://huggingface.co/spaces/RiverRider/srt-sunstone>
 - gpt-oss-20b full input→output trace: <https://huggingface.co/spaces/RiverRider/srt-nla-gptoss20b-trace>
 - SRT showcase (Qwen2.5-7B live introspection, ZeroGPU): <https://huggingface.co/spaces/RiverRider/srt-showcase>
@@ -170,6 +175,7 @@ See [examples/](examples/) for end-to-end loading, scoring, and sentence-encodin
 | [`RiverRider/srt-adapter-gptoss20b`](https://huggingface.co/RiverRider/srt-adapter-gptoss20b) | gpt-oss-20b (MXFP4 MoE) | Full Phase A+B port. Regime ECE 0.0009 / AUROC 0.974, r̂ Pearson 0.689, community NMI 0.42. |
 | [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone) | gemma-4-31B-it (multimodal) | Text-trained community read-out that reads images zero-shot. See SRT-Sunstone below. |
 | [`RiverRider/srt-sunstone-linear-head`](https://huggingface.co/RiverRider/srt-sunstone-linear-head) | gemma-4-31B-it (multimodal) | 22 MB (bf16) cross-modal retrieval head: i2t R@1 0.661 on our protocol, 0.416 Karpathy 5k. Quantization-robust; runs locally. |
+| [`RiverRider/srt-browser-head-118k`](https://huggingface.co/RiverRider/srt-browser-head-118k) | Qwen3-0.6B text × Qwen3.8-27B image | 2.1 MB head for the browser tier. Search 123,287 photographs from a tab, offline. Ships with the 4 KB runtime anchor, without which the cross-runtime read-out is at chance. |
 
 The 235B checkpoint shows the SRT read-out transfers across backbone scale and
 architecture (dense 7B → 94-layer, 22B-active MoE): only the ~15.9M side-channel
@@ -251,6 +257,45 @@ Engineering guide (deployment tiers, calibration rules, reproduction recipe):
 - **Live demo**: <https://huggingface.co/spaces/RiverRider/srt-sunstone>
 - **Model**: [`RiverRider/Gemma-4-31B-it-SRT-Sunstone`](https://huggingface.co/RiverRider/Gemma-4-31B-it-SRT-Sunstone)
 - **Demo source**: [demo/cross_modal_space/](demo/cross_modal_space/)
+
+### The browser tier: the whole system in a tab
+
+The far end of that invariance axis is a web page. A **382 MB** Qwen3-0.6B at
+Q4_0 and a **2.1 MB** head run in WebAssembly on the CPU, and search
+**123,287** photographs that a 27B model encoded offline. No server, no GPU,
+no API key; once the tab has loaded it works with the network off.
+
+The 27B appears nowhere at runtime. It encoded the gallery once, months
+earlier, and what ships is the index. That is the deployment shape the whole
+program argues for: the large model's reading is a durable artifact, and the
+small model is enough to *use* it.
+
+Crossing runtimes is where this gets interesting, and it is the part most
+easily got wrong. A head fitted on PyTorch/fp16 states does not transfer to
+candle/Q4_0, and the failure is silent, returning confidently ranked wrong
+answers. Measured on the head and gallery that ship, 5,001 captions against
+all 123,287 images:
+
+| runtime | t2i R@1 | median rank |
+|---|---|---|
+| PyTorch fp16 (reference) | 0.1092 | 36 |
+| candle Q4_0, head as-is | 0.0000 | 44,578 |
+| candle Q4_0, + 4 KB anchor | 0.0350 | **176** |
+
+Chance median is ~61,644, so the unanchored read-out is at chance: not
+degraded, gone. A 4,096-byte mean vector measured on 200 held-out sentences
+restores it to **32%** of the fp16 reference at R@1, and to the **top 0.14%**
+of the gallery by median rank. Read both columns. R@1 alone reads like a
+broken port; the median says the right photograph is usually near the top and
+just rarely first, which is weak for "I feel lucky" and perfectly serviceable
+behind a grid of results. An earlier version of this table advertised 85%
+recovery, measured on a different head against a 1,000-image pool; that number
+was wrong for the deployment and the correction came out of public review.
+
+- **Live demo**: <https://huggingface.co/spaces/RiverRider/0.6b-reads-27b>
+- **Head + full measurement**: [`RiverRider/srt-browser-head-118k`](https://huggingface.co/RiverRider/srt-browser-head-118k)
+- **Raw 27B states**: [`RiverRider/srt-qwen38-coco-states`](https://huggingface.co/datasets/RiverRider/srt-qwen38-coco-states)
+- **Artifact**: [`artifacts/nla/q4/cross_runtime_browser_rung_123k.json`](artifacts/nla/q4/cross_runtime_browser_rung_123k.json)
 
 ### Train from scratch
 
