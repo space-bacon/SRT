@@ -58,8 +58,9 @@ def body() -> str:
 <h3>A 382 MB model reads the notes a 31-billion-parameter model leaves behind</h3>
 
 <p><em>The notes are what the big model computes and would otherwise discard.
-Handed them and nothing else, the small one writes a sentence that
-finds the right photograph in the top 0.05% of 118,287.</em></p>
+Handed them and nothing else, the small one writes a sentence. Search 118,287
+photographs with that sentence and the right one comes back in the top
+0.05%.</em></p>
 
 <p>When a large model looks at a photograph it does not keep the picture. It
 builds a working impression: a list of several thousand numbers it uses to
@@ -68,15 +69,16 @@ as the model&rsquo;s working notes on the image, written in numbers rather than
 words. It is a record of what the model made of the picture, and it is normally
 thrown away the instant the answer is produced.</p>
 
-<p>Every time a multimodal model looks at
+<p>Every time one of these models looks at
 anything it builds one of these records, in enough detail to answer
 questions about it, and then discards it. You paid for that. It is gone
 before you could use it for anything else.</p>
 
 <p>We kept the notes for a gallery of 123,287 photographs, the standard COCO
 image set, and then taught something very
-small to read them. A frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in
-front of it, takes one of those number-lists and writes an English sentence
+small to read them. A 382&nbsp;MB language model, Qwen3-0.6B, with a small
+trained piece in front of it and its own weights never altered, takes one of
+those number-lists and writes an English sentence
 about a photograph it was never given. We call it the reader.</p>
 
 <p>The reader&rsquo;s blindness is the point rather than a curiosity. If it could
@@ -281,8 +283,9 @@ in the table before it, and the two should not be quoted as one number.</p>
 
 <h3>What it carries, and what it does not</h3>
 
-<p>Measured against COCO&rsquo;s own annotations rather than against a competing
-caption, so no text prior can reach it, the shortened record recovers a
+<p>Measured against COCO&rsquo;s own object labels rather than against a competing
+caption, so nothing can be won by guessing what usually goes with what, the
+shortened record recovers a
 scene&rsquo;s inventory nearly in full and its arrangement far less well:
 per-category detection AUC <strong>0.883</strong> across the 80 categories, and
 per-image recovery of the full annotated object list at <strong>0.543</strong>
