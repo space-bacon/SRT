@@ -142,6 +142,15 @@ between two named regions:</p>
                "the gallery is weaker than 60% of photographs manage with their "
                "own nearest neighbour.")}
 
+<p>The map is mostly ivory because a dot is a photograph, and 40,000 photographs
+do not fill a space this size. The pale areas are not dead, though. The
+instrument takes the 48 nearest photographs however far away they are, so every
+click returns a sentence. What varies is how much of a real place that sentence
+describes, and it is measurable: across these eight midpoints the best matching
+photograph in the gallery ranges from the 40th to the 95th percentile of what an
+ordinary photograph manages with its own nearest neighbour. Dense ground reads
+as a scene. Thin ground reads as a distant crowd.</p>
+
 <h3>Every stop on the way is its own scene</h3>
 
 <p>If any point can be read, so can every point on a line drawn between two of
@@ -155,9 +164,8 @@ region in the west, read at six evenly spaced stops along the way:</p>
                "coherent scenes, four of them nowhere near either end.")}
 
 <p>The line does not fade from one end to the other. It crosses whatever else
-lies between them and reads each thing correctly on the way. There is no dead
-ground on the map, so any point you land on has something to say, and you can
-search by moving as well as by typing.</p>
+lies between them and reads each thing correctly on the way. Every stop is
+somewhere, so you can search this map by moving as well as by typing.</p>
 
 <h3>The map runs in both directions</h3>
 
