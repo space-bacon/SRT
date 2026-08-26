@@ -137,7 +137,8 @@ zoo.
 2. **Quantization drift** — CLEARED 2026-07-25: the bf16-trained head
    applied *unchanged* to 4-bit NF4 states scores 0.566 R@1 vs 0.577 on
    bf16 states (a 0.011 loss); recalibrating just the two means (42KB)
-   recovers half of that (0.569/0.868/0.948). The Q4 zero-training
+   returns 0.569/0.868/0.948, which is 27% of the R@1 loss, 50% at R@10
+   and 85% at R@5. The Q4 zero-training
    baseline is identical to bf16 (0.185 vs 0.180). No retraining needed
    for edge deployment. Caveat: bnb NF4 on GPU proxies llama.cpp Q4 on
    CPU (same precision class, different kernels); final on-device

@@ -791,7 +791,8 @@ copying (`artifacts/nla/q4/mlp_align_mixed_v6.json`,
 
 ![**Figure 4. Precision and hardware invariance.** Left: the
 bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1;
-a 42KB mean recalibration recovers half. Right: across a simultaneous
+a 42KB mean recalibration returns 27% of that at R@1, 50% at R@10.
+Right: across a simultaneous
 change of hardware, kernels, and quantizer, raw text states agree at
 93.3% R@1 over the full 5,000 pool, centering and the subspace
 controls do not rescue, and the head lifts agreement to 97.0%,

@@ -52,7 +52,8 @@
 ## What got done (the invariance day)
 
 1. **Quantization gate CLEARED**: bf16-trained 3B head applied unchanged
-   to NF4 states loses 0.011 R@1; 42KB mean recal recovers half; Q4
+   to NF4 states loses 0.011 R@1; 42KB mean recal returns 27% of that at
+   R@1, 50% at R@10; Q4
    baseline ≡ bf16 baseline. Native-Q4 retrain lands on the bf16 data
    curve. (`artifacts/nla/q4/`.)
 2. **gemma-4-31B runs on the user's Mac** (M2 Ultra, 4-bit MLX, 17GB):

@@ -238,7 +238,7 @@ three things deployments usually vary:
 | axis | test | result |
 |---|---|---|
 | **host scale** | full ladder re-run on Qwen2.5-VL-**3B** (10× smaller) | identical fingerprint; linear head 0.577 R@1 at 39k pairs vs the 31B's 0.553–0.590 at the same budget — **no loss** |
-| **weight precision** | bf16-trained head applied *unchanged* to 4-bit NF4 states | −0.01 R@1; a 42 KB mean recalibration recovers half of that |
+| **weight precision** | bf16-trained head applied *unchanged* to 4-bit NF4 states | −0.011 R@1 on the 1,000-image pool; a 42 KB mean recalibration returns 27% of that at R@1, 50% at R@10 |
 | **hardware / runtime** | CUDA datacenter → Apple-Silicon MLX, different kernels, different quantization | local states retrieve their datacenter twins at **100 % R@1** through the head ([scripts/local_sunstone.py](scripts/local_sunstone.py)) |
 
 Read together with the earlier read-out ports (Qwen-7B → gpt-oss-20b →

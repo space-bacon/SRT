@@ -626,13 +626,19 @@ generation, 3B at 4-bit is Raspberry-Pi-class hardware.
 ### 7.2 Weight precision: bf16 → 4-bit, −0.011 R@1
 
 The 3B head, trained on bf16 states, was applied **unchanged** to
-states from the same model loaded in 4-bit NF4:
+states from the same model loaded in 4-bit NF4. Pool is the 1,000-image
+COCO val2017 protocol of §7.1, and quantization is bnb NF4 on GPU as a
+proxy for llama.cpp Q4 on CPU:
 
 | configuration | i2t R@1 | R@5 | R@10 |
 |---|---:|---:|---:|
 | head on bf16 states (reference) | 0.577 | 0.870 | 0.955 |
 | same head, unchanged, on 4-bit states | 0.566 | 0.857 | 0.941 |
 | plus 42KB mean recalibration | 0.569 | 0.868 | 0.948 |
+
+The recalibration returns 27% of the R@1 loss, 50% at R@10 and 85% at
+R@5, so how much of the gap a mean vector closes depends on which
+column is read.
 
 The zero-training baselines are statistically identical across
 precisions (0.185 vs 0.180): four-bit quantization barely perturbs the
@@ -784,7 +790,8 @@ copying (`artifacts/nla/q4/mlp_align_mixed_v6.json`,
 
 ![**Figure 4. Precision and hardware invariance.** Left: the
 bf16-trained head applied unchanged to 4-bit states loses 0.011 R@1;
-a 42KB mean recalibration recovers half. Right: across a simultaneous
+a 42KB mean recalibration returns 27% of that at R@1, 50% at R@10.
+Right: across a simultaneous
 change of hardware, kernels, and quantizer, raw text states agree at
 93.3% R@1 over the full 5,000 pool, centering and the subspace
 controls do not rescue, and the head lifts agreement to 97.0%,
