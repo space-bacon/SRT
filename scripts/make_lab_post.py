@@ -57,9 +57,9 @@ def body() -> str:
     return f"""
 <h3>A 382 MB model reads what a 31B saw</h3>
 
-<p><em>It has no eyes and has never been shown a photograph. Handed the working
-notes a 31-billion-parameter model left behind, it writes a sentence that finds
-the right photograph in the top 0.05% of 118,287.</em></p>
+<p><em>Handed the working notes a 31-billion-parameter model left behind, a
+frozen 382&nbsp;MB model writes a sentence that finds the right photograph in
+the top 0.05% of 118,287. Its only input is numbers.</em></p>
 
 <p>When a large model looks at a photograph it does not keep the picture. It
 builds a working impression: a list of several thousand numbers it uses to
@@ -75,11 +75,12 @@ before you could use it for anything else.</p>
 <p>We kept the notes for 123,287 photographs, and then taught something very
 small to read them. A frozen 382&nbsp;MB Qwen3-0.6B, with a small adapter in
 front of it, takes one of those number-lists and writes an English sentence
-about a photograph it cannot see and was never shown.</p>
+about a photograph it was never given.</p>
 
-<p>The reader having no eyes is the point rather than a curiosity. If it could
+<p>The reader&rsquo;s blindness is the point rather than a curiosity. If it could
 see, you could never tell whether its sentence came from the record or from the
-picture. It cannot see, so everything it says came out of the numbers.</p>
+picture. Everything it says came out of the numbers, because the numbers are all
+it was given.</p>
 
 <p>The notes turn out to be durable, too. The 31B did its looking once, months
 ago, on a different machine, and has not run since. The record it left behind
@@ -204,7 +205,7 @@ a median rank of 59,143:</p>
        "wall marked", width=740)}
 
 <p>In plain terms, the test runs like this. Take a photograph the reader has
-never seen. Hand it only the numbers, never the picture, and let it write a
+never seen. Hand it only the numbers and let it write a
 sentence. Now take that sentence and ask which of 118,287 photographs it best
 describes. Half the time the correct photograph comes back in the top 64, which
 is the top 0.05% of the pile. If the sentence carried nothing you would expect
@@ -248,8 +249,8 @@ above the first person&rsquo;s caption on <strong>49.6%</strong> of them. A
 second person manages <strong>48.0%</strong>. It sits inside the spread between
 two people describing the same picture.</p>
 
-<p>A 382&nbsp;MB model, with no vision of
-any kind, describing a photograph it cannot see about as well as a person who is
+<p>A 382&nbsp;MB model describing a
+photograph from numbers alone, about as well as a person who is
 looking straight at it. Not because it is a good captioner, but because the
 record it was handed already contained the scene.</p>
 
