@@ -15,11 +15,20 @@ Two conventions have to match the deployment exactly or the numbers are noise:
 
 Arms, in the order they run:
 
-    gold        human caption through the same encode-and-retrieve path. This
-                is the HARNESS CONTROL and it runs first: if human captions
-                cannot retrieve their own images, the head, the gallery and
-                the gold rows are not the same system and nothing else in the
-                run means anything.
+    gold        the image's FIRST COCO caption through the same encode-and-
+                retrieve path. This is the HARNESS CONTROL and it runs first: if
+                human captions cannot retrieve their own images, the head, the
+                gallery and the gold rows are not the same system and nothing
+                else in the run means anything.
+
+                It is NOT a human ceiling and must never be quoted as one. The
+                head was fitted on train2017 pairs built from each image's first
+                caption (scripts/gemma4_encode_pairs.py, `caption: caps[0]`) and
+                this gallery IS train2017, so the arm scores a pair the head was
+                explicitly trained to align. It lands ~6x better than an unseen
+                caption of the very same photograph.
+    second      a DIFFERENT human caption of the same image, which the head never
+                trained on. This is the honest human reference.
     real        the image's own point
     foreign     another held-out image's point, so a caption prior alone
                 cannot pass
@@ -113,10 +122,12 @@ def main():
 
     gold_rows = np.array(test)
     results = {}
+    ranks = {}
 
     # Harness control, first and fatal.
     gold_caps = [meta["captions"][i][0] for i in test]
     r = rank_of(project(gold_caps), gold_rows)
+    ranks["gold_caption_harness_control"] = r
     results["gold_caption_harness_control"] = {
         "r@1": round(float((r < 1).mean()), 4),
         "r@10": round(float((r < 10).mean()), 4),
@@ -128,6 +139,22 @@ def main():
     if results["gold_caption_harness_control"]["median_rank"] > len(gal) * 0.02:
         raise SystemExit("harness control failed: human captions do not retrieve "
                          "their own images. Nothing else here would mean anything.")
+
+    # A second person describing the same photograph. Without this arm the
+    # human number reads as a fixed line the reader falls short of, when it is
+    # really a spread: two people given one image do not retrieve it equally
+    # well, and the gap between them is the unit the reader should be read in.
+    second = [meta["captions"][i][1] if len(meta["captions"][i]) > 1
+              else meta["captions"][i][0] for i in test]
+    r = rank_of(project(second), gold_rows)
+    ranks["second_human_caption"] = r
+    results["second_human_caption"] = {
+        "r@1": round(float((r < 1).mean()), 4),
+        "r@10": round(float((r < 10).mean()), 4),
+        "median_rank": float(np.median(r)) + 1,
+    }
+    print(f"human2 R@1 {results['second_human_caption']['r@1']:.4f} "
+          f"median {results['second_human_caption']['median_rank']:.0f}", flush=True)
 
     tok = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
     reader = AutoModelForCausalLM.from_pretrained(
@@ -154,6 +181,7 @@ def main():
                     ("mean", np.repeat(real.mean(0, keepdims=True), len(test), 0))):
         said = speak(v.astype(np.float32))
         r = rank_of(project(said), gold_rows)
+        ranks[name] = r
         results[name] = {
             "r@1": round(float((r < 1).mean()), 4),
             "r@10": round(float((r < 10).mean()), 4),
@@ -163,6 +191,24 @@ def main():
         print(f"{name:8s} R@1 {results[name]['r@1']:.4f} "
               f"median {results[name]['median_rank']:.0f}\n    {said[0]!r}", flush=True)
 
+    # Per photograph, not per aggregate. A worse median does not mean losing
+    # every row, and how often the reader places an image above the human who
+    # was looking at it is a different question from where the medians sit.
+    def h2h(challenger, incumbent):
+        c, i = ranks[challenger], ranks[incumbent]
+        return {"challenger_better": round(float((c < i).mean()), 4),
+                "tie": round(float((c == i).mean()), 4),
+                "incumbent_better": round(float((c > i).mean()), 4)}
+
+    gold_key = "gold_caption_harness_control"
+    comparisons = {
+        "reader_vs_human": h2h("real", gold_key),
+        "second_human_vs_human": h2h("second_human_caption", gold_key),
+    }
+    for k, v in comparisons.items():
+        print(f"{k:24s} challenger wins {v['challenger_better']:.3f} "
+              f"tie {v['tie']:.3f}", flush=True)
+
     json.dump({"question": "can a 0.6B say what is at a point in the Lab's own space",
                "gallery": int(gal.shape[0]),
                "gallery_note": "train2017 sunstone-head projections, L2 normalized, "
@@ -170,7 +216,9 @@ def main():
                "n_scored": len(test),
                "text_convention": f"BOS-prefixed last-token L{a.layer}, gemma-4 is BOS-sensitive",
                "head": a.head_file, "reader_backbone": "Qwen/Qwen3-0.6B",
-               "n_prefix_tokens": ck["n_tok"], "arms": results},
+               "n_prefix_tokens": ck["n_tok"], "arms": results,
+               "head_to_head": comparisons,
+               "per_item_ranks": {k: [int(x) + 1 for x in v] for k, v in ranks.items()}},
               open(a.out, "w"), indent=1)
     print(f"wrote {a.out}", flush=True)
 

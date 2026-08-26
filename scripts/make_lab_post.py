@@ -187,23 +187,45 @@ asked.</p>
 
 <h3>The numbers</h3>
 
-<p>Measured on 500 held-out photographs against a pool of 118,287:</p>
+<p>Measured on 500 held-out photographs against a pool of 118,287, so chance is
+a median rank of 59,143:</p>
 
 <ul>
 <li>The reader&rsquo;s sentence retrieves the picture it was written from at
-<strong>median rank 64</strong>.</li>
-<li>A <em>human</em> caption, through the identical path, gets median rank 8.</li>
+<strong>median rank 64</strong>, the top 0.05% of the pool.</li>
+<li>A human caption of the same photograph, one the head has never seen, gets
+<strong>median 45</strong>.</li>
 <li>Handed another photograph&rsquo;s point, the same reader scores at
-<strong>chance</strong>: median 55,866, where chance is 59,143.</li>
+<strong>chance</strong>: median 55,866.</li>
 <li>Handed the average of all points, also chance: 59,135.</li>
 </ul>
 
-<p>The human caption is the ceiling and we are well below it. Both controls are
-dead, which is what makes the first number mean anything. A gold-caption arm runs
-before every evaluation and aborts the run if human captions cannot retrieve
-their own images, because a reader pointed at the wrong space produces perfectly
-fluent sentences over a completely dead harness, and that failure looks like a
-result rather than a bug.</p>
+<p>Counted per photograph instead of per median, the reader places the image
+above the human who was looking at it <strong>17% of the time</strong>. A second
+human describing the same photograph beats the first <strong>20% of the
+time</strong>. The reader sits inside the spread between two people rather than
+below a line.</p>
+
+<p>One correction we are making in public, because we found it while writing
+this. An earlier draft quoted the human caption at median rank 8 and called it a
+ceiling. That figure is contaminated. The head was trained on COCO train2017
+pairs using each image&rsquo;s <em>first</em> caption, and the gallery is
+train2017, so scoring that exact caption measures a pair the head was fitted to
+align. It reads about six times better than a caption of the same photograph the
+head never saw. The honest human reference is the 45 above, and we had been
+quoting a number that made our own result look worse than it is.</p>
+
+<p>Both controls are dead, which is what makes the first number mean anything. A
+gold-caption arm runs before every evaluation and aborts the run if human
+captions cannot retrieve their own images, because a reader pointed at the wrong
+space produces perfectly fluent sentences over a completely dead harness, and
+that failure looks like a result rather than a bug.</p>
+
+<p>A different reader in the same family, one that reads raw hidden states rather
+than this 1,024-dimensional space, does beat the human caption outright: median
+rank 20 of 123,287 against 39. Part of that margin is length. It keeps talking,
+the extra detail about the scene is often right, and a retrieval metric rewards
+saying more true things. We quote it with that caveat attached every time.</p>
 
 <h3>What you are actually looking at</h3>
 
