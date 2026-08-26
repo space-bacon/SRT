@@ -104,10 +104,6 @@ the centre of each of the 24 regions and printed what came back. The names you
 are reading are the machine&rsquo;s account of its own filing system, written
 months after the big model made the notes and on a different computer.</p>
 
-{embed("lab_01_map.png",
-       "The map instrument running in the Lab, pane 04",
-       caption="The same map inside the Lab, live.")}
-
 <h3>Stand anywhere on it</h3>
 
 <p>You are not limited to the photographs. Touch any point and the instrument
