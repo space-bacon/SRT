@@ -264,6 +264,109 @@ def make_morph(out, size=840, pad=34, n=56, t0=0.195, t1=0.402):
     print(f"wrote {out}", flush=True)
 
 
+def make_isles(out, size=900, pad=44):
+    """The whole map, then each region in turn with one of its photographs.
+
+    The still poster shows every name at once, which is the right first look
+    and a poor second one: 24 chips compete and none of them is attached to
+    anything you can see. This opens on that overview and then walks the
+    regions one at a time, each with the single photograph nearest its centre,
+    so a name and a picture arrive together.
+    """
+    xy, labels = load()
+    regions = sorted(labels, key=lambda r: -r["n"])
+    nears = []
+    for r in regions:
+        got = read_at_full(r["x"], r["y"])
+        nears.append(got["near"][0])
+        print(f"  {r['text'][:44]:46s} {got['near'][0]['file']}", flush=True)
+
+    TOP, CAP, TH = 96, 150, 158
+    H = TOP + size + CAP
+    base = base_map(xy, size, pad, dot=1.5, alpha=92)
+    f_lab, f_cap, f_pct = font(17, 10), font(30, 0), font(15, 1)
+
+    def shell(d, im):
+        im.paste(base, (0, TOP))
+        d.text((pad, 30), "A map of what a 31B has read",
+               font=font(38, didot=True), fill=INK)
+        d.text((size - pad, 42), f"{len(xy):,} of 123,287 photographs",
+               font=font(18, 10), fill=MUTED, anchor="ra")
+        d.text((pad, TOP + size - 30), "C O C O   I S L E S",
+               font=font(15, 1), fill=MUTED + (170,))
+
+    frames, durs = [], []
+
+    # opening frame: every name at once, laid out as the poster does
+    im = Image.new("RGB", (size, H), IVORY)
+    d = ImageDraw.Draw(im, "RGBA")
+    shell(d, im)
+    placed = []
+    for r in regions[:16]:
+        cx, cy = to_px(r["x"], r["y"], size, pad)
+        cy += TOP
+        lines = wrap(d, r["text"].rstrip("."), f_lab, 210)[:3]
+        h = len(lines) * 22 + 12
+        w = max(d.textlength(t, font=f_lab) for t in lines) + 20
+        box = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
+        for _ in range(60):
+            hit = next((p for p in placed
+                        if box[0] < p[2] and box[2] > p[0]
+                        and box[1] < p[3] and box[3] > p[1]), None)
+            if not hit:
+                break
+            shift = (hit[3] - box[1]) + 5
+            box[1] += shift
+            box[3] += shift
+        if box[3] > TOP + size - 40:           # nudged off the map, drop it
+            continue
+        placed.append(box + [lines])
+    for b in placed:
+        d.rounded_rectangle(tuple(b[:4]), 7, fill=(250, 247, 242, 234))
+    for b in placed:
+        for k, t in enumerate(b[4]):
+            d.text(((b[0] + b[2]) / 2, b[1] + 7 + k * 22), t,
+                   font=f_lab, fill=INK, anchor="ma")
+    d.rectangle((0, TOP + size, size, H), fill=PANEL)
+    d.line((0, TOP + size, size, TOP + size), fill=(226, 216, 205), width=2)
+    d.text((34, TOP + size + 22), f"{len(regions)} REGIONS", font=f_pct, fill=TERRA)
+    d.text((34, TOP + size + 48), "Every name written by the 0.6B from that",
+           font=f_cap, fill=INK)
+    d.text((34, TOP + size + 86), "region's own centre.", font=f_cap, fill=INK)
+    frames.append(im.quantize(colors=64, method=Image.MEDIANCUT))
+    durs.append(3400)
+
+    for i, (r, nb) in enumerate(zip(regions, nears)):
+        im = Image.new("RGB", (size, H), IVORY)
+        d = ImageDraw.Draw(im, "RGBA")
+        shell(d, im)
+        mxp, myp = to_px(r["x"], r["y"], size, pad)
+        myp += TOP
+        tx = int(min(max(mxp + 18, 14), size - TH - 14))
+        ty = int(min(max(myp - 18 - TH, TOP + 14), TOP + size - TH - 14))
+        d.line([mxp, myp, tx + TH // 2, ty + TH // 2], fill=TERRA_SOFT, width=3)
+        d.rectangle([tx - 5, ty - 5, tx + TH + 4, ty + TH + 4], fill=IVORY)
+        im.paste(thumb(nb["split"], nb["file"], TH), (tx, ty))
+        d.rectangle([tx - 5, ty - 5, tx + TH + 4, ty + TH + 4],
+                    outline=TERRA, width=3)
+        marker(d, mxp, myp, r=9)
+        d.rectangle((0, TOP + size, size, H), fill=PANEL)
+        d.line((0, TOP + size, size, TOP + size), fill=(226, 216, 205), width=2)
+        d.text((34, TOP + size + 22), f"REGION {i + 1} OF {len(regions)}",
+               font=f_pct, fill=TERRA)
+        d.text((size - 34, TOP + size + 22), f"{r['n']:,} photographs",
+               font=font(15, 10), fill=MUTED, anchor="ra")
+        for k, t in enumerate(wrap(d, r["text"], f_cap, size - 68)[:2]):
+            d.text((34, TOP + size + 48 + k * 38), t, font=f_cap, fill=INK)
+        frames.append(im.quantize(colors=64, method=Image.MEDIANCUT))
+        durs.append(1150)
+    durs[-1] = 2600
+
+    frames[0].save(out, save_all=True, append_images=frames[1:],
+                   duration=durs, loop=0, optimize=True)
+    print(f"wrote {out}  {len(frames)} frames", flush=True)
+
+
 def make_poster(out, size=1500, pad=54):
     """The whole map at a size where the reader's own names are readable."""
     xy, labels = load()
@@ -306,7 +409,7 @@ def make_poster(out, size=1500, pad=54):
         for k, t in enumerate(p["lines"]):
             d.text((mid, p["box"][1] + 8 + k * 25), t, font=f_lab, fill=INK, anchor="ma")
     d.text((pad, size + 60), "Every name written by a frozen 0.6B from that "
-           "region's own centre, not chosen by us.", font=font(20, 2), fill=MUTED)
+           "region's own centre.", font=font(20, 2), fill=MUTED)
     im.save(out, quality=94)
     print(f"wrote {out}", flush=True)
 
@@ -526,8 +629,8 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--walk", action="store_true")
     p.add_argument("--morph", action="store_true")
+    p.add_argument("--isles", action="store_true")
     p.add_argument("--poster", action="store_true")
-    p.add_argument("--blend", action="store_true")
     p.add_argument("--ladder", action="store_true")
     p.add_argument("--openwater", action="store_true")
     p.add_argument("--outdir", default="artifacts/marketing/lab_map_post")
@@ -536,10 +639,10 @@ if __name__ == "__main__":
         make_walk(f"{a.outdir}/fig_walk.gif")
     if a.morph:
         make_morph(f"{a.outdir}/fig_morph.gif")
+    if a.isles:
+        make_isles(f"{a.outdir}/fig_isles.gif")
     if a.poster:
         make_poster(f"{a.outdir}/fig_poster.png")
-    if a.blend:
-        make_blend(f"{a.outdir}/fig_blend.png")
     if a.ladder:
         make_ladder(f"{a.outdir}/fig_ladder.png")
     if a.openwater:

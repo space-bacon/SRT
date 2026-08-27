@@ -114,11 +114,14 @@ within it. What it cannot do is invent structure the notes did not contain. So
 the regions came with the notes, and a linear view was enough to find them. The
 flattening onto a screen is ours. The arrangement is the model&rsquo;s.</p>
 
-{embed("fig_poster.png",
+{embed("fig_isles.gif",
        "The map: 40,000 photographs of a 123,287-image gallery in two "
-       "dimensions, region names written by the reader",
+       "dimensions, region names written by the reader, then each region in "
+       "turn with the photograph nearest its centre",
        caption="Every dot is a photograph, sitting where the model&rsquo;s "
-               "reading of it put it.")}
+               "reading of it put it. After the overview it walks the 24 "
+               "regions one at a time, each with the single photograph "
+               "closest to that region&rsquo;s centre.")}
 
 <h3>The reader named the regions</h3>
 
