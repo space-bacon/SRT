@@ -37,6 +37,16 @@ correspondence in this substrate is linear (paper §11.6.4,
 
 ## Contents
 
+Two dtypes of the same head. `sunstone_linear_head_v3_drift.pt` is fp32 at
+44.1 MB; `sunstone_linear_head_v3_drift_bf16.pt` is 22.0 MB and is what the
+"22 MB head" figure in the papers refers to. The export is measured, not
+assumed: on 5,000 L47 pairs the two agree to cosine 0.999997 (minimum
+0.999992) and text-to-image R@1 moves from 0.3016 to 0.3018 with median rank
+4 unchanged. Receipt in `bf16_head_equivalence.json`, produced by
+`scripts/bf16_head_equivalence.py`. Scope: that pool is 5,000 images, well
+short of the shipped 123,287 gallery, so those are agreement figures and not
+deployment numbers.
+
 `sunstone_linear_head.pt` (`weights_only=True`-safe):
 
 - `img`, `txt` — state dicts for two `nn.Linear(5376, 1024)` heads

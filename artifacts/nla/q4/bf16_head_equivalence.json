@@ -1,0 +1,39 @@
+{
+ "n_pairs": 5000,
+ "params": 11022848,
+ "question": "does the shipped fp32 head survive a bf16 export",
+ "img": {
+  "cos_mean": 0.9999969005584717,
+  "cos_min": 0.9999918937683105,
+  "max_abs_weight_delta": 0.003805398941040039
+ },
+ "txt": {
+  "cos_mean": 0.9999980330467224,
+  "cos_min": 0.999994695186615,
+  "max_abs_weight_delta": 0.007445573806762695
+ },
+ "t2i_fp32": {
+  "r@1": 0.30160000920295715,
+  "r@10": 0.701200008392334,
+  "median_rank": 4.0
+ },
+ "t2i_bf16": {
+  "r@1": 0.301800012588501,
+  "r@10": 0.7013999819755554,
+  "median_rank": 4.0
+ },
+ "delta_r@1": 0.00020000338554382324,
+ "note": "pool is 5000 images, not the shipped 123,287 gallery, so these are agreement figures rather than deployment numbers",
+ "file_bytes": {
+  "fp32": 44094685,
+  "bf16": 22049561
+ },
+ "file_mb": {
+  "fp32": 44.1,
+  "bf16": 22.0
+ },
+ "file_mib": {
+  "fp32": 42.1,
+  "bf16": 21.0
+ }
+}
