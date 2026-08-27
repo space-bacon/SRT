@@ -100,6 +100,34 @@ GEN_WAITING = threading.Semaphore(GEN_MAX_WAITING)
 # separately so reads stay concurrent with each other and with generation.
 READ_SEM = threading.Semaphore(int(os.environ.get("SUNSTONE_MAX_READS", "3")))
 
+# Live queue state, so a visitor can be told where they are rather than just
+# refused. `recent` is a rolling window of generation durations used to turn a
+# queue position into an estimate in seconds.
+_GEN_STATE = {"running": 0, "waiting": 0, "recent": []}
+_GEN_STATE_LOCK = threading.Lock()
+
+
+def _gen_snapshot() -> dict:
+    with _GEN_STATE_LOCK:
+        running = _GEN_STATE["running"]
+        waiting = _GEN_STATE["waiting"]
+        recent = sorted(_GEN_STATE["recent"])
+    # The first generation after boot pays MLX kernel compilation and lands
+    # around 60s against a warm 0.4s, so a median over one or two samples
+    # would quote a visitor a wildly wrong wait. Stay silent until the window
+    # can outvote that outlier.
+    typical = round(recent[len(recent) // 2], 1) if len(recent) >= 3 else None
+    ahead = running + waiting
+    return {
+        "running": running,
+        "waiting": waiting,
+        "ahead": ahead,
+        "capacity": GEN_MAX_WAITING,
+        "accepting": waiting < GEN_MAX_WAITING,
+        "typical_s": typical,
+        "eta_s": round(ahead * typical, 1) if typical and ahead else 0.0,
+    }
+
 # Sampling. mlx-vlm defaults to temperature 0.0 (greedy), and greedy decode
 # on deep multi-turn contexts falls into repetition loops ("la la la...",
 # observed live 2026-08-04). Gemma's recommended sampling + a light
@@ -216,25 +244,41 @@ def _web_retrieve(query: str) -> tuple[str, list[dict]]:
     return block, sources
 
 
+def _busy_detail() -> str:
+    s = _gen_snapshot()
+    n = s["ahead"]
+    if not n:
+        return "the instrument is busy; try again in a moment"
+    who = "1 visitor" if n == 1 else f"{n} visitors"
+    eta = f" (about {int(s['eta_s'])}s)" if s["eta_s"] else ""
+    return f"the instrument is busy: {who} ahead of you{eta}"
+
+
 class _GenSlot:
     def __enter__(self):
         if not GEN_WAITING.acquire(blocking=False):
-            raise HTTPException(
-                503, "the instrument is busy with other visitors; try again"
-                     " in a moment")
+            raise HTTPException(503, _busy_detail())
+        with _GEN_STATE_LOCK:
+            _GEN_STATE["waiting"] += 1
         try:
             ok = GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S)
-        except BaseException:
+        finally:
+            with _GEN_STATE_LOCK:
+                _GEN_STATE["waiting"] -= 1
             GEN_WAITING.release()
-            raise
-        GEN_WAITING.release()
         if not ok:
-            raise HTTPException(
-                503, "the instrument is busy with other visitors; try again"
-                     " in a moment")
+            raise HTTPException(503, _busy_detail())
+        with _GEN_STATE_LOCK:
+            _GEN_STATE["running"] += 1
+        self._t0 = time.time()
         return self
 
     def __exit__(self, *exc):
+        dt = time.time() - getattr(self, "_t0", time.time())
+        with _GEN_STATE_LOCK:
+            _GEN_STATE["running"] -= 1
+            _GEN_STATE["recent"].append(dt)
+            del _GEN_STATE["recent"][:-20]
         _clear_mlx_cache()
         GEN_LOCK.release()
         return False
@@ -1000,6 +1044,17 @@ def build_app():
             return Image.open(io.BytesIO(data)).convert("RGB")
         except Exception as e:
             raise HTTPException(400, f"not a decodable image: {e}") from e
+
+    @app.get("/busy")
+    def busy():
+        """Live queue state, cheap enough for the frontend to poll while waiting.
+
+        Deliberately takes no lock: a visitor asking how long the line is must
+        never join it.
+        """
+        s = _gen_snapshot()
+        s["reads_free"] = READ_SEM._value
+        return s
 
     @app.get("/healthz")
     def healthz():
