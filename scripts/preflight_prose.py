@@ -131,6 +131,14 @@ TICS = {
     "deference": [r"great question", r"thank you", r"if I may", r"just wanted",
                   r"humbly", r"I wonder if", r"forgive", r"apolog"],
     "cognition verb": [r"worked out", r"it knows", r"understands", r"figures out"],
+    # Offering an experiment we could just run. If the box can do it, run it and
+    # send the number instead of handing the correspondent homework.
+    "deferred experiment": [r"is a run\b", r"is one job", r"harness (now )?exists",
+                           r"we have the harness", r"would give the \w+ directly",
+                           r"would settle (it|this)", r"is the experiment",
+                           r"the shape to test it against", r"worth running",
+                           r"someone should", r"is testable with", r"left as an exercise",
+                           r"if you want(ed)? to test"],
     # "X is not A. It is B." Reads as rhetoric doing work the evidence should do.
     "antithesis": [r"is not [^.]{0,70}\.\s*it is\b", r"does not [^.]{0,70}\.\s*it \w+s\b",
                    r"\bnot [^.,]{0,45},\s*(but|it'?s|it is)\b", r"\brather than\b",
