@@ -169,56 +169,71 @@ def make_walk(out, size=980, pad=34):
     print(f"wrote {out}", flush=True)
 
 
-def make_morph(out, size=840, pad=34, n=18, t0=0.195, t1=0.402):
-    """One short stretch of the walk line, sampled 18 times instead of once.
+def make_morph(out, size=840, pad=34, n=56, t0=0.195, t1=0.402):
+    """One short stretch of the walk line, sampled 56 times.
 
     The walk figure takes six stops a long way apart, which only shows that
     the ends differ. This magnifies the in-between: over roughly a sixth of
     the map's width the sentence changes one element at a time rather than
-    cutting from one scene to another. The inset says where on the map this
-    is happening, because at this magnification nothing else would.
+    cutting from one scene to another.
+
+    Sampling evenly wastes frames. 18 even samples spent 8 of them on two
+    states, because the space is stable in places and changes fast in others.
+    So sample finely and keep only the points where BOTH the sentence and the
+    nearest photograph differ from the last frame kept: no frame repeats, and
+    the marker crawls where the space is changing and jumps where it is not.
+
+    The inset says where on the map this is happening, because at this
+    magnification nothing else would.
     """
     xy, labels = load()
     a, b = (0.01, -0.62), (0.88, 0.66)
-    pts_xy = [(a[0] + (b[0] - a[0]) * (t0 + (t1 - t0) * i / (n - 1)),
-               a[1] + (b[1] - a[1]) * (t0 + (t1 - t0) * i / (n - 1)))
-              for i in range(n)]
-    reads = [read_at_full(*p) for p in pts_xy]
-    says = [r["text"] for r in reads]
-    nears = [r["near"][0] for r in reads]
-    for p, s in zip(pts_xy, says):
-        print(f"  ({p[0]:+.3f},{p[1]:+.3f}) -> {s}", flush=True)
+    kept, ptext, pfile = [], None, None
+    for i in range(n):
+        t = t0 + (t1 - t0) * i / (n - 1)
+        x, y = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
+        r = read_at_full(x, y)
+        f = r["near"][0]["file"]
+        if r["text"] != ptext and f != pfile:
+            kept.append((x, y, r["text"], r["near"][0]))
+            ptext, pfile = r["text"], f
+            print(f"  t={t:.4f} {f} {r['text']}", flush=True)
+    print(f"  {n} samples -> {len(kept)} frames", flush=True)
+    says = [k[2] for k in kept]
+    nears = [k[3] for k in kept]
 
     # zoomed view: render large, crop a square window around the segment
     BIG = 3000
     big = base_map(xy, BIG, pad, dot=3.0, alpha=80)
-    sb = [to_px(*p, BIG, pad) for p in pts_xy]
-    cx = (min(p[0] for p in sb) + max(p[0] for p in sb)) / 2
-    cy = (min(p[1] for p in sb) + max(p[1] for p in sb)) / 2
-    half = max(max(p[0] for p in sb) - min(p[0] for p in sb),
-               max(p[1] for p in sb) - min(p[1] for p in sb)) / 2 + 300
+    endpts = [(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+              for t in (t0, t1)]
+    sb = [to_px(*p, BIG, pad) for p in endpts]
+    cx, cy = (sb[0][0] + sb[1][0]) / 2, (sb[0][1] + sb[1][1]) / 2
+    half = max(abs(sb[1][0] - sb[0][0]), abs(sb[1][1] - sb[0][1])) / 2 + 300
     box = (int(cx - half), int(cy - half), int(cx + half), int(cy + half))
     view = big.crop(box).resize((size, size), Image.LANCZOS)
     sc = size / (box[2] - box[0])
-    seg = [((p[0] - box[0]) * sc, (p[1] - box[1]) * sc) for p in sb]
+    to_view = lambda p: ((p[0] - box[0]) * sc, (p[1] - box[1]) * sc)
+    ends = [to_view(p) for p in sb]
+    seg = [to_view(to_px(k[0], k[1], BIG, pad)) for k in kept]
 
     # locator: the whole map, small, with this segment marked
     LOC = 190
     loc = base_map(xy, LOC, 6, dot=0.7, alpha=95)
     ld = ImageDraw.Draw(loc, "RGBA")
     ld.line([to_px(*a, LOC, 6), to_px(*b, LOC, 6)], fill=INK + (70,), width=1)
-    ld.line([to_px(*p, LOC, 6) for p in pts_xy], fill=INK, width=3)
+    ld.line([to_px(*p, LOC, 6) for p in endpts], fill=INK, width=3)
 
     CAP = 150
     f_cap, f_small, f_pct = font(30, 0), font(17, 10), font(15, 1)
     TH = 150
-    frames, durs = [], []
+    frames = []
     for i, text in enumerate(says):
         im = Image.new("RGB", (size, size + CAP), IVORY)
         im.paste(view, (0, 0))
         d = ImageDraw.Draw(im, "RGBA")
-        d.line(seg, fill=INK + (70,), width=3)
-        d.line(seg[: i + 1], fill=INK, width=6)
+        d.line(ends, fill=INK + (70,), width=3)
+        d.line([ends[0], seg[i]], fill=INK, width=6)
         mxp, myp = seg[i]
         tx = int(min(max(mxp + 20, 16), size - TH - 16))
         ty = int(min(max(myp - 20 - TH, LOC + 26), size - TH - 16))
@@ -232,19 +247,17 @@ def make_morph(out, size=840, pad=34, n=18, t0=0.195, t1=0.402):
         im.paste(loc, (15, 15))
         d.rectangle((14, 14, 14 + LOC + 1, 14 + LOC + 1),
                     outline=(214, 203, 191), width=2)
-        d.text((15, 14 + LOC + 11), "WHERE THIS IS", font=font(12, 1), fill=MUTED)
+        d.text((15, 14 + LOC + 16), "WHERE THIS IS", font=font(12, 1), fill=MUTED)
         d.rectangle((0, size, size, size + CAP), fill=PANEL)
         d.line((0, size, size, size), fill=(226, 216, 205), width=2)
-        fresh = i == 0 or text != says[i - 1]
-        d.text((34, size + 22), f"SAMPLE {i + 1} OF {n}", font=f_pct, fill=TERRA)
+        d.text((34, size + 22), f"STEP {i + 1} OF {len(says)}",
+               font=f_pct, fill=TERRA)
         for k, line in enumerate(wrap(d, text, f_cap, size - 68)[:2]):
-            d.text((34, size + 48 + k * 38), line, font=f_cap,
-                   fill=INK if fresh else MUTED)
+            d.text((34, size + 48 + k * 38), line, font=f_cap, fill=INK)
         d.text((size - 34, size + 22), "lab.sunstonenorth.com", font=f_small,
                fill=MUTED, anchor="ra")
         frames.append(im.quantize(colors=64, method=Image.MEDIANCUT))
-        durs.append(1500 if fresh else 700)
-    durs[-1] = 3200
+    durs = [900] * (len(frames) - 1) + [2800]
 
     frames[0].save(out, save_all=True, append_images=frames[1:],
                    duration=durs, loop=0, optimize=True)
