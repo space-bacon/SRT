@@ -67,9 +67,32 @@ SOURCES = ["paper_srt_program.md", "paper_nla.md", "paper_program.md", "README.m
 EXTRA: list[Path] = []
 
 
+def _json_numbers(p: Path) -> list[float]:
+    """Every number in a result file, so a rounded quote can be checked by value."""
+    out: list[float] = []
+
+    def walk(o):
+        if isinstance(o, bool):
+            return
+        if isinstance(o, (int, float)):
+            out.append(float(o))
+        elif isinstance(o, dict):
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+
+    try:
+        walk(json.load(open(p)))
+    except Exception:
+        pass
+    return out
+
+
 def in_papers(n: str) -> list[str]:
     hits = []
-    # Papers write 1,384 while a draft may write 1384, so try both groupings.
+    # Papers write 1,384 while a draft writes 1384, so try both groupings.
     forms = {n}
     if "." not in n and len(n) > 3:
         forms.add(f"{int(n):,}")
@@ -78,8 +101,15 @@ def in_papers(n: str) -> list[str]:
         p = ROOT / name
         if p.exists() and re.search(pat, p.read_text()):
             hits.append(name)
+    dec = len(n.split(".")[1]) if "." in n else 0
     for p in EXTRA:
-        if p.exists() and re.search(pat, p.read_text()):
+        if not p.exists():
+            continue
+        if p.suffix == ".json":
+            # A result file holds 0.6664648, the draft quotes 0.666. Match by value.
+            if any(round(v, dec) == float(n) for v in _json_numbers(p)):
+                hits.append(p.name)
+        elif re.search(pat, p.read_text()):
             hits.append(p.name)
     return hits
 

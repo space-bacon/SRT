@@ -358,5 +358,8 @@
    },
    "macro_acc": 0.5223
   }
- }
+ },
+ "n_images": 1560,
+ "n_captions": 11844,
+ "n_pairs": 7511
 }
