@@ -205,6 +205,7 @@ def main() -> int:
                   r"where we are weak", r"came back null", r"per word it fails",
                   r"is untested", r"remains untested", r"we have not measured",
                   r"two limits", r"will not paper over", r"without settling",
+                  r"scope note", r"does not say", r"my error",
                   r"we have not", r"one backbone at one layer", r"did not replicate"]
     has_scope = any(re.search(p, low) for p in scope_pats)
     print(f"   explicit scoping present: {has_scope}")
