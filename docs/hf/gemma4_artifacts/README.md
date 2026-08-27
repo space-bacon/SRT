@@ -20,6 +20,15 @@ and these indexes decode it by nearest-neighbour retrieval
 ([github.com/space-bacon/SRT](https://github.com/space-bacon/SRT),
 `paper_nla.md` §11.6–§11.7).
 
+> **On "peak".** That ranking is measured with the raw-cosine read-out
+> these indexes use. A fitted linear probe orders the layers differently
+> and puts L20 ahead of L47 (R@1 0.293 against 0.230 on 4,000 held-out
+> COCO pairs). The depth profile is a joint property of the backbone and
+> the probe, so the two orderings are both real and answer different
+> questions. Full nine-layer tables, scaling curves and scripts:
+> [`RiverRider/srt-depth-probe-artifacts`](https://huggingface.co/datasets/RiverRider/srt-depth-probe-artifacts).
+> L47 remains the tap these artifacts are built and validated at.
+
 ## What they power
 
 - **Open-vocabulary image captioning**: 5/5 CIFAR natural images
