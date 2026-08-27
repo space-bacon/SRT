@@ -25,6 +25,8 @@ LAYERS = [4, 12, 20, 28, 36, 44, 47, 54, 60]
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--cache", default="/root/depth_states_all9.npz")
+    p.add_argument("--cache-layers", default="4,12,20,28,36,44,47,54,60",
+                   help="layer order the cache was written with")
     p.add_argument("--layers", default="20,47")
     p.add_argument("--sizes", default="250,500,1000,2000,4000")
     p.add_argument("--seeds", type=int, default=5)
@@ -70,6 +72,7 @@ def fit_and_score(I_tr, T_tr, I_te, T_te, dim, epochs, lr, tau, seed):
 def main() -> None:
     a = parse_args()
     layers = [int(x) for x in a.layers.split(",")]
+    cache_layers = [int(x) for x in a.cache_layers.split(",")]
     sizes = [int(x) for x in a.sizes.split(",")]
     z = np.load(a.cache, allow_pickle=True)
     img, txt = z["img"], z["txt"]
@@ -82,7 +85,7 @@ def main() -> None:
 
     out = {}
     for L in layers:
-        li = LAYERS.index(L)
+        li = cache_layers.index(L)
         I = torch.tensor(img[:, li], dtype=torch.float32, device="cuda")
         T = torch.tensor(txt[:, li], dtype=torch.float32, device="cuda")
         out[f"L{L}"] = {}

@@ -117,5 +117,13 @@
     ]
    }
   }
- }
+ },
+ "gap_L20_minus_L47": {
+  "250": 0.0094,
+  "500": 0.0134,
+  "1000": 0.0304,
+  "2000": 0.0322,
+  "4000": 0.0606
+ },
+ "gap_note": "mean r@1 at L20 minus mean r@1 at L47 at each training size, 5 seeds, same 1000 held out. Direction replicates on train2017 (tap_layer_scaling_30k.json) but magnitude does not."
 }

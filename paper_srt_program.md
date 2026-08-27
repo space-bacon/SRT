@@ -960,12 +960,26 @@ property of meaning as opposed to an artifact of a particular network.
 
 The program's law-like battery on contestedness (dissociation,
 coupling, causal forcing, and a diachronic test over 11,876 dated
-articles spanning 1770–1964, where contested political signs' measured
-divergence drifts above concrete controls with a
-difference-in-differences of +0.048, permutation p = 0.007, crossing
-over in the early twentieth century) locates the semiotic load in the
+articles spanning 1770–1964) locates the semiotic load in the
 sign's representation itself rather than in any injectable community
 signal, consistent with the causal nulls of §9.4.
+
+**Retraction (diachronic result).** Earlier versions of this section
+reported that contested signs' divergence drifts above concrete
+controls with a difference-in-differences of +0.048 at permutation
+p = 0.007. That test pooled 11,876 article-level observations as if
+they were independent draws, but the hypothesis is about word
+*classes*, so the unit of analysis must be the word. Re-running it at
+the word level (41 words: 6 contested against 10 concrete controls,
+plus mixed, polysemous and abstract strata) gives a
+difference-in-differences of +0.0011 at permutation p = 0.90. The
+effect shrinks by a factor of 43 and the significance disappears. The
+original figure was pseudoreplication: pooling articles inflated n from
+a few dozen words to eleven thousand documents and manufactured the
+p-value. We do not have evidence that contested signs drift faster than
+concrete ones. Artifact: `artifacts/nla/corpus_fair_diachronic.json`
+against the superseded
+`artifacts/nla/coupling/diachronic_concept_summary.json`.
 
 ---
 

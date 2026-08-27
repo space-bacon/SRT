@@ -99,8 +99,11 @@
    0.086±0.001 — comm_proj is a uniform style bias, not a per-sign
    disambiguator. Coupling is representational, localized to the sign.
    T4 (diachronic, gemma-4 over 11,876 AmericanStories articles
-   1770-1964) PASSES: contested-vs-control DiD +0.048, perm p=0.007,
-   decade crossover ~1900-1940.
+   1770-1964) FAILS on the fair test: word-level DiD +0.0011, perm
+   p=0.90. The earlier "PASSES, DiD +0.048, perm p=0.007, decade
+   crossover ~1900-1940" pooled article-level observations and was
+   pseudoreplication. Retracted in paper_nla.md, paper_srt_program.md,
+   arxiv_program/, and docs/substack_protomind.md.
 2. **Project-review hygiene pass** (full-repo code review, top-5 fixes):
    - README Quick Start fixed (`SRTConfig.from_json`, `out.ben_output.r_hat`);
      `srt.__version__` synced to 1.0.0.

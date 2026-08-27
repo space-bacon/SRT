@@ -2173,13 +2173,30 @@ Because $D$ drifts upward for every sign across the period (OCR
 quality and language change confound the raw trend), the test is a
 difference-in-differences: the contested signs' per-year rank-drift of
 $D$ ($\rho_{\text{year}}=+0.214$) exceeds the controls' ($+0.166$) by
-$+0.048$ (permutation $p=0.007$). The decade means cross over,
+$+0.048$ (permutation $p=0.007$).
+
+**This result is retracted.** The figures above pool $11{,}876$
+article-level observations as if they were independent draws. The
+hypothesis is about word *classes*, so the unit of analysis must be the
+word, and pooling articles is pseudoreplication: it inflates $n$ from a
+few dozen words to eleven thousand documents and manufactures the
+p-value. Re-run at the word level (41 words: 6 contested against 10
+concrete controls, plus mixed, polysemous and abstract strata) the
+difference-in-differences is $+0.0011$ at permutation $p=0.90$. The
+effect shrinks by a factor of $43$ and the significance disappears. We
+do not have evidence that contested signs drift faster than concrete
+ones, and the transmission-time prediction below is therefore
+**unsupported** rather than confirmed. Artifact:
+`artifacts/nla/corpus_fair_diachronic.json`, superseding
+`artifacts/nla/coupling/diachronic_concept_summary.json`.
+
+The decade means cross over,
 contested signs carrying less load than concrete ones early (1770s,
 $2.51$ vs $2.55$) and more late (1960s, $2.81$ vs $2.71$), with the
 crossover near $1900$–$1940$; the signs whose load rose most are the
 core contested ones (sovereignty $+0.52$, rights $+0.44$, justice,
-property, tyranny), not the controls. This confirms the conjecture's
-transmission-time prediction as an observable $D$-drift. The honest
+property, tyranny), not the controls. Under the word-level test this
+pattern is not distinguishable from chance. The honest
 limit is that it is the *consequence* of rising $U_{\text{com}}$, not
 a directly measured per-era $U_{\text{com}}$: the whole-passage
 community-dispersion proxy is degenerate on this read-out (the
@@ -2206,11 +2223,12 @@ produced by per-sign community-forcing sensitivity; the community
 coupling now
 replicates cross-backbone (Qwen and gemma-4) while the referential
 coupling does not; $n$ is
-$40$–$94$ concepts; and the diachronic term is now built (Test 4):
-the metapragmatic load of contested signs drifts upward faster than
-that of concrete controls across $1770$–$1964$
-(difference-in-differences $+0.048$, $p=0.007$), as a $D$-drift
-consequence rather than a directly measured per-era $U_{\text{com}}$.
+$40$–$94$ concepts; and the diachronic term is built but **fails**
+(Test 4): at the word level the metapragmatic load of contested signs
+does not drift upward faster than that of concrete controls across
+$1770$–$1964$ (difference-in-differences $+0.0011$, $p=0.90$). The
+earlier $+0.048$ at $p=0.007$ was an artifact of pooling article-level
+observations; see the retraction in Test 4 above.
 The conjecture's value is that each of these gaps names a decisive,
 runnable experiment.
 
