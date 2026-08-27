@@ -114,6 +114,9 @@ def in_papers(n: str) -> list[str]:
             # A result file holds 0.6664648, the draft quotes 0.666. Match by value.
             if any(round(v, dec) == float(n) for v in _json_numbers(p)):
                 hits.append(p.name)
+            # Notes and supersedes fields are prose, so a figure can live only in a string.
+            elif re.search(pat, p.read_text()):
+                hits.append(p.name)
         elif re.search(pat, p.read_text()):
             hits.append(p.name)
     return hits

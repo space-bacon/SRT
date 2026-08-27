@@ -108,5 +108,20 @@
   "file": "browser_rung_mismatched_123k.json",
   "what_was_wrong": "its floors are a SINGLE deterministic pairing. The as-is floor 64,481 survives (-1.67 SD of a 20-derangement mean of 65,088), but the anchored floor 59,071 does not: it sits outside the entire range of twenty (60,646..62,719), 4.46 SD below a mean of 61,718."
  },
+ "derived": {
+  "sd_convention": "median_sd is the population SD (ddof=0) over the 20 medians. Sample SD would read 373.0 and 608.9.",
+  "as_is_margin_vs_own_floor": 20510.0,
+  "as_is_margin_single_draw": 19903.0,
+  "recalibrated_margin_vs_own_floor": 61542.0,
+  "floor_separation": 3370.0,
+  "floor_separation_pooled_se": 155.6,
+  "floor_separation_sd": 21.7,
+  "as_is_floor_vs_analytic_chance": 3444.0,
+  "as_is_floor_vs_analytic_chance_sd": 9.47,
+  "recalibrated_floor_vs_analytic_chance": 74.0,
+  "recalibrated_floor_vs_analytic_chance_sd": 0.12,
+  "uniform_draw_se": 872.0,
+  "note": "each arm is quoted against its own floor, because the floor is a property of the arm (see floor_is_not_a_gallery_draw). The two floors are 21.7 SD apart, so they are not interchangeable and analytic chance is not the reference for either."
+ },
  "floor_is_not_a_gallery_draw": "replay_123k.json holds 5,001 captions over 1,000 distinct images at gallery rows 122,287-123,286, the last 1,000 of the index. Every mismatched pairing permutes caps[].gold, so every floor draws from that fixed 1,000-image pool rather than from the 123,287 gallery. The floor therefore measures how an arm ranks the val2017 pool, which is arm-dependent, and analytic chance over the whole gallery (61,644) is not its reference. It also explains why the observed spreads (364, 593) are tighter than the uniform-draw SE of 872: across derangements the same 1,000 images reshuffle among the same 5,001 queries."
 }
