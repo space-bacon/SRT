@@ -1,0 +1,362 @@
+{
+ "question": "does the object/arrangement spectrum shift with depth",
+ "arm": "head-free, pool-mean centred cosine on raw states",
+ "control": "L47 must reproduce sugarcrepe_diagnostic_20260806.json sep: swap_obj 0.396, replace_obj 0.582, swap_att 0.498, replace_rel 0.485",
+ "sep_note": "sep = mean cos(positive, negative caption), lower is better separated",
+ "backbone": "google/gemma-4-31B-it",
+ "layers": [
+  4,
+  12,
+  20,
+  28,
+  36,
+  44,
+  47,
+  54,
+  60
+ ],
+ "results": {
+  "L4": {
+   "add_att": {
+    "acc": 0.5679,
+    "sep": 0.5654,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5436,
+    "sep": 0.3819,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5457,
+    "sep": 0.5877,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.5139,
+    "sep": 0.4983,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.522,
+    "sep": 0.5185,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.488,
+    "sep": 0.5789,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.4531,
+    "sep": 0.5517,
+    "n": 245
+   },
+   "macro_acc": 0.5192
+  },
+  "L12": {
+   "add_att": {
+    "acc": 0.5332,
+    "sep": 0.649,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5466,
+    "sep": 0.5035,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5508,
+    "sep": 0.6551,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.5285,
+    "sep": 0.6039,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.4957,
+    "sep": 0.5967,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.4775,
+    "sep": 0.6318,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.4449,
+    "sep": 0.6076,
+    "n": 245
+   },
+   "macro_acc": 0.511
+  },
+  "L20": {
+   "add_att": {
+    "acc": 0.5289,
+    "sep": 0.7108,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5752,
+    "sep": 0.5293,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5533,
+    "sep": 0.7096,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.5708,
+    "sep": 0.6664,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.6017,
+    "sep": 0.5633,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.5135,
+    "sep": 0.6603,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.4776,
+    "sep": 0.6152,
+    "n": 245
+   },
+   "macro_acc": 0.5459
+  },
+  "L28": {
+   "add_att": {
+    "acc": 0.4855,
+    "sep": 0.6382,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5407,
+    "sep": 0.4193,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5368,
+    "sep": 0.6512,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.5333,
+    "sep": 0.6085,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.5455,
+    "sep": 0.4954,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.5225,
+    "sep": 0.5494,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.5429,
+    "sep": 0.4414,
+    "n": 245
+   },
+   "macro_acc": 0.5296
+  },
+  "L36": {
+   "add_att": {
+    "acc": 0.5029,
+    "sep": 0.6385,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5917,
+    "sep": 0.4463,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5381,
+    "sep": 0.6378,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.5611,
+    "sep": 0.6106,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.6017,
+    "sep": 0.4958,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.47,
+    "sep": 0.5449,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.5673,
+    "sep": 0.4561,
+    "n": 245
+   },
+   "macro_acc": 0.5475
+  },
+  "L44": {
+   "add_att": {
+    "acc": 0.4957,
+    "sep": 0.6146,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5689,
+    "sep": 0.4452,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5343,
+    "sep": 0.6336,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.6168,
+    "sep": 0.5973,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.6024,
+    "sep": 0.5022,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.536,
+    "sep": 0.513,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.5143,
+    "sep": 0.4154,
+    "n": 245
+   },
+   "macro_acc": 0.5526
+  },
+  "L47": {
+   "add_att": {
+    "acc": 0.5058,
+    "sep": 0.5973,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5684,
+    "sep": 0.4326,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5381,
+    "sep": 0.616,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.6138,
+    "sep": 0.5826,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.5996,
+    "sep": 0.4854,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.5465,
+    "sep": 0.4975,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.4939,
+    "sep": 0.3949,
+    "n": 245
+   },
+   "macro_acc": 0.5523
+  },
+  "L54": {
+   "add_att": {
+    "acc": 0.5694,
+    "sep": 0.5229,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.5664,
+    "sep": 0.3895,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5939,
+    "sep": 0.5514,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.6659,
+    "sep": 0.518,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.6095,
+    "sep": 0.4494,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.527,
+    "sep": 0.4402,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.4531,
+    "sep": 0.3432,
+    "n": 245
+   },
+   "macro_acc": 0.5693
+  },
+  "L60": {
+   "add_att": {
+    "acc": 0.5202,
+    "sep": 0.4547,
+    "n": 692
+   },
+   "add_obj": {
+    "acc": 0.4777,
+    "sep": 0.3392,
+    "n": 2062
+   },
+   "replace_att": {
+    "acc": 0.5431,
+    "sep": 0.4894,
+    "n": 788
+   },
+   "replace_obj": {
+    "acc": 0.5406,
+    "sep": 0.4587,
+    "n": 1652
+   },
+   "replace_rel": {
+    "acc": 0.5128,
+    "sep": 0.4254,
+    "n": 1406
+   },
+   "swap_att": {
+    "acc": 0.5435,
+    "sep": 0.3654,
+    "n": 666
+   },
+   "swap_obj": {
+    "acc": 0.5184,
+    "sep": 0.2617,
+    "n": 245
+   },
+   "macro_acc": 0.5223
+  }
+ }
+}
