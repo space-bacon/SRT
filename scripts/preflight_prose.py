@@ -219,7 +219,7 @@ def main() -> int:
     print(f"   explicit scoping present: {has_scope}")
     print(f"   rounding traps: {traps}")
     print(f"   numbers with no source: {unsourced}")
-    ok = bad == 0 and has_scope and traps == 0
+    ok = bad == 0 and has_scope and traps == 0 and unsourced == 0
     print(f"\n{'CLEAN' if ok else 'REVIEW NEEDED'}")
     return 0
 
