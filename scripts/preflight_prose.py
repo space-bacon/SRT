@@ -106,7 +106,9 @@ def main() -> int:
     EXTRA.extend(Path(a) for a in sys.argv[2:])
     body = path.read_text()
     body = body.split("---", 1)[1] if "---" in body else body
-    low = body.lower()
+    # Drafts are hard wrapped, so a multi-word pattern like "we have measured
+    # nothing" straddles a newline and a literal match silently misses it.
+    low = re.sub(r"\s+", " ", body.lower())
     facts = load_facts()
 
     print("=== NUMBERS: every figure traced to an artifact ===")
