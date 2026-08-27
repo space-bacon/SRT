@@ -1,0 +1,224 @@
+{
+ "question": "does the object/arrangement depth spectrum survive a fitted probe",
+ "fit_pool": 3440,
+ "triples": 7511,
+ "note": "head fitted on val2017 images SugarCrepe does not use",
+ "results": {
+  "L4": {
+   "raw_macro": 0.5192,
+   "fitted_macro": 0.4878,
+   "raw": {
+    "add_att": 0.5679,
+    "add_obj": 0.5436,
+    "replace_att": 0.5457,
+    "replace_obj": 0.5139,
+    "replace_rel": 0.522,
+    "swap_att": 0.488,
+    "swap_obj": 0.4531
+   },
+   "fitted": {
+    "add_att": 0.4971,
+    "add_obj": 0.5078,
+    "replace_att": 0.5,
+    "replace_obj": 0.5569,
+    "replace_rel": 0.4794,
+    "swap_att": 0.4204,
+    "swap_obj": 0.4531
+   },
+   "raw_identity_minus_order": 0.0609,
+   "fitted_identity_minus_order": 0.1038
+  },
+  "L12": {
+   "raw_macro": 0.511,
+   "fitted_macro": 0.5237,
+   "raw": {
+    "add_att": 0.5332,
+    "add_obj": 0.5466,
+    "replace_att": 0.5508,
+    "replace_obj": 0.5285,
+    "replace_rel": 0.4957,
+    "swap_att": 0.4775,
+    "swap_obj": 0.4449
+   },
+   "fitted": {
+    "add_att": 0.5361,
+    "add_obj": 0.5635,
+    "replace_att": 0.5533,
+    "replace_obj": 0.6114,
+    "replace_rel": 0.5114,
+    "swap_att": 0.47,
+    "swap_obj": 0.4204
+   },
+   "raw_identity_minus_order": 0.0836,
+   "fitted_identity_minus_order": 0.191
+  },
+  "L20": {
+   "raw_macro": 0.5459,
+   "fitted_macro": 0.5931,
+   "raw": {
+    "add_att": 0.5289,
+    "add_obj": 0.5752,
+    "replace_att": 0.5533,
+    "replace_obj": 0.5708,
+    "replace_rel": 0.6017,
+    "swap_att": 0.5135,
+    "swap_obj": 0.4776
+   },
+   "fitted": {
+    "add_att": 0.552,
+    "add_obj": 0.6421,
+    "replace_att": 0.632,
+    "replace_obj": 0.6961,
+    "replace_rel": 0.6209,
+    "swap_att": 0.5225,
+    "swap_obj": 0.4857
+   },
+   "raw_identity_minus_order": 0.0933,
+   "fitted_identity_minus_order": 0.2104
+  },
+  "L28": {
+   "raw_macro": 0.5296,
+   "fitted_macro": 0.5868,
+   "raw": {
+    "add_att": 0.4855,
+    "add_obj": 0.5407,
+    "replace_att": 0.5368,
+    "replace_obj": 0.5333,
+    "replace_rel": 0.5455,
+    "swap_att": 0.5225,
+    "swap_obj": 0.5429
+   },
+   "fitted": {
+    "add_att": 0.5838,
+    "add_obj": 0.6208,
+    "replace_att": 0.5838,
+    "replace_obj": 0.5738,
+    "replace_rel": 0.6209,
+    "swap_att": 0.5285,
+    "swap_obj": 0.5959
+   },
+   "raw_identity_minus_order": -0.0096,
+   "fitted_identity_minus_order": -0.0221
+  },
+  "L36": {
+   "raw_macro": 0.5475,
+   "fitted_macro": 0.5977,
+   "raw": {
+    "add_att": 0.5029,
+    "add_obj": 0.5917,
+    "replace_att": 0.5381,
+    "replace_obj": 0.5611,
+    "replace_rel": 0.6017,
+    "swap_att": 0.47,
+    "swap_obj": 0.5673
+   },
+   "fitted": {
+    "add_att": 0.5434,
+    "add_obj": 0.6499,
+    "replace_att": 0.6218,
+    "replace_obj": 0.6265,
+    "replace_rel": 0.655,
+    "swap_att": 0.524,
+    "swap_obj": 0.5633
+   },
+   "raw_identity_minus_order": -0.0062,
+   "fitted_identity_minus_order": 0.0632
+  },
+  "L44": {
+   "raw_macro": 0.5526,
+   "fitted_macro": 0.5772,
+   "raw": {
+    "add_att": 0.4957,
+    "add_obj": 0.5689,
+    "replace_att": 0.5343,
+    "replace_obj": 0.6168,
+    "replace_rel": 0.6024,
+    "swap_att": 0.536,
+    "swap_obj": 0.5143
+   },
+   "fitted": {
+    "add_att": 0.5434,
+    "add_obj": 0.5902,
+    "replace_att": 0.6129,
+    "replace_obj": 0.6689,
+    "replace_rel": 0.6245,
+    "swap_att": 0.539,
+    "swap_obj": 0.4612
+   },
+   "raw_identity_minus_order": 0.1025,
+   "fitted_identity_minus_order": 0.2077
+  },
+  "L47": {
+   "raw_macro": 0.5523,
+   "fitted_macro": 0.5685,
+   "raw": {
+    "add_att": 0.5058,
+    "add_obj": 0.5684,
+    "replace_att": 0.5381,
+    "replace_obj": 0.6138,
+    "replace_rel": 0.5996,
+    "swap_att": 0.5465,
+    "swap_obj": 0.4939
+   },
+   "fitted": {
+    "add_att": 0.5231,
+    "add_obj": 0.5902,
+    "replace_att": 0.5876,
+    "replace_obj": 0.661,
+    "replace_rel": 0.6117,
+    "swap_att": 0.5285,
+    "swap_obj": 0.4776
+   },
+   "raw_identity_minus_order": 0.1199,
+   "fitted_identity_minus_order": 0.1835
+  },
+  "L54": {
+   "raw_macro": 0.5693,
+   "fitted_macro": 0.5605,
+   "raw": {
+    "add_att": 0.5694,
+    "add_obj": 0.5664,
+    "replace_att": 0.5939,
+    "replace_obj": 0.6659,
+    "replace_rel": 0.6095,
+    "swap_att": 0.527,
+    "swap_obj": 0.4531
+   },
+   "fitted": {
+    "add_att": 0.5809,
+    "add_obj": 0.5718,
+    "replace_att": 0.5698,
+    "replace_obj": 0.6762,
+    "replace_rel": 0.574,
+    "swap_att": 0.494,
+    "swap_obj": 0.4571
+   },
+   "raw_identity_minus_order": 0.2128,
+   "fitted_identity_minus_order": 0.219
+  },
+  "L60": {
+   "raw_macro": 0.5223,
+   "fitted_macro": 0.502,
+   "raw": {
+    "add_att": 0.5202,
+    "add_obj": 0.4777,
+    "replace_att": 0.5431,
+    "replace_obj": 0.5406,
+    "replace_rel": 0.5128,
+    "swap_att": 0.5435,
+    "swap_obj": 0.5184
+   },
+   "fitted": {
+    "add_att": 0.5289,
+    "add_obj": 0.5194,
+    "replace_att": 0.5203,
+    "replace_obj": 0.5617,
+    "replace_rel": 0.5185,
+    "swap_att": 0.4655,
+    "swap_obj": 0.4
+   },
+   "raw_identity_minus_order": 0.0222,
+   "fitted_identity_minus_order": 0.1617
+  }
+ }
+}
