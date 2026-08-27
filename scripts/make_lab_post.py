@@ -55,7 +55,7 @@ def embed(name: str, alt: str, width: int = 700, caption: str | None = None) -> 
 
 def body() -> str:
     return f"""
-<h3>A 382 MB model reads the notes a 31-billion-parameter model leaves behind</h3>
+<h3>A 0.6B model reads the notes a 31B model leaves behind</h3>
 
 <p><em>The notes are what the big model computes and would otherwise discard.
 Handed them and nothing else, the small one writes a sentence. Search 118,287
@@ -76,7 +76,8 @@ before you could use it for anything else.</p>
 
 <p>We kept the notes for a gallery of 123,287 photographs, the standard COCO
 image set, and then taught something very
-small to read them. A 382&nbsp;MB language model, Qwen3-0.6B, with a small
+small to read them. Qwen3-0.6B, six hundred million parameters against the big
+model&rsquo;s thirty-one billion, with a small
 trained piece in front of it and its own weights never altered, takes one of
 those number-lists and writes an English sentence
 about a photograph it was never given. We call it the reader.</p>
@@ -304,7 +305,7 @@ above the first person&rsquo;s caption on <strong>49.6%</strong> of them. A
 second person manages <strong>48.0%</strong>. The reader beats a human caption
 slightly more often than another human does.</p>
 
-<p>A 382&nbsp;MB model describing a
+<p>A 0.6B model describing a
 photograph from numbers alone, as well as a person who is
 looking straight at it. Not because it is a good captioner, but because the
 record it was handed already contained the scene.</p>
