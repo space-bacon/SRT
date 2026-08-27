@@ -70,7 +70,13 @@ def needs_upload(s3, key: str, path: Path) -> bool:
     if path.stat().st_size > CHUNK:
         return (meta.get("mtime") != str(int(path.stat().st_mtime))
                 or meta.get("size") != str(path.stat().st_size))
-    return (head["ContentLength"] != path.stat().st_size
+    # Supabase's S3 head_object does not always carry ContentLength, and a
+    # bare [] raised KeyError that killed the whole nightly run partway
+    # through (2026-08-27). A head we cannot read is a reason to re-upload,
+    # never a reason to abort the backup.
+    remote_size = head.get("ContentLength")
+    return (remote_size is None
+            or remote_size != path.stat().st_size
             or meta.get("mtime") != str(int(path.stat().st_mtime)))
 
 
@@ -118,10 +124,12 @@ def main() -> int:
             if any(part.startswith(".") for part in rel.parts):
                 continue
             key = f"{PREFIX}/{name}/{rel}"
-            if not needs_upload(s3, key, path):
-                skipped += 1
-                continue
+            # needs_upload sat OUTSIDE this try, so one unreadable head
+            # aborted the entire nightly run rather than skipping one file.
             try:
+                if not needs_upload(s3, key, path):
+                    skipped += 1
+                    continue
                 if path.stat().st_size > CHUNK:
                     upload_chunked(s3, key, path)
                 else:
