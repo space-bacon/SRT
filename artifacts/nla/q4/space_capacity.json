@@ -1,0 +1,41 @@
+{
+ "question": "does discrimination in the shared space saturate as the pool grows",
+ "queries": 5000,
+ "query_note": "5,000 held-out COCO first captions, datacenter L47 states, shipped head",
+ "image_control_cos": 0.9999998211860657,
+ "pools": {
+  "1000": {
+   "median_rank": 1.0,
+   "median_rank_fraction_of_pool": 0.001,
+   "r@1": 0.5196,
+   "r@10": 0.9052
+  },
+  "4000": {
+   "median_rank": 3.0,
+   "median_rank_fraction_of_pool": 0.00075,
+   "r@1": 0.3242,
+   "r@10": 0.7358
+  },
+  "16000": {
+   "median_rank": 10.0,
+   "median_rank_fraction_of_pool": 0.000625,
+   "r@1": 0.194,
+   "r@10": 0.5088
+  },
+  "64000": {
+   "median_rank": 38.0,
+   "median_rank_fraction_of_pool": 0.00059375,
+   "r@1": 0.0996,
+   "r@10": 0.3136
+  },
+  "123287": {
+   "median_rank": 70.0,
+   "median_rank_fraction_of_pool": 0.0005677808690291758,
+   "r@1": 0.07,
+   "r@10": 0.2374
+  }
+ },
+ "participation_ratio": 84.47737884521484,
+ "dims_for_99pct_variance": 210,
+ "dims_total": 1024
+}
