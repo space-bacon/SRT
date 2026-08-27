@@ -1,0 +1,35 @@
+{
+ "question": "is the L60 collapse lost information or a readout that lost reach",
+ "method": "shipped head recipe: two 1024-d towers, InfoNCE, fitted per layer",
+ "control": "a fitted head at L47 must clearly beat head-free, or the instrument is invalid",
+ "n_images": 30000,
+ "n_train": 28000,
+ "n_holdout": 2000,
+ "backbone": "google/gemma-4-31B-it",
+ "results": {
+  "L20": {
+   "head_free": {
+    "r@1": 0.06650000065565109,
+    "r@10": 0.23800000548362732,
+    "median_rank": 145.0
+   },
+   "fitted_head": {
+    "r@1": 0.3295000195503235,
+    "r@10": 0.7630000114440918,
+    "median_rank": 3.0
+   }
+  },
+  "L47": {
+   "head_free": {
+    "r@1": 0.12250000238418579,
+    "r@10": 0.3615000247955322,
+    "median_rank": 31.0
+   },
+   "fitted_head": {
+    "r@1": 0.30000001192092896,
+    "r@10": 0.6925000548362732,
+    "median_rank": 4.0
+   }
+  }
+ }
+}
