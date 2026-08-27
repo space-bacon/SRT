@@ -156,6 +156,9 @@ def main() -> int:
     traps = 0
     unsourced = 0
     for n in sorted(quoted, key=lambda s: -float(s)):
+        # "section 8.7" cites someone's paper. It is not a measurement of ours.
+        if re.search(rf"(?:section|§|sec\.)\s*{re.escape(n)}\b", low):
+            continue
         if n in exact:
             label, src = exact[n]
             print(f"  {n:>10s}  {label}  <- {src}")
@@ -201,6 +204,7 @@ def main() -> int:
                   r"is not universal", r"stands untested", r"cannot support it",
                   r"where we are weak", r"came back null", r"per word it fails",
                   r"is untested", r"remains untested", r"we have not measured",
+                  r"two limits", r"will not paper over", r"without settling",
                   r"we have not", r"one backbone at one layer", r"did not replicate"]
     has_scope = any(re.search(p, low) for p in scope_pats)
     print(f"   explicit scoping present: {has_scope}")

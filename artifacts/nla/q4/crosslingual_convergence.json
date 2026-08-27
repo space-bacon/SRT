@@ -12,7 +12,8 @@
    "centred": {
     "r@1": 0.335,
     "r@10": 0.535,
-    "median_rank": 6.0
+    "median_rank": 6.0,
+    "r@1_vs_chance": 134
    },
    "raw": {
     "r@1": 0.2475,
@@ -25,7 +26,8 @@
    "centred": {
     "r@1": 0.2975,
     "r@10": 0.4775,
-    "median_rank": 14.0
+    "median_rank": 14.0,
+    "r@1_vs_chance": 119
    },
    "raw": {
     "r@1": 0.1975,
@@ -38,7 +40,8 @@
    "centred": {
     "r@1": 0.2475,
     "r@10": 0.4475,
-    "median_rank": 18.0
+    "median_rank": 18.0,
+    "r@1_vs_chance": 99
    },
    "raw": {
     "r@1": 0.2275,
