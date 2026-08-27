@@ -60,6 +60,20 @@ def load_facts() -> dict[str, tuple[float, str]]:
     return f
 
 
+# Program-level claims live in prose, not JSON, so the check is whether the figure
+# actually appears in a paper. A number I remember but cannot find is not a number.
+SOURCES = ["paper_srt_program.md", "paper_nla.md", "paper_program.md", "README.md"]
+
+
+def in_papers(n: str) -> list[str]:
+    hits = []
+    for name in SOURCES:
+        p = ROOT / name
+        if p.exists() and re.search(rf"(?<![\d.]){re.escape(n)}(?![\d])", p.read_text()):
+            hits.append(name)
+    return hits
+
+
 TICS = {
     "em dash": [r"\u2014"],
     "signposting": [r"the interesting", r"worth sitting with", r"crucially",
@@ -88,6 +102,7 @@ def main() -> int:
     quoted = {n.replace(",", "") for n in re.findall(r"\b\d[\d,]*(?:\.\d+)?\b", body)}
     exact = {f"{v:g}": (k, s) for k, (v, s) in facts.items()}
     traps = 0
+    unsourced = 0
     for n in sorted(quoted, key=lambda s: -float(s)):
         if n in exact:
             label, src = exact[n]
@@ -105,7 +120,12 @@ def main() -> int:
             print(f"! {n:>10s}  ROUNDED from {v} ({k} <- {s}). Half-integer, quote {v}")
             traps += 1
         else:
-            print(f"  {n:>10s}  not from an artifact, verify by hand")
+            papers = in_papers(n)
+            if papers:
+                print(f"  {n:>10s}  appears in {', '.join(papers)}")
+            else:
+                unsourced += 1
+                print(f"? {n:>10s}  not in any artifact or paper, verify by hand")
 
     print("\n=== artifact values available ===")
     for label, (val, src) in sorted(facts.items()):
@@ -121,9 +141,16 @@ def main() -> int:
 
     words = len(body.split())
     print(f"\n   words {words}")
-    has_scope = bool(re.search(r"scoping|we have measured nothing|not minds", low))
+    # Scoping can be phrased many ways. What matters is that the draft names a
+    # limit or a banked negative somewhere, not that it uses the word "scoping".
+    scope_pats = [r"scoping", r"we have measured nothing", r"not minds",
+                  r"have not touched", r"not going to pretend", r"banked it as a null",
+                  r"cut against us", r"is not universal", r"we have not",
+                  r"one backbone at one layer", r"did not replicate"]
+    has_scope = any(re.search(p, low) for p in scope_pats)
     print(f"   explicit scoping present: {has_scope}")
     print(f"   rounding traps: {traps}")
+    print(f"   numbers with no source: {unsourced}")
     ok = bad == 0 and has_scope and traps == 0
     print(f"\n{'CLEAN' if ok else 'REVIEW NEEDED'}")
     return 0
