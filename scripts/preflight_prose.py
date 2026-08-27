@@ -69,7 +69,11 @@ EXTRA: list[Path] = []
 
 def in_papers(n: str) -> list[str]:
     hits = []
-    pat = rf"(?<![\d.]){re.escape(n)}(?![\d])"
+    # Papers write 1,384 while a draft may write 1384, so try both groupings.
+    forms = {n}
+    if "." not in n and len(n) > 3:
+        forms.add(f"{int(n):,}")
+    pat = "|".join(rf"(?<![\d.,]){re.escape(f)}(?![\d])" for f in forms)
     for name in SOURCES:
         p = ROOT / name
         if p.exists() and re.search(pat, p.read_text()):
@@ -160,6 +164,7 @@ def main() -> int:
                   r"have not touched", r"have never touched", r"not going to pretend",
                   r"banked it as a null", r"cut against us", r"is not universal",
                   r"where we are weak", r"came back null", r"per word it fails",
+                  r"is untested", r"remains untested", r"we have not measured",
                   r"we have not", r"one backbone at one layer", r"did not replicate"]
     has_scope = any(re.search(p, low) for p in scope_pats)
     print(f"   explicit scoping present: {has_scope}")
