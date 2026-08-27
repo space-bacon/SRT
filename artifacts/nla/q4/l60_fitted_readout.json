@@ -214,5 +214,7 @@
    "512": 0.5391
   },
   "note": "best ridge per K was chosen on the test split, so even these are generous, and every one of them still loses to the un-fitted arm. 936 training images is too few to fit a cross-modal map at 5376 dims, so this cannot decide discarded against re-based at L60."
- }
+ },
+ "n_train_images": 936,
+ "n_images": 1560
 }

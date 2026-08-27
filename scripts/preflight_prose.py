@@ -197,7 +197,8 @@ def main() -> int:
     # limit or a banked negative somewhere, not that it uses the word "scoping".
     scope_pats = [r"scoping", r"we have measured nothing", r"not minds",
                   r"have not touched", r"have never touched", r"not going to pretend",
-                  r"banked it as a null", r"cut against us", r"is not universal",
+                  r"banked it as a null", r"banked as a null", r"cut against us",
+                  r"is not universal", r"stands untested", r"cannot support it",
                   r"where we are weak", r"came back null", r"per word it fails",
                   r"is untested", r"remains untested", r"we have not measured",
                   r"we have not", r"one backbone at one layer", r"did not replicate"]
