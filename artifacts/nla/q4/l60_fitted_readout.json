@@ -1,0 +1,218 @@
+{
+ "question": "is the L60 collapse lost information or a readout that lost reach",
+ "method": "PCA-128 per modality on train images, ridge map image->caption",
+ "test_note": "held-out images, same splits and metric as the head-free sweep",
+ "results": {
+  "L4": {
+   "raw_macro": 0.5266,
+   "fitted_macro": 0.5071,
+   "raw": {
+    "add_att": 0.5915,
+    "add_obj": 0.5767,
+    "replace_att": 0.5575,
+    "replace_obj": 0.521,
+    "replace_rel": 0.4992,
+    "swap_att": 0.5236,
+    "swap_obj": 0.4167
+   },
+   "fitted": {
+    "add_att": 0.5246,
+    "add_obj": 0.5093,
+    "replace_att": 0.4808,
+    "replace_obj": 0.4775,
+    "replace_rel": 0.4975,
+    "swap_att": 0.5079,
+    "swap_obj": 0.5521
+   }
+  },
+  "L12": {
+   "raw_macro": 0.5153,
+   "fitted_macro": 0.5016,
+   "raw": {
+    "add_att": 0.5528,
+    "add_obj": 0.5593,
+    "replace_att": 0.528,
+    "replace_obj": 0.5341,
+    "replace_rel": 0.4877,
+    "swap_att": 0.4764,
+    "swap_obj": 0.4688
+   },
+   "fitted": {
+    "add_att": 0.507,
+    "add_obj": 0.5419,
+    "replace_att": 0.5192,
+    "replace_obj": 0.508,
+    "replace_rel": 0.5237,
+    "swap_att": 0.4843,
+    "swap_obj": 0.4271
+   }
+  },
+  "L20": {
+   "raw_macro": 0.5486,
+   "fitted_macro": 0.5008,
+   "raw": {
+    "add_att": 0.507,
+    "add_obj": 0.6209,
+    "replace_att": 0.5457,
+    "replace_obj": 0.5893,
+    "replace_rel": 0.6007,
+    "swap_att": 0.5394,
+    "swap_obj": 0.4375
+   },
+   "fitted": {
+    "add_att": 0.4789,
+    "add_obj": 0.564,
+    "replace_att": 0.4926,
+    "replace_obj": 0.5196,
+    "replace_rel": 0.5548,
+    "swap_att": 0.5,
+    "swap_obj": 0.3958
+   }
+  },
+  "L28": {
+   "raw_macro": 0.5365,
+   "fitted_macro": 0.5301,
+   "raw": {
+    "add_att": 0.5,
+    "add_obj": 0.564,
+    "replace_att": 0.5546,
+    "replace_obj": 0.537,
+    "replace_rel": 0.5777,
+    "swap_att": 0.5118,
+    "swap_obj": 0.5104
+   },
+   "fitted": {
+    "add_att": 0.5704,
+    "add_obj": 0.5663,
+    "replace_att": 0.5398,
+    "replace_obj": 0.4862,
+    "replace_rel": 0.5336,
+    "swap_att": 0.5039,
+    "swap_obj": 0.5104
+   }
+  },
+  "L36": {
+   "raw_macro": 0.5366,
+   "fitted_macro": 0.5389,
+   "raw": {
+    "add_att": 0.4472,
+    "add_obj": 0.5826,
+    "replace_att": 0.5251,
+    "replace_obj": 0.5733,
+    "replace_rel": 0.6072,
+    "swap_att": 0.4685,
+    "swap_obj": 0.5521
+   },
+   "fitted": {
+    "add_att": 0.5282,
+    "add_obj": 0.593,
+    "replace_att": 0.5192,
+    "replace_obj": 0.5065,
+    "replace_rel": 0.5745,
+    "swap_att": 0.5197,
+    "swap_obj": 0.5312
+   }
+  },
+  "L44": {
+   "raw_macro": 0.5589,
+   "fitted_macro": 0.5267,
+   "raw": {
+    "add_att": 0.5141,
+    "add_obj": 0.5488,
+    "replace_att": 0.5693,
+    "replace_obj": 0.6386,
+    "replace_rel": 0.6007,
+    "swap_att": 0.5512,
+    "swap_obj": 0.4896
+   },
+   "fitted": {
+    "add_att": 0.5176,
+    "add_obj": 0.5116,
+    "replace_att": 0.5575,
+    "replace_obj": 0.5443,
+    "replace_rel": 0.5532,
+    "swap_att": 0.4921,
+    "swap_obj": 0.5104
+   }
+  },
+  "L47": {
+   "raw_macro": 0.5655,
+   "fitted_macro": 0.5222,
+   "raw": {
+    "add_att": 0.5246,
+    "add_obj": 0.5581,
+    "replace_att": 0.5782,
+    "replace_obj": 0.6386,
+    "replace_rel": 0.6039,
+    "swap_att": 0.5551,
+    "swap_obj": 0.5
+   },
+   "fitted": {
+    "add_att": 0.507,
+    "add_obj": 0.5186,
+    "replace_att": 0.5398,
+    "replace_obj": 0.5457,
+    "replace_rel": 0.5614,
+    "swap_att": 0.4724,
+    "swap_obj": 0.5104
+   }
+  },
+  "L54": {
+   "raw_macro": 0.5841,
+   "fitted_macro": 0.5309,
+   "raw": {
+    "add_att": 0.5915,
+    "add_obj": 0.5477,
+    "replace_att": 0.6077,
+    "replace_obj": 0.6865,
+    "replace_rel": 0.6072,
+    "swap_att": 0.5276,
+    "swap_obj": 0.5208
+   },
+   "fitted": {
+    "add_att": 0.5352,
+    "add_obj": 0.5163,
+    "replace_att": 0.5398,
+    "replace_obj": 0.5922,
+    "replace_rel": 0.5565,
+    "swap_att": 0.4764,
+    "swap_obj": 0.5
+   }
+  },
+  "L60": {
+   "raw_macro": 0.51,
+   "fitted_macro": 0.5094,
+   "raw": {
+    "add_att": 0.493,
+    "add_obj": 0.4593,
+    "replace_att": 0.5192,
+    "replace_obj": 0.521,
+    "replace_rel": 0.5041,
+    "swap_att": 0.563,
+    "swap_obj": 0.5104
+   },
+   "fitted": {
+    "add_att": 0.507,
+    "add_obj": 0.5163,
+    "replace_att": 0.4926,
+    "replace_obj": 0.4761,
+    "replace_rel": 0.5057,
+    "swap_att": 0.5157,
+    "swap_obj": 0.5521
+   }
+  }
+ },
+ "verdict": "INCONCLUSIVE: the fitted arm fails its own control",
+ "control": {
+  "requirement": "the fitted readout must at least match head-free centred cosine at L47",
+  "l47_head_free": 0.5655,
+  "l47_fitted_by_K": {
+   "32": 0.496,
+   "64": 0.5108,
+   "128": 0.5222,
+   "256": 0.5318,
+   "512": 0.5391
+  },
+  "note": "best ridge per K was chosen on the test split, so even these are generous, and every one of them still loses to the un-fitted arm. 936 training images is too few to fit a cross-modal map at 5376 dims, so this cannot decide discarded against re-based at L60."
+ }
+}
