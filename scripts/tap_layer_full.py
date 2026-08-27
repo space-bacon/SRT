@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 from pathlib import Path
 
 import numpy as np
@@ -61,19 +62,26 @@ def encode(files, caps, img_dir, layers, proc, model, cache):
     d = 5376
     img = np.zeros((len(files), len(layers), d), np.float16)
     txt = np.zeros((len(caps), len(layers), d), np.float16)
-    done = 0
+    done_img = done_txt = 0
     if os.path.exists(part):
         z = np.load(part, allow_pickle=False)
-        done = int(z["done"])
-        img[:done] = z["img"][:done]
-        txt[:done] = z["txt"][:done]
-        print(f"resuming at {done}/{len(files)}", flush=True)
+        # Older partials carry a single `done` for an interleaved image+caption loop.
+        done_img = int(z["done_img"]) if "done_img" in z.files else int(z["done"])
+        done_txt = int(z["done_txt"]) if "done_txt" in z.files else int(z["done"])
+        img[:done_img] = z["img"][:done_img]
+        txt[:done_txt] = z["txt"][:done_txt]
+        print(f"resuming: {done_img} images, {done_txt} captions", flush=True)
 
     img_tok = getattr(model.config, "image_token_id", None)
     tok = getattr(proc, "tokenizer", proc)
     bos = tok.bos_token_id
 
-    for i in range(done, len(files)):
+    def save(ni, nt):
+        np.savez(part, img=img, txt=txt, done_img=ni, done_txt=nt)
+        print(f"  checkpointed {ni} images, {nt} captions", flush=True)
+
+    t0 = time.time()
+    for i in range(done_img, len(files)):
         im = Image.open(os.path.join(img_dir, files[i])).convert("RGB")
         msg = [{"role": "user", "content": [
             {"type": "image", "image": im},
@@ -85,18 +93,49 @@ def encode(files, caps, img_dir, layers, proc, model, cache):
         for li, L in enumerate(layers):
             img[i, li] = out.hidden_states[L][0][mask].float().mean(0).cpu().numpy()
 
-        ids = tok(caps[i], truncation=True, max_length=MAX_SEQ,
-                  add_special_tokens=True).input_ids
-        if bos is not None and ids[0] != bos:
-            ids = [bos] + ids[: MAX_SEQ - 1]
-        t = torch.tensor([ids], device="cuda")
-        out = model(input_ids=t, output_hidden_states=True, use_cache=False)
-        for li, L in enumerate(layers):
-            txt[i, li] = out.hidden_states[L][0, -1].float().cpu().numpy()
+        n = i + 1 - done_img
+        if n % 500 == 0:
+            r = n / (time.time() - t0)
+            eta = (len(files) - i - 1) / r / 3600
+            print(f"  img {i + 1}/{len(files)}  {r:.2f}/s  eta {eta:.2f}h", flush=True)
+        if (i + 1) % CHUNK == 0:
+            save(i + 1, done_txt)
+    save(len(files), done_txt)
 
-        if (i + 1) % CHUNK == 0 or i + 1 == len(files):
-            np.savez(part, img=img, txt=txt, done=i + 1)
-            print(f"  {i + 1}/{len(files)} checkpointed", flush=True)
+    # A caption is ~20 tokens, so a per-caption forward is almost all weight-load
+    # overhead on a 31B backbone. Batching here is what makes the run tractable.
+    t0 = time.time()
+    for i in range(done_txt, len(caps), BATCH):
+        chunk = caps[i:i + BATCH]
+        ids_list = []
+        for t in chunk:
+            ids = tok(t, truncation=True, max_length=MAX_SEQ,
+                      add_special_tokens=True).input_ids
+            if bos is not None and ids[0] != bos:
+                ids = [bos] + ids[: MAX_SEQ - 1]
+            ids_list.append(ids)
+        T = max(len(x) for x in ids_list)
+        pad = tok.pad_token_id if tok.pad_token_id is not None else bos
+        input_ids = torch.full((len(chunk), T), pad, dtype=torch.long)
+        attn = torch.zeros((len(chunk), T), dtype=torch.long)
+        for j, ids in enumerate(ids_list):
+            input_ids[j, : len(ids)] = torch.tensor(ids)
+            attn[j, : len(ids)] = 1
+        out = model(input_ids=input_ids.cuda(), attention_mask=attn.cuda(),
+                    output_hidden_states=True, use_cache=False)
+        last = (attn.sum(-1) - 1).cuda()
+        rows = torch.arange(len(chunk)).cuda()
+        for li, L in enumerate(layers):
+            txt[i:i + len(chunk), li] = (out.hidden_states[L][rows, last]
+                                         .float().cpu().numpy().astype(np.float16))
+
+        n = i + len(chunk) - done_txt
+        if (i // BATCH) % 50 == 0 and n:
+            r = n / (time.time() - t0)
+            print(f"  txt {i + len(chunk)}/{len(caps)}  {r:.1f}/s  "
+                  f"eta {(len(caps) - i) / r / 3600:.2f}h", flush=True)
+        if (i + len(chunk)) % CHUNK < BATCH:
+            save(len(files), i + len(chunk))
 
     np.savez_compressed(cache, img=img, txt=txt)
     if os.path.exists(part):
