@@ -62,15 +62,21 @@ def load_facts() -> dict[str, tuple[float, str]]:
 
 # Program-level claims live in prose, not JSON, so the check is whether the figure
 # actually appears in a paper. A number I remember but cannot find is not a number.
+# Extra sources can be passed as trailing argv, for findings that live only in a memo.
 SOURCES = ["paper_srt_program.md", "paper_nla.md", "paper_program.md", "README.md"]
+EXTRA: list[Path] = []
 
 
 def in_papers(n: str) -> list[str]:
     hits = []
+    pat = rf"(?<![\d.]){re.escape(n)}(?![\d])"
     for name in SOURCES:
         p = ROOT / name
-        if p.exists() and re.search(rf"(?<![\d.]){re.escape(n)}(?![\d])", p.read_text()):
+        if p.exists() and re.search(pat, p.read_text()):
             hits.append(name)
+    for p in EXTRA:
+        if p.exists() and re.search(pat, p.read_text()):
+            hits.append(p.name)
     return hits
 
 
@@ -86,6 +92,10 @@ TICS = {
     "deference": [r"great question", r"thank you", r"if I may", r"just wanted",
                   r"humbly", r"I wonder if", r"forgive", r"apolog"],
     "cognition verb": [r"worked out", r"it knows", r"understands", r"figures out"],
+    # "X is not A. It is B." Reads as rhetoric doing work the evidence should do.
+    "antithesis": [r"is not [^.]{0,70}\.\s*it is\b", r"does not [^.]{0,70}\.\s*it \w+s\b",
+                   r"\bnot [^.,]{0,45},\s*(but|it'?s|it is)\b", r"\brather than\b",
+                   r"\bso,? not\b", r"\binstead of\b.{0,40}\bit\b"],
     "unexplained jargon": [r"\bnp\d", r"\bL47\b", r"\bfve\b", r"\bSRT\b", r"\bR@\d",
                            r"\badapter\b", r"\bcheckpoint\b", r"\bhead-space\b"],
 }
@@ -93,6 +103,7 @@ TICS = {
 
 def main() -> int:
     path = Path(sys.argv[1])
+    EXTRA.extend(Path(a) for a in sys.argv[2:])
     body = path.read_text()
     body = body.split("---", 1)[1] if "---" in body else body
     low = body.lower()
@@ -144,9 +155,10 @@ def main() -> int:
     # Scoping can be phrased many ways. What matters is that the draft names a
     # limit or a banked negative somewhere, not that it uses the word "scoping".
     scope_pats = [r"scoping", r"we have measured nothing", r"not minds",
-                  r"have not touched", r"not going to pretend", r"banked it as a null",
-                  r"cut against us", r"is not universal", r"we have not",
-                  r"one backbone at one layer", r"did not replicate"]
+                  r"have not touched", r"have never touched", r"not going to pretend",
+                  r"banked it as a null", r"cut against us", r"is not universal",
+                  r"where we are weak", r"came back null", r"per word it fails",
+                  r"we have not", r"one backbone at one layer", r"did not replicate"]
     has_scope = any(re.search(p, low) for p in scope_pats)
     print(f"   explicit scoping present: {has_scope}")
     print(f"   rounding traps: {traps}")
