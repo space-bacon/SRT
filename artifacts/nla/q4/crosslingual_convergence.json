@@ -1,0 +1,56 @@
+{
+ "question": "do independently evolved languages converge structurally",
+ "premise_tested": "MaL 5.1: Mandarin, Arabic and Finnish 'share only the shallowest semantic universals'",
+ "confound": "one model saw all these languages, so alignment may be imposed by joint training rather than recovered from the languages",
+ "limit": "English pivot only; Mandarin against Finnish is not measured here",
+ "backbone": "google/gemma-4-31B-it",
+ "layer": 47,
+ "n_sentences": 400,
+ "chance_r@1": 0.0025,
+ "pairs": {
+  "English-Mandarin": {
+   "centred": {
+    "r@1": 0.335,
+    "r@10": 0.535,
+    "median_rank": 6.0
+   },
+   "raw": {
+    "r@1": 0.2475,
+    "r@10": 0.4525,
+    "median_rank": 19.0
+   },
+   "n": 400
+  },
+  "English-Arabic": {
+   "centred": {
+    "r@1": 0.2975,
+    "r@10": 0.4775,
+    "median_rank": 14.0
+   },
+   "raw": {
+    "r@1": 0.1975,
+    "r@10": 0.355,
+    "median_rank": 101.5
+   },
+   "n": 400
+  },
+  "English-Finnish": {
+   "centred": {
+    "r@1": 0.2475,
+    "r@10": 0.4475,
+    "median_rank": 18.0
+   },
+   "raw": {
+    "r@1": 0.2275,
+    "r@10": 0.4075,
+    "median_rank": 25.0
+   },
+   "n": 400
+  }
+ },
+ "shuffled_floor_r@1": {
+  "English-Mandarin": 0.0025,
+  "English-Arabic": 0.0025,
+  "English-Finnish": 0.0025
+ }
+}
