@@ -77,7 +77,12 @@ def _json_numbers(p: Path) -> list[float]:
         if isinstance(o, (int, float)):
             out.append(float(o))
         elif isinstance(o, dict):
-            for v in o.values():
+            for k, v in o.items():
+                # Pool sizes and layer numbers live in the keys, not the values.
+                try:
+                    out.append(float(k))
+                except (TypeError, ValueError):
+                    pass
                 walk(v)
         elif isinstance(o, list):
             for v in o:
