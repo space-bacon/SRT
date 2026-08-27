@@ -1,0 +1,59 @@
+{
+ "question": "is the L60 collapse lost information or a readout that lost reach",
+ "method": "shipped head recipe: two 1024-d towers, InfoNCE, fitted per layer",
+ "control": "a fitted head at L47 must clearly beat head-free, or the instrument is invalid",
+ "n_images": 5000,
+ "n_train": 4000,
+ "n_holdout": 1000,
+ "backbone": "google/gemma-4-31B-it",
+ "results": {
+  "L28": {
+   "head_free": {
+    "r@1": 0.015000000596046448,
+    "r@10": 0.055000003427267075,
+    "median_rank": 329.0
+   },
+   "fitted_head": {
+    "r@1": 0.17400000989437103,
+    "r@10": 0.5330000519752502,
+    "median_rank": 9.0
+   }
+  },
+  "L47": {
+   "head_free": {
+    "r@1": 0.16700001060962677,
+    "r@10": 0.4190000295639038,
+    "median_rank": 20.0
+   },
+   "fitted_head": {
+    "r@1": 0.22700001299381256,
+    "r@10": 0.6340000033378601,
+    "median_rank": 5.0
+   }
+  },
+  "L54": {
+   "head_free": {
+    "r@1": 0.1600000113248825,
+    "r@10": 0.5570000410079956,
+    "median_rank": 8.0
+   },
+   "fitted_head": {
+    "r@1": 0.1980000138282776,
+    "r@10": 0.578000009059906,
+    "median_rank": 7.0
+   }
+  },
+  "L60": {
+   "head_free": {
+    "r@1": 0.003000000026077032,
+    "r@10": 0.03700000047683716,
+    "median_rank": 393.0
+   },
+   "fitted_head": {
+    "r@1": 0.1080000028014183,
+    "r@10": 0.40700000524520874,
+    "median_rank": 16.0
+   }
+  }
+ }
+}
