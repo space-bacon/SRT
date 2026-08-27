@@ -1,0 +1,119 @@
+{
+ "question": "is the L60 collapse lost information or a readout that lost reach",
+ "method": "shipped head recipe: two 1024-d towers, InfoNCE, fitted per layer",
+ "control": "a fitted head at L47 must clearly beat head-free, or the instrument is invalid",
+ "n_images": 5000,
+ "n_train": 4000,
+ "n_holdout": 1000,
+ "backbone": "google/gemma-4-31B-it",
+ "results": {
+  "L4": {
+   "head_free": {
+    "r@1": 0.013000000268220901,
+    "r@10": 0.0560000017285347,
+    "median_rank": 269.0
+   },
+   "fitted_head": {
+    "r@1": 0.08000000566244125,
+    "r@10": 0.3620000183582306,
+    "median_rank": 21.0
+   }
+  },
+  "L12": {
+   "head_free": {
+    "r@1": 0.04700000211596489,
+    "r@10": 0.21900001168251038,
+    "median_rank": 116.0
+   },
+   "fitted_head": {
+    "r@1": 0.17500001192092896,
+    "r@10": 0.5640000104904175,
+    "median_rank": 8.0
+   }
+  },
+  "L20": {
+   "head_free": {
+    "r@1": 0.10000000149011612,
+    "r@10": 0.3070000112056732,
+    "median_rank": 76.0
+   },
+   "fitted_head": {
+    "r@1": 0.2930000126361847,
+    "r@10": 0.6810000538825989,
+    "median_rank": 4.0
+   }
+  },
+  "L28": {
+   "head_free": {
+    "r@1": 0.015000000596046448,
+    "r@10": 0.055000003427267075,
+    "median_rank": 329.0
+   },
+   "fitted_head": {
+    "r@1": 0.1720000058412552,
+    "r@10": 0.527999997138977,
+    "median_rank": 9.0
+   }
+  },
+  "L36": {
+   "head_free": {
+    "r@1": 0.06800000369548798,
+    "r@10": 0.20500001311302185,
+    "median_rank": 127.0
+   },
+   "fitted_head": {
+    "r@1": 0.24000000953674316,
+    "r@10": 0.6320000290870667,
+    "median_rank": 5.0
+   }
+  },
+  "L44": {
+   "head_free": {
+    "r@1": 0.13700000941753387,
+    "r@10": 0.3920000195503235,
+    "median_rank": 24.0
+   },
+   "fitted_head": {
+    "r@1": 0.2540000081062317,
+    "r@10": 0.6550000309944153,
+    "median_rank": 5.0
+   }
+  },
+  "L47": {
+   "head_free": {
+    "r@1": 0.16700001060962677,
+    "r@10": 0.4190000295639038,
+    "median_rank": 20.0
+   },
+   "fitted_head": {
+    "r@1": 0.23000000417232513,
+    "r@10": 0.6350000500679016,
+    "median_rank": 5.0
+   }
+  },
+  "L54": {
+   "head_free": {
+    "r@1": 0.1600000113248825,
+    "r@10": 0.5570000410079956,
+    "median_rank": 8.0
+   },
+   "fitted_head": {
+    "r@1": 0.19300000369548798,
+    "r@10": 0.5800000429153442,
+    "median_rank": 7.0
+   }
+  },
+  "L60": {
+   "head_free": {
+    "r@1": 0.003000000026077032,
+    "r@10": 0.03700000047683716,
+    "median_rank": 393.0
+   },
+   "fitted_head": {
+    "r@1": 0.1080000028014183,
+    "r@10": 0.41700002551078796,
+    "median_rank": 16.0
+   }
+  }
+ }
+}
