@@ -87,7 +87,18 @@ MAX_SESSIONS = int(os.environ.get("SUNSTONE_MAX_SESSIONS", "12"))
 # streams, measured 2026-08-04). One generation runs at a time at full
 # speed; later arrivals queue here up to GEN_QUEUE_TIMEOUT_S, then 503.
 GEN_LOCK = threading.Lock()
-GEN_QUEUE_TIMEOUT_S = int(os.environ.get("SUNSTONE_QUEUE_TIMEOUT", "300"))
+GEN_QUEUE_TIMEOUT_S = int(os.environ.get("SUNSTONE_QUEUE_TIMEOUT", "45"))
+# Waiters occupy an anyio worker thread while they block, and that pool is
+# finite, so an unbounded queue starves /healthz and the static routes long
+# before it finishes serving anyone. Refuse past this depth instead.
+GEN_MAX_WAITING = int(os.environ.get("SUNSTONE_MAX_WAITING", "8"))
+GEN_WAITING = threading.Semaphore(GEN_MAX_WAITING)
+
+# Clicking the map needs no Metal: map_vector_at is numpy over precomputed
+# gallery rows and map_say runs the 0.6B on CPU. Holding GEN_LOCK for it put
+# every map click behind whatever chat generation was running. Bound it
+# separately so reads stay concurrent with each other and with generation.
+READ_SEM = threading.Semaphore(int(os.environ.get("SUNSTONE_MAX_READS", "3")))
 
 # Sampling. mlx-vlm defaults to temperature 0.0 (greedy), and greedy decode
 # on deep multi-turn contexts falls into repetition loops ("la la la...",
@@ -173,7 +184,13 @@ def _web_retrieve(query: str) -> tuple[str, list[dict]]:
                         or ip.is_reserved):
                     raise ValueError(f"non-public address: {host}")
             pr = requests.get(res["url"], timeout=5, stream=True,
+                              allow_redirects=False,
                               headers={"User-Agent": "sunstone-lab/1.0"})
+            # A redirect is re-entry with an unchecked host, which is how the
+            # address guard above gets walked around: 200 on a public page,
+            # 302 to 10.77.0.1:8888. Take the snippet instead of following.
+            if pr.status_code in (301, 302, 303, 307, 308):
+                raise ValueError(f"redirect refused: {res['url']}")
             raw = pr.raw.read(400_000, decode_content=True)
             text = _html_to_text(raw.decode(pr.encoding or "utf-8", "ignore"))
             return {**res, "text": text[:RETRIEVE_CHARS]}
@@ -201,7 +218,17 @@ def _web_retrieve(query: str) -> tuple[str, list[dict]]:
 
 class _GenSlot:
     def __enter__(self):
-        if not GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S):
+        if not GEN_WAITING.acquire(blocking=False):
+            raise HTTPException(
+                503, "the instrument is busy with other visitors; try again"
+                     " in a moment")
+        try:
+            ok = GEN_LOCK.acquire(timeout=GEN_QUEUE_TIMEOUT_S)
+        except BaseException:
+            GEN_WAITING.release()
+            raise
+        GEN_WAITING.release()
+        if not ok:
             raise HTTPException(
                 503, "the instrument is busy with other visitors; try again"
                      " in a moment")
@@ -210,6 +237,21 @@ class _GenSlot:
     def __exit__(self, *exc):
         _clear_mlx_cache()
         GEN_LOCK.release()
+        return False
+
+
+class _ReadSlot:
+    """Map reads: CPU only, so several at once, and never behind generation."""
+
+    def __enter__(self):
+        if not READ_SEM.acquire(timeout=20):
+            raise HTTPException(
+                503, "the instrument is busy with other visitors; try again"
+                     " in a moment")
+        return self
+
+    def __exit__(self, *exc):
+        READ_SEM.release()
         return False
 
 
@@ -1141,7 +1183,7 @@ def build_app():
         if "map" not in S:
             S["map"] = load_map()
         t0 = time.time()
-        with _GenSlot():
+        with _ReadSlot():
             v = map_vector_at(req.x, req.y)
             near = map_locate(v)["near"]
             text = map_say(v, MAP_MAX_TOKENS)
