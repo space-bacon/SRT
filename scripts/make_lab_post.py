@@ -199,12 +199,15 @@ between named places is filled with more places, not with noise.</p>
 <p>Type a sentence and it is placed by meaning,
 then read back from wherever it landed:</p>
 
-{embed("lab_04_sentence.png",
-       "Typing a sentence places it on the map; the eight nearest photographs "
-       "are all skiing",
-       caption="&ldquo;a man riding skis down a snowy slope&rdquo; lands in the "
-               "snow country, and the eight photographs nearest that spot are "
-               "all skiing. The match is on meaning; the words never met.")}
+{embed("lab_type.gif",
+       "Typing a sentence into the Lab, pressing Place it, and the map "
+       "answering with a marker, a sentence and the eight nearest photographs",
+       caption="Typed into the live Lab. &ldquo;a man riding skis down a snowy "
+               "slope&rdquo; lands in the snow country, the reader describes "
+               "that spot as &ldquo;A person is skiing down a snowy "
+               "slope&rdquo;, and the eight photographs nearest it are all "
+               "skiing. The typed words and the photographs never met. The "
+               "match is on meaning.")}
 
 <h3>Your own photograph needs the big model live</h3>
 
