@@ -249,9 +249,9 @@ check the sentence against them yourself.</p>
 <p>Measured on 500 held-out photographs against a pool of 118,287, so chance is
 a median rank of 59,143:</p>
 
-{embed("fig_ladder.png",
-       "Every arm of the reader evaluation on one log axis, with the chance "
-       "wall marked", width=740)}
+{embed("fig_scores.gif",
+       "Every arm of the reader evaluation on one log axis, built one arm at "
+       "a time, with the chance wall marked", width=740)}
 
 <p>In plain terms, the test runs like this. Take a photograph the reader has
 never seen. Hand it only the numbers and let it write a
@@ -259,6 +259,11 @@ sentence. Now take that sentence and ask which of 118,287 photographs it best
 describes. Half the time the correct photograph comes back in the top 64, which
 is the top 0.05% of the pile. If the sentence carried nothing you would expect
 around 59,143.</p>
+
+<p>Two sharper cuts of the same test. The exact photograph comes back
+<em>first</em>, out of 118,287, on <strong>4.2%</strong> of them, which is about
+five thousand times what picking at random would give. It comes back in the top
+ten on <strong>19.4%</strong>, roughly one in five.</p>
 
 <p>The two controls are the reason to believe that. Hand the reader some
 <em>other</em> photograph&rsquo;s numbers and its sentence lands at 55,866, which
@@ -271,7 +276,7 @@ particular numbers they were given.</p>
 <p>The obvious comparison is a person. Ours was wrong for a while, and it was
 wrong against us.</p>
 
-<p>We had been quoting a human caption at median rank 8 against the
+<p>We had been quoting a human caption at median rank 7.5 against the
 reader&rsquo;s 64 and calling that the gap. That figure is contaminated. The
 shortening step was trained on pairs built from each photograph&rsquo;s
 <em>first</em> caption, and the pool we score against contains those same

@@ -548,6 +548,107 @@ def make_ladder(out, size=1420):
     print(f"wrote {out}", flush=True)
 
 
+def make_scores(out, size=1180):
+    """The evaluation ladder, built one arm at a time.
+
+    Read straight from artifacts/nla/verbalizer/sunstone_verb_eval.json so the
+    plate cannot drift from the artifact. The still version hardcoded the
+    contaminated arm at 8 where the artifact says 7.5.
+
+    Each dot slides out along the log axis while its rank counts up from 1,
+    which on a log axis means the number crawls and then bolts. That is the
+    result: the two control arms bolt all the way into the chance wall.
+    """
+    ev = json.load(open("artifacts/nla/verbalizer/sunstone_verb_eval.json"))
+    arms = ev["arms"]
+    POOL = ev["gallery"]
+    CHANCE = POOL // 2
+    rows = [
+        ("The image's own first caption", "gold_caption_harness_control",
+         "the head was trained on this pair", True),
+        ("A second human caption of it", "second_human_caption",
+         "never seen by the head", False),
+        ("The reader, from the point alone", "real",
+         "no photograph, no caption", False),
+        ("Another photograph's point", "foreign", "control", False),
+        ("The average of every point", "mean", "control", False),
+    ]
+    CAP, ROW = 176, 96
+    H = CAP + len(rows) * ROW + 112
+    x0, x1 = 470, size - 118
+    lg = lambda r: np.log10(max(r, 1)) / np.log10(POOL)
+    cx = x0 + lg(CHANCE) * (x1 - x0)
+    f_num, f_lab, f_note = font(26, 1), font(23, 10), font(17, 2)
+
+    def plate():
+        im = Image.new("RGB", (size, H), IVORY)
+        d = ImageDraw.Draw(im, "RGBA")
+        d.text((50, 44), "WHAT THE READER RECOVERS", font=font(20, 1), fill=TERRA)
+        d.text((48, 72), "Median rank of the right photograph",
+               font=font(40, 2, didot=True), fill=INK)
+        d.text((50, 132), f"in a pool of {POOL:,}. Further left is better.",
+               font=font(19, 2), fill=MUTED)
+        d.rectangle((cx, CAP - 26, x1 + 44, CAP + len(rows) * ROW - 30),
+                    fill=(196, 106, 66, 26))
+        d.line((cx, CAP - 26, cx, CAP + len(rows) * ROW - 30),
+               fill=TERRA + (140,), width=2)
+        d.text((cx + 10, CAP - 50), f"CHANCE  {CHANCE:,}",
+               font=font(15, 1), fill=TERRA)
+        y = CAP + len(rows) * ROW + 4
+        d.line((50, y, size - 50, y), fill=(226, 216, 205), width=2)
+        d.text((50, y + 20),
+               "The top row is not a human ceiling. The head was fitted on each "
+               "image's first caption, so that arm scores a pair it was trained "
+               "to align.", font=font(18, 2), fill=MUTED)
+        return im, d
+
+    def draw_row(d, i, frac):
+        label, key, note, trained = rows[i]
+        target = arms[key]["median_rank"]
+        y = CAP + i * ROW
+        d.text((50, y - 8), label, font=f_lab, fill=INK)
+        d.text((50, y + 24), note, font=f_note,
+               fill=TERRA if trained else MUTED)
+        shown = max(1.0, 10 ** (frac * np.log10(max(target, 1))))
+        px = x0 + lg(shown) * (x1 - x0)
+        d.line((x0, y + 8, px, y + 8), fill=INK + (58,), width=3)
+        r = 11
+        d.ellipse((px - r, y + 8 - r, px + r, y + 8 + r),
+                  fill=TERRA if trained else INK, outline=IVORY, width=3)
+        txt = f"{shown:,.0f}" if shown >= 10 else f"{shown:.1f}"
+        d.text((px + 22, y - 6), txt, font=f_num,
+               fill=TERRA if trained else INK)
+        if key == "real" and frac >= 1.0:
+            a = arms[key]
+            d.text((50, y + 48),
+                   f"R@1 {a['r@1']:.1%}   R@10 {a['r@10']:.1%}",
+                   font=font(17, 1), fill=TERRA)
+
+    frames, durs = [], []
+
+    def add(im, ms):
+        frames.append(im.quantize(colors=64, method=Image.MEDIANCUT))
+        durs.append(ms)
+
+    im, d = plate()
+    add(im, 1400)
+    for i in range(len(rows)):
+        for step in (0.30, 0.58, 0.80, 0.94, 1.0):
+            im, d = plate()
+            for j in range(i):
+                draw_row(d, j, 1.0)
+            draw_row(d, i, step)
+            add(im, 150 if step < 1.0 else 900)
+    im, d = plate()
+    for j in range(len(rows)):
+        draw_row(d, j, 1.0)
+    add(im, 4200)
+
+    frames[0].save(out, save_all=True, append_images=frames[1:],
+                   duration=durs, loop=0, optimize=True)
+    print(f"wrote {out}  {len(frames)} frames", flush=True)
+
+
 def make_openwater(out, cols=4, cell=400):
     """Midpoints between named regions, each with the sentence the map returns.
 
@@ -630,6 +731,7 @@ if __name__ == "__main__":
     p.add_argument("--walk", action="store_true")
     p.add_argument("--morph", action="store_true")
     p.add_argument("--isles", action="store_true")
+    p.add_argument("--scores", action="store_true")
     p.add_argument("--poster", action="store_true")
     p.add_argument("--ladder", action="store_true")
     p.add_argument("--openwater", action="store_true")
@@ -641,6 +743,8 @@ if __name__ == "__main__":
         make_morph(f"{a.outdir}/fig_morph.gif")
     if a.isles:
         make_isles(f"{a.outdir}/fig_isles.gif")
+    if a.scores:
+        make_scores(f"{a.outdir}/fig_scores.gif")
     if a.poster:
         make_poster(f"{a.outdir}/fig_poster.png")
     if a.ladder:
