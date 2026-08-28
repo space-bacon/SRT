@@ -56,6 +56,9 @@ class Rig:
         self.host = AutoModelForCausalLM.from_pretrained(
             HOST, dtype=torch.bfloat16, device_map="cuda").eval()
         self.img_tok = getattr(self.host.config, "image_token_id", None)
+        cfg = self.host.config
+        self.n_layers = getattr(cfg, "num_hidden_layers", None) or \
+            cfg.text_config.num_hidden_layers
 
         print("loading verbalizer", flush=True)
         ck = torch.load(hf_hub_download("RiverRider/srt-verbalizer-v1",
@@ -69,7 +72,8 @@ class Rig:
         self.pre.eval()
         self.tok = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
         self.lm = AutoModelForCausalLM.from_pretrained(
-            "Qwen/Qwen3-0.6B", dtype=torch.float32).eval()
+            "Qwen/Qwen3-0.6B", dtype=torch.float32).eval().to("cuda")
+        self.pre = self.pre.to("cuda")
 
         print("loading L47 head", flush=True)
         h = torch.load(HEAD, map_location="cpu", weights_only=False)
@@ -94,6 +98,27 @@ class Rig:
         h = out.hidden_states[LAYER][0].float()
         mask = enc["input_ids"][0] == self.img_tok
         return h[mask].mean(0).cpu()
+
+    @torch.no_grad()
+    def look(self, im):
+        """One generate call yields both the layer-47 state and the host's own
+        answer. hidden_states[0] is the prefill, so the vector is read before
+        the host has emitted a single token."""
+        msg = [{"role": "user", "content": [
+            {"type": "image", "image": im},
+            {"type": "text", "text": "Describe this image."}]}]
+        enc = self.proc.apply_chat_template(
+            msg, add_generation_prompt=True, tokenize=True,
+            return_dict=True, return_tensors="pt").to("cuda")
+        out = self.host.generate(
+            **enc, max_new_tokens=48, do_sample=False,
+            output_hidden_states=True, return_dict_in_generate=True)
+        prefill = out.hidden_states[0][LAYER][0].float()
+        mask = enc["input_ids"][0] == self.img_tok
+        v = prefill[mask].mean(0).cpu()
+        said = self.proc.decode(out.sequences[0][enc["input_ids"].shape[1]:],
+                                skip_special_tokens=True).strip()
+        return v, dedupe(said)
 
     def project(self, v):
         z = (v - self.mu_img.flatten()) @ self.Wi.T + self.bi
@@ -121,11 +146,12 @@ class Rig:
 
     @torch.no_grad()
     def verbalize(self, v):
-        z = ((v - self.mu) / self.sd).unsqueeze(0)
+        z = ((v - self.mu) / self.sd).unsqueeze(0).to("cuda")
         soft = self.pre(z)
         gen = self.lm.generate(
             inputs_embeds=soft,
-            attention_mask=torch.ones(soft.shape[:2], dtype=torch.long),
+            attention_mask=torch.ones(soft.shape[:2], dtype=torch.long,
+                                      device="cuda"),
             max_new_tokens=40, do_sample=False)
         text = self.tok.decode(gen[0], skip_special_tokens=True).strip()
         return dedupe(text)
@@ -168,11 +194,16 @@ def build_ui(rig):
 
     def run(image, k=5):
         if image is None:
-            return "Give it a picture.", None
+            return "", "", "", None
         t0 = time.time()
         im = Image.fromarray(image).convert("RGB") if not isinstance(image, Image.Image) else image
-        v = rig.state_of(im)
-        words = rig.verbalize(v)
+
+        v, said = rig.look(im)
+        read = rig.verbalize(v)
+        # Same values, same norm, wrong arrangement: if the sentence survives
+        # this, the vector was not carrying it.
+        control = rig.verbalize(v[torch.randperm(v.numel())])
+
         q = rig.project(v)
         sims = (rig.gal @ q)
         # An example picture is itself in the gallery. Retrieving it back at
@@ -181,36 +212,43 @@ def build_ui(rig):
         top = order[:k]
         shots = [(os.path.join(IMG_DIR, rig.files[i]), f"{sims[i]:.3f}") for i in top]
 
-        raw = v / (v.norm() + 1e-8)
         dist = (v - rig.mu).norm()
         z = (v - rig.mu) / rig.sd
+        seeing = (f"### The model with eyes\n"
+                  f"**gemma-4-31B**, 31 billion parameters, a vision tower, and "
+                  f"the picture in front of it.\n\n> {said}")
+        blind = (f"### The model with no eyes\n"
+                 f"**Qwen3-0.6B**, text only. No vision tower. It never received "
+                 f"the picture. It received one 5376-d vector from the middle of "
+                 f"gemma's stack, read before gemma had said a word.\n\n"
+                 f"> {read}\n\n"
+                 f"*Shuffle that vector's dimensions and the same reader says:* "
+                 f"{control}")
         panel = (
-            f"### What came out of one forward pass\n\n"
-            f"**It said:** {words}\n\n"
             f"| | |\n|---|---|\n"
-            f"| layer read | {LAYER} of gemma-4-31B, {v.numel()}-d |\n"
-            f"| pooled over | image-token positions |\n"
+            f"| layer read | {LAYER} of {rig.n_layers}, "
+            f"{v.numel()}-d, pooled over the image tokens |\n"
+            f"| read at | the prefill, before the first generated token |\n"
             f"| state norm | {v.norm():.1f} |\n"
-            f"| distance from the verbaliser's training mean | {dist:.1f} "
-            f"(its sd averages {rig.sd.mean():.1f}, so this sits inside the "
-            f"distribution it was fitted on) |\n"
-            f"| z, mean absolute | {z.abs().mean():.3f} |\n"
+            f"| distance from the reader's training mean | {dist:.1f}, against a "
+            f"mean sd of {rig.sd.mean():.1f} |\n"
             f"| nearest of {len(rig.files)} gallery images | {sims[top[0]]:.3f} "
             f"against {sims.mean():.3f} for the average one |\n"
             f"| elapsed | {time.time()-t0:.1f}s |\n\n"
-            f"The sentence and the pictures come from the same vector. Nothing "
-            f"here was fine-tuned: gemma-4 is frozen, the verbaliser is a 0.6B "
-            f"reading its state, and the head is a linear map."
+            f"Nothing is fine-tuned. gemma-4 is frozen and was never trained to "
+            f"be read. The reader is a 0.6B decoder trained on COCO captions to "
+            f"turn that vector into English, and the gallery search is a single "
+            f"linear map applied to the same vector."
         )
-        return panel, shots
+        return seeing, blind, panel, shots
 
-    with gr.Blocks(title="One forward pass, read three ways") as demo:
+    with gr.Blocks(title="A model with no eyes describes your picture") as demo:
         gr.Markdown(
-            "# One forward pass, read three ways\n"
-            "Give **gemma-4-31B** a photograph. From the single layer-47 state "
-            "that produces, a 0.6B model says what it sees, a linear head "
-            "searches a gallery with it, and the state itself is reported. "
-            "The host is frozen throughout."
+            "# A model with no eyes describes your picture\n"
+            "Give the photograph to **gemma-4-31B**. Halfway up its stack, before "
+            "it has generated a single token, take one vector. Hand only that "
+            "vector to **Qwen3-0.6B**, a text-only model with no vision tower, "
+            "which never sees your picture. Then read both out loud."
         )
         with gr.Row():
             with gr.Column(scale=1):
@@ -219,10 +257,14 @@ def build_ui(rig):
                 go = gr.Button("Read the state", variant="primary", size="lg")
                 gr.Examples(examples(rig), inputs=inp)
             with gr.Column(scale=1):
-                out = gr.Markdown()
-        shots = gr.Gallery(label="What it reached for in the gallery",
+                a = gr.Markdown()
+            with gr.Column(scale=1):
+                b = gr.Markdown()
+        shots = gr.Gallery(label="What the same vector reached for, searching "
+                                 "the gallery on its own",
                            columns=5, height=200, object_fit="cover")
-        go.click(run, inp, [out, shots])
+        panel = gr.Markdown()
+        go.click(run, inp, [a, b, panel, shots])
     return demo
 
 
