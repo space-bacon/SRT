@@ -1,0 +1,2 @@
+# State caches are 156MB and regenerable from the manifest; keep the results.
+*.npz

@@ -1,0 +1,70 @@
+{
+ "question": "can one linear map place image, audio and video beside text in a single searchable space",
+ "n_total": 6883,
+ "n_train": 5507,
+ "n_holdout": 1376,
+ "counts": {
+  "image": 5000,
+  "audio": 883,
+  "video": 1000
+ },
+ "anisotropy_note": "raw cosine between unrelated items measured +0.869 on these states and retrieval sat exactly at chance; every number here is per-modality centred",
+ "shared": {
+  "mixed_gallery": {
+   "r@1": 0.2797965109348297,
+   "r@10": 0.6591569781303406,
+   "median_rank": 5.0,
+   "n": 1376
+  },
+  "image": {
+   "r@1": 0.28334957361221313,
+   "r@10": 0.6874391436576843,
+   "median_rank": 4.0,
+   "n": 1027
+  },
+  "audio": {
+   "r@1": 0.4390243887901306,
+   "r@10": 0.8109755516052246,
+   "median_rank": 2.0,
+   "n": 164
+  },
+  "video": {
+   "r@1": 0.22162163257598877,
+   "r@10": 0.6432432532310486,
+   "median_rank": 6.0,
+   "n": 185
+  }
+ },
+ "derangement_floor": {
+  "median_mean": 693.55,
+  "median_sd": 19.36614313692843,
+  "n": 20,
+  "analytic_chance": 688.5
+ },
+ "per_modality": {
+  "mixed_gallery": {
+   "r@1": 0.260174423456192,
+   "r@10": 0.6678779125213623,
+   "median_rank": 4.0,
+   "n": 1376
+  },
+  "image": {
+   "r@1": 0.2629016637802124,
+   "r@10": 0.6991236805915833,
+   "median_rank": 4.0,
+   "n": 1027
+  },
+  "audio": {
+   "r@1": 0.4146341383457184,
+   "r@10": 0.7987804412841797,
+   "median_rank": 2.0,
+   "n": 164
+  },
+  "video": {
+   "r@1": 0.20000000298023224,
+   "r@10": 0.5081081390380859,
+   "median_rank": 10.0,
+   "n": 185
+  }
+ }
+}
