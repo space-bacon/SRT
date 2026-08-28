@@ -1,0 +1,184 @@
+{
+ "question": "what actually moved MTEB-STS across 19 adapter configurations",
+ "backbone": "frozen Qwen2.5-7B, 12.7M trainable adapter",
+ "n_subsets": 39,
+ "n_comparable_configs": 18,
+ "table": [
+  {
+   "config": "v22c_a050",
+   "mean_sts": 0.3675,
+   "tested": "soup of v18 and v21a at alpha 0.50",
+   "verdict": "",
+   "duplicate_dirs": [
+    "v22c_a050_seed0",
+    "v22c_a050_seed1",
+    "v22c_a050_seed2"
+   ],
+   "delta_vs_v18": 0.0048
+  },
+  {
+   "config": "v22c_a030",
+   "mean_sts": 0.3674,
+   "tested": "soup of v18 and v21a at alpha 0.30",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0047
+  },
+  {
+   "config": "v22c_a070",
+   "mean_sts": 0.3663,
+   "tested": "soup of v18 and v21a at alpha 0.70",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0036
+  },
+  {
+   "config": "v21a",
+   "mean_sts": 0.3661,
+   "tested": "teacher distillation, mxbai cosines as continuous labels",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0034
+  },
+  {
+   "config": "v22a",
+   "mean_sts": 0.3651,
+   "tested": "STSB upsampled against the distilled pool",
+   "verdict": "negative: upsampling did not recover English",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0024
+  },
+  {
+   "config": "v22b",
+   "mean_sts": 0.365,
+   "tested": "multi-teacher distillation",
+   "verdict": "negative: more teachers did not help",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0023
+  },
+  {
+   "config": "v21b_a070",
+   "mean_sts": 0.3641,
+   "tested": "weight soup of v18 and v20 at alpha 0.70",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0014
+  },
+  {
+   "config": "v19b",
+   "mean_sts": 0.3634,
+   "tested": "CoSENT over 200K binary NLI pairs plus graded STSB",
+   "verdict": "mixed: cross-lingual up, graded English down",
+   "duplicate_dirs": [],
+   "delta_vs_v18": 0.0007
+  },
+  {
+   "config": "v18",
+   "mean_sts": 0.3627,
+   "tested": "CoSENT rank loss on STSB, lr 1e-5, 5 epochs",
+   "verdict": "",
+   "duplicate_dirs": [
+    "v18_seed0",
+    "v18_seed1",
+    "v18_seed2"
+   ],
+   "delta_vs_v18": 0.0
+  },
+  {
+   "config": "v21b_a050",
+   "mean_sts": 0.3619,
+   "tested": "weight soup of v18 and v20 at alpha 0.50",
+   "verdict": "negative: even mix over-tilts toward the weaker parent",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0008
+  },
+  {
+   "config": "v20",
+   "mean_sts": 0.3614,
+   "tested": "NLI labels mapped to graded similarity {1.0, 0.5, 0.0}",
+   "verdict": "negative: NLI labels are not similarity labels",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0013
+  },
+  {
+   "config": "v19a",
+   "mean_sts": 0.3554,
+   "tested": "gentler CoSENT schedule chosen on dev Spearman",
+   "verdict": "null: barely moved off the warm start",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0073
+  },
+  {
+   "config": "v15a",
+   "mean_sts": 0.355,
+   "tested": "NLI-only, warm from v14",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0077
+  },
+  {
+   "config": "v16",
+   "mean_sts": 0.3539,
+   "tested": "second epoch of NLI-only InfoNCE at lower lr",
+   "verdict": "negative: the recipe was already saturated, more steps is noise",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0088
+  },
+  {
+   "config": "v17",
+   "mean_sts": 0.3444,
+   "tested": "supervised cosine-MSE regression on STSB",
+   "verdict": "negative: regression on absolute cosines overfits one domain",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0183
+  },
+  {
+   "config": "v12",
+   "mean_sts": 0.3338,
+   "tested": "early contrastive baseline",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0289
+  },
+  {
+   "config": "v14",
+   "mean_sts": 0.3279,
+   "tested": "NLI + MSMARCO + Quora corpus mix",
+   "verdict": "",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0348
+  },
+  {
+   "config": "v15b",
+   "mean_sts": 0.2978,
+   "tested": "E5-style query/passage prefixes bolted onto a warm start",
+   "verdict": "catastrophic: prefixes destroy a warm-started encoder",
+   "duplicate_dirs": [],
+   "delta_vs_v18": -0.0649
+  }
+ ],
+ "excluded_not_comparable": {
+  "v22c_a050_beyond": "14 subsets, not the same 39 as every other run"
+ },
+ "no_variance_estimate": {
+  "claim": "v22c_a050 beats v18 by +0.0037 mean MTEB-STS",
+  "status": "UNQUANTIFIED",
+  "why": "the six *_seed{0,1,2} directories are byte-identical copies, not training-seed replicates. MTEB evaluation of a fixed checkpoint is deterministic, so repeating it cannot estimate variance. No adapter was ever retrained with a different seed, so this gap has no error bar and may not be a real difference.",
+  "byte_identical_groups": {
+   "232853092a6eb13f": [
+    "v18",
+    "v18_seed0",
+    "v18_seed1",
+    "v18_seed2"
+   ],
+   "9363f073d7fd0fb0": [
+    "v22c_a050",
+    "v22c_a050_seed0",
+    "v22c_a050_seed1",
+    "v22c_a050_seed2"
+   ]
+  },
+  "to_fix": "retrain v18 from v15a with >=3 training seeds and evaluate each; that gives the first genuine error bar for this line"
+ },
+ "reading": "the negatives are the point. Prefix injection onto a warm start is catastrophic, regression on absolute cosines overfits, NLI labels are not similarity labels, and weight souping beat three separate training attempts at recovering English calibration."
+}
