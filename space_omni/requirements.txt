@@ -1,3 +1,4 @@
 gradio>=5.9
 numpy>=1.26
 huggingface_hub>=0.25
+pillow>=10.0
