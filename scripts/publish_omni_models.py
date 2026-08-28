@@ -110,7 +110,7 @@ retrieval:
 | floors (analytic) | 593-601 (600) | 495-504 (500) |
 
 Both intervals contain 1.0, so the claim is indistinguishability rather than a
-specific retained fraction. Six of the twelve cross directions score above the
+specific retained fraction. Four of the twelve cross directions score above the
 within-vendor baseline of the gallery they search.
 
 ## Contents

@@ -61,7 +61,7 @@ Derangement floor 695 +/- 21 against an analytic 688.
 | floors (analytic) | 593-601 (600) | 495-504 (500) |
 
 Both intervals contain 1.0. The claim is indistinguishability, not a specific
-retained fraction. Six of the twelve cross directions score above the
+retained fraction. Four of the twelve cross directions score above the
 within-vendor baseline of the gallery they search.
 
 ## Read this before using the states

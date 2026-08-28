@@ -1973,7 +1973,7 @@ Both intervals contain $1.0$. The claim is therefore that cross-vendor retrieval
 is statistically indistinguishable from within-vendor retrieval, not that it
 retains some specific fraction of it. Adding the third and fourth vendors did
 not change that conclusion; it tightened the interval from $\pm 0.06$ to
-$\pm 0.03$. Six of the twelve cross directions score above the within-vendor
+$\pm 0.03$. Four of the twelve cross directions score above the within-vendor
 baseline of the gallery they search, which is what one expects when the residual
 differences are noise carrying no vendor signature.
 
