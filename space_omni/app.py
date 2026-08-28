@@ -255,6 +255,10 @@ with gr.Blocks(title="SRT omni cross-vendor retrieval") as demo:
 
     load_btn.click(prepare, [g, q], [status, fitted, summary],
                    show_progress="minimal")
+    # The browser logs "Too many arguments provided for the endpoint" here,
+    # because it counts gr.State as an argument while the generated endpoint
+    # signature does not. Cosmetic; api_name=False silences nothing and only
+    # costs the /search endpoint, so the handlers stay exposed.
     search_btn.click(search, [fitted, txt], result)
     txt.submit(search, [fitted, txt], result)
 

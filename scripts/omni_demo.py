@@ -59,40 +59,51 @@ def fetch(root, vendor):
             np.concatenate(text).astype(np.float32), np.array(keys), np.array(caps))
 
 
-def fit(Xi, Ta, Tb, dim, epochs, lr):
-    """One item tower and one text tower per vendor, into a shared space.
+def fit(mats, dim, epochs, lr, batch=512):
+    """One tower per input, every item/text pair trained together.
 
-    Each vendor needs its own tower because hidden sizes differ (5376 vs 2560),
-    and all pairs are trained together so the space is shared rather than two
-    spaces that happen to sit side by side.
+    Each vendor needs its own tower because hidden sizes differ (2048 to 5376).
+    Inputs are centred and scaled to unit RMS first, otherwise a shared lr
+    trains the towers at different speeds and that shows up as a fake vendor
+    difference.
     """
-    mus = [Xi.mean(0, keepdims=True), Ta.mean(0, keepdims=True), Tb.mean(0, keepdims=True)]
-    A, Pa, Pb = Xi - mus[0], Ta - mus[1], Tb - mus[2]
+    mus = [M.mean(0, keepdims=True) for M in mats]
+    C = [M - mu for M, mu in zip(mats, mus)]
+    scales = [float(np.sqrt((M ** 2).sum(1).mean())) + 1e-8 for M in C]
+    C = [M / s for M, s in zip(C, scales)]
     rng = np.random.default_rng(0)
-    W = [rng.normal(0, 0.02, (M.shape[1], dim)).astype(np.float32) for M in (A, Pa, Pb)]
-    n = len(A)
+    W = [rng.normal(0, 0.02, (M.shape[1], dim)).astype(np.float32) for M in C]
+    items, texts = (0, 2), (1, 3)  # [itemA, textA, itemB, textB]
+    n = len(C[0])
     for _ in range(epochs):
-        Z = []
-        for M, w in zip((A, Pa, Pb), W):
-            Y = M @ w
-            Z.append(Y / (np.linalg.norm(Y, axis=1, keepdims=True) + 1e-8))
-        grads = [np.zeros_like(w) for w in W]
-        for ti in (1, 2):
-            S = Z[0] @ Z[ti].T / 0.05
-            S -= S.max(1, keepdims=True)
-            G = np.exp(S)
-            G /= G.sum(1, keepdims=True)
-            G[np.arange(n), np.arange(n)] -= 1.0
-            G /= n
-            grads[0] += A.T @ (G @ Z[ti])
-            grads[ti] += (Pa if ti == 1 else Pb).T @ (G.T @ Z[0])
-        for i in range(3):
-            W[i] -= lr * grads[i]
-    return W, mus
+        for s in range(0, n, batch):
+            sl = slice(s, min(s + batch, n))
+            B = [M[sl] for M in C]
+            b = len(B[0])
+            if b < 8:
+                continue
+            Z = []
+            for M, w in zip(B, W):
+                Y = M @ w
+                Z.append(Y / (np.linalg.norm(Y, axis=1, keepdims=True) + 1e-8))
+            g = [np.zeros_like(w) for w in W]
+            for i in items:
+                for t in texts:
+                    S = Z[i] @ Z[t].T / 0.05
+                    S -= S.max(1, keepdims=True)
+                    G = np.exp(S)
+                    G /= G.sum(1, keepdims=True)
+                    G[np.arange(b), np.arange(b)] -= 1.0
+                    G /= b
+                    g[i] += B[i].T @ (G @ Z[t])
+                    g[t] += B[t].T @ (G.T @ Z[i])
+            for k in range(4):
+                W[k] -= lr * g[k]
+    return W, mus, scales
 
 
-def project(X, W, mu):
-    Y = (X - mu) @ W
+def project(X, W, mu, scale):
+    Y = ((X - mu) / scale) @ W
     return Y / (np.linalg.norm(Y, axis=1, keepdims=True) + 1e-8)
 
 
@@ -103,9 +114,9 @@ def main():
     ap.add_argument("--query-vendor", default="aria", choices=list(VENDORS))
     ap.add_argument("--query", default=None, help="Caption text to look up.")
     ap.add_argument("--dim", type=int, default=256)
-    ap.add_argument("--epochs", type=int, default=300)
-    ap.add_argument("--lr", type=float, default=0.5)
-    ap.add_argument("--holdout", type=int, default=1000)
+    ap.add_argument("--epochs", type=int, default=30)
+    ap.add_argument("--lr", type=float, default=5.0)
+    ap.add_argument("--holdout", type=int, default=800)
     a = ap.parse_args()
 
     print(f"loading {a.gallery} (gallery) and {a.query_vendor} (queries)")
@@ -121,38 +132,45 @@ def main():
     n = len(shared)
     rng = np.random.default_rng(0)
     perm = rng.permutation(n)
-    te, tr = perm[:min(a.holdout, n // 4)], perm[min(a.holdout, n // 4):]
+    hold = min(a.holdout, n // 4)
+    te, tr = perm[:hold], perm[hold:]
 
-    # Both vendors' towers are fitted together on the train split; the holdout
-    # is what decides whether the cross direction survives.
-    W, mus = fit(Ig[ig][tr], Tg[ig][tr], Tq[iq][tr], a.dim, a.epochs, a.lr)
+    # [item_A, text_A, item_B, text_B]. Both cross directions get measured,
+    # because a single direction is far too noisy at this fit quality to say
+    # anything: it lands anywhere from 0.65 to 1.36 depending on the pair.
+    W, mus, sc = fit([Ig[ig][tr], Tg[ig][tr], Iq[iq][tr], Tq[iq][tr]],
+                     a.dim, a.epochs, a.lr)
 
-    G = project(Ig[ig][te], W[0], mus[0])
+    held = [Ig[ig][te], Tg[ig][te], Iq[iq][te], Tq[iq][te]]
+    Z = [project(M, w, mu, s) for M, w, mu, s in zip(held, W, mus, sc)]
     caps = Cg[ig][te]
+    names = [a.gallery, a.query_vendor]
 
-    def rank_of(Q):
-        S = Q @ G.T
-        d = np.arange(len(Q))
-        return (S > S[d, d][:, None]).sum(1) + 1
+    def r1(item, text):
+        S = Z[text] @ Z[item].T
+        d = np.arange(len(S))
+        return float(((S > S[d, d][:, None]).sum(1) + 1 == 1).mean())
 
-    res = {}
-    for label, T, w, mu in ((f"within ({a.gallery})", Tg[ig][te], W[1], mus[1]),
-                            (f"CROSS  ({a.query_vendor})", Tq[iq][te], W[2], mus[2])):
-        r = rank_of(project(T, w, mu))
-        res[label] = (r == 1).mean()
-        print(f"  {label:22s} r@1 {(r == 1).mean():.4f}  "
-              f"r@10 {(r <= 10).mean():.4f}  median {np.median(r):.0f}")
-    w_, c_ = list(res.values())
-    print(f"  retention (cross/within) {c_ / w_:.3f}")
-    print("  note: a plain numpy fit, weaker than the torch fit behind the"
-          " published numbers; the cross/within comparison is the point.")
+    for i in (0, 1):
+        for j in (0, 1):
+            kind = "within" if i == j else "CROSS "
+            print(f"  {kind} {names[i]:>10s} gallery <- {names[j]:<10s} text "
+                  f"r@1 {r1(i * 2, j * 2 + 1):.4f}")
+    within = np.mean([r1(0, 1), r1(2, 3)])
+    cross = np.mean([r1(0, 3), r1(2, 1)])
+    print(f"  mean cross {cross:.4f}  mean within {within:.4f}  "
+          f"retention {cross / within:.3f}")
+    print("  note: a plain numpy fit, much weaker than the torch fit behind the"
+          " published retention 0.988, 95% CI [0.955, 1.023].")
 
     if a.query:
         sims = [len(set(a.query.lower().split()) & set(c.lower().split())) for c in caps]
         hit = int(np.argmax(sims))
+        if sims[hit] == 0:
+            print("\nno held-out caption shares a word with that query")
+            return
         print(f"\nclosest held-out caption to your query:\n  {caps[hit]}")
-        q = project(Tq[iq][te][hit:hit + 1], W[2], mus[2])
-        top = np.argsort(-(q @ G.T)[0])[:5]
+        top = np.argsort(-(Z[3][hit:hit + 1] @ Z[0].T)[0])[:5]
         print(f"\ntop 5 {a.gallery} gallery items for that caption, "
               f"queried by {a.query_vendor}:")
         for j, t in enumerate(top, 1):
