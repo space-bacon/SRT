@@ -39,6 +39,18 @@ LOCAL = [(HOME / "development", "development"),
          (HOME / "Downloads", "Downloads"),
          (HOME / "Desktop", "Desktop")]
 
+# Every backbone our heads and adapters are fitted to. Without these the
+# published artifacts are unusable, and several are gated or could be pulled.
+HOSTS = ["google/gemma-4-31B-it", "Qwen/Qwen3-0.6B", "Qwen/Qwen3.8-27B",
+         "Qwen/Qwen3-Omni-30B-A3B-Instruct", "rhymes-ai/Aria",
+         "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+         "google/gemma-2-2b", "openai/gpt-oss-20b", "Qwen/Qwen2.5-7B",
+         "Qwen/Qwen2.5-VL-3B-Instruct", "meta-llama/Llama-3.2-3B",
+         "Qwen/Qwen3-235B-A22B", "Qwen/Qwen3-235B-A22B-FP8"]
+# Several repos ship the same weights twice. Pulling both doubles the download
+# for nothing; this bit us once already on Mistral-Small.
+HOST_SKIP = ["consolidated*", "original/*", "*.pth", "*.gguf"]
+
 
 def sh(cmd):
     print("  $ " + " ".join(str(c) for c in cmd[:6]) + " ...", flush=True)
@@ -115,10 +127,24 @@ def stage_supabase(dest, repo_root):
     print(f"  {n} objects listed, {got} newly downloaded", flush=True)
 
 
+def stage_hosts(dest):
+    from huggingface_hub import get_token, snapshot_download
+    out = dest / "host-models"
+    print(f"\n=== host-models: {len(HOSTS)} backbones", flush=True)
+    for i, mid in enumerate(HOSTS, 1):
+        print(f"  [{i}/{len(HOSTS)}] {mid}", flush=True)
+        try:
+            snapshot_download(mid, local_dir=str(out / mid.replace("/", "__")),
+                              token=get_token(), max_workers=4,
+                              ignore_patterns=HOST_SKIP)
+        except Exception as e:
+            print(f"      FAILED {type(e).__name__}: {str(e)[:140]}", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dest", required=True)
-    ap.add_argument("--only", choices=["local", "hub", "supabase"])
+    ap.add_argument("--only", choices=["local", "hub", "supabase", "hosts"])
     a = ap.parse_args()
     dest = pathlib.Path(a.dest)
     dest.mkdir(parents=True, exist_ok=True)
@@ -131,6 +157,8 @@ def main():
         stage_hub(dest)
     if a.only in (None, "supabase"):
         stage_supabase(dest, repo_root)
+    if a.only in (None, "hosts"):
+        stage_hosts(dest)
 
     manifest = {
         "written": time.strftime("%Y-%m-%dT%H:%M:%S"),
