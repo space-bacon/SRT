@@ -18,6 +18,8 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import os
+import re
 
 import numpy as np
 import torch
@@ -41,13 +43,23 @@ def parse_args():
 
 def load(patterns):
     items, texts, mods = [], [], []
+    seen = []
     for g in patterns:
         for p in sorted(glob.glob(g)):
+            # A glob like omni_states_s*.npz also matches the mid-run
+            # *.partial.npz checkpoints and any smoke file, which silently
+            # doubles the data and voids the result. Take final shards only.
+            base = os.path.basename(p)
+            if ".partial." in base or not re.fullmatch(r"omni_states_s\d+\.npz", base):
+                print(f"  skipping {base}", flush=True)
+                continue
             z = np.load(p, allow_pickle=True)
             ok = z["ok"]
             items.append(z["item"][ok])
             texts.append(z["text"][ok])
             mods += [str(m) for m, k in zip(z["modality"], ok) if k]
+            seen.append(f"{base}({int(ok.sum())})")
+    print(f"  loaded: {', '.join(seen)}", flush=True)
     return (np.concatenate(items).astype(np.float32),
             np.concatenate(texts).astype(np.float32), np.array(mods))
 

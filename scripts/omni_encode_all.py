@@ -24,6 +24,9 @@ def parse_args():
     p.add_argument("--img-dir", default="/root/val2017")
     p.add_argument("--layer-frac", type=float, default=0.6)
     p.add_argument("--video-frames", type=int, default=8)
+    p.add_argument("--skip-modalities", default="",
+                   help="comma list a backbone cannot ingest, e.g. audio for "
+                        "gemma-4, which has an audio token id but no audio tower")
     p.add_argument("--limit", type=int, default=0, help="0 = all")
     p.add_argument("--out", default="/root/omni_states.npz")
     return p.parse_args()
@@ -85,6 +88,11 @@ def main() -> None:
 
     man = json.load(open(a.manifest))
     rows = man["rows"][: a.limit] if a.limit else man["rows"]
+    skip = {s for s in a.skip_modalities.split(",") if s}
+    if skip:
+        before = len(rows)
+        rows = [r for r in rows if r["modality"] not in skip]
+        print(f"skipping {sorted(skip)}: {before} -> {len(rows)} rows", flush=True)
     n = len(rows)
     item = np.zeros((n, d_model), np.float16)
     text = np.zeros((n, d_model), np.float16)
