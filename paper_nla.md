@@ -1922,6 +1922,86 @@ train2017, `qwen38_coco_ls/images.pt` for the val2017 states at layer 52).
 
 ---
 
+## 11.9 One space for four modalities, and a gallery that does not care which model built it
+
+Two questions close out the cross-modal thread. Does a single linear map place
+image, audio and video beside text in one searchable space, or does each
+modality need its own map? And is the resulting space a property of the
+particular model that produced it, or something four different vendors arrive at
+independently?
+
+Both are measured on a common footing. We build one manifest of 5,000 COCO
+images, 1,000 AudioCaps clips and 1,000 MSR-VTT videos, each with a caption,
+encode every row through a frozen host at 60% depth, and pool only the content
+token positions. Pooling matters: averaging every position lets the shared chat
+prompt dominate, at which point unrelated items sit at cosine 0.9987 and the
+measurement is of the template, not the content.
+
+Anisotropy matters more. Raw cosine between unrelated items on these states is
+$+0.869$ and raw retrieval sits exactly at chance. Every number below is
+per-modality centered. Uncentered, none of this is visible.
+
+**One tower beats four.** Fitting a single item tower across all modalities
+outperforms per-modality towers on every modality (1,376 holdout items):
+
+| | shared | per-modality | $n$ |
+|---|---|---|---|
+| mixed gallery | **0.2885** | 0.2667 | 1376 |
+| image | **0.2902** | 0.2687 | 1027 |
+| audio | **0.4451** | 0.4207 | 164 |
+| video | **0.2486** | 0.1730 | 185 |
+
+Derangement floor $695 \pm 21$ against an analytic $688$. The widest margin is
+video ($+0.076$), the modality with the fewest items, which is the expected
+signature of a shared tower borrowing structure the small set cannot learn
+alone.
+
+**Vendor identity carries almost no information.** Encoding the same manifest
+through four hosts from four vendors and fitting every vendor's item tower
+against every vendor's text tower, a gallery built by one model is searchable by
+another model's encoder at a rate indistinguishable from native:
+
+| | 2 vendors | 4 vendors |
+|---|---|---|
+| modalities | image, video | image |
+| holdout | 1200 | 1000 |
+| cross / within r@1 | 0.2537 / 0.2621 | 0.2862 / 0.2898 |
+| retention | 0.968, 95% CI [0.908, 1.030] | **0.988, 95% CI [0.955, 1.023]** |
+| floors (analytic) | 593–601 (600) | 495–504 (500) |
+
+Both intervals contain $1.0$. The claim is therefore that cross-vendor retrieval
+is statistically indistinguishable from within-vendor retrieval, not that it
+retains some specific fraction of it. Adding the third and fourth vendors did
+not change that conclusion; it tightened the interval from $\pm 0.06$ to
+$\pm 0.03$. Six of the twelve cross directions score above the within-vendor
+baseline of the gallery they search, which is what one expects when the residual
+differences are noise carrying no vendor signature.
+
+**Scope, and what would falsify the strong reading.** The four-vendor result
+covers images only: two of the four hosts carry no audio or video tower, so the
+audio evidence is single-vendor and the video evidence is two-vendor. The audio
+column is also the thinnest leg despite carrying the highest score, resting on
+164 holdout items drawn from a set where 12.6% of the source clips downloaded
+empty, so the surviving sample is "clips still available", not a random draw.
+Each configuration is one fit on one split; refitting moved the two-vendor
+retention from 0.960 to 0.968, so fit-to-fit variation is real and the bootstrap
+interval covers sampling only.
+
+The load-bearing caveat is that all four hosts are trained on overlapping
+web-scale corpora. Convergence across them is evidence that the readable
+structure survives a change of vendor, architecture and training run. The
+stronger reading, that independent minds would converge on this structure,
+remains untested and we do not assert it. Separating the two requires a host
+whose training corpus does not overlap the others, which the current model
+ecosystem does not offer.
+
+Artifacts: `artifacts/nla/omni/{omni_joint,xvendor,xvendor4}.json`, fitted towers
+`omni_shared_map.pt` / `xvendor_map.pt` / `xvendor4_map.pt`, per-vendor states
+and shard manifests; scripts `build_omni_manifest.py`, `omni_encode_all.py`,
+`omni_joint_fit.py`, `xvendor_fit.py`, `xvendor_fit_n.py`.
+
+---
+
 ## 12. NLA as Stage 4 of the SRT program
 
 We now connect Stage 4 explicitly to Stages 1–3 (Lancaster, 2025;
