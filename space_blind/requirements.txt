@@ -1,0 +1,6 @@
+accelerate
+bitsandbytes
+gradio>=5.9
+numpy
+pillow
+transformers>=5.0

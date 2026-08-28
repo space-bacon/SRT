@@ -73,3 +73,7 @@ artifacts/nla/q4/qwen3b_caches/
 # generated: base64-inlined copy of the marketing images, regenerable and
 # duplicates every asset beside it
 artifacts/marketing/**/post.html
+
+# Space gallery assets, rebuilt by scripts/build_space_assets.py
+space_blind/gallery/
+space_blind/gallery.npz
