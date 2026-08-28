@@ -12,6 +12,7 @@ Credentials come from .env (gitignored) and are never printed.
 """
 import argparse
 import hashlib
+import json
 import os
 import pathlib
 import re
@@ -19,6 +20,9 @@ import sys
 
 BUCKET = os.environ.get("SUPABASE_BUCKET", "SRT")
 REGION = "us-east-1"
+# Supabase's S3 endpoint rejects UploadPart, so keep every object single-part.
+MULTIPART_CEILING = 5 * 1024 ** 3
+PART_SIZE = 45 * 1024 ** 2
 
 
 def load_env(path=".env"):
@@ -51,6 +55,13 @@ def client(env):
     )
 
 
+def transfer_config():
+    from boto3.s3.transfer import TransferConfig
+    return TransferConfig(multipart_threshold=MULTIPART_CEILING,
+                          multipart_chunksize=MULTIPART_CEILING,
+                          use_threads=False)
+
+
 def sha(path, chunk=1 << 20):
     h = hashlib.sha256()
     with open(path, "rb") as fh:
@@ -69,6 +80,7 @@ def main():
     args = ap.parse_args()
 
     s3 = client(load_env())
+    TRANSFER = transfer_config()
 
     if args.list:
         resp = s3.list_objects_v2(Bucket=BUCKET)
@@ -105,9 +117,31 @@ def main():
                 continue
         except Exception:
             pass
-        s3.upload_file(str(p), BUCKET, key,
-                       ExtraArgs={"Metadata": {"sha256": digest}})
-        print(f"  ^ {key} ({p.stat().st_size/1e6:.1f} MB)")
+        size = p.stat().st_size
+        if size <= PART_SIZE:
+            s3.upload_file(str(p), BUCKET, key,
+                           ExtraArgs={"Metadata": {"sha256": digest}},
+                           Config=TRANSFER)
+            print(f"  ^ {key} ({size/1e6:.1f} MB)")
+        else:
+            # The bucket enforces a per-object size cap, so large artifacts go
+            # up as numbered parts with a manifest, matching the existing
+            # backups/ convention. Reassemble with `cat *.partNNN > file`.
+            n_parts = 0
+            with open(p, "rb") as fh:
+                while True:
+                    blk = fh.read(PART_SIZE)
+                    if not blk:
+                        break
+                    s3.put_object(Bucket=BUCKET,
+                                  Key=f"{key}.part{n_parts:03d}", Body=blk)
+                    n_parts += 1
+            s3.put_object(
+                Bucket=BUCKET, Key=f"{key}.manifest.json",
+                Body=json.dumps({"parts": n_parts, "bytes": size,
+                                 "sha256": digest,
+                                 "part_size": PART_SIZE}).encode())
+            print(f"  ^ {key} ({size/1e6:.1f} MB in {n_parts} parts)")
         done += 1
     print(f"uploaded {done} file(s) to {BUCKET}/{args.prefix}/")
 
