@@ -1,0 +1,3 @@
+gradio>=4.44
+numpy>=1.26
+huggingface_hub>=0.25
