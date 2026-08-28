@@ -134,6 +134,13 @@ TICS = {
     "deference": [r"great question", r"thank you", r"if I may", r"just wanted",
                   r"humbly", r"I wonder if", r"forgive", r"apolog"],
     "cognition verb": [r"worked out", r"it knows", r"understands", r"figures out"],
+    # Body metaphors. "no eyes" was caught above and then replaced with "speaks",
+    # which is the same error wearing a different coat: models do not have
+    # sensory organs and do not speak, they receive tensors and emit tokens.
+    "body metaphor": [r"\bno eyes\b", r"\beyes\b", r"\bspeaks?\b", r"\bspoke\b",
+                      r"\bsees\b", r"\bsaw\b", r"\bseeing\b", r"\bblind\b",
+                      r"\blistens?\b", r"\bhears?\b", r"\bmind\b", r"\bthinks?\b",
+                      r"\bwatches\b", r"\btells you\b", r"\bsays\b"],
     # Offering an experiment we could just run. If the box can do it, run it and
     # send the number instead of handing the correspondent homework.
     "deferred experiment": [r"is a run\b", r"is one job", r"harness (now )?exists",

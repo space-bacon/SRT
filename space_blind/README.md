@@ -1,5 +1,5 @@
 ---
-title: Read the state before the model speaks
+title: A 0.6B model decodes a 31B model's hidden state
 emoji: 👁️
 colorFrom: indigo
 colorTo: purple
@@ -8,29 +8,29 @@ sdk_version: 5.49.1
 app_file: app.py
 pinned: true
 license: apache-2.0
-short_description: Read a frozen 31B model's state before it speaks
+short_description: A 0.6B model decodes a 31B model's hidden state
 models:
   - RiverRider/srt-verbalizer-v1
   - RiverRider/srt-browser-head-118k
   - RiverRider/gemma-4-31B-it-nf4
 ---
 
-# Read the state before the model speaks
+# A 0.6B model decodes a 31B model's hidden state
 
-Give a photograph to **gemma-4-31B**. At layer 47 of 60, before it has produced
-a single token, take one 5376-dimensional vector out of the forward pass, pooled
-over the image token positions.
+Give a photograph to **gemma-4-31B**. At layer 47 of 60, during the prefill and
+before a single token has been generated, take one 5376-dimensional vector,
+pooled over the image token positions.
 
-That vector is the only thing **Qwen3-0.6B** receives. It is a text-only model
-with no vision tower and it never sees your photograph, and it tells you what is
-in the picture. The two sentences usually agree.
+That vector is the entire input to **Qwen3-0.6B**, a text-only model. Those 5376
+numbers are everything it gets about your photograph. It produces a description
+of what is in the frame, and the two descriptions usually agree.
 
 ## The control is the point
 
-The third line shuffles that vector's 5376 dimensions and feeds it to the same
-reader. Identical values, identical norm, wrong arrangement. The reader falls
-apart, typically into something like `NYC NYC NYC NYC`. If the description had
-survived that, the vector would not have been carrying it.
+The third line shuffles that vector's 5376 dimensions and passes it to the same
+reader. Identical values, identical norm, wrong arrangement. The output degrades
+to something like `NYC NYC NYC NYC`. If the description had survived that, the
+vector would not have been carrying it.
 
 ## What is and is not trained
 
@@ -55,9 +55,9 @@ mismatched floor of 0.0237.
   same subject, 2 of 8 were identical strings.
 
 The gallery is 1000 COCO val2017 photographs indexed from bf16 states. Greedy
-decoding at 40 tokens loops, so repeated sentences are dropped for display. A
-gallery image retrieving itself at cosine 1.000 is arithmetic rather than
-evidence, so exact self-matches are excluded.
+decoding at 40 tokens loops, so repeated sentences are dropped for display.
+Exact self-matches are excluded, since a gallery image retrieving itself at
+cosine 1.000 measures arithmetic.
 
 Use of the host is governed by the [Gemma Terms of
 Use](https://ai.google.dev/gemma/terms).

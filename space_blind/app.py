@@ -118,15 +118,15 @@ def run(image, k=5):
     order = [i for i in torch.argsort(-sims).tolist() if sims[i] < 0.999][:k]
     shots = [(os.path.join(GAL_DIR, FILES[i]), f"{sims[i]:.3f}") for i in order]
 
-    seeing = (f"### The model that saw it\n"
-              f"**gemma-4-31B**, 31 billion parameters, a vision tower, and "
-              f"the photograph in front of it.\n\n> {said}")
-    blind = (f"### The model that only got the vector\n"
-             f"**Qwen3-0.6B**, text only. No vision tower, no image, no "
-             f"caption. One 5376-d vector lifted out of gemma's stack before "
-             f"gemma had said a word.\n\n"
+    seeing = (f"### gemma-4-31B, which received the photograph\n"
+              f"31 billion parameters and a vision encoder. This is its own "
+              f"output.\n\n> {said}")
+    blind = (f"### Qwen3-0.6B, which received only the vector\n"
+             f"A text-only model. Its entire input is one 5376-dimensional "
+             f"vector taken out of gemma's stack before gemma had generated a "
+             f"token.\n\n"
              f"> {read}\n\n"
-             f"*Shuffle that vector's dimensions and the same reader says:* "
+             f"*Shuffle that vector's dimensions and the same reader produces:* "
              f"{control}")
     panel = (
         f"| | |\n|---|---|\n"
@@ -148,20 +148,21 @@ def run(image, k=5):
     return seeing, blind, panel, shots
 
 
-with gr.Blocks(title="Read the state before the model speaks") as demo:
+with gr.Blocks(title="A 0.6B model decodes a 31B model's hidden state") as demo:
     gr.Markdown(
-        "# Read the state before the model speaks\n"
-        "Give a photograph to **gemma-4-31B**. At layer 47 of 60, before it has "
-        "produced a single token, take one 5376-dimensional vector out of the "
-        "forward pass.\n\n"
-        "That vector is the only thing **Qwen3-0.6B** receives. It has no "
-        "vision tower and never sees your photograph, and it tells you what is "
-        "in the picture. The same vector goes through one linear map and "
-        "searches a thousand photographs. The host is frozen and was never "
-        "trained to be read.\n\n"
-        "Then the control: shuffle that vector's 5376 dimensions and hand the "
+        "# A 0.6B model decodes a 31B model's hidden state\n"
+        "Give a photograph to **gemma-4-31B**. At layer 47 of 60, during the "
+        "prefill and before a single token has been generated, take one "
+        "5376-dimensional vector, pooled over the image token positions.\n\n"
+        "**Qwen3-0.6B** receives that vector and nothing else. It is a "
+        "text-only model, and those 5376 numbers are everything it gets about "
+        "your photograph. It produces a description of what is in the frame. "
+        "The same vector passes through one linear map and retrieves from a "
+        "gallery of 1000 photographs. The host is frozen and was trained for "
+        "neither job.\n\n"
+        "Then the control: shuffle that vector's 5376 dimensions and pass the "
         "reader identical values with an identical norm. The description "
-        "collapses. Arrangement is what carries the picture."
+        "collapses. Arrangement is what carries the content."
     )
     with gr.Row():
         with gr.Column(scale=1):
@@ -175,8 +176,8 @@ with gr.Blocks(title="Read the state before the model speaks") as demo:
             a = gr.Markdown()
         with gr.Column(scale=1):
             b = gr.Markdown()
-    shots = gr.Gallery(label="What the same vector reached for, searching the "
-                             "gallery on its own",
+    shots = gr.Gallery(label="What the same vector retrieves from a gallery of "
+                             "1000 photographs",
                        columns=5, height=200, object_fit="cover")
     panel = gr.Markdown()
     go.click(run, inp, [a, b, panel, shots])

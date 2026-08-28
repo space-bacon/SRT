@@ -214,16 +214,16 @@ def build_ui(rig):
 
         dist = (v - rig.mu).norm()
         z = (v - rig.mu) / rig.sd
-        seeing = (f"### The model that saw it\n"
-                  f"**gemma-4-31B**, 31 billion parameters, a vision tower, and "
-                  f"the photograph in front of it.\n\n> {said}")
-        blind = (f"### The model that only got the vector\n"
-                 f"**Qwen3-0.6B**, text only. No vision tower, no image, no "
-                 f"caption. One 5376-d vector lifted out of gemma's stack "
-                 f"before gemma had said a word.\n\n"
+        seeing = (f"### gemma-4-31B, which received the photograph\n"
+                  f"31 billion parameters and a vision encoder. This is its own "
+                  f"output.\n\n> {said}")
+        blind = (f"### Qwen3-0.6B, which received only the vector\n"
+                 f"A text-only model. Its entire input is one 5376-dimensional "
+                 f"vector taken out of gemma's stack before gemma had generated "
+                 f"a token.\n\n"
                  f"> {read}\n\n"
-                 f"*Shuffle that vector's dimensions and the same reader says:* "
-                 f"{control}")
+                 f"*Shuffle that vector's dimensions and the same reader "
+                 f"produces:* {control}")
         panel = (
             f"| | |\n|---|---|\n"
             f"| layer read | {LAYER} of {rig.n_layers}, "
@@ -242,14 +242,15 @@ def build_ui(rig):
         )
         return seeing, blind, panel, shots
 
-    with gr.Blocks(title="Read the state before the model speaks") as demo:
+    with gr.Blocks(title="A 0.6B model decodes a 31B model's hidden state") as demo:
         gr.Markdown(
-            "# Read the state before the model speaks\n"
-            "Give a photograph to **gemma-4-31B**. At layer 47 of 60, before it "
-            "has produced a single token, take one 5376-dimensional vector out "
-            "of the forward pass. That vector is the only thing **Qwen3-0.6B** "
-            "receives. It has no vision tower and never sees your photograph, "
-            "and it tells you what is in the picture."
+            "# A 0.6B model decodes a 31B model's hidden state\n"
+            "Give a photograph to **gemma-4-31B**. At layer 47 of 60, during "
+            "the prefill and before a single token has been generated, take one "
+            "5376-dimensional vector, pooled over the image token positions. "
+            "That vector is the entire input to **Qwen3-0.6B**, a text-only "
+            "model, and those 5376 numbers are everything it gets about the "
+            "photograph."
         )
         with gr.Row():
             with gr.Column(scale=1):
