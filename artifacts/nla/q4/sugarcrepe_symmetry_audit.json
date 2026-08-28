@@ -1,0 +1,88 @@
+{
+ "question": "how many SugarCrepe pairs differ only in word order",
+ "method": "lowercase, tokenise on [a-z0-9']+, compare multisets of the positive and negative caption",
+ "why_it_matters": "for a bag-identical pair, any model whose text representation ignores word order assigns both captions the same score, so it lands at chance by construction. On the swap_* splits such a model cannot exceed chance however good its content representation is, and a swap score therefore does not separate content quality across that class of models.",
+ "totals": {
+  "n": 7511,
+  "bag_identical": 572,
+  "frac": 0.0762
+ },
+ "splits": {
+  "add_att": {
+   "n": 692,
+   "bag_identical": 0,
+   "frac": 0.0,
+   "pct": 0.0,
+   "examples": []
+  },
+  "add_obj": {
+   "n": 2062,
+   "bag_identical": 0,
+   "frac": 0.0,
+   "pct": 0.0,
+   "examples": []
+  },
+  "replace_att": {
+   "n": 788,
+   "bag_identical": 0,
+   "frac": 0.0,
+   "pct": 0.0,
+   "examples": []
+  },
+  "replace_obj": {
+   "n": 1652,
+   "bag_identical": 0,
+   "frac": 0.0,
+   "pct": 0.0,
+   "examples": []
+  },
+  "replace_rel": {
+   "n": 1406,
+   "bag_identical": 0,
+   "frac": 0.0,
+   "pct": 0.0,
+   "examples": []
+  },
+  "swap_att": {
+   "n": 666,
+   "bag_identical": 408,
+   "frac": 0.6126,
+   "pct": 61.3,
+   "examples": [
+    {
+     "positive": "Blue bathroom with two white towels hanging by the shower.",
+     "negative": "White bathroom with two blue towels hanging by the shower."
+    },
+    {
+     "positive": "a brick building with a blue sign on it in front of a metal pole",
+     "negative": "a blue building with a brick sign on it in front of a metal pole."
+    },
+    {
+     "positive": "A man in a red shirt rides a yellow surfboard on light blue water.",
+     "negative": "A man in a yellow shirt rides a red surfboard on light blue water."
+    }
+   ]
+  },
+  "swap_obj": {
+   "n": 245,
+   "bag_identical": 164,
+   "frac": 0.6694,
+   "pct": 66.9,
+   "examples": [
+    {
+     "positive": "A cat sits on its hind legs, and swats at the plant.",
+     "negative": "A cat sits on the plant, and swats at its hind legs."
+    },
+    {
+     "positive": "A woman prepares a pizza while a man watches.",
+     "negative": "A man prepares a pizza while a woman watches."
+    },
+    {
+     "positive": "Girls wash a motorcycle while men look on.",
+     "negative": "Men wash a motorcycle while girls look on."
+    }
+   ]
+  }
+ },
+ "scope": "this is a property of the benchmark data alone. No model was run. It is not a defect: the swap splits are meant to probe word order. It is a caveat about how their scores read."
+}
