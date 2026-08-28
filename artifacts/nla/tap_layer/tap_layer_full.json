@@ -1,0 +1,18 @@
+{
+ "question": "does L20 beat the shipped L47 tap at full scale",
+ "n_pairs": 118287,
+ "n_train": 113287,
+ "n_holdout": 5000,
+ "results": {
+  "L20": {
+   "r@1": 0.3243999779224396,
+   "r@10": 0.727400004863739,
+   "median_rank": 3.0
+  },
+  "L47": {
+   "r@1": 0.28299999237060547,
+   "r@10": 0.6534000039100647,
+   "median_rank": 5.0
+  }
+ }
+}
