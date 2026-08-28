@@ -107,7 +107,12 @@ def main() -> None:
         enc = proc.apply_chat_template(msg, add_generation_prompt=True,
                                        tokenize=True, return_dict=True,
                                        return_tensors="pt")
-        enc = {k: (v.to("cuda") if hasattr(v, "to") else v) for k, v in enc.items()}
+        # Pixel/audio tensors arrive fp32 while the model is bf16, and some
+        # vision towers do not cast internally.
+        enc = {k: (v.to("cuda", model.dtype)
+                   if hasattr(v, "is_floating_point") and v.is_floating_point()
+                   else v.to("cuda") if hasattr(v, "to") else v)
+               for k, v in enc.items()}
         out = model(**enc, output_hidden_states=True, use_cache=False,
                     return_dict=True)
         h = out.hidden_states[L][0]

@@ -105,7 +105,9 @@ def main() -> None:
             except Exception as e:
                 results[tag] = f"FAIL processor: {type(e).__name__}: {e}"
                 return
-            enc = {k: (v.to("cuda") if hasattr(v, "to") else v)
+            enc = {k: (v.to("cuda", model.dtype)
+                       if hasattr(v, "is_floating_point") and v.is_floating_point()
+                       else v.to("cuda") if hasattr(v, "to") else v)
                    for k, v in enc.items()}
             try:
                 with torch.no_grad():
