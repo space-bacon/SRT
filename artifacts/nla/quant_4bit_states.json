@@ -1,0 +1,76 @@
+{
+  "n": 100,
+  "gallery": 2000,
+  "cos_bf16_vs_nf4": {
+    "raw_mean": 0.9986162781715393,
+    "raw_min": 0.9980102181434631,
+    "centered_mean": 0.963085412979126,
+    "centered_min": 0.9056072235107422,
+    "raw_floor_mismatched": 0.9866822957992554,
+    "centered_floor_mismatched": 0.023667240515351295
+  },
+  "anisotropy": {
+    "bf16_raw": 0.9874075651168823,
+    "nf4_raw": 0.9872229099273682,
+    "bf16_centered": -0.0068442742340266705
+  },
+  "norms": {
+    "state_bf16": 115.66215515136719,
+    "state_nf4": 115.72300720214844,
+    "dist_to_reader_mu_bf16": 13.434911727905273,
+    "dist_to_reader_mu_nf4": 14.505797386169434,
+    "reader_sd_mean": 12.952143669128418
+  },
+  "retrieval_nf4_query_into_bf16_index": {
+    "self_r_at_1": 1.0,
+    "self_r_at_10": 1.0,
+    "median_rank": 1.0,
+    "neighbour_overlap_at_10": 0.704
+  },
+  "verbalizer": {
+    "shown": 8,
+    "identical": 2,
+    "pairs": [
+      {
+        "file": "000000000139.jpg",
+        "bf16": "A living room with a television, coffee table, and a dining table. The floor is covered with yellow tiles. The floor is covered with yellow tiles. The floor is covered with yellow tiles. The",
+        "nf4": "A living room with a television, a dining table, and a window. The window is open. The floor is covered with a carpet. The television is on. The dining table is covered with a"
+      },
+      {
+        "file": "000000000285.jpg",
+        "bf16": "A brown bear standing in a grassy field. The bear is looking at the camera. The bear is sitting in the grass. The grass is a brown color. The bear is a brown bear.",
+        "nf4": "A brown bear sitting on top of a green grassy field. The bear is looking at the camera. The grass is green. The bear is sitting on top of the grass. The bear is looking"
+      },
+      {
+        "file": "000000000632.jpg",
+        "bf16": "A bedroom with a bed, a desk, and a window. A bookshelf is in the corner. A window is open. A window is open. A window is open. A window is open",
+        "nf4": "A bedroom with a large window and a large bed. The bed is made of wood. The window is a large window. The window is a large window. The window is a large window. The"
+      },
+      {
+        "file": "000000000724.jpg",
+        "bf16": "A stop sign sitting on a street corner. The sign is in a corner. The street is in the background. The sign is in a corner. The street is in the background. The sign is",
+        "nf4": "A stop sign sitting on a street corner. The sign is in a corner. The street is in the background. The sign is in a parking lot. The street is in the background. The sign"
+      },
+      {
+        "file": "000000000776.jpg",
+        "bf16": "A group of teddy bears sitting on a table. The bears are all wearing the same color. The bears are all sitting on the same level. The bears are all wearing the same color. The",
+        "nf4": "A group of teddy bears sitting on a wall. The bears are all wearing the same color. The bears are all on the same line. The bears are all on the same line. The bears"
+      },
+      {
+        "file": "000000000785.jpg",
+        "bf16": "A woman skiing down a snowy hill. with her skis. and her skis. and her skis. and her skis. and her skis. and her skis. and her",
+        "nf4": "A woman skiing down a snowy hill. with her skis. and her skis. and her skis. and her skis. and her skis. and her skis. and her"
+      },
+      {
+        "file": "000000000802.jpg",
+        "bf16": "A kitchen with a refrigerator and a stove. The stove is in the middle of the room. The refrigerator is on the left. The cabinets are on the right. The stove is on the left.",
+        "nf4": "A kitchen with a refrigerator and a stove. The stove is in the middle of the room. The refrigerator is on the left. The cabinets are on the right. The stove is on the left."
+      },
+      {
+        "file": "000000000872.jpg",
+        "bf16": "A baseball player running to the base while another player is running to the base. The bases are on the field. The bases are on the field. The bases are on the field. The bases are",
+        "nf4": "A group of baseball players running on a field. The catcher is holding his mitt. The batter is running towards the base. The base runner is running towards the batter. The base runner is running towards"
+      }
+    ]
+  }
+}
