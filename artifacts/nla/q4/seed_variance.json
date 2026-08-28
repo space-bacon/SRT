@@ -1,0 +1,23 @@
+{
+  "question": "is the v22c_a050-over-v18 gap larger than training-seed noise",
+  "method": "retrained v18 from the v15a warm start three times, changing only the training seed, using the v18 recipe verbatim (CoSENT, lr 1e-5, scale 20, batch 32, max-seq 128, 5 epochs on 7249 STSB pairs). mteb pinned to 2.12.30, the version that produced the existing record, so seed variance is not confounded with task-version drift.",
+  "n_shared_subsets": 40,
+  "v18_original_ckpt": 0.370734,
+  "retrains": {
+    "seed0": 0.371709,
+    "seed1": 0.372524,
+    "seed2": 0.372317
+  },
+  "retrain_mean": 0.372184,
+  "retrain_sd": 0.000423,
+  "retrain_range": 0.000815,
+  "published_gap_v22c_a050_vs_v18": 0.0048,
+  "gap_in_seed_sd": 11.33,
+  "verdict": "SURVIVES. Training-seed sd is 0.0004; the published gap of 0.0048 is 11.3 sd. The ranking is not a seed artifact.",
+  "caveats": [
+    "n=3, so the sd estimate itself is uncertain (2 dof); treat the sd as order-of-magnitude, not precise.",
+    "varies the training seed only, holding the warm start, data and recipe fixed, so this is a lower bound on true run-to-run spread.",
+    "all three retrains beat the original v18 checkpoint (+0.0010 to +0.0018), putting it -3.4 sd below the retrain mean. Measured against a fresh v18 the gap is ~0.0034, still many sd.",
+    "dev Spearman spread across these same seeds was 0.043 while MTEB spread was 0.0008; dev Spearman is not a usable proxy here."
+  ]
+}
