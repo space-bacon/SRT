@@ -118,16 +118,16 @@ def run(image, k=5):
     order = [i for i in torch.argsort(-sims).tolist() if sims[i] < 0.999][:k]
     shots = [(os.path.join(GAL_DIR, FILES[i]), f"{sims[i]:.3f}") for i in order]
 
-    seeing = (f"### gemma-4-31B, which received the photograph\n"
-              f"31 billion parameters and a vision encoder. This is its own "
-              f"output.\n\n> {said}")
-    blind = (f"### Qwen3-0.6B, which received only the vector\n"
-             f"A text-only model. Its entire input is one 5376-dimensional "
-             f"vector taken out of gemma's stack before gemma had generated a "
-             f"token.\n\n"
-             f"> {read}\n\n"
-             f"*Shuffle that vector's dimensions and the same reader produces:* "
-             f"{control}")
+    host_panel = (f"### gemma-4-31B, which received the photograph\n"
+                  f"31 billion parameters and a vision encoder. This is its own "
+                  f"output.\n\n> {said}")
+    reader_panel = (f"### Qwen3-0.6B, which received only the vector\n"
+                    f"A text-only model. Its entire input is one "
+                    f"5376-dimensional vector taken out of gemma's stack before "
+                    f"gemma had generated a token.\n\n"
+                    f"> {read}\n\n"
+                    f"*Shuffle that vector's dimensions and the same reader "
+                    f"produces:* {control}")
     panel = (
         f"| | |\n|---|---|\n"
         f"| layer read | {LAYER} of {N_LAYERS}, {v.numel()}-d, pooled over the "
@@ -145,7 +145,7 @@ def run(image, k=5):
         f"free hardware, which keeps retrieval intact but changes the reader's "
         f"wording. See the model card for the measurements."
     )
-    return seeing, blind, panel, shots
+    return host_panel, reader_panel, panel, shots
 
 
 with gr.Blocks(title="A 0.6B model decodes a 31B model's hidden state") as demo:

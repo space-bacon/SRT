@@ -11,8 +11,8 @@ pretty_name: SRT-NLA gemma-4-31B-it L47 artifacts
 
 # SRT-NLA gemma-4-31B-it artifacts (L47)
 
-**The retrieval indexes that let a frozen gemma-4-31B-it say what it
-sees and what it means — in full sentences, with zero training.**
+**The retrieval indexes that turn a frozen gemma-4-31B-it's L47 states into
+full sentences, with zero training.**
 
 Layer 47 is the backbone's cross-modal alignment peak. Encode any L47
 state — a text's last token, or the mean over an image's soft-tokens —

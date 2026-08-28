@@ -502,7 +502,7 @@ def search(state, query):
         f'<b>{shared} of {TOPK}</b> results are the same photograph, and '
         f'{"the top hit is identical" if own[0] == other[0] else "the order differs slightly"}.'
         f'<br><span style="font-size:15px;font-weight:400;color:#a7a1cc">'
-        f'{MAKER[gb]}\'s model never saw {MAKER[ga]}\'s index while training. '
+        f'{MAKER[gb]}\'s model was never trained on {MAKER[ga]}\'s index. '
         f'It is reading another company\'s memory.</span></div>')
 
     def strip(order, cls, who, what):

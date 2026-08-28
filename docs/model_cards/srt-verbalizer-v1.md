@@ -24,15 +24,13 @@ orderly enough to read with small, auditable instruments. What it is not, is
 
 This is the translator. A frozen **Qwen3-0.6B**, plus a ~44M-parameter prefix
 network, takes one such record and writes a sentence describing the photograph.
-The small model has no vision path. It never sees the image. It only ever
-receives the vector.
+The small model is text-only. Its entire input is the vector.
 
 Measured on 5,000 held-out photographs, the sentence it writes retrieves the
 correct image out of **123,287** at **median rank 20**, against **39** for a
 human-written reference caption.
 
-> Not mind reading. Reading aloud. The record was always legible; this puts it
-> in English.
+> The record was always legible. This puts it in English.
 
 ## What is in this repository
 

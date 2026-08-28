@@ -24,16 +24,16 @@ reads visual states and text states alike.
 
 ## What the stack does (zero training on any of it)
 
-- **Sees and says.** An image's mean L47 state retrieves on-topic
+- **Image to caption.** An image's mean L47 state retrieves on-topic
   full-sentence captions from an open pool of 10,000 COCO captions:
   **5/5 CIFAR natural images at rank 1** (horse → "an old black and
   white photo with a person riding a horse", 0.680; dog 0.651; ship
   0.631). Live in the
   [SRT-Sunstone demo](https://huggingface.co/spaces/RiverRider/srt-sunstone).
-- **Says what it actually sees.** Shown a random-dot autostereogram
+- **Reports the texture that is present.** Given a random-dot autostereogram
   whose figure exists only in binocular disparity, the stack retrieves
-  "An abstract mosaic of tiny colored squares" — a faithful sentence-level
-  report of the texture the flat encoder truly perceives (paper §11.6.2–.3).
+  "An abstract mosaic of tiny colored squares", a faithful sentence-level
+  report of what a flat encoder actually receives (paper §11.6.2–.3).
 - **Reads text states at ceiling.** Centered replay 0.994 inside a fully
   calibrated anchor frame (NN retrieval 0.695, random floor 0.494), so
   every reported number is interpretable.

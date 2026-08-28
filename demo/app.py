@@ -595,9 +595,9 @@ fully replaces the original direction with the edited one.
                     lines=2,
                 )
                 gr.Markdown(
-                    "**Mind-reading** — the answer is encoded in the "
-                    "hidden state *before* it's spoken. Watch the rail "
-                    "match the reply."
+                    "**Read before output** — the answer is encoded in the "
+                    "hidden state *before* the first token is generated. Watch "
+                    "the rail match the reply."
                 )
                 gr.Examples(
                     examples=[
@@ -610,7 +610,7 @@ fully replaces the original direction with the edited one.
                         ["17 × 24 = let me work it out. 17 × 24 = 17 × (20 + 4) = 340 + 68 ="],
                     ],
                     inputs=chat_user,
-                    label="① Mind-reading prompts",
+                    label="① Read-before-output prompts",
                 )
                 gr.Markdown(
                     "**Causal steering** — open *Steer this reply* and "
