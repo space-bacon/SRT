@@ -39,6 +39,10 @@ def parse_args():
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--tau", type=float, default=0.05)
     p.add_argument("--derangements", type=int, default=20)
+    p.add_argument("--bootstrap", type=int, default=2000)
+    p.add_argument("--save-map", default=None,
+                   help="Path to persist the fitted towers. Without this the "
+                        "result is a measurement with nothing shippable.")
     p.add_argument("--out", default="/root/xvendor.json")
     return p.parse_args()
 
@@ -161,6 +165,13 @@ def main() -> None:
             s = res["directions"][tag]
             print(f"  {kind:<13} {tag:<38} r@1 {s['r@1']:.4f} median {s['median_rank']:.0f}")
 
+    # Per-item hit vectors, so retention can be resampled over holdout items.
+    hits = {}
+    for x in names:
+        for y in names:
+            r = ranks(P[x][0], P[y][1]).float().cpu().numpy()
+            hits[f"{y}_text -> {x}_gallery"] = (r <= 1).astype(np.float64)
+
     for x in names:
         for y in names:
             meds = []
@@ -183,6 +194,42 @@ def main() -> None:
                       "within_vendor_mean_r@1": float(np.mean(within)),
                       "retention": float(np.mean(cross) / np.mean(within))
                       if np.mean(within) else None}
+
+    # Retention is a ratio of two means over the same holdout items, so a single
+    # point estimate says nothing about how much of it is sampling luck.
+    cross_tags = [k for k in hits if k.split("_text")[0]
+                  != k.split("-> ")[1].replace("_gallery", "")]
+    within_tags = [k for k in hits if k not in cross_tags]
+    g = np.random.default_rng(12345)
+    n_te = len(te)
+    boots = []
+    for _ in range(a.bootstrap):
+        idx = g.integers(0, n_te, n_te)
+        c = np.mean([hits[t][idx].mean() for t in cross_tags])
+        w = np.mean([hits[t][idx].mean() for t in within_tags])
+        if w > 0:
+            boots.append(c / w)
+    boots = np.array(boots)
+    res["summary"]["retention_ci"] = {
+        "n_bootstrap": int(len(boots)),
+        "resampled": "holdout items, with replacement",
+        "mean": float(boots.mean()),
+        "sd": float(boots.std()),
+        "ci95_low": float(np.percentile(boots, 2.5)),
+        "ci95_high": float(np.percentile(boots, 97.5)),
+    }
+    ci = res["summary"]["retention_ci"]
+    print(f"  retention 95% CI [{ci['ci95_low']:.3f}, {ci['ci95_high']:.3f}] "
+          f"over {ci['n_bootstrap']} bootstraps")
+
+    if a.save_map:
+        torch.save({"Wi": Wi.state_dict(), "Wt": Wt.state_dict(),
+                    "mu": {k: {m: v.cpu() for m, v in mu[k].items()} for k in names},
+                    "mu_txt": {k: mut[k].cpu() for k in names},
+                    "vendors": names, "modalities": keep, "dim": a.dim},
+                   a.save_map)
+        print(f"wrote {a.save_map}")
+
     with open(a.out, "w") as f:
         json.dump(res, f, indent=1)
     print(f"\ncross {np.mean(cross):.4f} within {np.mean(within):.4f} "

@@ -33,6 +33,9 @@ def parse_args():
     p.add_argument("--states", nargs="+", required=True)
     p.add_argument("--dim", type=int, default=512)
     p.add_argument("--holdout-frac", type=float, default=0.2)
+    p.add_argument("--save-map", default=None,
+                   help="Path to persist the shared tower. Without this the "
+                        "result is a measurement with nothing shippable.")
     p.add_argument("--epochs", type=int, default=120)
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--tau", type=float, default=0.05)
@@ -124,7 +127,11 @@ def fit(I, T, mods, tr, te, dim, epochs, lr, tau, shared: bool):
         if ep % 40 == 0:
             print(f"    epoch {ep} loss {float(loss):.4f}", flush=True)
     with torch.no_grad():
-        return project(te)
+        a, b = project(te)
+    state = {"Wi": Wi.state_dict(), "Wt": Wt.state_dict(),
+             "mu_img": {m: v.cpu() for m, v in mu_i.items()},
+             "mu_txt": mu_t.cpu(), "dim": dim, "shared": shared}
+    return a, b, state
 
 
 def main() -> None:
@@ -152,7 +159,10 @@ def main() -> None:
 
     for tag, shared in (("shared", True), ("per_modality", False)):
         print(f"\n{tag} tower:", flush=True)
-        A, B = fit(I, T, mods, tr_np, te_np, a.dim, a.epochs, a.lr, a.tau, shared)
+        A, B, state = fit(I, T, mods, tr_np, te_np, a.dim, a.epochs, a.lr, a.tau, shared)
+        if a.save_map and shared:
+            torch.save(state, a.save_map)
+            print(f"  wrote {a.save_map}", flush=True)
         te_mods = mods[te_np]
         # One mixed index holding every modality, queried by text.
         block = {"mixed_gallery": score(ranks(A, B))}

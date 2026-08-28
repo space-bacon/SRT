@@ -63,6 +63,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("files", nargs="*")
     ap.add_argument("--prefix", default="misc")
+    ap.add_argument("--flatten", action="store_true",
+                    help="Key by basename only. Unsafe when names repeat.")
     ap.add_argument("--list", action="store_true")
     args = ap.parse_args()
 
@@ -82,12 +84,19 @@ def main():
 
     # Skip re-uploads by comparing the local digest to the stored metadata.
     done = 0
+    seen = {}
     for f in args.files:
         p = pathlib.Path(f)
         if not p.is_file():
             print(f"  SKIP (not a file) {f}")
             continue
-        key = f"{args.prefix}/{p.name}"
+        # Basenames repeat across sibling result dirs (summary.json), so key by
+        # path unless explicitly asked to flatten.
+        rel = p.name if args.flatten else str(p).lstrip("./").replace("/", "__")
+        key = f"{args.prefix}/{rel}"
+        if key in seen:
+            sys.exit(f"key collision: {seen[key]} and {p} both map to {key}")
+        seen[key] = p
         digest = sha(p)
         try:
             head = s3.head_object(Bucket=BUCKET, Key=key)
