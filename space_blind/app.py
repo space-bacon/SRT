@@ -14,6 +14,7 @@ READER = "Qwen/Qwen3-0.6B"
 LAYER = 47
 HERE = os.path.dirname(os.path.abspath(__file__))
 GAL_DIR = os.path.join(HERE, "gallery")
+EX_DIR = os.path.join(HERE, "examples")
 
 
 class Prefix(torch.nn.Module):
@@ -50,7 +51,7 @@ reader = AutoModelForCausalLM.from_pretrained(
     READER, dtype=torch.float32).eval().to("cuda")
 
 head = torch.load(hf_hub_download("RiverRider/srt-browser-head-118k",
-                                  "head_full_L47.pt"),
+                                  "tap_layer/head_full_L47.pt"),
                   map_location="cpu", weights_only=False)
 WI = head["img"]["weight"].float()
 BI = head["img"]["bias"].float()
@@ -160,8 +161,10 @@ with gr.Blocks(title="A model with no eyes describes your picture") as demo:
         with gr.Column(scale=1):
             inp = gr.Image(label="Give it a picture", height=300, type="pil")
             go = gr.Button("Read the state", variant="primary", size="lg")
-            gr.Examples([[os.path.join(GAL_DIR, f)] for f in FILES[:6]],
-                        inputs=inp)
+            # Deliberately outside the 1000 indexed images, so the first hit is
+            # a real neighbour rather than the picture retrieving itself.
+            gr.Examples([[os.path.join(EX_DIR, f)]
+                         for f in sorted(os.listdir(EX_DIR))], inputs=inp)
         with gr.Column(scale=1):
             a = gr.Markdown()
         with gr.Column(scale=1):

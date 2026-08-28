@@ -3,4 +3,5 @@ bitsandbytes
 gradio>=5.9
 numpy
 pillow
+torchvision
 transformers>=5.0

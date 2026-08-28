@@ -8,7 +8,7 @@ sdk_version: 5.49.1
 app_file: app.py
 pinned: true
 license: apache-2.0
-short_description: A blind 0.6B model reads a 31B model's mind and describes your photo
+short_description: A blind 0.6B model reads a 31B model's mind
 models:
   - RiverRider/srt-verbalizer-v1
   - RiverRider/srt-browser-head-118k
