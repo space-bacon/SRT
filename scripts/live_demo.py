@@ -214,13 +214,13 @@ def build_ui(rig):
 
         dist = (v - rig.mu).norm()
         z = (v - rig.mu) / rig.sd
-        seeing = (f"### The model with eyes\n"
+        seeing = (f"### The model that saw it\n"
                   f"**gemma-4-31B**, 31 billion parameters, a vision tower, and "
-                  f"the picture in front of it.\n\n> {said}")
-        blind = (f"### The model with no eyes\n"
-                 f"**Qwen3-0.6B**, text only. No vision tower. It never received "
-                 f"the picture. It received one 5376-d vector from the middle of "
-                 f"gemma's stack, read before gemma had said a word.\n\n"
+                  f"the photograph in front of it.\n\n> {said}")
+        blind = (f"### The model that only got the vector\n"
+                 f"**Qwen3-0.6B**, text only. No vision tower, no image, no "
+                 f"caption. One 5376-d vector lifted out of gemma's stack "
+                 f"before gemma had said a word.\n\n"
                  f"> {read}\n\n"
                  f"*Shuffle that vector's dimensions and the same reader says:* "
                  f"{control}")
@@ -242,13 +242,14 @@ def build_ui(rig):
         )
         return seeing, blind, panel, shots
 
-    with gr.Blocks(title="A model with no eyes describes your picture") as demo:
+    with gr.Blocks(title="Read the state before the model speaks") as demo:
         gr.Markdown(
-            "# A model with no eyes describes your picture\n"
-            "Give the photograph to **gemma-4-31B**. Halfway up its stack, before "
-            "it has generated a single token, take one vector. Hand only that "
-            "vector to **Qwen3-0.6B**, a text-only model with no vision tower, "
-            "which never sees your picture. Then read both out loud."
+            "# Read the state before the model speaks\n"
+            "Give a photograph to **gemma-4-31B**. At layer 47 of 60, before it "
+            "has produced a single token, take one 5376-dimensional vector out "
+            "of the forward pass. That vector is the only thing **Qwen3-0.6B** "
+            "receives. It has no vision tower and never sees your photograph, "
+            "and it tells you what is in the picture."
         )
         with gr.Row():
             with gr.Column(scale=1):

@@ -88,7 +88,7 @@ def say(v):
     return dedupe(tok.decode(g[0], skip_special_tokens=True).strip())
 
 
-@spaces.GPU(duration=90)
+@spaces.GPU(duration=60)
 @torch.no_grad()
 def run(image, k=5):
     if image is None:
@@ -118,14 +118,16 @@ def run(image, k=5):
     order = [i for i in torch.argsort(-sims).tolist() if sims[i] < 0.999][:k]
     shots = [(os.path.join(GAL_DIR, FILES[i]), f"{sims[i]:.3f}") for i in order]
 
-    seeing = (f"### The model with eyes\n**gemma-4-31B**, 31 billion "
-              f"parameters, a vision tower, and the picture in front of it.\n\n"
-              f"> {said}")
-    blind = (f"### The model with no eyes\n**Qwen3-0.6B**, text only. No vision "
-             f"tower. It never received the picture. It received one 5376-d "
-             f"vector from the middle of gemma's stack, read before gemma had "
-             f"said a word.\n\n> {read}\n\n*Shuffle that vector's dimensions "
-             f"and the same reader says:* {control}")
+    seeing = (f"### The model that saw it\n"
+              f"**gemma-4-31B**, 31 billion parameters, a vision tower, and "
+              f"the photograph in front of it.\n\n> {said}")
+    blind = (f"### The model that only got the vector\n"
+             f"**Qwen3-0.6B**, text only. No vision tower, no image, no "
+             f"caption. One 5376-d vector lifted out of gemma's stack before "
+             f"gemma had said a word.\n\n"
+             f"> {read}\n\n"
+             f"*Shuffle that vector's dimensions and the same reader says:* "
+             f"{control}")
     panel = (
         f"| | |\n|---|---|\n"
         f"| layer read | {LAYER} of {N_LAYERS}, {v.numel()}-d, pooled over the "
@@ -146,16 +148,20 @@ def run(image, k=5):
     return seeing, blind, panel, shots
 
 
-with gr.Blocks(title="A model with no eyes describes your picture") as demo:
+with gr.Blocks(title="Read the state before the model speaks") as demo:
     gr.Markdown(
-        "# A model with no eyes describes your picture\n"
-        "Give the photograph to **gemma-4-31B**. Halfway up its stack, before "
-        "it has generated a single token, take one vector. Hand only that "
-        "vector to **Qwen3-0.6B**, a text-only model with no vision tower, "
-        "which never sees your picture. Then read both out loud.\n\n"
-        "The third line is the control. Shuffle that vector's 5376 dimensions "
-        "and the reader gets identical values with an identical norm. If the "
-        "description survived that, the vector was not carrying it."
+        "# Read the state before the model speaks\n"
+        "Give a photograph to **gemma-4-31B**. At layer 47 of 60, before it has "
+        "produced a single token, take one 5376-dimensional vector out of the "
+        "forward pass.\n\n"
+        "That vector is the only thing **Qwen3-0.6B** receives. It has no "
+        "vision tower and never sees your photograph, and it tells you what is "
+        "in the picture. The same vector goes through one linear map and "
+        "searches a thousand photographs. The host is frozen and was never "
+        "trained to be read.\n\n"
+        "Then the control: shuffle that vector's 5376 dimensions and hand the "
+        "reader identical values with an identical norm. The description "
+        "collapses. Arrangement is what carries the picture."
     )
     with gr.Row():
         with gr.Column(scale=1):
@@ -174,5 +180,8 @@ with gr.Blocks(title="A model with no eyes describes your picture") as demo:
                        columns=5, height=200, object_fit="cover")
     panel = gr.Markdown()
     go.click(run, inp, [a, b, panel, shots])
+    # Set the default inside a request, otherwise Gradio builds an absolute
+    # http://0.0.0.0:7860 URL that the HTTPS page blocks as mixed content.
+    demo.load(lambda: Image.open(os.path.join(EX_DIR, "01_king.jpg")), None, inp)
 
 demo.queue(default_concurrency_limit=2).launch()
