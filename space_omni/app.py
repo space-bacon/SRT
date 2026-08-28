@@ -408,7 +408,8 @@ def omni_prepare(progress=gr.Progress()):
     d = np.arange(len(S))
     r = (S > S[d, d][:, None]).sum(1) + 1
     counts = {m: int((mods[te] == m).sum()) for m in ("image", "audio", "video")}
-    state = {"G": G, "Q": Q, "keys": K[te], "caps": C[te], "mods": mods[te]}
+    state = {"G": G, "Q": Q, "keys": K[te], "caps": C[te], "mods": mods[te],
+             "rawI": I[te], "rawT": T[te]}
     yield panel(
         f"Ready in {time.time()-t0:.0f}s. One index of {len(te)} items: "
         f"{counts['image']} photos, {counts['audio']} sounds, "
@@ -416,26 +417,64 @@ def omni_prepare(progress=gr.Progress()):
         f"against a chance rate of {1/len(te):.4f}."), state
 
 
-def omni_search(state, query):
+def omni_search(state, query, history):
+    history = list(history or [])
     if not state:
-        return '<div class="verdict">Press <b>Build one shared index</b> first.</div>', ""
+        history += [{"role": "user", "content": query},
+                    {"role": "assistant", "content": "Build the index first."}]
+        return history, "", "", ""
+
     caps, mods = state["caps"], state["mods"]
     seed = seed_index(query, caps)
     if seed < 0:
-        return ('<div class="verdict">Nothing in this index matches that. Try '
-                'one of the examples.</div>', "")
-    order = np.argsort(-(state["Q"][seed:seed + 1] @ state["G"].T)[0])[:6]
+        history += [{"role": "user", "content": query},
+                    {"role": "assistant",
+                     "content": "Nothing in these 700 held-out items matches "
+                                "that. Try wording it like a caption."}]
+        return history, "", "", ""
+
+    scores = (state["Q"][seed:seed + 1] @ state["G"].T)[0]
+    order = np.argsort(-scores)[:6]
+    seed_rank = int((scores > scores[seed]).sum() + 1)
     kinds = [mods[i] for i in order]
     mix = ", ".join(f"{kinds.count(k)} {k}" for k in ("image", "audio", "video")
                     if kinds.count(k))
-    head = (f'<div class="verdict">One text query, one index, three kinds of '
-            f'media. Top 6 came back as {mix}.<br>'
-            f'<span style="font-size:15px;font-weight:400;color:#a7a1cc">'
-            f'Matched to the held-out caption “{caps[seed][:90]}”. The same '
-            f'linear map placed all three kinds. Nothing was trained per '
-            f'modality.</span></div>')
+
+    # The same retrieval with no centring. Raw states are dominated by one
+    # direction, so this is what the demo would show if centring were skipped.
+    rI, rT = state["rawI"], state["rawT"]
+    nI = rI / (np.linalg.norm(rI, axis=1, keepdims=True) + 1e-8)
+    qv = rT[seed] / (np.linalg.norm(rT[seed]) + 1e-8)
+    raw_order = np.argsort(-(nI @ qv))[:6]
+    kept = len(set(order.tolist()) & set(raw_order.tolist()))
+    sample = nI[:300]
+    raw_mean = float((sample @ sample.T)[np.triu_indices(len(sample), 1)].mean())
+
+    words = (f"I reached for {mix}. The closest thing I hold to that is "
+             f"\u201c{caps[seed]}\u201d.")
+    history += [{"role": "user", "content": query},
+                {"role": "assistant", "content": words}]
+
     cards = "".join(card(mods[i], state["keys"][i], caps[i]) for i in order)
-    return head, f'<div class="cards">{cards}</div>'
+    panel = (
+        '<div class="verdict">Internal state for this turn'
+        '<table style="width:100%;margin-top:10px;font-size:14px;'
+        'font-weight:400"><tr><td>the item that caption belongs to ranks</td>'
+        f'<td><b>{seed_rank} of {len(scores)}</b></td></tr>'
+        '<tr><td>mean raw cosine between unrelated items</td>'
+        f'<td><b>{raw_mean:+.3f}</b></td></tr>'
+        '<tr><td>same query, centring removed</td>'
+        f'<td><b>{kept} of 6</b> results survive</td></tr></table>'
+        '<span style="font-size:14px;font-weight:400;color:#a7a1cc">'
+        'In the raw space every item sits near every other item, which is why '
+        'the uncentred results below are unrelated to what you asked for. '
+        'Subtracting the per-modality mean is what makes the arrangement '
+        'legible at all.</span></div>')
+    raw_cards = "".join(card(mods[i], state["keys"][i], caps[i])
+                        for i in raw_order)
+    return (history, f'<div class="cards">{cards}</div>', panel,
+            '<div class="vendorbar bar-b">Without centring, the same query '
+            f'returns these</div><div class="cards">{raw_cards}</div>')
 
 
 def search(state, query):
@@ -527,11 +566,15 @@ with gr.Blocks(title="Two rival models, one memory", css=CSS,
             obuild = gr.Button("Build one shared index", variant="primary",
                                size="lg")
             overdict = gr.HTML()
-            oquery = gr.Textbox(label="Ask for anything", value=OMNI_EXAMPLES[0])
+            chat = gr.Chatbot(type="messages", height=240, show_label=False,
+                              placeholder="Build the index, then ask it "
+                                          "something.")
+            oquery = gr.Textbox(label="Say something", value=OMNI_EXAMPLES[0])
             gr.Examples(OMNI_EXAMPLES, inputs=oquery, label="Try one")
-            ogo = gr.Button("Search all three", variant="primary", size="lg")
-            ohead = gr.HTML()
+            ogo = gr.Button("Send", variant="primary", size="lg")
             ocards = gr.HTML()
+            ostate = gr.HTML()
+            oraw = gr.HTML()
 
     pair_out = [verdict, head_a, gal_a, head_b, gal_b]
     # api_name=False everywhere: gr.State carrying a dict makes Gradio's schema
@@ -542,10 +585,11 @@ with gr.Blocks(title="Two rival models, one memory", css=CSS,
     go.click(search, [fitted, query], pair_out, api_name=False)
     query.submit(search, [fitted, query], pair_out, api_name=False)
 
+    omni_out = [chat, ocards, ostate, oraw]
     obuild.click(omni_prepare, None, [overdict, omni_fitted],
                  show_progress="minimal", api_name=False)
-    ogo.click(omni_search, [omni_fitted, oquery], [ohead, ocards], api_name=False)
-    oquery.submit(omni_search, [omni_fitted, oquery], [ohead, ocards],
+    ogo.click(omni_search, [omni_fitted, oquery, chat], omni_out, api_name=False)
+    oquery.submit(omni_search, [omni_fitted, oquery, chat], omni_out,
                   api_name=False)
 
     gr.Markdown(
