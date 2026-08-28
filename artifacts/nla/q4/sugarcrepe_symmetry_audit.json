@@ -84,5 +84,16 @@
    ]
   }
  },
- "scope": "this is a property of the benchmark data alone. No model was run. It is not a defect: the swap splits are meant to probe word order. It is a caveat about how their scores read."
+ "scope": "this is a property of the benchmark data alone. No model was run. It is not a defect: the swap splits are meant to probe word order. It is a caveat about how their scores read.",
+ "mteb_aggregate": {
+  "dataset": "mteb/SUGARCREPE_fmt",
+  "note": "MTEB merges all seven source subsets into one 7511-item test split, so the order-only items are a share of the whole benchmark.",
+  "n": 7511,
+  "bag_identical": 572,
+  "frac": 0.0762,
+  "replace_family_n": 3846,
+  "add_family_n": 2754,
+  "order_insensitive_ceiling": 0.9619,
+  "ceiling_note": "a model that ignores word order scores chance on the 572 order-only pairs, so its maximum text_acc is (7511-572)/7511 + 0.5*572/7511."
+ }
 }
