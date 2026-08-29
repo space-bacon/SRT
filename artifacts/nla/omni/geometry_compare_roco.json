@@ -1,0 +1,269 @@
+{
+  "question": "where in the spectrum does the cross-vendor structure live, and does retention depend on the damage geometry",
+  "chance_r@1": 0.001,
+  "answer": "cross tracks within at every spectral level. dropping the top k does not kill cross while sparing within, and the tail alone carries almost nothing for either: dropping the top 128 leaves within at 0.0105 and cross at 0.0117, both near chance. the shared structure is not a thin residue in the tail and is not concentrated in a few leading directions. it is spread across the same directions the within-vendor signal occupies.",
+  "raw_cross_curve": "cross does NOT rise as components are removed. at k=64 cross is 0.0571 against 0.0990 at k=1024. the only increase is k=512 at 0.1010 +/- 0.0025 against 0.0990 +/- 0.0003, inside its own spread. truncation is not a recipe for better cross-vendor retrieval.",
+  "spectrum_split": [
+    {
+      "k": 4,
+      "keep_within": 0.0022500000971679888,
+      "drop_within": 0.09533333809425433,
+      "sum": 0.09758333819142231,
+      "frac_of_full": 0.929365077711976
+    },
+    {
+      "k": 8,
+      "keep_within": 0.003500000137137249,
+      "drop_within": 0.0819166712462902,
+      "sum": 0.08541667138342746,
+      "frac_of_full": 0.8134920664677082
+    },
+    {
+      "k": 16,
+      "keep_within": 0.007833333763604363,
+      "drop_within": 0.06675000271449487,
+      "sum": 0.07458333647809923,
+      "frac_of_full": 0.7103174536416916
+    },
+    {
+      "k": 32,
+      "keep_within": 0.02608333465953668,
+      "drop_within": 0.04366666839147607,
+      "sum": 0.06975000305101275,
+      "frac_of_full": 0.6642857090905818
+    },
+    {
+      "k": 64,
+      "keep_within": 0.051916668812433876,
+      "drop_within": 0.027833334325502317,
+      "sum": 0.07975000313793619,
+      "frac_of_full": 0.7595238002457816
+    },
+    {
+      "k": 128,
+      "keep_within": 0.08125000384946664,
+      "drop_within": 0.010500000440515578,
+      "sum": 0.09175000428998221,
+      "frac_of_full": 0.873809519610477
+    },
+    {
+      "k": 256,
+      "keep_within": 0.09283333737403154,
+      "drop_within": 0.0052500002008552355,
+      "sum": 0.09808333757488678,
+      "frac_of_full": 0.9341269763565772
+    },
+    {
+      "k": 512,
+      "keep_within": 0.09683333834012349,
+      "drop_within": 0.002916666776097069,
+      "sum": 0.09975000511622056,
+      "frac_of_full": 0.9499999997412993
+    },
+    {
+      "k": 1024,
+      "keep_within": 0.10500000541408856,
+      "drop_within": 0.0019166667383008946,
+      "sum": 0.10691667215238945,
+      "frac_of_full": 1.0182539679949743
+    }
+  ],
+  "split_note": "the two halves sum to less than the undamaged whole in the middle of the range, 0.66x of full at k=32, so the signal is not separable by any single cut in the spectrum",
+  "retention_summary": {
+    "n_levels": 14,
+    "min_within_over_chance": 5,
+    "mean_retention": 0.9838336343891761,
+    "median_retention": 0.9600564245352383,
+    "n_below_one": 10,
+    "mean_abs_dev_from_one": 0.05809440216531568,
+    "n_beyond_2sd_of_one": 5
+  },
+  "isotropic_noise": [
+    {
+      "level": 0.0,
+      "within": 0.09400000516325235,
+      "cross": 0.09430556009627052,
+      "retention": 1.0033139848685386,
+      "retention_sd": 0.012008589022002253
+    },
+    {
+      "level": 0.05,
+      "within": 0.05950000183656812,
+      "cross": 0.06161111334545745,
+      "retention": 1.0364651556478646,
+      "retention_sd": 0.04231554192959779
+    },
+    {
+      "level": 0.1,
+      "within": 0.043750002048909664,
+      "cross": 0.03808333528124624,
+      "retention": 0.8740263598697441,
+      "retention_sd": 0.082885923669556
+    },
+    {
+      "level": 0.15,
+      "within": 0.028750001297642786,
+      "cross": 0.027611112196205392,
+      "retention": 0.9665326162479713,
+      "retention_sd": 0.0981821011317982
+    },
+    {
+      "level": 0.2,
+      "within": 0.024083334719762206,
+      "cross": 0.02052777864608086,
+      "retention": 0.8522295581800419,
+      "retention_sd": 0.010129800849626383
+    },
+    {
+      "level": 0.3,
+      "within": 0.016083333796511095,
+      "cross": 0.013361111723093523,
+      "retention": 0.8402714426628681,
+      "retention_sd": 0.12045072324549244
+    },
+    {
+      "level": 0.5,
+      "within": 0.008166667064263796,
+      "cross": 0.006111111411074591,
+      "retention": 0.750307221496992,
+      "retention_sd": 0.17082082244863336
+    },
+    {
+      "level": 1.0,
+      "within": 0.003000000103687247,
+      "cross": 0.0019166667318333767,
+      "retention": 0.7010101034588493,
+      "retention_sd": 0.47001292978199233
+    }
+  ],
+  "keep_top_k": [
+    {
+      "level": 1024.0,
+      "within": 0.10500000541408856,
+      "cross": 0.0990277828855647,
+      "retention": 0.9431260978192831,
+      "retention_sd": 0.0028650919722767922
+    },
+    {
+      "level": 512.0,
+      "within": 0.09683333834012349,
+      "cross": 0.10100000413755576,
+      "retention": 1.0433696504263252,
+      "retention_sd": 0.023022640425222143
+    },
+    {
+      "level": 256.0,
+      "within": 0.09283333737403154,
+      "cross": 0.08891667063451476,
+      "retention": 0.957899314209798,
+      "retention_sd": 0.01198126470918647
+    },
+    {
+      "level": 128.0,
+      "within": 0.08125000384946664,
+      "cross": 0.0810833370520009,
+      "retention": 0.9979346689700759,
+      "retention_sd": 0.021017670835425557
+    },
+    {
+      "level": 64.0,
+      "within": 0.051916668812433876,
+      "cross": 0.0571111134874324,
+      "retention": 1.099990469838092,
+      "retention_sd": 0.010436124450164319
+    },
+    {
+      "level": 32.0,
+      "within": 0.02608333465953668,
+      "cross": 0.02383333429073294,
+      "retention": 0.9146854695665694,
+      "retention_sd": 0.04916227875348326
+    },
+    {
+      "level": 16.0,
+      "within": 0.007833333763604363,
+      "cross": 0.007527778196769456,
+      "retention": 0.9622135348606786,
+      "retention_sd": 0.043185681921719336
+    },
+    {
+      "level": 8.0,
+      "within": 0.003500000137137249,
+      "cross": 0.0033333334722556174,
+      "retention": 0.9507122538021899,
+      "retention_sd": 0.10752374536954701
+    },
+    {
+      "level": 4.0,
+      "within": 0.0022500000971679888,
+      "cross": 0.0017500000604842273,
+      "retention": 0.8271604910525158,
+      "retention_sd": 0.22247928370467732
+    }
+  ],
+  "drop_top_k": [
+    {
+      "level": 4.0,
+      "within": 0.09533333809425433,
+      "cross": 0.089416671026912,
+      "retention": 0.9380161338604851,
+      "retention_sd": 0.008468882626064647
+    },
+    {
+      "level": 8.0,
+      "within": 0.0819166712462902,
+      "cross": 0.07775000368969308,
+      "retention": 0.9495135576471704,
+      "retention_sd": 0.03269357484751443
+    },
+    {
+      "level": 16.0,
+      "within": 0.06675000271449487,
+      "cross": 0.06419444736093283,
+      "retention": 0.9632881415648866,
+      "retention_sd": 0.05970550592478883
+    },
+    {
+      "level": 32.0,
+      "within": 0.04366666839147607,
+      "cross": 0.04436111336366998,
+      "retention": 1.0166138803971743,
+      "retention_sd": 0.05536367527320466
+    },
+    {
+      "level": 64.0,
+      "within": 0.027833334325502317,
+      "cross": 0.025027778724001512,
+      "retention": 0.8998914682061379,
+      "retention_sd": 0.02407468607145372
+    },
+    {
+      "level": 128.0,
+      "within": 0.010500000440515578,
+      "cross": 0.011722222824270526,
+      "retention": 1.1335222552198512,
+      "retention_sd": 0.21694480807735428
+    },
+    {
+      "level": 256.0,
+      "within": 0.0052500002008552355,
+      "cross": 0.00500000019868215,
+      "retention": 0.9536062388619382,
+      "retention_sd": 0.1617702687216923
+    },
+    {
+      "level": 512.0,
+      "within": 0.002916666776097069,
+      "cross": 0.0030277778892519158,
+      "retention": 1.0435120398970148,
+      "retention_sd": 0.1994925642535587
+    },
+    {
+      "level": 1024.0,
+      "within": 0.0019166667383008946,
+      "cross": 0.002388888976484951,
+      "retention": 1.269841271454483,
+      "retention_sd": 0.2622652704380323
+    }
+  ]
+}
