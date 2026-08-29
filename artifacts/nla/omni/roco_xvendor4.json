@@ -1,0 +1,192 @@
+{
+ "question": "can a gallery encoded by one vendor be searched by any other vendor's encoder",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "modalities": [
+  "image"
+ ],
+ "n_aligned": 5000,
+ "n_train": 4000,
+ "n_holdout": 1000,
+ "directions": {
+  "qwen3omni_text -> qwen3omni_gallery": {
+   "r@1": 0.10300000756978989,
+   "r@10": 0.359000027179718,
+   "median_rank": 25.0,
+   "n": 1000
+  },
+  "gemma4_text -> qwen3omni_gallery": {
+   "r@1": 0.11300000548362732,
+   "r@10": 0.3840000033378601,
+   "median_rank": 22.0,
+   "n": 1000
+  },
+  "mistral_text -> qwen3omni_gallery": {
+   "r@1": 0.11700000613927841,
+   "r@10": 0.3920000195503235,
+   "median_rank": 21.0,
+   "n": 1000
+  },
+  "aria_text -> qwen3omni_gallery": {
+   "r@1": 0.10700000822544098,
+   "r@10": 0.3460000157356262,
+   "median_rank": 25.0,
+   "n": 1000
+  },
+  "qwen3omni_text -> gemma4_gallery": {
+   "r@1": 0.11400000751018524,
+   "r@10": 0.3970000147819519,
+   "median_rank": 18.0,
+   "n": 1000
+  },
+  "gemma4_text -> gemma4_gallery": {
+   "r@1": 0.1340000033378601,
+   "r@10": 0.4300000071525574,
+   "median_rank": 16.0,
+   "n": 1000
+  },
+  "mistral_text -> gemma4_gallery": {
+   "r@1": 0.12200000882148743,
+   "r@10": 0.4300000071525574,
+   "median_rank": 16.0,
+   "n": 1000
+  },
+  "aria_text -> gemma4_gallery": {
+   "r@1": 0.1120000034570694,
+   "r@10": 0.3970000147819519,
+   "median_rank": 18.0,
+   "n": 1000
+  },
+  "qwen3omni_text -> mistral_gallery": {
+   "r@1": 0.08500000089406967,
+   "r@10": 0.30000001192092896,
+   "median_rank": 37.0,
+   "n": 1000
+  },
+  "gemma4_text -> mistral_gallery": {
+   "r@1": 0.08400000631809235,
+   "r@10": 0.32100000977516174,
+   "median_rank": 32.0,
+   "n": 1000
+  },
+  "mistral_text -> mistral_gallery": {
+   "r@1": 0.08500000089406967,
+   "r@10": 0.30900001525878906,
+   "median_rank": 30.0,
+   "n": 1000
+  },
+  "aria_text -> mistral_gallery": {
+   "r@1": 0.07500000298023224,
+   "r@10": 0.30900001525878906,
+   "median_rank": 39.0,
+   "n": 1000
+  },
+  "qwen3omni_text -> aria_gallery": {
+   "r@1": 0.0650000050663948,
+   "r@10": 0.2540000081062317,
+   "median_rank": 49.0,
+   "n": 1000
+  },
+  "gemma4_text -> aria_gallery": {
+   "r@1": 0.0650000050663948,
+   "r@10": 0.2600000202655792,
+   "median_rank": 38.0,
+   "n": 1000
+  },
+  "mistral_text -> aria_gallery": {
+   "r@1": 0.06300000101327896,
+   "r@10": 0.2800000011920929,
+   "median_rank": 42.0,
+   "n": 1000
+  },
+  "aria_text -> aria_gallery": {
+   "r@1": 0.06400000303983688,
+   "r@10": 0.2630000114440918,
+   "median_rank": 56.0,
+   "n": 1000
+  }
+ },
+ "floors": {
+  "qwen3omni_text -> qwen3omni_gallery": {
+   "median_mean": 493.85,
+   "median_sd": 12.669944751260756
+  },
+  "gemma4_text -> qwen3omni_gallery": {
+   "median_mean": 496.65,
+   "median_sd": 12.297459087144793
+  },
+  "mistral_text -> qwen3omni_gallery": {
+   "median_mean": 498.3,
+   "median_sd": 14.068048905232027
+  },
+  "aria_text -> qwen3omni_gallery": {
+   "median_mean": 497.9,
+   "median_sd": 13.895682782792647
+  },
+  "qwen3omni_text -> gemma4_gallery": {
+   "median_mean": 498.2,
+   "median_sd": 12.882546332150332
+  },
+  "gemma4_text -> gemma4_gallery": {
+   "median_mean": 503.55,
+   "median_sd": 16.971962172948654
+  },
+  "mistral_text -> gemma4_gallery": {
+   "median_mean": 496.0,
+   "median_sd": 17.424121211699603
+  },
+  "aria_text -> gemma4_gallery": {
+   "median_mean": 498.15,
+   "median_sd": 18.818275691465463
+  },
+  "qwen3omni_text -> mistral_gallery": {
+   "median_mean": 498.7,
+   "median_sd": 13.281942628998214
+  },
+  "gemma4_text -> mistral_gallery": {
+   "median_mean": 496.55,
+   "median_sd": 14.503361679279738
+  },
+  "mistral_text -> mistral_gallery": {
+   "median_mean": 501.45,
+   "median_sd": 21.14586247945446
+  },
+  "aria_text -> mistral_gallery": {
+   "median_mean": 497.0,
+   "median_sd": 16.67932852365466
+  },
+  "qwen3omni_text -> aria_gallery": {
+   "median_mean": 495.0,
+   "median_sd": 12.895735729302148
+  },
+  "gemma4_text -> aria_gallery": {
+   "median_mean": 498.95,
+   "median_sd": 14.281018871215036
+  },
+  "mistral_text -> aria_gallery": {
+   "median_mean": 496.55,
+   "median_sd": 13.135733706192434
+  },
+  "aria_text -> aria_gallery": {
+   "median_mean": 500.2,
+   "median_sd": 16.197530676001204
+  }
+ },
+ "summary": {
+  "n_cross_pairs": 12,
+  "cross_vendor_mean_r@1": 0.09350000508129597,
+  "within_vendor_mean_r@1": 0.09650000371038914,
+  "retention": 0.9689119325000586,
+  "retention_ci": {
+   "n_bootstrap": 2000,
+   "mean": 0.9720200449979696,
+   "sd": 0.038871039382568875,
+   "ci95_low": 0.898163576804825,
+   "ci95_high": 1.0494597567287782
+  }
+ }
+}
