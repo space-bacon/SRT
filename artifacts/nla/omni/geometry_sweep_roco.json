@@ -1,0 +1,167 @@
+{
+  "domain": "roco_radiology",
+  "chance_r@1": 0.001,
+  "n_holdout": 1000,
+  "question": "does the retention curve depend on how the representation is degraded",
+  "credit": "spectral-truncation discriminator proposed by Dipankar Sarkar",
+  "finding": "yes. isotropic noise is flat across directions while the signal is not, so a fixed multiple of the per-vendor std removes the lowest variance directions first and the cross-vendor term dies first by construction. under spectral truncation, which removes the directions the within-vendor signal actually occupies, retention does not collapse: it stays between 0.83 and 1.10 from k=1024 down to k=4. at matched within r@1 of 0.0035 the two geometries give 0.951 and 0.701.",
+  "withdrawn": "the within r@1 0.015 usable boundary. it was measured under one perturbation and does not survive a change of geometry.",
+  "survives": "the failure is variance not bias under both geometries: retention sd runs 0.0029 at k=1024 to 0.2225 at k=4.",
+  "isotropic_noise": [
+    {
+      "noise_x_std": 0.0,
+      "n_repeats": 3,
+      "within_r@1": 0.094,
+      "within_sd": 0.0011,
+      "cross_r@1": 0.0943,
+      "retention": 1.0033,
+      "retention_sd": 0.012
+    },
+    {
+      "noise_x_std": 0.05,
+      "n_repeats": 3,
+      "within_r@1": 0.0595,
+      "within_sd": 0.0022,
+      "cross_r@1": 0.0616,
+      "retention": 1.0365,
+      "retention_sd": 0.0423
+    },
+    {
+      "noise_x_std": 0.1,
+      "n_repeats": 3,
+      "within_r@1": 0.0438,
+      "within_sd": 0.0029,
+      "cross_r@1": 0.0381,
+      "retention": 0.874,
+      "retention_sd": 0.0829
+    },
+    {
+      "noise_x_std": 0.15,
+      "n_repeats": 3,
+      "within_r@1": 0.0288,
+      "within_sd": 0.0028,
+      "cross_r@1": 0.0276,
+      "retention": 0.9665,
+      "retention_sd": 0.0982
+    },
+    {
+      "noise_x_std": 0.2,
+      "n_repeats": 3,
+      "within_r@1": 0.0241,
+      "within_sd": 0.0008,
+      "cross_r@1": 0.0205,
+      "retention": 0.8522,
+      "retention_sd": 0.0101
+    },
+    {
+      "noise_x_std": 0.3,
+      "n_repeats": 3,
+      "within_r@1": 0.0161,
+      "within_sd": 0.0019,
+      "cross_r@1": 0.0134,
+      "retention": 0.8403,
+      "retention_sd": 0.1205
+    },
+    {
+      "noise_x_std": 0.5,
+      "n_repeats": 3,
+      "within_r@1": 0.0082,
+      "within_sd": 0.0005,
+      "cross_r@1": 0.0061,
+      "retention": 0.7503,
+      "retention_sd": 0.1708
+    },
+    {
+      "noise_x_std": 1.0,
+      "n_repeats": 3,
+      "within_r@1": 0.003,
+      "within_sd": 0.0007,
+      "cross_r@1": 0.0019,
+      "retention": 0.701,
+      "retention_sd": 0.47
+    }
+  ],
+  "spectral_truncation": [
+    {
+      "top_k": 1024.0,
+      "n_repeats": 3,
+      "within_r@1": 0.105,
+      "within_sd": 0.0004,
+      "cross_r@1": 0.099,
+      "retention": 0.9431,
+      "retention_sd": 0.0029
+    },
+    {
+      "top_k": 512.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0968,
+      "within_sd": 0.0032,
+      "cross_r@1": 0.101,
+      "retention": 1.0434,
+      "retention_sd": 0.023
+    },
+    {
+      "top_k": 256.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0928,
+      "within_sd": 0.0018,
+      "cross_r@1": 0.0889,
+      "retention": 0.9579,
+      "retention_sd": 0.012
+    },
+    {
+      "top_k": 128.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0813,
+      "within_sd": 0.0013,
+      "cross_r@1": 0.0811,
+      "retention": 0.9979,
+      "retention_sd": 0.021
+    },
+    {
+      "top_k": 64.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0519,
+      "within_sd": 0.0008,
+      "cross_r@1": 0.0571,
+      "retention": 1.1,
+      "retention_sd": 0.0104
+    },
+    {
+      "top_k": 32.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0261,
+      "within_sd": 0.001,
+      "cross_r@1": 0.0238,
+      "retention": 0.9147,
+      "retention_sd": 0.0492
+    },
+    {
+      "top_k": 16.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0078,
+      "within_sd": 0.0004,
+      "cross_r@1": 0.0075,
+      "retention": 0.9622,
+      "retention_sd": 0.0432
+    },
+    {
+      "top_k": 8.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0035,
+      "within_sd": 0.0002,
+      "cross_r@1": 0.0033,
+      "retention": 0.9507,
+      "retention_sd": 0.1075
+    },
+    {
+      "top_k": 4.0,
+      "n_repeats": 3,
+      "within_r@1": 0.0023,
+      "within_sd": 0.0008,
+      "cross_r@1": 0.0018,
+      "retention": 0.8272,
+      "retention_sd": 0.2225
+    }
+  ]
+}

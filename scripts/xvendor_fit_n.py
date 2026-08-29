@@ -39,6 +39,14 @@ def parse_args():
                    help="add isotropic noise at this multiple of the per-vendor "
                         "std, to walk within-vendor r@1 down toward chance and "
                         "find where the retention ratio stops being evidence")
+    p.add_argument("--truncate", type=int, default=0,
+                   help="keep only the top-k of each vendor's own spectrum, "
+                        "fitted on train. A second degradation geometry: "
+                        "isotropic noise removes low-variance directions first, "
+                        "so if the shared subspace is the small-norm part the "
+                        "cross term must die first whatever is true. Truncation "
+                        "removes the SAME directions the within-vendor signal "
+                        "lives in, which separates the two readings")
     p.add_argument("--out", default="/root/xvendor4.json")
     return p.parse_args()
 
@@ -123,6 +131,20 @@ def main():
     perm0 = rng.permutation(n)
     n_te = int(a.holdout_frac * n)
     te, tr = perm0[:n_te], perm0[n_te:]
+
+    if a.truncate > 0:
+        # Basis from the train rows only, so the holdout never informs the
+        # subspace it is later scored in.
+        tr_t = torch.tensor(tr).cuda()
+        for t in X:
+            kept = []
+            for M in X[t]:
+                mu_m = M[tr_t].mean(0, keepdim=True)
+                _, _, Vh = torch.linalg.svd(M[tr_t] - mu_m, full_matrices=False)
+                B = Vh[:min(a.truncate, Vh.shape[0])]
+                kept.append((M - mu_m) @ B.T @ B + mu_m)
+            X[t] = tuple(kept)
+        print(f"kept the top {a.truncate} components of each vendor's own spectrum")
 
     Wi = torch.nn.ModuleDict(
         {t: torch.nn.Linear(X[t][0].shape[1], a.dim) for t in tags}).cuda()
