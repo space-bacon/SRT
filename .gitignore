@@ -77,3 +77,4 @@ artifacts/marketing/**/post.html
 # Space gallery assets, rebuilt by scripts/build_space_assets.py
 space_blind/gallery/
 space_blind/gallery.npz
+artifacts/nla/cxr14/
