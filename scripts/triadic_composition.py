@@ -101,6 +101,7 @@ def main():
     te_t = torch.tensor(te).cuda()
 
     X = {}
+    aniso = {}
     print()
     for v in V:
         pos = {k: i for i, k in enumerate(v["key"])}
@@ -110,13 +111,14 @@ def main():
         M = M - M[tr_t].mean(0, keepdim=True)
         cen = anisotropy(M[te_t])
         X[v["tag"]] = M
+        aniso[v["tag"]] = {"raw": raw, "centred": cen, "d": int(M.shape[1])}
         print(f"  {v['tag']:<10} d={M.shape[1]:5d}  anisotropy raw {raw:6.3f} "
               f"-> centred {cen:6.3f}")
 
     res = {"question": "do interpretants compose, or is each pairing constitutive",
            "vendors": tags, "n_aligned": n, "n_train": len(tr), "n_holdout": n_te,
-           "centred": True, "direct": {}, "composed": {}, "self_hop": {},
-           "floor": {}}
+           "centred": True, "anisotropy": aniso, "direct": {}, "composed": {},
+           "self_hop": {}, "floor": {}}
 
     print(f"\nfitting {len(tags) * (len(tags) - 1)} direct maps, "
           f"train {len(tr)} rows, holdout {n_te}")

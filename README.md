@@ -25,6 +25,8 @@ corrections back into the stream. *Meaning forks. SRT sees it.*
 > - **New (July 2026) — the portability result:** the structure these taps read is **invariant across scale, precision, and hardware**. A 22 MB linear head gives a frozen multimodal LLM image↔text retrieval at fully-trained-2018-dual-encoder level (Karpathy 5k i2t R@1 = 0.416), and the *same head* survives a 10× host reduction (31B → 3B, no loss), 4-bit quantization (−0.01 R@1, unchanged weights), and a change of silicon (CUDA datacenter → Apple-Silicon Mac: 97.0% head-space text agreement against a 99.96% same-runtime ceiling, and on-device image→text retrieval within 3 R@1 points of the datacenter reference, 0.640 vs 0.670). One artifact, every deployment tier from Raspberry-Pi-class to datacenter. See [SRT-Sunstone](#srt-sunstone--the-read-out-reads-images-cross-modal) and [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md).
 > - **New (August 2026) — the whole system runs in a browser tab:** a **382 MB** Qwen3-0.6B and a **2.1 MB** head, in WebAssembly on the CPU, search **123,287** photographs a 27B model encoded offline. No server, no GPU, no API key, and it works with the network off. The 27B never runs at inference; what ships is its reading. Crossing runtimes needs a **4 KB** anchor, without which the read-out is at chance rather than merely degraded. [Try it](https://huggingface.co/spaces/RiverRider/0.6b-reads-27b), [details below](#the-browser-tier-the-whole-system-in-a-tab).
 > - **New (August 2026) — a small model reads a large one:** a frozen **Qwen3-0.6B** (382 MB at Q4), handed one **raw gemma-4-31B** hidden state and nothing else, writes a sentence that retrieves the right photograph out of **123,287** at **median rank 25**, against 39 for a human reference caption. The gallery was built by an unrelated 27B tower, so no shared representation carries it, and both controls (another image's state, the mean state) sit at chance. The human-caption comparison is a register effect, not a captioning claim; see [§11.8](paper_nla.md) for why. [Details below](#a-06b-puts-words-to-a-31bs-internal-state).
+> - **New (August 2026) — index with one vendor, search with another:** a ridge map between two vendors' image states moves a picture from one company's encoder into another's and lands on the right picture at **r@1 0.8024** (shuffled floor 0.0007), across Qwen3-Omni 30B, Gemma-4 31B, Mistral Small 3.1 and Aria. Embedding lock-in is weaker than assumed. This also **retired our own `retention` metric**: within-vendor text-to-image is 0.1050 against 0.8024 vendor-to-vendor, so the ratio was throttled by the caption head rather than the vendor boundary. [Details below](#index-with-one-vendor-search-with-another).
+> - **New (August 2026) — frozen states beat a fine-tuned baseline on chest radiographs:** a linear probe on frozen `gemma-4-31B-it` states scores **0.7590** mean AUROC on all 112,120 images of ChestX-ray14 using the **official split**, against **0.7451** for the dataset authors' fine-tuned ResNet-50 on that same split, ahead on 12 of 14 findings. No radiology training, no fine-tuning, patient-level cluster bootstrap. [Details below](#medical-imaging--frozen-states-linear-probes-split-matched).
 > - **How (one line):** read divergence → integrate in a GRU → emit `γ, β` → `h ← h·(1+γ) + β`.
 > - **Reading order (5 min):** [Architecture](artifacts/explainers/00_architecture.png) → [Visual grammar](artifacts/explainers/00b_legend.png) → [One-token trace](artifacts/explainers/11_token_trace.png).
 
@@ -297,6 +299,112 @@ was wrong for the deployment and the correction came out of public review.
 - **Head + full measurement**: [`RiverRider/srt-browser-head-118k`](https://huggingface.co/RiverRider/srt-browser-head-118k)
 - **Raw 27B states**: [`RiverRider/srt-qwen38-coco-states`](https://huggingface.co/datasets/RiverRider/srt-qwen38-coco-states)
 - **Artifact**: [`artifacts/nla/q4/cross_runtime_browser_rung_123k.json`](artifacts/nla/q4/cross_runtime_browser_rung_123k.json)
+
+### Index with one vendor, search with another
+
+Four multimodal backbones from four companies (Qwen3-Omni 30B, Gemma-4 31B,
+Mistral Small 3.1, Aria) encode the same gallery. A ridge map fitted between
+two vendors' image states, train rows only, moves a picture from one
+vendor's space into another's and lands on the right picture:
+
+| | r@1 | pool |
+|---|---:|---:|
+| **cross-vendor image agreement, direct map** | **0.8024** | 1000 |
+| routed through a third vendor | 0.7864 | 1000 |
+| shuffled floor | 0.0007 | 1000 |
+
+Embedding lock-in is weaker than usually assumed: a gallery encoded once
+remains searchable by a different vendor's encoder.
+
+**The retention metric we started with was the wrong instrument, and this is
+the correction.** `retention = cross r@1 / within r@1` reported ~0.99 on
+photographs and held across satellite and radiology. It also refused to move
+under isotropic noise, spectral truncation, and spectral complement. The
+reason is that both terms are limited by the same component: within-vendor
+text-to-image retrieval is **0.1050** while vendor-to-vendor image agreement
+is **0.8024**. A ratio of two numbers throttled by the same caption head is
+close to insensitive to the vendor boundary it is named after. Report the
+legs separately.
+
+Anisotropy is load-bearing throughout. Raw mean pairwise cosine on the image
+states runs 0.873 to **0.998**; centering on the train mean takes all four
+vendors to 0.005 or below. Every number here is centered.
+
+- **Live demo**: <https://huggingface.co/spaces/RiverRider/srt-omni-demo>
+- **States**: [`RiverRider/srt-omni-crossvendor-states`](https://huggingface.co/datasets/RiverRider/srt-omni-crossvendor-states)
+- **Artifacts**: [`artifacts/nla/omni/triadic_composition_roco.json`](artifacts/nla/omni/triadic_composition_roco.json),
+  [`artifacts/nla/omni/geometry_compare_roco.json`](artifacts/nla/omni/geometry_compare_roco.json)
+
+### Single-pass tests could not resolve structure that iteration exposes
+
+Transporting a state around a closed cycle of vendors returns it almost
+exactly after one lap: holonomy gap **+0.0043 ± 0.0037** across 18 cycles,
+which is the same null every single-pass perturbation gave. Iterating the
+same maps to 32 hops separates them:
+
+| loop at 32 hops | crosses | encloses | return r@1 |
+|---|---|---|---:|
+| self-loop | nothing | nothing | 1.0000 |
+| there-and-back | an edge | no area | 0.7162 |
+| four-cycle | edges | area | 0.3830 |
+
+The four-cycle sits below even the worst single there-and-back (0.5020), so
+edge quality alone does not explain it. **Caveat carried on the face of the
+claim**: iterating any non-normal linear map collapses toward its dominant
+eigenspace and all three arms pay that cost. Hop counts are matched and the
+self-loop holds at 1.0000, so read the ordering rather than the size of the
+split. The practical consequence is that two models tying on a single-pass
+retrieval benchmark is not evidence they carry the same structure.
+
+- **Artifact**: [`artifacts/nla/omni/semiosis_holonomy_roco.json`](artifacts/nla/omni/semiosis_holonomy_roco.json)
+
+## Medical imaging — frozen states, linear probes, split-matched
+
+A linear probe on frozen `gemma-4-31B-it` states, no fine-tuning and no
+radiology training, on all 112,120 images of ChestX-ray14 using the
+**official `test_list.txt`** (86,524 train / 25,596 test, 30,805 patients,
+patient overlap 0). Confidence intervals use a patient-level cluster
+bootstrap, since the unit that repeats is the patient rather than the film.
+
+| ChestX-ray14, official split | mean AUROC | method |
+|---|---:|---|
+| Wang et al. 2017 (dataset authors) | 0.7451 | ResNet-50, fine-tuned end to end |
+| **ours** | **0.7590** | frozen backbone, linear probe |
+| shuffled floor | 0.5002 | |
+| view-position only | 0.5827 | |
+
+Ahead on 12 of 14 findings. Behind on Hernia (−0.0888, 227 positives in the
+whole dataset) and Fibrosis (−0.0321). Reference numbers from CheXNet (0.8414)
+and Yao (0.8027) are **not** split-matched: those are a random 70/10/20
+partition, which is the easier split, and `scripts/cxr_probe.py` labels them
+as context rather than as a head-to-head.
+
+Longitudinal CT on real NLST volumes (620 slices, 40 participants, 116
+studies): probe AUROC **0.9380**, CI [0.906, 0.964], against a position-only
+baseline of 0.5353 and a shuffled floor of 0.4651. 37 of 38 studies rank the
+lesion-bearing slice above the others. There is no leaderboard comparison for
+this because LUNA16 and LIDC score localisation with FROC, which is a
+different task, and manufacturing a comparison would be dishonest.
+
+**Scope**: these labels describe what is visible in the image, so this is
+detection and not early detection. Nothing here speaks to catching disease
+before it is apparent.
+
+- **Artifacts**: [`artifacts/nla/cxr14_probe_full112k.json`](artifacts/nla/cxr14_probe_full112k.json),
+  [`artifacts/nla/cxr14_pool_sweep.json`](artifacts/nla/cxr14_pool_sweep.json),
+  [`artifacts/nla/nlst_probe.json`](artifacts/nla/nlst_probe.json)
+
+### Banked negatives
+
+Results that cut against us, kept because they bound the claims above.
+
+| hypothesis | result |
+|---|---|
+| Attention-style pooling beats mean for focal findings | **Falsified.** max −0.0537, top16 −0.0225 on focal findings; mean-pool wins at every depth tested |
+| Depth of readout matters for the probe | **No.** 0.7600 to 0.7605 across 0.4/0.6/0.8 of backbone depth |
+| A within-vendor r@1 of 0.015 bounds where retention is usable | **Withdrawn.** It was one perturbation geometry and did not survive a change of geometry |
+| The shared subspace is a thin remnant in low-variance directions | **Refuted.** Cross tracks within at every spectral level, both keeping and dropping the head |
+| Interpretants fail to compose (triadic irreducibility) | **Negative.** Routing through a third vendor costs 0.0160 beyond one extra fitted hop; the dyadic reduction holds at one pass |
 
 ### Train from scratch
 
