@@ -1,0 +1,333 @@
+{
+ "question": "does a state transported around a closed cycle of interpretants come home",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "n_aligned": 5000,
+ "n_holdout": 1000,
+ "control": "self-loop of equal length, same shrinkage, no boundary crossed. holonomy is the gap, not the raw return",
+ "cycles": {
+  "qwen3omni -> gemma4 -> mistral -> qwen3omni": {
+   "r@1": 1.0,
+   "cos": 0.9628118402065825,
+   "norm_ratio": 0.8866366470125278,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0
+  },
+  "aria -> gemma4 -> mistral -> aria": {
+   "r@1": 1.0,
+   "cos": 0.9452241392971875,
+   "norm_ratio": 0.8625023724124834,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0
+  },
+  "qwen3omni -> gemma4 -> aria -> qwen3omni": {
+   "r@1": 0.9960000514984131,
+   "cos": 0.9399002313696415,
+   "norm_ratio": 0.8548945428941855,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.003999948501586914
+  },
+  "mistral -> gemma4 -> aria -> mistral": {
+   "r@1": 0.9970000386238098,
+   "cos": 0.9398814586505201,
+   "norm_ratio": 0.8784014610314687,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0029999613761901855
+  },
+  "qwen3omni -> mistral -> gemma4 -> qwen3omni": {
+   "r@1": 1.0,
+   "cos": 0.9642403637018743,
+   "norm_ratio": 0.8858490984950885,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0
+  },
+  "aria -> mistral -> gemma4 -> aria": {
+   "r@1": 1.0,
+   "cos": 0.9464164935652544,
+   "norm_ratio": 0.8637191190921758,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0
+  },
+  "qwen3omni -> mistral -> aria -> qwen3omni": {
+   "r@1": 1.0,
+   "cos": 0.9493017843523844,
+   "norm_ratio": 0.856136260786838,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0
+  },
+  "gemma4 -> mistral -> aria -> gemma4": {
+   "r@1": 0.9900000691413879,
+   "cos": 0.9164837575290317,
+   "norm_ratio": 0.8332650516463638,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.00999993085861206
+  },
+  "qwen3omni -> aria -> gemma4 -> qwen3omni": {
+   "r@1": 0.9980000257492065,
+   "cos": 0.9380694359408588,
+   "norm_ratio": 0.8536034504967375,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.001999974250793457
+  },
+  "mistral -> aria -> gemma4 -> mistral": {
+   "r@1": 0.9950000643730164,
+   "cos": 0.9381136002305339,
+   "norm_ratio": 0.8788311224202738,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.004999935626983643
+  },
+  "qwen3omni -> aria -> mistral -> qwen3omni": {
+   "r@1": 1.0,
+   "cos": 0.9453844473311309,
+   "norm_ratio": 0.859783994581449,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0
+  },
+  "gemma4 -> aria -> mistral -> gemma4": {
+   "r@1": 0.9910000562667847,
+   "cos": 0.9104142273095955,
+   "norm_ratio": 0.8386458835086427,
+   "length": 3,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.008999943733215332
+  },
+  "qwen3omni -> gemma4 -> mistral -> aria -> qwen3omni": {
+   "r@1": 0.9930000305175781,
+   "cos": 0.9303294552845014,
+   "norm_ratio": 0.8299543214319712,
+   "length": 4,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.006999969482421875
+  },
+  "qwen3omni -> gemma4 -> aria -> mistral -> qwen3omni": {
+   "r@1": 0.9900000691413879,
+   "cos": 0.9283725677316499,
+   "norm_ratio": 0.8309318641604079,
+   "length": 4,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.00999993085861206
+  },
+  "qwen3omni -> mistral -> gemma4 -> aria -> qwen3omni": {
+   "r@1": 0.9950000643730164,
+   "cos": 0.9312701492828761,
+   "norm_ratio": 0.8274162457527475,
+   "length": 4,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.004999935626983643
+  },
+  "qwen3omni -> mistral -> aria -> gemma4 -> qwen3omni": {
+   "r@1": 0.9940000176429749,
+   "cos": 0.9305321631813229,
+   "norm_ratio": 0.829314241570394,
+   "length": 4,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.0059999823570251465
+  },
+  "qwen3omni -> aria -> gemma4 -> mistral -> qwen3omni": {
+   "r@1": 0.9910000562667847,
+   "cos": 0.9265880294809943,
+   "norm_ratio": 0.8332655229473386,
+   "length": 4,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.008999943733215332
+  },
+  "qwen3omni -> aria -> mistral -> gemma4 -> qwen3omni": {
+   "r@1": 0.9930000305175781,
+   "cos": 0.9272944512209788,
+   "norm_ratio": 0.8311359631248338,
+   "length": 4,
+   "self_loop_r@1": 1.0,
+   "holonomy_gap": 0.006999969482421875
+  }
+ },
+ "self_loops": {
+  "qwen3omnix3": {
+   "r@1": 1.0,
+   "cos": 0.9925916421648975,
+   "norm_ratio": 0.9791174882312291
+  },
+  "gemma4x3": {
+   "r@1": 1.0,
+   "cos": 0.9925444927291319,
+   "norm_ratio": 0.983567921301266
+  },
+  "mistralx3": {
+   "r@1": 1.0,
+   "cos": 0.9907727930058823,
+   "norm_ratio": 0.9840564160749401
+  },
+  "ariax3": {
+   "r@1": 1.0,
+   "cos": 0.9907257967814833,
+   "norm_ratio": 0.9747030350621011
+  },
+  "qwen3omnix4": {
+   "r@1": 1.0,
+   "cos": 0.9906327543380924,
+   "norm_ratio": 0.9758514472069415
+  },
+  "gemma4x4": {
+   "r@1": 1.0,
+   "cos": 0.9912065122227353,
+   "norm_ratio": 0.981242285296306
+  },
+  "mistralx4": {
+   "r@1": 1.0,
+   "cos": 0.989511018778785,
+   "norm_ratio": 0.982061198068047
+  },
+  "ariax4": {
+   "r@1": 1.0,
+   "cos": 0.9884087657905481,
+   "norm_ratio": 0.9707474658869878
+  }
+ },
+ "iterated": {
+  "1": {
+   "r@1": 0.9930000305175781,
+   "cos": 0.9303294552845014,
+   "norm_ratio": 0.8299543214319727,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.9849079166761856
+  },
+  "2": {
+   "r@1": 0.9040000438690186,
+   "cos": 0.8880137616840914,
+   "norm_ratio": 0.7635031276064769,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.9808621169640921
+  },
+  "3": {
+   "r@1": 0.7850000262260437,
+   "cos": 0.8600574119635437,
+   "norm_ratio": 0.7204294536745357,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.9776463155997155
+  },
+  "4": {
+   "r@1": 0.687000036239624,
+   "cos": 0.8391339453633141,
+   "norm_ratio": 0.6871809195729582,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.974935749992875
+  },
+  "5": {
+   "r@1": 0.597000002861023,
+   "cos": 0.8224083864364279,
+   "norm_ratio": 0.6581728883549703,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.972569481640574
+  },
+  "6": {
+   "r@1": 0.5230000019073486,
+   "cos": 0.8084789476286521,
+   "norm_ratio": 0.6343698675709538,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.9704553148622265
+  },
+  "7": {
+   "r@1": 0.445000022649765,
+   "cos": 0.796539457624197,
+   "norm_ratio": 0.6137768082531,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.9685351997565349
+  },
+  "8": {
+   "r@1": 0.3830000162124634,
+   "cos": 0.786079869452589,
+   "norm_ratio": 0.5943180049702105,
+   "self_loop_r@1": 1.0,
+   "self_loop_cos": 0.9667700369400425
+  }
+ },
+ "there_and_back": {
+  "qwen3omni -> gemma4 -> qwen3omni": {
+   "hops": 32,
+   "r@1": 0.7430000305175781,
+   "cos": 0.8523996865550805
+  },
+  "qwen3omni -> mistral -> qwen3omni": {
+   "hops": 32,
+   "r@1": 0.9070000648498535,
+   "cos": 0.881351750646907
+  },
+  "qwen3omni -> aria -> qwen3omni": {
+   "hops": 32,
+   "r@1": 0.5020000338554382,
+   "cos": 0.8031410970558713
+  },
+  "gemma4 -> qwen3omni -> gemma4": {
+   "hops": 32,
+   "r@1": 0.7310000061988831,
+   "cos": 0.84884730264217
+  },
+  "gemma4 -> mistral -> gemma4": {
+   "hops": 32,
+   "r@1": 0.7040000557899475,
+   "cos": 0.8472290672247078
+  },
+  "gemma4 -> aria -> gemma4": {
+   "hops": 32,
+   "r@1": 0.51500004529953,
+   "cos": 0.799780724662684
+  },
+  "mistral -> qwen3omni -> mistral": {
+   "hops": 32,
+   "r@1": 0.9020000696182251,
+   "cos": 0.8911031520487374
+  },
+  "mistral -> gemma4 -> mistral": {
+   "hops": 32,
+   "r@1": 0.7870000600814819,
+   "cos": 0.8847135510591301
+  },
+  "mistral -> aria -> mistral": {
+   "hops": 32,
+   "r@1": 0.6970000267028809,
+   "cos": 0.8602256077397488
+  },
+  "aria -> qwen3omni -> aria": {
+   "hops": 32,
+   "r@1": 0.5860000252723694,
+   "cos": 0.8178679166511351
+  },
+  "aria -> gemma4 -> aria": {
+   "hops": 32,
+   "r@1": 0.7290000319480896,
+   "cos": 0.8366571630420716
+  },
+  "aria -> mistral -> aria": {
+   "hops": 32,
+   "r@1": 0.7910000085830688,
+   "cos": 0.8492000733314403
+  }
+ },
+ "summary": {
+  "mean_holonomy_gap_one_lap": 0.004277745882670085,
+  "sd_holonomy_gap_one_lap": 0.003693899861149293,
+  "max_holonomy_gap_one_lap": 0.00999993085861206,
+  "n_cycles": 18,
+  "hops_compared": 32,
+  "cycle_r@1_at_depth": 0.3830000162124634,
+  "cycle_cos_at_depth": 0.786079869452589,
+  "self_loop_r@1_at_depth": 1.0,
+  "there_and_back_mean_r@1_at_depth": 0.7161667048931122,
+  "there_and_back_mean_cos_at_depth": 0.8477097577216401,
+  "reading": "one lap cannot resolve this. the gap at a single pass is inside its own spread, which is what every cut-based measurement was reporting. the same maps iterated show whether the chain closes or spirals, and the controls say whether a spiral is fitting error or path."
+ }
+}
