@@ -78,6 +78,50 @@
   "24": "area",
   "36": "area"
  },
- "verdict": "area",
- "reading": "retracing means the three-way ordering reported earlier was partly an artifact of pairwise error cancellation and the enclosed-area reading should be withdrawn. area means the four-cycle penalty survives a route that retraces every edge and visits every vendor."
+ "edge_count_ladder": {
+  "1 distinct edge": {
+   "12": {
+    "r@1": 0.947,
+    "cos": 0.9042
+   },
+   "24": {
+    "r@1": 0.819,
+    "cos": 0.8678
+   },
+   "36": {
+    "r@1": 0.722,
+    "cos": 0.846
+   }
+  },
+  "2 distinct edges": {
+   "12": {
+    "r@1": 0.909,
+    "cos": 0.8907
+   },
+   "24": {
+    "r@1": 0.717,
+    "cos": 0.8465
+   },
+   "36": {
+    "r@1": 0.558,
+    "cos": 0.8194
+   }
+  },
+  "3 distinct edges": {
+   "12": {
+    "r@1": 0.813,
+    "cos": 0.8667
+   },
+   "24": {
+    "r@1": 0.564,
+    "cos": 0.8165
+   },
+   "36": {
+    "r@1": 0.388,
+    "cos": 0.786
+   }
+  }
+ },
+ "verdict": "distinct edges crossed",
+ "reading": "the palindrome tracks the four-cycle while enclosing zero area, so area is not the variable, and it retraces every edge, so retracing is not the protection either. degradation is monotone in the number of distinct vendor boundaries a route crosses, which also orders the original three-way result: the self-loop crosses none, there-and-back crosses one, the four-cycle crosses four. the enclosed-area reading is withdrawn; area was confounded with edge count."
 }

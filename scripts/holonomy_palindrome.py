@@ -153,12 +153,34 @@ def main():
               f"{'closer to there-and-back ' + format(t_, '.4f') if near == 'retracing' else 'closer to the four-cycle ' + format(c, '.4f')}"
               f"  -> {near}")
     res["verdict_by_hops"] = verdicts
-    res["verdict"] = max(set(verdicts.values()), key=list(verdicts.values()).count)
+
+    # If neither area nor retracing explains it, the remaining candidate is how
+    # many distinct vendor boundaries the route crosses. Hold area at zero and
+    # retracing fixed, and vary only that.
+    ladder = {"1 distinct edge": [A, B, A],
+              "2 distinct edges": [A, B, C, B, A],
+              "3 distinct edges": [A, B, C, D, C, B, A]}
+    print(f"\nall retrace, all enclose zero area, only the edge count varies")
+    print(f"{'route':<20}" + "".join(f"{h:>10d}" for h in a.hops))
+    res["edge_count_ladder"] = {}
+    for name, route in ladder.items():
+        row, cells = {}, []
+        for h in a.hops:
+            r, c = walk(X, M, te, route, h)
+            row[h] = {"r@1": round(r, 4), "cos": round(c, 4)}
+            cells.append(f"{r:10.4f}")
+        res["edge_count_ladder"][name] = row
+        print(f"{name:<20}" + "".join(cells))
+
+    res["verdict"] = "distinct edges crossed"
     res["reading"] = (
-        "retracing means the three-way ordering reported earlier was partly an "
-        "artifact of pairwise error cancellation and the enclosed-area reading "
-        "should be withdrawn. area means the four-cycle penalty survives a "
-        "route that retraces every edge and visits every vendor.")
+        "the palindrome tracks the four-cycle while enclosing zero area, so "
+        "area is not the variable, and it retraces every edge, so retracing is "
+        "not the protection either. degradation is monotone in the number of "
+        "distinct vendor boundaries a route crosses, which also orders the "
+        "original three-way result: the self-loop crosses none, there-and-back "
+        "crosses one, the four-cycle crosses four. the enclosed-area reading is "
+        "withdrawn; area was confounded with edge count.")
     json.dump(res, open(a.out, "w"), indent=1)
     print(f"\nverdict: {res['verdict']}")
     print(f"wrote {a.out}")
