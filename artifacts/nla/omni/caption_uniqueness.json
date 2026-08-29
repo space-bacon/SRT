@@ -1,0 +1,22 @@
+{
+  "rsicd": {
+    "n": 5000,
+    "unique_captions": 3017,
+    "unique_pct": 60.3,
+    "rows_sharing_a_caption": 2450,
+    "shared_pct": 49.0,
+    "most_repeated_count": 102,
+    "most_repeated_caption": "many green buildings and trees are located in a dense residential area.",
+    "r_at_1_ceiling": 0.603
+  },
+  "roco": {
+    "n": 5000,
+    "unique_captions": 4992,
+    "unique_pct": 99.8,
+    "rows_sharing_a_caption": 16,
+    "shared_pct": 0.3,
+    "most_repeated_count": 2,
+    "most_repeated_caption": "chest radiograph.",
+    "r_at_1_ceiling": 0.998
+  }
+}
