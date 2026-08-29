@@ -35,6 +35,10 @@ def parse_args():
     p.add_argument("--mu-from", default=None,
                    help="ABLATION ONLY: take the centering means from a saved "
                         "map instead of recomputing them on this gallery")
+    p.add_argument("--noise", type=float, default=0.0,
+                   help="add isotropic noise at this multiple of the per-vendor "
+                        "std, to walk within-vendor r@1 down toward chance and "
+                        "find where the retention ratio stops being evidence")
     p.add_argument("--out", default="/root/xvendor4.json")
     return p.parse_args()
 
@@ -99,6 +103,16 @@ def main():
         idx = np.array([pos[k] for k in order])
         X[v["tag"]] = (torch.tensor(v["item"][idx]).cuda(),
                        torch.tensor(v["text"][idx]).cuda())
+    if a.noise > 0:
+        # Degrade every vendor identically. Both terms of the ratio fall together,
+        # which is the point: it shows where retention goes once the denominator
+        # is near the floor.
+        g = torch.Generator(device="cuda").manual_seed(0)
+        for t in X:
+            it, tx = X[t]
+            it += torch.randn(it.shape, generator=g, device="cuda") * (a.noise * it.std())
+            tx += torch.randn(tx.shape, generator=g, device="cuda") * (a.noise * tx.std())
+        print(f"added isotropic noise at {a.noise}x std to every vendor")
     mods = V[0]["mod"][np.array([{k: i for i, k in enumerate(V[0]["key"])}[k]
                                  for k in order])]
     keep = sorted(set(mods.tolist()))

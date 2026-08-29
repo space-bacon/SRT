@@ -1,0 +1,108 @@
+{
+  "domain": "roco_radiology",
+  "n_holdout": 1000,
+  "chance_r@1": 0.001,
+  "vendors": [
+    "qwen3omni",
+    "gemma4",
+    "mistral",
+    "aria"
+  ],
+  "question": "where does the retention ratio stop being evidence",
+  "finding": "retention does not pin to 1.0 as within-vendor r@1 falls; it declines to 0.70 because noise destroys the cross-vendor term faster than the within-vendor term. the failure mode is variance: retention sd runs 0.012 to 0.470",
+  "usable_boundary_within_r@1": 0.015,
+  "published_domains_within_r@1": {
+    "satellite_rsicd": 0.0738,
+    "radiology_roco": 0.0965
+  },
+  "sweep": [
+    {
+      "noise_x_std": 0.0,
+      "n_repeats": 3,
+      "within_r@1": 0.094,
+      "within_sd": 0.0011,
+      "cross_r@1": 0.0943,
+      "cross_sd": 0.0009,
+      "retention": 1.0033,
+      "retention_sd": 0.012,
+      "within_x_chance": 94.0
+    },
+    {
+      "noise_x_std": 0.05,
+      "n_repeats": 3,
+      "within_r@1": 0.0595,
+      "within_sd": 0.0022,
+      "cross_r@1": 0.0616,
+      "cross_sd": 0.0008,
+      "retention": 1.0365,
+      "retention_sd": 0.0423,
+      "within_x_chance": 59.5
+    },
+    {
+      "noise_x_std": 0.1,
+      "n_repeats": 3,
+      "within_r@1": 0.0438,
+      "within_sd": 0.0029,
+      "cross_r@1": 0.0381,
+      "cross_sd": 0.0014,
+      "retention": 0.874,
+      "retention_sd": 0.0829,
+      "within_x_chance": 43.8
+    },
+    {
+      "noise_x_std": 0.15,
+      "n_repeats": 3,
+      "within_r@1": 0.0288,
+      "within_sd": 0.0028,
+      "cross_r@1": 0.0276,
+      "cross_sd": 0.0004,
+      "retention": 0.9665,
+      "retention_sd": 0.0982,
+      "within_x_chance": 28.8
+    },
+    {
+      "noise_x_std": 0.2,
+      "n_repeats": 3,
+      "within_r@1": 0.0241,
+      "within_sd": 0.0008,
+      "cross_r@1": 0.0205,
+      "cross_sd": 0.0008,
+      "retention": 0.8522,
+      "retention_sd": 0.0101,
+      "within_x_chance": 24.1
+    },
+    {
+      "noise_x_std": 0.3,
+      "n_repeats": 3,
+      "within_r@1": 0.0161,
+      "within_sd": 0.0019,
+      "cross_r@1": 0.0134,
+      "cross_sd": 0.0003,
+      "retention": 0.8403,
+      "retention_sd": 0.1205,
+      "within_x_chance": 16.1
+    },
+    {
+      "noise_x_std": 0.5,
+      "n_repeats": 3,
+      "within_r@1": 0.0082,
+      "within_sd": 0.0005,
+      "cross_r@1": 0.0061,
+      "cross_sd": 0.0013,
+      "retention": 0.7503,
+      "retention_sd": 0.1708,
+      "within_x_chance": 8.2
+    },
+    {
+      "noise_x_std": 1.0,
+      "n_repeats": 3,
+      "within_r@1": 0.003,
+      "within_sd": 0.0007,
+      "cross_r@1": 0.0019,
+      "cross_sd": 0.001,
+      "retention": 0.701,
+      "retention_sd": 0.47,
+      "within_x_chance": 3.0
+    }
+  ]
+}
