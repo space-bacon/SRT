@@ -67,6 +67,8 @@ def parse_args():
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--wd", type=float, default=1e-2)
     p.add_argument("--bootstrap", type=int, default=1000)
+    p.add_argument("--save-probe", help="write the fitted weights, plus the "
+                                        "train mean and sd they require")
     p.add_argument("--out", default="/root/cxr14_probe.json")
     return p.parse_args()
 
@@ -117,10 +119,19 @@ def boot_ci(scores, labels, n, rng, groups=None):
             "ci95_high": round(float(np.percentile(vals, 97.5)), 4)}
 
 
-def fit(Xtr, Ytr, Xte, epochs, lr, wd):
+def pick_device():
+    if torch.cuda.is_available():
+        return "cuda"
+    if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
+
+
+def fit(Xtr, Ytr, Xte, epochs, lr, wd, return_weights=False):
     """One Linear(d, 14) under BCE is fourteen independent logistic regressions."""
-    W = torch.zeros(Xtr.shape[1], Ytr.shape[1], device="cuda", requires_grad=True)
-    b = torch.zeros(Ytr.shape[1], device="cuda", requires_grad=True)
+    dev = Xtr.device
+    W = torch.zeros(Xtr.shape[1], Ytr.shape[1], device=dev, requires_grad=True)
+    b = torch.zeros(Ytr.shape[1], device=dev, requires_grad=True)
     opt = torch.optim.AdamW([W, b], lr=lr, weight_decay=wd)
     for _ in range(epochs):
         loss = F.binary_cross_entropy_with_logits(Xtr @ W + b, Ytr)
@@ -128,7 +139,8 @@ def fit(Xtr, Ytr, Xte, epochs, lr, wd):
         loss.backward()
         opt.step()
     with torch.no_grad():
-        return (Xte @ W + b).cpu().numpy()
+        S = (Xte @ W + b).cpu().numpy()
+    return (S, W.detach().cpu(), b.detach().cpu()) if return_weights else S
 
 
 def main():
@@ -161,22 +173,25 @@ def main():
                 Y[i, j] = 1.0
     is_ap = np.array([r["view"] == "AP" for r in rows], np.float32)
 
-    Xt = torch.tensor(X, device="cuda")
+    dev = pick_device()
+    print(f"  device: {dev}")
+    Xt = torch.tensor(X, device=dev)
     # Centred on the training split only, so the holdout is untouched.
-    mu = Xt[torch.tensor(tr)].mean(0, keepdim=True)
-    sd = Xt[torch.tensor(tr)].std(0, keepdim=True) + 1e-6
+    mu = Xt[torch.tensor(tr, device=dev)].mean(0, keepdim=True)
+    sd = Xt[torch.tensor(tr, device=dev)].std(0, keepdim=True) + 1e-6
     Xt = (Xt - mu) / sd
-    Xtr, Xte = Xt[torch.tensor(tr)], Xt[torch.tensor(te)]
-    Ytr = torch.tensor(Y[tr], device="cuda")
+    Xtr, Xte = (Xt[torch.tensor(tr, device=dev)],
+                Xt[torch.tensor(te, device=dev)])
+    Ytr = torch.tensor(Y[tr], device=dev)
 
     print("\nfitting probe", flush=True)
-    S = fit(Xtr, Ytr, Xte, a.epochs, a.lr, a.wd)
+    S, Wp, bp = fit(Xtr, Ytr, Xte, a.epochs, a.lr, a.wd, return_weights=True)
 
     print("fitting shuffled-label floor", flush=True)
     Ysh = Y[tr].copy()
     for j in range(Ysh.shape[1]):
         rng.shuffle(Ysh[:, j])
-    S_sh = fit(Xtr, torch.tensor(Ysh, device="cuda"), Xte, a.epochs, a.lr, a.wd)
+    S_sh = fit(Xtr, torch.tensor(Ysh, device=dev), Xte, a.epochs, a.lr, a.wd)
 
     Yte = Y[te]
     pat_te = np.array([r["patient_id"] for r, m in zip(rows, te) if m])
@@ -233,6 +248,15 @@ def main():
     }
     json.dump({"summary": summary, "per_finding": out,
                "states": a.states}, open(a.out, "w"), indent=2)
+    if a.save_probe:
+        # mu and sd travel with the weights: applied to anything else they are
+        # the wrong normalisation and the scores are meaningless.
+        torch.save({"W": Wp, "b": bp, "mu": mu.cpu(), "sd": sd.cpu(),
+                    "findings": FINDINGS, "d": int(X.shape[1]),
+                    "backbone": "google/gemma-4-31B-it",
+                    "split": "official test_list.txt",
+                    "mean_auroc": round(mean_auroc, 4)}, a.save_probe)
+        print(f"probe weights -> {a.save_probe}")
     print(f"\nmean AUROC {mean_auroc:.4f}   shuffled floor "
           f"{summary['mean_shuffled_floor']:.4f}   view-only "
           f"{summary['mean_view_only']:.4f}")
