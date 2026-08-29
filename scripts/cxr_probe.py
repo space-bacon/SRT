@@ -42,6 +42,22 @@ REFERENCES = {"wang2017": 0.7381, "yao2017": 0.8027, "chexnet": 0.8414}
 REFERENCE_SPLIT = "random 70/10/20 patient-disjoint, not the official list"
 CHEXNET = REFERENCES["chexnet"]
 
+# The one number that IS a head-to-head. Wang et al. 1705.02315v5 Table 17,
+# ChestX-ray14 column, added in v5 precisely to report "the published data
+# split". Fine-tuned ResNet-50 against our frozen backbone and linear probe.
+MATCHED = {
+    "source": "Wang et al. 2017, arXiv:1705.02315v5 Table 17, ChestX-ray14 column",
+    "split": "official test_list.txt, same as ours",
+    "method": "ImageNet-pretrained ResNet-50, fine-tuned end to end",
+    "mean_auroc": 0.7451,
+    "per_finding": {
+        "Atelectasis": 0.7003, "Cardiomegaly": 0.8100, "Effusion": 0.7585,
+        "Infiltration": 0.6614, "Mass": 0.6933, "Nodule": 0.6687,
+        "Pneumonia": 0.6580, "Pneumothorax": 0.7993, "Consolidation": 0.7032,
+        "Edema": 0.8052, "Emphysema": 0.8330, "Fibrosis": 0.7859,
+        "Pleural_Thickening": 0.6835, "Hernia": 0.8717}}
+
+
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -200,6 +216,10 @@ def main():
         "mean_view_only": round(float(np.nanmean(
             [out[f]["view_only_baseline"] for f in FINDINGS])), 4),
         "findings_beating_view_only": n_beat,
+        "split_matched_baseline": MATCHED,
+        "vs_split_matched": round(mean_auroc - MATCHED["mean_auroc"], 4),
+        "beats_split_matched_on": sum(
+            1 for f in FINDINGS if out[f]["auroc"] > MATCHED["per_finding"][f]),
         "references_not_split_matched": REFERENCES,
         "reference_split": REFERENCE_SPLIT,
         "our_split": "official test_list.txt",
@@ -217,7 +237,13 @@ def main():
           f"{summary['mean_shuffled_floor']:.4f}   view-only "
           f"{summary['mean_view_only']:.4f}")
     print(f"{n_beat}/14 findings beat the view-only baseline")
-    print(f"published refs (DIFFERENT split, {REFERENCE_SPLIT}): "
+    print("\nSPLIT-MATCHED, both on the official test_list.txt:")
+    print(f"  Wang et al. 2017, ResNet-50 fine-tuned end to end  "
+          f"{MATCHED['mean_auroc']:.4f}")
+    print(f"  ours, frozen backbone + linear probe               "
+          f"{mean_auroc:.4f}   {mean_auroc - MATCHED['mean_auroc']:+.4f}, "
+          f"ahead on {summary['beats_split_matched_on']}/14")
+    print(f"context only, NOT our split ({REFERENCE_SPLIT}): "
           f"Wang {REFERENCES['wang2017']}, Yao {REFERENCES['yao2017']}, "
           f"CheXNet {REFERENCES['chexnet']}")
     print(f"\nwrote {a.out}")

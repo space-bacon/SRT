@@ -10,7 +10,31 @@
     "n_test_patients": 2797,
     "images_per_test_patient": 9.15,
     "bootstrap_unit": "patient",
-    "note": "detection, not early detection: these labels describe what is visible in the image, so nothing here speaks to catching disease before it is apparent"
+    "note": "detection, not early detection: these labels describe what is visible in the image, so nothing here speaks to catching disease before it is apparent",
+    "split_matched_baseline": {
+      "source": "Wang et al. 2017, arXiv:1705.02315v5 Table 17, ChestX-ray14 column",
+      "split": "official test_list.txt, same as ours",
+      "method": "ImageNet-pretrained ResNet-50, fine-tuned end to end",
+      "mean_auroc": 0.7451,
+      "per_finding": {
+        "Atelectasis": 0.7003,
+        "Cardiomegaly": 0.81,
+        "Effusion": 0.7585,
+        "Infiltration": 0.6614,
+        "Mass": 0.6933,
+        "Nodule": 0.6687,
+        "Pneumonia": 0.658,
+        "Pneumothorax": 0.7993,
+        "Consolidation": 0.7032,
+        "Edema": 0.8052,
+        "Emphysema": 0.833,
+        "Fibrosis": 0.7859,
+        "Pleural_Thickening": 0.6835,
+        "Hernia": 0.8717
+      }
+    },
+    "vs_split_matched": 0.0139,
+    "beats_split_matched_on": 12
   },
   "per_finding": {
     "Atelectasis": {
