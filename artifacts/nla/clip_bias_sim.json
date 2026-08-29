@@ -1,0 +1,36 @@
+{
+  "metric": "(1 - trap_rate) + max(0, delta)",
+  "true_gain_compared_against": 0.01,
+  "n_draws": 400000,
+  "finding": "clipping a noisy gain at zero gives a model with no real adapter benefit a positive expected contribution of sigma/sqrt(2*pi), so noisier measurement scores higher",
+  "rows": [
+    {
+      "sigma": 0.005,
+      "bias_at_zero_gain": 0.002,
+      "analytic_sigma_over_sqrt_2pi": 0.00199,
+      "p_zero_gain_outranks_true_gain": 0.0755,
+      "pct_zero_gain_outranks_true_gain": 7.6
+    },
+    {
+      "sigma": 0.01,
+      "bias_at_zero_gain": 0.00398,
+      "analytic_sigma_over_sqrt_2pi": 0.00399,
+      "p_zero_gain_outranks_true_gain": 0.2119,
+      "pct_zero_gain_outranks_true_gain": 21.2
+    },
+    {
+      "sigma": 0.02,
+      "bias_at_zero_gain": 0.00796,
+      "analytic_sigma_over_sqrt_2pi": 0.00798,
+      "p_zero_gain_outranks_true_gain": 0.2963,
+      "pct_zero_gain_outranks_true_gain": 29.6
+    },
+    {
+      "sigma": 0.05,
+      "bias_at_zero_gain": 0.02001,
+      "analytic_sigma_over_sqrt_2pi": 0.01995,
+      "p_zero_gain_outranks_true_gain": 0.3458,
+      "pct_zero_gain_outranks_true_gain": 34.6
+    }
+  ]
+}

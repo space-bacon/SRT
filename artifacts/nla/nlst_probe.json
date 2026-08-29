@@ -1,0 +1,24 @@
+{
+  "auroc": 0.938,
+  "auroc_ci": {
+    "ci95_low": 0.906,
+    "ci95_high": 0.9642
+  },
+  "position_only_baseline": 0.5353,
+  "shuffled_floor": 0.4651,
+  "beats_position": true,
+  "paired_within_study": {
+    "n_studies": 38,
+    "n_lesion_higher": 37,
+    "mean_margin": 10.1643
+  },
+  "lesion_score_by_timepoint": {
+    "0": 5.4214,
+    "1": 6.4801,
+    "2": 6.1879
+  },
+  "n_train": 424,
+  "n_test": 196,
+  "n_participants": 40,
+  "note": "no outcomes in this subset: lesion-vs-healthy discrimination, not early detection"
+}
