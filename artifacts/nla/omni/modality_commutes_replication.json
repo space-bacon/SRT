@@ -1,0 +1,36 @@
+{
+ "question": "does routing vendor-first beat a directly fitted cross-vendor text-to-image map, and does it hold across domains",
+ "verdict": "photographs only. the ordering effect points the same way in all three domains but only COCO clears significance. the deployable recipe claimed on 2026-08-29 is scoped to photographs and is NOT established on radiology or satellite.",
+ "domains": {
+  "coco": {
+   "mean_direct": 0.1979166679084301,
+   "mean_vendor_then_modality": 0.21491666759053865,
+   "delta": 0.017,
+   "vendor_first_beats_modality_first": 12,
+   "vendor_first_beats_direct": 12,
+   "n_pairs": 12,
+   "binomial_p_one_sided": 0.0002,
+   "significant_at_0.05": true
+  },
+  "roco": {
+   "mean_direct": 0.060916666562358536,
+   "mean_vendor_then_modality": 0.0665000001899898,
+   "delta": 0.0056,
+   "vendor_first_beats_modality_first": 8,
+   "vendor_first_beats_direct": 8,
+   "n_pairs": 12,
+   "binomial_p_one_sided": 0.1938,
+   "significant_at_0.05": false
+  },
+  "rsicd": {
+   "mean_direct": 0.04783333403368791,
+   "mean_vendor_then_modality": 0.04950000004221996,
+   "delta": 0.0017,
+   "vendor_first_beats_modality_first": 9,
+   "vendor_first_beats_direct": 5,
+   "n_pairs": 12,
+   "binomial_p_one_sided": 0.8062,
+   "significant_at_0.05": false
+  }
+ }
+}

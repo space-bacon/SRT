@@ -46,10 +46,13 @@ DEV = "cuda" if torch.cuda.is_available() else "cpu"
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--dir", default="artifacts/nla/omni")
+    p.add_argument("--domain", default=None,
+                   help="roco, rsicd, ... uses states/{domain}_{vendor}.npz and "
+                        "{domain}_manifest.json. Omit for the sharded COCO set.")
     p.add_argument("--manifest-glob", default="manifests/xv_manifest_s*.json")
     p.add_argument("--holdout-frac", type=float, default=0.2)
     p.add_argument("--ridge", type=float, default=1e-2)
-    p.add_argument("--out", default="artifacts/nla/omni/modality_commutes.json")
+    p.add_argument("--out", default=None)
     return p.parse_args()
 
 
@@ -79,33 +82,53 @@ def main():
         return sorted(fs, key=lambda f: int(re.search(r"_s(\d+)\.", f).group(1)))
 
     tags = ["qwen3omni", "gemma4", "mistral", "aria"]
-    # Each vendor was sharded on its own manifest; they are not interchangeable
-    # and a mismatched pair silently misaligns every row after the first drop.
-    SRC = {"qwen3omni": ("omni_states_s*.npz", "manifests/omni_manifest_s*.json"),
-           "gemma4": ("gemma4_states_s*.npz", "manifests/xv_manifest_s*.json"),
-           "mistral": ("mistral_states_s*.npz", "img_s*.json"),
-           "aria": ("aria_states_s*.npz", "img_s*.json")}
+    a.out = a.out or os.path.join(
+        a.dir, f"modality_commutes{'_' + a.domain if a.domain else ''}.json")
 
-    print(f"device {DEV}")
+    print(f"device {DEV}   domain {a.domain or 'coco'}")
     V = {}
-    for t in tags:
-        sf, mans = shards(SRC[t][0]), shards(SRC[t][1])
-        if len(sf) != len(mans) or not sf:
-            print(f"  {t}: {len(sf)} state shards vs {len(mans)} manifests, skipping")
-            continue
-        img, txt, keys = [], [], []
-        for s, m in zip(sf, mans):
-            z = np.load(s)
-            rows = json.load(open(m))["rows"]
+    if a.domain:
+        # One unsharded file per vendor against one shared manifest.
+        rows = json.load(open(os.path.join(a.dir, f"{a.domain}_manifest.json")))["rows"]
+        for t in tags:
+            f = os.path.join(a.dir, "states", f"{a.domain}_{t}.npz")
+            if not os.path.exists(f):
+                print(f"  {t}: no {f}, skipping")
+                continue
+            z = np.load(f)
             ok = z["ok"]
             if len(rows) != len(ok):
-                raise SystemExit(f"{t}: {m} has {len(rows)} rows, {s} has {len(ok)}")
-            img.append(z["item"][ok])
-            txt.append(z["text"][ok])
-            keys += [r["key"] for r, k in zip(rows, ok) if k]
-        V[t] = {"img": np.concatenate(img), "txt": np.concatenate(txt),
-                "key": np.array(keys)}
-        print(f"  {t:<10} {len(keys)} rows, d={V[t]['img'].shape[1]}")
+                raise SystemExit(f"{t}: manifest {len(rows)} rows, states {len(ok)}")
+            V[t] = {"img": z["item"][ok], "txt": z["text"][ok],
+                    "key": np.array([r["key"] for r, k in zip(rows, ok) if k])}
+            print(f"  {t:<10} {len(V[t]['key'])} rows, d={V[t]['img'].shape[1]}")
+    else:
+        # Each vendor was sharded on its own manifest; they are not
+        # interchangeable and a mismatched pair silently misaligns every row
+        # after the first drop.
+        SRC = {"qwen3omni": ("omni_states_s*.npz", "manifests/omni_manifest_s*.json"),
+               "gemma4": ("gemma4_states_s*.npz", "manifests/xv_manifest_s*.json"),
+               "mistral": ("mistral_states_s*.npz", "img_s*.json"),
+               "aria": ("aria_states_s*.npz", "img_s*.json")}
+        for t in tags:
+            sf, mans = shards(SRC[t][0]), shards(SRC[t][1])
+            if len(sf) != len(mans) or not sf:
+                print(f"  {t}: {len(sf)} shards vs {len(mans)} manifests, skipping")
+                continue
+            img, txt, keys = [], [], []
+            for s, m in zip(sf, mans):
+                z = np.load(s)
+                rows = json.load(open(m))["rows"]
+                ok = z["ok"]
+                if len(rows) != len(ok):
+                    raise SystemExit(f"{t}: {m} has {len(rows)} rows, "
+                                     f"{s} has {len(ok)}")
+                img.append(z["item"][ok])
+                txt.append(z["text"][ok])
+                keys += [r["key"] for r, k in zip(rows, ok) if k]
+            V[t] = {"img": np.concatenate(img), "txt": np.concatenate(txt),
+                    "key": np.array(keys)}
+            print(f"  {t:<10} {len(keys)} rows, d={V[t]['img'].shape[1]}")
     tags = [t for t in tags if t in V]
 
     shared = set(V[tags[0]]["key"])

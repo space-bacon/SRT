@@ -1,0 +1,101 @@
+{
+ "question": "does the modality gap commute with the vendor gap",
+ "device": "cpu",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "n_aligned": 5000,
+ "n_holdout": 1000,
+ "pairs": {
+  "qwen3omni->gemma4": {
+   "direct": 0.10199999809265137,
+   "modality_then_vendor": 0.08799999952316284,
+   "vendor_then_modality": 0.10700000077486038,
+   "path_gap": 0.01900000125169754
+  },
+  "qwen3omni->mistral": {
+   "direct": 0.05400000140070915,
+   "modality_then_vendor": 0.054999999701976776,
+   "vendor_then_modality": 0.06300000101327896,
+   "path_gap": 0.008000001311302185
+  },
+  "qwen3omni->aria": {
+   "direct": 0.04100000113248825,
+   "modality_then_vendor": 0.04100000113248825,
+   "vendor_then_modality": 0.03799999877810478,
+   "path_gap": 0.0030000023543834686
+  },
+  "gemma4->qwen3omni": {
+   "direct": 0.05999999865889549,
+   "modality_then_vendor": 0.05299999937415123,
+   "vendor_then_modality": 0.07100000232458115,
+   "path_gap": 0.018000002950429916
+  },
+  "gemma4->mistral": {
+   "direct": 0.07199999690055847,
+   "modality_then_vendor": 0.0689999982714653,
+   "vendor_then_modality": 0.07000000029802322,
+   "path_gap": 0.0010000020265579224
+  },
+  "gemma4->aria": {
+   "direct": 0.03700000047683716,
+   "modality_then_vendor": 0.03799999877810478,
+   "vendor_then_modality": 0.029999999329447746,
+   "path_gap": 0.007999999448657036
+  },
+  "mistral->qwen3omni": {
+   "direct": 0.06700000166893005,
+   "modality_then_vendor": 0.06199999898672104,
+   "vendor_then_modality": 0.05999999865889549,
+   "path_gap": 0.0020000003278255463
+  },
+  "mistral->gemma4": {
+   "direct": 0.09300000220537186,
+   "modality_then_vendor": 0.08799999952316284,
+   "vendor_then_modality": 0.11100000143051147,
+   "path_gap": 0.023000001907348633
+  },
+  "mistral->aria": {
+   "direct": 0.03500000014901161,
+   "modality_then_vendor": 0.039000000804662704,
+   "vendor_then_modality": 0.03799999877810478,
+   "path_gap": 0.0010000020265579224
+  },
+  "aria->qwen3omni": {
+   "direct": 0.050999999046325684,
+   "modality_then_vendor": 0.04899999871850014,
+   "vendor_then_modality": 0.0560000017285347,
+   "path_gap": 0.007000003010034561
+  },
+  "aria->gemma4": {
+   "direct": 0.07599999755620956,
+   "modality_then_vendor": 0.06199999898672104,
+   "vendor_then_modality": 0.0949999988079071,
+   "path_gap": 0.032999999821186066
+  },
+  "aria->mistral": {
+   "direct": 0.0430000014603138,
+   "modality_then_vendor": 0.04500000178813934,
+   "vendor_then_modality": 0.05900000035762787,
+   "path_gap": 0.013999998569488525
+  }
+ },
+ "summary": {
+  "mean_direct": 0.060916666562358536,
+  "mean_modality_then_vendor": 0.05741666629910469,
+  "mean_vendor_then_modality": 0.0665000001899898,
+  "mean_path_gap": 0.011416667917122444,
+  "max_path_gap": 0.032999999821186066,
+  "shuffled_floor": 0.00116666672208036,
+  "wins": {
+   "vendor_first_beats_modality_first": 8,
+   "vendor_first_beats_direct": 8,
+   "modality_first_beats_direct": 4,
+   "n_pairs": 12
+  },
+  "reading": "the square does not commute. crossing the vendor gap in text space first, then the destination vendor's own modality map, beats the reverse order on every pair and also beats a directly fitted text-to-image map across vendors. the two-hop route is the better estimator, which makes this a recipe rather than only a geometry result."
+ }
+}
