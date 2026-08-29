@@ -32,11 +32,12 @@ emoji: 🫁
 colorFrom: indigo
 colorTo: gray
 sdk: gradio
-sdk_version: 4.44.0
-python_version: "3.11"
+sdk_version: "6.19.0"
 app_file: app.py
+python_version: "3.11"
 pinned: false
 license: apache-2.0
+short_description: 339 KB linear probe beats a fine-tuned ResNet-50
 ---
 
 A 339 KB `Linear(5376, 14)` probe on frozen `google/gemma-4-31B-it` states,
@@ -48,7 +49,15 @@ The backbone does not run here. The probe runs live on precomputed states.
 Research artifact, not a diagnostic device. Detection, not early detection.
 """
 
-REQS = "gradio==4.44.0\ntorch\nnumpy\nhuggingface_hub\n"
+# gradio 6 is what every other SRT Space already runs, and 6.19.0 is the exact
+# version this app was built and exercised against locally before publishing.
+# Chasing 4.44 cost four builds: it pulls pydub (audioop, gone in 3.13) and its
+# client dies in get_api_info() with "argument of type 'bool' is not iterable".
+REQS = ("gradio==6.19.0\n"
+        "huggingface_hub>=0.24\n"
+        "torch>=2.6\n"
+        "numpy\n"
+        "pillow\n")
 
 
 def main():

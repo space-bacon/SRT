@@ -13,6 +13,7 @@ import gradio as gr
 import numpy as np
 import torch
 from huggingface_hub import hf_hub_download
+from PIL import Image
 
 MODEL_REPO = "RiverRider/srt-cxr14-linear-probe"
 DATA_REPO = "RiverRider/srt-cxr14-frozen-probe"
@@ -49,9 +50,11 @@ def read_film(i):
     table = [[f, round(float(p), 3), "yes" if f in truth else ""] for f, p in rows]
     head = (f"**{KEYS[i]}**, view {VIEW[i]}, held out from training.\n\n"
             f"Reported findings: {', '.join(sorted(truth)) or 'none'}")
-    img = hf_hub_download(DATA_REPO, f"demo/images/{str(KEYS[i])[:-4]}.jpg",
-                          repo_type="dataset")
-    return img, head, table
+    # Hand gradio the decoded image rather than the cache path, which keeps
+    # this independent of whatever the SDK currently allows to be served.
+    p = hf_hub_download(DATA_REPO, f"demo/images/{str(KEYS[i])[:-4]}.jpg",
+                        repo_type="dataset")
+    return Image.open(p).convert("L"), head, table
 
 
 def controls():
