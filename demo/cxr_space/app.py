@@ -4,7 +4,7 @@ Most medical imaging demos show a heatmap and ask you to trust it. This one
 shows the floor and the shortcut next to the result, because a bare AUROC on
 this dataset is not interpretable and the controls are the interesting part.
 
-The 347 KB probe runs live on precomputed frozen states, so the 31B backbone
+The 339 KB probe runs live on precomputed frozen states, so the 31B backbone
 never runs here. That is the claim being demonstrated rather than described.
 """
 import json
@@ -68,7 +68,7 @@ def controls():
 
 with gr.Blocks(title="ChestX-ray14: frozen features, linear probe") as demo:
     gr.Markdown(
-        "# A 347 KB linear probe reads chest radiographs\n"
+        "# A 339 KB linear probe reads chest radiographs\n"
         "`Linear(5376, 14)` on frozen `google/gemma-4-31B-it` states. No "
         "fine-tuning, no radiology pretraining. On the **official** "
         "ChestX-ray14 split it scores **0.7590** mean AUROC against **0.7451** "
@@ -104,7 +104,7 @@ with gr.Blocks(title="ChestX-ray14: frozen features, linear probe") as demo:
             "high score involving no pathology. A finding that fails to clear "
             "it has not been detected. The baseline is folded, because a value "
             "far below 0.5 is strongly predictive once flipped: Hernia's raw "
-            "view-only is 0.1808, which is 0.8192 of shortcut.")
+            "view-only is 0.3436, which is 0.6564 of shortcut.")
         gr.Dataframe(controls(),
                      headers=["finding", "probe", "shuffled floor",
                               "view-only", "beats view"],

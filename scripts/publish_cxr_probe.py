@@ -98,8 +98,8 @@ probe refit. Anything above 0.5 on held-out data is leakage or a bug.
 patients, so view alone is a real route to a high AUROC that involves no
 pathology. A finding that does not clear this baseline has not been detected.
 The baseline is **folded** (`max(vw, 1-vw)`): Hernia's raw view-only AUROC is
-0.1808, which is 0.8192 of shortcut once flipped, and reporting 0.1808 would
-have flattered the probe.
+0.3436, which is 0.6564 of shortcut once flipped, and reporting the raw figure
+would have flattered the probe.
 
 **Patient-level cluster bootstrap.** Confidence intervals resample *patients*,
 not images. The test split is 25,596 films from 2,797 patients, roughly 9 per

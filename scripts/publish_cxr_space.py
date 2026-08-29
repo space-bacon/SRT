@@ -38,7 +38,7 @@ pinned: false
 license: apache-2.0
 ---
 
-A 347 KB `Linear(5376, 14)` probe on frozen `google/gemma-4-31B-it` states,
+A 339 KB `Linear(5376, 14)` probe on frozen `google/gemma-4-31B-it` states,
 scoring 0.7590 mean AUROC on the official ChestX-ray14 split against 0.7451 for
 the dataset authors' fine-tuned ResNet-50.
 

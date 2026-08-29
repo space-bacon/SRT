@@ -98,7 +98,7 @@ films from 2,797 patients, about 9 each, and those films are not independent.
 Resampling images instead of patients gives intervals roughly 1.5x too narrow.
 
 The view-only baseline is **folded** (`max(vw, 1-vw)`). Hernia's raw view-only
-AUROC is 0.1808, which is 0.8192 of shortcut once flipped, and reporting the raw
+AUROC is 0.3436, which is 0.6564 of shortcut once flipped, and reporting the raw
 figure would have flattered the probe.
 
 ## Usage
