@@ -52,7 +52,7 @@ augmentation. All 112,120 images of NIH ChestX-ray14, official `test_list.txt`.
 |---|---:|---:|
 | Wang et al. 2017 (dataset authors) | 0.7451 | ~25 M, fine-tuned end to end |
 | **this probe** | **0.7590** | **75,278** |
-| view-position only | 0.5827 | shortcut baseline |
+| view-position only | 0.5896 | shortcut baseline |
 | shuffled labels | 0.5002 | refit floor |
 
 Ahead on **12 of 14** findings. **14 of 14** clear the view-position baseline.

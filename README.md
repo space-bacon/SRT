@@ -371,7 +371,7 @@ bootstrap, since the unit that repeats is the patient rather than the film.
 | Wang et al. 2017 (dataset authors) | 0.7451 | ResNet-50, fine-tuned end to end |
 | **ours** | **0.7590** | frozen backbone, linear probe |
 | shuffled floor | 0.5002 | |
-| view-position only | 0.5827 | |
+| view-position only | 0.5896 | |
 
 Ahead on 12 of 14 findings. Behind on Hernia (−0.0888, 227 positives in the
 whole dataset) and Fibrosis (−0.0321). Reference numbers from CheXNet (0.8414)

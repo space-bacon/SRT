@@ -44,7 +44,7 @@ under BCE, which is fourteen logistic regressions.
 |---|---:|---|
 | Wang et al. 2017 (dataset authors) | 0.7451 | ResNet-50, fine-tuned end to end |
 | **this probe** | **0.7590** | frozen backbone, linear probe |
-| view-position only | 0.5827 | shortcut baseline |
+| view-position only | 0.5896 | shortcut baseline |
 | shuffled labels | 0.5002 | refit floor |
 
 Ahead on **12 of 14** findings.
@@ -84,7 +84,7 @@ split-matched row is the head-to-head above and the rest is context.
 | Consolidation | 0.7107 | 0.7032 | +0.0075 |
 | Pneumonia | 0.6600 | 0.6580 | +0.0020 |
 | Fibrosis | 0.7538 | 0.7859 | -0.0321 |
-| Hernia | 0.7829 | 0.8717 | -0.0888 |
+| Hernia | 0.7828 | 0.8717 | -0.0889 |
 
 Hernia has 227 positives in the entire dataset and 86 in the test split, so that
 column is thin for everyone and should not carry weight in either direction.
@@ -94,7 +94,7 @@ column is thin for everyone and should not carry weight in either direction.
 **Shuffled labels (0.5002).** Labels permuted within the training split and the
 probe refit. Anything above 0.5 on held-out data is leakage or a bug.
 
-**View position only (0.5827).** Portable AP films are taken of sicker, bedbound
+**View position only (0.5896).** Portable AP films are taken of sicker, bedbound
 patients, so view alone is a real route to a high AUROC that involves no
 pathology. A finding that does not clear this baseline has not been detected.
 The baseline is **folded** (`max(vw, 1-vw)`): Hernia's raw view-only AUROC is
