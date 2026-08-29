@@ -32,7 +32,15 @@ import torch.nn.functional as F
 FINDINGS = ["Atelectasis", "Cardiomegaly", "Effusion", "Infiltration", "Mass",
             "Nodule", "Pneumonia", "Pneumothorax", "Consolidation", "Edema",
             "Emphysema", "Fibrosis", "Pleural_Thickening", "Hernia"]
-CHEXNET = 0.841
+# Published references, all from CheXNet Table 2 (arXiv:1711.05225v3). They are
+# NOT split-matched to us: that paper randomly split 70/10/20, patient-disjoint
+# but its own partition, while we use the official test_list.txt. The official
+# split is the harder one, which is why Wang et al. revised their paper to add
+# official-split numbers in an appendix. Quote these as context, never as a
+# head-to-head.
+REFERENCES = {"wang2017": 0.7381, "yao2017": 0.8027, "chexnet": 0.8414}
+REFERENCE_SPLIT = "random 70/10/20 patient-disjoint, not the official list"
+CHEXNET = REFERENCES["chexnet"]
 
 
 def parse_args():
@@ -192,7 +200,9 @@ def main():
         "mean_view_only": round(float(np.nanmean(
             [out[f]["view_only_baseline"] for f in FINDINGS])), 4),
         "findings_beating_view_only": n_beat,
-        "chexnet_reference": CHEXNET,
+        "references_not_split_matched": REFERENCES,
+        "reference_split": REFERENCE_SPLIT,
+        "our_split": "official test_list.txt",
         "n_train": int(tr.sum()), "n_test": int(te.sum()),
         "n_test_patients": int(n_pat_te),
         "images_per_test_patient": round(float(te.sum() / n_pat_te), 2),
@@ -207,7 +217,9 @@ def main():
           f"{summary['mean_shuffled_floor']:.4f}   view-only "
           f"{summary['mean_view_only']:.4f}")
     print(f"{n_beat}/14 findings beat the view-only baseline")
-    print(f"CheXNet, supervised end to end on this split: {CHEXNET}")
+    print(f"published refs (DIFFERENT split, {REFERENCE_SPLIT}): "
+          f"Wang {REFERENCES['wang2017']}, Yao {REFERENCES['yao2017']}, "
+          f"CheXNet {REFERENCES['chexnet']}")
     print(f"\nwrote {a.out}")
 
 
