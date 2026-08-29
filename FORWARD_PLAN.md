@@ -366,12 +366,21 @@ read-only ≈ **$400–700**; Phase-B inject ≈ **$1–2K**; R0–R2 rungs ≈
 
 ---
 
-## Two workstreams, one repo
+## Workstreams
 
-| Workstream | Current SOTA | Branch | Status |
+| Workstream | Where it stands | Branch | Status |
 |---|---|---|---|
-| **SRT-Adapter** (semiotic awareness for frozen LLMs) | `v22c_a050`, 0.3744 averaged over 40 MTEB-STS splits under our own harness, NOT a leaderboard figure (English STS cosine-Spearman is 0.5192, well below board models) | `main` | Shipping. v1.0 on HF for downstream pinning. |
-| **SRT-NLA** (activation verbalization, frozen backbone) | `srt-nla-av-v1`, best-of-64 ρ_norm = 0.92, greedy ρ_norm = 0.26 | `nla` | First public release 2026-05-18. Greedy gap is the open problem. |
+| **Frozen features on medical images** | ChestX-ray14, official split: 0.7590 mean AUROC against 0.7451 for the dataset authors' fine-tuned ResNet-50, ahead on 12/14. NLST CT slice probe 0.9380. | `main` | Live: dataset, model and Space on HF. Untested on backbones other than gemma4. |
+| **Cross-vendor portability** | Image agreement across four vendors r@1 0.8024 vs 0.0007 floor. Vendor-then-modality beats a directly fitted map 12/12. | `main` | Live: `srt-omni-demo`, states published. The caption head at 0.1050 is the bottleneck. |
+| **Measurement discipline** | One-pass tests cannot resolve structure that 32 hops separates (1.0000 / 0.7162 / 0.3830). MTEB issue #5330 filed. | `main` | Open question with the benchmark maintainers. |
+| **SRT-NLA** (activation verbalization) | `srt-nla-av-v1`, best-of-64 ρ_norm = 0.92, greedy ρ_norm = 0.26 | `nla` | Released 2026-05-18. Greedy gap is the open problem. |
+| **SRT-Adapter STS head** *(superseded)* | `v22c_a050`. Kept for provenance, not a current claim: it is far off the pace of dedicated encoders and was never built to compete with them. | `main` | `v1.0` stays on HF for downstream pinning. Not a line we are pushing. |
+
+The STS numbers are the oldest thing in this repo and the least representative
+of it. They came from a research series that ended, they are not competitive
+with dedicated sentence encoders, and quoting them as a headline understates
+everything above. `srt-adapter-v1.0` remains pinnable because things depend on
+it, which is a compatibility commitment and not a performance claim.
 
 ---
 
