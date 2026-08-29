@@ -25,7 +25,12 @@ FINDINGS = ["Atelectasis", "Cardiomegaly", "Effusion", "Infiltration", "Mass",
             "Nodule", "Pneumonia", "Pneumothorax", "Consolidation", "Edema",
             "Emphysema", "Fibrosis", "Pleural_Thickening", "Hernia"]
 TAGS = ["gemma4", "qwen3omni", "mistral", "aria"]
-CHEXNET = 0.841
+# Split-matched: Wang et al. 1705.02315v5 Table 17, ChestX-ray14 column, which
+# v5 added specifically to report the published split. CheXNet's 0.8414 is NOT
+# this split and is deliberately absent here.
+MATCHED = 0.7451
+MATCHED_SRC = ("Wang et al. 2017, arXiv:1705.02315v5 Table 17, ResNet-50 "
+               "fine-tuned end to end, official test_list.txt")
 
 
 def parse_args():
@@ -70,7 +75,8 @@ def main():
         "vendor_spread": round(float(max(means.values()) - min(means.values())), 4),
         "findings_beating_view_in_all_vendors": all_beat,
         "n_findings": len(FINDINGS),
-        "chexnet_reference": CHEXNET,
+        "split_matched_baseline": MATCHED,
+        "split_matched_source": MATCHED_SRC,
         "note": "detection, not early detection: labels describe what is visible "
                 "in the image",
     }
@@ -79,7 +85,7 @@ def main():
           + "  ".join(f"{t} {v:.4f}" for t, v in means.items()))
     print(f"spread across vendors {summary['vendor_spread']:.4f}")
     print(f"{all_beat}/{len(FINDINGS)} findings clear the view baseline in every vendor")
-    print(f"CheXNet, supervised end to end: {CHEXNET}")
+    print(f"split-matched baseline {MATCHED:.4f} ({MATCHED_SRC})")
     print(f"\nwrote {a.out}")
 
 

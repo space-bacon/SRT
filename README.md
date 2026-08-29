@@ -376,8 +376,10 @@ bootstrap, since the unit that repeats is the patient rather than the film.
 Ahead on 12 of 14 findings. Behind on Hernia (−0.0888, 227 positives in the
 whole dataset) and Fibrosis (−0.0321). Reference numbers from CheXNet (0.8414)
 and Yao (0.8027) are **not** split-matched: those are a random 70/10/20
-partition, which is the easier split, and `scripts/cxr_probe.py` labels them
-as context rather than as a head-to-head.
+partition. Which split is harder is not established, since Wang scored 0.7381
+random against 0.7451 official, so we assert only that the two are not
+comparable. `scripts/cxr_probe.py` labels them as context rather than as a
+head-to-head.
 
 Longitudinal CT on real NLST volumes (620 slices, 40 participants, 116
 studies): probe AUROC **0.9380**, CI [0.906, 0.964], against a position-only

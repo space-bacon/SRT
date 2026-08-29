@@ -34,10 +34,10 @@ FINDINGS = ["Atelectasis", "Cardiomegaly", "Effusion", "Infiltration", "Mass",
             "Emphysema", "Fibrosis", "Pleural_Thickening", "Hernia"]
 # Published references, all from CheXNet Table 2 (arXiv:1711.05225v3). They are
 # NOT split-matched to us: that paper randomly split 70/10/20, patient-disjoint
-# but its own partition, while we use the official test_list.txt. The official
-# split is the harder one, which is why Wang et al. revised their paper to add
-# official-split numbers in an appendix. Quote these as context, never as a
-# head-to-head.
+# but its own partition, while we use the official test_list.txt. Which split is
+# harder is NOT established: Wang scored 0.7381 random and 0.7451 official, so
+# for that model the official one was marginally easier. Quote these as context,
+# never as a head-to-head, and do not assert a direction.
 REFERENCES = {"wang2017": 0.7381, "yao2017": 0.8027, "chexnet": 0.8414}
 REFERENCE_SPLIT = "random 70/10/20 patient-disjoint, not the official list"
 CHEXNET = REFERENCES["chexnet"]
