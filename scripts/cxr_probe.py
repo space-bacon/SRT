@@ -59,15 +59,34 @@ def auroc(scores, labels):
     return float((ranks[labels == 1].sum() - pos * (pos + 1) / 2) / (pos * neg))
 
 
-def boot_ci(scores, labels, n, rng):
+def boot_ci(scores, labels, n, rng, groups=None):
+    """Resample PATIENTS, not images.
+
+    A patient contributes several radiographs and they are anything but
+    independent, so resampling rows treats correlated films as fresh evidence
+    and reports an interval narrower than the data supports. Credit to
+    FINAL-Bench, who found the same error in their own floor: replicate pairs
+    there, images here, and the fix is to resample the unit that actually
+    repeats.
+    """
     if n == 0:
         return None
     vals = []
-    for _ in range(n):
-        idx = rng.integers(0, len(labels), len(labels))
-        a = auroc(scores[idx], labels[idx])
-        if a == a:
-            vals.append(a)
+    if groups is None:
+        for _ in range(n):
+            idx = rng.integers(0, len(labels), len(labels))
+            a = auroc(scores[idx], labels[idx])
+            if a == a:
+                vals.append(a)
+    else:
+        uniq = np.unique(groups)
+        by = {g: np.where(groups == g)[0] for g in uniq}
+        for _ in range(n):
+            pick = rng.integers(0, len(uniq), len(uniq))
+            idx = np.concatenate([by[uniq[p]] for p in pick])
+            a = auroc(scores[idx], labels[idx])
+            if a == a:
+                vals.append(a)
     if not vals:
         return None
     return {"ci95_low": round(float(np.percentile(vals, 2.5)), 4),
@@ -136,15 +155,23 @@ def main():
     S_sh = fit(Xtr, torch.tensor(Ysh, device="cuda"), Xte, a.epochs, a.lr, a.wd)
 
     Yte = Y[te]
+    pat_te = np.array([r["patient_id"] for r, m in zip(rows, te) if m])
+    n_pat_te = len(np.unique(pat_te))
+    print(f"  test set: {int(te.sum())} images from {n_pat_te} patients "
+          f"({te.sum()/n_pat_te:.2f} per patient)")
     out, aurocs = {}, []
     print(f"\n{'finding':22s} {'n_pos':>6s} {'AUROC':>7s} {'95% CI':>16s} "
           f"{'shuffled':>9s} {'view-only':>10s}")
     for j, f in enumerate(FINDINGS):
         y = Yte[:, j]
         au = auroc(S[:, j], y)
-        ci = boot_ci(S[:, j], y, a.bootstrap, rng)
+        ci = boot_ci(S[:, j], y, a.bootstrap, rng, groups=pat_te)
         sh = auroc(S_sh[:, j], y)
+        # A view baseline far below 0.5 is strongly predictive once flipped:
+        # Hernia sits at 0.18, which is really 0.82 of shortcut. Fold it, or the
+        # baseline flatters the probe.
         vw = auroc(is_ap[te], y)
+        vw = max(vw, 1 - vw)
         out[f] = {"n_pos_test": int(y.sum()),
                   "prevalence": round(float(y.mean()), 4),
                   "auroc": round(au, 4), "auroc_ci": ci,
@@ -167,6 +194,9 @@ def main():
         "findings_beating_view_only": n_beat,
         "chexnet_reference": CHEXNET,
         "n_train": int(tr.sum()), "n_test": int(te.sum()),
+        "n_test_patients": int(n_pat_te),
+        "images_per_test_patient": round(float(te.sum() / n_pat_te), 2),
+        "bootstrap_unit": "patient",
         "note": "detection, not early detection: these labels describe what is "
                 "visible in the image, so nothing here speaks to catching "
                 "disease before it is apparent",

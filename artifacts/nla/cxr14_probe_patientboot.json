@@ -1,0 +1,186 @@
+{
+  "summary": {
+    "mean_auroc": 0.7179,
+    "mean_shuffled_floor": 0.4799,
+    "mean_view_only": 0.5905,
+    "findings_beating_view_only": 13,
+    "chexnet_reference": 0.841,
+    "n_train": 29394,
+    "n_test": 5605,
+    "n_test_patients": 331,
+    "images_per_test_patient": 16.93,
+    "bootstrap_unit": "patient",
+    "note": "detection, not early detection: these labels describe what is visible in the image, so nothing here speaks to catching disease before it is apparent"
+  },
+  "per_finding": {
+    "Atelectasis": {
+      "n_pos_test": 683,
+      "prevalence": 0.1219,
+      "auroc": 0.691,
+      "auroc_ci": {
+        "ci95_low": 0.6602,
+        "ci95_high": 0.7238
+      },
+      "shuffled_floor": 0.4894,
+      "view_only_baseline": 0.52,
+      "beats_view": true
+    },
+    "Cardiomegaly": {
+      "n_pos_test": 433,
+      "prevalence": 0.0773,
+      "auroc": 0.8424,
+      "auroc_ci": {
+        "ci95_low": 0.8092,
+        "ci95_high": 0.8712
+      },
+      "shuffled_floor": 0.5015,
+      "view_only_baseline": 0.5017,
+      "beats_view": true
+    },
+    "Effusion": {
+      "n_pos_test": 839,
+      "prevalence": 0.1497,
+      "auroc": 0.7523,
+      "auroc_ci": {
+        "ci95_low": 0.7204,
+        "ci95_high": 0.7798
+      },
+      "shuffled_floor": 0.5247,
+      "view_only_baseline": 0.5116,
+      "beats_view": true
+    },
+    "Infiltration": {
+      "n_pos_test": 1364,
+      "prevalence": 0.2434,
+      "auroc": 0.6667,
+      "auroc_ci": {
+        "ci95_low": 0.643,
+        "ci95_high": 0.689
+      },
+      "shuffled_floor": 0.5103,
+      "view_only_baseline": 0.582,
+      "beats_view": true
+    },
+    "Mass": {
+      "n_pos_test": 260,
+      "prevalence": 0.0464,
+      "auroc": 0.6804,
+      "auroc_ci": {
+        "ci95_low": 0.619,
+        "ci95_high": 0.7404
+      },
+      "shuffled_floor": 0.4854,
+      "view_only_baseline": 0.5731,
+      "beats_view": true
+    },
+    "Nodule": {
+      "n_pos_test": 304,
+      "prevalence": 0.0542,
+      "auroc": 0.6517,
+      "auroc_ci": {
+        "ci95_low": 0.6059,
+        "ci95_high": 0.694
+      },
+      "shuffled_floor": 0.4975,
+      "view_only_baseline": 0.5758,
+      "beats_view": true
+    },
+    "Pneumonia": {
+      "n_pos_test": 119,
+      "prevalence": 0.0212,
+      "auroc": 0.5677,
+      "auroc_ci": {
+        "ci95_low": 0.5071,
+        "ci95_high": 0.6243
+      },
+      "shuffled_floor": 0.5025,
+      "view_only_baseline": 0.5147,
+      "beats_view": true
+    },
+    "Pneumothorax": {
+      "n_pos_test": 483,
+      "prevalence": 0.0862,
+      "auroc": 0.8018,
+      "auroc_ci": {
+        "ci95_low": 0.7647,
+        "ci95_high": 0.8304
+      },
+      "shuffled_floor": 0.484,
+      "view_only_baseline": 0.5764,
+      "beats_view": true
+    },
+    "Consolidation": {
+      "n_pos_test": 344,
+      "prevalence": 0.0614,
+      "auroc": 0.6467,
+      "auroc_ci": {
+        "ci95_low": 0.6122,
+        "ci95_high": 0.6774
+      },
+      "shuffled_floor": 0.4487,
+      "view_only_baseline": 0.5929,
+      "beats_view": true
+    },
+    "Edema": {
+      "n_pos_test": 184,
+      "prevalence": 0.0328,
+      "auroc": 0.7451,
+      "auroc_ci": {
+        "ci95_low": 0.6848,
+        "ci95_high": 0.8016
+      },
+      "shuffled_floor": 0.5128,
+      "view_only_baseline": 0.6968,
+      "beats_view": true
+    },
+    "Emphysema": {
+      "n_pos_test": 199,
+      "prevalence": 0.0355,
+      "auroc": 0.8533,
+      "auroc_ci": {
+        "ci95_low": 0.8007,
+        "ci95_high": 0.8906
+      },
+      "shuffled_floor": 0.4505,
+      "view_only_baseline": 0.5596,
+      "beats_view": true
+    },
+    "Fibrosis": {
+      "n_pos_test": 178,
+      "prevalence": 0.0318,
+      "auroc": 0.6962,
+      "auroc_ci": {
+        "ci95_low": 0.6434,
+        "ci95_high": 0.7465
+      },
+      "shuffled_floor": 0.4627,
+      "view_only_baseline": 0.6573,
+      "beats_view": true
+    },
+    "Pleural_Thickening": {
+      "n_pos_test": 279,
+      "prevalence": 0.0498,
+      "auroc": 0.7019,
+      "auroc_ci": {
+        "ci95_low": 0.6535,
+        "ci95_high": 0.7469
+      },
+      "shuffled_floor": 0.467,
+      "view_only_baseline": 0.5856,
+      "beats_view": true
+    },
+    "Hernia": {
+      "n_pos_test": 32,
+      "prevalence": 0.0057,
+      "auroc": 0.7535,
+      "auroc_ci": {
+        "ci95_low": 0.5449,
+        "ci95_high": 0.8905
+      },
+      "shuffled_floor": 0.3815,
+      "view_only_baseline": 0.8192,
+      "beats_view": false
+    }
+  },
+  "states": "/root/cxr14_gemma4.npz"
+}
