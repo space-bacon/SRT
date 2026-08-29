@@ -47,6 +47,14 @@ def parse_args():
                         "cross term must die first whatever is true. Truncation "
                         "removes the SAME directions the within-vendor signal "
                         "lives in, which separates the two readings")
+    p.add_argument("--drop-top", type=int, default=0,
+                   help="the complement of --truncate: discard the top-k and "
+                        "keep the tail. Truncation alone cannot say where the "
+                        "shared part lives, since removing the head removes "
+                        "everything. If cross falls to chance on the tail while "
+                        "within survives, the shared structure is genuinely in "
+                        "the high-variance head; if both survive, it is spread "
+                        "and the truncation curve was about the head, not sharing")
     p.add_argument("--out", default="/root/xvendor4.json")
     return p.parse_args()
 
@@ -132,7 +140,7 @@ def main():
     n_te = int(a.holdout_frac * n)
     te, tr = perm0[:n_te], perm0[n_te:]
 
-    if a.truncate > 0:
+    if a.truncate > 0 or a.drop_top > 0:
         # Basis from the train rows only, so the holdout never informs the
         # subspace it is later scored in.
         tr_t = torch.tensor(tr).cuda()
@@ -141,10 +149,13 @@ def main():
             for M in X[t]:
                 mu_m = M[tr_t].mean(0, keepdim=True)
                 _, _, Vh = torch.linalg.svd(M[tr_t] - mu_m, full_matrices=False)
-                B = Vh[:min(a.truncate, Vh.shape[0])]
+                B = (Vh[a.drop_top:] if a.drop_top > 0
+                     else Vh[:min(a.truncate, Vh.shape[0])])
                 kept.append((M - mu_m) @ B.T @ B + mu_m)
             X[t] = tuple(kept)
-        print(f"kept the top {a.truncate} components of each vendor's own spectrum")
+        print(f"dropped the top {a.drop_top} components, kept the tail"
+              if a.drop_top > 0 else
+              f"kept the top {a.truncate} components of each vendor's own spectrum")
 
     Wi = torch.nn.ModuleDict(
         {t: torch.nn.Linear(X[t][0].shape[1], a.dim) for t in tags}).cuda()
@@ -209,6 +220,7 @@ def main():
                        "any other vendor's encoder",
            "vendors": tags, "modalities": keep, "n_aligned": n,
            "n_train": len(tr), "n_holdout": len(te),
+           "noise": a.noise, "truncate": a.truncate, "drop_top": a.drop_top,
            "directions": {}, "floors": {}}
     hits = {}
     print()
