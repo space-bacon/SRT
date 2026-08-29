@@ -1,0 +1,26 @@
+{
+ "question": "does swapping the caption tower move cross and within by the same factor",
+ "credit": "test proposed by Dipankar Sarkar",
+ "domain": "roco",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "swapped_head": "sentence-transformers/all-MiniLM-L6-v2",
+ "n_holdout": 1000,
+ "native": {
+  "within": 0.0887,
+  "cross": 0.0853
+ },
+ "swapped": {
+  "within": 0.0833,
+  "cross": 0.083
+ },
+ "within_ratio": 0.938,
+ "cross_ratio": 0.9727,
+ "ratio_gap": 0.0347,
+ "verdict": "head-limited",
+ "reading": "the two terms scaling by the same factor when the head is replaced is what 'both limited by the caption head' predicts. the terms moving apart would mean retention is not head-limited and the reframe should be withdrawn."
+}

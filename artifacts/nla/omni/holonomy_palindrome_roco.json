@@ -1,0 +1,83 @@
+{
+ "question": "is the four-cycle penalty about enclosed area or about never retracing an edge",
+ "credit": "control proposed by Dipankar Sarkar",
+ "domain": "roco",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "n_holdout": 1000,
+ "routes": {
+  "self-loop, no boundary": "qwen3omni -> qwen3omni",
+  "there-and-back, 1 edge retraced": "qwen3omni -> gemma4 -> qwen3omni",
+  "palindrome, 4 vendors, retraced, zero area": "qwen3omni -> gemma4 -> mistral -> aria -> mistral -> gemma4 -> qwen3omni",
+  "four-cycle, 4 vendors, never retraces": "qwen3omni -> gemma4 -> mistral -> aria -> qwen3omni"
+ },
+ "by_hops": {
+  "self-loop, no boundary": {
+   "12": {
+    "r@1": 1.0,
+    "cos": 0.9809
+   },
+   "24": {
+    "r@1": 1.0,
+    "cos": 0.9726
+   },
+   "36": {
+    "r@1": 1.0,
+    "cos": 0.9668
+   }
+  },
+  "there-and-back, 1 edge retraced": {
+   "12": {
+    "r@1": 0.947,
+    "cos": 0.9042
+   },
+   "24": {
+    "r@1": 0.819,
+    "cos": 0.8678
+   },
+   "36": {
+    "r@1": 0.722,
+    "cos": 0.846
+   }
+  },
+  "palindrome, 4 vendors, retraced, zero area": {
+   "12": {
+    "r@1": 0.813,
+    "cos": 0.8667
+   },
+   "24": {
+    "r@1": 0.564,
+    "cos": 0.8165
+   },
+   "36": {
+    "r@1": 0.388,
+    "cos": 0.786
+   }
+  },
+  "four-cycle, 4 vendors, never retraces": {
+   "12": {
+    "r@1": 0.785,
+    "cos": 0.8601
+   },
+   "24": {
+    "r@1": 0.523,
+    "cos": 0.8085
+   },
+   "36": {
+    "r@1": 0.32,
+    "cos": 0.7768
+   }
+  }
+ },
+ "verdict_by_hops": {
+  "12": "area",
+  "24": "area",
+  "36": "area"
+ },
+ "verdict": "area",
+ "reading": "retracing means the three-way ordering reported earlier was partly an artifact of pairwise error cancellation and the enclosed-area reading should be withdrawn. area means the four-cycle penalty survives a route that retraces every edge and visits every vendor."
+}
