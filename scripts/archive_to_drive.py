@@ -105,6 +105,7 @@ def stage_supabase(dest, repo_root):
     out = dest / "supabase"
     out.mkdir(parents=True, exist_ok=True)
     token, n, got = None, 0, 0
+    failed = []
     print("\n=== supabase bucket", sb.BUCKET, flush=True)
     while True:
         kw = {"Bucket": sb.BUCKET, "MaxKeys": 1000}
@@ -113,18 +114,35 @@ def stage_supabase(dest, repo_root):
         resp = s3.list_objects_v2(**kw)
         for o in resp.get("Contents", []):
             n += 1
-            p = out / o["Key"]
+            key = o["Key"]
+            p = out / key
             if p.exists() and p.stat().st_size == o["Size"]:
                 continue
+            # Folder placeholders have no body, and Supabase omits ContentLength
+            # for them, which used to abort the whole stage.
+            if key.endswith("/"):
+                p.mkdir(parents=True, exist_ok=True)
+                continue
+            if o["Size"] == 0:
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.touch()
+                continue
             p.parent.mkdir(parents=True, exist_ok=True)
-            s3.download_file(sb.BUCKET, o["Key"], str(p))
+            try:
+                s3.download_file(sb.BUCKET, key, str(p))
+            except Exception as e:
+                failed.append((key, f"{type(e).__name__}: {str(e)[:60]}"))
+                continue
             got += 1
             if got % 25 == 0:
                 print(f"  {got} downloaded of {n} seen", flush=True)
         if not resp.get("IsTruncated"):
             break
         token = resp.get("NextContinuationToken")
-    print(f"  {n} objects listed, {got} newly downloaded", flush=True)
+    print(f"  {n} objects listed, {got} newly downloaded, "
+          f"{len(failed)} failed", flush=True)
+    for k, why in failed[:20]:
+        print(f"      FAILED {k}  {why}", flush=True)
 
 
 def stage_hosts(dest):
