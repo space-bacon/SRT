@@ -32,6 +32,9 @@ def parse_args():
     p.add_argument("--derangements", type=int, default=20)
     p.add_argument("--bootstrap", type=int, default=2000)
     p.add_argument("--save-map", default=None)
+    p.add_argument("--mu-from", default=None,
+                   help="ABLATION ONLY: take the centering means from a saved "
+                        "map instead of recomputing them on this gallery")
     p.add_argument("--out", default="/root/xvendor4.json")
     return p.parse_args()
 
@@ -114,6 +117,21 @@ def main():
     mu = {t: {m: X[t][0][torch.tensor(tr[mods[tr] == m]).cuda()].mean(0, keepdim=True)
               for m in keep if (mods[tr] == m).any()} for t in tags}
     mut = {t: X[t][1][torch.tensor(tr).cuda()].mean(0, keepdim=True) for t in tags}
+    if a.mu_from:
+        # The anisotropy direction is domain-specific, so a mean fitted on one
+        # gallery under-corrects on another. This path exists to measure that
+        # penalty, never to produce a headline number.
+        saved = torch.load(a.mu_from, map_location="cpu")
+        missing = [t for t in tags if t not in saved["mu"]]
+        if missing:
+            raise SystemExit(f"--mu-from lacks vendors {missing}")
+        mu = {t: {m: saved["mu"][t][m].cuda() for m in mu[t] if m in saved["mu"][t]}
+              for t in tags}
+        mut = {t: saved["mu_txt"][t].cuda() for t in tags}
+        for t in tags:
+            if not mu[t]:
+                raise SystemExit(f"--mu-from has no matching modality for {t}")
+        print(f"CARRIED means from {a.mu_from} (ablation, not a headline run)")
     opt = torch.optim.Adam(list(Wi.parameters()) + list(Wt.parameters()), lr=a.lr)
 
     def project(t, idx_np):
