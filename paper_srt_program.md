@@ -148,7 +148,8 @@ pretrained quality; there is nothing to "recover."
 
 Two consumer artifacts ship from this stage: `srt-adapter-v1.0`
 (semantic embeddings; the research series behind it culminated in a
-model-soup checkpoint, mean MTEB-STS 0.3744) and `zooL4nD3r-v0.1`
+model-soup checkpoint scoring 0.3744 averaged over 40 MTEB-STS splits
+under our own evaluation harness) and `zooL4nD3r-v0.1`
 (961 discourse communities). A separate diagnostic established the
 substrate's raw capacity for one downstream task: frozen-backbone
 features plus gradient boosting reach TruthfulQA-MC2 AUC 0.8656 ±

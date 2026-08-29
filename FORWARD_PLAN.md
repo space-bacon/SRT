@@ -370,7 +370,7 @@ read-only ≈ **$400–700**; Phase-B inject ≈ **$1–2K**; R0–R2 rungs ≈
 
 | Workstream | Current SOTA | Branch | Status |
 |---|---|---|---|
-| **SRT-Adapter** (semiotic awareness for frozen LLMs) | `v22c_a050`, mean MTEB-STS 0.3744 (soup of v18+v21a) | `main` | Shipping. v1.0 on HF for downstream pinning. |
+| **SRT-Adapter** (semiotic awareness for frozen LLMs) | `v22c_a050`, 0.3744 averaged over 40 MTEB-STS splits under our own harness, NOT a leaderboard figure (English STS cosine-Spearman is 0.5192, well below board models) | `main` | Shipping. v1.0 on HF for downstream pinning. |
 | **SRT-NLA** (activation verbalization, frozen backbone) | `srt-nla-av-v1`, best-of-64 ρ_norm = 0.92, greedy ρ_norm = 0.26 | `nla` | First public release 2026-05-18. Greedy gap is the open problem. |
 
 ---
