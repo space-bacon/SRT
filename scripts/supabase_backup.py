@@ -83,12 +83,27 @@ def main():
     TRANSFER = transfer_config()
 
     if args.list:
-        resp = s3.list_objects_v2(Bucket=BUCKET)
-        objs = resp.get("Contents", [])
+        # list_objects_v2 caps at 1000 keys per call. Without paging it reports a
+        # confident, wrong total: this bucket looked like 1000 objects and 5.41 GB
+        # when it holds 94,418 and 90 GB.
+        objs = []
+        for page in s3.get_paginator("list_objects_v2").paginate(Bucket=BUCKET):
+            objs.extend(page.get("Contents", []))
         total = sum(o["Size"] for o in objs)
-        for o in sorted(objs, key=lambda x: x["Key"]):
-            print(f"  {o['Size']/1e6:9.1f} MB  {o['Key']}")
-        print(f"{len(objs)} objects, {total/1e9:.2f} GB in bucket {BUCKET}")
+        if len(objs) <= 200:
+            for o in sorted(objs, key=lambda x: x["Key"]):
+                print(f"  {o['Size']/1e6:9.1f} MB  {o['Key']}")
+        else:
+            by_prefix = {}
+            for o in objs:
+                p = o["Key"].split("/")[0]
+                n, b = by_prefix.get(p, (0, 0))
+                by_prefix[p] = (n + 1, b + o["Size"])
+            for p, (n, b) in sorted(by_prefix.items(), key=lambda x: -x[1][1]):
+                print(f"  {b/1e9:9.2f} GB  {n:7d} objects  {p}/")
+        empty = sum(1 for o in objs if o["Size"] == 0)
+        print(f"{len(objs)} objects, {total/1e9:.2f} GB in bucket {BUCKET} "
+              f"({empty} zero-byte)")
         return
 
     if not args.files:
