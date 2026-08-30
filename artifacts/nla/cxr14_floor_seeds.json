@@ -1,0 +1,100 @@
+{
+ "question": "how wide is the headline, and does the floor hold as a bound",
+ "credit": "every item here was raised by Dipankar Sarkar",
+ "states": "artifacts/nla/omni/states/cxr14_gemma4_full112k.npz",
+ "macro_auroc": 0.759035,
+ "wang_macro": 0.745143,
+ "gap": 0.013892,
+ "ahead_on": 12,
+ "per_finding": {
+  "Atelectasis": 0.7248,
+  "Cardiomegaly": 0.8221,
+  "Effusion": 0.7849,
+  "Infiltration": 0.6862,
+  "Mass": 0.7423,
+  "Nodule": 0.6956,
+  "Pneumonia": 0.66,
+  "Pneumothorax": 0.8465,
+  "Consolidation": 0.7107,
+  "Edema": 0.817,
+  "Emphysema": 0.865,
+  "Fibrosis": 0.7538,
+  "Pleural_Thickening": 0.7347,
+  "Hernia": 0.7828
+ },
+ "macro_ci": {
+  "ci95": [
+   0.75,
+   0.7673
+  ],
+  "se": 0.0045,
+  "gap_over_se": 3.09,
+  "note": "one number, not fourteen averaged"
+ },
+ "floor_seeds": {
+  "n": 20,
+  "macro_mean": 0.5006,
+  "macro_sd": 0.0052,
+  "macro_min": 0.491,
+  "macro_max": 0.5093,
+  "published_single_seed": 0.5002,
+  "per_finding_sd_mean": 0.0177,
+  "gap_over_floor_sd": 2.65
+ },
+ "count_null": {
+  "observed": 12,
+  "shuffled_counts": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "shuffled_mean": 0.0,
+  "shuffled_max": 0,
+  "coin_flip_p_ge_12_of_14": 0.0065,
+  "note": "the shuffled refit gives the count a measured null, which the coin-flip figure only approximates and which ignores that findings co-occur within a patient"
+ },
+ "leave_one_out_gap": {
+  "Atelectasis": 0.0131,
+  "Cardiomegaly": 0.014,
+  "Effusion": 0.0129,
+  "Infiltration": 0.0131,
+  "Mass": 0.0112,
+  "Nodule": 0.0129,
+  "Pneumonia": 0.0148,
+  "Pneumothorax": 0.0113,
+  "Consolidation": 0.0144,
+  "Edema": 0.0141,
+  "Emphysema": 0.0125,
+  "Fibrosis": 0.0174,
+  "Pleural_Thickening": 0.011,
+  "Hernia": 0.0218
+ },
+ "leave_one_out_range": [
+  0.011,
+  0.0218
+ ],
+ "weighted_by_positives": {
+  "ours": 0.7491,
+  "wang": 0.7226,
+  "gap": 0.0265,
+  "equal_weight_gap": 0.0139,
+  "note": "macro gives Hernia's 86 positives the same vote as Infiltration's 6112; equal weighting is the conservative choice"
+ }
+}
