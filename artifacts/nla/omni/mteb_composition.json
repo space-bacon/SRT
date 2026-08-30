@@ -1,0 +1,163 @@
+{
+ "question": "does the single-pass / composition split appear on text encoders MTEB ranks",
+ "context": "raised by Samoed on embeddings-benchmark/mteb#5330: the original filing used models MTEB does not rank",
+ "corpus": "mteb/stsbenchmark-sts train, unique sentences",
+ "models": {
+  "minilm": "sentence-transformers/all-MiniLM-L6-v2",
+  "mpnet": "sentence-transformers/all-mpnet-base-v2",
+  "bge": "BAAI/bge-small-en-v1.5",
+  "gte": "thenlper/gte-base"
+ },
+ "pooling": {
+  "minilm": "mean",
+  "mpnet": "mean",
+  "bge": "cls",
+  "gte": "mean"
+ },
+ "dims": {
+  "minilm": 384,
+  "mpnet": 768,
+  "bge": 384,
+  "gte": 768
+ },
+ "anisotropy": {
+  "minilm": {
+   "raw": 0.0335,
+   "centered": 0.0027
+  },
+  "mpnet": {
+   "raw": 0.0314,
+   "centered": 0.0022
+  },
+  "bge": {
+   "raw": 0.3804,
+   "centered": 0.0022
+  },
+  "gte": {
+   "raw": 0.7107,
+   "centered": 0.0021
+  }
+ },
+ "n": 5000,
+ "n_holdout": 1000,
+ "single_pass": {
+  "four_cycle_1_lap": 0.992,
+  "self_loop_4_hops": 1.0,
+  "gap": 0.008
+ },
+ "single_boundary": {
+  "minilm|mpnet": {
+   "4": 0.998,
+   "6": 0.992,
+   "8": 0.973,
+   "12": 0.938,
+   "18": 0.844,
+   "24": 0.696,
+   "36": 0.426
+  },
+  "minilm|bge": {
+   "4": 0.997,
+   "6": 0.989,
+   "8": 0.972,
+   "12": 0.927,
+   "18": 0.798,
+   "24": 0.608,
+   "36": 0.323
+  },
+  "minilm|gte": {
+   "4": 0.997,
+   "6": 0.986,
+   "8": 0.97,
+   "12": 0.936,
+   "18": 0.845,
+   "24": 0.692,
+   "36": 0.403
+  },
+  "mpnet|bge": {
+   "4": 0.992,
+   "6": 0.977,
+   "8": 0.955,
+   "12": 0.889,
+   "18": 0.751,
+   "24": 0.603,
+   "36": 0.37
+  },
+  "mpnet|gte": {
+   "4": 0.996,
+   "6": 0.989,
+   "8": 0.982,
+   "12": 0.955,
+   "18": 0.907,
+   "24": 0.813,
+   "36": 0.619
+  },
+  "bge|gte": {
+   "4": 0.998,
+   "6": 0.992,
+   "8": 0.986,
+   "12": 0.952,
+   "18": 0.889,
+   "24": 0.797,
+   "36": 0.618
+  }
+ },
+ "edge_spread_at_36": 0.296,
+ "edge_count_ladder": {
+  "1 distinct edges": {
+   "12": 0.938,
+   "24": 0.696,
+   "36": 0.426
+  },
+  "2 distinct edges": {
+   "12": 0.883,
+   "24": 0.481,
+   "36": 0.24
+  },
+  "3 distinct edges": {
+   "12": 0.883,
+   "24": 0.51,
+   "36": 0.267
+  }
+ },
+ "ladder_monotone": false,
+ "ladder_under_permutations_36": {
+  "mpnet, bge, gte": {
+   "1": 0.426,
+   "2": 0.24,
+   "3": 0.267,
+   "monotone": false
+  },
+  "mpnet, gte, bge": {
+   "1": 0.426,
+   "2": 0.33,
+   "3": 0.282,
+   "monotone": true
+  },
+  "bge, mpnet, gte": {
+   "1": 0.323,
+   "2": 0.276,
+   "3": 0.277,
+   "monotone": false
+  },
+  "bge, gte, mpnet": {
+   "1": 0.323,
+   "2": 0.326,
+   "3": 0.302,
+   "monotone": false
+  },
+  "gte, mpnet, bge": {
+   "1": 0.403,
+   "2": 0.334,
+   "3": 0.254,
+   "monotone": true
+  },
+  "gte, bge, mpnet": {
+   "1": 0.403,
+   "2": 0.294,
+   "3": 0.264,
+   "monotone": true
+  }
+ },
+ "monotone_permutations": "3 of 6",
+ "verdict": "does NOT replicate on MTEB text encoders"
+}
