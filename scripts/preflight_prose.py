@@ -201,6 +201,16 @@ TICS = {
     "antithesis": [r"is not [^.]{0,70}\.\s*it is\b", r"does not [^.]{0,70}\.\s*it \w+s\b",
                    r"\bnot [^.,]{0,45},\s*(but|it'?s|it is)\b", r"\brather than\b",
                    r"\bso,? not\b", r"\binstead of\b.{0,40}\bit\b"],
+    # Constructions that sound like a distinction while asserting nothing.
+    # "Both answers are yes, and they are not the same yes" shipped in a paper
+    # abstract on 2026-08-30: it names no difference, so the reader learns
+    # nothing and the sentence cannot be checked against a result. State the
+    # two findings instead. "not the same AS <thing>" is exempt because it
+    # names the comparand and is therefore checkable.
+    "hollow distinction": [r"not the same (?!as\b)\w+\b", r"\bthe same \w+ twice\b",
+                           r"\bin more than one sense\b", r"\btwo different kinds of\b",
+                           r"\bboth (?:answers?|are) [^.]{0,40}\band (?:they|both)\b",
+                           r"\bis and is not\b", r"\bmore than one way\b(?![^.]{0,40}\d)"],
     "unexplained jargon": [r"\bnp\d", r"\bL47\b", r"\bfve\b", r"\bSRT\b", r"\bR@\d",
                            r"\badapter\b", r"\bcheckpoint\b", r"\bhead-space\b"],
     # One domain is not "every time". Published as a general recipe on
@@ -222,6 +232,30 @@ COMPARE = r"(beats|against|versus|\bvs\.?\b|ahead of|outperforms|compared (?:to|
 MATCHED = r"(split|matched|same (?:test|set|protocol|holdout)|holdout|config|" \
           r"protocol|our harness|different test set|not comparable|" \
           r"test_list|official (?:split|test|list))"
+
+# A score with no metric named near it. An abstract paragraph on 2026-08-30 read
+# "scores 0.7774 against 0.7451", three numbers deep before it said what was
+# being scored or on what task, which asks the reader to hold figures they
+# cannot yet interpret. Any score in a claim needs its metric within reach.
+SCORE = r"(?<![\d.])0\.\d{3,4}(?![\d])"
+# Metric NAMES only. Relational words (margin, gain, cost, ratio, floor) were in
+# this list first and made it useless: they appear in every comparison, so the
+# offending paragraph passed its own check on the word "margin".
+METRIC = r"(auroc|\bauc\b|r@\d|\brecall\b|\bprecision\b|\bf1\b|accuracy|" \
+         r"spearman|pearson|cosine|\bfve\b|\bmap\b|average precision|" \
+         r"sensitivity|specificity|dice|iou|perplexity|\bbleu\b|rouge)"
+
+# A finding announced before the reader is told what was done. The abstract of
+# this paper opened "a probe moves between backbones at no cost" three sentences
+# before it said what a probe was, what moving one meant, or why it should be
+# hard, which asks the reader to accept a result they cannot yet picture. State
+# the procedure and the reason it might fail, then the outcome.
+RESULT_CLAIM = r"\b(at no cost|costs? nothing|it works\b|survives?|outperforms?|" \
+               r"beats?|improves? on|still improves|holds up|transports?\b)"
+METHOD_STMT = r"\b(we fit|we train|we measure|we compute|we encode|we read|" \
+              r"we apply|we score|we probe|we swap|we hold|fitted on|" \
+              r"estimated on|pooled over|is fitted|are fitted|by fitting)"
+OPENING_WORDS = 250
 
 
 def main() -> int:
@@ -253,8 +287,11 @@ def main() -> int:
         # only flag when the number is not being used as a count.
         ctx = " ".join(re.findall(rf".{{0,40}}\b{re.escape(n)}\b.{{0,20}}", body))
         counted = re.search(r"\b(position|token|epoch|step|layer|dimension)", ctx)
+        # A number inside a model name is not a measurement. "ResNet-50" was
+        # flagged as rounded from a 49.5 median belonging to another paper.
+        named = re.search(rf"[a-z]-{re.escape(n)}\b", low)
         near = [(k, v, s) for k, (v, s) in facts.items() if abs(v - float(n)) == 0.5]
-        if near and not counted:
+        if near and not counted and not named:
             k, v, s = near[0]
             print(f"! {n:>10s}  ROUNDED from {v} ({k} <- {s}). Half-integer, quote {v}")
             traps += 1
@@ -299,6 +336,44 @@ def main() -> int:
             print(f"! {m.group(0):<16s} ...{low[max(0, m.start() - 60):m.end() + 60]}...")
     if not unmatched:
         print("  every comparison names its split or protocol")
+
+    print(f"\n=== SCORES: is the metric named before the first figure ===")
+    bare = 0
+    # Per section, not per number. Flagging every figure produced thirty hits on
+    # a clean draft, and a check that fires on everything gets ignored. The rule
+    # is narrower: a reader meeting a section's FIRST score should already have
+    # been told what is being measured.
+    low_nl = body.lower()
+    sections = re.split(r"\n(?=#{1,3} )", low_nl)
+    for sec in sections:
+        head = sec.split("\n", 1)[0].strip("# ").strip() or "(opening)"
+        prose = "\n".join(l for l in sec.split("\n") if not l.lstrip().startswith("|"))
+        first = re.search(SCORE, prose)
+        if not first:
+            continue
+        # The metric may be named anywhere before the figure, or in the same
+        # breath just after it.
+        lead = prose[:first.start()] + prose[first.start():first.end() + 160]
+        if not re.search(METRIC, lead):
+            bare += 1
+            n = len(re.findall(SCORE, prose))
+            snippet = re.sub(r"\s+", " ", prose[max(0, first.start() - 90):first.end() + 40])
+            print(f"! {head[:38]:<40s} {n} score(s), first unlabelled")
+            print(f"    ...{snippet}...")
+    if not bare:
+        print("  every section names its metric before its first figure")
+
+    print(f"\n=== OPENING: is the method stated before the finding ===")
+    opening = " ".join(low.split()[:OPENING_WORDS])
+    res_m = re.search(RESULT_CLAIM, opening)
+    met_m = re.search(METHOD_STMT, opening)
+    if res_m and (met_m is None or met_m.start() > res_m.start()):
+        where = "no method statement at all" if met_m is None else \
+                f"method arrives later, at '{met_m.group(0)}'"
+        print(f"! '{res_m.group(0)}' claims a result first, {where}")
+        print(f"    ...{opening[max(0, res_m.start() - 90):res_m.end() + 60]}...")
+    else:
+        print("  the opening says what was done before it says how it came out")
 
     print(f"\n   words {words}")
     # Scoping can be phrased many ways. What matters is that the draft names a
