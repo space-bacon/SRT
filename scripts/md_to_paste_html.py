@@ -130,12 +130,26 @@ def rewrite_md(text: str, base: str) -> str:
     return out
 
 
+def insert_hero(html: str, path: Path, after: int) -> str:
+    """Drop the OG image in after the Nth closing </p>."""
+    idx = -1
+    for _ in range(after):
+        idx = html.find("</p>", idx + 1)
+        if idx < 0:
+            raise SystemExit(f"!! only {after - 1} paragraphs, cannot place hero after {after}")
+    uri, nbytes = data_uri(path)
+    print(f"  hero {path.name:47s} {nbytes / 1024:6.0f} KB  after paragraph {after}")
+    return f'{html[:idx + 4]}<figure><img alt="" src="{uri}"></figure>{html[idx + 4:]}'
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("markdown")
     ap.add_argument("--out", default=None)
     ap.add_argument("--image-base", help="host prefix for figures; switches output to markdown")
     ap.add_argument("--md-out", default=None)
+    ap.add_argument("--hero", default=None, help="image to inline near the top")
+    ap.add_argument("--hero-after", type=int, default=1, help="paragraph to place it after")
     args = ap.parse_args()
 
     src = Path(args.markdown).resolve()
@@ -152,6 +166,8 @@ def main() -> int:
 
     md = MarkdownIt("commonmark").enable(["table", "strikethrough"])
     body = inline(md.render(src.read_text()), src.parent)
+    if args.hero:
+        body = insert_hero(body, Path(args.hero).resolve(), args.hero_after)
 
     title = re.search(r"^#\s+(.+)$", src.read_text(), re.M)
     out.write_text(
