@@ -120,8 +120,12 @@ otherwise.
 the image in front of you. Nothing here speaks to catching disease before it is
 apparent; that needs longitudinal data with outcomes.
 
-**One backbone, one probe class.** The probe is deliberately linear because
-anything stronger measures the probe rather than the representation.
+**One backbone, one probe class, and the number depends on the backbone.** The
+probe is deliberately linear because anything stronger measures the probe rather
+than the representation. The identical probe and split on other frozen backbones
+gives Qwen3-Omni-30B-A3B 0.7650 and Aria 0.7080, so the 0.7590 here is a gemma-4
+result. Averaging three backbones' logits reaches 0.7774 at no added parameters:
+see `RiverRider/srt-cxr14-pooled-probe`.
 
 **Labels are NLP-mined** from radiology reports by the dataset authors, with
 their own reported precision and recall. Every model on this dataset inherits

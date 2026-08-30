@@ -51,7 +51,7 @@ augmentation. All 112,120 images of NIH ChestX-ray14, official `test_list.txt`.
 | ChestX-ray14, official split | mean AUROC | trainable params |
 |---|---:|---:|
 | Wang et al. 2017 (dataset authors) | 0.7451 | ~25 M, fine-tuned end to end |
-| **this probe** | **0.7590** | **75,278** |
+| **this probe** | **0.7590** | **5376 x 14 + 14** |
 | view-position only | 0.5883 | shortcut baseline |
 | shuffled labels | 0.5002 | refit floor |
 
@@ -134,8 +134,13 @@ prospective evaluation, no regulatory clearance.
 **Labels are NLP-mined** from radiology reports by the dataset authors. Every
 model on this benchmark inherits that ceiling.
 
-**One backbone.** The probe is deliberately linear, because anything stronger
-starts measuring the probe rather than the representation.
+**One backbone, and the number depends on which.** The probe is deliberately
+linear, because anything stronger starts measuring the probe rather than the
+representation. The identical probe, split and protocol on other frozen
+backbones gives Qwen3-Omni-30B-A3B 0.7650 and Aria 0.7080, so the 0.7590 here is
+a gemma-4 result and is labelled as one. Averaging three backbones' logits,
+which adds no parameters, reaches 0.7774: see
+`RiverRider/srt-cxr14-pooled-probe`.
 
 ## Banked negatives
 

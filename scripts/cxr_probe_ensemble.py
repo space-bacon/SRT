@@ -48,6 +48,9 @@ def parse_args():
     p.add_argument("--wd", type=float, default=1e-2)
     p.add_argument("--bootstrap", type=int, default=1000)
     p.add_argument("--device", default=None)
+    p.add_argument("--save-probe", help="write per-vendor weights, biases and the "
+                                       "train-split normalisation, without which "
+                                       "the pooled score cannot be reproduced")
     p.add_argument("--out", default="/root/cxr14_ensemble.json")
     return p.parse_args()
 
@@ -116,11 +119,12 @@ def main():
     trt, tet = torch.tensor(tr, device=dev), torch.tensor(te, device=dev)
     Ytr = torch.tensor(Y[tr], device=dev)
 
-    X = {}
+    X, NORM = {}, {}
     for t in tags:
         M = torch.tensor(Z[t], device=dev)
         mu, sd = M[trt].mean(0, keepdim=True), M[trt].std(0, keepdim=True) + 1e-6
         X[t] = (M - mu) / sd
+        NORM[t] = (mu.cpu(), sd.cpu())
         del M
 
     res = {"question": "does reading several frozen backbones together recover "
@@ -130,10 +134,12 @@ def main():
            "split_matched_baseline": MATCHED["mean_auroc"],
            "single": {}, "ensemble": {}, "control": {}}
 
-    S = {}
+    S, WB = {}, {}
     print("\nfitting per-vendor probes", flush=True)
     for t in tags:
-        S[t] = fit(X[t][trt], Ytr, X[t][tet], a.epochs, a.lr, a.wd)
+        S[t], W, b = fit(X[t][trt], Ytr, X[t][tet], a.epochs, a.lr, a.wd,
+                         return_weights=True)
+        WB[t] = (W, b)
         m = mean_auroc(S[t], Yte)
         res["single"][t] = round(m, 4)
         print(f"  {t:12} {m:.4f}   vs Wang {m - MATCHED['mean_auroc']:+.4f}")
@@ -192,6 +198,19 @@ def main():
                    "complementary information between backbones. any concat "
                    "gain must be read net of the duplicate-vendor control."}
     json.dump(res, open(a.out, "w"), indent=2)
+    if a.save_probe:
+        # Each vendor is standardised with ITS OWN train-split statistics, so the
+        # normalisation ships with the weights or the pooled score is not
+        # reproducible from raw states.
+        torch.save({"findings": FINDINGS, "vendors": tags,
+                    "rule": "standardise per vendor, apply that vendor's linear "
+                            "probe, average the logits across vendors",
+                    "probes": {t: {"weight": WB[t][0], "bias": WB[t][1],
+                                   "mu": NORM[t][0], "sd": NORM[t][1]}
+                               for t in tags},
+                    "metrics": res["summary"], "split": res["split"]},
+                   a.save_probe)
+        print(f"wrote {a.save_probe}")
     s = res["summary"]
     print(f"\nbest single   {s['best_single']} ({best})")
     print(f"best ensemble {s['best_ensemble']}   vs Wang {s['vs_split_matched']:+}")

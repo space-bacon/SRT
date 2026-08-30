@@ -26,14 +26,27 @@ import subprocess
 import sys
 import tempfile
 
+# Values a card may state that are arithmetic on its own text rather than
+# measurements. Anything here must be checkable by a reader without an artifact.
+DERIVED = {
+    "scripts/publish_cxr_model.py": {
+        5376: "gemma-4 hidden size, stated in the card",
+        14: "ChestX-ray14 findings, stated in the card"},
+}
+
 # publisher -> artifacts whose numbers that card is allowed to quote
 CARDS = {
     "scripts/publish_cxr_probe.py": [
         "artifacts/nla/cxr14_probe_full112k.json",
+        "artifacts/nla/cxr14_ensemble3.json",
         "artifacts/nla/cxr14_pool_sweep.json"],
     "scripts/publish_cxr_model.py": [
         "artifacts/nla/cxr14_probe_full112k.json",
+        "artifacts/nla/cxr14_ensemble3.json",
         "artifacts/nla/cxr14_pool_sweep.json"],
+    "scripts/publish_pooled_probe.py": [
+        "artifacts/nla/cxr14_ensemble3.json",
+        "artifacts/nla/cxr14_transport.json"],
     "scripts/publish_cxr_space.py": [
         "artifacts/nla/cxr14_probe_full112k.json"],
     "scripts/publish_omni_dataset.py": [
@@ -45,6 +58,13 @@ CARDS = {
         "artifacts/nla/omni/joint_frame_roco.json",
         "artifacts/nla/omni/joint_frame_rsicd.json"],
 }
+
+
+def _as_number(tok):
+    try:
+        return float(tok.replace(",", "").rstrip(".%"))
+    except ValueError:
+        return None
 
 
 def card_text(path):
@@ -80,9 +100,14 @@ def main():
             [sys.executable, "scripts/preflight_prose.py", tmp, *arts],
             capture_output=True, text=True).stdout
         unsourced = re.findall(r"^\?\s+(\S+)\s+not in any", out, re.M)
+        ok = DERIVED.get(pub, {})
+        skipped = [u for u in unsourced
+                   if _as_number(u) is not None and _as_number(u) in ok]
+        unsourced = [u for u in unsourced if u not in skipped]
         n = len(unsourced)
         flag = "OK " if n == 0 else "!! "
-        print(f"{flag}{pub}  ({len(arts)} artifacts)  unsourced: {n}")
+        print(f"{flag}{pub}  ({len(arts)} artifacts)  unsourced: {n}"
+              + (f"  ({len(skipped)} derived)" if skipped else ""))
         for u in unsourced:
             print(f"     {u}")
         bad += n
