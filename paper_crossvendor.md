@@ -277,6 +277,16 @@ average and usually gains. Per direction:
 Four of six beat the target's native probe. The best single reading in the study,
 0.7708, comes from a probe that was never fitted on the states it is reading.
 
+![Every cross direction, measured relative to the target backbone's own probe.
+Bars above zero are directions where a borrowed probe outscores the one fitted
+natively.](arxiv_crossvendor/figs/fig1_transport.png)
+
+The same comparison in both labelled domains, with the two controls that bound
+it:
+
+![Native, self-map control, transported and shuffled floor, on satellite scene
+classes and on chest findings.](arxiv_crossvendor/figs/fig3_transport_cost.png)
+
 This was a prediction on record. The satellite result implied pathology should
 transport if scene content did; the observed cost is smaller still.
 
@@ -304,6 +314,9 @@ Two things make this hard to explain away. Averaging logits adds **no
 parameters**, so the gain cannot be capacity. And **Aria is 0.0371 behind the
 baseline on its own** and still improves the average, which means it holds
 something the two better backbones do not.
+
+![Each backbone alone, the mean of their logits, feature concatenation, and the
+duplicate-vendor control, shown with the split-matched baseline.](arxiv_crossvendor/figs/fig2_pooling.png)
 
 ### 6.1 Concatenation gains exactly nothing, and the control is why we know
 
@@ -360,6 +373,9 @@ distinct vendor boundaries a route crosses:
 | 3 | 0.8130 | 0.5640 | 0.3880 | | 0.7820 | 0.4230 | 0.2510 |
 
 Monotone at every hop count in both domains, six of six.
+
+![Round-trip r@1 against hop count, for routes crossing one, two and three
+distinct vendor boundaries, in radiology and satellite.](arxiv_crossvendor/figs/fig4_ladder.png)
 
 **The first reading of this was wrong and is withdrawn.** We originally reported
 a three-way ordering and read it as evidence about *enclosed area*. Dipankar
@@ -460,6 +476,10 @@ All results are reproducible from published states.
 Scripts: `cxr_probe.py`, `cxr_probe_transport.py`, `cxr_probe_ensemble.py`,
 `rsicd_scene_probe.py`, `joint_frame.py`, `holonomy_palindrome.py`,
 `head_swap.py`.
+
+Figures: `make_crossvendor_figures.py`, which reads every value from the result
+files below rather than carrying its own copy, so a regenerated artifact
+regenerates the plot.
 
 Result files: `cxr14_probe_full112k.json`, `cxr14_transport.json`,
 `cxr14_ensemble3.json`, `rsicd_scene_probe.json`, `joint_frame_{roco,rsicd}.json`,
