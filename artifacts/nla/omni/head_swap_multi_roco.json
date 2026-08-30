@@ -1,0 +1,58 @@
+{
+ "question": "does swapping the caption tower move within and cross by the same factor",
+ "credit": "test proposed by Dipankar Sarkar; spread requirement his too",
+ "supersedes": {
+  "file": "head_swap_roco.json",
+  "why": "that version used ONE shared swapped encoder, so the swapped side lost its dependence on the text vendor and swapped-within and swapped-cross estimated the same quantity (0.0835 vs 0.0833). The ratio test collapsed to cross_native / within_native. Not underpowered, degenerate."
+ },
+ "domain": "roco",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "swapped_head_per_slot": {
+  "qwen3omni": "sentence-transformers/all-MiniLM-L6-v2",
+  "gemma4": "BAAI/bge-small-en-v1.5",
+  "mistral": "thenlper/gte-base",
+  "aria": "intfloat/e5-base-v2"
+ },
+ "slot_assignment": "fixed and arbitrary",
+ "n_holdout": 1000,
+ "seeds": 5,
+ "native": {
+  "within": [
+   0.0847,
+   0.0033
+  ],
+  "cross": [
+   0.0872,
+   0.0025
+  ]
+ },
+ "swapped": {
+  "within": [
+   0.1021,
+   0.0023
+  ],
+  "cross": [
+   0.1072,
+   0.003
+  ]
+ },
+ "within_ratio": [
+  1.2064,
+  0.0304
+ ],
+ "cross_ratio": [
+  1.2308,
+  0.0401
+ ],
+ "ratio_gap": -0.0244,
+ "ratio_gap_sd": 0.0476,
+ "gap_over_sd": -0.51,
+ "swapped_arms_differ_by": -0.0051,
+ "swap_is_nondegenerate": true,
+ "verdict": "head-limited: both terms scale together"
+}

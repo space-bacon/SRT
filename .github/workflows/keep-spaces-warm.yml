@@ -1,0 +1,24 @@
+name: keep spaces warm
+
+# A cpu-basic Space with no traffic gets reaped, and the next visitor sees a
+# white page rather than an error: the edge serves the Gradio shell, the browser
+# blocks on /config while the container boots, and nothing renders. srt-omni-demo
+# sat that way for two days and srt-adapter-v1.0-demo, the released product demo,
+# took 69s to wake. Six-hourly traffic keeps them up, and the same run doubles as
+# a monitor because it checks /config rather than /.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet huggingface_hub requests
+      - run: python scripts/ping_spaces.py --author RiverRider --timeout 240
