@@ -144,14 +144,18 @@ def main():
     print("\nfitting ensembles", flush=True)
     Sm = np.mean([S[t] for t in tags], 0)
     res["ensemble"]["logit_mean"] = round(mean_auroc(Sm, Yte), 4)
+    print(f"  logit mean   {res['ensemble']['logit_mean']:.4f}", flush=True)
 
     Sc = fit(torch.cat([X[t][trt] for t in tags], 1), Ytr,
              torch.cat([X[t][tet] for t in tags], 1), a.epochs, a.lr, a.wd)
     res["ensemble"]["concat"] = round(mean_auroc(Sc, Yte), 4)
+    print(f"  concat       {res['ensemble']['concat']:.4f}", flush=True)
 
     Sd = fit(torch.cat([X[best][trt]] * len(tags), 1), Ytr,
              torch.cat([X[best][tet]] * len(tags), 1), a.epochs, a.lr, a.wd)
     res["control"][f"concat_{best}_with_itself"] = round(mean_auroc(Sd, Yte), 4)
+    print(f"  control      {res['control'][f'concat_{best}_with_itself']:.4f}",
+          flush=True)
     res["control"]["capacity_effect"] = round(
         mean_auroc(Sd, Yte) - res["single"][best], 4)
     res["control"]["concat_gain_net_of_capacity"] = round(
