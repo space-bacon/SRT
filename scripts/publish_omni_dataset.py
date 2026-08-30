@@ -64,6 +64,31 @@ Both intervals contain 1.0. The claim is indistinguishability, not a specific
 retained fraction. Four of the twelve cross directions score above the
 within-vendor baseline of the gallery they search.
 
+## What retention does and does not tell you (added after publication)
+
+**The ratio above is close to insensitive to the vendor boundary it is named
+after, and later work established why.** Both of its terms are limited by the
+caption head, not by the difference between vendors:
+
+| | r@1 |
+|---|---:|
+| cross-vendor image-to-image agreement, direct ridge map | **0.8024** |
+| within-vendor text-to-image retrieval | 0.1050 |
+| shuffled floor | 0.0007 |
+
+The encoders agree with each other about pictures roughly eight times better
+than any one of them connects its own captions to its own pictures. A ratio of
+two caption-head-limited numbers cannot report much about the encoders.
+
+Tested directly by swapping the head. Replacing the caption tower with an
+unrelated `all-MiniLM-L6-v2` on the radiology gallery moves both terms by
+nearly the same factor: within scales 0.938, cross scales 0.973, gap 0.0347.
+That is what a shared bottleneck predicts. Test proposed by Dipankar Sarkar.
+
+**Use the 0.8024 image-agreement number for portability claims.** It is
+measured without a shared space, against a floor of 0.0007, and it is not
+throttled by the caption head.
+
 ## Read this before using the states
 
 **Centering is not optional.** Raw cosine between unrelated items on these

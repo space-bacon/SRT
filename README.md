@@ -340,23 +340,63 @@ vendors to 0.005 or below. Every number here is centered.
 Transporting a state around a closed cycle of vendors returns it almost
 exactly after one lap: holonomy gap **+0.0043 ± 0.0037** across 18 cycles,
 which is the same null every single-pass perturbation gave. Iterating the
-same maps to 32 hops separates them:
+same maps separates them cleanly. Hop counts are matched at 12, 24 and 36,
+where every route's period divides evenly:
 
-| loop at 32 hops | crosses | encloses | return r@1 |
-|---|---|---|---:|
-| self-loop | nothing | nothing | 1.0000 |
-| there-and-back | an edge | no area | 0.7162 |
-| four-cycle | edges | area | 0.3830 |
+| route | distinct edges | encloses area | 12 | 24 | 36 |
+|---|---:|---|---:|---:|---:|
+| self-loop | 0 | no | 1.0000 | 1.0000 | 1.0000 |
+| there-and-back | 1 | no | 0.9470 | 0.8190 | 0.7220 |
+| palindrome | 3 | **no** | 0.8130 | 0.5640 | 0.3880 |
+| four-cycle | 4 | yes | 0.7850 | 0.5230 | 0.3200 |
 
-The four-cycle sits below even the worst single there-and-back (0.5020), so
-edge quality alone does not explain it. **Caveat carried on the face of the
-claim**: iterating any non-normal linear map collapses toward its dominant
-eigenspace and all three arms pay that cost. Hop counts are matched and the
-self-loop holds at 1.0000, so read the ordering rather than the size of the
+**The first reading of this was wrong and is withdrawn.** We originally
+reported a three-way ordering and read it as evidence about enclosed area.
+Dipankar Sarkar pointed out that there-and-back also differs by composing a
+map with its own approximate inverse, so errors cancel pairwise, and proposed
+the palindrome `A → B → C → D → C → B → A`: four vendors, every edge
+retraced, zero enclosed area. The palindrome tracks the four-cycle, so area
+is not the variable. It also retraces everything, so retracing is not the
+protection.
+
+Holding area at zero and retracing fixed, and varying only how many distinct
+vendor boundaries a route crosses:
+
+| distinct edges | 12 | 24 | 36 |
+|---:|---:|---:|---:|
+| 1 | 0.9470 | 0.8190 | 0.7220 |
+| 2 | 0.9090 | 0.7170 | 0.5580 |
+| 3 | 0.8130 | 0.5640 | 0.3880 |
+
+Monotone. That also orders the original result, where the self-loop crosses
+none, there-and-back one, and the four-cycle four.
+
+**Caveat carried on the face of the claim**: iterating any non-normal linear
+map collapses toward its dominant eigenspace and every route pays that cost.
+Hop counts are matched, so read the ordering rather than the size of the
 split. The practical consequence is that two models tying on a single-pass
 retrieval benchmark is not evidence they carry the same structure.
 
-- **Artifact**: [`artifacts/nla/omni/semiosis_holonomy_roco.json`](artifacts/nla/omni/semiosis_holonomy_roco.json)
+- **Artifacts**: [`artifacts/nla/omni/semiosis_holonomy_roco.json`](artifacts/nla/omni/semiosis_holonomy_roco.json),
+  [`artifacts/nla/omni/holonomy_palindrome_roco.json`](artifacts/nla/omni/holonomy_palindrome_roco.json)
+
+### The caption head is the bottleneck, tested by replacing it
+
+The claim that `retention` is insensitive to the vendor boundary rests on both
+of its terms being limited by the caption head. The test that settles it is to
+hold the image side fixed and swap the head. An unrelated off-the-shelf
+encoder, `all-MiniLM-L6-v2`, as the caption tower on ROCO:
+
+| | native head | swapped head | ratio |
+|---|---:|---:|---:|
+| within r@1 | 0.0887 | 0.0833 | 0.938 |
+| cross r@1 | 0.0853 | 0.0830 | 0.973 |
+
+Both terms scale by nearly the same factor, gap 0.0347. That is what
+"limited by the shared head" predicts, and it is the test designed to break
+the reframe. Test proposed by Dipankar Sarkar.
+
+- **Artifact**: [`artifacts/nla/omni/head_swap_roco.json`](artifacts/nla/omni/head_swap_roco.json)
 
 ## Medical imaging — frozen states, linear probes, split-matched
 
@@ -407,6 +447,8 @@ Results that cut against us, kept because they bound the claims above.
 | A within-vendor r@1 of 0.015 bounds where retention is usable | **Withdrawn.** It was one perturbation geometry and did not survive a change of geometry |
 | The shared subspace is a thin remnant in low-variance directions | **Refuted.** Cross tracks within at every spectral level, both keeping and dropping the head |
 | Interpretants fail to compose (triadic irreducibility) | **Negative.** Routing through a third vendor costs 0.0160 beyond one extra fitted hop; the dyadic reduction holds at one pass |
+| Vendor-first routing beats a directly fitted cross-vendor map | **Photographs only.** 12/12 on COCO at p=0.0002, but 8/12 on radiology (p=0.19) and 5/12 on satellite (p=0.81). Published as general and withdrawn to one domain |
+| The four-cycle penalty is about enclosed area | **Withdrawn.** A palindrome route with zero area tracks the four-cycle. Degradation is monotone in distinct vendor boundaries crossed, which was confounded with area |
 
 ### Train from scratch
 

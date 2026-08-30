@@ -371,8 +371,8 @@ read-only ≈ **$400–700**; Phase-B inject ≈ **$1–2K**; R0–R2 rungs ≈
 | Workstream | Where it stands | Branch | Status |
 |---|---|---|---|
 | **Frozen features on medical images** | ChestX-ray14, official split: 0.7590 mean AUROC against 0.7451 for the dataset authors' fine-tuned ResNet-50, ahead on 12/14. NLST CT slice probe 0.9380. | `main` | Live: dataset, model and Space on HF. Untested on backbones other than gemma4. |
-| **Cross-vendor portability** | Image agreement across four vendors r@1 0.8024 vs 0.0007 floor. Vendor-then-modality beats a directly fitted map 12/12. | `main` | Live: `srt-omni-demo`, states published. The caption head at 0.1050 is the bottleneck. |
-| **Measurement discipline** | One-pass tests cannot resolve structure that 32 hops separates (1.0000 / 0.7162 / 0.3830). MTEB issue #5330 filed. | `main` | Open question with the benchmark maintainers. |
+| **Cross-vendor portability** | Image agreement across four vendors r@1 0.8024 vs 0.0007 floor. Caption head confirmed as the shared bottleneck by head swap: within scales 0.938, cross 0.973. | `main` | Live: `srt-omni-demo`, states published. The caption head at 0.1050 is the bottleneck. |
+| **Measurement discipline** | One-pass tests cannot resolve structure that iteration exposes. Degradation is monotone in distinct vendor boundaries crossed (0.7220 / 0.5580 / 0.3880 at 36 hops). MTEB issue #5330 filed. | `main` | Open question with the benchmark maintainers. |
 | **SRT-NLA** (activation verbalization) | `srt-nla-av-v1`, best-of-64 ρ_norm = 0.92, greedy ρ_norm = 0.26 | `nla` | Released 2026-05-18. Greedy gap is the open problem. |
 | **SRT-Adapter STS head** *(superseded)* | `v22c_a050`. Kept for provenance, not a current claim: it is far off the pace of dedicated encoders and was never built to compete with them. | `main` | `v1.0` stays on HF for downstream pinning. Not a line we are pushing. |
 

@@ -30,7 +30,9 @@ CARDS = {
         "artifacts/nla/cxr14_probe_full112k.json"],
     "scripts/publish_omni_dataset.py": [
         "artifacts/nla/omni/xvendor4.json",
-        "artifacts/nla/omni/triadic_composition_roco.json"],
+        "artifacts/nla/omni/triadic_composition_roco.json",
+        "artifacts/nla/omni/head_swap_roco.json",
+        "artifacts/nla/omni/geometry_compare_roco.json"],
 }
 
 
