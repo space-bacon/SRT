@@ -11,9 +11,11 @@
 # to the LaCie, which are the two places that survive both a dead box and a dead
 # laptop.
 #
-# rsync rather than scp: --partial --append-verify makes a dropped connection
-# cost the remainder of a file instead of the whole thing, and this box has been
-# dropping ssh under load all night.
+# rsync rather than scp for --partial, so a dropped connection costs the
+# remainder of a file instead of the whole thing, and this box has been dropping
+# ssh under load all night. NOTE: macOS ships openrsync ("2.6.9 compatible"),
+# which has --partial/--append/--inplace but NOT --append-verify. That flag is
+# rsync 3.0+ and fails outright here.
 #
 #   nohup bash scripts/bank_results.sh > logs/bank.log 2>&1 &
 set -u
@@ -35,7 +37,7 @@ mkdir -p "$STATES" "$NLA" "$REPO/logs"
 cd "$REPO" || exit 1
 say () { echo "[$(date '+%H:%M:%S')] $*"; }
 
-pull () {  # remote_name  local_dir
+pull () {  # remote_name  local_dir -> 0 only when a NEW file actually arrived
   local f=$1 d=$2
   [ -s "$d/$f" ] && return 1
   ssh $SSH_OPTS $BOX "test -s /root/$f" 2>/dev/null || return 1
@@ -46,25 +48,33 @@ pull () {  # remote_name  local_dir
   b=$(ssh $SSH_OPTS $BOX "stat -c %s /root/$f" 2>/dev/null)
   [ "$a" != "$b" ] && { say "still growing, will retry: $f"; return 1; }
   say "pulling $f ($(echo "$a" | awk '{printf "%.1f MB", $1/1e6}'))"
-  rsync -e "ssh $SSH_OPTS" --partial --append-verify -q \
-        "$BOX:/root/$f" "$d/$f" && say "  got $f" || say "  FAILED $f"
+  if rsync -e "ssh $SSH_OPTS" --partial -q "$BOX:/root/$f" "$d/$f"; then
+    say "  got $f"
+    return 0
+  fi
+  say "  FAILED $f"
+  return 1
 }
 
 say "watching the box; will bank each artifact as it lands"
 while :; do
-  got_new=0
-  for f in $JSONS; do pull "$f" "$NLA" && got_new=1; done
-  for f in $NPZS;  do pull "$f" "$STATES" && got_new=1; done
+  fresh=""
+  for f in $JSONS; do pull "$f" "$NLA" && fresh="$fresh $f"; done
+  for f in $NPZS;  do pull "$f" "$STATES"; done
 
-  if [ "$got_new" = 1 ]; then
-    new=$(cd "$REPO" && git status --porcelain artifacts/nla | grep -c . || true)
-    if [ "${new:-0}" -gt 0 ]; then
-      git add artifacts/nla/*.json 2>/dev/null
-      git commit -q -m "bank results off the box as they land
-
-Pulled automatically rather than at the end of the chain. A file that exists
-only on a rented vast.ai box is one host-reclaim away from gone, which has
-already cost us two runs." && git push -q origin main && say "committed + pushed"
+  # Stage only what this run pulled. A blanket add on artifacts/nla/*.json
+  # sweeps up unrelated local work under a commit message about the box.
+  if [ -n "$fresh" ]; then
+    staged=0
+    for f in $fresh; do
+      [ -s "$NLA/$f" ] && git add "$NLA/$f" && staged=1
+    done
+    if [ "$staged" = 1 ]; then
+      git commit -q -m "bank from the box:$fresh" -m \
+"Pulled automatically as it landed rather than at the end of the chain. A file
+that exists only on a rented vast.ai box is one host-reclaim away from gone,
+which has already cost us two runs." && git push -q origin main \
+        && say "committed +$fresh"
     fi
   fi
 
