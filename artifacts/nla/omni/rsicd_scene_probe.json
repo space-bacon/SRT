@@ -1,0 +1,188 @@
+{
+  "question": "is land-use scene content linearly present in every backbone, and is it the same direction",
+  "domain": "rsicd",
+  "vendors": [
+    "gemma4",
+    "aria",
+    "mistral",
+    "qwen3omni"
+  ],
+  "classes": [
+    "airport",
+    "bareland",
+    "beach",
+    "bridge",
+    "church",
+    "desert",
+    "farmland",
+    "forest",
+    "industrial",
+    "meadow",
+    "mountain",
+    "parking",
+    "playground",
+    "pond",
+    "residential",
+    "river"
+  ],
+  "n_train": 4000,
+  "n_test": 1000,
+  "label_source": "keyword match on RSICD captions, weak supervision, same shape as ChestX-ray14's NLP-mined findings",
+  "native": {
+    "gemma4": {
+      "mean_auroc": 0.9589,
+      "per_class": {
+        "airport": 0.9971,
+        "bareland": 0.8596,
+        "beach": 0.9995,
+        "bridge": 0.9993,
+        "church": 0.9989,
+        "desert": 0.9901,
+        "farmland": 0.8678,
+        "forest": 0.9972,
+        "industrial": 0.9928,
+        "meadow": 0.9279,
+        "mountain": 0.9531,
+        "parking": 0.9589,
+        "playground": 0.9762,
+        "pond": 0.9423,
+        "residential": 0.9677,
+        "river": 0.9133
+      }
+    },
+    "aria": {
+      "mean_auroc": 0.9573,
+      "per_class": {
+        "airport": 0.9922,
+        "bareland": 0.8442,
+        "beach": 0.9862,
+        "bridge": 0.9966,
+        "church": 0.9985,
+        "desert": 0.9895,
+        "farmland": 0.88,
+        "forest": 0.9964,
+        "industrial": 0.9883,
+        "meadow": 0.9662,
+        "mountain": 0.954,
+        "parking": 0.9328,
+        "playground": 0.9778,
+        "pond": 0.9531,
+        "residential": 0.9732,
+        "river": 0.8878
+      }
+    },
+    "mistral": {
+      "mean_auroc": 0.9312,
+      "per_class": {
+        "airport": 0.9983,
+        "bareland": 0.6891,
+        "beach": 0.9814,
+        "bridge": 0.9996,
+        "church": 0.9974,
+        "desert": 0.9793,
+        "farmland": 0.8515,
+        "forest": 0.9946,
+        "industrial": 0.9707,
+        "meadow": 0.9366,
+        "mountain": 0.9258,
+        "parking": 0.9296,
+        "playground": 0.8848,
+        "pond": 0.9353,
+        "residential": 0.9735,
+        "river": 0.8522
+      }
+    },
+    "qwen3omni": {
+      "mean_auroc": 0.9555,
+      "per_class": {
+        "airport": 0.9974,
+        "bareland": 0.7998,
+        "beach": 0.9993,
+        "bridge": 0.9994,
+        "church": 0.9987,
+        "desert": 0.9806,
+        "farmland": 0.8878,
+        "forest": 0.9973,
+        "industrial": 0.993,
+        "meadow": 0.9046,
+        "mountain": 0.9687,
+        "parking": 0.9556,
+        "playground": 0.9688,
+        "pond": 0.971,
+        "residential": 0.9621,
+        "river": 0.9043
+      }
+    }
+  },
+  "transported": {
+    "gemma4 probe on aria": {
+      "mean_auroc": 0.9483,
+      "vs_native_target": -0.009
+    },
+    "gemma4 probe on mistral": {
+      "mean_auroc": 0.9442,
+      "vs_native_target": 0.013
+    },
+    "gemma4 probe on qwen3omni": {
+      "mean_auroc": 0.9583,
+      "vs_native_target": 0.0028
+    },
+    "aria probe on gemma4": {
+      "mean_auroc": 0.9522,
+      "vs_native_target": -0.0067
+    },
+    "aria probe on mistral": {
+      "mean_auroc": 0.9414,
+      "vs_native_target": 0.0102
+    },
+    "aria probe on qwen3omni": {
+      "mean_auroc": 0.957,
+      "vs_native_target": 0.0015
+    },
+    "mistral probe on gemma4": {
+      "mean_auroc": 0.9376,
+      "vs_native_target": -0.0213
+    },
+    "mistral probe on aria": {
+      "mean_auroc": 0.9377,
+      "vs_native_target": -0.0196
+    },
+    "mistral probe on qwen3omni": {
+      "mean_auroc": 0.9502,
+      "vs_native_target": -0.0053
+    },
+    "qwen3omni probe on gemma4": {
+      "mean_auroc": 0.9564,
+      "vs_native_target": -0.0025
+    },
+    "qwen3omni probe on aria": {
+      "mean_auroc": 0.9521,
+      "vs_native_target": -0.0052
+    },
+    "qwen3omni probe on mistral": {
+      "mean_auroc": 0.9449,
+      "vs_native_target": 0.0137
+    }
+  },
+  "self_map": {
+    "gemma4": 0.9593,
+    "aria": 0.9576,
+    "mistral": 0.9332,
+    "qwen3omni": 0.9568
+  },
+  "shuffled": {
+    "gemma4 shuffled probe on gemma4": 0.5012,
+    "gemma4 shuffled probe on aria": 0.4891,
+    "gemma4 shuffled probe on mistral": 0.5053,
+    "gemma4 shuffled probe on qwen3omni": 0.5099
+  },
+  "summary": {
+    "mean_native": 0.9507,
+    "mean_self_map": 0.9517,
+    "mean_transported": 0.9484,
+    "transport_cost": 0.0024,
+    "mean_shuffled": 0.5014,
+    "vendor_spread": 0.0277,
+    "reading": "transported near native means one probe reads every backbone and the scene direction is shared. transported near the shuffled floor means each backbone carries scene content in its own private direction."
+  }
+}

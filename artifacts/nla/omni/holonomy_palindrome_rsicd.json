@@ -1,0 +1,127 @@
+{
+ "question": "is the four-cycle penalty about enclosed area or about never retracing an edge",
+ "credit": "control proposed by Dipankar Sarkar",
+ "domain": "rsicd",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "n_holdout": 1000,
+ "routes": {
+  "self-loop, no boundary": "qwen3omni -> qwen3omni",
+  "there-and-back, 1 edge retraced": "qwen3omni -> gemma4 -> qwen3omni",
+  "palindrome, 4 vendors, retraced, zero area": "qwen3omni -> gemma4 -> mistral -> aria -> mistral -> gemma4 -> qwen3omni",
+  "four-cycle, 4 vendors, never retraces": "qwen3omni -> gemma4 -> mistral -> aria -> qwen3omni"
+ },
+ "by_hops": {
+  "self-loop, no boundary": {
+   "12": {
+    "r@1": 1.0,
+    "cos": 0.9806
+   },
+   "24": {
+    "r@1": 1.0,
+    "cos": 0.9719
+   },
+   "36": {
+    "r@1": 1.0,
+    "cos": 0.9658
+   }
+  },
+  "there-and-back, 1 edge retraced": {
+   "12": {
+    "r@1": 0.965,
+    "cos": 0.9039
+   },
+   "24": {
+    "r@1": 0.776,
+    "cos": 0.8729
+   },
+   "36": {
+    "r@1": 0.584,
+    "cos": 0.853
+   }
+  },
+  "palindrome, 4 vendors, retraced, zero area": {
+   "12": {
+    "r@1": 0.782,
+    "cos": 0.8766
+   },
+   "24": {
+    "r@1": 0.423,
+    "cos": 0.8378
+   },
+   "36": {
+    "r@1": 0.251,
+    "cos": 0.8133
+   }
+  },
+  "four-cycle, 4 vendors, never retraces": {
+   "12": {
+    "r@1": 0.745,
+    "cos": 0.8727
+   },
+   "24": {
+    "r@1": 0.39,
+    "cos": 0.8336
+   },
+   "36": {
+    "r@1": 0.235,
+    "cos": 0.8087
+   }
+  }
+ },
+ "verdict_by_hops": {
+  "12": "area",
+  "24": "area",
+  "36": "area"
+ },
+ "edge_count_ladder": {
+  "1 distinct edge": {
+   "12": {
+    "r@1": 0.965,
+    "cos": 0.9039
+   },
+   "24": {
+    "r@1": 0.776,
+    "cos": 0.8729
+   },
+   "36": {
+    "r@1": 0.584,
+    "cos": 0.853
+   }
+  },
+  "2 distinct edges": {
+   "12": {
+    "r@1": 0.917,
+    "cos": 0.8919
+   },
+   "24": {
+    "r@1": 0.58,
+    "cos": 0.8557
+   },
+   "36": {
+    "r@1": 0.377,
+    "cos": 0.8327
+   }
+  },
+  "3 distinct edges": {
+   "12": {
+    "r@1": 0.782,
+    "cos": 0.8766
+   },
+   "24": {
+    "r@1": 0.423,
+    "cos": 0.8378
+   },
+   "36": {
+    "r@1": 0.251,
+    "cos": 0.8133
+   }
+  }
+ },
+ "verdict": "distinct edges crossed",
+ "reading": "the palindrome tracks the four-cycle while enclosing zero area, so area is not the variable, and it retraces every edge, so retracing is not the protection either. degradation is monotone in the number of distinct vendor boundaries a route crosses, which also orders the original three-way result: the self-loop crosses none, there-and-back crosses one, the four-cycle crosses four. the enclosed-area reading is withdrawn; area was confounded with edge count."
+}
