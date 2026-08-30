@@ -2,9 +2,17 @@
 """Check every number in a publisher's card against the artifacts, before upload.
 
 Two wrong figures reached public cards in one session. 0.8192 was carried over
-from a superseded 35k pilot, and 0.5827 appeared in no artifact at all. Both
-survived because preflight_prose.py was only ever pointed at prose drafts, never
-at the card text the publishers actually upload.
+from a superseded 35k pilot, and the view-only baseline was quoted as 0.5896
+when the reproducible value is 0.5883. Both survived because preflight_prose.py
+was only ever pointed at prose drafts, never at the card text the publishers
+actually upload.
+
+The second one is the more instructive failure. 0.5827 and 0.5896 were both
+real outputs, from the same code on two machines, because auroc() promised tied
+ranks were averaged and did not average them. A binary feature is all ties, so
+the baseline silently became a property of the sort order. Agreeing with an
+artifact is not the same as being right, and the first fix here replaced a
+wrong number with another wrong number for exactly that reason.
 
 This imports each publisher, pulls its CARD string, and runs the same number
 check over it. A card is prose that makes claims, so it gets the same gate.

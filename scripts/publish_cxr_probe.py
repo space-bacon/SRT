@@ -44,7 +44,7 @@ under BCE, which is fourteen logistic regressions.
 |---|---:|---|
 | Wang et al. 2017 (dataset authors) | 0.7451 | ResNet-50, fine-tuned end to end |
 | **this probe** | **0.7590** | frozen backbone, linear probe |
-| view-position only | 0.5896 | shortcut baseline |
+| view-position only | 0.5883 | shortcut baseline |
 | shuffled labels | 0.5002 | refit floor |
 
 Ahead on **12 of 14** findings.
@@ -94,12 +94,17 @@ column is thin for everyone and should not carry weight in either direction.
 **Shuffled labels (0.5002).** Labels permuted within the training split and the
 probe refit. Anything above 0.5 on held-out data is leakage or a bug.
 
-**View position only (0.5896).** Portable AP films are taken of sicker, bedbound
+**View position only (0.5883).** Portable AP films are taken of sicker, bedbound
 patients, so view alone is a real route to a high AUROC that involves no
 pathology. A finding that does not clear this baseline has not been detected.
 The baseline is **folded** (`max(vw, 1-vw)`): Hernia's raw view-only AUROC is
-0.3436, which is 0.6564 of shortcut once flipped, and reporting the raw figure
+0.3033, which is 0.6967 of shortcut once flipped, and reporting the raw figure
 would have flattered the probe.
+
+View position is a single binary feature, so every one of its AUROC comparisons
+is a tie. Scoring it needs rank averaging within tied groups, or the answer
+becomes an artefact of the sort order and moves between machines. An earlier
+release of this card said 0.5896 for that reason.
 
 **Patient-level cluster bootstrap.** Confidence intervals resample *patients*,
 not images. The test split is 25,596 films from 2,797 patients, roughly 9 per

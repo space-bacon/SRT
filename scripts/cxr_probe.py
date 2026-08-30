@@ -79,9 +79,16 @@ def auroc(scores, labels):
     neg = len(labels) - pos
     if pos == 0 or neg == 0:
         return float("nan")
-    order = np.argsort(scores)
-    ranks = np.empty(len(scores), float)
-    ranks[order] = np.arange(1, len(scores) + 1)
+    n = len(scores)
+    order = np.argsort(scores, kind="mergesort")
+    s = scores[order]
+    # Tied scores must share the mean of the ranks they span. Without this a
+    # binary feature is all ties, and the answer becomes whatever order the
+    # sort happened to pick, which differs across platforms.
+    starts = np.flatnonzero(np.r_[True, s[1:] != s[:-1]])
+    ends = np.r_[starts[1:], n]
+    ranks = np.empty(n, float)
+    ranks[order] = np.repeat((starts + ends + 1) / 2.0, ends - starts)
     return float((ranks[labels == 1].sum() - pos * (pos + 1) / 2) / (pos * neg))
 
 
