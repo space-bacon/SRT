@@ -1,0 +1,216 @@
+{
+  "summary": {
+    "mean_auroc": 0.708,
+    "mean_shuffled_floor": 0.5016,
+    "mean_view_only": 0.5883,
+    "findings_beating_view_only": 14,
+    "split_matched_baseline": {
+      "source": "Wang et al. 2017, arXiv:1705.02315v5 Table 17, ChestX-ray14 column",
+      "split": "official test_list.txt, same as ours",
+      "method": "ImageNet-pretrained ResNet-50, fine-tuned end to end",
+      "mean_auroc": 0.7451,
+      "per_finding": {
+        "Atelectasis": 0.7003,
+        "Cardiomegaly": 0.81,
+        "Effusion": 0.7585,
+        "Infiltration": 0.6614,
+        "Mass": 0.6933,
+        "Nodule": 0.6687,
+        "Pneumonia": 0.658,
+        "Pneumothorax": 0.7993,
+        "Consolidation": 0.7032,
+        "Edema": 0.8052,
+        "Emphysema": 0.833,
+        "Fibrosis": 0.7859,
+        "Pleural_Thickening": 0.6835,
+        "Hernia": 0.8717
+      }
+    },
+    "vs_split_matched": -0.0371,
+    "beats_split_matched_on": 2,
+    "references_not_split_matched": {
+      "wang2017": 0.7381,
+      "yao2017": 0.8027,
+      "chexnet": 0.8414
+    },
+    "reference_split": "random 70/10/20 patient-disjoint, not the official list",
+    "our_split": "official test_list.txt",
+    "n_train": 86524,
+    "n_test": 25596,
+    "n_test_patients": 2797,
+    "images_per_test_patient": 9.15,
+    "bootstrap_unit": "patient",
+    "note": "detection, not early detection: these labels describe what is visible in the image, so nothing here speaks to catching disease before it is apparent"
+  },
+  "per_finding": {
+    "Atelectasis": {
+      "n_pos_test": 3279,
+      "prevalence": 0.1281,
+      "auroc": 0.6802,
+      "auroc_ci": {
+        "ci95_low": 0.666,
+        "ci95_high": 0.6945
+      },
+      "shuffled_floor": 0.5072,
+      "view_only_baseline": 0.5106,
+      "beats_view": true
+    },
+    "Cardiomegaly": {
+      "n_pos_test": 1069,
+      "prevalence": 0.0418,
+      "auroc": 0.7379,
+      "auroc_ci": {
+        "ci95_low": 0.712,
+        "ci95_high": 0.7603
+      },
+      "shuffled_floor": 0.5146,
+      "view_only_baseline": 0.5178,
+      "beats_view": true
+    },
+    "Effusion": {
+      "n_pos_test": 4658,
+      "prevalence": 0.182,
+      "auroc": 0.7306,
+      "auroc_ci": {
+        "ci95_low": 0.7182,
+        "ci95_high": 0.7427
+      },
+      "shuffled_floor": 0.4847,
+      "view_only_baseline": 0.5345,
+      "beats_view": true
+    },
+    "Infiltration": {
+      "n_pos_test": 6112,
+      "prevalence": 0.2388,
+      "auroc": 0.6647,
+      "auroc_ci": {
+        "ci95_low": 0.6536,
+        "ci95_high": 0.6742
+      },
+      "shuffled_floor": 0.4997,
+      "view_only_baseline": 0.6051,
+      "beats_view": true
+    },
+    "Mass": {
+      "n_pos_test": 1748,
+      "prevalence": 0.0683,
+      "auroc": 0.6595,
+      "auroc_ci": {
+        "ci95_low": 0.6339,
+        "ci95_high": 0.6824
+      },
+      "shuffled_floor": 0.4979,
+      "view_only_baseline": 0.5563,
+      "beats_view": true
+    },
+    "Nodule": {
+      "n_pos_test": 1623,
+      "prevalence": 0.0634,
+      "auroc": 0.6118,
+      "auroc_ci": {
+        "ci95_low": 0.591,
+        "ci95_high": 0.6326
+      },
+      "shuffled_floor": 0.4975,
+      "view_only_baseline": 0.5557,
+      "beats_view": true
+    },
+    "Pneumonia": {
+      "n_pos_test": 555,
+      "prevalence": 0.0217,
+      "auroc": 0.6201,
+      "auroc_ci": {
+        "ci95_low": 0.5958,
+        "ci95_high": 0.6436
+      },
+      "shuffled_floor": 0.506,
+      "view_only_baseline": 0.5724,
+      "beats_view": true
+    },
+    "Pneumothorax": {
+      "n_pos_test": 2665,
+      "prevalence": 0.1041,
+      "auroc": 0.7884,
+      "auroc_ci": {
+        "ci95_low": 0.7708,
+        "ci95_high": 0.8038
+      },
+      "shuffled_floor": 0.4954,
+      "view_only_baseline": 0.5829,
+      "beats_view": true
+    },
+    "Consolidation": {
+      "n_pos_test": 1815,
+      "prevalence": 0.0709,
+      "auroc": 0.6749,
+      "auroc_ci": {
+        "ci95_low": 0.6582,
+        "ci95_high": 0.6906
+      },
+      "shuffled_floor": 0.4925,
+      "view_only_baseline": 0.6177,
+      "beats_view": true
+    },
+    "Edema": {
+      "n_pos_test": 925,
+      "prevalence": 0.0361,
+      "auroc": 0.7987,
+      "auroc_ci": {
+        "ci95_low": 0.7792,
+        "ci95_high": 0.8176
+      },
+      "shuffled_floor": 0.494,
+      "view_only_baseline": 0.6811,
+      "beats_view": true
+    },
+    "Emphysema": {
+      "n_pos_test": 1093,
+      "prevalence": 0.0427,
+      "auroc": 0.775,
+      "auroc_ci": {
+        "ci95_low": 0.7509,
+        "ci95_high": 0.7964
+      },
+      "shuffled_floor": 0.4931,
+      "view_only_baseline": 0.5722,
+      "beats_view": true
+    },
+    "Fibrosis": {
+      "n_pos_test": 435,
+      "prevalence": 0.017,
+      "auroc": 0.7301,
+      "auroc_ci": {
+        "ci95_low": 0.6977,
+        "ci95_high": 0.7609
+      },
+      "shuffled_floor": 0.5069,
+      "view_only_baseline": 0.6455,
+      "beats_view": true
+    },
+    "Pleural_Thickening": {
+      "n_pos_test": 1143,
+      "prevalence": 0.0447,
+      "auroc": 0.6848,
+      "auroc_ci": {
+        "ci95_low": 0.6634,
+        "ci95_high": 0.7075
+      },
+      "shuffled_floor": 0.4967,
+      "view_only_baseline": 0.5872,
+      "beats_view": true
+    },
+    "Hernia": {
+      "n_pos_test": 86,
+      "prevalence": 0.0034,
+      "auroc": 0.7552,
+      "auroc_ci": {
+        "ci95_low": 0.6686,
+        "ci95_high": 0.835
+      },
+      "shuffled_floor": 0.5364,
+      "view_only_baseline": 0.6967,
+      "beats_view": true
+    }
+  },
+  "states": "/root/cxr14_aria.npz"
+}
