@@ -1,0 +1,99 @@
+{
+ "question": "what do independent sources answering the same prompt score",
+ "context": "missing baseline for the inter-model number in arXiv:2510.22954",
+ "source": "COCO val2017, 5 captions per image, one annotator each",
+ "n_images": 2000,
+ "paper_reference": {
+  "inter_model_low": 0.71,
+  "inter_model_high": 0.82,
+  "intra_model_typical": 0.8,
+  "random_pair_floor": "0.1-0.2",
+  "encoder": "openai/text-embedding-3-small"
+ },
+ "scope": "image captioning is more constrained than open-ended generation, so this calibrates the question rather than reproducing their setup",
+ "per_encoder": {
+  "minilm": {
+   "model": "sentence-transformers/all-MiniLM-L6-v2",
+   "raw": {
+    "human_human_same_image": 0.6121,
+    "sd": 0.1073,
+    "different_image_floor": 0.0898,
+    "gap": 0.5224
+   },
+   "centered": {
+    "human_human_same_image": 0.5738,
+    "sd": 0.1185,
+    "different_image_floor": -0.0006,
+    "gap": 0.5743
+   }
+  },
+  "bge": {
+   "model": "BAAI/bge-small-en-v1.5",
+   "raw": {
+    "human_human_same_image": 0.761,
+    "sd": 0.0601,
+    "different_image_floor": 0.4412,
+    "gap": 0.3198
+   },
+   "centered": {
+    "human_human_same_image": 0.5689,
+    "sd": 0.1117,
+    "different_image_floor": 0.0002,
+    "gap": 0.5687
+   }
+  },
+  "gte": {
+   "model": "thenlper/gte-base",
+   "raw": {
+    "human_human_same_image": 0.8876,
+    "sd": 0.0287,
+    "different_image_floor": 0.7361,
+    "gap": 0.1514
+   },
+   "centered": {
+    "human_human_same_image": 0.5702,
+    "sd": 0.1143,
+    "different_image_floor": 0.0008,
+    "gap": 0.5695
+   }
+  },
+  "e5": {
+   "model": "intfloat/e5-base-v2",
+   "raw": {
+    "human_human_same_image": 0.8784,
+    "sd": 0.0326,
+    "different_image_floor": 0.7241,
+    "gap": 0.1542
+   },
+   "centered": {
+    "human_human_same_image": 0.5593,
+    "sd": 0.1152,
+    "different_image_floor": -0.0005,
+    "gap": 0.5598
+   }
+  }
+ },
+ "summary": {
+  "human_human_raw_range": [
+   0.6121,
+   0.8876
+  ],
+  "floor_matched_encoder": "minilm",
+  "floor_matched_floor": 0.0898,
+  "floor_matched_human_human": 0.6121,
+  "paper_inter_model_range": [
+   0.71,
+   0.82
+  ],
+  "models_above_human_on_floor_matched_scale": true,
+  "raw_gap_range": [
+   0.1514,
+   0.5224
+  ],
+  "centered_gap_range": [
+   0.5598,
+   0.5743
+  ],
+  "reading": "Two findings, and the first one goes THEIR way. On the encoder whose random-pair floor matches theirs, independent humans describing the same image reach 0.6121, below the 0.71 to 0.82 they report between models on the same query. So models are more alike than independent humans on a floor-matched scale, which supports rather than undermines the hivemind reading. The caveat is that captioning a photograph is a narrower task than open-ended generation, so this calibrates the question without settling it, and the arm they actually need is independent human responses to their own prompts. The second finding is about method: the RAW same-versus-different gap ranges over 0.1514 to 0.5224 across four encoders while the CENTERED gap is 0.5598 to 0.5743 on all four. The underlying quantity is constant and the raw numbers are an artifact of each encoder's anisotropy, so no raw cosine similarity figure is portable between encoders and every one of them needs its floor quoted beside it."
+ }
+}
