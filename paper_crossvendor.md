@@ -25,7 +25,8 @@ directly.
 
 On satellite imagery, a 17-class land-use probe scores 0.9507 mean AUROC natively
 and 0.9484 transported across backbones, a cost of 0.0024 against a shuffled
-floor of 0.5014 on the same holdout. On chest radiographs, across three of the
+floor of 0.5014 on the same holdout. AUROC is the area under the ROC curve, one
+per class and averaged; 0.5 is chance and 1.0 is perfect ranking. On chest radiographs, across three of the
 four backbones, using the official ChestX-ray14 test list and 25,596 held-out
 films from patients never seen in training, the same procedure scores 0.7440
 natively and **0.7511 transported**. The transport cost is negative. Four of six
@@ -77,9 +78,11 @@ two models can score the same while encoding differently.
 
 Retrieval does not settle it either. Two encoders agreeing about *which* picture
 is weaker than agreeing about *what is in it*, since retrieval is satisfied by
-any injective encoding. We therefore run both tests three times, with increasing
-semantic commitment: retrieval on photographs, weak-labelled scene classes on
-satellite imagery, and expert-labelled pathology on chest radiographs.
+any injective encoding, meaning any scheme that gives distinct pictures distinct
+codes, however arbitrary those codes are. We therefore run both tests three
+times, with increasing semantic commitment: retrieval on photographs,
+weak-labelled scene classes on satellite imagery, and expert-labelled pathology
+on chest radiographs.
 
 ---
 
@@ -98,6 +101,15 @@ fraction of depth. Nothing is read from a position the input did not occupy.
 
 **Domains.** COCO photographs, ROCO radiology, RSICD satellite imagery, and
 ChestX-ray14 chest radiographs.
+
+**Metrics and controls.** Labelled tasks are scored by **AUROC**, the area under
+the ROC curve, computed per class and averaged; 0.5 is chance. Retrieval is
+scored by **r@1**, the fraction of queries whose correct match is ranked first.
+Two controls recur. A **shuffled floor** refits or rescores with the labels or
+pairings permuted, giving the value the procedure returns when no signal is
+present. A **self-map control** transports a probe through a ridge map fitted
+from a backbone to *itself*, which measures what the fitting step costs on its
+own, separately from crossing a vendor boundary.
 
 **Transport.** To read vendor A's probe on vendor C's states we fit a ridge map
 C to A on training rows only, apply it to held-out states, then apply A's probe
@@ -310,9 +322,10 @@ refuted, but no part of it is evidence about cross-backbone information.
 ## 7. One frame for four backbones
 
 Everything above is bilateral: one ridge map per ordered pair, twelve maps for
-four vendors. Fitting a *single* shared frame from all four at once (MAXVAR
-generalised CCA) gives four encoders and four decoders, eight maps instead of
-twelve.
+four vendors. Fitting a *single* shared frame from all four at once gives four
+encoders and four decoders, eight maps instead of twelve. The frame is found by
+MAXVAR generalised CCA, which searches for the directions on which all four
+backbones agree most strongly and uses those as a common coordinate system.
 
 | | satellite | radiology |
 |---|---:|---:|
@@ -330,8 +343,11 @@ radiology.
 ## 8. Iterated composition, and a withdrawn reading
 
 A single pass through a cross-vendor map is nearly free, which makes single-pass
-tests weak instruments. Iterating the same maps separates them. Hop counts are
-matched at 12, 24 and 36, where every route's period divides evenly.
+tests weak instruments. Iterating the same maps separates them. Carrying a vector
+out along a closed route of maps and back, then measuring how far it lands from
+where it started, is what the geometry literature calls **holonomy**, and the
+script for this section is named for it. Hop counts are matched at 12, 24 and 36,
+where every route's period divides evenly.
 
 Holding enclosed area at zero and retracing fixed, and varying only how many
 distinct vendor boundaries a route crosses:
@@ -352,9 +368,12 @@ own approximate inverse, so errors cancel pairwise, and proposed the control:
 `A → B → C → D → C → B → A`, four vendors, every edge retraced, zero enclosed
 area. The palindrome tracks the four-cycle, so area is not the variable.
 
-**Caveat carried on the face of the claim.** Iterating any non-normal linear map
-collapses toward its dominant eigenspace and every route pays that cost. Hop
-counts are matched, so read the ordering rather than the size of the split.
+**Caveat carried on the face of the claim.** Applying any linear map over and
+over pulls vectors toward whichever direction that map stretches most, until
+little else survives. Every route pays that cost whatever it means, so the
+degradation itself is not the finding. Hop counts are matched across routes,
+which is what makes the *ordering* between them readable. Read the ordering
+rather than the size of the split.
 
 **A second reading, and why we do not make it.** Send the same routes through the
 shared frame of §7 instead of through the pairwise maps, and the ladder stops
