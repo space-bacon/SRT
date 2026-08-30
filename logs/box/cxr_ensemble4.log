@@ -1,0 +1,12 @@
+=== 4-way ensemble starting 2026-08-30 05:45:05
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/cxr_probe_ensemble.py", line 204, in <module>
+    main()
+  File "/root/srt-adapter/scripts/cxr_probe_ensemble.py", line 86, in main
+    z = np.load(p)
+        ^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 454, in load
+    fid = stack.enter_context(open(os.fspath(file), "rb"))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/root/cxr14_mistral.npz'
+=== 4-way ensemble done 2026-08-30 05:45:09

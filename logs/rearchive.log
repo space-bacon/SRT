@@ -1,0 +1,93 @@
+  ^ cxr14/artifacts__nla__omni__states__cxr14_gemma4_full112k.npz (2413.4 MB in 52 parts)
+  ^ cxr14/artifacts__nla__omni__states__cxr14_gemma4_PILOT35k.npz (470.7 MB in 10 parts)
+  ^ cxr14/artifacts__nla__omni__states__cxr14_aria.npz (1150.5 MB in 25 parts)
+  ^ cxr14/artifacts__nla__omni__states__cxr14_qwen3omni.npz (920.8 MB in 20 parts)
+  ^ cxr14/space_workspace__decodes-31b__decode_states.npz (43.8 MB)
+  ^ cxr14/artifacts__nla__cxr14_manifest.json (17.2 MB)
+  ^ cxr14/artifacts__nla__cxr14_pooled_probe.pt (0.6 MB)
+uploaded 7 file(s) to SRT/cxr14/
+  = cxr14_results/artifacts__nla__cxr14_ensemble3.json (0.0 MB) already current
+  ^ cxr14_results/artifacts__nla__cxr14_ensemble_2vendor_raw.json (0.0 MB)
+  = cxr14_results/artifacts__nla__cxr14_ensemble_gemma4_aria.json (0.0 MB) already current
+  ^ cxr14_results/artifacts__nla__cxr14_manifest.json (17.2 MB)
+  = cxr14_results/artifacts__nla__cxr14_pool_sweep.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_probe.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_probe_aria.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_probe_full112k.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_probe_full112k_rerun.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_probe_patientboot.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_probe_qwen3omni.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_transport.json (0.0 MB) already current
+  = cxr14_results/artifacts__nla__cxr14_vendor_compare.json (0.0 MB) already current
+uploaded 2 file(s) to SRT/cxr14_results/
+
+=== development  <- /Users/burtron/development
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 293322
+Number of files transferred: 62
+Total file size: 215 GB
+Total transferred file size: 2990 MB
+Unmatched data: 2990 MB
+Matched data: 0 B
+File list size: 28464 kB
+File list generation time: 4.949 seconds
+File list transfer time: 5.453 seconds
+Total sent: 3019 MB
+Total received: 1534 B
+
+sent 3019M bytes  received 1534 bytes  7084k bytes/sec
+total size is 215G  speedup is 71.20
+
+=== hf-cache  <- /Users/burtron/.cache/huggingface
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 2301
+Number of files transferred: 84
+Total file size: 110 GB
+Total transferred file size: 211 MB
+Unmatched data: 211 MB
+Matched data: 0 B
+File list size: 258 kB
+File list generation time: 0.043 seconds
+File list transfer time: 0.039 seconds
+Total sent: 211 MB
+Total received: 2054 B
+
+sent 211M bytes  received 2054 bytes  2344k bytes/sec
+total size is 110G  speedup is 522.57
+
+=== Downloads  <- /Users/burtron/Downloads
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 28664
+Number of files transferred: 0
+Total file size: 9052 MB
+Total transferred file size: 0 B
+Unmatched data: 0 B
+Matched data: 0 B
+File list size: 4521 kB
+File list generation time: 0.495 seconds
+File list transfer time: 0.493 seconds
+Total sent: 4521 kB
+Total received: 20 B
+
+sent 4521k bytes  received 20 bytes  35939 bytes/sec
+total size is 9052M  speedup is 2001.99
+
+=== Desktop  <- /Users/burtron/Desktop
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 17423
+Number of files transferred: 0
+Total file size: 11445 MB
+Total transferred file size: 0 B
+Unmatched data: 0 B
+Matched data: 0 B
+File list size: 2100 kB
+File list generation time: 0.309 seconds
+File list transfer time: 0.301 seconds
+Total sent: 2100 kB
+Total received: 20 B
+
+sent 2100k bytes  received 20 bytes  52863 bytes/sec
+total size is 11445M  speedup is 5449.49
+
+done in 0.2 h -> /Volumes/LaCie/SRT-ARCHIVE
+=== ARCHIVE CORRECTED

@@ -584,8 +584,34 @@ before it is apparent.
 
 - **Artifacts**: [`artifacts/nla/cxr14_probe_full112k.json`](artifacts/nla/cxr14_probe_full112k.json),
   [`artifacts/nla/cxr14_pool_sweep.json`](artifacts/nla/cxr14_pool_sweep.json),
-  [`artifacts/nla/cxr14_ensemble_gemma4_aria.json`](artifacts/nla/cxr14_ensemble_gemma4_aria.json),
+  [`artifacts/nla/cxr14_ensemble3.json`](artifacts/nla/cxr14_ensemble3.json),
+  [`artifacts/nla/cxr14_transport.json`](artifacts/nla/cxr14_transport.json),
+  [`artifacts/nla/cxr14_vendor_compare.json`](artifacts/nla/cxr14_vendor_compare.json),
   [`artifacts/nla/nlst_probe.json`](artifacts/nla/nlst_probe.json)
+
+### Where the states live, and one filename that will bite you
+
+The `.npz` state dumps are gitignored, so the copies that matter are elsewhere.
+All three backbones cover the identical 112,120 images in manifest row order and
+can be indexed against each other directly.
+
+| | rows | published | cold storage |
+|---|---:|---|---|
+| `cxr14_gemma4_full112k.npz` | 112,120 | `RiverRider/srt-cxr14-frozen-probe` | Supabase `cxr14/`, LaCie |
+| `cxr14_aria.npz` | 112,120 | same dataset | same |
+| `cxr14_qwen3omni.npz` | 112,120 | same dataset | same |
+| `cxr14_gemma4_PILOT35k.npz` | **34,999** | not published | Supabase, LaCie |
+
+**The pilot is the trap.** It sat at `cxr14_gemma4.npz` for a while, which is the
+name every script reaches for, and it holds under a third of the images. It has
+been renamed on disk and in cold storage, and the mislabelled archive copy was
+deleted. Any script that slices states should check `len(z["ok"])` against the
+manifest row count before doing anything with the result;
+`scripts/build_pooled_demo_subset.py` refuses outright on a mismatch, which is
+what caught it.
+
+Chest radiographs themselves are not stored anywhere here. `scripts/get_cxr14.py`
+re-fetches them from the NIH release.
 
 ### Banked negatives
 
@@ -865,6 +891,15 @@ If you are integrating SRT into a product (including [`RiverRider/zooL4nD3r-v0.1
 | [`RiverRider/srt-adapter-v18`](https://huggingface.co/RiverRider/srt-adapter-v18) | Research checkpoint | CoSENT supervised STS, English-purist tier. Paper §5.14. |
 | [`RiverRider/srt-adapter-v21a`](https://huggingface.co/RiverRider/srt-adapter-v21a) | Research checkpoint | mxbai-distilled CoSENT, multilingual-leaning. Paper §5.14. |
 | [`RiverRider/srt-adapter-v22c_a050`](https://huggingface.co/RiverRider/srt-adapter-v22c_a050) | Research checkpoint | Souping `v18 + v21a` at α=0.5; best of the STS series (mean 0.3744 over 40 splits, our harness). Superseded line, kept for provenance. Paper §5.14. |
+| [`RiverRider/srt-cxr14-linear-probe`](https://huggingface.co/RiverRider/srt-cxr14-linear-probe) | Probe | `Linear(5376, 14)` on frozen gemma-4-31B-it. 0.7590 on the official ChestX-ray14 split. |
+| [`RiverRider/srt-cxr14-pooled-probe`](https://huggingface.co/RiverRider/srt-cxr14-pooled-probe) | Probe | Three backbones' probes plus their normalisation. Logit average scores 0.7774, +0.0323 over the split-matched baseline, with no added parameters. |
+| [`RiverRider/srt-cxr14-frozen-probe`](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe) | Dataset | 4.51 GB. All three backbones' states for the same 112,120 images, the manifest, and every result json. |
+
+Live surfaces: [`srt-cxr14-probe`](https://huggingface.co/spaces/RiverRider/srt-cxr14-probe)
+reads a held-out film with one backbone or with all three side by side, and
+[`0.6b-decodes-31b`](https://huggingface.co/spaces/RiverRider/0.6b-decodes-31b)
+lets a 0.6B model describe a 31B's hidden state, then scramble or interpolate it.
+Both run on CPU against precomputed states, so neither waits for a GPU.
 
 ## Citation
 

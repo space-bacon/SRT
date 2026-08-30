@@ -1,0 +1,43 @@
+=== transport starting 2026-08-30 05:42:34
+device cuda   vendors ['gemma4', 'aria', 'qwen3omni']
+  gemma4     torch.Size([112120, 5376])
+  aria       torch.Size([112120, 2560])
+  qwen3omni  torch.Size([112120, 2048])
+  train 86524  test 25596  patient overlap 0
+
+fitting one probe per vendor
+  gemma4     native mean AUROC 0.7590
+  aria       native mean AUROC 0.7080
+  qwen3omni  native mean AUROC 0.7650
+
+fitting maps between vendors, train rows only
+
+probe trained on  read on      mean AUROC  vs native
+gemma4            itself (map)     0.7599    +0.0009
+gemma4            aria             0.7321    +0.0241
+gemma4            qwen3omni        0.7708    +0.0058
+aria              itself (map)     0.7092    +0.0012
+aria              gemma4           0.7480    -0.0110
+aria              qwen3omni        0.7522    -0.0128
+qwen3omni         itself (map)     0.7658    +0.0008
+qwen3omni         gemma4           0.7707    +0.0117
+qwen3omni         aria             0.7325    +0.0245
+
+cycle                                        mean AUROC  vs native
+gemma4 -> aria -> qwen3omni -> gemma4            0.7505    -0.0085
+aria -> gemma4 -> qwen3omni -> aria              0.7246    +0.0166
+qwen3omni -> gemma4 -> aria -> qwen3omni         0.7527    -0.0123
+
+shuffled-label floor, same transport
+  gemma4 shuffled probe on gemma4       0.5004
+  gemma4 shuffled probe on aria         0.5040
+  gemma4 shuffled probe on qwen3omni    0.5015
+
+native      0.744
+self-map    0.745
+transported 0.7511   cost -0.0071
+cycle       0.7426
+shuffled    0.502
+
+wrote /root/cxr14_transport.json
+=== transport done 2026-08-30 05:43:17

@@ -1,0 +1,21 @@
+audio: 1000 wanted
+  downloading data/val.zip (this is the slow part)
+  extracting
+  extracted 1000
+  200/1000 ok=174
+  400/1000 ok=351
+  600/1000 ok=528
+  800/1000 ok=701
+  1000/1000 ok=883
+  wrote audio: 883 items, 35.3 MB
+video: 1000 wanted
+  downloading MSRVTT_Videos.zip (this is the slow part)
+  extracting
+  extracted 1000
+  200/1000 ok=200
+  400/1000 ok=400
+  600/1000 ok=600
+  800/1000 ok=800
+  1000/1000 ok=1000
+  wrote video: 1000 items, 6.9 MB
+MEDIA DONE

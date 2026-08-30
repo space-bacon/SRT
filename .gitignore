@@ -78,3 +78,6 @@ artifacts/marketing/**/post.html
 space_blind/gallery/
 space_blind/gallery.npz
 artifacts/nla/cxr14/
+
+# 17 MB and already published at RiverRider/srt-cxr14-frozen-probe.
+artifacts/nla/cxr14_manifest.json
