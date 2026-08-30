@@ -146,11 +146,39 @@ Nine variants (3 depths x 3 poolings) are in `results/cxr14_pool_sweep.json`.
 
 | path | what |
 |---|---|
-| `states/cxr14_gemma4.npz` | frozen pooled hidden states, all 112,120 images |
+| `states/cxr14_gemma4.npz` | frozen pooled hidden states, gemma-4-31B-it, all 112,120 images |
+| `states/cxr14_aria.npz` | the same 112,120 images through Aria |
+| `states/cxr14_qwen3omni.npz` | the same 112,120 images through Qwen3-Omni-30B-A3B |
 | `manifests/cxr14_manifest.json` | rows with `key`, `labels`, `patient_id`, `view`, official `split` |
 | `results/cxr14_probe_full112k.json` | per-finding AUROC, CIs, both controls, split-matched comparison |
+| `results/cxr14_probe_qwen3omni.json` | the same, for Qwen3-Omni |
+| `results/cxr14_vendor_compare.json` | the three backbones side by side |
+| `results/cxr14_ensemble3.json` | pooling, with the duplicate-vendor capacity control |
+| `results/cxr14_transport.json` | probe from one backbone read on another |
 | `results/cxr14_pool_sweep.json` | the nine pooling / depth variants |
-| `scripts/` | dataset fetch, encoder, probe, sweep |
+| `scripts/` | dataset fetch, encoder, probe, sweep, ensemble, transport |
+
+All three state files cover the identical 112,120 images in manifest row order,
+so they can be indexed against each other directly and against the manifest
+without realignment.
+
+## Three backbones, and what falls out of having them
+
+| backbone, official split | mean AUROC |
+|---|---:|
+| Qwen3-Omni-30B-A3B | 0.7650 |
+| gemma-4-31B-it | 0.7590 |
+| Aria | 0.7080 |
+| **mean of the three probes' logits** | **0.7774** |
+
+Against a split-matched 0.7451 (Wang et al. 2017, Table 17, ResNet-50 fine-tuned
+end to end). Averaging logits adds no parameters, and the paired
+patient-clustered bootstrap gives +0.0124 with 95% CI [+0.0082, +0.0168].
+
+A probe fitted on one backbone and read on another, through a ridge map fitted
+on training rows only, scores 0.7511 against 0.7440 native. Transport cost is
+negative, and four of six cross directions beat the target backbone's own probe.
+Weights for the pooled probe are at `RiverRider/srt-cxr14-pooled-probe`.
 
 ## Reproducing
 

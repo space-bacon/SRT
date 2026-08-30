@@ -16,6 +16,7 @@ from huggingface_hub import hf_hub_download
 from PIL import Image
 
 MODEL_REPO = "RiverRider/srt-cxr14-linear-probe"
+POOLED_REPO = "RiverRider/srt-cxr14-pooled-probe"
 DATA_REPO = "RiverRider/srt-cxr14-frozen-probe"
 
 ck = torch.load(hf_hub_download(MODEL_REPO, "cxr14_probe.pt"), weights_only=True)
@@ -30,6 +31,23 @@ EVAL = json.load(open(hf_hub_download(MODEL_REPO, "eval/cxr14_probe_full112k.jso
 
 Xn = (X - ck["mu"]) / ck["sd"]
 P = torch.sigmoid(Xn @ ck["W"] + ck["b"]).numpy()
+
+# Each backbone is standardised with its own training statistics, which is why
+# the pooled checkpoint ships mu and sd alongside every weight matrix.
+pck = torch.load(hf_hub_download(POOLED_REPO, "pooled_probe.pt"),
+                 weights_only=False)
+VENDORS = pck["vendors"]
+sub3 = np.load(hf_hub_download(DATA_REPO, "demo/test_subset_3vendor.npz",
+                               repo_type="dataset"))
+LOGIT, PV = {}, {}
+for _v in VENDORS:
+    _p = pck["probes"][_v]
+    _x = (torch.tensor(sub3[f"states_{_v}"]) - _p["mu"]) / _p["sd"]
+    LOGIT[_v] = _x @ _p["weight"] + _p["bias"]
+    PV[_v] = torch.sigmoid(LOGIT[_v]).numpy()
+POOLED = torch.sigmoid(torch.stack([LOGIT[v] for v in VENDORS]).mean(0)).numpy()
+POOLED_EVAL = json.load(open(hf_hub_download(POOLED_REPO,
+                                             "results/cxr14_ensemble3.json")))
 
 
 def auroc(scores, labels):
@@ -69,6 +87,41 @@ def controls():
     return out
 
 
+def read_pooled(i):
+    """One film, scored by each backbone separately and by their average."""
+    i = int(i) % len(KEYS)
+    truth = {FINDINGS[j] for j in range(14) if Y[i, j] == 1}
+    rows = []
+    for j, f in enumerate(FINDINGS):
+        rows.append([f] + [round(float(PV[v][i, j]), 3) for v in VENDORS]
+                    + [round(float(POOLED[i, j]), 3),
+                       "yes" if f in truth else ""])
+    rows.sort(key=lambda r: -r[-2])
+    head = (f"**{KEYS[i]}**, view {VIEW[i]}, held out from training.\n\n"
+            f"Reported findings: {', '.join(sorted(truth)) or 'none'}")
+    p = hf_hub_download(DATA_REPO, f"demo/images/{str(KEYS[i])[:-4]}.jpg",
+                        repo_type="dataset")
+    return Image.open(p).convert("L"), head, rows
+
+
+def pooled_table():
+    """Per-backbone and pooled AUROC on these 300 films only.
+
+    Deliberately recomputed on the demo cut rather than quoting the full-test
+    numbers, so a visitor can check the arithmetic against what is on screen.
+    The full-test figures are in the card and are the ones to cite.
+    """
+    out = []
+    for v in VENDORS:
+        m = np.nanmean([auroc(PV[v][:, j], Y[:, j]) for j in range(14)])
+        out.append([v, round(float(m), 4),
+                    POOLED_EVAL["single"].get(v, float("nan"))])
+    m = np.nanmean([auroc(POOLED[:, j], Y[:, j]) for j in range(14)])
+    out.append(["pooled (logit mean)", round(float(m), 4),
+                POOLED_EVAL["summary"]["best_ensemble"]])
+    return out
+
+
 with gr.Blocks(title="ChestX-ray14: frozen features, linear probe") as demo:
     gr.Markdown(
         "# A 339 KB linear probe reads chest radiographs\n"
@@ -95,6 +148,41 @@ with gr.Blocks(title="ChestX-ray14: frozen features, linear probe") as demo:
         idx.change(read_film, idx, [film, info, out])
         shuffle.click(lambda: np.random.randint(len(KEYS)), None, idx)
         demo.load(read_film, idx, [film, info, out])
+
+    with gr.Tab("Three backbones at once"):
+        gr.Markdown(
+            "The same film read by three frozen backbones from three different "
+            "companies, and by the **average of their logits**, which adds no "
+            "parameters at all.\n\n"
+            "On the full official test split these score "
+            f"**{POOLED_EVAL['single']['qwen3omni']}** (Qwen3-Omni), "
+            f"**{POOLED_EVAL['single']['gemma4']}** (gemma-4) and "
+            f"**{POOLED_EVAL['single']['aria']}** (Aria). Averaging them reaches "
+            f"**{POOLED_EVAL['summary']['best_ensemble']}**, against "
+            f"**{POOLED_EVAL['split_matched_baseline']}** for the dataset "
+            "authors' fine-tuned ResNet-50.\n\n"
+            "Aria is **behind** that baseline on its own and still improves the "
+            "average, which is what makes this information the others lack "
+            "rather than extra capacity.")
+        pidx = gr.Slider(0, len(KEYS) - 1, value=0, step=1, label="film")
+        pshuffle = gr.Button("Random film")
+        with gr.Row():
+            pfilm = gr.Image(label="radiograph", height=460)
+            with gr.Column():
+                pinfo = gr.Markdown()
+                pout = gr.Dataframe(
+                    headers=["finding"] + list(VENDORS) + ["pooled", "reported"],
+                    label="each backbone, then their average, pooled first")
+        gr.Markdown(
+            "Mean AUROC over **these 300 films only**, recomputed live so it can "
+            "be checked against what is on screen. The full-test figures above "
+            "are the ones to cite.")
+        gr.Dataframe(pooled_table(),
+                     headers=["backbone", "these 300 films", "full test split"],
+                     label="demo cut versus the real evaluation")
+        pidx.change(read_pooled, pidx, [pfilm, pinfo, pout])
+        pshuffle.click(lambda: np.random.randint(len(KEYS)), None, pidx)
+        demo.load(read_pooled, pidx, [pfilm, pinfo, pout])
 
     with gr.Tab("The controls"):
         gr.Markdown(
