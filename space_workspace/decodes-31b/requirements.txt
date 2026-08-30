@@ -1,0 +1,7 @@
+gradio==6.19.0
+torch
+transformers
+numpy
+pillow
+huggingface_hub
+safetensors
