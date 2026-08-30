@@ -22,13 +22,22 @@ from __future__ import annotations
 
 import argparse
 import base64
+import html as htmlmod
 import io
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 from markdown_it import MarkdownIt
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
+
+LANCZOS = Image.Resampling.LANCZOS
+
+SANS = "/System/Library/Fonts/HelveticaNeue.ttc"
+TS = 2  # table supersample
+T_PAD, T_PADV, T_LH, T_MAXCOL, T_FS = 14, 9, 21, 430, 15
+T_HEAD, T_BORDER, T_INK = "#f3f1fb", "#d9d5ea", "#1c1a47"
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_W = 1400  # a 700px column at 2x; beyond this is bytes nobody sees
@@ -62,9 +71,9 @@ def data_uri(path: Path) -> tuple[str, int]:
     if mime == "png":
         im = Image.open(io.BytesIO(raw))
         if im.width > MAX_W:
-            im = im.resize((MAX_W, round(im.height * MAX_W / im.width)), Image.LANCZOS)
+            small = im.resize((MAX_W, round(im.height * MAX_W / im.width)), LANCZOS)
             buf = io.BytesIO()
-            im.save(buf, "PNG", optimize=True)
+            small.save(buf, "PNG", optimize=True)
             # Resampling a flat line plot adds antialiasing gradients that cost
             # more to compress than the pixels saved, so only keep a real win.
             if buf.tell() < len(raw):
@@ -130,6 +139,101 @@ def rewrite_md(text: str, base: str) -> str:
     return out
 
 
+TABLE_RE = re.compile(r"<table>.*?</table>", re.S)
+ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.S)
+CELL_RE = re.compile(r"<(th|td)([^>]*)>(.*?)</\1>", re.S)
+TAG_RE = re.compile(r"<[^>]+>")
+
+
+def _tfont(bold: bool) -> ImageFont.FreeTypeFont:
+    return ImageFont.truetype(SANS, T_FS * TS, index=1 if bold else 0)
+
+
+def table_to_image(block: str) -> Image.Image:
+    """Draw one markdown-rendered table as a picture.
+
+    Substack drops <table> on paste, taking the column structure with it. A
+    picture is the only form that survives, so alignment and emphasis have to be
+    reproduced here rather than left to CSS. Emphasis is tracked per word: cells
+    in the negative-results table open with a bold verdict and continue in
+    regular weight, and a per-cell flag renders that whole column bold.
+    """
+    probe = ImageDraw.Draw(Image.new("RGB", (1, 1)))
+
+    def tw(s: str, bold: bool) -> float:
+        return probe.textlength(s, font=_tfont(bold)) / TS
+
+    def tokens(inner: str, force: bool) -> list[tuple[str, bool]]:
+        out = []
+        for part in re.split(r"(<strong>.*?</strong>)", inner, flags=re.S):
+            if part:
+                bold = force or part.startswith("<strong>")
+                out += [(w, bold) for w in htmlmod.unescape(TAG_RE.sub("", part)).split()]
+        return out
+
+    def line_w(line: list[tuple[str, bool]]) -> float:
+        return sum(tw(w, b) + (tw(" ", b) if i else 0) for i, (w, b) in enumerate(line))
+
+    def wrap(toks: list[tuple[str, bool]]) -> list[list[tuple[str, bool]]]:
+        lines: list[list[tuple[str, bool]]] = []
+        cur: list[tuple[str, bool]] = []
+        for word, bold in toks:
+            if cur and line_w(cur + [(word, bold)]) > T_MAXCOL:
+                lines.append(cur)
+                cur = [(word, bold)]
+            else:
+                cur.append((word, bold))
+        lines.append(cur)
+        return lines
+
+    rows: list[list[dict[str, Any]]] = []
+    for r in ROW_RE.findall(block):
+        cells = [{"lines": wrap(tokens(inner, tag == "th")),
+                  "right": "text-align:right" in attrs.replace(" ", ""),
+                  "head": tag == "th"}
+                 for tag, attrs, inner in CELL_RE.findall(r)]
+        if cells:
+            rows.append(cells)
+
+    ncol = max(len(r) for r in rows)
+    blank: dict[str, Any] = {"lines": [[]], "right": False, "head": False}
+    grid = [[(r[j] if j < len(r) else blank) for j in range(ncol)] for r in rows]
+
+    colw = [round(max(max(line_w(ln) for ln in row[j]["lines"]) for row in grid)) + 2 * T_PAD
+            for j in range(ncol)]
+    rowh = [max(len(c["lines"]) for c in row) * T_LH + 2 * T_PADV for row in grid]
+
+    w, h = sum(colw) + 2, sum(rowh) + 2
+    im = Image.new("RGB", (w * TS, h * TS), "#ffffff")
+    d = ImageDraw.Draw(im)
+    y = 1
+    for row, rh in zip(grid, rowh):
+        x = 1
+        for c, cw in zip(row, colw):
+            box = [x * TS, y * TS, (x + cw) * TS, (y + rh) * TS]
+            if c["head"]:
+                d.rectangle(box, fill=T_HEAD)
+            d.rectangle(box, outline=T_BORDER, width=TS)
+            ty = y + T_PADV
+            for line in c["lines"]:
+                tx = x + cw - T_PAD - line_w(line) if c["right"] else x + T_PAD
+                for i, (word, bold) in enumerate(line):
+                    if i:
+                        tx += tw(" ", bold)
+                    d.text((tx * TS, ty * TS), word, font=_tfont(bold), fill=T_INK)
+                    tx += tw(word, bold)
+                ty += T_LH
+            x += cw
+        y += rh
+    return im.resize((w, h), LANCZOS)
+
+
+def image_uri(im: Image.Image) -> tuple[str, int]:
+    buf = io.BytesIO()
+    im.save(buf, "PNG", optimize=True)
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode(), buf.tell()
+
+
 def insert_hero(html: str, path: Path, after: int) -> str:
     """Drop the OG image in after the Nth closing </p>."""
     idx = -1
@@ -150,6 +254,8 @@ def main() -> int:
     ap.add_argument("--md-out", default=None)
     ap.add_argument("--hero", default=None, help="image to inline near the top")
     ap.add_argument("--hero-after", type=int, default=1, help="paragraph to place it after")
+    ap.add_argument("--tables-as-images", action="store_true",
+                    help="render each table to a picture; Substack strips <table>")
     args = ap.parse_args()
 
     src = Path(args.markdown).resolve()
@@ -166,6 +272,16 @@ def main() -> int:
 
     md = MarkdownIt("commonmark").enable(["table", "strikethrough"])
     body = inline(md.render(src.read_text()), src.parent)
+    if args.tables_as_images:
+        n = [0]
+
+        def as_img(m: re.Match[str]) -> str:
+            uri, nbytes = image_uri(table_to_image(m.group(0)))
+            n[0] += 1
+            print(f"  table {n[0]:>2d}{'':44s} {nbytes / 1024:6.0f} KB")
+            return f'<figure><img alt="table" src="{uri}"></figure>'
+
+        body = TABLE_RE.sub(as_img, body)
     if args.hero:
         body = insert_hero(body, Path(args.hero).resolve(), args.hero_after)
 
