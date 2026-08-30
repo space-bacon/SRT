@@ -11,16 +11,39 @@
  "swapped_head": "sentence-transformers/all-MiniLM-L6-v2",
  "n_holdout": 1000,
  "native": {
-  "within": 0.0887,
-  "cross": 0.0853
+  "within": 0.0867,
+  "cross": 0.085
  },
  "swapped": {
-  "within": 0.0833,
-  "cross": 0.083
+  "within": 0.0835,
+  "cross": 0.0833
  },
- "within_ratio": 0.938,
- "cross_ratio": 0.9727,
- "ratio_gap": 0.0347,
+ "within_ratio": 0.9642,
+ "within_ratio_sd": 0.0555,
+ "cross_ratio": 0.9801,
+ "cross_ratio_sd": 0.0161,
+ "n_seeds": 6,
+ "ratio_by_seed": {
+  "within": [
+   0.9099,
+   1.0456,
+   0.913,
+   0.9608,
+   1.0322,
+   0.9235
+  ],
+  "cross": [
+   0.9659,
+   0.9652,
+   0.9961,
+   1.0049,
+   0.9646,
+   0.9841
+  ]
+ },
+ "ratio_gap": 0.016,
+ "ratio_gap_sd": 0.0648,
+ "gap_over_sd": 0.25,
  "verdict": "head-limited",
  "reading": "the two terms scaling by the same factor when the head is replaced is what 'both limited by the caption head' predicts. the terms moving apart would mean retention is not head-limited and the reframe should be withdrawn."
 }

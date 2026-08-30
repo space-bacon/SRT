@@ -41,6 +41,8 @@ def parse_args():
     p.add_argument("--dim", type=int, default=512)
     p.add_argument("--epochs", type=int, default=400)
     p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--seeds", type=int, default=1,
+                   help="refits per arm; a ratio with no spread is not a result")
     p.add_argument("--out", default=None)
     return p.parse_args()
 
@@ -142,21 +144,39 @@ def main():
            "domain": a.domain, "vendors": tags, "swapped_head": a.head,
            "n_holdout": n_te, "native": {}, "swapped": {}}
 
-    print(f"\n{'':<26}{'native head':>13}{'swapped head':>14}{'ratio':>8}")
+    print(f"\n{'':<26}{'native head':>13}{'swapped head':>14}{'ratio':>8}{'sd':>8}")
+    ratio_by_seed = {}
     for label, pairs in (("within", [(t, t) for t in tags]),
                          ("cross", list(itertools.permutations(tags, 2)))):
-        nat = [infonce_towers(I[x], T[y], tr, te, a.dim, a.epochs, a.lr)
-               for x, y in pairs]
-        swp = [infonce_towers(I[x], SWAP, tr, te, a.dim, a.epochs, a.lr)
-               for x, _ in pairs]
-        res["native"][label] = round(float(np.mean(nat)), 4)
-        res["swapped"][label] = round(float(np.mean(swp)), 4)
-        r = np.mean(swp) / np.mean(nat) if np.mean(nat) else float("nan")
-        res[f"{label}_ratio"] = round(float(r), 4)
-        print(f"{label + ' r@1':<26}{np.mean(nat):13.4f}{np.mean(swp):14.4f}{r:8.3f}")
+        nat_s, swp_s, rat_s = [], [], []
+        for s in range(a.seeds):
+            nat = np.mean([infonce_towers(I[x], T[y], tr, te, a.dim, a.epochs, a.lr, seed=s)
+                           for x, y in pairs])
+            swp = np.mean([infonce_towers(I[x], SWAP, tr, te, a.dim, a.epochs, a.lr, seed=s)
+                           for x, _ in pairs])
+            nat_s.append(nat)
+            swp_s.append(swp)
+            rat_s.append(swp / nat if nat else float("nan"))
+        ratio_by_seed[label] = rat_s
+        res["native"][label] = round(float(np.mean(nat_s)), 4)
+        res["swapped"][label] = round(float(np.mean(swp_s)), 4)
+        res[f"{label}_ratio"] = round(float(np.mean(rat_s)), 4)
+        res[f"{label}_ratio_sd"] = round(float(np.std(rat_s)), 4)
+        print(f"{label + ' r@1':<26}{np.mean(nat_s):13.4f}{np.mean(swp_s):14.4f}"
+              f"{np.mean(rat_s):8.3f}{np.std(rat_s):8.3f}")
 
-    gap = abs(res["within_ratio"] - res["cross_ratio"])
+    # Signed, then averaged. Averaging |gap| per seed is biased upward by
+    # Jensen whenever the gap is small relative to its own noise, which is
+    # exactly the regime this test is trying to resolve.
+    gaps = [w - c for w, c in zip(ratio_by_seed["within"], ratio_by_seed["cross"])]
+    gap = abs(float(np.mean(gaps)))
+    res["n_seeds"] = a.seeds
+    res["ratio_by_seed"] = {k: [round(float(v), 4) for v in vs]
+                            for k, vs in ratio_by_seed.items()}
     res["ratio_gap"] = round(gap, 4)
+    res["ratio_gap_sd"] = round(float(np.std(gaps)), 4)
+    res["gap_over_sd"] = (round(gap / float(np.std(gaps)), 2)
+                          if a.seeds > 1 and np.std(gaps) > 0 else None)
     res["verdict"] = ("head-limited" if gap < 0.15 else "not head-limited")
     res["reading"] = (
         "the two terms scaling by the same factor when the head is replaced is "
@@ -164,8 +184,10 @@ def main():
         "apart would mean retention is not head-limited and the reframe should "
         "be withdrawn.")
     json.dump(res, open(a.out, "w"), indent=1)
-    print(f"\nwithin scales {res['within_ratio']}, cross scales {res['cross_ratio']}, "
-          f"gap {gap:.4f}")
+    print(f"\nwithin scales {res['within_ratio']} +/- {res['within_ratio_sd']}, "
+          f"cross scales {res['cross_ratio']} +/- {res['cross_ratio_sd']}")
+    print(f"gap {gap:.4f} +/- {res['ratio_gap_sd']:.4f}"
+          + (f"   gap/sd {res['gap_over_sd']}" if res["gap_over_sd"] else ""))
     print(f"verdict: {res['verdict']}")
     print(f"wrote {a.out}")
 
