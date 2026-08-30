@@ -1,0 +1,456 @@
+{
+ "question": "does state-level transport predict output-level convergence",
+ "generation": "greedy, 48 new tokens, 60 shared prompts",
+ "scorer": "sentence-transformers/all-MiniLM-L6-v2",
+ "n_models": 12,
+ "n_pairs": 66,
+ "output_similarity": {
+  "mean_same_prompt_different_model": 0.4564,
+  "range": [
+   0.3721,
+   0.8844
+  ],
+  "different_prompt_floor": 0.1204,
+  "paper_inter_model_range": [
+   0.71,
+   0.82
+  ]
+ },
+ "transport": {
+  "mean": 0.9203,
+  "range": [
+   0.826,
+   0.999
+  ]
+ },
+ "link": {
+  "all_pairs": {
+   "n": 66,
+   "rho": 0.2645,
+   "p": 0.0282
+  },
+  "minus_identical_weight_anchor": {
+   "n": 65,
+   "rho": 0.2308,
+   "p": 0.0598
+  },
+  "cross_lab_only": {
+   "n": 59,
+   "rho": 0.2213,
+   "p": 0.0866
+  }
+ },
+ "range_restriction": {
+  "transport_sd": 0.0497,
+  "transport_span": 0.173,
+  "transport_min": 0.826,
+  "note": "transport is at or near ceiling for every pair, so this design has little variance to correlate against and cannot resolve the question either way. It is underpowered by construction."
+ },
+ "per_prompt_agreement": {
+  "metric": "models producing an identical first 40 characters",
+  "n_models": 12,
+  "mean_models_on_modal_continuation": 2.2,
+  "max_on_any_prompt": 5,
+  "prompts_with_6_or_more_identical": 0,
+  "prompts_with_2_or_fewer": 48
+ },
+ "verdict": "NOT ESTABLISHED. The headline rho of +0.26 (p 0.03) clears significance only because of the identical-weights anchor. Drop it and the result is +0.23 (p 0.06); restrict to cross-lab pairs and it is +0.22 (p 0.09). Transport does not demonstrably predict output convergence here, and the design cannot settle it because transport is >=0.83 for all 66 pairs. The finding that DOES separate is the level: these base models agree at 0.4564 against a 0.1204 floor, while the paper's instruction-tuned models agree at 0.71-0.82 against a comparable 0.1-0.2 floor. Base-model states transport at 0.9181, near ceiling, yet their text converges far less than instruction-tuned text does. That points at post-training, not shared representation geometry, as the dominant convergence force.",
+ "pairs": [
+  {
+   "a": "llama32_1b",
+   "b": "olmo2_1b",
+   "transport": 0.999,
+   "output_sim": 0.4709
+  },
+  {
+   "a": "qwen25_7b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.999,
+   "output_sim": 0.8844
+  },
+  {
+   "a": "llama32_1b",
+   "b": "llama32_3b",
+   "transport": 0.9985,
+   "output_sim": 0.4848
+  },
+  {
+   "a": "llama32_3b",
+   "b": "olmo2_1b",
+   "transport": 0.998,
+   "output_sim": 0.4757
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "olmo2_1b",
+   "transport": 0.995,
+   "output_sim": 0.4719
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "llama32_1b",
+   "transport": 0.9905,
+   "output_sim": 0.4644
+  },
+  {
+   "a": "olmo2_1b",
+   "b": "gptoss_20b",
+   "transport": 0.9905,
+   "output_sim": 0.4759
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "olmo2_1b",
+   "transport": 0.9855,
+   "output_sim": 0.4593
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "llama32_3b",
+   "transport": 0.984,
+   "output_sim": 0.4217
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "llama32_3b",
+   "transport": 0.9795,
+   "output_sim": 0.4706
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "llama32_1b",
+   "transport": 0.977,
+   "output_sim": 0.4447
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "gptoss_20b",
+   "transport": 0.975,
+   "output_sim": 0.4424
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "olmo2_1b",
+   "transport": 0.9735,
+   "output_sim": 0.4291
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "qwen3_06b",
+   "transport": 0.971,
+   "output_sim": 0.4302
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "llama32_3b",
+   "transport": 0.9695,
+   "output_sim": 0.4163
+  },
+  {
+   "a": "llama32_3b",
+   "b": "gptoss_20b",
+   "transport": 0.9695,
+   "output_sim": 0.4693
+  },
+  {
+   "a": "tinyllama",
+   "b": "olmo2_1b",
+   "transport": 0.964,
+   "output_sim": 0.4652
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "tinyllama",
+   "transport": 0.963,
+   "output_sim": 0.465
+  },
+  {
+   "a": "llama32_1b",
+   "b": "qwen25_7b",
+   "transport": 0.9555,
+   "output_sim": 0.4827
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "llama32_1b",
+   "transport": 0.955,
+   "output_sim": 0.5225
+  },
+  {
+   "a": "llama32_1b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.9535,
+   "output_sim": 0.4765
+  },
+  {
+   "a": "olmo2_1b",
+   "b": "pythia_410m",
+   "transport": 0.953,
+   "output_sim": 0.4282
+  },
+  {
+   "a": "llama32_1b",
+   "b": "gptoss_20b",
+   "transport": 0.9485,
+   "output_sim": 0.4497
+  },
+  {
+   "a": "llama32_3b",
+   "b": "qwen25_7b",
+   "transport": 0.936,
+   "output_sim": 0.4695
+  },
+  {
+   "a": "llama32_3b",
+   "b": "tinyllama",
+   "transport": 0.934,
+   "output_sim": 0.4425
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "qwen25_7b",
+   "transport": 0.933,
+   "output_sim": 0.4268
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.933,
+   "output_sim": 0.4393
+  },
+  {
+   "a": "llama32_3b",
+   "b": "pythia_410m",
+   "transport": 0.933,
+   "output_sim": 0.3979
+  },
+  {
+   "a": "llama32_3b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.933,
+   "output_sim": 0.4727
+  },
+  {
+   "a": "llama32_1b",
+   "b": "pythia_410m",
+   "transport": 0.9315,
+   "output_sim": 0.4327
+  },
+  {
+   "a": "llama32_1b",
+   "b": "tinyllama",
+   "transport": 0.925,
+   "output_sim": 0.4508
+  },
+  {
+   "a": "olmo2_1b",
+   "b": "qwen25_7b",
+   "transport": 0.9235,
+   "output_sim": 0.4572
+  },
+  {
+   "a": "olmo2_1b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.923,
+   "output_sim": 0.4602
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "pythia_410m",
+   "transport": 0.9195,
+   "output_sim": 0.4384
+  },
+  {
+   "a": "tinyllama",
+   "b": "gptoss_20b",
+   "transport": 0.9195,
+   "output_sim": 0.4755
+  },
+  {
+   "a": "olmo2_1b",
+   "b": "smollm2_360m",
+   "transport": 0.9155,
+   "output_sim": 0.5362
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.915,
+   "output_sim": 0.3923
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "qwen25_7b",
+   "transport": 0.913,
+   "output_sim": 0.3939
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "gemma2_2b",
+   "transport": 0.9075,
+   "output_sim": 0.4051
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "gemma2_2b",
+   "transport": 0.907,
+   "output_sim": 0.4318
+  },
+  {
+   "a": "llama32_1b",
+   "b": "smollm2_360m",
+   "transport": 0.905,
+   "output_sim": 0.4969
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "gptoss_20b",
+   "transport": 0.899,
+   "output_sim": 0.4493
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "smollm2_360m",
+   "transport": 0.898,
+   "output_sim": 0.4814
+  },
+  {
+   "a": "llama32_3b",
+   "b": "smollm2_360m",
+   "transport": 0.898,
+   "output_sim": 0.4677
+  },
+  {
+   "a": "smollm2_360m",
+   "b": "pythia_410m",
+   "transport": 0.8955,
+   "output_sim": 0.4905
+  },
+  {
+   "a": "tinyllama",
+   "b": "pythia_410m",
+   "transport": 0.893,
+   "output_sim": 0.3947
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "pythia_410m",
+   "transport": 0.8885,
+   "output_sim": 0.4352
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "gptoss_20b",
+   "transport": 0.888,
+   "output_sim": 0.4187
+  },
+  {
+   "a": "pythia_410m",
+   "b": "gptoss_20b",
+   "transport": 0.885,
+   "output_sim": 0.4234
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "smollm2_360m",
+   "transport": 0.884,
+   "output_sim": 0.5255
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "pythia_410m",
+   "transport": 0.8805,
+   "output_sim": 0.4035
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.8715,
+   "output_sim": 0.4693
+  },
+  {
+   "a": "gemma2_2b",
+   "b": "qwen25_7b",
+   "transport": 0.871,
+   "output_sim": 0.4596
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "smollm2_360m",
+   "transport": 0.869,
+   "output_sim": 0.4474
+  },
+  {
+   "a": "smollm2_360m",
+   "b": "gptoss_20b",
+   "transport": 0.8665,
+   "output_sim": 0.4663
+  },
+  {
+   "a": "qwen25_05b",
+   "b": "tinyllama",
+   "transport": 0.863,
+   "output_sim": 0.4176
+  },
+  {
+   "a": "tinyllama",
+   "b": "smollm2_360m",
+   "transport": 0.8615,
+   "output_sim": 0.4624
+  },
+  {
+   "a": "qwen25_7b",
+   "b": "gptoss_20b",
+   "transport": 0.859,
+   "output_sim": 0.456
+  },
+  {
+   "a": "gptoss_20b",
+   "b": "qwen25_7b_f32",
+   "transport": 0.8585,
+   "output_sim": 0.466
+  },
+  {
+   "a": "qwen3_06b",
+   "b": "tinyllama",
+   "transport": 0.8545,
+   "output_sim": 0.4106
+  },
+  {
+   "a": "tinyllama",
+   "b": "qwen25_7b",
+   "transport": 0.843,
+   "output_sim": 0.4166
+  },
+  {
+   "a": "tinyllama",
+   "b": "qwen25_7b_f32",
+   "transport": 0.8405,
+   "output_sim": 0.4278
+  },
+  {
+   "a": "pythia_410m",
+   "b": "qwen25_7b",
+   "transport": 0.832,
+   "output_sim": 0.3721
+  },
+  {
+   "a": "pythia_410m",
+   "b": "qwen25_7b_f32",
+   "transport": 0.832,
+   "output_sim": 0.3804
+  },
+  {
+   "a": "smollm2_360m",
+   "b": "qwen25_7b_f32",
+   "transport": 0.8275,
+   "output_sim": 0.4829
+  },
+  {
+   "a": "smollm2_360m",
+   "b": "qwen25_7b",
+   "transport": 0.826,
+   "output_sim": 0.4784
+  }
+ ]
+}
