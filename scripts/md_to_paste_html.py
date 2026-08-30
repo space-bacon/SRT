@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
-"""Render a markdown paper to one self-contained HTML file for pasting into a
-WYSIWYG editor (Substack, Hugging Face articles, Ghost).
+"""Get a markdown paper into a WYSIWYG editor with its figures intact.
 
 Relative image links cannot survive a paste: the editor has no repo to resolve
-them against. So every local image is inlined as a base64 data URI, which is
-what the hand-written Substack builders in this repo already do, generalised so
-a paper does not have to be retyped as Python string literals to get it.
+them against. Two editors want two different answers.
 
-Open the output in a browser, select all, copy, paste.
+Substack takes rich HTML, so inline every image as a base64 data URI and paste
+the rendered page. That is the default.
 
     python scripts/md_to_paste_html.py paper_crossvendor.md
     -> docs/paper_crossvendor_paste.html
+
+Hugging Face articles strip data URIs on paste but do accept markdown, so there
+the figures must be hosted and linked absolutely. --image-base rewrites every
+local image to <base>/<filename> and emits markdown instead.
+
+    python scripts/md_to_paste_html.py paper_crossvendor.md \\
+      --image-base https://huggingface.co/datasets/<repo>/resolve/main/figs \\
+      --md-out docs/paper_crossvendor_hf.md
 """
 from __future__ import annotations
 
@@ -95,14 +101,48 @@ def inline(html: str, base: Path) -> str:
     return out
 
 
+MD_IMG = re.compile(r"(!\[[^\]]*\]\()([^)\s]+)(\))")
+
+
+def rewrite_md(text: str, base: str) -> str:
+    """Point every local image at a hosted copy, matched on filename alone."""
+    base = base.rstrip("/")
+    seen: list[tuple[str, str]] = []
+
+    def sub(m: re.Match[str]) -> str:
+        src = m.group(2)
+        if src.startswith(("http://", "https://", "data:")):
+            return m.group(0)
+        url = f"{base}/{Path(src).name}"
+        seen.append((src, url))
+        return m.group(1) + url + m.group(3)
+
+    out = MD_IMG.sub(sub, text)
+    for s, u in seen:
+        print(f"  {s}\n    -> {u}")
+    if not seen:
+        print("  no local images found", file=sys.stderr)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("markdown")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--image-base", help="host prefix for figures; switches output to markdown")
+    ap.add_argument("--md-out", default=None)
     args = ap.parse_args()
 
     src = Path(args.markdown).resolve()
-    out = Path(args.out) if args.out else ROOT / "docs" / f"{src.stem}_paste.html"
+
+    if args.image_base:
+        md_out = Path(args.md_out).resolve() if args.md_out else ROOT / "docs" / f"{src.stem}_hosted.md"
+        md_out.parent.mkdir(parents=True, exist_ok=True)
+        md_out.write_text(rewrite_md(src.read_text(), args.image_base))
+        print(f"\n  {md_out}")
+        return 0
+
+    out = Path(args.out).resolve() if args.out else ROOT / "docs" / f"{src.stem}_paste.html"
     out.parent.mkdir(parents=True, exist_ok=True)
 
     md = MarkdownIt("commonmark").enable(["table", "strikethrough"])
@@ -116,7 +156,7 @@ def main() -> int:
         f"<style>{CSS}</style></head><body><div class=wrap>{body}</div></body></html>"
     )
     kb = out.stat().st_size / 1024
-    print(f"\n  {out.relative_to(ROOT)}  {kb:.0f} KB")
+    print(f"\n  {out}  {kb:.0f} KB")
     if kb > 4000:
         print("  large: some editors truncate a very big clipboard payload")
     return 0
