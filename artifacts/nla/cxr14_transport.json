@@ -1,0 +1,215 @@
+{
+  "question": "is it the same direction in every backbone, and does it survive a trip around the vendor cycle",
+  "vendors": [
+    "gemma4",
+    "aria",
+    "qwen3omni"
+  ],
+  "n_train": 86524,
+  "n_test": 25596,
+  "native": {
+    "gemma4": {
+      "mean_auroc": 0.759,
+      "per_finding": {
+        "Atelectasis": 0.7248,
+        "Cardiomegaly": 0.8221,
+        "Effusion": 0.7849,
+        "Infiltration": 0.6862,
+        "Mass": 0.7423,
+        "Nodule": 0.6956,
+        "Pneumonia": 0.66,
+        "Pneumothorax": 0.8465,
+        "Consolidation": 0.7107,
+        "Edema": 0.817,
+        "Emphysema": 0.865,
+        "Fibrosis": 0.7538,
+        "Pleural_Thickening": 0.7347,
+        "Hernia": 0.7829
+      }
+    },
+    "aria": {
+      "mean_auroc": 0.708,
+      "per_finding": {
+        "Atelectasis": 0.6802,
+        "Cardiomegaly": 0.7379,
+        "Effusion": 0.7306,
+        "Infiltration": 0.6647,
+        "Mass": 0.6595,
+        "Nodule": 0.6118,
+        "Pneumonia": 0.6201,
+        "Pneumothorax": 0.7884,
+        "Consolidation": 0.6749,
+        "Edema": 0.7987,
+        "Emphysema": 0.775,
+        "Fibrosis": 0.7301,
+        "Pleural_Thickening": 0.6848,
+        "Hernia": 0.7552
+      }
+    },
+    "qwen3omni": {
+      "mean_auroc": 0.765,
+      "per_finding": {
+        "Atelectasis": 0.7282,
+        "Cardiomegaly": 0.8246,
+        "Effusion": 0.7899,
+        "Infiltration": 0.6921,
+        "Mass": 0.7387,
+        "Nodule": 0.6989,
+        "Pneumonia": 0.6704,
+        "Pneumothorax": 0.8419,
+        "Consolidation": 0.708,
+        "Edema": 0.8291,
+        "Emphysema": 0.8502,
+        "Fibrosis": 0.7747,
+        "Pleural_Thickening": 0.736,
+        "Hernia": 0.8269
+      }
+    }
+  },
+  "transported": {
+    "gemma4 probe on aria": {
+      "mean_auroc": 0.7321,
+      "vs_native_target": 0.0241,
+      "per_finding": {
+        "Atelectasis": 0.6929,
+        "Cardiomegaly": 0.7705,
+        "Effusion": 0.7353,
+        "Infiltration": 0.6773,
+        "Mass": 0.6796,
+        "Nodule": 0.6462,
+        "Pneumonia": 0.6522,
+        "Pneumothorax": 0.8034,
+        "Consolidation": 0.6942,
+        "Edema": 0.8115,
+        "Emphysema": 0.7847,
+        "Fibrosis": 0.7673,
+        "Pleural_Thickening": 0.7181,
+        "Hernia": 0.8162
+      }
+    },
+    "gemma4 probe on qwen3omni": {
+      "mean_auroc": 0.7708,
+      "vs_native_target": 0.0058,
+      "per_finding": {
+        "Atelectasis": 0.7298,
+        "Cardiomegaly": 0.8364,
+        "Effusion": 0.7851,
+        "Infiltration": 0.6951,
+        "Mass": 0.7442,
+        "Nodule": 0.7051,
+        "Pneumonia": 0.6824,
+        "Pneumothorax": 0.844,
+        "Consolidation": 0.7132,
+        "Edema": 0.8264,
+        "Emphysema": 0.8486,
+        "Fibrosis": 0.7895,
+        "Pleural_Thickening": 0.7502,
+        "Hernia": 0.8406
+      }
+    },
+    "aria probe on gemma4": {
+      "mean_auroc": 0.748,
+      "vs_native_target": -0.011,
+      "per_finding": {
+        "Atelectasis": 0.7074,
+        "Cardiomegaly": 0.7872,
+        "Effusion": 0.7555,
+        "Infiltration": 0.681,
+        "Mass": 0.7053,
+        "Nodule": 0.6759,
+        "Pneumonia": 0.6627,
+        "Pneumothorax": 0.828,
+        "Consolidation": 0.698,
+        "Edema": 0.8136,
+        "Emphysema": 0.8222,
+        "Fibrosis": 0.7943,
+        "Pleural_Thickening": 0.7339,
+        "Hernia": 0.807
+      }
+    },
+    "aria probe on qwen3omni": {
+      "mean_auroc": 0.7522,
+      "vs_native_target": -0.0128,
+      "per_finding": {
+        "Atelectasis": 0.7108,
+        "Cardiomegaly": 0.7986,
+        "Effusion": 0.7633,
+        "Infiltration": 0.6846,
+        "Mass": 0.6962,
+        "Nodule": 0.673,
+        "Pneumonia": 0.6643,
+        "Pneumothorax": 0.8271,
+        "Consolidation": 0.6951,
+        "Edema": 0.8164,
+        "Emphysema": 0.8087,
+        "Fibrosis": 0.7906,
+        "Pleural_Thickening": 0.7359,
+        "Hernia": 0.8663
+      }
+    },
+    "qwen3omni probe on gemma4": {
+      "mean_auroc": 0.7707,
+      "vs_native_target": 0.0117,
+      "per_finding": {
+        "Atelectasis": 0.7265,
+        "Cardiomegaly": 0.8389,
+        "Effusion": 0.7814,
+        "Infiltration": 0.6915,
+        "Mass": 0.7466,
+        "Nodule": 0.7044,
+        "Pneumonia": 0.6765,
+        "Pneumothorax": 0.8453,
+        "Consolidation": 0.7145,
+        "Edema": 0.8263,
+        "Emphysema": 0.8508,
+        "Fibrosis": 0.7948,
+        "Pleural_Thickening": 0.7492,
+        "Hernia": 0.8439
+      }
+    },
+    "qwen3omni probe on aria": {
+      "mean_auroc": 0.7325,
+      "vs_native_target": 0.0245,
+      "per_finding": {
+        "Atelectasis": 0.6944,
+        "Cardiomegaly": 0.7728,
+        "Effusion": 0.7368,
+        "Infiltration": 0.6762,
+        "Mass": 0.6804,
+        "Nodule": 0.6413,
+        "Pneumonia": 0.6507,
+        "Pneumothorax": 0.8011,
+        "Consolidation": 0.6934,
+        "Edema": 0.8112,
+        "Emphysema": 0.7829,
+        "Fibrosis": 0.7674,
+        "Pleural_Thickening": 0.7158,
+        "Hernia": 0.8309
+      }
+    }
+  },
+  "self_map": {
+    "gemma4": 0.7599,
+    "aria": 0.7092,
+    "qwen3omni": 0.7658
+  },
+  "cycle": {
+    "gemma4 -> aria -> qwen3omni -> gemma4": 0.7505,
+    "aria -> gemma4 -> qwen3omni -> aria": 0.7246,
+    "qwen3omni -> gemma4 -> aria -> qwen3omni": 0.7527
+  },
+  "shuffled": {
+    "gemma4 shuffled probe on gemma4": 0.5004,
+    "gemma4 shuffled probe on aria": 0.504,
+    "gemma4 shuffled probe on qwen3omni": 0.5015
+  },
+  "summary": {
+    "mean_native": 0.744,
+    "mean_transported": 0.7511,
+    "transport_cost": -0.0071,
+    "mean_self_map": 0.745,
+    "mean_cycle": 0.7426,
+    "mean_shuffled": 0.502,
+    "reading": "transported near native means the pathology direction is shared and a probe fitted once reads every backbone. transported near the shuffled floor means each backbone carries pathology in its own private direction and four probes are four findings, not one."
+  }
+}
