@@ -101,21 +101,26 @@ def inline(html: str, base: Path) -> str:
     return out
 
 
-MD_IMG = re.compile(r"(!\[[^\]]*\]\()([^)\s]+)(\))")
+MD_IMG = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)\)")
 
 
 def rewrite_md(text: str, base: str) -> str:
-    """Point every local image at a hosted copy, matched on filename alone."""
+    """Point every local image at a hosted copy, matched on filename alone.
+
+    The image is also collapsed onto one line. The paper hard wraps, so alt text
+    routinely spans three lines, and a line-oriented parser (which is what a
+    WYSIWYG paste handler usually is) leaves that as a broken link.
+    """
     base = base.rstrip("/")
     seen: list[tuple[str, str]] = []
 
     def sub(m: re.Match[str]) -> str:
-        src = m.group(2)
+        alt, src = " ".join(m.group(1).split()), m.group(2)
         if src.startswith(("http://", "https://", "data:")):
-            return m.group(0)
+            return f"![{alt}]({src})"
         url = f"{base}/{Path(src).name}"
         seen.append((src, url))
-        return m.group(1) + url + m.group(3)
+        return f"![{alt}]({url})"
 
     out = MD_IMG.sub(sub, text)
     for s, u in seen:

@@ -278,15 +278,12 @@ average and usually gains. Per direction:
 Four of six beat the target's native probe. The best single reading in the study,
 0.7708, comes from a probe that was never fitted on the states it is reading.
 
-![Every cross direction, measured relative to the target backbone's own probe.
-Bars above zero are directions where a borrowed probe outscores the one fitted
-natively.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig1_transport.png)
+![Every cross direction, measured relative to the target backbone's own probe. Bars above zero are directions where a borrowed probe outscores the one fitted natively.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig1_transport.png)
 
 The same comparison in both labelled domains, with the two controls that bound
 it:
 
-![Native, self-map control, transported and shuffled floor, on satellite scene
-classes and on chest findings.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig3_transport_cost.png)
+![Native, self-map control, transported and shuffled floor, on satellite scene classes and on chest findings.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig3_transport_cost.png)
 
 This was a prediction on record. The satellite result implied pathology should
 transport if scene content did; the observed cost is smaller still.
@@ -316,8 +313,7 @@ parameters**, so the gain cannot be capacity. And **Aria is 0.0371 behind the
 baseline on its own** and still improves the average, which means it holds
 something the two better backbones do not.
 
-![Each backbone alone, the mean of their logits, feature concatenation, and the
-duplicate-vendor control, shown with the split-matched baseline.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig2_pooling.png)
+![Each backbone alone, the mean of their logits, feature concatenation, and the duplicate-vendor control, shown with the split-matched baseline.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig2_pooling.png)
 
 ### 6.1 Concatenation gains exactly nothing, and the control is why we know
 
@@ -380,8 +376,7 @@ nearest neighbour once the route closes.
 Fewer distinct boundaries scores higher at every hop count in both domains, six
 of six.
 
-![Round-trip r@1 by hop count, for routes crossing one, two and three
-distinct vendor boundaries, in radiology and satellite.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig4_ladder.png)
+![Round-trip r@1 by hop count, for routes crossing one, two and three distinct vendor boundaries, in radiology and satellite.](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe/resolve/main/figs/fig4_ladder.png)
 
 **The first reading of this was wrong and is withdrawn.** We originally reported
 a three-way ordering and read it as evidence about *enclosed area*. Dipankar
