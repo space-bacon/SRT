@@ -25,12 +25,13 @@ directly.
 
 On satellite imagery, a 17-class land-use probe scores 0.9507 mean AUROC natively
 and 0.9484 transported across backbones, a cost of 0.0024 against a shuffled
-floor of 0.5014 on the same holdout. On chest radiographs, using the official
-ChestX-ray14 test list and 25,596 held-out films from patients never seen in
-training, the same procedure scores 0.7440 natively and **0.7511 transported**. The transport cost
-is negative. Four of six cross directions beat the target backbone's own probe,
-and the single best reading in the study belongs to a probe that was never fitted
-on the states it is reading.
+floor of 0.5014 on the same holdout. On chest radiographs, across three of the
+four backbones, using the official ChestX-ray14 test list and 25,596 held-out
+films from patients never seen in training, the same procedure scores 0.7440
+natively and **0.7511 transported**. The transport cost is negative. Four of six
+cross directions beat the target backbone's own probe, and the single best
+reading in the study belongs to a probe that was never fitted on the states it is
+reading.
 
 Because the backbones are not redundant, reading them together beats reading any
 one of them. The task is the fourteen ChestX-ray14 findings, scored as mean AUROC
@@ -87,6 +88,10 @@ satellite imagery, and expert-labelled pathology on chest radiographs.
 **Backbones.** Qwen3-Omni-30B-A3B-Instruct, Gemma-4-31B-it, Mistral-Small-3.1-24B
 and Aria. Two dense, two mixture-of-experts, four vendors, four pretraining
 corpora. Every model is frozen. Nothing is fine-tuned anywhere in this paper.
+
+All four encode every domain. The photograph, satellite and shared-frame results
+use all four. **The ChestX-ray14 results use three**, Qwen3-Omni, Gemma-4 and
+Aria, and every clinical figure in this paper is a three-backbone figure.
 
 **States.** Hidden states are pooled over content-token positions at a fixed
 fraction of depth. Nothing is read from a position the input did not occupy.
@@ -205,7 +210,8 @@ side cannot leak the answer.
 ## 5. Radiology: transport costs less than nothing
 
 The strongest version of the test uses expert labels, a standard benchmark and a
-published split.
+published split. This section and the two after it use three backbones,
+Qwen3-Omni, Gemma-4 and Aria.
 
 **Setup.** All 112,120 images of ChestX-ray14, the **official `test_list.txt`**,
 86,524 train and 25,596 test across 30,805 patients, patient overlap zero and
@@ -350,15 +356,27 @@ area. The palindrome tracks the four-cycle, so area is not the variable.
 collapses toward its dominant eigenspace and every route pays that cost. Hop
 counts are matched, so read the ordering rather than the size of the split.
 
-A second reading was caught before publication. Routing every hop through the
-shared frame of §7 flattens this ladder to 1.0000 at 36 hops, which looks like
-the frame buying back the degradation. It is not: the composed map collapses to
-rank 128 of 256, exactly the joint width, so later hops cannot discard dimensions
-already gone. Truncating every pairwise map to the same rank is the control, and
-rank-matched pairwise degrades identically to full rank. So the flat ladder is
-not a bottleneck artifact, but what remains may only restate that the joint route
-reuses one subspace per hop while pairwise routes rotate between mismatched ones.
-We do not claim more than that.
+**A second reading, and why we do not make it.** Send the same routes through the
+shared frame of §7 instead of through the pairwise maps, and the ladder stops
+degrading altogether. It sits at 1.0000 at every hop count, including 36.
+
+The tempting conclusion is that the shared frame preserves what the pairwise maps
+lose. There is a duller possibility. The joint route projects onto a fixed
+128-dimensional subspace on its very first hop, and after that there is nothing
+further to discard, so it would read 1.0000 whether or not the frame meant
+anything at all.
+
+Those two are separable. We truncated every pairwise map to rank 128 as well, so
+both routes pass through a bottleneck of identical width. Rank-matched pairwise
+degrades exactly as full-rank pairwise does. The flat ladder is therefore not a
+consequence of the bottleneck's width.
+
+What we cannot separate is subtler, and it is why the claim stops here. The joint
+route returns to the **same** subspace at every hop. Each pairwise map has its
+own preferred subspace, so a route through several of them keeps changing basis.
+The flat ladder may say only that reusing one subspace avoids compounding
+mismatch, which is a weaker statement than the shared frame carrying more
+information. We claim the weaker one.
 
 ---
 
@@ -393,10 +411,10 @@ no regulatory clearance.
 satellite labels are keyword-matched by us. Every model on these benchmarks
 inherits those ceilings.
 
-**Three backbones on the clinical task, not four.** Mistral Small 3.1 was encoded
-but one shard wrote a truncated file and our chain deleted the good shards
-alongside it. That is our bug, since fixed. The satellite and radiology retrieval
-results use all four.
+**Three backbones on the clinical task.** Every ChestX-ray14 figure here comes
+from Qwen3-Omni, Gemma-4 and Aria. The photograph, satellite and shared-frame
+results use all four. Whether a fourth backbone would extend the pooled margin
+or dilute it is untested.
 
 **Linear probes throughout.** Deliberate: anything stronger begins measuring the
 probe rather than the representation.

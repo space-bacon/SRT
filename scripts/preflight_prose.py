@@ -324,16 +324,22 @@ def main() -> int:
     words = len(body.split())
     print(f"\n=== COMPARISONS: does every head-to-head say on what ===")
     unmatched = 0
-    for m in re.finditer(COMPARE, low):
+    # Prose only. A negative-results ledger is a table of hypothesis strings, and
+    # matching "beats" inside a row header flagged five rows that state no claim
+    # of ours. Same exclusion the SCORES check uses.
+    prose_only = re.sub(r"\s+", " ", "\n".join(
+        l for l in body.lower().split("\n") if not l.lstrip().startswith("|")))
+    for m in re.finditer(COMPARE, prose_only):
         # Wide enough that a headline claim can be qualified a sentence or two
         # later, which is how prose actually reads, and still narrow enough that
         # a split named in a different section does not launder the claim.
-        window = low[max(0, m.start() - 400): m.end() + 400]
+        window = prose_only[max(0, m.start() - 400): m.end() + 400]
         if not re.search(r"\d", window):
             continue
         if not re.search(MATCHED, window):
             unmatched += 1
-            print(f"! {m.group(0):<16s} ...{low[max(0, m.start() - 60):m.end() + 60]}...")
+            print(f"! {m.group(0):<16s} "
+                  f"...{prose_only[max(0, m.start() - 60):m.end() + 60]}...")
     if not unmatched:
         print("  every comparison names its split or protocol")
 
