@@ -1,0 +1,50 @@
+{
+  "question": "does reading several frozen backbones together recover and extend the split-matched lead",
+  "vendors": [
+    "gemma4",
+    "aria"
+  ],
+  "split": "official test_list.txt",
+  "n_train": 86524,
+  "n_test": 25596,
+  "split_matched_baseline": 0.7451,
+  "single": {
+    "gemma4": 0.759,
+    "aria": 0.708
+  },
+  "ensemble": {
+    "logit_mean": 0.7626,
+    "concat": 0.7543,
+    "logit_mean_vs_gemma4": {
+      "delta": 0.0036,
+      "ci95": [
+        0.0008,
+        0.0061
+      ],
+      "frac_bootstrap_positive": 0.999,
+      "significant": true
+    },
+    "concat_vs_gemma4": {
+      "delta": -0.0047,
+      "ci95": [
+        -0.0076,
+        -0.002
+      ],
+      "frac_bootstrap_positive": 0.0,
+      "significant": false
+    }
+  },
+  "control": {
+    "concat_gemma4_with_itself": 0.7568,
+    "capacity_effect": -0.0022,
+    "concat_gain_net_of_capacity": -0.0025
+  },
+  "summary": {
+    "best_single": 0.759,
+    "best_single_vendor": "gemma4",
+    "best_ensemble": 0.7626,
+    "vs_split_matched": 0.0175,
+    "recovers_lead": true,
+    "reading": "logit mean adds no parameters, so a gain there is complementary information between backbones. any concat gain must be read net of the duplicate-vendor control."
+  }
+}

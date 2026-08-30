@@ -504,6 +504,31 @@ linearly" holds for both. "Ahead of the split-matched baseline" does not: that
 is a `gemma-4-31B-it` result and is labelled as one everywhere it appears. Two
 further backbones are encoding now.
 
+**Averaging two backbones' probe scores recovers and extends the lead, with zero
+added parameters.** Aria is individually 0.0371 behind Wang, and pooling it with
+Gemma-4 still helps:
+
+| | mean AUROC | vs Gemma-4 | vs Wang 0.7451 |
+|---|---:|---:|---:|
+| Gemma-4 alone | 0.7590 | | +0.0139 |
+| Aria alone | 0.7080 | −0.0510 | −0.0371 |
+| **mean of the two probes' logits** | **0.7626** | **+0.0036** | **+0.0175** |
+| concatenated features | 0.7543 | −0.0047 | +0.0092 |
+| control: Gemma-4 concatenated with itself | 0.7568 | −0.0022 | +0.0117 |
+
+The gain is small but it is significant under a paired patient-clustered
+bootstrap, +0.0036 with CI [+0.0008, +0.0061], positive in 999 of 1000
+resamples. Averaging logits adds no parameters at all, so the gain cannot be
+capacity and has to be information one backbone holds and the other does not.
+This is the same effect the joint-frame run found on retrieval, where three
+vendors read together beat the best single vendor eight times out of eight.
+
+The concatenation row went the other way, and the control is why we can say what
+that means. Concatenating Gemma-4 **with itself** also degraded, by 0.0022, so a
+wider probe is worse-conditioned at these fixed hyperparameters regardless of
+what is in the extra columns. Real concatenation landed below even that.
+Concatenation was never retuned, so read it as untuned rather than refuted.
+
 **A metric bug found and fixed, 2026-08-29.** Our `auroc` promised tie-averaged
 ranks and did not implement them. Continuous probe scores have no ties, so
 0.7590 and every per-finding number are unaffected. The view-position baseline
@@ -525,6 +550,7 @@ before it is apparent.
 
 - **Artifacts**: [`artifacts/nla/cxr14_probe_full112k.json`](artifacts/nla/cxr14_probe_full112k.json),
   [`artifacts/nla/cxr14_pool_sweep.json`](artifacts/nla/cxr14_pool_sweep.json),
+  [`artifacts/nla/cxr14_ensemble_gemma4_aria.json`](artifacts/nla/cxr14_ensemble_gemma4_aria.json),
   [`artifacts/nla/nlst_probe.json`](artifacts/nla/nlst_probe.json)
 
 ### Banked negatives
@@ -542,6 +568,7 @@ Results that cut against us, kept because they bound the claims above.
 | The four-cycle penalty is about enclosed area | **Withdrawn.** A palindrome route with zero area tracks the four-cycle. Degradation is monotone in distinct vendor boundaries crossed, which was confounded with area |
 | The chest-radiograph result holds for any frozen backbone | **Scoped to one.** Aria scores 0.708 on the identical probe and split, 0.0371 below the split-matched baseline and ahead on only 2 of 14 findings. Linear presence of pathology replicates; beating Wang does not |
 | A shared frame buys back the loop degradation | **Not established.** The via-joint ladder is flat, but the composed map collapses to exactly the joint width. Rank-matched pairwise rules out the trivial bottleneck reading; what remains may only restate that one subspace is reused every hop |
+| Concatenating two backbones' features beats either alone | **Falsified as run.** 0.7543 against Gemma-4's 0.7590. The duplicate-vendor control also lost 0.0022, so a wider probe is worse-conditioned at these hyperparameters whatever fills the columns. Untuned, not refuted. Averaging logits, which adds no parameters, wins instead |
 
 ### Train from scratch
 
