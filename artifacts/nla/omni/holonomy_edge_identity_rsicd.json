@@ -1,0 +1,317 @@
+{
+ "question": "does the edge-count ladder survive holding edge identity fixed",
+ "credit": "objection and multiplicativity test proposed by Dipankar Sarkar",
+ "domain": "rsicd",
+ "vendors": [
+  "qwen3omni",
+  "gemma4",
+  "mistral",
+  "aria"
+ ],
+ "n_holdout": 1000,
+ "single_boundary": {
+  "qwen3omni|gemma4": {
+   "4": {
+    "r@1": 0.999,
+    "cos": 0.9482
+   },
+   "6": {
+    "r@1": 0.998,
+    "cos": 0.9325
+   },
+   "8": {
+    "r@1": 0.991,
+    "cos": 0.9209
+   },
+   "12": {
+    "r@1": 0.965,
+    "cos": 0.9039
+   },
+   "18": {
+    "r@1": 0.887,
+    "cos": 0.8861
+   },
+   "24": {
+    "r@1": 0.776,
+    "cos": 0.8729
+   },
+   "36": {
+    "r@1": 0.584,
+    "cos": 0.853
+   }
+  },
+  "qwen3omni|mistral": {
+   "4": {
+    "r@1": 1.0,
+    "cos": 0.9645
+   },
+   "6": {
+    "r@1": 1.0,
+    "cos": 0.9492
+   },
+   "8": {
+    "r@1": 1.0,
+    "cos": 0.9366
+   },
+   "12": {
+    "r@1": 0.99,
+    "cos": 0.9168
+   },
+   "18": {
+    "r@1": 0.928,
+    "cos": 0.8949
+   },
+   "24": {
+    "r@1": 0.814,
+    "cos": 0.8784
+   },
+   "36": {
+    "r@1": 0.568,
+    "cos": 0.8539
+   }
+  },
+  "qwen3omni|aria": {
+   "4": {
+    "r@1": 1.0,
+    "cos": 0.9362
+   },
+   "6": {
+    "r@1": 0.995,
+    "cos": 0.9199
+   },
+   "8": {
+    "r@1": 0.985,
+    "cos": 0.9076
+   },
+   "12": {
+    "r@1": 0.904,
+    "cos": 0.8892
+   },
+   "18": {
+    "r@1": 0.748,
+    "cos": 0.8695
+   },
+   "24": {
+    "r@1": 0.606,
+    "cos": 0.8546
+   },
+   "36": {
+    "r@1": 0.427,
+    "cos": 0.8321
+   }
+  },
+  "gemma4|mistral": {
+   "4": {
+    "r@1": 0.998,
+    "cos": 0.9734
+   },
+   "6": {
+    "r@1": 0.982,
+    "cos": 0.9636
+   },
+   "8": {
+    "r@1": 0.945,
+    "cos": 0.9554
+   },
+   "12": {
+    "r@1": 0.869,
+    "cos": 0.9423
+   },
+   "18": {
+    "r@1": 0.724,
+    "cos": 0.9275
+   },
+   "24": {
+    "r@1": 0.599,
+    "cos": 0.916
+   },
+   "36": {
+    "r@1": 0.385,
+    "cos": 0.8987
+   }
+  },
+  "gemma4|aria": {
+   "4": {
+    "r@1": 0.953,
+    "cos": 0.9535
+   },
+   "6": {
+    "r@1": 0.894,
+    "cos": 0.9433
+   },
+   "8": {
+    "r@1": 0.841,
+    "cos": 0.9353
+   },
+   "12": {
+    "r@1": 0.715,
+    "cos": 0.9233
+   },
+   "18": {
+    "r@1": 0.547,
+    "cos": 0.9101
+   },
+   "24": {
+    "r@1": 0.425,
+    "cos": 0.9
+   },
+   "36": {
+    "r@1": 0.266,
+    "cos": 0.8843
+   }
+  },
+  "mistral|aria": {
+   "4": {
+    "r@1": 0.994,
+    "cos": 0.9209
+   },
+   "6": {
+    "r@1": 0.972,
+    "cos": 0.9081
+   },
+   "8": {
+    "r@1": 0.944,
+    "cos": 0.898
+   },
+   "12": {
+    "r@1": 0.836,
+    "cos": 0.8824
+   },
+   "18": {
+    "r@1": 0.676,
+    "cos": 0.865
+   },
+   "24": {
+    "r@1": 0.52,
+    "cos": 0.8516
+   },
+   "36": {
+    "r@1": 0.358,
+    "cos": 0.8313
+   }
+  }
+ },
+ "spread_at_36": {
+  "best_edge": "qwen3omni|gemma4",
+  "best": 0.584,
+  "worst_edge": "gemma4|aria",
+  "worst": 0.266,
+  "range": 0.318
+ },
+ "ladder_vs_product": {
+  "1 edges, 12 hops": {
+   "measured_r@1": 0.965,
+   "cos": 0.9039,
+   "per_edge_hops": 12,
+   "product_r@1": 0.965,
+   "measured_minus_product": -0.0
+  },
+  "1 edges, 24 hops": {
+   "measured_r@1": 0.776,
+   "cos": 0.8729,
+   "per_edge_hops": 24,
+   "product_r@1": 0.776,
+   "measured_minus_product": 0.0
+  },
+  "1 edges, 36 hops": {
+   "measured_r@1": 0.584,
+   "cos": 0.853,
+   "per_edge_hops": 36,
+   "product_r@1": 0.584,
+   "measured_minus_product": -0.0
+  },
+  "2 edges, 12 hops": {
+   "measured_r@1": 0.917,
+   "cos": 0.8919,
+   "per_edge_hops": 6,
+   "product_r@1": 0.98,
+   "measured_minus_product": -0.063
+  },
+  "2 edges, 24 hops": {
+   "measured_r@1": 0.58,
+   "cos": 0.8557,
+   "per_edge_hops": 12,
+   "product_r@1": 0.8386,
+   "measured_minus_product": -0.2586
+  },
+  "2 edges, 36 hops": {
+   "measured_r@1": 0.377,
+   "cos": 0.8327,
+   "per_edge_hops": 18,
+   "product_r@1": 0.6422,
+   "measured_minus_product": -0.2652
+  },
+  "3 edges, 12 hops": {
+   "measured_r@1": 0.782,
+   "cos": 0.8766,
+   "per_edge_hops": 4,
+   "product_r@1": 0.991,
+   "measured_minus_product": -0.209
+  },
+  "3 edges, 24 hops": {
+   "measured_r@1": 0.423,
+   "cos": 0.8378,
+   "per_edge_hops": 8,
+   "product_r@1": 0.8841,
+   "measured_minus_product": -0.4611
+  },
+  "3 edges, 36 hops": {
+   "measured_r@1": 0.251,
+   "cos": 0.8133,
+   "per_edge_hops": 12,
+   "product_r@1": 0.7011,
+   "measured_minus_product": -0.4501
+  }
+ },
+ "worst_single_vs_three_edges_at_36": {
+  "worst_single_boundary": "gemma4|aria",
+  "worst_single_r@1": 0.266,
+  "three_edge_r@1": 0.251,
+  "delta": 0.015,
+  "boundaries_the_three_edge_route_uses": {
+   "qwen3omni|gemma4": 0.584,
+   "gemma4|mistral": 0.385,
+   "mistral|aria": 0.358
+  },
+  "reading": "a single boundary already at or below the 3-edge rung would mean edge identity is sufficient and the count is not needed"
+ },
+ "ladder_under_vendor_permutations_36": {
+  "gemma4, mistral, aria": {
+   "1": 0.584,
+   "2": 0.377,
+   "3": 0.251,
+   "monotone": true
+  },
+  "gemma4, aria, mistral": {
+   "1": 0.584,
+   "2": 0.318,
+   "3": 0.273,
+   "monotone": true
+  },
+  "mistral, gemma4, aria": {
+   "1": 0.568,
+   "2": 0.33,
+   "3": 0.245,
+   "monotone": true
+  },
+  "mistral, aria, gemma4": {
+   "1": 0.568,
+   "2": 0.286,
+   "3": 0.253,
+   "monotone": true
+  },
+  "aria, gemma4, mistral": {
+   "1": 0.427,
+   "2": 0.315,
+   "3": 0.268,
+   "monotone": true
+  },
+  "aria, mistral, gemma4": {
+   "1": 0.427,
+   "2": 0.321,
+   "3": 0.253,
+   "monotone": true
+  }
+ },
+ "monotone_permutations": "6 of 6"
+}
