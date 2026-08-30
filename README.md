@@ -371,6 +371,18 @@ vendor boundaries a route crosses:
 Monotone. That also orders the original result, where the self-loop crosses
 none, there-and-back one, and the four-cycle four.
 
+**Replicated on satellite**, same protocol, only the pixels change. The single
+domain was the weakness of the first version of this claim, and it is the same
+weakness that cost us the routing recipe:
+
+| distinct edges | 12 | 24 | 36 |
+|---:|---:|---:|---:|
+| 1 | 0.9650 | 0.7760 | 0.5840 |
+| 2 | 0.9170 | 0.5800 | 0.3770 |
+| 3 | 0.7820 | 0.4230 | 0.2510 |
+
+Monotone at every hop count in both domains, six of six.
+
 **Caveat carried on the face of the claim**: iterating any non-normal linear
 map collapses toward its dominant eigenspace and every route pays that cost.
 Hop counts are matched, so read the ordering rather than the size of the
@@ -378,7 +390,69 @@ split. The practical consequence is that two models tying on a single-pass
 retrieval benchmark is not evidence they carry the same structure.
 
 - **Artifacts**: [`artifacts/nla/omni/semiosis_holonomy_roco.json`](artifacts/nla/omni/semiosis_holonomy_roco.json),
-  [`artifacts/nla/omni/holonomy_palindrome_roco.json`](artifacts/nla/omni/holonomy_palindrome_roco.json)
+  [`artifacts/nla/omni/holonomy_palindrome_roco.json`](artifacts/nla/omni/holonomy_palindrome_roco.json),
+  [`artifacts/nla/omni/holonomy_palindrome_rsicd.json`](artifacts/nla/omni/holonomy_palindrome_rsicd.json)
+
+### A probe trained on one backbone reads another at native accuracy
+
+Retrieval says two vendors agree about *which picture*. It does not say they
+agree about *what is in it*. This asks the labelled version, on satellite
+imagery: fit a linear scene probe on one vendor's frozen image states, then read
+it on a different vendor's states through a ridge map fitted on train rows only.
+17 land-use classes, four backbones, 12 cross directions.
+
+| | mean AUROC |
+|---|---:|
+| native, each vendor probing itself | 0.9507 (spread 0.0277) |
+| self-map control | 0.9517 |
+| **transported, probe from one backbone read on another** | **0.9484** |
+| shuffled floor | 0.5014 |
+
+Transport costs **0.0024**, and 4 of the 12 transported pairs beat the native
+target outright. Train once, read anywhere, as a measurement rather than a
+slogan.
+
+**The labels are weak and the number must not be quoted without this sentence.**
+Scene classes are keyword-matched out of the RSICD captions, which is the same
+shape of supervision ChestX-ray14 uses for its fourteen findings, and they are
+coarser than chest pathology, which is part of why 0.95 is reachable. The probe
+reads the image tower while the label comes from the caption, so the text side
+cannot leak the answer.
+
+- **Artifact**: [`artifacts/nla/omni/rsicd_scene_probe.json`](artifacts/nla/omni/rsicd_scene_probe.json)
+
+### One frame for four backbones, and reading them together
+
+Everything above is bilateral: one ridge map per ordered pair, twelve for four
+vendors. Fitting a *single* shared frame from all four at once (MAXVAR
+generalised CCA) gives four encoders and four decoders, eight maps instead of
+twelve, and costs little:
+
+| | satellite | radiology |
+|---|---:|---:|
+| direct, 12 pairwise maps | 0.8425 | 0.8817 |
+| **via one shared frame, 8 maps** | **0.8164** | **0.8400** |
+| cost | 0.0261 | 0.0417 |
+
+**Three vendors read together beat the best single vendor reading alone, on all
+four targets in both domains, eight for eight.** Satellite gains +0.0345 on
+average (mistral 0.8310 → 0.8810), radiology +0.0165 (qwen3omni 0.9670 →
+0.9940). The backbones are not redundant: each carries something the others do
+not, and pooling recovers it.
+
+**A reading we caught before publishing.** Routing every hop through the shared
+frame flattens the edge-count ladder above to 1.0000 at 36 hops. That is not the
+frame buying back the degradation: the composed map collapses to rank 128 of
+256, exactly the joint width, so later hops cannot discard dimensions already
+gone. Truncating every pairwise map to the same rank is the control, and
+rank-matched pairwise degrades identically to full-rank (0.3720 → 0.3720 at one
+edge, 36 hops). So the flat ladder is not a bottleneck artifact, but it may only
+be restating that the joint route reuses one subspace per hop while pairwise
+routes rotate between mismatched ones. The artifact carries a `ladder_caveat`
+field forbidding comparison against full-rank pairwise.
+
+- **Artifacts**: [`artifacts/nla/omni/joint_frame_roco.json`](artifacts/nla/omni/joint_frame_roco.json),
+  [`artifacts/nla/omni/joint_frame_rsicd.json`](artifacts/nla/omni/joint_frame_rsicd.json)
 
 ### The caption head is the bottleneck, tested by replacing it
 
@@ -421,6 +495,23 @@ random against 0.7451 official, so we assert only that the two are not
 comparable. `scripts/cxr_probe.py` labels them as context rather than as a
 head-to-head.
 
+**The headline is backbone-specific, and that is a limit on the claim.** The
+identical probe, split and protocol run on Aria's frozen states scores **0.708**,
+which is 0.0371 *below* Wang and ahead on only 2 of 14 findings. Both backbones
+clear the view-position baseline on all 14 findings and sit far above the
+shuffled floor, so "frozen general-purpose states carry chest pathology
+linearly" holds for both. "Ahead of the split-matched baseline" does not: that
+is a `gemma-4-31B-it` result and is labelled as one everywhere it appears. Two
+further backbones are encoding now.
+
+**A metric bug found and fixed, 2026-08-29.** Our `auroc` promised tie-averaged
+ranks and did not implement them. Continuous probe scores have no ties, so
+0.7590 and every per-finding number are unaffected. The view-position baseline
+scores a single binary feature, which is nothing but ties, so its value depended
+on platform sort order: 0.5896 on macOS, 0.5827 on Linux, both wrong. The
+correct order-invariant value is **0.5883**, verified against scikit-learn over
+200 tie-heavy trials, and it has been corrected on every public surface.
+
 Longitudinal CT on real NLST volumes (620 slices, 40 participants, 116
 studies): probe AUROC **0.9380**, CI [0.906, 0.964], against a position-only
 baseline of 0.5353 and a shuffled floor of 0.4651. 37 of 38 studies rank the
@@ -449,6 +540,8 @@ Results that cut against us, kept because they bound the claims above.
 | Interpretants fail to compose (triadic irreducibility) | **Negative.** Routing through a third vendor costs 0.0160 beyond one extra fitted hop; the dyadic reduction holds at one pass |
 | Vendor-first routing beats a directly fitted cross-vendor map | **Photographs only.** 12/12 on COCO at p=0.0002, but 8/12 on radiology (p=0.19) and 5/12 on satellite (p=0.81). Published as general and withdrawn to one domain |
 | The four-cycle penalty is about enclosed area | **Withdrawn.** A palindrome route with zero area tracks the four-cycle. Degradation is monotone in distinct vendor boundaries crossed, which was confounded with area |
+| The chest-radiograph result holds for any frozen backbone | **Scoped to one.** Aria scores 0.708 on the identical probe and split, 0.0371 below the split-matched baseline and ahead on only 2 of 14 findings. Linear presence of pathology replicates; beating Wang does not |
+| A shared frame buys back the loop degradation | **Not established.** The via-joint ladder is flat, but the composed map collapses to exactly the joint width. Rank-matched pairwise rules out the trivial bottleneck reading; what remains may only restate that one subspace is reused every hop |
 
 ### Train from scratch
 

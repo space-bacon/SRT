@@ -40,7 +40,10 @@ CARDS = {
         "artifacts/nla/omni/xvendor4.json",
         "artifacts/nla/omni/triadic_composition_roco.json",
         "artifacts/nla/omni/head_swap_roco.json",
-        "artifacts/nla/omni/geometry_compare_roco.json"],
+        "artifacts/nla/omni/geometry_compare_roco.json",
+        "artifacts/nla/omni/rsicd_scene_probe.json",
+        "artifacts/nla/omni/joint_frame_roco.json",
+        "artifacts/nla/omni/joint_frame_rsicd.json"],
 }
 
 

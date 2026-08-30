@@ -89,6 +89,50 @@ That is what a shared bottleneck predicts. Test proposed by Dipankar Sarkar.
 measured without a shared space, against a floor of 0.0007, and it is not
 throttled by the caption head.
 
+## A probe trained on one backbone reads another (added 2026-08-29)
+
+Retrieval says two vendors agree about *which picture*. It does not say they
+agree about *what is in it*. On satellite imagery, a linear scene probe fitted
+on one vendor's frozen states and read on a different vendor's states through a
+ridge map fitted on train rows only, 17 land-use classes, 12 cross directions:
+
+| | mean AUROC |
+|---|---:|
+| native, each vendor probing itself | 0.9507 |
+| self-map control | 0.9517 |
+| **transported across backbones** | **0.9484** |
+| shuffled floor | 0.5014 |
+
+Transport costs **0.0024**, and 4 of the 12 transported pairs beat the native
+target. **The labels are weak** and the number should not be quoted without
+that: scene classes are keyword-matched from the RSICD captions, the same shape
+of supervision ChestX-ray14 uses for its findings, and they are coarser than
+the medical case. The probe reads the image tower while the label comes from
+the caption, so the text side cannot leak the answer.
+
+## One frame for four backbones, and reading them together
+
+Everything above is bilateral: one ridge map per ordered pair, twelve maps for
+four vendors. Fitting a single shared frame from all four at once (MAXVAR
+generalised CCA) gives eight maps instead of twelve and costs little:
+
+| | satellite | radiology |
+|---|---:|---:|
+| direct, 12 pairwise maps | 0.8425 | 0.8817 |
+| **via one shared frame, 8 maps** | **0.8164** | **0.8400** |
+
+**Three vendors read together beat the best single vendor, on all four targets
+in both domains, eight for eight.** Satellite +0.0345 mean (mistral 0.8310 to
+0.8810), radiology +0.0165 (qwen3omni 0.9670 to 0.9940). The backbones are not
+redundant; each carries something the others do not.
+
+Routing every hop through the shared frame also flattens the iterated-loop
+degradation to 1.0000 at 36 hops. Read that with the caveat recorded in the
+artifact: the composed map collapses to exactly the joint width, so later hops
+cannot lose dimensions that are already gone. Rank-matched pairwise maps rule
+out the trivial bottleneck reading, but the result may only restate that the
+joint route reuses one subspace per hop.
+
 ## Read this before using the states
 
 **Centering is not optional.** Raw cosine between unrelated items on these
