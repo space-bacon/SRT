@@ -12,55 +12,97 @@
    "model": "Qwen/Qwen2.5-0.5B",
    "lab": "Alibaba",
    "dim": 896,
-   "layer": 14
+   "layer": 14,
+   "weights_gb": 1.0,
+   "dtype": "float32"
   },
   "qwen3_06b": {
    "model": "Qwen/Qwen3-0.6B-Base",
    "lab": "Alibaba",
    "dim": 1024,
-   "layer": 17
+   "layer": 17,
+   "weights_gb": 1.4,
+   "dtype": "float32"
   },
   "gemma2_2b": {
    "model": "google/gemma-2-2b",
    "lab": "Google",
    "dim": 2304,
-   "layer": 16
+   "layer": 16,
+   "weights_gb": 9.8,
+   "dtype": "float32"
   },
   "llama32_1b": {
    "model": "meta-llama/Llama-3.2-1B",
    "lab": "Meta",
    "dim": 2048,
-   "layer": 10
+   "layer": 10,
+   "weights_gb": 2.5,
+   "dtype": "float32"
   },
   "llama32_3b": {
    "model": "meta-llama/Llama-3.2-3B",
    "lab": "Meta",
    "dim": 3072,
-   "layer": 17
+   "layer": 17,
+   "weights_gb": 6.0,
+   "dtype": "float32"
   },
   "tinyllama": {
    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
    "lab": "TinyLlama",
    "dim": 2048,
-   "layer": 13
+   "layer": 13,
+   "weights_gb": 2.2,
+   "dtype": "float32"
   },
   "olmo2_1b": {
    "model": "allenai/OLMo-2-0425-1B",
    "lab": "AI2",
    "dim": 2048,
-   "layer": 10
+   "layer": 10,
+   "weights_gb": 2.4,
+   "dtype": "float32"
   },
   "smollm2_360m": {
    "model": "HuggingFaceTB/SmolLM2-360M",
    "lab": "HuggingFace",
    "dim": 960,
-   "layer": 19
+   "layer": 19,
+   "weights_gb": 0.7,
+   "dtype": "float32"
   },
   "pythia_410m": {
    "model": "EleutherAI/pythia-410m",
    "lab": "EleutherAI",
    "dim": 1024,
-   "layer": 14
+   "layer": 14,
+   "weights_gb": 0.9,
+   "dtype": "float32"
+  },
+  "qwen25_7b": {
+   "model": "/Volumes/LaCie/SRT-ARCHIVE/host-models/Qwen__Qwen2.5-7B",
+   "lab": "Alibaba",
+   "dim": 3584,
+   "layer": 17,
+   "weights_gb": 14,
+   "dtype": "bfloat16"
+  },
+  "gptoss_20b": {
+   "model": "/Volumes/LaCie/SRT-ARCHIVE/host-models/openai__gpt-oss-20b",
+   "lab": "OpenAI",
+   "dim": 2880,
+   "layer": 14,
+   "weights_gb": 26,
+   "dtype": "bfloat16"
+  },
+  "qwen25_7b_f32": {
+   "model": "/Volumes/LaCie/SRT-ARCHIVE/host-models/Qwen__Qwen2.5-7B",
+   "lab": "Alibaba/fp32",
+   "dim": 3584,
+   "layer": 17,
+   "weights_gb": 28,
+   "dtype": "float32"
   }
  },
  "matrix": {
@@ -73,7 +115,10 @@
    "tinyllama": 0.91,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.894,
-   "pythia_410m": 0.908
+   "pythia_410m": 0.908,
+   "qwen25_7b": 0.883,
+   "gptoss_20b": 0.958,
+   "qwen25_7b_f32": 0.883
   },
   "qwen3_06b": {
    "qwen25_05b": 0.966,
@@ -84,7 +129,10 @@
    "tinyllama": 0.908,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.875,
-   "pythia_410m": 0.896
+   "pythia_410m": 0.896,
+   "qwen25_7b": 0.847,
+   "gptoss_20b": 0.952,
+   "qwen25_7b_f32": 0.848
   },
   "gemma2_2b": {
    "qwen25_05b": 0.825,
@@ -95,7 +143,10 @@
    "tinyllama": 0.935,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.804,
-   "pythia_410m": 0.857
+   "pythia_410m": 0.857,
+   "qwen25_7b": 0.743,
+   "gptoss_20b": 0.967,
+   "qwen25_7b_f32": 0.744
   },
   "llama32_1b": {
    "qwen25_05b": 0.986,
@@ -106,7 +157,10 @@
    "tinyllama": 0.951,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.887,
-   "pythia_410m": 0.932
+   "pythia_410m": 0.932,
+   "qwen25_7b": 0.915,
+   "gptoss_20b": 0.987,
+   "qwen25_7b_f32": 0.911
   },
   "llama32_3b": {
    "qwen25_05b": 0.977,
@@ -117,7 +171,10 @@
    "tinyllama": 0.929,
    "olmo2_1b": 0.998,
    "smollm2_360m": 0.844,
-   "pythia_410m": 0.911
+   "pythia_410m": 0.911,
+   "qwen25_7b": 0.873,
+   "gptoss_20b": 0.986,
+   "qwen25_7b_f32": 0.867
   },
   "tinyllama": {
    "qwen25_05b": 0.816,
@@ -128,7 +185,10 @@
    "tinyllama": 0.999,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.796,
-   "pythia_410m": 0.856
+   "pythia_410m": 0.856,
+   "qwen25_7b": 0.741,
+   "gptoss_20b": 0.95,
+   "qwen25_7b_f32": 0.738
   },
   "olmo2_1b": {
    "qwen25_05b": 0.972,
@@ -139,7 +199,10 @@
    "tinyllama": 0.929,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.832,
-   "pythia_410m": 0.907
+   "pythia_410m": 0.907,
+   "qwen25_7b": 0.848,
+   "gptoss_20b": 0.982,
+   "qwen25_7b_f32": 0.847
   },
   "smollm2_360m": {
    "qwen25_05b": 0.874,
@@ -150,7 +213,10 @@
    "tinyllama": 0.927,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.999,
-   "pythia_410m": 0.921
+   "pythia_410m": 0.921,
+   "qwen25_7b": 0.762,
+   "gptoss_20b": 0.96,
+   "qwen25_7b_f32": 0.763
   },
   "pythia_410m": {
    "qwen25_05b": 0.869,
@@ -161,26 +227,71 @@
    "tinyllama": 0.93,
    "olmo2_1b": 0.999,
    "smollm2_360m": 0.87,
-   "pythia_410m": 0.999
+   "pythia_410m": 0.999,
+   "qwen25_7b": 0.754,
+   "gptoss_20b": 0.947,
+   "qwen25_7b_f32": 0.751
+  },
+  "qwen25_7b": {
+   "qwen25_05b": 0.983,
+   "qwen3_06b": 0.979,
+   "gemma2_2b": 0.999,
+   "llama32_1b": 0.996,
+   "llama32_3b": 0.999,
+   "tinyllama": 0.945,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.89,
+   "pythia_410m": 0.91,
+   "qwen25_7b": 0.999,
+   "gptoss_20b": 0.983,
+   "qwen25_7b_f32": 0.999
+  },
+  "gptoss_20b": {
+   "qwen25_05b": 0.84,
+   "qwen3_06b": 0.824,
+   "gemma2_2b": 0.983,
+   "llama32_1b": 0.91,
+   "llama32_3b": 0.953,
+   "tinyllama": 0.889,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.773,
+   "pythia_410m": 0.823,
+   "qwen25_7b": 0.735,
+   "gptoss_20b": 0.999,
+   "qwen25_7b_f32": 0.735
+  },
+  "qwen25_7b_f32": {
+   "qwen25_05b": 0.983,
+   "qwen3_06b": 0.982,
+   "gemma2_2b": 0.999,
+   "llama32_1b": 0.996,
+   "llama32_3b": 0.999,
+   "tinyllama": 0.943,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.892,
+   "pythia_410m": 0.913,
+   "qwen25_7b": 0.999,
+   "gptoss_20b": 0.982,
+   "qwen25_7b_f32": 0.999
   }
  },
  "summary": {
   "mean_self_map_diagonal": 0.999,
-  "mean_transported_off_diagonal": 0.9339,
-  "transport_cost": 0.0651,
-  "mean_shuffled_floor": 0.00088,
-  "mean_within_lab": 0.9848,
-  "mean_cross_lab": 0.9309,
-  "within_minus_cross_lab": 0.0539,
+  "mean_transported_off_diagonal": 0.9203,
+  "transport_cost": 0.0787,
+  "mean_shuffled_floor": 0.00101,
+  "mean_within_lab": 0.9539,
+  "mean_cross_lab": 0.9181,
+  "within_minus_cross_lab": 0.0357,
   "best_pair": [
    "qwen25_05b",
    "olmo2_1b",
    0.999
   ],
   "worst_pair": [
-   "tinyllama",
-   "smollm2_360m",
-   0.796
+   "gptoss_20b",
+   "qwen25_7b",
+   0.735
   ]
  }
 }
