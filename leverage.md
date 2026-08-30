@@ -1,127 +1,148 @@
-# Leverage — Top 10 Next Moves (2026-07-08)
+# Leverage — Top Moves (revised 2026-08-29)
 
 Ranked by (impact × readiness), across research, distribution, and credibility.
 Companion to [FORWARD_PLAN.md](FORWARD_PLAN.md); this is the strategic view,
 that is the operational queue.
 
-> **2026-07-25 addendum — SUBSTRATE INVARIANCE is the headline.**
-> The completed arc (rotation refuted → linear verdict → Karpathy
-> placement → 3B scale floor → Q4 drift → Mac deployment, all with
-> controls) resolves into one claim, and every surface now leads with
-> it: **the readable structure inside frozen LLMs is invariant across
-> host scale, weight precision, and hardware. Train once, read
-> everywhere; from Pi-class to datacenter, tiers differ in latency and
-> cost, never in capability.** This is the organizing claim for the
-> arXiv paper (move 1), the one-sentence pitch for press (the Pi and
-> the datacenter run the SAME artifact), and the product moat (no
-> per-deployment retraining, auditable-by-inspection linear taps).
-> README hero, docs/CROSSMODAL_LINEAR_HEAD.md, and the HF model card
-> all carry it.
-
-> **2026-07-24 addendum — the cross-modal linear-head arc changes the board.**
-> One box-day produced: Procrustes refuted → anchor rule (domain beats
-> size) → **the modality gap is linear** → a trained 22MB linear head
-> hits 0.59 R@1 / 0.87 R@5 on frozen gemma-4 with no vision training
-> (paper §11.6.4, docs/CROSSMODAL_LINEAR_HEAD.md). Strategic effects:
+> **2026-08-29 rewrite — the board changed and one prior move was backwards.**
+> Three things reorder everything below.
 >
-> - **Move 1 (arXiv) strengthens**: the Sunstone standalone paper now has
->   a citable benchmark, a controlled mechanism ladder
->   (orthogonal < identity < linear; MLP never wins), and a boundary
->   revision. This is a complete arc, not a demo.
-> - **New product move: ship `srt-sunstone-linear-head`.** The "no new
->   model" pitch is now quantified: cross-modal retrieval as a ~22MB
->   auditable sidecar on an LLM the customer already runs. Backbone
->   untouched = zero regression risk; linear = inspectable; anchors =
->   productizable onboarding calibration ("give us 150–4,000
->   representative images").
-> - **New credibility/press move: the scale-floor experiment.** If
->   linear alignment survives on a 2–4B multimodal host, "Sunstone on a
->   Raspberry Pi" is both a product tier (single prefill pass, no
->   generation — viable on Pi-5-class hardware for batch tagging) and a
->   better press artifact than the stereogram alone.
-> - Honest scoping for all pitches: the claim is never "beats CLIP"; it
->   is comparable-band retrieval as a free rider on existing LLM infra,
->   from 39k pairs and minutes of training. Karpathy-split eval required
->   before any external number comparison.
+> 1. **Medical imaging is the sharpest claim we have.** A linear probe on
+>    frozen `gemma-4-31B-it` states scores **0.7590** mean AUROC on the
+>    official ChestX-ray14 split against **0.7451** for the dataset authors'
+>    fine-tuned ResNet-50, ahead on 12 of 14 findings. Split-matched,
+>    patient-disjoint, three controls, published as dataset, model and Space.
+> 2. **The caption head is the bottleneck, and it is now measured.**
+>    Cross-vendor image agreement is **0.8024** against a 0.0007 floor;
+>    within-vendor text-to-image is **0.1050**. Swapping the caption tower
+>    moves both terms together (0.938 and 0.973), so the head is the shared
+>    constraint. That 8x gap sits in one component and is the largest piece
+>    of headroom in the program.
+> 3. **GPUs are needed for exactly one thing: encoding.** Every fit, sweep,
+>    probe and retrieval here runs on CPU. The chest probe refits locally in
+>    48 seconds. Budget compute for "get a new backbone's reading of an image"
+>    and for nothing else.
+>
+> **The previous move 5, finishing the MTEB submission, is reversed.** Our
+> English STS cosine-Spearman is 0.5192 against a board where competitive
+> models sit at 0.80 or better. Submitting would enter a competition the
+> adapter was never built for. The STS line is closed; see FORWARD_PLAN. What
+> we filed instead is a measurement question, MTEB issue #5330.
 
-## 1. Post the papers to arXiv (or SSRN) — stop being repository-hosted
+> **Standing note on corrections.** Two published claims were withdrawn on
+> 2026-08-29: the vendor-first routing recipe (held on photographs, failed to
+> replicate on radiology and satellite) and the enclosed-area reading of the
+> cycle result (area was confounded with the number of distinct vendor
+> boundaries crossed). Both were caught by controls a public reviewer asked
+> for. The willingness to run those and publish the result is a real asset in
+> that relationship and should not be traded for a cleaner-looking claim.
 
-Three manuscripts exist (SRT-Adapter under [arxiv/](arxiv/paper.md),
-[paper_nla.md](paper_nla.md), and the Sunstone/stereogram result) with zero
-citable DOIs beyond the two SSRN theory entries. Every other move below
-(press, leaderboards, adoption) compounds off a citable preprint. Sunstone's
-cross-modal result (§11.6) is arguably a standalone short paper with a viral
-figure already made.
+## 1. Post the papers — still the top blocker
 
-## 2. (removed — handled outside the repo)
+Three manuscripts exist ([arxiv/](arxiv/paper.md), [paper_nla.md](paper_nla.md),
+[paper_srt_program.md](paper_srt_program.md)) with no citable DOI beyond the two
+SSRN theory entries. Every move below compounds off a preprint. Two blockers
+cleared today: the "mean MTEB-STS 0.3744" phrasing that read like a leaderboard
+figure is now labelled as our own harness, and the split-matched baseline for
+the radiograph result is in hand.
 
-## 3. Attack the greedy gap — RUN ON GEMMA-4, RESOLVED AS A NEGATIVE + A HYPOTHESIS
+The medical result is arguably the standalone short paper, and it is the one
+with a reviewer-legible headline.
 
-Executed 2026-07-08 on gemma-4-31B-it at L47 (`paper_nla.md` §11.7).
-Draft-conditioned decoding is refuted with a mechanism: the activation-space
-neighbour adds 0.03 nats of predictive value for the gold text, so CE never
-learns to use it. The K-curve (+0.017/doubling, never reaching NN) patterns
-with gpt-oss and yields the program's sharpest open conjecture: base models
-verbalize, instruction-tuned hosts do not. Next lever: same pipeline on the
-gemma-4 base checkpoint. Deployable decode on tuned hosts = retrieval, now
-validated on the visual channel too (§11.6.3, live in the Sunstone demo).
+## 2. Attack the caption head
 
-## 4. Run the gpt-oss-120b port
+The largest measured gap in the program: 0.8024 image agreement against 0.1050
+text-to-image, with the head confirmed as the shared bottleneck by swap. Every
+retention-style number is throttled by it and the cross-vendor product is capped
+by it. Options: a better head architecture, more pair data, a stronger
+objective, or a distilled teacher. States for four vendors across three domains
+are already on disk, so iteration is fast and needs no GPU.
+
+## 3. Generalize the radiograph result across backbones — IN FLIGHT
+
+`scripts/cxr_vendor_compare.py` and `scripts/cxr_probe_transport.py` are queued
+on the current box. Two questions: is chest pathology linearly present in every
+backbone, and is it the *same direction*. The transport arm trains the probe on
+one vendor and reads it on another through a ridge map, which makes "train once,
+read everywhere" a measurement on a clinical target rather than a slogan.
+
+Every reader of the published result will ask whether 0.7590 is a gemma4 fact.
+
+## 4. NLST and the early-detection question — BLOCKED ON ACCESS
+
+CDAS quotes 1 to 4 weeks. The current CT result (0.9380 AUROC, 620 slices, 37 of
+38 studies ranking the lesion higher) is **detection, not early detection**, and
+the published scoping says so. The Lung Cancer Selection with its 438 interval
+and post-screening cancers is what would change that, using nodule-positive
+benign participants as controls rather than clean scans.
+
+This is the only line that could produce a clinically interesting claim rather
+than a representational one.
+
+## 5. Measurement discipline as a contribution
+
+MTEB issue #5330 is filed: models tying on a single-pass retrieval score is not
+evidence they carry the same structure, with the iteration ladder as evidence.
+Issue #4842, the Massive Omni Embedding Benchmark research project, is open and
+active, and our four-vendor omni states are close to what it needs. That is a
+better home for the portability work than any submission we could make alone.
+
+## 6. Curate a clean public repo for the medical work
+
+Same argument as the old move 7, new subject. The result has a dataset, a model,
+a running Space and a pinned collection, but the code lives in a sprawling
+research monorepo. A focused repo leading with the split-matched table is what a
+journalist or a radiologist would click through.
+
+## 7. Run the gpt-oss-120b port
 
 Runbook exists ([docs/PORTING_GPT_OSS_120B.md](docs/PORTING_GPT_OSS_120B.md)),
-sliding-window mask code is tested bit-exact, 20b validated the whole
-pipeline. A read-out on a 120B open frontier model alongside the 235B
-checkpoint makes "substrate-general" unassailable, for roughly one box-day of
-Phase-A compute.
+sliding-window mask code tested bit-exact, 20b validated the pipeline. Roughly
+one box-day. Less urgent than it was: the cross-vendor and medical results carry
+the substrate-generality weight more directly now.
 
-## 5. Finish the MTEB(eng, v2) leaderboard submission for v22c_a050
+## 8. The two queued mechanistic experiments
 
-The run was launched 2026-07-03 on a box that's since gone; verify whether
-results survived, relaunch if not, then file the two PRs (ModelMeta +
-results). A public leaderboard row is permanent, passive distribution for the
-adapter line.
+Multi-position spoof test (is the punctuation completeness flag confined to the
+aggregation site?) and the Qwen2.5-7B replication of the L24-surface /
+L18-semantic split. Together they upgrade the red-teaming section from one
+backbone's quirk to a cross-backbone claim about layer roles.
 
-## 6. Harvest the ginigen Metacognition leaderboard results
+## 9. Extend the cross-vendor work to a fifth vendor
 
-Four backbones queued since 2026-07-02, scored daily 09:00 KST — results may
-already be sitting there. Pull `leaderboard_mcq.json`, check gpt-oss for
-harmony parse failures, run the verbalizability-vs-metacog-gain correlation
-for §13. That cross-benchmark correlation is a novel finding, nearly free.
-
-## 7. Curate SRT-Sunstone into a real public repo, not a mirror
-
-Currently a full clone of a sprawling research monorepo. Trim to: Sunstone
-demo, stereogram scripts, the figure, a focused README leading with the 0.93
-retrieval result and the live Space. This is the repo journalists and HN
-should click through to; it is what makes moves 1–2 land.
-
-## 8. Extend Sunstone beyond CIFAR-10 — FIRST STEP SHIPPED
-
-Open-vocabulary caption retrieval (10k COCO pool) is live in the Sunstone
-demo as a third read-out panel (5/5 CIFAR rank-1, per-category up to 0.778;
-§11.6.3). Remaining: harder open-vocab image sets (ImageNet/COCO objects),
-and audio via the Gemma4Unified omni variant for literal
-modality-agnosticism.
-
-## 9. Fix the Dependabot debt — DONE 2026-07-08
-
-Gradio bumped 6.7.0 → 6.19.0 (CVE-2026-48545 cookie injection, fix validated
-on the live Sunstone Space). Transformers CVE-2026-4372 cannot be fixed by
-upgrade (patched only in 5.3.0, and 5.x verifiably breaks the adapter's
-KV-cached generation); dismissed as tolerable risk on both repos with the
-mitigation documented at every pin (fixed first-party model IDs only, no HF
-Trainer). Commit `f896edab`.
-
-## 10. Run the two queued mechanistic experiments on the next box
-
-Multi-position spoof test (is the punctuation completeness flag confined to
-the aggregation site?) and the Qwen2.5-7B replication of the
-L24-surface/L18-semantic split. Together they upgrade the red-teaming section
-from "one backbone's quirk" to a cross-backbone claim about layer roles.
+Everything measured so far uses four. The edge-count ladder, the composition
+result and the head swap all rest on that set. A fifth vendor is the cheapest
+test of whether any of it is a property of these four in particular.
 
 ## Sequencing
 
-Moves 2, 5, 6, and 9 are each under an hour and unblock passively; do them
-first. Then 1 and 7 as a pair (preprint + clean repo). Then pick one
-compute-heavy lane (3, 4, or 8) for the next GPU box rather than splitting a
-single machine three ways.
+Move 3 is running and needs nothing. Move 1 is the highest-value thing a human
+can do this week and needs no compute at all. Move 2 is where the research
+headroom is and is CPU-bound against states already on disk.
+
+Do not rent a box for anything that is a fit, a sweep, a probe or a retrieval.
+Rent only to encode, and upload states already held rather than re-encoding
+them: skipping gemma4 on the current run saved a quarter of the job.
+
+## Operational lessons worth keeping
+
+- **Boxes die without warning.** Three vast.ai instances became unreachable on
+  2026-08-29 alone. Anything that exists only on a rented machine is ephemeral;
+  pull states down or push them to the Hub the moment they land.
+- **Read your own working config before debugging a new one.** Four failed Space
+  builds came from starting on gradio 4.44 when every other SRT Space runs 6.x.
+  The fix was one `cat` of a sibling `requirements.txt`.
+- **Pull the real logs on the first failure.** Three of those four rounds were
+  spent fixing a problem that no longer existed, read off a cached error page.
+- **Gate cards, not just drafts.** Two wrong numbers reached public cards before
+  `scripts/verify_cards.py` existed. It checks every figure in a card against
+  its artifacts and found a third error immediately.
+- **Superseded numbers outlive their run.** Both bad card figures came from a
+  35k pilot that a 112k run had replaced. Delete or clearly mark pilot artifacts
+  once the full run lands.
+
+## Superseded
+
+The 2026-07-08 version of this file, with the substrate-invariance addenda and
+the pre-medical ranking, is in git history at `fe0ae4e9~1`. The invariance arc
+it describes still stands; it is no longer the newest thing on the board.

@@ -1,0 +1,19 @@
+{
+ "question": "where would the SRT adapter's STS head actually place on MTEB",
+ "checkpoint": "v22c_a050 (soup of v18 + v21a), best of the STS series",
+ "metric": "cosine_spearman, the metric the MTEB leaderboard ranks on",
+ "per_task": {
+  "STS12": 0.5094,
+  "STS13": 0.3989,
+  "STS14": 0.3885,
+  "STS15": 0.5963,
+  "STS16": 0.5546,
+  "STSBenchmark": 0.5193,
+  "BIOSSES": 0.5565,
+  "SICK-R": 0.6303
+ },
+ "mean_english_sts": 0.5192,
+ "decision": "do not submit. competitive board models sit at 0.80 or better on these tasks and averaged GloVe reaches roughly 0.58 on STSBenchmark, so 0.5192 would enter below a bag-of-words baseline. the adapter's STS head is a 12.7M side-channel on a frozen backbone and was never built to compete with dedicated sentence encoders. the line is closed.",
+ "note": "the 0.3744 figure quoted elsewhere is a mean over 40 splits under our own harness including multilingual subsets. it is not a leaderboard figure and is not comparable to one.",
+ "source": "artifacts/mteb/v22c_a050/summary.json"
+}
