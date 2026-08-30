@@ -206,11 +206,16 @@ TICS = {
     # abstract on 2026-08-30: it names no difference, so the reader learns
     # nothing and the sentence cannot be checked against a result. State the
     # two findings instead. "not the same AS <thing>" is exempt because it
-    # names the comparand and is therefore checkable.
+    # names the comparand and is therefore checkable, and "is and is not
+    # claiming" is exempt because a speech verb turns it into a delimitation of
+    # a claim. The exemption lists those verbs rather than matching any -ing
+    # word, which would have let "is and is not surprising" through.
     "hollow distinction": [r"not the same (?!as\b)\w+\b", r"\bthe same \w+ twice\b",
                            r"\bin more than one sense\b", r"\btwo different kinds of\b",
                            r"\bboth (?:answers?|are) [^.]{0,40}\band (?:they|both)\b",
-                           r"\bis and is not\b", r"\bmore than one way\b(?![^.]{0,40}\d)"],
+                           r"\bis and is not\b(?!\s+(?:claim|say|assert|argu|"
+                           r"propos|suggest|impl|mean|stat)\w*\b)",
+                           r"\bmore than one way\b(?![^.]{0,40}\d)"],
     "unexplained jargon": [r"\bnp\d", r"\bL47\b", r"\bfve\b", r"\bSRT\b", r"\bR@\d",
                            r"\badapter\b", r"\bcheckpoint\b", r"\bhead-space\b"],
     # One domain is not "every time". Published as a general recipe on
