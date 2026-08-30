@@ -1,33 +1,35 @@
 {
  "question": "does the single-pass / composition split appear on text encoders MTEB ranks",
- "context": "raised by Samoed on embeddings-benchmark/mteb#5330: the original filing used models MTEB does not rank",
+ "context": "raised by Samoed on embeddings-benchmark/mteb#5330",
  "corpus": "mteb/stsbenchmark-sts train, unique sentences",
  "models": {
   "minilm": "sentence-transformers/all-MiniLM-L6-v2",
-  "mpnet": "sentence-transformers/all-mpnet-base-v2",
   "bge": "BAAI/bge-small-en-v1.5",
-  "gte": "thenlper/gte-base"
+  "gte": "thenlper/gte-base",
+  "e5": "intfloat/e5-base-v2"
  },
  "pooling": {
   "minilm": "mean",
-  "mpnet": "mean",
   "bge": "cls",
-  "gte": "mean"
+  "gte": "mean",
+  "e5": "mean"
+ },
+ "prefix": {
+  "minilm": "",
+  "bge": "",
+  "gte": "",
+  "e5": "query: "
  },
  "dims": {
   "minilm": 384,
-  "mpnet": 768,
   "bge": 384,
-  "gte": 768
+  "gte": 768,
+  "e5": 768
  },
  "anisotropy": {
   "minilm": {
    "raw": 0.0335,
    "centered": 0.0027
-  },
-  "mpnet": {
-   "raw": 0.0314,
-   "centered": 0.0022
   },
   "bge": {
    "raw": 0.3804,
@@ -36,128 +38,217 @@
   "gte": {
    "raw": 0.7107,
    "centered": 0.0021
+  },
+  "e5": {
+   "raw": 0.6744,
+   "centered": 0.0021
   }
  },
  "n": 5000,
  "n_holdout": 1000,
+ "seeds": 5,
  "single_pass": {
-  "four_cycle_1_lap": 0.992,
-  "self_loop_4_hops": 1.0,
-  "gap": 0.008
+  "four_cycle_1_lap": 0.9912,
+  "four_cycle_sd": 0.0035,
+  "self_loop_4_hops": 0.9998,
+  "gap": 0.0086,
+  "gap_sd": 0.0033
  },
  "single_boundary": {
-  "minilm|mpnet": {
-   "4": 0.998,
-   "6": 0.992,
-   "8": 0.973,
-   "12": 0.938,
-   "18": 0.844,
-   "24": 0.696,
-   "36": 0.426
-  },
   "minilm|bge": {
-   "4": 0.997,
-   "6": 0.989,
-   "8": 0.972,
-   "12": 0.927,
-   "18": 0.798,
-   "24": 0.608,
-   "36": 0.323
+   "2": 0.9984,
+   "4": 0.9946,
+   "6": 0.9862,
+   "8": 0.9712,
+   "12": 0.9194,
+   "18": 0.7818,
+   "24": 0.6076,
+   "36": 0.3388
   },
   "minilm|gte": {
-   "4": 0.997,
-   "6": 0.986,
-   "8": 0.97,
-   "12": 0.936,
-   "18": 0.845,
-   "24": 0.692,
-   "36": 0.403
+   "2": 0.9992,
+   "4": 0.9956,
+   "6": 0.9864,
+   "8": 0.9728,
+   "12": 0.9316,
+   "18": 0.8332,
+   "24": 0.6876,
+   "36": 0.4036
   },
-  "mpnet|bge": {
-   "4": 0.992,
-   "6": 0.977,
-   "8": 0.955,
-   "12": 0.889,
-   "18": 0.751,
-   "24": 0.603,
-   "36": 0.37
-  },
-  "mpnet|gte": {
-   "4": 0.996,
-   "6": 0.989,
-   "8": 0.982,
-   "12": 0.955,
-   "18": 0.907,
-   "24": 0.813,
-   "36": 0.619
+  "minilm|e5": {
+   "2": 0.999,
+   "4": 0.9954,
+   "6": 0.988,
+   "8": 0.9716,
+   "12": 0.925,
+   "18": 0.801,
+   "24": 0.6326,
+   "36": 0.3548
   },
   "bge|gte": {
-   "4": 0.998,
-   "6": 0.992,
-   "8": 0.986,
-   "12": 0.952,
-   "18": 0.889,
-   "24": 0.797,
-   "36": 0.618
+   "2": 0.9996,
+   "4": 0.9968,
+   "6": 0.9916,
+   "8": 0.9844,
+   "12": 0.9524,
+   "18": 0.8798,
+   "24": 0.7902,
+   "36": 0.6024
+  },
+  "bge|e5": {
+   "2": 0.9996,
+   "4": 0.9972,
+   "6": 0.9894,
+   "8": 0.9786,
+   "12": 0.9422,
+   "18": 0.8528,
+   "24": 0.756,
+   "36": 0.5274
+  },
+  "gte|e5": {
+   "2": 0.9996,
+   "4": 0.9974,
+   "6": 0.9954,
+   "8": 0.9926,
+   "12": 0.9856,
+   "18": 0.9644,
+   "24": 0.9386,
+   "36": 0.8462
   }
  },
- "edge_spread_at_36": 0.296,
+ "edge_spread_at_36": 0.5074,
+ "edge_spread_at_2": 0.0012,
+ "one_pass_vs_depth": {
+  "minilm|bge": {
+   "one_round_trip": 0.9984,
+   "36_hops": 0.3388
+  },
+  "minilm|gte": {
+   "one_round_trip": 0.9992,
+   "36_hops": 0.4036
+  },
+  "minilm|e5": {
+   "one_round_trip": 0.999,
+   "36_hops": 0.3548
+  },
+  "bge|gte": {
+   "one_round_trip": 0.9996,
+   "36_hops": 0.6024
+  },
+  "bge|e5": {
+   "one_round_trip": 0.9996,
+   "36_hops": 0.5274
+  },
+  "gte|e5": {
+   "one_round_trip": 0.9996,
+   "36_hops": 0.8462
+  }
+ },
  "edge_count_ladder": {
   "1 distinct edges": {
-   "12": 0.938,
-   "24": 0.696,
-   "36": 0.426
+   "12": {
+    "mean": 0.9194,
+    "sd": 0.004
+   },
+   "24": {
+    "mean": 0.6076,
+    "sd": 0.0246
+   },
+   "36": {
+    "mean": 0.3388,
+    "sd": 0.0265
+   }
   },
   "2 distinct edges": {
-   "12": 0.883,
-   "24": 0.481,
-   "36": 0.24
+   "12": {
+    "mean": 0.902,
+    "sd": 0.0051
+   },
+   "24": {
+    "mean": 0.5914,
+    "sd": 0.0212
+   },
+   "36": {
+    "mean": 0.3332,
+    "sd": 0.0257
+   }
   },
   "3 distinct edges": {
-   "12": 0.883,
-   "24": 0.51,
-   "36": 0.267
+   "12": {
+    "mean": 0.9084,
+    "sd": 0.0049
+   },
+   "24": {
+    "mean": 0.6206,
+    "sd": 0.0231
+   },
+   "36": {
+    "mean": 0.3592,
+    "sd": 0.0234
+   }
   }
  },
- "ladder_monotone": false,
- "ladder_under_permutations_36": {
-  "mpnet, bge, gte": {
-   "1": 0.426,
-   "2": 0.24,
-   "3": 0.267,
-   "monotone": false
+ "rung_separation": {
+  "1 minus 2 at 12": {
+   "mean": 0.0174,
+   "sd": 0.0038,
+   "over_sd": 4.58,
+   "separated": true
   },
-  "mpnet, gte, bge": {
-   "1": 0.426,
-   "2": 0.33,
-   "3": 0.282,
-   "monotone": true
+  "2 minus 3 at 12": {
+   "mean": -0.0064,
+   "sd": 0.001,
+   "over_sd": -6.4,
+   "separated": false
   },
-  "bge, mpnet, gte": {
-   "1": 0.323,
-   "2": 0.276,
-   "3": 0.277,
-   "monotone": false
+  "1 minus 2 at 24": {
+   "mean": 0.0162,
+   "sd": 0.0077,
+   "over_sd": 2.1,
+   "separated": true
   },
-  "bge, gte, mpnet": {
-   "1": 0.323,
-   "2": 0.326,
-   "3": 0.302,
-   "monotone": false
+  "2 minus 3 at 24": {
+   "mean": -0.0292,
+   "sd": 0.0037,
+   "over_sd": -7.89,
+   "separated": false
   },
-  "gte, mpnet, bge": {
-   "1": 0.403,
-   "2": 0.334,
-   "3": 0.254,
-   "monotone": true
+  "1 minus 2 at 36": {
+   "mean": 0.0056,
+   "sd": 0.0073,
+   "over_sd": 0.77,
+   "separated": false
   },
-  "gte, bge, mpnet": {
-   "1": 0.403,
-   "2": 0.294,
-   "3": 0.264,
-   "monotone": true
+  "2 minus 3 at 36": {
+   "mean": -0.026,
+   "sd": 0.0068,
+   "over_sd": -3.82,
+   "separated": false
   }
  },
- "monotone_permutations": "3 of 6",
- "verdict": "does NOT replicate on MTEB text encoders"
+ "monotone_orderings_of_6": {
+  "mean": 0.6,
+  "sd": 0.4899,
+  "per_seed": [
+   0,
+   0,
+   1,
+   1,
+   1
+  ]
+ },
+ "core_claim": {
+  "statement": "encoder pairs a one-pass score cannot tell apart are far apart once the same fitted maps are composed",
+  "spread_one_round_trip": 0.0012,
+  "spread_36_hops": 0.5074,
+  "fold_increase": 422.8,
+  "replicates": true
+ },
+ "ladder_claim": {
+  "statement": "retention is monotone in the number of distinct boundaries a route crosses",
+  "monotone_orderings": "0.6 of 6",
+  "replicates": false,
+  "note": "the 2-to-3 rung is reliably INVERTED here, not merely noisy"
+ },
+ "verdict": "core claim replicates; ladder does not replicate"
 }
