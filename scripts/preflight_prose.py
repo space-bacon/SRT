@@ -122,6 +122,54 @@ def in_papers(n: str) -> list[str]:
     return hits
 
 
+_ALL_ARTIFACTS: list[Path] | None = None
+
+
+def elsewhere_in_repo(n: str, cited: set[str]) -> list[str]:
+    """Which artifact DOES hold this number, if the cited ones do not.
+
+    Twice on 2026-08-29 a figure from a superseded run reached a public card:
+    0.8192 was a view-only baseline from a 35k pilot that a 112k run had
+    already replaced. "Not in any artifact" was the wrong message, because it
+    was in an artifact, just not the one being cited. Naming the file turns a
+    shrug into a diagnosis.
+    """
+    global _ALL_ARTIFACTS
+    if _ALL_ARTIFACTS is None:
+        _ALL_ARTIFACTS = sorted(
+            p for p in (ROOT / "artifacts").rglob("*.json")
+            if p.stat().st_size < 4_000_000)
+    dec = len(n.split(".")[1]) if "." in n else 0
+
+    def kinship(p: Path) -> int:
+        """Longest shared filename prefix with anything cited.
+
+        A pilot and the run that replaced it are named alike, so ranking by
+        name similarity puts the actual suspect first instead of whichever
+        unrelated artifact happens to contain the same float.
+        """
+        best = 0
+        for c in cited:
+            i = 0
+            while i < min(len(c), len(p.name)) and c[i] == p.name[i]:
+                i += 1
+            best = max(best, i)
+        return best
+
+    hits = []
+    for p in sorted(_ALL_ARTIFACTS, key=kinship, reverse=True):
+        if p.name in cited:
+            continue
+        try:
+            if any(round(v, dec) == float(n) for v in _json_numbers(p)):
+                hits.append(str(p.relative_to(ROOT)))
+        except Exception:
+            continue
+        if len(hits) >= 3:
+            break
+    return hits
+
+
 TICS = {
     "em dash": [r"\u2014"],
     "signposting": [r"the interesting", r"worth sitting with", r"crucially",
@@ -155,7 +203,25 @@ TICS = {
                    r"\bso,? not\b", r"\binstead of\b.{0,40}\bit\b"],
     "unexplained jargon": [r"\bnp\d", r"\bL47\b", r"\bfve\b", r"\bSRT\b", r"\bR@\d",
                            r"\badapter\b", r"\bcheckpoint\b", r"\bhead-space\b"],
+    # One domain is not "every time". Published as a general recipe on
+    # 2026-08-29 off a single gallery, then failed to replicate on the other
+    # two we already held states for. If a claim reaches for a universal,
+    # either the replication is in hand or the word comes out.
+    "overgeneralised": [r"every time", r"\balways\b", r"without exception",
+                        r"in every case", r"never fails", r"\buniversally\b",
+                        r"holds everywhere", r"in all cases", r"\bany domain\b",
+                        r"across the board"],
 }
+
+# A number quoted next to a comparison verb is a claim that two systems were
+# measured the same way. CheXNet's 0.8414 sat in our own code as a head-to-head
+# for a day before anyone checked that it is a different test split. If a draft
+# compares, it has to say on what.
+COMPARE = r"(beats|against|versus|\bvs\.?\b|ahead of|outperforms|compared (?:to|with))"
+# Naming the actual split file is naming the split, so test_list.txt counts.
+MATCHED = r"(split|matched|same (?:test|set|protocol|holdout)|holdout|config|" \
+          r"protocol|our harness|different test set|not comparable|" \
+          r"test_list|official (?:split|test|list))"
 
 
 def main() -> int:
@@ -198,7 +264,13 @@ def main() -> int:
                 print(f"  {n:>10s}  appears in {', '.join(papers)}")
             else:
                 unsourced += 1
-                print(f"? {n:>10s}  not in any artifact or paper, verify by hand")
+                cited = {p.name for p in EXTRA}
+                other = elsewhere_in_repo(n, cited)
+                if other:
+                    print(f"? {n:>10s}  NOT in the cited artifacts, but IS in "
+                          f"{', '.join(other)} -- superseded run?")
+                else:
+                    print(f"? {n:>10s}  not in any artifact or paper, verify by hand")
 
     print("\n=== artifact values available ===")
     for label, (val, src) in sorted(facts.items()):
@@ -213,6 +285,21 @@ def main() -> int:
         print(f"{mark} {name:20s} {len(hits)}" + (f"   {sorted(set(hits))}" if hits else ""))
 
     words = len(body.split())
+    print(f"\n=== COMPARISONS: does every head-to-head say on what ===")
+    unmatched = 0
+    for m in re.finditer(COMPARE, low):
+        # Wide enough that a headline claim can be qualified a sentence or two
+        # later, which is how prose actually reads, and still narrow enough that
+        # a split named in a different section does not launder the claim.
+        window = low[max(0, m.start() - 400): m.end() + 400]
+        if not re.search(r"\d", window):
+            continue
+        if not re.search(MATCHED, window):
+            unmatched += 1
+            print(f"! {m.group(0):<16s} ...{low[max(0, m.start() - 60):m.end() + 60]}...")
+    if not unmatched:
+        print("  every comparison names its split or protocol")
+
     print(f"\n   words {words}")
     # Scoping can be phrased many ways. What matters is that the draft names a
     # limit or a banked negative somewhere, not that it uses the word "scoping".
@@ -229,7 +316,9 @@ def main() -> int:
     print(f"   explicit scoping present: {has_scope}")
     print(f"   rounding traps: {traps}")
     print(f"   numbers with no source: {unsourced}")
-    ok = bad == 0 and has_scope and traps == 0 and unsourced == 0
+    print(f"   comparisons with no split named: {unmatched}")
+    ok = (bad == 0 and has_scope and traps == 0 and unsourced == 0
+          and unmatched == 0)
     print(f"\n{'CLEAN' if ok else 'REVIEW NEEDED'}")
     return 0
 
