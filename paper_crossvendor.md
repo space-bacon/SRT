@@ -10,8 +10,8 @@ Burton Lancaster, SRT program. 2026-08-30.
 
 Four multimodal models from four companies encode the same images. Every model is
 frozen and nothing is fine-tuned anywhere in this work. Their hidden states do
-not even share a width, running to 5376, 2560 and 2048 dimensions, and nothing
-ties one model's coordinates to another's.
+not even share a width, running to 5376, 5120, 2560 and 2048 dimensions, and
+nothing ties one model's coordinates to another's.
 
 We fit a linear probe, a single weight matrix, on one model's states to predict
 image labels. We then read that same probe, unchanged, on a **different** model's
@@ -24,8 +24,8 @@ on the hardest of them it scores better than a probe fitted on the target model
 directly.
 
 On satellite imagery, a 17-class land-use probe scores 0.9507 mean AUROC natively
-and 0.9484 transported across backbones, a cost of 0.0024 against a shuffled
-floor of 0.5014 on the same holdout. AUROC is the area under the ROC curve, one
+and 0.9484 transported across backbones, a cost of 0.0024. The shuffled floor on
+the same holdout is 0.5014. AUROC is the area under the ROC curve, one
 per class and averaged; 0.5 is chance and 1.0 is perfect ranking. On chest radiographs, across three of the
 four backbones, using the official ChestX-ray14 test list and 25,596 held-out
 films from patients never seen in training, the same procedure scores 0.7440
@@ -208,7 +208,7 @@ directions.
 | shuffled floor | 0.5014 |
 
 Scoring is mean AUROC across the 17 classes. **Transport costs 0.0024 mean
-AUROC**, and 4 of the 12 transported pairs beat the native target outright.
+AUROC**, and 5 of the 12 transported pairs beat the native target outright.
 
 **The labels are weak and this number should not be quoted without that
 sentence.** Scene classes are keyword-matched from captions, which is the same
@@ -252,7 +252,8 @@ single-model claim: linear presence of pathology replicates on all three, but
 beating the baseline does not, because Aria does not.
 
 **Now transport.** Probe fitted on one backbone, read on another's states through
-a train-only ridge map:
+a train-only ridge map. The native row is the mean of the three single-backbone
+scores above:
 
 | | mean AUROC |
 |---|---:|
@@ -426,7 +427,7 @@ Kept because they bound the claims above.
 | Vendor-first routing beats a directly fitted cross-vendor map | **Photographs only.** 12/12 on COCO at p=0.0002, but 8/12 on radiology (p=0.19) and 5/12 on satellite (p=0.81). Published as general, withdrawn to one domain |
 | The four-cycle penalty is about enclosed area | **Withdrawn.** A palindrome route with zero area tracks the four-cycle |
 | A shared frame buys back loop degradation | **Not established.** Rank-matching rules out the trivial reading; what remains may only restate subspace reuse |
-| Interpretants fail to compose | **Negative.** Routing through a third vendor costs 0.0160 beyond one extra fitted hop; the dyadic reduction holds at one pass |
+| A two-vendor mapping needs a third vendor to mediate it | **Negative.** Routing through a third costs 0.0160 beyond the extra fitted hop it adds, so at one pass a direct pair is enough |
 | `retention` measures the vendor boundary | **Withdrawn.** Both terms are caption-head limited; report the legs separately |
 | Attention-style pooling beats mean for focal findings | **Falsified.** max −0.0537, top16 −0.0225 on focal findings |
 | Readout depth matters | **No.** 0.7600 to 0.7605 across 0.4 / 0.6 / 0.8 of depth |
@@ -481,10 +482,11 @@ Figures: `make_crossvendor_figures.py`, which reads every value from the result
 files below rather than carrying its own copy, so a regenerated artifact
 regenerates the plot.
 
-Result files: `cxr14_probe_full112k.json`, `cxr14_transport.json`,
-`cxr14_ensemble3.json`, `rsicd_scene_probe.json`, `joint_frame_{roco,rsicd}.json`,
-`holonomy_palindrome_{roco,rsicd}.json`, `head_swap_roco.json`, `xvendor4.json`,
-`triadic_composition_roco.json`.
+Result files: `cxr14_probe_full112k.json`, `cxr14_probe_{qwen3omni,aria}.json`,
+`cxr14_transport.json`, `cxr14_ensemble3.json`, `cxr14_vendor_compare.json`,
+`rsicd_scene_probe.json`, `joint_frame_{roco,rsicd}.json`,
+`holonomy_palindrome_{roco,rsicd}.json`, `geometry_compare_roco.json`,
+`head_swap_roco.json`, `xvendor4.json`, `triadic_composition_roco.json`.
 
 ---
 
@@ -519,3 +521,41 @@ a second backbone is worth more as a co-reader than as a replacement.
 Dipankar Sarkar proposed the head-swap control in §3.1 and the palindrome control
 in §8, and raised the task-ceiling objection we record as unresolved. Two of our
 published readings did not survive his tests. Both are withdrawn above.
+
+## References
+
+Ethayarajh, K. (2019). How Contextual are Contextualized Word Representations?
+Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings. EMNLP 2019.
+arXiv:1909.00512.
+
+Kettenring, J. R. (1971). Canonical analysis of several sets of variables.
+*Biometrika* 58(3), 433–451.
+
+Lin, T.-Y., Maire, M., Belongie, S., Bourdev, L., Girshick, R., Hays, J.,
+Perona, P., Ramanan, D., Zitnick, C. L., Dollár, P. (2014). Microsoft COCO:
+Common Objects in Context. arXiv:1405.0312.
+
+Lu, X., Wang, B., Zheng, X., Li, X. (2017). Exploring Models and Data for Remote
+Sensing Image Caption Generation. *IEEE Transactions on Geoscience and Remote
+Sensing*. arXiv:1712.07835. (RSICD)
+
+Pelka, O., Koitka, S., Rückert, J., Nensa, F., Friedrich, C. M. (2018). Radiology
+Objects in COntext (ROCO): A Multimodal Image Dataset. MICCAI LABELS workshop.
+
+Rajpurkar, P., Irvin, J., Zhu, K., Yang, B., Mehta, H., Duan, T., Ding, D.,
+Bagul, A., Langlotz, C., Shpanskaya, K., Lungren, M. P., Ng, A. Y. (2017).
+CheXNet: Radiologist-Level Pneumonia Detection on Chest X-Rays with Deep
+Learning. arXiv:1711.05225.
+
+Reimers, N., Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using
+Siamese BERT-Networks. EMNLP 2019. arXiv:1908.10084. (`all-MiniLM-L6-v2`)
+
+Wang, X., Peng, Y., Lu, L., Lu, Z., Bagheri, M., Summers, R. M. (2017).
+ChestX-ray8: Hospital-scale Chest X-ray Database and Benchmarks on
+Weakly-Supervised Classification and Localization of Common Thorax Diseases.
+arXiv:1705.02315v5. (ChestX-ray14; Table 17 is the split-matched baseline used
+throughout §5 and §6)
+
+Yao, L., Poblenz, E., Dagunts, D., Covington, B., Bernard, D., Lyman, K. (2017).
+Learning to diagnose from scratch by exploiting dependencies among labels.
+arXiv:1710.10501.

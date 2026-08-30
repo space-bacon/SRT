@@ -268,6 +268,10 @@ def main() -> int:
     EXTRA.extend(Path(a) for a in sys.argv[2:])
     body = path.read_text()
     body = body.split("---", 1)[1] if "---" in body else body
+    # A bibliography is citations, not measurements. arXiv ids, years and page
+    # ranges have no artifact behind them and never will.
+    body = re.sub(r"\n#{1,6}[ \t]*references\b.*?(?=\n#{1,6}[ \t]|\Z)", "\n",
+                  body, flags=re.S | re.I)
     # Drafts are hard wrapped, so a multi-word pattern like "we have measured
     # nothing" straddles a newline and a literal match silently misses it.
     low = re.sub(r"\s+", " ", body.lower())
