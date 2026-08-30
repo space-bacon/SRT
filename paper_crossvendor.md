@@ -364,18 +364,23 @@ script for this section is named for it. Hop counts are matched at 12, 24 and 36
 where every route's period divides evenly.
 
 Holding enclosed area at zero and retracing fixed, and varying only how many
-distinct vendor boundaries a route crosses:
+distinct vendor boundaries a route crosses. Scoring is round-trip **r@1**: the
+fraction of held-out items that come back to their own starting vector as
+nearest neighbour once the route closes.
 
-| distinct edges | 12 | 24 | 36 | | 12 | 24 | 36 |
-|---:|---:|---:|---:|---|---:|---:|---:|
-| | *radiology* | | | | *satellite* | | |
-| 1 | 0.9470 | 0.8190 | 0.7220 | | 0.9650 | 0.7760 | 0.5840 |
-| 2 | 0.9090 | 0.7170 | 0.5580 | | 0.9170 | 0.5800 | 0.3770 |
-| 3 | 0.8130 | 0.5640 | 0.3880 | | 0.7820 | 0.4230 | 0.2510 |
+| domain | distinct edges | 12 hops | 24 hops | 36 hops |
+|---|---:|---:|---:|---:|
+| radiology | 1 | 0.9470 | 0.8190 | 0.7220 |
+| radiology | 2 | 0.9090 | 0.7170 | 0.5580 |
+| radiology | 3 | 0.8130 | 0.5640 | 0.3880 |
+| satellite | 1 | 0.9650 | 0.7760 | 0.5840 |
+| satellite | 2 | 0.9170 | 0.5800 | 0.3770 |
+| satellite | 3 | 0.7820 | 0.4230 | 0.2510 |
 
-Monotone at every hop count in both domains, six of six.
+Fewer distinct boundaries scores higher at every hop count in both domains, six
+of six.
 
-![Round-trip r@1 against hop count, for routes crossing one, two and three
+![Round-trip r@1 by hop count, for routes crossing one, two and three
 distinct vendor boundaries, in radiology and satellite.](arxiv_crossvendor/figs/fig4_ladder.png)
 
 **The first reading of this was wrong and is withdrawn.** We originally reported
