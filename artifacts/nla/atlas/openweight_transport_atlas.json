@@ -1,0 +1,186 @@
+{
+ "question": "how much of one open-weight model's state is a linear function of another's",
+ "why": "arXiv:2510.22954 measures 70+ models at the output layer because they are closed. Open weights let us measure the mechanism instead.",
+ "n_texts": 5000,
+ "n_train": 4000,
+ "n_holdout": 1000,
+ "corpus": "COCO val2017 captions, one per image",
+ "metric": "held-out retrieval r@1 through a ridge map, centered on train mean",
+ "chance_r1": 0.001,
+ "models": {
+  "qwen25_05b": {
+   "model": "Qwen/Qwen2.5-0.5B",
+   "lab": "Alibaba",
+   "dim": 896,
+   "layer": 14
+  },
+  "qwen3_06b": {
+   "model": "Qwen/Qwen3-0.6B-Base",
+   "lab": "Alibaba",
+   "dim": 1024,
+   "layer": 17
+  },
+  "gemma2_2b": {
+   "model": "google/gemma-2-2b",
+   "lab": "Google",
+   "dim": 2304,
+   "layer": 16
+  },
+  "llama32_1b": {
+   "model": "meta-llama/Llama-3.2-1B",
+   "lab": "Meta",
+   "dim": 2048,
+   "layer": 10
+  },
+  "llama32_3b": {
+   "model": "meta-llama/Llama-3.2-3B",
+   "lab": "Meta",
+   "dim": 3072,
+   "layer": 17
+  },
+  "tinyllama": {
+   "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+   "lab": "TinyLlama",
+   "dim": 2048,
+   "layer": 13
+  },
+  "olmo2_1b": {
+   "model": "allenai/OLMo-2-0425-1B",
+   "lab": "AI2",
+   "dim": 2048,
+   "layer": 10
+  },
+  "smollm2_360m": {
+   "model": "HuggingFaceTB/SmolLM2-360M",
+   "lab": "HuggingFace",
+   "dim": 960,
+   "layer": 19
+  },
+  "pythia_410m": {
+   "model": "EleutherAI/pythia-410m",
+   "lab": "EleutherAI",
+   "dim": 1024,
+   "layer": 14
+  }
+ },
+ "matrix": {
+  "qwen25_05b": {
+   "qwen25_05b": 0.999,
+   "qwen3_06b": 0.976,
+   "gemma2_2b": 0.989,
+   "llama32_1b": 0.995,
+   "llama32_3b": 0.991,
+   "tinyllama": 0.91,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.894,
+   "pythia_410m": 0.908
+  },
+  "qwen3_06b": {
+   "qwen25_05b": 0.966,
+   "qwen3_06b": 0.999,
+   "gemma2_2b": 0.989,
+   "llama32_1b": 0.977,
+   "llama32_3b": 0.983,
+   "tinyllama": 0.908,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.875,
+   "pythia_410m": 0.896
+  },
+  "gemma2_2b": {
+   "qwen25_05b": 0.825,
+   "qwen3_06b": 0.826,
+   "gemma2_2b": 0.999,
+   "llama32_1b": 0.914,
+   "llama32_3b": 0.965,
+   "tinyllama": 0.935,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.804,
+   "pythia_410m": 0.857
+  },
+  "llama32_1b": {
+   "qwen25_05b": 0.986,
+   "qwen3_06b": 0.977,
+   "gemma2_2b": 0.996,
+   "llama32_1b": 0.999,
+   "llama32_3b": 0.998,
+   "tinyllama": 0.951,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.887,
+   "pythia_410m": 0.932
+  },
+  "llama32_3b": {
+   "qwen25_05b": 0.977,
+   "qwen3_06b": 0.956,
+   "gemma2_2b": 0.994,
+   "llama32_1b": 0.999,
+   "llama32_3b": 0.999,
+   "tinyllama": 0.929,
+   "olmo2_1b": 0.998,
+   "smollm2_360m": 0.844,
+   "pythia_410m": 0.911
+  },
+  "tinyllama": {
+   "qwen25_05b": 0.816,
+   "qwen3_06b": 0.801,
+   "gemma2_2b": 0.991,
+   "llama32_1b": 0.899,
+   "llama32_3b": 0.939,
+   "tinyllama": 0.999,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.796,
+   "pythia_410m": 0.856
+  },
+  "olmo2_1b": {
+   "qwen25_05b": 0.972,
+   "qwen3_06b": 0.948,
+   "gemma2_2b": 0.991,
+   "llama32_1b": 0.999,
+   "llama32_3b": 0.998,
+   "tinyllama": 0.929,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.832,
+   "pythia_410m": 0.907
+  },
+  "smollm2_360m": {
+   "qwen25_05b": 0.874,
+   "qwen3_06b": 0.863,
+   "gemma2_2b": 0.992,
+   "llama32_1b": 0.923,
+   "llama32_3b": 0.952,
+   "tinyllama": 0.927,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.999,
+   "pythia_410m": 0.921
+  },
+  "pythia_410m": {
+   "qwen25_05b": 0.869,
+   "qwen3_06b": 0.865,
+   "gemma2_2b": 0.982,
+   "llama32_1b": 0.931,
+   "llama32_3b": 0.955,
+   "tinyllama": 0.93,
+   "olmo2_1b": 0.999,
+   "smollm2_360m": 0.87,
+   "pythia_410m": 0.999
+  }
+ },
+ "summary": {
+  "mean_self_map_diagonal": 0.999,
+  "mean_transported_off_diagonal": 0.9339,
+  "transport_cost": 0.0651,
+  "mean_shuffled_floor": 0.00088,
+  "mean_within_lab": 0.9848,
+  "mean_cross_lab": 0.9309,
+  "within_minus_cross_lab": 0.0539,
+  "best_pair": [
+   "qwen25_05b",
+   "olmo2_1b",
+   0.999
+  ],
+  "worst_pair": [
+   "tinyllama",
+   "smollm2_360m",
+   0.796
+  ]
+ }
+}
