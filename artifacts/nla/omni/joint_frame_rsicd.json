@@ -1,0 +1,174 @@
+{
+  "question": "is there one frame shared by all four backbones, or twelve compatible private ones",
+  "domain": "rsicd",
+  "vendors": [
+    "qwen3omni",
+    "gemma4",
+    "mistral",
+    "aria"
+  ],
+  "native_dims": {
+    "qwen3omni": 2048,
+    "gemma4": 5376,
+    "mistral": 5120,
+    "aria": 2560
+  },
+  "whitened_dims": 256,
+  "joint_width": 128,
+  "joint_variance_retained": 0.3862,
+  "n_train": 4000,
+  "n_test": 1000,
+  "maps_bilateral": 12,
+  "maps_joint": 8,
+  "direct": {
+    "qwen3omni->gemma4": 0.956,
+    "qwen3omni->mistral": 0.831,
+    "qwen3omni->aria": 0.922,
+    "gemma4->qwen3omni": 0.939,
+    "gemma4->mistral": 0.689,
+    "gemma4->aria": 0.836,
+    "mistral->qwen3omni": 0.834,
+    "mistral->gemma4": 0.715,
+    "mistral->aria": 0.794,
+    "aria->qwen3omni": 0.936,
+    "aria->gemma4": 0.882,
+    "aria->mistral": 0.776
+  },
+  "via_joint": {
+    "qwen3omni->gemma4": 0.937,
+    "qwen3omni->mistral": 0.795,
+    "qwen3omni->aria": 0.875,
+    "gemma4->qwen3omni": 0.909,
+    "gemma4->mistral": 0.694,
+    "gemma4->aria": 0.803,
+    "mistral->qwen3omni": 0.813,
+    "mistral->gemma4": 0.717,
+    "mistral->aria": 0.751,
+    "aria->qwen3omni": 0.902,
+    "aria->gemma4": 0.842,
+    "aria->mistral": 0.759
+  },
+  "consensus": {
+    "qwen3omni": {
+      "best_single": 0.939,
+      "best_single_source": "gemma4",
+      "three_together": 0.986,
+      "gain": 0.047
+    },
+    "gemma4": {
+      "best_single": 0.956,
+      "best_single_source": "qwen3omni",
+      "three_together": 0.972,
+      "gain": 0.016
+    },
+    "mistral": {
+      "best_single": 0.831,
+      "best_single_source": "qwen3omni",
+      "three_together": 0.881,
+      "gain": 0.05
+    },
+    "aria": {
+      "best_single": 0.922,
+      "best_single_source": "qwen3omni",
+      "three_together": 0.947,
+      "gain": 0.025
+    }
+  },
+  "ladder": {
+    "self_loop": {
+      "12": {
+        "pairwise": 1.0,
+        "pairwise_rank_matched": 1.0,
+        "via_joint": 1.0
+      },
+      "24": {
+        "pairwise": 1.0,
+        "pairwise_rank_matched": 1.0,
+        "via_joint": 1.0
+      },
+      "36": {
+        "pairwise": 1.0,
+        "pairwise_rank_matched": 1.0,
+        "via_joint": 1.0
+      }
+    },
+    "1_edge": {
+      "12": {
+        "pairwise": 0.797,
+        "pairwise_rank_matched": 0.797,
+        "via_joint": 1.0
+      },
+      "24": {
+        "pairwise": 0.308,
+        "pairwise_rank_matched": 0.308,
+        "via_joint": 1.0
+      },
+      "36": {
+        "pairwise": 0.148,
+        "pairwise_rank_matched": 0.148,
+        "via_joint": 1.0
+      }
+    },
+    "2_edges": {
+      "12": {
+        "pairwise": 0.476,
+        "pairwise_rank_matched": 0.469,
+        "via_joint": 1.0
+      },
+      "24": {
+        "pairwise": 0.12,
+        "pairwise_rank_matched": 0.116,
+        "via_joint": 1.0
+      },
+      "36": {
+        "pairwise": 0.057,
+        "pairwise_rank_matched": 0.059,
+        "via_joint": 1.0
+      }
+    },
+    "3_edges": {
+      "12": {
+        "pairwise": 0.413,
+        "pairwise_rank_matched": 0.388,
+        "via_joint": 1.0
+      },
+      "24": {
+        "pairwise": 0.086,
+        "pairwise_rank_matched": 0.082,
+        "via_joint": 1.0
+      },
+      "36": {
+        "pairwise": 0.046,
+        "pairwise_rank_matched": 0.046,
+        "via_joint": 1.0
+      }
+    },
+    "four_cycle": {
+      "12": {
+        "pairwise": 0.375,
+        "pairwise_rank_matched": 0.341,
+        "via_joint": 1.0
+      },
+      "24": {
+        "pairwise": 0.079,
+        "pairwise_rank_matched": 0.074,
+        "via_joint": 1.0
+      },
+      "36": {
+        "pairwise": 0.045,
+        "pairwise_rank_matched": 0.043,
+        "via_joint": 1.0
+      }
+    }
+  },
+  "shuffled_floor": 0.0,
+  "summary": {
+    "mean_direct": 0.8425,
+    "mean_via_joint": 0.8164,
+    "joint_cost": 0.0261,
+    "mean_consensus_gain": 0.0345,
+    "shuffled_floor": 0.0,
+    "ladder_caveat": "via_joint flattens the ladder because the composed map collapses to the joint width and cannot lose further dimensions. compare against pairwise_rank_matched, not against full-rank pairwise.",
+    "reading": "via_joint near direct means four encoders and four decoders replace twelve pairwise maps at little cost, so the backbones share one frame. on the ladder, only rank-matched pairwise is a fair comparison for the joint route."
+  }
+}
