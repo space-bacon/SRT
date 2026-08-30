@@ -47,18 +47,33 @@ run_vendor () {
         > "$L/cxr14_${tag}_s${i}.log" 2>&1 < /dev/null &
   done
   # Gate on the shard outputs, never on pgrep: this script's own command line
-  # carries the pattern and would match itself.
+  # carries the pattern and would match itself. Existence is not enough: a
+  # truncated .npz from an interrupted save still passes -f and then fails the
+  # merge with BadZipFile, which is how mistral was lost on 2026-08-30.
   while true; do
     done_n=0
     for i in $(seq 0 $((N - 1))); do
-      [ -f "/root/cxr14_${tag}_s${i}.npz" ] && done_n=$((done_n + 1))
+      f="/root/cxr14_${tag}_s${i}.npz"
+      [ -f "$f" ] || continue
+      if $PY -c "import numpy,sys; numpy.load(sys.argv[1],allow_pickle=True)['ok']" "$f" \
+           > /dev/null 2>&1; then
+        done_n=$((done_n + 1))
+      else
+        echo "=== $tag: shard $i present but unreadable, waiting"
+      fi
     done
     [ "$done_n" -eq "$N" ] && break
     sleep 60
   done
   echo "=== $tag: merging, $(date '+%F %T')"
-  $PY scripts/merge_shards.py --tag "$tag" --shards $N
-  rm -f /root/cxr14_${tag}_s*.npz /root/cxr14_${tag}_s*.partial.npz
+  # Delete shards ONLY on a clean merge. The unconditional rm that used to live
+  # here destroyed three good mistral shards along with the one bad one.
+  if $PY scripts/merge_shards.py --tag "$tag" --shards $N; then
+    rm -f /root/cxr14_${tag}_s*.npz /root/cxr14_${tag}_s*.partial.npz
+  else
+    echo "=== $tag: MERGE FAILED, shards kept at /root/cxr14_${tag}_s*.npz"
+    return 1
+  fi
   echo "=== $tag: probing"
   $PY scripts/cxr_probe.py --states "/root/cxr14_${tag}.npz" --manifest "$MAN" \
       --out "/root/cxr14_probe_${tag}.json"

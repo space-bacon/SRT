@@ -496,38 +496,72 @@ comparable. `scripts/cxr_probe.py` labels them as context rather than as a
 head-to-head.
 
 **The headline is backbone-specific, and that is a limit on the claim.** The
-identical probe, split and protocol run on Aria's frozen states scores **0.708**,
-which is 0.0371 *below* Wang and ahead on only 2 of 14 findings. Both backbones
-clear the view-position baseline on all 14 findings and sit far above the
-shuffled floor, so "frozen general-purpose states carry chest pathology
-linearly" holds for both. "Ahead of the split-matched baseline" does not: that
-is a `gemma-4-31B-it` result and is labelled as one everywhere it appears. Two
-further backbones are encoding now.
+identical probe, split and protocol run on four backbones gives a spread of
+0.057:
 
-**Averaging two backbones' probe scores recovers and extends the lead, with zero
-added parameters.** Aria is individually 0.0371 behind Wang, and pooling it with
-Gemma-4 still helps:
+| backbone, official split | mean AUROC | vs Wang 0.7451 |
+|---|---:|---:|
+| **Qwen3-Omni-30B-A3B** | **0.7650** | **+0.0199** |
+| Gemma-4-31B-it | 0.7590 | +0.0139 |
+| Aria | 0.7080 | −0.0371 |
 
-| | mean AUROC | vs Gemma-4 | vs Wang 0.7451 |
+All three clear the view-position baseline on all 14 findings and sit far above
+the shuffled floor, so "frozen general-purpose states carry chest pathology
+linearly" holds for every backbone tested. "Ahead of the split-matched
+baseline" does not: Aria is behind it. Mistral is absent because a shard was
+lost, see the note below.
+
+**A probe fitted on one backbone reads another, and often reads it better than
+its own probe does.** Fitting the ridge map on train rows only, four of six
+cross directions beat the target backbone's *native* probe:
+
+| | mean AUROC |
+|---|---:|
+| native, each backbone probing itself | 0.7440 |
+| self-map control | 0.7450 |
+| **transported across backbones** | **0.7511** |
+| round-trip cycle | 0.7426 |
+| shuffled floor | 0.5020 |
+
+The best single reading in the whole study is a transported one: Gemma-4's probe
+read on Qwen3-Omni's states scores **0.7708**, and Qwen3-Omni's probe read on
+Gemma-4's states scores 0.7707, both above either backbone's own probe. Transport
+cost is **−0.0071**, meaning it is negative: moving a probe between backbones
+costs nothing and on average gains. The satellite scene probe predicted this,
+where transport cost 0.0024; pathology turns out to share direction even more
+readily than land use.
+
+**Averaging probe scores across backbones extends the lead, with zero added
+parameters.** Aria is individually 0.0371 behind Wang and still helps:
+
+| | mean AUROC | vs best single | vs Wang 0.7451 |
 |---|---:|---:|---:|
-| Gemma-4 alone | 0.7590 | | +0.0139 |
-| Aria alone | 0.7080 | −0.0510 | −0.0371 |
-| **mean of the two probes' logits** | **0.7626** | **+0.0036** | **+0.0175** |
-| concatenated features | 0.7543 | −0.0047 | +0.0092 |
-| control: Gemma-4 concatenated with itself | 0.7568 | −0.0022 | +0.0117 |
+| Qwen3-Omni alone | 0.7650 | | +0.0199 |
+| Gemma-4 alone | 0.7590 | −0.0060 | +0.0139 |
+| Aria alone | 0.7080 | −0.0570 | −0.0371 |
+| **mean of three probes' logits** | **0.7774** | **+0.0124** | **+0.0323** |
+| concatenated features | 0.7627 | −0.0023 | +0.0176 |
+| control: best single concatenated with itself | 0.7626 | −0.0024 | +0.0175 |
 
-The gain is small but it is significant under a paired patient-clustered
-bootstrap, +0.0036 with CI [+0.0008, +0.0061], positive in 999 of 1000
-resamples. Averaging logits adds no parameters at all, so the gain cannot be
-capacity and has to be information one backbone holds and the other does not.
+Significant under a paired patient-clustered bootstrap: **+0.0124, CI [+0.0082,
++0.0168]**. Averaging logits adds no parameters at all, so the gain cannot be
+capacity and has to be information one backbone holds and the others do not.
 This is the same effect the joint-frame run found on retrieval, where three
 vendors read together beat the best single vendor eight times out of eight.
 
-The concatenation row went the other way, and the control is why we can say what
-that means. Concatenating Gemma-4 **with itself** also degraded, by 0.0022, so a
-wider probe is worse-conditioned at these fixed hyperparameters regardless of
-what is in the extra columns. Real concatenation landed below even that.
-Concatenation was never retuned, so read it as untuned rather than refuted.
+The concatenation row went the other way, and the control is why that is
+readable. Concatenating the best backbone **with itself** landed at 0.7626
+against real concatenation's 0.7627, a gap of 0.0001. So the whole concat effect
+is width, not content. Concatenation was never retuned, so read it as untuned
+rather than refuted.
+
+**Mistral is missing, and the reason is ours.** Its four encode shards all
+finished, but one wrote a truncated `.npz`. The chain gated on the file
+*existing* rather than on it being readable, so it proceeded to merge, hit
+`BadZipFile`, and then ran an unconditional `rm` that deleted all four shards
+including the three good ones. Both faults are fixed in
+`scripts/cxr_shard_chain.sh`: the gate now opens the archive before counting a
+shard done, and shards are deleted only after a merge that succeeded.
 
 **A metric bug found and fixed, 2026-08-29.** Our `auroc` promised tie-averaged
 ranks and did not implement them. Continuous probe scores have no ties, so
@@ -566,9 +600,11 @@ Results that cut against us, kept because they bound the claims above.
 | Interpretants fail to compose (triadic irreducibility) | **Negative.** Routing through a third vendor costs 0.0160 beyond one extra fitted hop; the dyadic reduction holds at one pass |
 | Vendor-first routing beats a directly fitted cross-vendor map | **Photographs only.** 12/12 on COCO at p=0.0002, but 8/12 on radiology (p=0.19) and 5/12 on satellite (p=0.81). Published as general and withdrawn to one domain |
 | The four-cycle penalty is about enclosed area | **Withdrawn.** A palindrome route with zero area tracks the four-cycle. Degradation is monotone in distinct vendor boundaries crossed, which was confounded with area |
-| The chest-radiograph result holds for any frozen backbone | **Scoped to one.** Aria scores 0.708 on the identical probe and split, 0.0371 below the split-matched baseline and ahead on only 2 of 14 findings. Linear presence of pathology replicates; beating Wang does not |
+| The chest-radiograph result holds for any frozen backbone | **Scoped.** Across three backbones the spread is 0.057: Qwen3-Omni 0.7650, Gemma-4 0.7590, Aria 0.7080. Linear presence of pathology replicates on all three; beating the split-matched baseline does not, since Aria is 0.0371 behind it |
+| Concatenating backbones' features beats either alone | **Falsified as run.** 0.7627 against the best single 0.7650, and the duplicate-vendor control scored 0.7626, within 0.0001. The whole effect is width, not content. Averaging logits, which adds no parameters, gains +0.0124 instead. Untuned, not refuted |
 | A shared frame buys back the loop degradation | **Not established.** The via-joint ladder is flat, but the composed map collapses to exactly the joint width. Rank-matched pairwise rules out the trivial bottleneck reading; what remains may only restate that one subspace is reused every hop |
 | Concatenating two backbones' features beats either alone | **Falsified as run.** 0.7543 against Gemma-4's 0.7590. The duplicate-vendor control also lost 0.0022, so a wider probe is worse-conditioned at these hyperparameters whatever fills the columns. Untuned, not refuted. Averaging logits, which adds no parameters, wins instead |
+| Pathology lives in a backbone-specific direction | **Refuted.** A probe fitted on one backbone, read on another through a train-only ridge map, beats the target's own probe in 4 of 6 directions. Transport cost is −0.0071 |
 
 ### Train from scratch
 
