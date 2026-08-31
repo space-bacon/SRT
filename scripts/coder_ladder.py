@@ -102,6 +102,7 @@ def main():
           f"K={a.k}  batch={a.batch}  -> {out}", flush=True)
     print(f"  {', '.join(t for t, _, _ in mine)}\n", flush=True)
 
+    failed = []
     for tag, repo, arms in mine:
         path = snap(repo)
         if path is None:
