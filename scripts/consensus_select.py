@@ -25,7 +25,9 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "scripts"))
+sys.path.insert(0, HERE)
 from code_select import extract  # noqa: E402
+from srt_select.sandbox import run_json  # noqa: E402
 
 POOL = {
     "int": [0, 1, 2, 3, 5, 7, 10, -1, -4, 100],
@@ -151,18 +153,10 @@ def probe_program(body, entry, cases):
 
 
 def run_capture(program, timeout):
-    import subprocess
-    from visible_tests import HELPER  # noqa: F401  (kept for symmetry of imports)
-    try:
-        r = subprocess.run([sys.executable, "-I", "-c", program], capture_output=True,
-                           timeout=timeout, cwd="/tmp", text=True,
-                           env={"PATH": "/usr/bin:/bin", "PYTHONDONTWRITEBYTECODE": "1",
-                                "HOME": "/tmp", "OMP_NUM_THREADS": "1"})
-        if r.returncode != 0:
-            return None
-        return tuple(json.loads(r.stdout.strip().splitlines()[-1]))
-    except Exception:
-        return None
+    # The wall-clock timeout here is enforced by this parent, so it buys nothing once
+    # the parent is killed: the child orphans and spins forever. srt_select.sandbox
+    # applies RLIMIT_CPU inside the child, which is the only limit that survives us.
+    return run_json(program, timeout)
 
 
 def main():
