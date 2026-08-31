@@ -119,9 +119,22 @@ def main() -> int:
     # Share of the climb from our base arm to their stated 0.8 line. Both endpoints
     # are ours and the target is their threshold, so no floor assumption enters.
     climb = fmt / (0.80 - iso["base"]["intra_mean"])
+
+    # Floor-corrected recovery of their level. They report the floor as a band and
+    # inter-model as a band, so this is a span rather than a point, and shipping the
+    # span is the only honest form of it.
+    their_floors = (0.10, 0.20)
+    their_levels = (("intra", 0.80, chat_intra),
+                    ("inter", 0.71, iso["instruct_chat"]["inter_mean"]),
+                    ("inter", 0.82, iso["instruct_chat"]["inter_mean"]))
+    ours_floor = iso["instruct_chat"]["floor"]
+    rec = [(ours - ours_floor) / (theirs - tf)
+           for tf in their_floors for _, theirs, ours in their_levels]
+
     stats = [
         (f"{climb * 100:.0f}%", "of the way from base models to their 0.8 line",
-         f"intra {iso['base']['intra_mean']:.4f} to {chat_intra:.4f}, at 0.36B to 2B", GREEN),
+         f"{min(rec) * 100:.0f}% to {max(rec) * 100:.0f}% of their level, "
+         "floor-corrected", GREEN),
         (f"{ratio:.1f}\u00d7", "the format outweighs the tuning",
          f"+{fmt:.4f} through the template against +{tuning:.4f} tuned", INK),
         (f"{share * 100:.0f}%", "recovered by markers nobody trained on",
