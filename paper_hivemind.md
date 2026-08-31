@@ -454,6 +454,17 @@ states one for 128 of 164, and agreement wins there only by covering the remaini
 the prompt happens to say what the answer should be, which is a property of the
 benchmark rather than of the reader.
 
+**None of it survives scale.** Reading the MBPP arms by rung, the gain from selecting
+among eight candidates decays at **−0.0704 per decade of parameters**, from +0.1538
+at 3B to +0.0097 at 32B, where it captures 17% of the remaining headroom rather than
+60%. The selector has not stopped working. The room has gone, because a single sample
+from the 32B model already passes 0.8609.
+
+That is the mirror image of Section 5.2. Format-induced similarity grows at +0.0441
+per decade while the value of choosing between samples falls at −0.0704. Larger models
+write more alike and leave less to choose between, and both trends point the same way:
+whatever variation the hivemind result measures, scale is removing it.
+
 ### 5.5 It can be suppressed, but not by anything anyone ships
 
 Everything above adds framing and watches similarity rise. That is an explanation,
