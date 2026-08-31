@@ -1,0 +1,3 @@
+/venv/main/bin/python scripts/mbpp_ladder.py --k 64 --sizes 7B --arms chat --out artifacts/nla/mbpp_k64 --batch 8
+/venv/main/bin/python scripts/mbpp_ladder.py --k 64 --sizes 3B --arms chat --out artifacts/nla/mbpp_k64 --batch 12
+/venv/main/bin/python scripts/mbpp_ladder.py --k 64 --sizes 1.5B --arms chat --out artifacts/nla/mbpp_k64 --batch 16

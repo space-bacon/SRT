@@ -1,3 +1,4 @@
-/venv/main/bin/python scripts/ministral_ladder.py --k 32 --prompts 164 --sizes 14B --arms chat --out artifacts/nla/min_k32 --batch 8
-/venv/main/bin/python scripts/ministral_ladder.py --k 32 --prompts 164 --sizes 8B --arms chat --out artifacts/nla/min_k32 --batch 12
-/venv/main/bin/python scripts/ministral_ladder.py --k 32 --prompts 164 --sizes 3B --arms chat --out artifacts/nla/min_k32 --batch 24
+/venv/main/bin/python scripts/coder_ladder.py --k 64 --sizes 14B --arms chat --out artifacts/nla/he_k64 --batch 8
+/venv/main/bin/python scripts/coder_ladder.py --k 64 --sizes 7B --arms chat --out artifacts/nla/he_k64 --batch 12
+/venv/main/bin/python scripts/coder_ladder.py --k 64 --sizes 3B 1.5B --arms chat --out artifacts/nla/he_k64 --batch 16
+/venv/main/bin/python scripts/coder_ladder.py --k 64 --sizes 32B --arms chat --out artifacts/nla/he_k64 --batch 4
