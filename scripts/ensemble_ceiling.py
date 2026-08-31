@@ -31,6 +31,10 @@ from code_select import execute_file  # noqa: E402
 from hivemind_gen import Progress, run_model  # noqa: E402
 
 HUB = "/root/.hf_home/hub"
+# HF_HOME moved; earlier models are still under /root. Search both.
+HUBS = [h for h in (os.environ.get("HF_HOME", "") and
+                    os.path.join(os.environ["HF_HOME"], "hub"),
+                    "/workspace/.hf_home/hub", HUB) if h]
 OUT = "artifacts/nla/ensemble"
 MODELS = [
     ("qwen25c_32b", "Qwen/Qwen2.5-Coder-32B-Instruct", "Alibaba"),
@@ -45,8 +49,17 @@ INSTR = "Complete the following Python function. Reply with the full function on
 
 
 def snap(repo):
-    g = glob.glob(f"{HUB}/models--{repo.replace('/', '--')}/snapshots/*/")
-    return g[0] if g else None
+    """First snapshot of `repo` in any known cache.
+
+    HF_HOME moved to /workspace/.hf_home while 830 GB of earlier models stayed in
+    /root/.hf_home, so a single hardcoded hub silently misses half the models.
+    """
+    stem = f"models--{repo.replace('/', '--')}/snapshots/*/"
+    for hub in HUBS:
+        g = glob.glob(f"{hub}/{stem}")
+        if g:
+            return g[0]
+    return None
 
 
 def render(tok, stem, mode):

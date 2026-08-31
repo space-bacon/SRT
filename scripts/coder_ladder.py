@@ -33,6 +33,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hivemind_gen import run_model, Progress
 
 HUB = "/root/.hf_home/hub"
+# HF_HOME moved; earlier models are still under /root. Search both.
+HUBS = [h for h in (os.environ.get("HF_HOME", "") and
+                    os.path.join(os.environ["HF_HOME"], "hub"),
+                    "/workspace/.hf_home/hub", HUB) if h]
 OUT = "artifacts/nla/coder_ladder"
 PERSONA = "You are a helpful assistant."
 SIZES = ["0.5B", "1.5B", "3B", "7B", "14B", "32B"]
@@ -58,8 +62,17 @@ def parse_args():
 
 
 def snap(repo):
-    g = glob.glob(f"{HUB}/models--{repo.replace('/', '--')}/snapshots/*/")
-    return g[0] if g else None
+    """First snapshot of `repo` in any known cache.
+
+    HF_HOME moved to /workspace/.hf_home while 830 GB of earlier models stayed in
+    /root/.hf_home, so a single hardcoded hub silently misses half the models.
+    """
+    stem = f"models--{repo.replace('/', '--')}/snapshots/*/"
+    for hub in HUBS:
+        g = glob.glob(f"{hub}/{stem}")
+        if g:
+            return g[0]
+    return None
 
 
 def render(tok, stem, mode):

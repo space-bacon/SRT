@@ -49,6 +49,10 @@ DEPLOYED = [
 ]
 
 HUB = "/root/.hf_home/hub"
+# HF_HOME moved; earlier models are still under /root. Search both.
+HUBS = [h for h in (os.environ.get("HF_HOME", "") and
+                    os.path.join(os.environ["HF_HOME"], "hub"),
+                    "/workspace/.hf_home/hub", HUB) if h]
 OUT = "artifacts/nla/ministral_suppression"
 SIZES = ["3B", "8B", "14B"]
 MODES = ["persona_model", "persona_sample", "deployed_model", "deployed_sample"]
@@ -56,8 +60,17 @@ SCORER = "sentence-transformers/all-MiniLM-L6-v2"
 
 
 def snap(repo):
-    g = glob.glob(f"{HUB}/models--{repo.replace('/', '--')}/snapshots/*/")
-    return g[0] if g else None
+    """First snapshot of `repo` in any known cache.
+
+    HF_HOME moved to /workspace/.hf_home while 830 GB of earlier models stayed in
+    /root/.hf_home, so a single hardcoded hub silently misses half the models.
+    """
+    stem = f"models--{repo.replace('/', '--')}/snapshots/*/"
+    for hub in HUBS:
+        g = glob.glob(f"{hub}/{stem}")
+        if g:
+            return g[0]
+    return None
 
 
 def make_render(model_idx, k):
