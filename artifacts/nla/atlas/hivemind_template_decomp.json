@@ -1,0 +1,214 @@
+{
+ "question": "which part of a chat template carries the convergence",
+ "persona_text": "You are a helpful assistant.",
+ "shared_markers": "### User:\\n{stem}\\n\\n### Assistant:\\n",
+ "protocol": "top_p=0.9, temperature=1.0, K=8, 48 new tokens",
+ "note": "shared and shared_persona use plain-text markers identical across all six models, so they test the assistant frame WITHOUT the special tokens any model was tuned on",
+ "arms": {
+  "raw": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.3597,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "qwen3_06b": {
+     "mean": 0.3666,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "gemma2_2b": {
+     "mean": 0.4812,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "llama32_1b": {
+     "mean": 0.4967,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "smollm2_360m": {
+     "mean": 0.4442,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "olmo2_1b": {
+     "mean": 0.5125,
+     "frac_prompts_above_0.8": 0.0
+    }
+   },
+   "intra_mean": 0.4435,
+   "intra_range": [
+    0.3597,
+    0.5125
+   ],
+   "frac_models_any_prompt_above_0.8": 0.0,
+   "inter_mean": 0.4045,
+   "inter_cross_lab": 0.4092,
+   "intra_minus_inter": 0.039,
+   "floor": 0.1125
+  },
+  "persona": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.3566,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "qwen3_06b": {
+     "mean": 0.391,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "gemma2_2b": {
+     "mean": 0.4633,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "llama32_1b": {
+     "mean": 0.4289,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "smollm2_360m": {
+     "mean": 0.4018,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "olmo2_1b": {
+     "mean": 0.5473,
+     "frac_prompts_above_0.8": 0.0
+    }
+   },
+   "intra_mean": 0.4315,
+   "intra_range": [
+    0.3566,
+    0.5473
+   ],
+   "frac_models_any_prompt_above_0.8": 0.0,
+   "inter_mean": 0.3958,
+   "inter_cross_lab": 0.3991,
+   "intra_minus_inter": 0.0357,
+   "floor": 0.1076
+  },
+  "shared": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.5576,
+     "frac_prompts_above_0.8": 0.0333
+    },
+    "qwen3_06b": {
+     "mean": 0.6711,
+     "frac_prompts_above_0.8": 0.1333
+    },
+    "gemma2_2b": {
+     "mean": 0.8025,
+     "frac_prompts_above_0.8": 0.5
+    },
+    "llama32_1b": {
+     "mean": 0.4253,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "smollm2_360m": {
+     "mean": 0.3902,
+     "frac_prompts_above_0.8": 0.0167
+    },
+    "olmo2_1b": {
+     "mean": 0.764,
+     "frac_prompts_above_0.8": 0.4333
+    }
+   },
+   "intra_mean": 0.6018,
+   "intra_range": [
+    0.3902,
+    0.8025
+   ],
+   "frac_models_any_prompt_above_0.8": 0.8333,
+   "inter_mean": 0.5186,
+   "inter_cross_lab": 0.5186,
+   "intra_minus_inter": 0.0831,
+   "floor": 0.0976
+  },
+  "shared_persona": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.6293,
+     "frac_prompts_above_0.8": 0.0167
+    },
+    "qwen3_06b": {
+     "mean": 0.5699,
+     "frac_prompts_above_0.8": 0.0333
+    },
+    "gemma2_2b": {
+     "mean": 0.7817,
+     "frac_prompts_above_0.8": 0.5
+    },
+    "llama32_1b": {
+     "mean": 0.4518,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "smollm2_360m": {
+     "mean": 0.5796,
+     "frac_prompts_above_0.8": 0.0333
+    },
+    "olmo2_1b": {
+     "mean": 0.7738,
+     "frac_prompts_above_0.8": 0.45
+    }
+   },
+   "intra_mean": 0.631,
+   "intra_range": [
+    0.4518,
+    0.7817
+   ],
+   "frac_models_any_prompt_above_0.8": 0.8333,
+   "inter_mean": 0.5775,
+   "inter_cross_lab": 0.5801,
+   "intra_minus_inter": 0.0535,
+   "floor": 0.0961
+  },
+  "chat": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.6577,
+     "frac_prompts_above_0.8": 0.15
+    },
+    "qwen3_06b": {
+     "mean": 0.8064,
+     "frac_prompts_above_0.8": 0.5833
+    },
+    "gemma2_2b": {
+     "mean": 0.8101,
+     "frac_prompts_above_0.8": 0.6
+    },
+    "llama32_1b": {
+     "mean": 0.8196,
+     "frac_prompts_above_0.8": 0.75
+    },
+    "smollm2_360m": {
+     "mean": 0.4442,
+     "frac_prompts_above_0.8": 0.0167
+    },
+    "olmo2_1b": {
+     "mean": 0.8253,
+     "frac_prompts_above_0.8": 0.7333
+    }
+   },
+   "intra_mean": 0.7272,
+   "intra_range": [
+    0.4442,
+    0.8253
+   ],
+   "frac_models_any_prompt_above_0.8": 1.0,
+   "inter_mean": 0.6464,
+   "inter_cross_lab": 0.649,
+   "intra_minus_inter": 0.0808,
+   "floor": 0.1028
+  }
+ },
+ "intra_gain_over_raw": {
+  "persona": -0.012,
+  "shared": 0.1583,
+  "shared_persona": 0.1875,
+  "chat": 0.2837
+ },
+ "decomposition": {
+  "total_effect_chat_minus_raw": 0.2837,
+  "persona_alone": -0.012,
+  "role_structure_alone": 0.1583,
+  "persona_added_within_structure": 0.0292,
+  "native_token_premium": 0.0962,
+  "share_reachable_without_native_tokens": 0.6609
+ },
+ "verdict": "Persona text alone does nothing (-0.0120); it only matters inside a role frame (+0.0292 when added there). Generic plain-text markers that no model was trained on reproduce 66% of the full template effect. The model's own tuned tokens supply the remaining 34%. So the convergence is mostly the assistant FRAME, reachable by prompt convention, with a real but minority contribution from the tuned format."
+}
