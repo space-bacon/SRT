@@ -52,6 +52,10 @@ def main():
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--shards", type=int, default=1)
     ap.add_argument("--sizes", nargs="*", default=SIZES)
+    ap.add_argument("--arms", nargs="*", default=ARMS)
+    # Generations are named by tag alone, so a different K must write elsewhere
+    # or it silently overwrites the published K=8 pools.
+    ap.add_argument("--out", default=OUT)
     a = ap.parse_args()
 
     probs = json.load(open(os.path.join(HERE, a.probs)))
@@ -60,15 +64,15 @@ def main():
     jobs.sort(key=lambda j: -float(j[0].replace("mbpp", "").replace("B_inst", "")))
     mine = [j for i, j in enumerate(jobs) if i % a.shards == a.shard]
     print(f"shard {a.shard}/{a.shards}  {len(mine)} models  {len(stems)} prompts  "
-          f"K={a.k}  max_new={a.max_new}", flush=True)
+          f"K={a.k}  max_new={a.max_new}  arms={a.arms}  -> {a.out}", flush=True)
 
-    prog = Progress(len(mine) * len(ARMS) * len(stems))
+    prog = Progress(len(mine) * len(a.arms) * len(stems))
     for tag, repo in mine:
         p = snap(repo)
         if not p:
             print(f"  {tag:16s} MISSING {repo}", flush=True)
             continue
-        run_model(tag, p, stems, ARMS, render, os.path.join(HERE, OUT), prog,
+        run_model(tag, p, stems, a.arms, render, os.path.join(HERE, a.out), prog,
                   k=a.k, max_new=a.max_new, batch=a.batch, dtype=torch.bfloat16)
 
 
