@@ -130,87 +130,129 @@
    "n_prompts": 164,
    "k": 8
   },
+  "coder32B_base__raw": {
+   "intra": 0.657,
+   "frac_above_0.8": 0.128,
+   "floor": 0.3252,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder32B_inst__chat": {
+   "intra": 0.9365,
+   "frac_above_0.8": 1.0,
+   "floor": 0.2941,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder32B_inst__persona": {
+   "intra": 0.8449,
+   "frac_above_0.8": 0.8476,
+   "floor": 0.3289,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder32B_inst__raw": {
+   "intra": 0.7845,
+   "frac_above_0.8": 0.5244,
+   "floor": 0.3447,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder32B_inst__shared": {
+   "intra": 0.9104,
+   "frac_above_0.8": 0.9878,
+   "floor": 0.2871,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder32B_inst__shared_persona": {
+   "intra": 0.9197,
+   "frac_above_0.8": 0.9939,
+   "floor": 0.2887,
+   "n_prompts": 164,
+   "k": 8
+  },
   "coder3B_base__raw": {
    "intra": 0.6416,
    "frac_above_0.8": 0.1341,
-   "floor": 0.3189,
+   "floor": 0.3185,
    "n_prompts": 164,
    "k": 8
   },
   "coder3B_inst__chat": {
    "intra": 0.8764,
    "frac_above_0.8": 0.9451,
-   "floor": 0.2924,
+   "floor": 0.2904,
    "n_prompts": 164,
    "k": 8
   },
   "coder3B_inst__persona": {
    "intra": 0.79,
    "frac_above_0.8": 0.4573,
-   "floor": 0.3317,
+   "floor": 0.3297,
    "n_prompts": 164,
    "k": 8
   },
   "coder3B_inst__raw": {
    "intra": 0.7499,
    "frac_above_0.8": 0.3293,
-   "floor": 0.3549,
+   "floor": 0.352,
    "n_prompts": 164,
    "k": 8
   },
   "coder3B_inst__shared": {
    "intra": 0.8752,
    "frac_above_0.8": 0.9512,
-   "floor": 0.2912,
+   "floor": 0.292,
    "n_prompts": 164,
    "k": 8
   },
   "coder3B_inst__shared_persona": {
    "intra": 0.8823,
    "frac_above_0.8": 0.9512,
-   "floor": 0.2938,
+   "floor": 0.2943,
    "n_prompts": 164,
    "k": 8
   },
   "coder7B_base__raw": {
    "intra": 0.6215,
    "frac_above_0.8": 0.0732,
-   "floor": 0.3139,
+   "floor": 0.313,
    "n_prompts": 164,
    "k": 8
   },
   "coder7B_inst__chat": {
    "intra": 0.8638,
    "frac_above_0.8": 0.9268,
-   "floor": 0.3029,
+   "floor": 0.3028,
    "n_prompts": 164,
    "k": 8
   },
   "coder7B_inst__persona": {
    "intra": 0.6849,
    "frac_above_0.8": 0.189,
-   "floor": 0.3025,
+   "floor": 0.3024,
    "n_prompts": 164,
    "k": 8
   },
   "coder7B_inst__raw": {
    "intra": 0.7315,
    "frac_above_0.8": 0.2805,
-   "floor": 0.3333,
+   "floor": 0.3342,
    "n_prompts": 164,
    "k": 8
   },
   "coder7B_inst__shared": {
    "intra": 0.8648,
    "frac_above_0.8": 0.9512,
-   "floor": 0.3009,
+   "floor": 0.3004,
    "n_prompts": 164,
    "k": 8
   },
   "coder7B_inst__shared_persona": {
    "intra": 0.8719,
    "frac_above_0.8": 0.9451,
-   "floor": 0.2933,
+   "floor": 0.2954,
    "n_prompts": 164,
    "k": 8
   }
@@ -250,7 +292,7 @@
    "format_gain": 0.1265,
    "total_gain": 0.2348,
    "frac_above_0.8_chat": 0.9451,
-   "floor_chat": 0.2924
+   "floor_chat": 0.2904
   },
   "7B": {
    "params_b": 7.6,
@@ -262,7 +304,7 @@
    "format_gain": 0.1323,
    "total_gain": 0.2423,
    "frac_above_0.8_chat": 0.9268,
-   "floor_chat": 0.3029
+   "floor_chat": 0.3028
   },
   "14B": {
    "params_b": 14.8,
@@ -275,14 +317,26 @@
    "total_gain": 0.297,
    "frac_above_0.8_chat": 0.9939,
    "floor_chat": 0.295
+  },
+  "32B": {
+   "params_b": 32.8,
+   "base_raw": 0.657,
+   "inst_raw": 0.7845,
+   "inst_chat": 0.9365,
+   "inst_shared": 0.9104,
+   "tuning_gain": 0.1275,
+   "format_gain": 0.152,
+   "total_gain": 0.2795,
+   "frac_above_0.8_chat": 1.0,
+   "floor_chat": 0.2941
   }
  },
  "trend": {
-  "format_gain_slope_per_decade": 0.0473,
-  "tuning_gain_slope_per_decade": -0.0285,
+  "format_gain_slope_per_decade": 0.0441,
+  "tuning_gain_slope_per_decade": -0.022,
   "format_gain_range": [
    0.0787,
-   0.1402
+   0.152
   ],
   "paper_small_model_format_gain": 0.3623,
   "reading": "a slope near zero means the format effect is scale-free and the small-model objection to section 5 fails; a clearly negative slope means it decays with scale and the paper needs to say so"

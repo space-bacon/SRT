@@ -1,0 +1,72 @@
+{
+  "question": "does persona suppression work across labs at deployable size",
+  "models": {
+    "qwen25c_14b": {
+      "repo": "Qwen/Qwen2.5-Coder-14B-Instruct",
+      "lab": "Alibaba"
+    },
+    "ministral_14b": {
+      "repo": "mistralai/Ministral-3-14B-Instruct-2512",
+      "lab": "Mistral"
+    },
+    "gemma4_31b": {
+      "repo": "google/gemma-4-31B-it",
+      "lab": "Google"
+    }
+  },
+  "arms": {
+    "chat": {
+      "intra_mean": 0.8555,
+      "inter_mean": 0.7792,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.8278,
+      "floor": 0.1284
+    },
+    "persona_model": {
+      "intra_mean": 0.7475,
+      "inter_mean": 0.5156,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.3778,
+      "floor": 0.1287
+    },
+    "persona_sample": {
+      "intra_mean": 0.4582,
+      "inter_mean": 0.4509,
+      "frac_models_any_prompt_above_0.8": 0.0,
+      "mean_frac_prompts_above_0.8": 0.0,
+      "floor": 0.1324
+    },
+    "deployed_model": {
+      "intra_mean": 0.8667,
+      "inter_mean": 0.7903,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.8389,
+      "floor": 0.1318
+    },
+    "deployed_sample": {
+      "intra_mean": 0.7636,
+      "inter_mean": 0.7188,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.4278,
+      "floor": 0.1311
+    }
+  },
+  "suppression": {
+    "persona_model": {
+      "intra_drop": 0.108,
+      "inter_drop": 0.2636
+    },
+    "persona_sample": {
+      "intra_drop": 0.3973,
+      "inter_drop": 0.3283
+    },
+    "deployed_model": {
+      "intra_drop": -0.0112,
+      "inter_drop": -0.0111
+    },
+    "deployed_sample": {
+      "intra_drop": 0.0919,
+      "inter_drop": 0.0604
+    }
+  }
+}

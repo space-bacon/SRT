@@ -38,9 +38,9 @@ model's own tuned tokens supply the remaining 34%. What drives the convergence i
 the assistant turn structure, not what the system prompt says.
 
 Two extensions close the obvious objections. Across the Qwen2.5-Coder ladder from
-0.5B to 14B, one lab and one recipe held fixed, the format effect **grows** with
-scale at +0.0473 per decade of parameters while the tuning term declines at
-−0.0285, so the split tilts further toward format as models get bigger. On
+0.5B to 32B, one lab and one recipe held fixed, the format effect **grows**
+monotonically with scale at +0.0441 per decade of parameters while the tuning term
+declines at −0.0220, so the split tilts further toward format as models get bigger. On
 Ministral-3 from an eighth lab, at 3B, 8B and 14B, the decomposition reproduces
 with role structure worth +0.3809 to +0.4354, persona worth +0.0612 to +0.0821,
 instruction tuning alone slightly negative, and the format effect rising at +0.0348
@@ -311,7 +311,7 @@ The standing objection to Section 5 is that 0.36B to 2B models are not the syste
 anyone deploys, and that convergence at that size could be a small-model artifact.
 
 We ran the same four arms across the Qwen2.5-Coder ladder, one lab, one recipe and
-one tokenizer held fixed from 0.5B to 14B, on 164 HumanEval prompts with K = 8.
+one tokenizer held fixed from 0.5B to 32B, on 164 HumanEval prompts with K = 8.
 Holding the family fixed removes lineage as a confound, so the only thing varying
 across rungs is parameter count.
 
@@ -322,19 +322,23 @@ across rungs is parameter count.
 | 3B | 3.1 | 0.6416 | 0.7499 | 0.8764 | 0.8752 | +0.1083 | +0.1265 |
 | 7B | 7.6 | 0.6215 | 0.7315 | 0.8638 | 0.8648 | +0.1100 | +0.1323 |
 | 14B | 14.8 | 0.6085 | 0.7653 | 0.9055 | 0.8974 | +0.1568 | +0.1402 |
+| 32B | 32.8 | 0.6570 | 0.7845 | 0.9365 | 0.9104 | +0.1275 | +0.1520 |
 
-**The format effect grows with scale**, from +0.0787 at 0.5B to +0.1402 at 14B, a
-slope of +0.0473 per decade of parameters. The small-model objection is answered in
-the direction that matters: whatever this is, it does not wash out as models get
-bigger over the 30x range we can afford. The tuning term moves the other way, at
-−0.0285 per decade, so the split between weights and format tilts further toward
-format as scale increases.
+**The format effect grows with scale**, monotonically across all six rungs, from
++0.0787 at 0.5B to +0.1520 at 32B, a slope of +0.0441 per decade of parameters. The
+small-model objection is answered in the direction that matters: over a 66x range
+the effect does not wash out, it strengthens at every step. The tuning term moves
+the other way, at −0.0220 per decade, so the split between weights and format tilts
+further toward format as scale increases. At 32B the chat arm reaches 0.9365, the
+highest intra-model similarity anywhere in this paper.
 
-**Generic markers reach parity with native tokens in this domain.** The `shared`
-arm recovers 82% of the format gain at 0.5B and 94% to 101% from 3B upward, against
-66% in the prose setting of Section 5.1. At 7B the untrained markers slightly
-exceed the model's own template, 0.8648 against 0.8638. Whatever the tuned tokens
-buy in prose, on code prompts a plain-text turn structure is sufficient.
+**Generic markers come close to native tokens in this domain, but not uniformly.**
+The `shared` arm recovers 82% of the format gain at 0.5B, rises to 99% at 3B and
+101% at 7B, where the untrained markers slightly exceed the model's own template at
+0.8648 against 0.8638, then falls back to 94% at 14B and 83% at 32B. Across the
+ladder the range is 82% to 101%, against 66% in the prose setting of Section 5.1.
+The tuned tokens buy more at the ends of the ladder than in the middle, and we do
+not have an account of why.
 
 Absolute levels are much higher here than in Section 5.1, with instruct raw already
 at 0.73 to 0.79 before any framing, because a function signature and docstring
@@ -463,11 +467,31 @@ Deployed personas move the cross-model term by 0.0098 and actually raise intra b
 0.0120. At 3B to 14B, as at 0.36B to 2B, the lever works and the shipped personas do
 not pull it.
 
-One caveat on that table. These three rungs are one family, so its inter-model term
-measures agreement across scale within a lab rather than across labs, and its 0.8316
-baseline is correspondingly higher than the 0.6464 of the six-model set. The
-comparison that carries weight is exotic against deployed inside the same setup, not
-the absolute level.
+Those three rungs are one family, so that inter-model term measures agreement across
+scale inside a lab rather than across labs. To cross a vendor boundary at deployable
+size we ran the same arms over Qwen2.5-Coder-14B, Ministral-3-14B and gemma-4-31B,
+three labs, against their own chat baseline.
+
+| arm | intra | inter | intra drop | inter drop |
+|---|---:|---:|---:|---:|
+| chat (baseline) | 0.8555 | 0.7792 | | |
+| exotic, per model | 0.7475 | 0.5156 | +0.1080 | **+0.2636** |
+| exotic, per sample | **0.4582** | 0.4509 | **+0.3973** | +0.3283 |
+| deployed, per model | 0.8667 | 0.7903 | **−0.0112** | **−0.0111** |
+| deployed, per sample | 0.7636 | 0.7188 | +0.0919 | +0.0604 |
+
+Across three vendors the picture is the same, and the deployed arm is worse than
+inert. Giving each lab's model a different production-style system prompt makes the
+three **more** alike, by 0.0111 on the cross-model term and 0.0112 within models.
+Eight distinct voices instead move the cross-model term by 0.2636, and varying voice
+per sample moves intra by 0.3973 against a floor that never leaves 0.1284 to 0.1324.
+
+The industry's persona diversity is not small. It is negative. Three models from
+three labs, each given a different way of saying "helpful assistant", converge
+slightly more than if nobody had written a system prompt at all.
+
+We exclude Mistral-Small-3.1-24B from this arm: its tokenizer ships no chat template,
+so it cannot run the baseline the other arms are measured against.
 
 ## 6. What transport predicts
 
@@ -611,8 +635,8 @@ like a tokenizer problem from the metric alone.
 
 ## 11. Limitations
 
-Section 5.2 takes the ladder to 14B within one family and finds the format effect
-growing at +0.0473 per decade, which answers the small-model objection over a 30x
+Section 5.2 takes the ladder to 32B within one family and finds the format effect
+growing at +0.0441 per decade, which answers the small-model objection over a 66x
 range. It does not reach frontier scale, and it does not show that a 500B model
 reaches the reported level by this route.
 

@@ -24,10 +24,11 @@ from ministral_ladder import STEMS  # noqa: E402
 from ministral_suppression import DEPLOYED, PERSONAS, embed, snap, stats  # noqa: E402
 
 OUT = "artifacts/nla/crosslab_suppression"
+# Mistral-Small-3.1-24B-Instruct is excluded: its tokenizer ships no chat_template,
+# so it cannot run the chat baseline these arms are measured against.
 MODELS = [
     ("qwen25c_14b", "Qwen/Qwen2.5-Coder-14B-Instruct", "Alibaba"),
     ("ministral_14b", "mistralai/Ministral-3-14B-Instruct-2512", "Mistral"),
-    ("mistralsmall_24b", "mistralai/Mistral-Small-3.1-24B-Instruct-2503", "Mistral"),
     ("gemma4_31b", "google/gemma-4-31B-it", "Google"),
 ]
 MODES = ["chat", "persona_model", "persona_sample", "deployed_model", "deployed_sample"]
