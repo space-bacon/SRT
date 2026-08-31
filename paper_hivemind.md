@@ -37,10 +37,25 @@ model was ever trained on reproduce 66% of the full template effect, and each
 model's own tuned tokens supply the remaining 34%. What drives the convergence is
 the assistant turn structure, not what the system prompt says.
 
+Two extensions close the obvious objections. Across the Qwen2.5-Coder ladder from
+0.5B to 14B, one lab and one recipe held fixed, the format effect **grows** with
+scale at +0.0473 per decade of parameters while the tuning term declines at
+−0.0285, so the split tilts further toward format as models get bigger. And on
+Ministral-3 from an eighth lab, at 3B, 8B and 14B, the decomposition reproduces
+with role structure worth +0.3809 to +0.4354, persona worth +0.0612 to +0.0821,
+and instruction tuning alone slightly negative.
+
+A final measurement bounds what any of this licenses. Scoring the same code
+generations with an execution harness, an arm at 0.8638 intra-model similarity
+passes only 0.5404 of the time per sample while its 8-sample pool contains a
+passing solution 0.9024 of the time. Convergence in phrasing is not convergence in
+correctness.
+
 The homogeneity is not inherited from pretrained geometry and is not mostly bought
 by instruction tuning. It largely arrives with the deployment format, and most of
 that is reachable by prompt convention alone. We also report negatives, including
-a published null that later reversed.
+a published null that later reversed and a selector result that did not survive
+our own replication.
 
 ---
 
@@ -281,6 +296,99 @@ with a genuine but secondary contribution from the tuned format.
 The floor stays between 0.0961 and 0.1125 across all five arms, so none of this is
 a scale artifact.
 
+### 5.2 The effect does not shrink with scale
+
+The standing objection to Section 5 is that 0.36B to 2B models are not the systems
+anyone deploys, and that convergence at that size could be a small-model artifact.
+
+We ran the same four arms across the Qwen2.5-Coder ladder, one lab, one recipe and
+one tokenizer held fixed from 0.5B to 14B, on 164 HumanEval prompts with K = 8.
+Holding the family fixed removes lineage as a confound, so the only thing varying
+across rungs is parameter count.
+
+| size | params (B) | base raw | inst raw | inst chat | shared | tuning | format |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 0.5B | 0.5 | 0.5966 | 0.7863 | 0.8650 | 0.8508 | +0.1897 | +0.0787 |
+| 1.5B | 1.5 | 0.6371 | 0.7723 | 0.8526 | 0.8414 | +0.1352 | +0.0803 |
+| 3B | 3.1 | 0.6416 | 0.7499 | 0.8764 | 0.8752 | +0.1083 | +0.1265 |
+| 7B | 7.6 | 0.6215 | 0.7315 | 0.8638 | 0.8648 | +0.1100 | +0.1323 |
+| 14B | 14.8 | 0.6085 | 0.7653 | 0.9055 | 0.8974 | +0.1568 | +0.1402 |
+
+**The format effect grows with scale**, from +0.0787 at 0.5B to +0.1402 at 14B, a
+slope of +0.0473 per decade of parameters. The small-model objection is answered in
+the direction that matters: whatever this is, it does not wash out as models get
+bigger over the 30x range we can afford. The tuning term moves the other way, at
+−0.0285 per decade, so the split between weights and format tilts further toward
+format as scale increases.
+
+**Generic markers reach parity with native tokens in this domain.** The `shared`
+arm recovers 82% of the format gain at 0.5B and 94% to 101% from 3B upward, against
+66% in the prose setting of Section 5.1. At 7B the untrained markers slightly
+exceed the model's own template, 0.8648 against 0.8638. Whatever the tuned tokens
+buy in prose, on code prompts a plain-text turn structure is sufficient.
+
+Absolute levels are much higher here than in Section 5.1, with instruct raw already
+at 0.73 to 0.79 before any framing, because a function signature and docstring
+constrain the output far more than an open-ended stem. The gains are therefore
+measured against a compressed ceiling, and the magnitudes are not comparable across
+the two domains. The slope is.
+
+### 5.3 An independent lab reproduces the decomposition
+
+Section 5.1 rests on one set of six models. We repeated it on Ministral-3, from
+Mistral AI, a lab absent from that set, with matched base and instruct weights at
+3B, 8B and 14B on the same 60 prose stems.
+
+| | 3B | 8B | 14B |
+|---|---:|---:|---:|
+| base raw | 0.4614 | 0.4473 | 0.4449 |
+| instruct raw | 0.4307 | 0.4251 | 0.4301 |
+| tuning alone | −0.0307 | −0.0222 | −0.0148 |
+| persona alone | +0.0612 | +0.0759 | +0.0821 |
+| role structure alone | **+0.3809** | **+0.4307** | **+0.4354** |
+| persona within the frame | +0.0268 | +0.0006 | +0.0068 |
+
+The ordering reproduces exactly. Role structure dominates, persona text alone is a
+minor term, and persona contributes almost nothing once a frame already exists. The
+`shared` arm reaches 0.8116 to 0.8655 intra against floors of 0.1329 to 0.1391, and
+clears the 0.8 threshold on 67% of prompts at 3B and 83% at both 8B and 14B, using
+markers Mistral never trained on.
+
+Two things are sharper here than in Section 5.1. **Instruction tuning on its own is
+slightly negative**, between −0.0148 and −0.0307, so for this family the tuned
+weights supply none of the convergence and the frame supplies all of it. And the
+role-structure term is more than twice the +0.1583 we measured before, which says
+the 66/34 split of Section 5.1 is a property of those particular models rather than
+a constant.
+
+**We exclude the Ministral chat arm.** Its generations are corrupted by template
+leakage, with `[INST]` and `</s>` markers appearing inside 70% of continuations at
+3B, 66% at 14B and 21% at 8B, plus empty generations at 3B and 14B. The resulting
+format gain oscillates in sign across rungs, which is the signature of broken data
+rather than a finding. Every other arm is clean, with zero empty and zero leaked
+generations, so the decomposition above stands while the native-token component
+does not have a value we trust for this family.
+
+### 5.4 Homogeneous text, divergent correctness
+
+High intra-model similarity is a claim about text, not about being right. On code
+we can measure both on the same samples.
+
+Using a sandboxed executor validated at 164/164 on HumanEval canonical solutions,
+we scored every candidate behind the arms above. `coder7B_inst__chat` sits at 0.8638
+intra, comfortably inside hivemind territory, while a single sample from it passes
+0.5404 of the time and the K = 8 pool contains a passing solution 0.9024 of the
+time.
+
+Across all 30 arms the gap between the pool and a single sample averages **+0.3151**
+and reaches +0.4649. For comparison the same quantity on GSM8K is +0.060. Samples
+that an encoder scores as 0.86 similar disagree about correctness on roughly a third
+of problems.
+
+**Embedding homogeneity does not imply outcome homogeneity.** This bounds what the
+hivemind result licenses: convergence in phrasing is real and we reproduced it, but
+it should not be read as convergence in what the models actually get right.
+
 ## 6. What transport predicts
 
 Within any given level, transport still carries information about which pairs
@@ -390,17 +498,48 @@ Section 8.
 
 **Seven-lab agreement was an artifact of reading one prompt.** Section 7.
 
+**Centered semantic voting does not select better code.** Anisotropy among code
+candidates is severe, 0.7929 mean pairwise cosine across 30 arms, so we expected
+centering by the pool mean to be necessary before consensus voting. It changes
+nothing: centered minus raw is −0.0016, with 8 wins, 12 losses and 10 ties. Medoid
+voting beats a random single sample by +0.0064, which is 2.0% of the +0.3151
+headroom. Centering corrects similarity magnitudes and leaves the argmax alone.
+
+**A cross-model transport selector did not survive replication, and we published
+the claim before checking.** Scoring candidates by how far a hidden state fails to
+return after transport around a closed cross-lab loop gave +0.0727 over the floor
+at p < 0.0001, passing a length control, a reversed-direction control and 10,000
+permutations. Refitting the ridge maps on a different set of arms, with the
+evaluated candidates and ground truth byte-identical, moved the same measurement to
++0.0158 at p = 0.1986, and at 14B it went to −0.0208 with the discriminative
+direction reversed. The signal belonged to the particular map fit, not to the
+candidates. We record it because the three controls we ran all passed on the
+configuration that was wrong, and none of them could have caught it. Varying an
+arbitrary knob would have.
+
+**The Ministral chat arm produced unusable data.** Section 5.3.
+
 ## 11. Limitations
 
-Our models are small. Section 5 shows frontier scale is not required to reach the
-reported level, but it does not show that frontier models reach it by the same
-route.
+Section 5.2 takes the ladder to 14B within one family and finds the format effect
+growing at +0.0473 per decade, which answers the small-model objection over a 30x
+range. It does not reach frontier scale, and it does not show that a 500B model
+reaches the reported level by this route.
 
 Our prompts are 60 hand-written open-ended stems, not 26,070 mined from real
 traffic, and our continuations are 48 tokens rather than full responses. The chat
 arm gives instruct models a format their base siblings never had, which is the
 point of the comparison, but it also means the two arms differ in effective task
 as well as in weights.
+
+The scale and replication ladders use 192 and 128 new tokens respectively. Chat
+arms spend part of that budget on preamble before content, so cross-arm comparisons
+of anything other than similarity, capability in particular, are confounded by
+truncation. We make no capability claim across arms for that reason.
+
+Section 5.3 covers three rungs of one additional family and excludes its chat arm
+for data corruption. It replicates the ordering of the decomposition, not the
+native-token term.
 
 We use a different scorer than they do. We matched the floor rather than the
 encoder because we do not have theirs, and Section 9 argues the floor is what
@@ -433,12 +572,18 @@ scores.
 - `scripts/hivemind_template_decomp.py`, `artifacts/nla/atlas/hivemind_template_decomp.json`
 - `scripts/hivemind_mechanism_link.py`, `artifacts/nla/atlas/hivemind_mechanism_link.json`
 - `scripts/hivemind_human_baseline.py`, `artifacts/nla/hivemind_human_baseline.json`
+- `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`
+- `scripts/ministral_ladder.py`, `artifacts/nla/ministral_ladder/`
+- `scripts/code_select.py`, `artifacts/nla/code_select/results.json`
+- `scripts/holonomy_select.py`, `artifacts/nla/holonomy/`, including the retraction sweep
 - `artifacts/nla/atlas/samples/` and `samples_instruct/`, sampled continuations
 - `scripts/bench_device.py`, same-task benchmark for cross-device comparison
 
-Every measurement ran on a single Apple M2 Ultra with 64 GB of unified memory,
-concurrently with that machine serving a 31B multimodal model to a public
-endpoint.
+Sections 1 through 5.1 and 6 through 10 ran on a single Apple M2 Ultra with 64 GB
+of unified memory, concurrently with that machine serving a 31B multimodal model to
+a public endpoint. Sections 5.2 through 5.4 ran on four RTX PRO 6000 Blackwell
+cards, one model per card, because 39,360 generations at 14B do not fit in the
+former.
 
 ## 13. Conclusion
 

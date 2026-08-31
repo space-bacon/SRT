@@ -1,0 +1,181 @@
+{
+  "question": "does the chat-template effect hold across model scale",
+  "family": "Ministral-3, Mistral AI, independent lab",
+  "domain": "prose stems",
+  "scorer": "sentence-transformers/all-MiniLM-L6-v2",
+  "per_arm": {
+    "ministral14B_base__raw": {
+      "intra": 0.4449,
+      "frac_above_0.8": 0.0,
+      "floor": 0.0968,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral14B_inst__chat": {
+      "intra": 0.317,
+      "frac_above_0.8": 0.0,
+      "floor": 0.14,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral14B_inst__persona": {
+      "intra": 0.5122,
+      "frac_above_0.8": 0.0167,
+      "floor": 0.113,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral14B_inst__raw": {
+      "intra": 0.4301,
+      "frac_above_0.8": 0.0,
+      "floor": 0.1011,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral14B_inst__shared": {
+      "intra": 0.8655,
+      "frac_above_0.8": 0.8333,
+      "floor": 0.1391,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral14B_inst__shared_persona": {
+      "intra": 0.8723,
+      "frac_above_0.8": 0.8833,
+      "floor": 0.1386,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral3B_base__raw": {
+      "intra": 0.4614,
+      "frac_above_0.8": 0.0,
+      "floor": 0.0993,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral3B_inst__chat": {
+      "intra": 0.281,
+      "frac_above_0.8": 0.0,
+      "floor": 0.1626,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral3B_inst__persona": {
+      "intra": 0.4919,
+      "frac_above_0.8": 0.0167,
+      "floor": 0.1055,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral3B_inst__raw": {
+      "intra": 0.4307,
+      "frac_above_0.8": 0.0,
+      "floor": 0.1018,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral3B_inst__shared": {
+      "intra": 0.8116,
+      "frac_above_0.8": 0.6667,
+      "floor": 0.1338,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral3B_inst__shared_persona": {
+      "intra": 0.8384,
+      "frac_above_0.8": 0.7667,
+      "floor": 0.1328,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral8B_base__raw": {
+      "intra": 0.4473,
+      "frac_above_0.8": 0.0,
+      "floor": 0.0979,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral8B_inst__chat": {
+      "intra": 0.5537,
+      "frac_above_0.8": 0.1,
+      "floor": 0.113,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral8B_inst__persona": {
+      "intra": 0.501,
+      "frac_above_0.8": 0.0167,
+      "floor": 0.1078,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral8B_inst__raw": {
+      "intra": 0.4251,
+      "frac_above_0.8": 0.0,
+      "floor": 0.1013,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral8B_inst__shared": {
+      "intra": 0.8558,
+      "frac_above_0.8": 0.8333,
+      "floor": 0.1329,
+      "n_prompts": 60,
+      "k": 8
+    },
+    "ministral8B_inst__shared_persona": {
+      "intra": 0.8564,
+      "frac_above_0.8": 0.85,
+      "floor": 0.1325,
+      "n_prompts": 60,
+      "k": 8
+    }
+  },
+  "curve": {
+    "3B": {
+      "params_b": 4.0,
+      "base_raw": 0.4614,
+      "inst_raw": 0.4307,
+      "inst_shared": 0.8116,
+      "tuning_gain": -0.0307
+    },
+    "8B": {
+      "params_b": 9.0,
+      "base_raw": 0.4473,
+      "inst_raw": 0.4251,
+      "inst_shared": 0.8558,
+      "tuning_gain": -0.0222
+    },
+    "14B": {
+      "params_b": 14.0,
+      "base_raw": 0.4449,
+      "inst_raw": 0.4301,
+      "inst_shared": 0.8655,
+      "tuning_gain": -0.0148
+    }
+  },
+  "trend": {
+    "INVALID": "derived from the excluded chat arm; see data_quality"
+  },
+  "data_quality": {
+    "chat_arm": "EXCLUDED - corrupted by template leakage",
+    "detail": {
+      "ministral14B_inst__chat": {
+        "n": 480,
+        "template_leaked": 315,
+        "empty": 3
+      },
+      "ministral8B_inst__chat": {
+        "n": 480,
+        "template_leaked": 102,
+        "empty": 0
+      },
+      "ministral3B_inst__chat": {
+        "n": 480,
+        "template_leaked": 336,
+        "empty": 6
+      }
+    },
+    "consequence": "every figure in trend[] and curve[].inst_chat/format_gain/total_gain is INVALID. Do not cite them. The base/inst raw, persona, shared and shared_persona arms are clean (0 empty, 0 leaked) and are what paper_hivemind section 5.3 uses."
+  }
+}

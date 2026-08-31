@@ -1,0 +1,290 @@
+{
+ "question": "does the chat-template effect hold across model scale",
+ "family": "Qwen2.5-Coder, one lab, one recipe, one tokenizer",
+ "domain": "HumanEval prompts",
+ "scorer": "sentence-transformers/all-MiniLM-L6-v2",
+ "per_arm": {
+  "coder0.5B_base__raw": {
+   "intra": 0.5966,
+   "frac_above_0.8": 0.0305,
+   "floor": 0.3266,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder0.5B_inst__chat": {
+   "intra": 0.865,
+   "frac_above_0.8": 0.939,
+   "floor": 0.2904,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder0.5B_inst__persona": {
+   "intra": 0.8009,
+   "frac_above_0.8": 0.6098,
+   "floor": 0.3828,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder0.5B_inst__raw": {
+   "intra": 0.7863,
+   "frac_above_0.8": 0.4451,
+   "floor": 0.3839,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder0.5B_inst__shared": {
+   "intra": 0.8508,
+   "frac_above_0.8": 0.8841,
+   "floor": 0.3027,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder0.5B_inst__shared_persona": {
+   "intra": 0.8571,
+   "frac_above_0.8": 0.9085,
+   "floor": 0.2971,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder1.5B_base__raw": {
+   "intra": 0.6371,
+   "frac_above_0.8": 0.1524,
+   "floor": 0.3077,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder1.5B_inst__chat": {
+   "intra": 0.8526,
+   "frac_above_0.8": 0.9024,
+   "floor": 0.2927,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder1.5B_inst__persona": {
+   "intra": 0.7684,
+   "frac_above_0.8": 0.3415,
+   "floor": 0.3521,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder1.5B_inst__raw": {
+   "intra": 0.7723,
+   "frac_above_0.8": 0.4207,
+   "floor": 0.3737,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder1.5B_inst__shared": {
+   "intra": 0.8414,
+   "frac_above_0.8": 0.8293,
+   "floor": 0.2983,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder1.5B_inst__shared_persona": {
+   "intra": 0.851,
+   "frac_above_0.8": 0.9207,
+   "floor": 0.2958,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder14B_base__raw": {
+   "intra": 0.6085,
+   "frac_above_0.8": 0.0976,
+   "floor": 0.3161,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder14B_inst__chat": {
+   "intra": 0.9055,
+   "frac_above_0.8": 0.9939,
+   "floor": 0.295,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder14B_inst__persona": {
+   "intra": 0.784,
+   "frac_above_0.8": 0.5732,
+   "floor": 0.3198,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder14B_inst__raw": {
+   "intra": 0.7653,
+   "frac_above_0.8": 0.4085,
+   "floor": 0.3385,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder14B_inst__shared": {
+   "intra": 0.8974,
+   "frac_above_0.8": 0.9756,
+   "floor": 0.3194,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder14B_inst__shared_persona": {
+   "intra": 0.8932,
+   "frac_above_0.8": 0.9634,
+   "floor": 0.3062,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder3B_base__raw": {
+   "intra": 0.6416,
+   "frac_above_0.8": 0.1341,
+   "floor": 0.3189,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder3B_inst__chat": {
+   "intra": 0.8764,
+   "frac_above_0.8": 0.9451,
+   "floor": 0.2924,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder3B_inst__persona": {
+   "intra": 0.79,
+   "frac_above_0.8": 0.4573,
+   "floor": 0.3317,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder3B_inst__raw": {
+   "intra": 0.7499,
+   "frac_above_0.8": 0.3293,
+   "floor": 0.3549,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder3B_inst__shared": {
+   "intra": 0.8752,
+   "frac_above_0.8": 0.9512,
+   "floor": 0.2912,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder3B_inst__shared_persona": {
+   "intra": 0.8823,
+   "frac_above_0.8": 0.9512,
+   "floor": 0.2938,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder7B_base__raw": {
+   "intra": 0.6215,
+   "frac_above_0.8": 0.0732,
+   "floor": 0.3139,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder7B_inst__chat": {
+   "intra": 0.8638,
+   "frac_above_0.8": 0.9268,
+   "floor": 0.3029,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder7B_inst__persona": {
+   "intra": 0.6849,
+   "frac_above_0.8": 0.189,
+   "floor": 0.3025,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder7B_inst__raw": {
+   "intra": 0.7315,
+   "frac_above_0.8": 0.2805,
+   "floor": 0.3333,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder7B_inst__shared": {
+   "intra": 0.8648,
+   "frac_above_0.8": 0.9512,
+   "floor": 0.3009,
+   "n_prompts": 164,
+   "k": 8
+  },
+  "coder7B_inst__shared_persona": {
+   "intra": 0.8719,
+   "frac_above_0.8": 0.9451,
+   "floor": 0.2933,
+   "n_prompts": 164,
+   "k": 8
+  }
+ },
+ "curve": {
+  "0.5B": {
+   "params_b": 0.5,
+   "base_raw": 0.5966,
+   "inst_raw": 0.7863,
+   "inst_chat": 0.865,
+   "inst_shared": 0.8508,
+   "tuning_gain": 0.1897,
+   "format_gain": 0.0787,
+   "total_gain": 0.2684,
+   "frac_above_0.8_chat": 0.939,
+   "floor_chat": 0.2904
+  },
+  "1.5B": {
+   "params_b": 1.5,
+   "base_raw": 0.6371,
+   "inst_raw": 0.7723,
+   "inst_chat": 0.8526,
+   "inst_shared": 0.8414,
+   "tuning_gain": 0.1352,
+   "format_gain": 0.0803,
+   "total_gain": 0.2155,
+   "frac_above_0.8_chat": 0.9024,
+   "floor_chat": 0.2927
+  },
+  "3B": {
+   "params_b": 3.1,
+   "base_raw": 0.6416,
+   "inst_raw": 0.7499,
+   "inst_chat": 0.8764,
+   "inst_shared": 0.8752,
+   "tuning_gain": 0.1083,
+   "format_gain": 0.1265,
+   "total_gain": 0.2348,
+   "frac_above_0.8_chat": 0.9451,
+   "floor_chat": 0.2924
+  },
+  "7B": {
+   "params_b": 7.6,
+   "base_raw": 0.6215,
+   "inst_raw": 0.7315,
+   "inst_chat": 0.8638,
+   "inst_shared": 0.8648,
+   "tuning_gain": 0.11,
+   "format_gain": 0.1323,
+   "total_gain": 0.2423,
+   "frac_above_0.8_chat": 0.9268,
+   "floor_chat": 0.3029
+  },
+  "14B": {
+   "params_b": 14.8,
+   "base_raw": 0.6085,
+   "inst_raw": 0.7653,
+   "inst_chat": 0.9055,
+   "inst_shared": 0.8974,
+   "tuning_gain": 0.1568,
+   "format_gain": 0.1402,
+   "total_gain": 0.297,
+   "frac_above_0.8_chat": 0.9939,
+   "floor_chat": 0.295
+  }
+ },
+ "trend": {
+  "format_gain_slope_per_decade": 0.0473,
+  "tuning_gain_slope_per_decade": -0.0285,
+  "format_gain_range": [
+   0.0787,
+   0.1402
+  ],
+  "paper_small_model_format_gain": 0.3623,
+  "reading": "a slope near zero means the format effect is scale-free and the small-model objection to section 5 fails; a clearly negative slope means it decays with scale and the paper needs to say so"
+ }
+}
