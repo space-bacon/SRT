@@ -73,6 +73,7 @@
    0.82
   ]
  },
+ "intra_minus_inter": 0.0244,
  "floor_different_prompt": 0.0993,
  "link_transport_vs_inter": {
   "all": {

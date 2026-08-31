@@ -157,6 +157,8 @@ def main():
             "range": [round(float(inter.min()), 4), round(float(inter.max()), 4)],
             "cross_lab_mean": round(float(inter[cross].mean()), 4),
             "paper_range": [0.71, 0.82]},
+        # Their headline shape: resamples barely more distinctive than a rival's output.
+        "intra_minus_inter": round(float(im.mean() - inter.mean()), 4),
         "floor_different_prompt": round(floor, 4),
         "link_transport_vs_inter": {
             "all": {"n": len(pairs), "rho": round(spearman(tr, inter), 4),
