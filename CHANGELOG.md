@@ -66,6 +66,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   been run over the pool it describes. It is a bound on what better selection
   could win and nothing more. Agreement returns the majority, so extra members
   mostly add votes for what the pool already believed.
+- **Two follow-on directions, both measured and both dead.** Cluster reranking:
+  the majority cluster is already correct on 160 of the 162 solvable problems
+  and only 2 are minority-held, so the whole approach tops out at +2 problems.
+  Probe resolution: sweeping `n_cases` over {2,4,6,12,24,48} crossed with K
+  {2,4,8} moves accuracy by nothing at any K, and is faintly negative at the
+  top, while cluster purity climbs 0.7076 to 0.8909. Sharper probes do split the
+  impure clusters exactly as predicted; the candidates they separate are not the
+  ones that pass. **K is the only lever that moves accuracy**, so latency is the
+  currency and there is no cheap substitute for sampling.
 
 - **The Lab-map reader re-measured without contamination, and it reaches
   human parity.** Refit the sunstone head from the same gemma L47 states with

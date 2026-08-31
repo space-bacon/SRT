@@ -22,7 +22,7 @@ from .consensus import choose
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("file", nargs="?", help="JSON file; stdin if omitted")
-    ap.add_argument("--cases", type=int, default=6)
+    ap.add_argument("--cases", type=int, default=2)
     ap.add_argument("--timeout", type=float, default=8.0)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--print-reply", action="store_true",

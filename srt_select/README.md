@@ -67,6 +67,13 @@ because agreement returns the majority and extra members mostly add votes for
 what the pool already believed. Point this at one model's samples, not at an
 ensemble.
 
+**More probe inputs do not help.** `n_cases` defaults to 2 because that is what
+the sweep supports: from 2 to 48 inputs, accuracy does not move at any K, while
+cluster purity climbs 0.7076 to 0.8909. The sharper probe genuinely does split
+clusters that mix passing and failing candidates, and the candidates it
+separates are not the ones that pass. Raising it only costs coverage, since
+every extra input is another chance for a candidate to crash.
+
 **A learned verifier did worse.** Fitting a classifier on 47,232 execution
 labels reached 0.2639 on HumanEval against this method's 0.4426, and it did not
 transfer to MBPP. Executing the pool beat learning to score it, on both

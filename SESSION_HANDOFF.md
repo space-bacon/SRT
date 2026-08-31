@@ -48,13 +48,17 @@
 
 ## Open items
 
-- **Next experiment, no GPU needed:** characterise the clusters on the eight
-  problems only the oracle reaches. Agreement fails there because the correct
-  answer is a minority cluster; the question is whether that cluster is readable
-  by anything other than its size. See `FORWARD_PLAN.md` "Selection".
+- **The oracle gap is closed, and my prediction about it was wrong.** I expected
+  a ranking failure. The majority cluster is correct on 160 of 162 solvable
+  problems, only 2 are minority-held, so cluster reranking tops out at +2. The
+  loss is inside the correct cluster (purity 0.7730), which pointed at probe
+  resolution, and that is flat too: n_cases 2 to 48 moves accuracy by nothing
+  while purity climbs 0.71 to 0.89. **K is the only lever.** Set n_cases to 2.
 - Coverage on docstring-only prompts (HumanEval resolves 55.0% vs MBPP 98.6%).
-- Frontier trio still unrun, and now only motivated as ladder replication rather
-  than as ensemble members.
+- Frontier trio downloading. Motivated as a competitive reference and as a test
+  of whether the decay law extends to reasoning-first MoE, which it was never
+  fit on. `frontier_select.py` reports cluster counts so collapse and branching
+  can be told apart.
 
 ---
 

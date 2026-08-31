@@ -456,29 +456,42 @@ Package: `srt_select`. Paper: `paper_hivemind.md` §5.4. Artifacts:
 `RiverRider/srt-hivemind`. Standing numbers: HumanEval 0.1868 → 0.4426
 (oracle 0.4954), MBPP 0.7185 → 0.8174 (oracle 0.8887).
 
-### 1. The eight problems agreement cannot reach *(the live question)*
+### 1. The oracle gap is closed as a research direction *(answered 2026-08-31)*
 
-The pooled null says a diverse pool holds 162 of 164 solvable problems while
-every selector we have finds at most 155. That gap is not a coverage problem,
-it is a ranking problem: agreement returns the majority, and the correct answer
-in those eight cases is held by a minority of the pool.
+The pooled null said a diverse pool holds 162 of 164 solvable problems while no
+selector finds more than 155. I predicted a ranking failure: agreement returns
+the majority, so the correct answer must sit in a minority cluster. **That was
+wrong**, and two runs killed it.
 
-Two candidate attacks, in order of cheapness:
+`minority_clusters.json`: the majority cluster is correct on **160 of the 162**
+solvable problems. Only **2** are genuinely minority-held. Cluster reranking has
+a ceiling of +2 problems and is not worth building.
 
-- [ ] **Minority-aware selection.** Instead of taking the largest output
-      cluster, characterise the clusters. On the eight oracle-only problems,
-      does the correct cluster differ from the majority cluster in any readable
-      way (size, member identity, agreement with the prompt's stated examples,
-      candidate length, which lab produced it)? This is analysis on existing
-      artifacts and needs no GPU. It either finds a signal or bounds how much
-      is there, and both outcomes are publishable.
-- [ ] **Cluster-level scoring rather than candidate-level.** The learned
-      verifier failed at candidate scoring (0.2639, no transfer). Scoring
-      *clusters* is a different and much smaller problem: 2 to 6 clusters per
-      problem instead of 8 to 48 candidates, and the features are structural
-      rather than lexical. Do not repeat the candidate-level verifier.
+The loss is inside the correct cluster instead: purity 0.7730, with 59 of 164
+problems carrying a cluster that holds both passing and failing candidates. That
+pointed at `n_cases`, the probe resolution, which had been 6 since the first
+version and was never swept.
 
-**Do not** run more pooling variants. That question is answered: +0.0000.
+`probe_depth.json` and `cases_sweep.json` both say that is also a dead end:
+
+| | cases 2 | cases 6 | cases 48 |
+|---|---:|---:|---:|
+| K=2 | 0.7546 | 0.7546 | 0.7539 |
+| K=4 | 0.7868 | 0.7856 | 0.7835 |
+| K=8 | 0.8073 | 0.8094 | 0.8092 |
+
+Purity climbs 0.7076 to 0.8909 on the pooled set while accuracy sits at 0.9390,
+unmoved. Sharper probes do split the impure clusters; the candidates they
+separate are simply not the ones that pass.
+
+**Standing conclusions.** K is the only lever that moves accuracy, so latency is
+the currency and there is no cheap substitute for sampling. Set `n_cases` to 2
+rather than 6: identical accuracy, and it slightly improves coverage since every
+extra probe input is another chance for a candidate to crash.
+
+**Do not** run more pooling variants (+0.0000), more cluster-reranking (ceiling
++2), more probe-resolution work (flat), or another candidate-level verifier
+(0.2639, no transfer).
 
 ### 2. Coverage on HumanEval-like prompts
 

@@ -46,9 +46,12 @@ class Selection:
         return self.cluster_size > 1
 
 
-def choose(user_text: str, replies, n_cases: int = 6, timeout: float = 8.0,
+def choose(user_text: str, replies, n_cases: int = 2, timeout: float = 8.0,
            seed: int = 0) -> Selection:
     """Index of the reply the pool agrees with. Executes untrusted code.
+
+    n_cases is 2 because the sweep from 2 to 48 moves accuracy at no K, while
+    every extra input is another chance for a candidate to crash and be dropped.
 
     See `srt_select.sandbox` for what confinement this does and does not give.
     """
