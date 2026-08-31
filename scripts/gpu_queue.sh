@@ -30,23 +30,28 @@ fi
 
 gpu="${1:?usage: gpu_queue.sh <gpu-id> <jobfile>}"
 jobs="${2:?usage: gpu_queue.sh <gpu-id> <jobfile>}"
-log="logs/queue_gpu${gpu}.log"
+log="logs/queue_gpu${gpu//,/_}.log"
 mkdir -p logs
 
 # A fixed sleep cannot help when something outside the queue still holds the
 # card, which is how the first queued job died with 6 MB free of 102 GB. Wait
 # for the GPU to actually drain before loading the next model.
+# gpu may be a list like "0,1": the frontier models need several cards each, and
+# every one of them has to be free before a sharded load will fit.
 wait_for_free() {
-  local want_mb=${1:-4000} waited=0
-  while (( waited < 1800 )); do
-    local used
-    used=$(nvidia-smi --id="$gpu" --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null)
-    [[ -z "$used" ]] && return 0
-    (( used < want_mb )) && return 0
-    (( waited % 120 == 0 )) && echo "QUEUE-WAIT gpu=$gpu ${used}MiB in use, waiting"
+  local want_mb=${1:-4000} waited=0 busy
+  while (( waited < 5400 )); do
+    busy=""
+    for id in ${gpu//,/ }; do
+      local used
+      used=$(nvidia-smi --id="$id" --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null)
+      [[ -n "$used" ]] && (( used >= want_mb )) && busy="$busy $id:${used}MiB"
+    done
+    [[ -z "$busy" ]] && return 0
+    (( waited % 120 == 0 )) && echo "QUEUE-WAIT gpu=$gpu busy:$busy"
     sleep 15; waited=$((waited + 15))
   done
-  echo "QUEUE-WAIT-TIMEOUT gpu=$gpu still busy after 30m, starting anyway"
+  echo "QUEUE-WAIT-TIMEOUT gpu=$gpu still busy after 90m, starting anyway"
 }
 
 {
@@ -76,8 +81,8 @@ wait_for_free() {
     sleep 10
   done < "$jobs"
   echo "QUEUE-DONE gpu=$gpu $(date -Is)"
-  rm -f "logs/queue_gpu${gpu}.pid"
+  rm -f "logs/queue_gpu${gpu//,/_}.pid"
 } >> "$log" 2>&1 &
 
-echo $! > "logs/queue_gpu${gpu}.pid"
-echo "queue on gpu $gpu -> $log (pid $(cat logs/queue_gpu${gpu}.pid))"
+echo $! > "logs/queue_gpu${gpu//,/_}.pid"
+echo "queue on gpu $gpu -> $log (pid $(cat logs/queue_gpu${gpu//,/_}.pid))"
