@@ -431,6 +431,29 @@ The homogeneity Section 5 measures is in the text; the residual disagreement, wh
 is invisible to an encoder, is enough to pick a correct answer four times out of
 nine when a single sample manages fewer than two.
 
+Repeating all of it on MBPP, 425 problems over ten arms of the same family, changes
+the ranking and is the reason we report both:
+
+| read | HumanEval share | MBPP share |
+|---|---:|---:|
+| learned verifier | 25.0% | **6.3%** |
+| filter by the prompt's own examples | 73.8% | **76.8%** |
+| that filter plus the verifier | 80.1% | 76.4% |
+| agreement among candidates | **82.9%** | 58.1% |
+
+**The verifier does not transfer.** A quarter of the gap on the benchmark it was
+tuned against becomes 6.3% on the other one, and adding it to example-filtering now
+costs 0.0007 rather than gaining. Together with the earlier finding that surface
+features alone reach 0.2229 of its 0.2646, most of what it learned was the shape of
+HumanEval rather than the shape of correct code.
+
+**The order of the other two is a coverage effect, not a ranking.** MBPP states an
+example for 425 of 425 problems, so filtering reaches everything and wins. HumanEval
+states one for 128 of 164, and agreement wins there only by covering the remaining
+36. Neither method is better than the other in general. What decides it is whether
+the prompt happens to say what the answer should be, which is a property of the
+benchmark rather than of the reader.
+
 ### 5.5 It can be suppressed, but not by anything anyone ships
 
 Everything above adds framing and watches similarity rise. That is an explanation,
@@ -639,9 +662,11 @@ headroom. Centering corrects similarity magnitudes and leaves the argmax alone.
 classifier on 47,232 execution labels was the one read that survived its nuisance
 knobs, at +0.0771 over the floor with a spread of 0.0090 across six configurations.
 It is still beaten by running the examples the prompt already contains (−0.1506) and
-by candidate agreement (−0.1787). We report it because the negative is the useful
+by candidate agreement (−0.1787). **It also fails to transfer**, falling from 25.0%
+of the gap on HumanEval to 6.3% on MBPP, where appending it to example-filtering
+makes that baseline slightly worse. We report it because the negative is the useful
 part: the supervised signal we paid for is worth a quarter of what falls out of
-executing the pool for free.
+executing the pool for free, on one benchmark, and almost nothing on the other.
 
 **We twice weakened a baseline by accident, and both times it flattered us.** Our
 first example extractor read only doctest blocks with literal expected values,
@@ -735,6 +760,8 @@ scores.
 - `scripts/verifier_select.py` and `scripts/exec_guided_select.py`, `artifacts/nla/verifier/`
 - `scripts/visible_tests.py`, prompt-derived example extraction with canonical validation
 - `scripts/consensus_select.py`, `artifacts/nla/verifier/consensus.json`
+- `scripts/chat_consensus.py`, selection from a chat turn with no benchmark metadata
+- `scripts/mbpp_ladder.py` and `scripts/fetch_mbpp.py`, `artifacts/nla/mbpp_ladder/`
 - `scripts/holonomy_select.py`, `artifacts/nla/holonomy/`, including the retraction sweep
 - `artifacts/nla/atlas/samples/` and `samples_instruct/`, sampled continuations
 - `scripts/bench_device.py`, same-task benchmark for cross-device comparison

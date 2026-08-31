@@ -1,0 +1,94 @@
+{
+  "bench": "mbpp",
+  "n_problems": 425,
+  "arms": {
+    "mbpp1.5B_inst__chat": {
+      "chat_consensus": 0.6424,
+      "on_resolved_only": 0.6424,
+      "resolved": 425,
+      "n": 425,
+      "floor": 0.5662,
+      "oracle": 0.8118
+    },
+    "mbpp1.5B_inst__shared": {
+      "chat_consensus": 0.6729,
+      "on_resolved_only": 0.6729,
+      "resolved": 425,
+      "n": 425,
+      "floor": 0.5829,
+      "oracle": 0.8259
+    },
+    "mbpp14B_inst__chat": {
+      "chat_consensus": 0.8706,
+      "on_resolved_only": 0.9089,
+      "resolved": 406,
+      "n": 425,
+      "floor": 0.7941,
+      "oracle": 0.9059
+    },
+    "mbpp14B_inst__shared": {
+      "chat_consensus": 0.8659,
+      "on_resolved_only": 0.8798,
+      "resolved": 416,
+      "n": 425,
+      "floor": 0.8074,
+      "oracle": 0.9224
+    },
+    "mbpp32B_inst__chat": {
+      "chat_consensus": 0.8706,
+      "on_resolved_only": 0.8697,
+      "resolved": 422,
+      "n": 425,
+      "floor": 0.8609,
+      "oracle": 0.9176
+    },
+    "mbpp32B_inst__shared": {
+      "chat_consensus": 0.8541,
+      "on_resolved_only": 0.8555,
+      "resolved": 422,
+      "n": 425,
+      "floor": 0.8494,
+      "oracle": 0.9176
+    },
+    "mbpp3B_inst__chat": {
+      "chat_consensus": 0.7741,
+      "on_resolved_only": 0.8005,
+      "resolved": 411,
+      "n": 425,
+      "floor": 0.6203,
+      "oracle": 0.8635
+    },
+    "mbpp3B_inst__shared": {
+      "chat_consensus": 0.7906,
+      "on_resolved_only": 0.8014,
+      "resolved": 418,
+      "n": 425,
+      "floor": 0.6532,
+      "oracle": 0.8871
+    },
+    "mbpp7B_inst__chat": {
+      "chat_consensus": 0.8376,
+      "on_resolved_only": 0.8416,
+      "resolved": 423,
+      "n": 425,
+      "floor": 0.7188,
+      "oracle": 0.9153
+    },
+    "mbpp7B_inst__shared": {
+      "chat_consensus": 0.8118,
+      "on_resolved_only": 0.8156,
+      "resolved": 423,
+      "n": 425,
+      "floor": 0.7315,
+      "oracle": 0.92
+    }
+  },
+  "note": "selector sees only the prompt text and the candidate replies",
+  "summary": {
+    "floor": 0.7185,
+    "chat_consensus": 0.7991,
+    "oracle": 0.8887,
+    "resolved": 0.9861,
+    "gain_over_floor": 0.0806
+  }
+}
