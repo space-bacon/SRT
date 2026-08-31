@@ -460,6 +460,16 @@ at 3B to +0.0097 at 32B, where it captures 17% of the remaining headroom rather 
 60%. The selector has not stopped working. The room has gone, because a single sample
 from the 32B model already passes 0.8609.
 
+**Read the other way, that decay is the useful part.** The 14B rung with selection
+reaches 0.8706, and the 32B rung unaided reaches 0.8609, on the same 425 problems.
+Selecting among eight samples from a 14B is worth about one size class, which is the
+only practical claim this section supports. It is worth exactly as much as sampling
+eight times costs, and that cost is a property of the serving stack rather than of
+the method: decode is memory-bandwidth bound, so K samples in one batch stream the
+weights once, while K samples served sequentially do not. We have not measured that
+curve, so we do not claim the trade is favourable, only that this is where the
+question sits.
+
 That slope is the chat-native read, which is the deployable one. A slope is only
 defined once you say which read produced it, so: agreement over the pool gives
 −0.0815 and execution-guided filtering gives −0.1192, the last of these fitting
@@ -687,6 +697,23 @@ model's own eight, +0.0000. We had reported a union ceiling of 0.9878 for months
 without ever running a selector over the pool it describes, which let an oracle
 statement read as though it were an ensembling result. Section 5.4.
 
+**Reranking clusters cannot recover the oracle gap.** The pooled null leaves eight
+problems that some candidate solves and no selector finds, and since agreement
+returns the largest output cluster we expected those to sit in minority clusters.
+They do not. The majority cluster is already correct on **160 of the 162** solvable
+problems and only **2** are genuinely minority-held, so the entire approach has a
+ceiling of two problems. We had a design ready to build before measuring the
+incidence, and the measurement retired it.
+
+**A sharper probe does not help either.** Those losses sit inside the correct
+cluster: purity is 0.7730, with 59 of 164 problems carrying a cluster that holds
+both passing and failing candidates, which pointed at the number of synthesised
+inputs used to separate them. Sweeping that from 2 to 48, crossed with K in
+{2, 4, 8}, moves accuracy at no value of K and is faintly negative at the top,
+while cluster purity climbs from 0.7076 to 0.8909. The sharper probe splits the
+impure clusters exactly as predicted, and the candidates it separates are not the
+ones that pass. Two consecutive mechanisms, both real, both worth nothing.
+
 **The mechanism link failed under greedy decoding**, cross-lab +0.2213 at
 p = 0.0866, and we published that null before establishing the decode was wrong.
 Section 7.
@@ -816,6 +843,12 @@ scores.
 - `scripts/chat_consensus.py`, selection from a chat turn with no benchmark metadata
 - `scripts/mbpp_ladder.py` and `scripts/fetch_mbpp.py`, `artifacts/nla/mbpp_ladder/`
 - `scripts/holonomy_select.py`, `artifacts/nla/holonomy/`, including the retraction sweep
+- `scripts/ensemble_ceiling.py`, `artifacts/nla/ensemble/union_ceiling_fixed.json`
+- `scripts/pooled_select.py`, `artifacts/nla/ensemble/pooled_select.json`
+- `scripts/minority_clusters.py`, `artifacts/nla/ensemble/minority_clusters.json`
+- `scripts/probe_depth_sweep.py` and `scripts/cases_sweep.py`, the probe-resolution nulls
+- `scripts/hivemind_census.py`, `artifacts/nla/hivemind_census.json`, the corpus census and all three decay slopes
+- `scripts/make_hivemind_figures.py`, which reads every plotted value from the artifacts above
 - `artifacts/nla/atlas/samples/` and `samples_instruct/`, sampled continuations
 - `scripts/bench_device.py`, same-task benchmark for cross-device comparison
 
