@@ -31,9 +31,16 @@ The same tuned weights prompted through the model's own chat template raise it b
 the band reported for frontier systems from models of 0.6B to 2B. **The prompt
 format does roughly 4.6 times the work of the tuning.**
 
+Decomposing that template gives a fourth result. The system persona contributes
+nothing on its own, moving similarity by −0.0120. Generic role markers that no
+model was ever trained on reproduce 66% of the full template effect, and each
+model's own tuned tokens supply the remaining 34%. What drives the convergence is
+the assistant turn structure, not what the system prompt says.
+
 The homogeneity is not inherited from pretrained geometry and is not mostly bought
-by instruction tuning. It largely arrives with the deployment format. We also
-report negatives, including a published null that later reversed.
+by instruction tuning. It largely arrives with the deployment format, and most of
+that is reachable by prompt convention alone. We also report negatives, including
+a published null that later reversed.
 
 ---
 
@@ -229,6 +236,51 @@ Both arms were necessary. A chat-only design would have concluded that
 post-training causes the homogeneity. A raw-only design would have concluded that
 post-training barely matters. Both conclusions are wrong.
 
+### 5.1 Which part of the template does it
+
+A chat template bundles a system persona, role structure and native special tokens
+trained during tuning. Section 5 cannot say which one carries the effect.
+
+We separate them with five arms, each a plain string transformation of the same
+stem. Editing six different Jinja templates would have been fragile, and any
+difference here is attributable to the transformation. The `shared` arms use
+markers no model was ever trained on, identical across all six.
+
+| arm | what the model sees | intra | inter | floor | gain over raw |
+|---|---|---:|---:|---:|---:|
+| raw | the bare stem | 0.4435 | 0.4045 | 0.1125 | |
+| persona | `You are a helpful assistant.` then the stem | 0.4315 | 0.3958 | 0.1076 | **−0.0120** |
+| shared | `### User:` / `### Assistant:` | 0.6018 | 0.5186 | 0.0976 | **+0.1583** |
+| shared_persona | persona plus those markers | 0.6310 | 0.5775 | 0.0961 | **+0.1875** |
+| chat | the model's own template | 0.7272 | 0.6464 | 0.1028 | **+0.2837** |
+
+The total effect of +0.2837 decomposes as:
+
+| component | intra gain |
+|---|---:|
+| persona text alone | −0.0120 |
+| role structure alone | +0.1583 |
+| persona added within a role structure | +0.0292 |
+| native tuned tokens | +0.0962 |
+
+**The persona is not the cause.** Telling a model it is a helpful assistant, as
+plain text, moves intra-model similarity by −0.0120. That is nothing, and slightly
+the wrong way. This is worth stating plainly because the intuitive explanation for
+the hivemind is that every lab writes the same system prompt. Measured, that
+explanation is false. The persona earns its +0.0292 only once a role frame exists
+for it to attach to.
+
+**The turn structure is the largest single component**, at +0.1583, and it works
+with plain-text markers that no model saw in training.
+
+**Generic framing reproduces 66% of the full template effect.** The model's own
+tuned tokens supply the remaining 34%, which is real and a minority. So the
+convergence is mostly the assistant frame, reachable by prompt convention alone,
+with a genuine but secondary contribution from the tuned format.
+
+The floor stays between 0.0961 and 0.1125 across all five arms, so none of this is
+a scale artifact.
+
 ## 6. What transport predicts
 
 Within any given level, transport still carries information about which pairs
@@ -360,9 +412,15 @@ reasoning or code.
 The correlation in Section 6 is roughly a tenth of the variance. It orders pairs;
 it does not explain them.
 
-We have not decomposed the chat template itself. It bundles a system persona, role
-markers and a generation prefix, and we do not know which part carries the effect.
-That is the obvious next experiment and it is cheap.
+Section 5.1 uses one persona sentence and one generic marker format. A different
+persona, or markers closer to a specific model's native format, could shift the
+66/34 split. We have shown that generic framing recovers most of the effect, not
+that this particular framing is optimal.
+
+We have not tested whether the effect can be suppressed. Everything here adds
+framing and measures convergence going up. Whether a deliberately varied set of
+frames drives it back down, which is what would matter for anyone trying to fix
+this, is untested.
 
 ## 12. Artifacts
 
@@ -372,6 +430,7 @@ scores.
 - `scripts/openweight_transport_atlas.py`, `artifacts/nla/atlas/openweight_transport_atlas.json`
 - `scripts/hivemind_sampled_protocol.py`, `artifacts/nla/atlas/hivemind_sampled_protocol.json`
 - `scripts/hivemind_posttraining_isolation.py`, `artifacts/nla/atlas/hivemind_posttraining_isolation.json`
+- `scripts/hivemind_template_decomp.py`, `artifacts/nla/atlas/hivemind_template_decomp.json`
 - `scripts/hivemind_mechanism_link.py`, `artifacts/nla/atlas/hivemind_mechanism_link.json`
 - `scripts/hivemind_human_baseline.py`, `artifacts/nla/hivemind_human_baseline.json`
 - `artifacts/nla/atlas/samples/` and `samples_instruct/`, sampled continuations
@@ -406,15 +465,22 @@ sufficient.
 reaching 0.7272, with four of six models above 0.80 at parameter counts three
 orders of magnitude below the systems originally measured.
 
+**And it is the turn structure, not the persona.** Telling a model it is a helpful
+assistant does nothing by itself, −0.0120. Generic role markers no model was
+trained on recover 66% of the template's effect, with the tuned tokens supplying
+the rest.
+
 The homogeneity that matters is therefore not inherited from pretraining and is
 not mostly purchased by alignment. It is largely a consequence of how models are
-addressed at inference: a template that puts every system into the same helpful
-assistant frame, answering as that frame answers.
+addressed at inference: not the words in the system prompt, but the act of putting
+the model in an assistant's turn and asking it to speak there.
 
 That is a more optimistic finding than a hivemind living in the weights, because
-it is a product decision rather than a property of the technology, and it is
-reversible at the prompt layer. It is also a warning, because a homogeneity that
-comes from the interface will not be fixed by training more diverse models.
+two-thirds of it is a prompt convention rather than a property of any model, and
+conventions can be changed. It is also a warning, because a homogeneity that comes
+from the interface will not be fixed by training more diverse models, and every
+lab converging on the same turn format is enough to produce it without anyone
+choosing it.
 
 Establishing it required opening the models, which is the one move the original
 design could not make.
