@@ -51,11 +51,13 @@ def snap(repo):
 
 def render(tok, stem, mode):
     msgs = [{"role": "user", "content": INSTR + stem}]
+    # GLM-family templates open a <think> block by default, which burns the whole
+    # budget on analysis before any code. Templates without the flag ignore it.
     try:
-        o = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=True)
-    except Exception:
         o = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=True,
-                                    chat_template="default")
+                                    enable_thinking=False)
+    except Exception:
+        o = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=True)
     return (o["input_ids"] if hasattr(o, "keys") else o), False, False
 
 

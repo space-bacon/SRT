@@ -29,8 +29,8 @@
       "lab": "Zhipu",
       "repo": "zai-org/GLM-4.7-Flash",
       "k": 8,
-      "pass_at_1": 0.0526,
-      "pass_at_k": 0.2927
+      "pass_at_1": 0.7904,
+      "pass_at_k": 0.9512
     },
     "qwen3c_30b": {
       "lab": "Alibaba",
@@ -48,30 +48,30 @@
     }
   },
   "union": {
-    "union_pass": 0.9756,
+    "union_pass": 0.9878,
     "best_single_pass_at_k": 0.9634,
     "best_single": "gemma4_31b",
-    "union_minus_best": 0.0122,
-    "mean_single_pass_at_1": 0.7168,
+    "union_minus_best": 0.0244,
+    "mean_single_pass_at_1": 0.8398,
     "solved_by_exactly_one_model": {
       "gemma4_31b": 0,
-      "glm47_flash": 0,
+      "glm47_flash": 2,
       "ministral_14b": 0,
       "ornith_35b": 0,
       "qwen25c_32b": 0,
       "qwen3c_30b": 0
     },
-    "solved_by_none": 4,
+    "solved_by_none": 2,
     "pairwise_jaccard": {
-      "gemma4_31b|glm47_flash": 0.3038,
+      "gemma4_31b|glm47_flash": 0.9503,
       "gemma4_31b|ministral_14b": 0.95,
       "gemma4_31b|ornith_35b": 0.943,
       "gemma4_31b|qwen25c_32b": 0.9437,
       "gemma4_31b|qwen3c_30b": 0.9434,
-      "glm47_flash|ministral_14b": 0.3032,
-      "glm47_flash|ornith_35b": 0.3221,
-      "glm47_flash|qwen25c_32b": 0.3137,
-      "glm47_flash|qwen3c_30b": 0.3179,
+      "glm47_flash|ministral_14b": 0.9255,
+      "glm47_flash|ornith_35b": 0.8944,
+      "glm47_flash|qwen25c_32b": 0.9313,
+      "glm47_flash|qwen3c_30b": 0.9187,
       "ministral_14b|ornith_35b": 0.9177,
       "ministral_14b|qwen25c_32b": 0.9308,
       "ministral_14b|qwen3c_30b": 0.9304,
@@ -79,9 +79,5 @@
       "ornith_35b|qwen3c_30b": 0.9231,
       "qwen25c_32b|qwen3c_30b": 0.9363
     }
-  },
-  "SUPERSEDED": {
-    "by": "union_ceiling_fixed.json",
-    "reason": "GLM-4.7-Flash was rendered with its <think> block open, so it spent the whole 512-token budget on analysis and never emitted code. Its pass@1 here (0.0526) is a render bug, not a capability. Fixed run: 0.7904. Every union figure in this file understates the pool."
   }
 }
