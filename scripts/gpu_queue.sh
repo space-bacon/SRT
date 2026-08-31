@@ -19,7 +19,7 @@ if [[ "${1:-}" == "status" ]]; then
   nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader |
     while IFS=, read -r i mem util; do
       st="idle"; [[ -f logs/queue_gpu$i.pid ]] && kill -0 "$(cat logs/queue_gpu$i.pid)" 2>/dev/null && st="running"
-      last=$(tail -1 "logs/queue_gpu$i.log" 2>/dev/null | tr -s ' ' | cut -c1-72)
+      last=$(tr '\r' '\n' < "logs/queue_gpu$i.log" 2>/dev/null | grep -av "^$" | tail -1 | tr -s ' ' | cut -c1-70)
       printf '%-6s %-9s %s | %s\n' "$i" "$st" "${mem}${util}" "$last"
     done
   echo
@@ -33,12 +33,29 @@ jobs="${2:?usage: gpu_queue.sh <gpu-id> <jobfile>}"
 log="logs/queue_gpu${gpu}.log"
 mkdir -p logs
 
+# A fixed sleep cannot help when something outside the queue still holds the
+# card, which is how the first queued job died with 6 MB free of 102 GB. Wait
+# for the GPU to actually drain before loading the next model.
+wait_for_free() {
+  local want_mb=${1:-4000} waited=0
+  while (( waited < 1800 )); do
+    local used
+    used=$(nvidia-smi --id="$gpu" --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null)
+    [[ -z "$used" ]] && return 0
+    (( used < want_mb )) && return 0
+    (( waited % 120 == 0 )) && echo "QUEUE-WAIT gpu=$gpu ${used}MiB in use, waiting"
+    sleep 15; waited=$((waited + 15))
+  done
+  echo "QUEUE-WAIT-TIMEOUT gpu=$gpu still busy after 30m, starting anyway"
+}
+
 {
   echo "QUEUE-START gpu=$gpu jobs=$jobs $(date -Is)"
   n=0
   while IFS= read -r cmd; do
     [[ -z "$cmd" || "$cmd" == \#* ]] && continue
     n=$((n + 1))
+    wait_for_free
     echo "QUEUE-JOB $n gpu=$gpu $(date -Is) :: $cmd"
     # Fragmentation is the usual cause of a late-run OOM on these cards.
     if CUDA_VISIBLE_DEVICES="$gpu" PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
