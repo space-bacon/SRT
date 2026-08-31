@@ -78,7 +78,13 @@ def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     tok.padding_side = "left"
-    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype).to(DEV).eval()
+    try:
+        mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype)
+    except ValueError:
+        # Ministral-3 and friends ship as multimodal ForConditionalGeneration configs.
+        from transformers import AutoModelForImageTextToText
+        mod = AutoModelForImageTextToText.from_pretrained(mid, dtype=dtype)
+    mod = mod.to(DEV).eval()
     print(f"  {tag:16s} loaded {time.time() - t0:.0f}s, running {len(todo)} arm(s)",
           flush=True)
 
