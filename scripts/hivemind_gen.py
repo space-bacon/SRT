@@ -51,12 +51,15 @@ class Progress:
 
 
 def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
-              top_p=0.9, temp=1.0, batch=8, dtype=torch.float32):
+              top_p=0.9, temp=1.0, batch=8, dtype=torch.float32, device_map=None):
     """Load `mid` once, generate every arm in `modes`, return {mode: [[str]*k]*n}.
 
     render(tok, stem, mode) -> (text, add_special_tokens, per_sample)
     per_sample True means the k samples use k DIFFERENT prompts, which is how the
     varied-persona arms work.
+
+    device_map="auto" shards across every visible GPU, which the 160-330 GB
+    frontier models need since none of them fit on one 96 GB card.
     """
     os.makedirs(out_dir, exist_ok=True)
     paths = {m: f"{out_dir}/{tag}__{m}.json" for m in modes}
@@ -79,16 +82,21 @@ def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
         tok.pad_token = tok.eos_token
     tok.padding_side = "left"
     try:
-        mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype)
+        mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
     except ValueError:
         # Ministral-3 and friends ship as multimodal ForConditionalGeneration configs.
         from transformers import AutoModelForImageTextToText
-        mod = AutoModelForImageTextToText.from_pretrained(mid, dtype=dtype)
-    mod = mod.to(DEV).eval()
-    print(f"  {tag:16s} loaded {time.time() - t0:.0f}s, running {len(todo)} arm(s)",
+        mod = AutoModelForImageTextToText.from_pretrained(mid, dtype=dtype,
+                                                          device_map=device_map)
+    # A sharded model is already placed; moving it would collapse it onto one card.
+    mod = (mod if device_map else mod.to(DEV)).eval()
+    print(f"  {tag:16s} loaded {time.time() - t0:.0f}s, running {len(todo)} arm(s)"
+          + (f", sharded over {torch.cuda.device_count()} gpu(s)" if device_map else ""),
           flush=True)
 
     torch.manual_seed(0)
+    # With device_map the embeddings may not be on cuda:0, and inputs must meet them.
+    in_dev = getattr(mod, "device", DEV) if device_map else DEV
     for mode in todo:
         rows = []
         with torch.no_grad():
@@ -101,10 +109,10 @@ def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
                 if texts and isinstance(texts[0], list):
                     # Pre-tokenized: some backends cannot round-trip specials through a string.
                     b = tok.pad({"input_ids": texts}, return_tensors="pt",
-                                padding=True).to(DEV)
+                                padding=True).to(in_dev)
                 else:
                     b = tok(texts, return_tensors="pt", padding=True,
-                            add_special_tokens=add_sp).to(DEV)
+                            add_special_tokens=add_sp).to(in_dev)
                 g = mod.generate(**b, max_new_tokens=max_new, do_sample=True,
                                  top_p=top_p, temperature=temp,
                                  num_return_sequences=1 if per_sample else k,

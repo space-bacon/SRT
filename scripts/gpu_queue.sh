@@ -57,13 +57,21 @@ wait_for_free() {
     n=$((n + 1))
     wait_for_free
     echo "QUEUE-JOB $n gpu=$gpu $(date -Is) :: $cmd"
-    # Fragmentation is the usual cause of a late-run OOM on these cards.
-    if CUDA_VISIBLE_DEVICES="$gpu" PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
-        bash -c "$cmd"; then
-      echo "QUEUE-OK $n gpu=$gpu $(date -Is)"
-    else
-      echo "QUEUE-FAIL $n gpu=$gpu rc=$? $(date -Is) :: $cmd"
-    fi
+    # Two agents share this box, so a card can be reclaimed between the wait
+    # check and the model load. That OOM is transient, so retry rather than
+    # dropping the job.
+    ok=0
+    for attempt in 1 2 3; do
+      if CUDA_VISIBLE_DEVICES="$gpu" PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+          bash -c "$cmd"; then
+        echo "QUEUE-OK $n gpu=$gpu attempt=$attempt $(date -Is)"
+        ok=1; break
+      fi
+      echo "QUEUE-RETRY $n gpu=$gpu attempt=$attempt $(date -Is)"
+      sleep 60
+      wait_for_free
+    done
+    (( ok )) || echo "QUEUE-FAIL $n gpu=$gpu after 3 attempts $(date -Is) :: $cmd"
     # Let the driver reclaim the card before the next model loads.
     sleep 10
   done < "$jobs"
