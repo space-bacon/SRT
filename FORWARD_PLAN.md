@@ -450,6 +450,55 @@ gap may be largely an anisotropy story. Quick prior-art check:
 
 ---
 
+## Selection — next push, in priority order
+
+Package: `srt_select`. Paper: `paper_hivemind.md` §5.4. Artifacts:
+`RiverRider/srt-hivemind`. Standing numbers: HumanEval 0.1868 → 0.4426
+(oracle 0.4954), MBPP 0.7185 → 0.8174 (oracle 0.8887).
+
+### 1. The eight problems agreement cannot reach *(the live question)*
+
+The pooled null says a diverse pool holds 162 of 164 solvable problems while
+every selector we have finds at most 155. That gap is not a coverage problem,
+it is a ranking problem: agreement returns the majority, and the correct answer
+in those eight cases is held by a minority of the pool.
+
+Two candidate attacks, in order of cheapness:
+
+- [ ] **Minority-aware selection.** Instead of taking the largest output
+      cluster, characterise the clusters. On the eight oracle-only problems,
+      does the correct cluster differ from the majority cluster in any readable
+      way (size, member identity, agreement with the prompt's stated examples,
+      candidate length, which lab produced it)? This is analysis on existing
+      artifacts and needs no GPU. It either finds a signal or bounds how much
+      is there, and both outcomes are publishable.
+- [ ] **Cluster-level scoring rather than candidate-level.** The learned
+      verifier failed at candidate scoring (0.2639, no transfer). Scoring
+      *clusters* is a different and much smaller problem: 2 to 6 clusters per
+      problem instead of 8 to 48 candidates, and the features are structural
+      rather than lexical. Do not repeat the candidate-level verifier.
+
+**Do not** run more pooling variants. That question is answered: +0.0000.
+
+### 2. Coverage on HumanEval-like prompts
+
+HumanEval resolves on only 55.0% of problems from the chat turn alone, against
+98.6% on MBPP, because its prompts are docstrings that often state no example
+and carry no annotations. Coverage is the axis with the most room. A prompt that
+states nothing runnable is the failure mode, so the fix is inferring argument
+shapes from the docstring prose rather than from signatures.
+
+### 3. Frontier trio, still queued
+
+`DeepSeek-V4-Flash` (159.6 GB), `Qwen3.8-Flash-Next-FP8` (185.5 GB),
+`GLM-5.3-Flash` (328.3 GB). All reasoning-first, so **must** pass
+`enable_thinking=False` and budget 2–4× the tokens. The GLM-4.7 render bug cost
+a whole arm by exactly this mechanism. Note that with the pooling null in hand,
+adding members to the ensemble is no longer motivated by ensembling; these are
+worth running only as independent replications of the ladder.
+
+---
+
 ## SRT-Adapter — next push, in priority order
 
 ### 1. Souping is the cheap Pareto move

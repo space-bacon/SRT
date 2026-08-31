@@ -121,6 +121,46 @@ See [docs/EXPLAINERS.md](docs/EXPLAINERS.md). PNGs live in
 | **RRM** (Reflexive Recurrent Module) | Tracks semiotic meta-state, injects corrections | ~2.2M |
 | **BEN** (Bifurcation Estimation Network) | Estimates reflexivity coefficient r̂ and regime | ~0.2M |
 | **Community Head** | Discovers discourse-trajectory structure unsupervised | ~0.2M |
+| **`srt_select`** | Picks one of K model replies by what they compute, no training | 0 |
+
+## `srt_select` — choose among K replies without a test suite
+
+```python
+from srt_select import select
+best = select(user_message, replies)
+```
+
+Run every candidate on the same synthesised inputs, group them by the outputs
+they produce, return a member of the largest group. No reference solution, no
+test suite, no scoring model, no training, no weights. The entry point and the
+argument shapes are recovered from the candidates themselves, so it works on a
+chat turn rather than a benchmark row.
+
+| | problems | arms | floor | selected | oracle |
+|---|---:|---:|---:|---:|---:|
+| HumanEval | 164 | 36 | 0.1868 | **0.4426** | 0.4954 |
+| MBPP | 425 | 10 | 0.7185 | **0.8174** | 0.8887 |
+
+That is 82.9% and 58.1% of the headroom an oracle would capture. It beats a
+verifier trained on 47,232 execution labels, which reached 0.2639 on HumanEval
+and did not transfer to MBPP. Recovering the target from the chat turn alone
+costs coverage rather than accuracy: HumanEval resolves on 55.0% of problems and
+MBPP on 98.6%, giving 0.3096 and 0.7991 with unresolved problems scored as an
+arbitrary pick.
+
+**Three things it does not do.** It is not a correctness check, it returns the
+pool's majority, and a pool that is confidently wrong together defeats it.
+Its value decays with scale at −0.0704 per decade, from +0.1538 at 3B to +0.0097
+at 32B, so it is a weak-model amplifier. And **pooling several models buys
+nothing**: over 48 candidates from six frontier models across five labs it solves
+the same 154 of 164 problems as the best single member's own eight, a gain of
++0.0000. Point it at one model's samples, not at an ensemble.
+
+Selecting means executing every candidate, so it is a remote code execution
+primitive if pointed at the wrong host. Read `srt_select/sandbox.py` before
+deploying. Full documentation in `srt_select/README.md`, method and controls in
+`paper_hivemind.md` §5.4, artifacts in
+[`RiverRider/srt-hivemind`](https://huggingface.co/datasets/RiverRider/srt-hivemind).
 
 ## Quick Start
 
@@ -894,6 +934,7 @@ If you are integrating SRT into a product (including [`RiverRider/zooL4nD3r-v0.1
 | [`RiverRider/srt-cxr14-linear-probe`](https://huggingface.co/RiverRider/srt-cxr14-linear-probe) | Probe | `Linear(5376, 14)` on frozen gemma-4-31B-it. 0.7590 on the official ChestX-ray14 split. |
 | [`RiverRider/srt-cxr14-pooled-probe`](https://huggingface.co/RiverRider/srt-cxr14-pooled-probe) | Probe | Three backbones' probes plus their normalisation. Logit average scores 0.7774, +0.0323 over the split-matched baseline, with no added parameters. |
 | [`RiverRider/srt-cxr14-frozen-probe`](https://huggingface.co/datasets/RiverRider/srt-cxr14-frozen-probe) | Dataset | 4.51 GB. All three backbones' states for the same 112,120 images, the manifest, and every result json. |
+| [`RiverRider/srt-hivemind`](https://huggingface.co/datasets/RiverRider/srt-hivemind) | Dataset | 529 MB. 110,704 generations across 97 arms, 12 models' states, the selection results, and the `srt_select` package. |
 
 Live surfaces: [`srt-cxr14-probe`](https://huggingface.co/spaces/RiverRider/srt-cxr14-probe)
 reads a held-out film with one backbone or with all three side by side, and

@@ -7,6 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **`srt_select`: choosing among K model replies, with no test suite and no
+  training.** Run every candidate on synthesised inputs, group by the outputs
+  they produce, return a member of the largest group. The entry point and the
+  argument shapes are recovered from the candidates themselves, so it takes a
+  chat turn rather than a benchmark row. On HumanEval it moves a random single
+  draw from 0.1868 to **0.4426** against an oracle of 0.4954, and on MBPP from
+  0.7185 to **0.8174** against 0.8887, which is 82.9% and 58.1% of the available
+  headroom. It beats a verifier trained on 47,232 execution labels (0.2639 on
+  HumanEval, and that verifier does not transfer to MBPP). Recovering the target
+  from the chat turn alone costs coverage rather than accuracy: 55.0% of
+  HumanEval problems resolve and 98.6% of MBPP ones, giving 0.3096 and 0.7991.
+  Packaged with a CLI, a sandbox module documenting its own limits, and a test
+  pinning it against the harness that produced the published numbers.
+- **`hivemind_census.py`**, which recomputes the corpus census and the
+  selection-decay slope so both can be gated instead of trusted.
+
+### Fixed
+- **The §3.1 head-swap control was degenerate, not weak, and the correction had
+  never reached the prose.** The published version put one shared
+  `all-MiniLM-L6-v2` in every vendor's caption slot, which deleted the swapped
+  side's dependence on the text vendor, so both swapped arms measured the same
+  quantity and returned 0.0833 against 0.0835. The ratio test reduced to
+  `cross_native / within_native`. Rebuilt with one distinct caption tower per
+  slot: within 1.2064 ± 0.0304, cross 1.2308 ± 0.0401, gap −0.0244 against a
+  spread of 0.0476. Same conclusion, valid instrument. The same wrong numbers
+  were live in the `srt-omni-crossvendor-states` card and are fixed there too.
+- **`verify_cards.py` only ever checked cards held as module strings**, so any
+  card living in a file was never gated. Now gated, which immediately found
+  three numbers that existed only in prose. Also registered the artifact that
+  actually sources `0.9390`, which had been passing by coincidentally matching
+  an unrelated model's pass@k.
+- **The `srt-omni-crossvendor-states` dataset shipped three of the twelve result
+  files its paper's artifact index names.** Now ships twenty, including both
+  files the §3.1 correction points at.
+- **`RLIMIT_AS` at 4 GB raises on macOS**, so the sandbox guard killed every
+  child and the selector reported "no candidate ran" on pools it should have
+  resolved. Every limit is now clamped to the inherited hard limit and tolerates
+  its own failure, because the guard must never be the thing that fails.
+
+### Changed
+- Three results that had been sitting in artifacts with no writeup are now in
+  `paper_crossvendor.md`: the edge-identity control (monotone in 6/6 vendor
+  permutations in both domains, with two-edge routes falling 0.078 and 0.063
+  below the per-edge product), the floor as a distribution rather than a bound
+  (0.5006 ± 0.0052 over 20 seeds, plus the 95% interval on the headline and the
+  12-of-14 count null), and the `mteb#5330` replication.
+- The selection-decay slope now names its read. −0.0704 is the chat-native read;
+  agreement gives −0.0815 and execution-guided filtering −0.1192, the last
+  fitting considerably tighter. The direction is read-independent, the magnitude
+  is not, and the figure published is the most conservative of the three.
+
+### Removed
+- **The ensemble framing.** Pooling 48 candidates from six frontier models
+  across five labs solves the same 154 of 164 problems as the best single
+  member's own eight, a gain of **+0.0000**. The union ceiling of 0.9878 had
+  been quoted as though it supported pooling, without a selector ever having
+  been run over the pool it describes. It is a bound on what better selection
+  could win and nothing more. Agreement returns the majority, so extra members
+  mostly add votes for what the pool already believed.
+
 - **The Lab-map reader re-measured without contamination, and it reaches
   human parity.** Refit the sunstone head from the same gemma L47 states with
   the 5,000 evaluation images held out of HEAD training as well as reader

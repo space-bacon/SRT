@@ -1,3 +1,63 @@
+# SRT — Session Handoff (2026-08-31)
+
+## The selector got a home, and the ensemble framing died
+
+1. **`srt_select` is the deliverable.** `select(user_message, replies)` returns
+   one of K replies by executing them all on synthesised inputs and taking a
+   member of the largest output-agreement cluster. No tests, no reference, no
+   scoring model, no training, no weights. HumanEval 0.1868 → **0.4426**
+   (oracle 0.4954), MBPP 0.7185 → **0.8174** (oracle 0.8887). Beats a verifier
+   trained on 47,232 execution labels. From a chat turn alone it costs coverage
+   not accuracy: 55.0% / 98.6% resolved → 0.3096 / 0.7991.
+
+2. **Pooling models is dead, +0.0000.** 48 candidates across six frontier models
+   from five labs solve the *same 154 of 164* problems as the best member's own
+   eight. We had been quoting the 0.9878 union ceiling as if it argued for
+   pooling, without ever running a selector over that pool. It is a bound on
+   better selection, nothing else. `artifacts/nla/ensemble/pooled_select.json`.
+
+3. **Two live surfaces were stating something the artifacts contradicted.** The
+   §3.1 head-swap control was *degenerate*, not weak: one shared MiniLM in every
+   caption slot made both swapped arms measure the same quantity (0.0833 vs
+   0.0835). `head_swap_multi` fixed it on 08-30 and the fix never reached the
+   prose, so both `paper_crossvendor.md` and the `srt-omni-crossvendor-states`
+   card carried the wrong table. Both corrected.
+
+4. **Three results had been sitting in artifacts unpublished**: edge identity,
+   floor-as-a-distribution, and the `mteb#5330` replication. All now in the
+   paper.
+
+## Gotchas banked
+
+- `setrlimit(RLIMIT_AS, 4GB)` **raises** on macOS when it exceeds the inherited
+  hard limit. It killed every sandbox child, and the symptom was the selector
+  saying "no candidate ran". Clamp every rlimit to the hard limit and swallow
+  per-limit failure: the guard must never be the thing that fails.
+- `RLIMIT_FSIZE=0` stops **bytes, not file creation**, and a write that trips it
+  at interpreter shutdown is "Exception ignored" with **exit code 0**. A clean
+  returncode does not prove the child behaved.
+- `verify_cards.py` only checked cards held as module **strings**, so any
+  file-backed card was ungated. It also passed `0.9390` because that value
+  coincidentally matched an unrelated model's pass@k. Register the artifact that
+  actually sources a number.
+- A slope is undefined until you name the read. The decay is −0.0704 chat-native,
+  −0.0815 agreement, −0.1192 execution-guided.
+- The `srt-omni-crossvendor-states` dataset shipped 3 of the 12 result files its
+  paper's artifact index names. "Reproducible from published artifacts" is a
+  claim that needs checking against the actual repo listing.
+
+## Open items
+
+- **Next experiment, no GPU needed:** characterise the clusters on the eight
+  problems only the oracle reaches. Agreement fails there because the correct
+  answer is a minority cluster; the question is whether that cluster is readable
+  by anything other than its size. See `FORWARD_PLAN.md` "Selection".
+- Coverage on docstring-only prompts (HumanEval resolves 55.0% vs MBPP 98.6%).
+- Frontier trio still unrun, and now only motivated as ladder replication rather
+  than as ensemble members.
+
+---
+
 # SRT — Session Handoff (2026-08-05)
 
 ## The reader-review arc (hardware-invariance row corrected and extended)
