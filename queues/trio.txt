@@ -1,0 +1,3 @@
+/venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 0 --shards 3 --k 8 --max-new 1024 --batch 4 --device-map auto --gen-only
+/venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 1 --shards 3 --k 8 --max-new 1024 --batch 4 --device-map auto --gen-only
+/venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 2 --shards 3 --k 8 --max-new 1024 --batch 2 --device-map auto --gen-only

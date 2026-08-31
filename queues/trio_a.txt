@@ -1,1 +1,0 @@
-/venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --out artifacts/nla/frontier/union_frontier.json --shard 0 --shards 3 --k 8 --max-new 1024 --batch 2 --device-map auto --gen-only
