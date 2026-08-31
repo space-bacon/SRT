@@ -30,9 +30,18 @@ def _chk(got, want_lit, want_str, has_lit):
     return g == s or str(got).strip() == s or g.replace("'", '"') == s.replace("'", '"')
 """
 
-ARROWS = r"==|=>|\u279e|\u27a1|->"
+# Longest first: `==` would otherwise match inside `==>` and leave `> 2` as the value.
+ARROWS = r"==>|=>|==|\u279e|\u27a1|->"
 WORDS = {"true": "True", "false": "False", "none": "None", "null": "None",
          "nil": "None"}
+
+
+def _is_literal(text):
+    try:
+        ast.literal_eval(text)
+        return True
+    except Exception:
+        return False
 
 
 def _concrete(call):
@@ -47,22 +56,45 @@ def _concrete(call):
                    for n in ast.walk(tree))
 
 
+def _strip_quotes(seg):
+    seg = re.sub(r"^[rRbBuUfF]{0,2}", "", seg.strip())
+    for q in ('"""', "'''", '"', "'"):
+        if seg.startswith(q) and seg.endswith(q) and len(seg) >= 2 * len(q):
+            return seg[len(q):-len(q)]
+    return seg
+
+
 def _docstring(prompt, entry):
-    """The function's docstring, so doctest never swallows the closing quotes."""
+    """Raw docstring source.
+
+    ast.get_docstring returns the *evaluated* string, which turns a literal \\n
+    inside an example into a real newline and destroys the doctest block. The raw
+    source segment is what doctest needs to see.
+    """
+    best = None
     for suffix in ("", "\n    pass\n", "    pass\n"):
         try:
             tree = ast.parse(prompt + suffix)
         except SyntaxError:
             continue
-        best = None
+        src = prompt + suffix
         for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                d = ast.get_docstring(node)
-                if d and (node.name == entry or best is None):
-                    best = d
-                    if node.name == entry:
-                        return d
-        if best:
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            body = node.body
+            if not (body and isinstance(body[0], ast.Expr)
+                    and isinstance(body[0].value, ast.Constant)
+                    and isinstance(body[0].value.value, str)):
+                continue
+            seg = ast.get_source_segment(src, body[0].value)
+            if not seg:
+                continue
+            doc = _strip_quotes(seg)
+            if node.name == entry:
+                return doc
+            if best is None:
+                best = doc
+        if best is not None:
             return best
     return prompt
 
@@ -80,7 +112,8 @@ def _pairs(prompt, entry):
         call, want = ex.source.strip(), ex.want.strip()
         if want and entry in call:
             out.append((call, want))
-    for m in re.finditer(rf"({re.escape(entry)}\s*\([^\n]*?\))\s*(?:{ARROWS})\s*([^\n]+)", body):
+    for m in re.finditer(
+            rf"({re.escape(entry)}\s*\([^\n]*?\))\s*(?:#\s*)?(?:{ARROWS})\s*([^\n]+)", body):
         want = m.group(2).strip().rstrip(".,;").strip()
         if want:
             out.append((m.group(1).strip(), want))
@@ -88,6 +121,11 @@ def _pairs(prompt, entry):
     for c, w in out:
         w = re.sub(r'\s*(?:"""|\'\'\')\s*$', "", w).strip()
         w = WORDS.get(w.lower(), w)
+        if "=" in w and not _is_literal(w):
+            # Derivation style: "19 - 5 - 6 = 8" states the value after the last =.
+            tail = w.rsplit("=", 1)[-1].strip()
+            if tail:
+                w = tail
         if w and _concrete(c) and (c, w) not in seen:
             seen.add((c, w))
             uniq.append((c, w))
