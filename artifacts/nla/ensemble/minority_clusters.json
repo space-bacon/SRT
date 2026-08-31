@@ -1,0 +1,107 @@
+{
+  "question": "are the oracle-only problems held by clusters a selector could rank",
+  "n_problems": 164,
+  "pool_size": 48,
+  "members": [
+    "gemma4_31b",
+    "glm47_flash",
+    "ministral_14b",
+    "ornith_35b",
+    "qwen25c_32b",
+    "qwen3c_30b"
+  ],
+  "purity": {
+    "mean_pure_cluster_fraction": 0.773,
+    "problems_with_any_impure_cluster": 59,
+    "note": "a pure cluster is one whose members all pass or all fail. If purity is high, choosing the right cluster is equivalent to solving the problem, and cluster scoring is well posed"
+  },
+  "incidence": {
+    "oracle_solvable": 162,
+    "majority_cluster_correct": 160,
+    "minority_held": 2,
+    "unclusterable": 0,
+    "note": "minority_held is the reachable prize: a correct cluster exists and agreement does not pick it"
+  },
+  "separation": {
+    "stated_examples_would_flip": 0,
+    "of_minority_cases_with_examples": 0,
+    "median_correct_rank_by_size": 2.5,
+    "correct_cluster_is_a_singleton": 0,
+    "lab_counts_in_correct": {
+      "ministral_14b": 1,
+      "qwen25c_32b": 2,
+      "qwen3c_30b": 1,
+      "gemma4_31b": 1,
+      "glm47_flash": 1,
+      "ornith_35b": 1
+    }
+  },
+  "minority_cases": [
+    {
+      "task": "HumanEval/32",
+      "majority_size": 5,
+      "n_clusters": 20,
+      "correct_sizes": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "correct_rank_by_size": 3,
+      "correct_labs": [
+        "ministral_14b",
+        "qwen25c_32b",
+        "qwen3c_30b"
+      ],
+      "majority_labs": [
+        "glm47_flash",
+        "ornith_35b"
+      ],
+      "correct_visible": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "majority_visible": null
+    },
+    {
+      "task": "HumanEval/160",
+      "majority_size": 14,
+      "n_clusters": 7,
+      "correct_sizes": [
+        11,
+        4,
+        1,
+        1
+      ],
+      "correct_rank_by_size": 2,
+      "correct_labs": [
+        "gemma4_31b",
+        "glm47_flash",
+        "ornith_35b",
+        "qwen25c_32b"
+      ],
+      "majority_labs": [
+        "glm47_flash",
+        "ministral_14b",
+        "qwen3c_30b"
+      ],
+      "correct_visible": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "majority_visible": null
+    }
+  ]
+}
