@@ -101,7 +101,14 @@ def main():
     ap.add_argument("--gen-dir", default=OUT)
     ap.add_argument("--device-map", default=None,
                     help="'auto' shards over every visible GPU; required for the frontier set")
+    ap.add_argument("--per-gpu-gib", type=int, default=None,
+                    help="cap weights per card, leaving the rest for activations")
     a = ap.parse_args()
+
+    max_memory = None
+    if a.per_gpu_gib:
+        max_memory = {i: f"{a.per_gpu_gib}GiB" for i in range(torch.cuda.device_count())}
+        max_memory["cpu"] = "0GiB"
 
     probs = json.load(open(os.path.join(HERE, a.probs)))
     stems = [p["prompt"] for p in probs]
@@ -118,7 +125,7 @@ def main():
             continue
         run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
                   k=a.k, max_new=a.max_new, batch=a.batch, dtype=torch.bfloat16,
-                  device_map=a.device_map)
+                  device_map=a.device_map, max_memory=max_memory)
     if a.gen_only:
         return
 

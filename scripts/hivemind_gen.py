@@ -32,6 +32,30 @@ DEV = "mps" if torch.backends.mps.is_available() else (
     "cuda" if torch.cuda.is_available() else "cpu")
 
 
+class _NoOverride(dict):
+    """Missing experts-impl entry means no rewrite, so return {} rather than None."""
+
+    def get(self, key, default=None):
+        v = super().get(key, default)
+        return {} if v is None else v
+
+
+def patch_fp8_tp_plan():
+    """transformers 5.16.1 cannot load fine-grained-FP8 checkpoints without this.
+
+    `quantizer_finegrained_fp8.update_tp_plan` looks the experts implementation up in
+    `FP8Experts._impl_tp_layer_overrides`, gets None when that impl has no entry, then
+    calls `.get` on it and raises. A missing entry means "no rewrite", so an empty
+    mapping is the value the code already assumes it has. With it the plan rewrite
+    reduces to the identity plus the library's own expert-scale sharding step, and the
+    plan governs tensor parallelism, which we never enable. Real entries are preserved.
+    """
+    from transformers.integrations.finegrained_fp8 import FP8Experts
+    tbl = FP8Experts._impl_tp_layer_overrides
+    if not isinstance(tbl, _NoOverride):
+        FP8Experts._impl_tp_layer_overrides = _NoOverride(tbl)
+
+
 class Progress:
     def __init__(self, total):
         self.total, self.done, self.t0 = total, 0, time.time()
@@ -51,7 +75,8 @@ class Progress:
 
 
 def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
-              top_p=0.9, temp=1.0, batch=8, dtype=torch.float32, device_map=None):
+              top_p=0.9, temp=1.0, batch=8, dtype=torch.float32, device_map=None,
+              max_memory=None):
     """Load `mid` once, generate every arm in `modes`, return {mode: [[str]*k]*n}.
 
     render(tok, stem, mode) -> (text, add_special_tokens, per_sample)
@@ -76,18 +101,24 @@ def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
         return have
 
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    patch_fp8_tp_plan()
     t0 = time.time()
     tok = AutoTokenizer.from_pretrained(mid)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     tok.padding_side = "left"
+    # device_map="auto" fills card 0 before moving on, which leaves no room there for
+    # activations and OOMs mid-generate even when the other cards are empty. An
+    # explicit per-card cap forces the weights to spread.
+    kw = {"dtype": dtype, "device_map": device_map}
+    if max_memory:
+        kw["max_memory"] = max_memory
     try:
-        mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+        mod = AutoModelForCausalLM.from_pretrained(mid, **kw)
     except ValueError:
         # Ministral-3 and friends ship as multimodal ForConditionalGeneration configs.
         from transformers import AutoModelForImageTextToText
-        mod = AutoModelForImageTextToText.from_pretrained(mid, dtype=dtype,
-                                                          device_map=device_map)
+        mod = AutoModelForImageTextToText.from_pretrained(mid, **kw)
     # A sharded model is already placed; moving it would collapse it onto one card.
     mod = (mod if device_map else mod.to(DEV)).eval()
     print(f"  {tag:16s} loaded {time.time() - t0:.0f}s, running {len(todo)} arm(s)"
