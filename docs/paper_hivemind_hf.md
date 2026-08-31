@@ -297,10 +297,7 @@ for it to attach to.
 **The turn structure is the largest single component**, at +0.1583, and it works
 with plain-text markers that no model saw in training.
 
-![Mean intra-model similarity across six models under five framings, against a
-shuffled-pair floor of 0.1125. Persona text alone moves the number the wrong way;
-the role frame carries the
-effect.](arxiv_hivemind/figs/fig1_decomposition.png)
+![Mean intra-model similarity across six models under five framings, against a shuffled-pair floor of 0.1125. Persona text alone moves the number the wrong way; the role frame carries the effect.](https://huggingface.co/datasets/RiverRider/srt-hivemind/resolve/main/figs/fig1_decomposition.png)
 
 **Generic framing reproduces 66% of the full template effect.** The model's own
 tuned tokens supply the remaining 34%, which is real and a minority. So the
@@ -428,10 +425,7 @@ problem so no candidate for a test problem is ever seen in training. It captures
 quarter of the gap and loses to simply running the examples the prompt already
 states, by 0.1506.
 
-![Pass rate for each read on both benchmarks, from the random-single floor to the
-any-candidate oracle. The supervised verifier loses to two baselines that need no
-training, and the order of the two free baselines flips between
-benchmarks.](arxiv_hivemind/figs/fig3_reads.png)
+![Pass rate for each read on both benchmarks, from the random-single floor to the any-candidate oracle. The supervised verifier loses to two baselines that need no training, and the order of the two free baselines flips between benchmarks.](https://huggingface.co/datasets/RiverRider/srt-hivemind/resolve/main/figs/fig3_reads.png)
 
 **What wins is the pool disagreeing with itself.** Synthesising inputs from each
 signature, running all eight candidates, and keeping the largest group that agrees on
@@ -492,11 +486,7 @@ per decade while the value of choosing between samples falls at −0.0704. Large
 write more alike and leave less to choose between, and both trends point the same way:
 whatever variation the hivemind result measures, scale is removing it.
 
-![The two slopes crossing, on a log parameter axis. Format-induced similarity is one
-point per rung; selection value is plotted as its ten arms with the fitted line,
-since two arms share each rung and joining them would imply structure the data does
-not carry. The fit is loose at r = −0.715, which the scatter
-shows.](arxiv_hivemind/figs/fig2_scale.png)
+![The two slopes crossing, on a log parameter axis. Format-induced similarity is one point per rung; selection value is plotted as its ten arms with the fitted line, since two arms share each rung and joining them would imply structure the data does not carry. The fit is loose at r = −0.715, which the scatter shows.](https://huggingface.co/datasets/RiverRider/srt-hivemind/resolve/main/figs/fig2_scale.png)
 
 **Pooling six frontier models across five labs buys nothing.** Every read above was
 measured inside one model's pool: eight samples, one lab, one tokenizer. The union
@@ -521,10 +511,7 @@ small gain, the same 154 problems. Recovering the target from the replies alone 
 one more, which is a single problem in 164 and is not a result. Everything a real
 selector reaches sits within two problems; the oracle sits eight above all of it.
 
-![HumanEval pass rate for the pooled set against the best single member. The three
-selector bars stand at the same height, 154 of 164, while the oracle reaches 162.
-The identical heights are the
-result.](arxiv_hivemind/figs/fig4_pooling.png)
+![HumanEval pass rate for the pooled set against the best single member. The three selector bars stand at the same height, 154 of 164, while the oracle reaches 162. The identical heights are the result.](https://huggingface.co/datasets/RiverRider/srt-hivemind/resolve/main/figs/fig4_pooling.png)
 
 The reading is that a diverse pool does contain more correct answers, and that
 agreement cannot find them. Agreement selects the majority, and pooling a weaker

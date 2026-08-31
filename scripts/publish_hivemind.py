@@ -21,6 +21,7 @@ ROOT = pathlib.Path("artifacts/nla")
 # (local dir, remote prefix, glob). Ordered as the card's Layout section reads.
 SETS = [
     (".", ".", "hivemind_census.json"),
+    (".", ".", "hivemind_human_baseline.json"),
     ("atlas", "atlas", "*.json"),
     ("atlas/states", "atlas/states", "*.npz"),
     ("atlas/samples", "atlas/samples", "*.json"),
@@ -54,6 +55,9 @@ SCRIPTS = [
 # the card's usage example works without cloning the source repository.
 PACKAGE = pathlib.Path("srt_select")
 
+# The paper embeds these, so they have to resolve for a reader who is not in the repo.
+FIGS = pathlib.Path("arxiv_hivemind/figs")
+
 
 def plan():
     items = []
@@ -75,6 +79,8 @@ def plan():
     for p in sorted(PACKAGE.glob("*.py")) + [PACKAGE / "README.md"]:
         if p.is_file():
             items.append((p, f"srt_select/{p.name}"))
+    for p in sorted(FIGS.glob("*.png")):
+        items.append((p, f"figs/{p.name}"))
     paper = pathlib.Path("paper_hivemind.md")
     if paper.is_file():
         items.append((paper, "paper_hivemind.md"))
