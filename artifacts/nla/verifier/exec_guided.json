@@ -1,0 +1,270 @@
+{
+  "bench": "humaneval",
+  "n_arms": 36,
+  "n_problems": 164,
+  "visible_asserts_mean": 1.96,
+  "overall": {
+    "floor": 0.1868,
+    "verifier": 0.2639,
+    "exec": 0.3943,
+    "exec_verifier": 0.4148,
+    "oracle": 0.4954,
+    "exec_minus_floor": 0.2075,
+    "verifier_minus_exec": -0.1304,
+    "execverifier_minus_exec": 0.0205
+  },
+  "per_arm": {
+    "coder0.5B_base__raw": {
+      "floor": 0.0213,
+      "oracle": 0.1524,
+      "verifier": 0.0366,
+      "exec": 0.1159,
+      "exec_verifier": 0.1159
+    },
+    "coder0.5B_inst__chat": {
+      "floor": 0.1745,
+      "oracle": 0.4695,
+      "verifier": 0.2744,
+      "exec": 0.3963,
+      "exec_verifier": 0.4146
+    },
+    "coder0.5B_inst__persona": {
+      "floor": 0.0381,
+      "oracle": 0.2134,
+      "verifier": 0.0366,
+      "exec": 0.189,
+      "exec_verifier": 0.1768
+    },
+    "coder0.5B_inst__raw": {
+      "floor": 0.0259,
+      "oracle": 0.1829,
+      "verifier": 0.0366,
+      "exec": 0.128,
+      "exec_verifier": 0.1341
+    },
+    "coder0.5B_inst__shared": {
+      "floor": 0.1692,
+      "oracle": 0.4817,
+      "verifier": 0.2622,
+      "exec": 0.378,
+      "exec_verifier": 0.4207
+    },
+    "coder0.5B_inst__shared_persona": {
+      "floor": 0.1562,
+      "oracle": 0.4512,
+      "verifier": 0.2317,
+      "exec": 0.3841,
+      "exec_verifier": 0.3963
+    },
+    "coder1.5B_base__raw": {
+      "floor": 0.0373,
+      "oracle": 0.2012,
+      "verifier": 0.0244,
+      "exec": 0.122,
+      "exec_verifier": 0.1159
+    },
+    "coder1.5B_inst__chat": {
+      "floor": 0.3178,
+      "oracle": 0.7134,
+      "verifier": 0.4268,
+      "exec": 0.6037,
+      "exec_verifier": 0.6037
+    },
+    "coder1.5B_inst__persona": {
+      "floor": 0.0465,
+      "oracle": 0.2805,
+      "verifier": 0.0549,
+      "exec": 0.2073,
+      "exec_verifier": 0.2134
+    },
+    "coder1.5B_inst__raw": {
+      "floor": 0.0686,
+      "oracle": 0.3841,
+      "verifier": 0.061,
+      "exec": 0.3049,
+      "exec_verifier": 0.2866
+    },
+    "coder1.5B_inst__shared": {
+      "floor": 0.2424,
+      "oracle": 0.7073,
+      "verifier": 0.4207,
+      "exec": 0.5305,
+      "exec_verifier": 0.5976
+    },
+    "coder1.5B_inst__shared_persona": {
+      "floor": 0.2767,
+      "oracle": 0.6829,
+      "verifier": 0.3902,
+      "exec": 0.5793,
+      "exec_verifier": 0.5915
+    },
+    "coder14B_base__raw": {
+      "floor": 0.0465,
+      "oracle": 0.2683,
+      "verifier": 0.0671,
+      "exec": 0.1646,
+      "exec_verifier": 0.1707
+    },
+    "coder14B_inst__chat": {
+      "floor": 0.3636,
+      "oracle": 0.7866,
+      "verifier": 0.5366,
+      "exec": 0.6707,
+      "exec_verifier": 0.6951
+    },
+    "coder14B_inst__persona": {
+      "floor": 0.1052,
+      "oracle": 0.4573,
+      "verifier": 0.1585,
+      "exec": 0.3293,
+      "exec_verifier": 0.3537
+    },
+    "coder14B_inst__raw": {
+      "floor": 0.0755,
+      "oracle": 0.3293,
+      "verifier": 0.0732,
+      "exec": 0.2256,
+      "exec_verifier": 0.2378
+    },
+    "coder14B_inst__shared": {
+      "floor": 0.5404,
+      "oracle": 0.878,
+      "verifier": 0.6768,
+      "exec": 0.7927,
+      "exec_verifier": 0.8232
+    },
+    "coder14B_inst__shared_persona": {
+      "floor": 0.4329,
+      "oracle": 0.7927,
+      "verifier": 0.6402,
+      "exec": 0.6768,
+      "exec_verifier": 0.7561
+    },
+    "coder32B_base__raw": {
+      "floor": 0.0366,
+      "oracle": 0.25,
+      "verifier": 0.0671,
+      "exec": 0.1646,
+      "exec_verifier": 0.1585
+    },
+    "coder32B_inst__chat": {
+      "floor": 0.2401,
+      "oracle": 0.5061,
+      "verifier": 0.3293,
+      "exec": 0.4207,
+      "exec_verifier": 0.4329
+    },
+    "coder32B_inst__persona": {
+      "floor": 0.0968,
+      "oracle": 0.439,
+      "verifier": 0.122,
+      "exec": 0.3049,
+      "exec_verifier": 0.311
+    },
+    "coder32B_inst__raw": {
+      "floor": 0.0777,
+      "oracle": 0.3354,
+      "verifier": 0.0549,
+      "exec": 0.2744,
+      "exec_verifier": 0.2378
+    },
+    "coder32B_inst__shared": {
+      "floor": 0.2264,
+      "oracle": 0.5305,
+      "verifier": 0.2927,
+      "exec": 0.4451,
+      "exec_verifier": 0.4573
+    },
+    "coder32B_inst__shared_persona": {
+      "floor": 0.2058,
+      "oracle": 0.4817,
+      "verifier": 0.2561,
+      "exec": 0.3841,
+      "exec_verifier": 0.4207
+    },
+    "coder3B_base__raw": {
+      "floor": 0.0213,
+      "oracle": 0.1341,
+      "verifier": 0.0183,
+      "exec": 0.0732,
+      "exec_verifier": 0.061
+    },
+    "coder3B_inst__chat": {
+      "floor": 0.2774,
+      "oracle": 0.7012,
+      "verifier": 0.4451,
+      "exec": 0.5915,
+      "exec_verifier": 0.6098
+    },
+    "coder3B_inst__persona": {
+      "floor": 0.109,
+      "oracle": 0.5427,
+      "verifier": 0.1707,
+      "exec": 0.4451,
+      "exec_verifier": 0.4512
+    },
+    "coder3B_inst__raw": {
+      "floor": 0.0549,
+      "oracle": 0.2927,
+      "verifier": 0.0549,
+      "exec": 0.189,
+      "exec_verifier": 0.189
+    },
+    "coder3B_inst__shared": {
+      "floor": 0.2782,
+      "oracle": 0.7012,
+      "verifier": 0.5183,
+      "exec": 0.5488,
+      "exec_verifier": 0.6463
+    },
+    "coder3B_inst__shared_persona": {
+      "floor": 0.2409,
+      "oracle": 0.6402,
+      "verifier": 0.4939,
+      "exec": 0.5183,
+      "exec_verifier": 0.5976
+    },
+    "coder7B_base__raw": {
+      "floor": 0.0495,
+      "oracle": 0.2805,
+      "verifier": 0.0671,
+      "exec": 0.189,
+      "exec_verifier": 0.1951
+    },
+    "coder7B_inst__chat": {
+      "floor": 0.5404,
+      "oracle": 0.9024,
+      "verifier": 0.6585,
+      "exec": 0.7622,
+      "exec_verifier": 0.8171
+    },
+    "coder7B_inst__persona": {
+      "floor": 0.0945,
+      "oracle": 0.4756,
+      "verifier": 0.1341,
+      "exec": 0.3537,
+      "exec_verifier": 0.3415
+    },
+    "coder7B_inst__raw": {
+      "floor": 0.1044,
+      "oracle": 0.4756,
+      "verifier": 0.1159,
+      "exec": 0.311,
+      "exec_verifier": 0.311
+    },
+    "coder7B_inst__shared": {
+      "floor": 0.4931,
+      "oracle": 0.878,
+      "verifier": 0.6463,
+      "exec": 0.7439,
+      "exec_verifier": 0.8049
+    },
+    "coder7B_inst__shared_persona": {
+      "floor": 0.4375,
+      "oracle": 0.8354,
+      "verifier": 0.6463,
+      "exec": 0.6768,
+      "exec_verifier": 0.7866
+    }
+  }
+}
