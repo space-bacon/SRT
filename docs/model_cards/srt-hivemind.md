@@ -97,6 +97,31 @@ retraction is the useful part.
 
 ---
 
+## Using the selector rather than reading about it
+
+The winning read is packaged as `srt_select` in the source repository. It picks one
+of K replies using only the replies: no reference solution, no test suite, no scoring
+model, no training.
+
+```python
+from srt_select import select
+best = select(user_message, replies)
+```
+
+Handed the benchmark's entry point and signature it scores 0.4426 on HumanEval and
+0.8174 on MBPP, against floors of 0.1868 and 0.7185. Recovering the entry point and
+the argument shapes from the chat turn alone is the deployable case, and it costs
+coverage rather than accuracy: 55.0% of HumanEval problems resolve and 98.6% of MBPP
+ones do, giving 0.3096 and 0.7991 when unresolved problems are scored as an arbitrary
+pick. `verifier/chat_consensus.json` and `verifier/chat_consensus_mbpp.json` are those
+two runs.
+
+Selecting means executing every candidate, so it is a remote code execution primitive
+if pointed at the wrong host. `srt_select.sandbox` states what the confinement does
+and does not cover. Run it somewhere you are willing to lose.
+
+---
+
 ## Reading these files correctly
 
 **`ensemble/union_ceiling.json` is superseded and carries a `SUPERSEDED` key.** Use
@@ -118,7 +143,9 @@ slightly worse. It is reported as a negative result.
 
 **Selection value decays with scale**, at −0.0704 per decade, from +0.1538 at 3B to
 +0.0097 at 32B. It is a weak-model amplifier and does not push a strong model past its
-own ceiling.
+own ceiling. That slope is the chat-native read; agreement gives −0.0815 and
+execution-guided filtering −0.1192, so the direction is read-independent and the
+quoted figure is the most conservative of the three. See `hivemind_census.json`.
 
 **Ladder magnitudes are not comparable across domains.** Code prompts constrain output
 far more than open-ended stems, so instruct-raw already sits at 0.73-0.79 on HumanEval

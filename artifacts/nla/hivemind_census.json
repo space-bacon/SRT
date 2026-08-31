@@ -1,0 +1,435 @@
+{
+  "question": "how much was generated, and does selection value survive scale",
+  "census": {
+    "generations": 110704,
+    "arms": 97,
+    "directories": [
+      "coder_ladder",
+      "ministral_ladder",
+      "mbpp_ladder",
+      "ensemble",
+      "crosslab_suppression",
+      "ministral_suppression"
+    ],
+    "note": "executed candidate pools only; atlas prose samples are scored for similarity, not executed, and are not counted here",
+    "per_arm": {
+      "coder_ladder/coder0.5B_base__raw": 1312,
+      "coder_ladder/coder0.5B_inst__chat": 1312,
+      "coder_ladder/coder0.5B_inst__persona": 1312,
+      "coder_ladder/coder0.5B_inst__raw": 1312,
+      "coder_ladder/coder0.5B_inst__shared": 1312,
+      "coder_ladder/coder0.5B_inst__shared_persona": 1312,
+      "coder_ladder/coder1.5B_base__raw": 1312,
+      "coder_ladder/coder1.5B_inst__chat": 1312,
+      "coder_ladder/coder1.5B_inst__persona": 1312,
+      "coder_ladder/coder1.5B_inst__raw": 1312,
+      "coder_ladder/coder1.5B_inst__shared": 1312,
+      "coder_ladder/coder1.5B_inst__shared_persona": 1312,
+      "coder_ladder/coder14B_base__raw": 1312,
+      "coder_ladder/coder14B_inst__chat": 1312,
+      "coder_ladder/coder14B_inst__persona": 1312,
+      "coder_ladder/coder14B_inst__raw": 1312,
+      "coder_ladder/coder14B_inst__shared": 1312,
+      "coder_ladder/coder14B_inst__shared_persona": 1312,
+      "coder_ladder/coder32B_base__raw": 1312,
+      "coder_ladder/coder32B_inst__chat": 1312,
+      "coder_ladder/coder32B_inst__persona": 1312,
+      "coder_ladder/coder32B_inst__raw": 1312,
+      "coder_ladder/coder32B_inst__shared": 1312,
+      "coder_ladder/coder32B_inst__shared_persona": 1312,
+      "coder_ladder/coder3B_base__raw": 1312,
+      "coder_ladder/coder3B_inst__chat": 1312,
+      "coder_ladder/coder3B_inst__persona": 1312,
+      "coder_ladder/coder3B_inst__raw": 1312,
+      "coder_ladder/coder3B_inst__shared": 1312,
+      "coder_ladder/coder3B_inst__shared_persona": 1312,
+      "coder_ladder/coder7B_base__raw": 1312,
+      "coder_ladder/coder7B_inst__chat": 1312,
+      "coder_ladder/coder7B_inst__persona": 1312,
+      "coder_ladder/coder7B_inst__raw": 1312,
+      "coder_ladder/coder7B_inst__shared": 1312,
+      "coder_ladder/coder7B_inst__shared_persona": 1312,
+      "ministral_ladder/ministral14B_base__raw": 480,
+      "ministral_ladder/ministral14B_inst__chat": 480,
+      "ministral_ladder/ministral14B_inst__persona": 480,
+      "ministral_ladder/ministral14B_inst__raw": 480,
+      "ministral_ladder/ministral14B_inst__shared": 480,
+      "ministral_ladder/ministral14B_inst__shared_persona": 480,
+      "ministral_ladder/ministral3B_base__raw": 480,
+      "ministral_ladder/ministral3B_inst__chat": 480,
+      "ministral_ladder/ministral3B_inst__persona": 480,
+      "ministral_ladder/ministral3B_inst__raw": 480,
+      "ministral_ladder/ministral3B_inst__shared": 480,
+      "ministral_ladder/ministral3B_inst__shared_persona": 480,
+      "ministral_ladder/ministral8B_base__raw": 480,
+      "ministral_ladder/ministral8B_inst__chat": 480,
+      "ministral_ladder/ministral8B_inst__persona": 480,
+      "ministral_ladder/ministral8B_inst__raw": 480,
+      "ministral_ladder/ministral8B_inst__shared": 480,
+      "ministral_ladder/ministral8B_inst__shared_persona": 480,
+      "mbpp_ladder/mbpp1.5B_inst__chat": 3400,
+      "mbpp_ladder/mbpp1.5B_inst__shared": 3400,
+      "mbpp_ladder/mbpp14B_inst__chat": 3400,
+      "mbpp_ladder/mbpp14B_inst__shared": 3400,
+      "mbpp_ladder/mbpp32B_inst__chat": 3400,
+      "mbpp_ladder/mbpp32B_inst__shared": 3400,
+      "mbpp_ladder/mbpp3B_inst__chat": 3400,
+      "mbpp_ladder/mbpp3B_inst__shared": 3400,
+      "mbpp_ladder/mbpp7B_inst__chat": 3400,
+      "mbpp_ladder/mbpp7B_inst__shared": 3400,
+      "ensemble/gemma4_31b__chat": 1312,
+      "ensemble/glm47_flash__chat": 1312,
+      "ensemble/ministral_14b__chat": 1312,
+      "ensemble/ornith_35b__chat": 1312,
+      "ensemble/qwen25c_32b__chat": 1312,
+      "ensemble/qwen3c_30b__chat": 1312,
+      "crosslab_suppression/gemma4_31b__chat": 480,
+      "crosslab_suppression/gemma4_31b__deployed_model": 480,
+      "crosslab_suppression/gemma4_31b__deployed_sample": 480,
+      "crosslab_suppression/gemma4_31b__persona_model": 480,
+      "crosslab_suppression/gemma4_31b__persona_sample": 480,
+      "crosslab_suppression/ministral_14b__chat": 480,
+      "crosslab_suppression/ministral_14b__deployed_model": 480,
+      "crosslab_suppression/ministral_14b__deployed_sample": 480,
+      "crosslab_suppression/ministral_14b__persona_model": 480,
+      "crosslab_suppression/ministral_14b__persona_sample": 480,
+      "crosslab_suppression/qwen25c_14b__chat": 480,
+      "crosslab_suppression/qwen25c_14b__deployed_model": 480,
+      "crosslab_suppression/qwen25c_14b__deployed_sample": 480,
+      "crosslab_suppression/qwen25c_14b__persona_model": 480,
+      "crosslab_suppression/qwen25c_14b__persona_sample": 480,
+      "ministral_suppression/ministral14B_inst__deployed_model": 480,
+      "ministral_suppression/ministral14B_inst__deployed_sample": 480,
+      "ministral_suppression/ministral14B_inst__persona_model": 480,
+      "ministral_suppression/ministral14B_inst__persona_sample": 480,
+      "ministral_suppression/ministral3B_inst__deployed_model": 480,
+      "ministral_suppression/ministral3B_inst__deployed_sample": 480,
+      "ministral_suppression/ministral3B_inst__persona_model": 480,
+      "ministral_suppression/ministral3B_inst__persona_sample": 480,
+      "ministral_suppression/ministral8B_inst__deployed_model": 480,
+      "ministral_suppression/ministral8B_inst__deployed_sample": 480,
+      "ministral_suppression/ministral8B_inst__persona_model": 480,
+      "ministral_suppression/ministral8B_inst__persona_sample": 480
+    }
+  },
+  "excluded": {
+    "generations": 2752,
+    "arms": 4,
+    "directories": [
+      "ensemble/excluded",
+      "ministral_ladder/corrupt_chat_pre_fix"
+    ],
+    "note": "superseded runs, kept for audit and not counted in the census"
+  },
+  "selection_decay": {
+    "published_read": "chat_consensus",
+    "slope_per_decade": -0.0704,
+    "by_read": {
+      "chat_consensus": {
+        "metric": "chat_consensus minus random-single floor, MBPP",
+        "slope_per_decade": -0.0704,
+        "intercept": 0.139,
+        "r": -0.7154,
+        "n_rungs": 10,
+        "rungs": [
+          {
+            "params_b": 1.5,
+            "arm": "mbpp1.5B_inst__chat",
+            "gain": 0.0762,
+            "floor": 0.5662,
+            "selected": 0.6424,
+            "oracle": 0.8118,
+            "headroom_captured": 0.3103
+          },
+          {
+            "params_b": 1.5,
+            "arm": "mbpp1.5B_inst__shared",
+            "gain": 0.09,
+            "floor": 0.5829,
+            "selected": 0.6729,
+            "oracle": 0.8259,
+            "headroom_captured": 0.3704
+          },
+          {
+            "params_b": 3.0,
+            "arm": "mbpp3B_inst__shared",
+            "gain": 0.1374,
+            "floor": 0.6532,
+            "selected": 0.7906,
+            "oracle": 0.8871,
+            "headroom_captured": 0.5874
+          },
+          {
+            "params_b": 3.0,
+            "arm": "mbpp3B_inst__chat",
+            "gain": 0.1538,
+            "floor": 0.6203,
+            "selected": 0.7741,
+            "oracle": 0.8635,
+            "headroom_captured": 0.6324
+          },
+          {
+            "params_b": 7.0,
+            "arm": "mbpp7B_inst__shared",
+            "gain": 0.0803,
+            "floor": 0.7315,
+            "selected": 0.8118,
+            "oracle": 0.92,
+            "headroom_captured": 0.426
+          },
+          {
+            "params_b": 7.0,
+            "arm": "mbpp7B_inst__chat",
+            "gain": 0.1188,
+            "floor": 0.7188,
+            "selected": 0.8376,
+            "oracle": 0.9153,
+            "headroom_captured": 0.6046
+          },
+          {
+            "params_b": 14.0,
+            "arm": "mbpp14B_inst__shared",
+            "gain": 0.0585,
+            "floor": 0.8074,
+            "selected": 0.8659,
+            "oracle": 0.9224,
+            "headroom_captured": 0.5087
+          },
+          {
+            "params_b": 14.0,
+            "arm": "mbpp14B_inst__chat",
+            "gain": 0.0765,
+            "floor": 0.7941,
+            "selected": 0.8706,
+            "oracle": 0.9059,
+            "headroom_captured": 0.6843
+          },
+          {
+            "params_b": 32.0,
+            "arm": "mbpp32B_inst__shared",
+            "gain": 0.0047,
+            "floor": 0.8494,
+            "selected": 0.8541,
+            "oracle": 0.9176,
+            "headroom_captured": 0.0689
+          },
+          {
+            "params_b": 32.0,
+            "arm": "mbpp32B_inst__chat",
+            "gain": 0.0097,
+            "floor": 0.8609,
+            "selected": 0.8706,
+            "oracle": 0.9176,
+            "headroom_captured": 0.1711
+          }
+        ]
+      },
+      "consensus": {
+        "metric": "consensus_on_covered minus random-single floor, MBPP",
+        "slope_per_decade": -0.0815,
+        "intercept": 0.1665,
+        "r": -0.7117,
+        "n_rungs": 10,
+        "rungs": [
+          {
+            "params_b": 1.5,
+            "arm": "mbpp1.5B_inst__chat",
+            "gain": 0.0933,
+            "floor": 0.5662,
+            "selected": 0.6595,
+            "oracle": 0.8118,
+            "headroom_captured": 0.3799
+          },
+          {
+            "params_b": 1.5,
+            "arm": "mbpp1.5B_inst__shared",
+            "gain": 0.1147,
+            "floor": 0.5829,
+            "selected": 0.6976,
+            "oracle": 0.8259,
+            "headroom_captured": 0.472
+          },
+          {
+            "params_b": 3.0,
+            "arm": "mbpp3B_inst__shared",
+            "gain": 0.1584,
+            "floor": 0.6532,
+            "selected": 0.8116,
+            "oracle": 0.8871,
+            "headroom_captured": 0.6772
+          },
+          {
+            "params_b": 3.0,
+            "arm": "mbpp3B_inst__chat",
+            "gain": 0.1876,
+            "floor": 0.6203,
+            "selected": 0.8079,
+            "oracle": 0.8635,
+            "headroom_captured": 0.7714
+          },
+          {
+            "params_b": 7.0,
+            "arm": "mbpp7B_inst__shared",
+            "gain": 0.0986,
+            "floor": 0.7315,
+            "selected": 0.8301,
+            "oracle": 0.92,
+            "headroom_captured": 0.5231
+          },
+          {
+            "params_b": 7.0,
+            "arm": "mbpp7B_inst__chat",
+            "gain": 0.1233,
+            "floor": 0.7188,
+            "selected": 0.8421,
+            "oracle": 0.9153,
+            "headroom_captured": 0.6275
+          },
+          {
+            "params_b": 14.0,
+            "arm": "mbpp14B_inst__shared",
+            "gain": 0.0785,
+            "floor": 0.8074,
+            "selected": 0.8859,
+            "oracle": 0.9224,
+            "headroom_captured": 0.6826
+          },
+          {
+            "params_b": 14.0,
+            "arm": "mbpp14B_inst__chat",
+            "gain": 0.1161,
+            "floor": 0.7941,
+            "selected": 0.9102,
+            "oracle": 0.9059,
+            "headroom_captured": 1.0385
+          },
+          {
+            "params_b": 32.0,
+            "arm": "mbpp32B_inst__shared",
+            "gain": 0.0091,
+            "floor": 0.8494,
+            "selected": 0.8585,
+            "oracle": 0.9176,
+            "headroom_captured": 0.1334
+          },
+          {
+            "params_b": 32.0,
+            "arm": "mbpp32B_inst__chat",
+            "gain": 0.0096,
+            "floor": 0.8609,
+            "selected": 0.8705,
+            "oracle": 0.9176,
+            "headroom_captured": 0.1693
+          }
+        ]
+      },
+      "exec_guided": {
+        "metric": "exec minus random-single floor, MBPP",
+        "slope_per_decade": -0.1192,
+        "intercept": 0.2296,
+        "r": -0.9537,
+        "n_rungs": 10,
+        "rungs": [
+          {
+            "params_b": 1.5,
+            "arm": "mbpp1.5B_inst__chat",
+            "gain": 0.182,
+            "floor": 0.5662,
+            "selected": 0.7482,
+            "oracle": 0.8118,
+            "headroom_captured": 0.741
+          },
+          {
+            "params_b": 1.5,
+            "arm": "mbpp1.5B_inst__shared",
+            "gain": 0.1912,
+            "floor": 0.5829,
+            "selected": 0.7741,
+            "oracle": 0.8259,
+            "headroom_captured": 0.7868
+          },
+          {
+            "params_b": 3.0,
+            "arm": "mbpp3B_inst__shared",
+            "gain": 0.1892,
+            "floor": 0.6532,
+            "selected": 0.8424,
+            "oracle": 0.8871,
+            "headroom_captured": 0.8089
+          },
+          {
+            "params_b": 3.0,
+            "arm": "mbpp3B_inst__chat",
+            "gain": 0.2032,
+            "floor": 0.6203,
+            "selected": 0.8235,
+            "oracle": 0.8635,
+            "headroom_captured": 0.8355
+          },
+          {
+            "params_b": 7.0,
+            "arm": "mbpp7B_inst__shared",
+            "gain": 0.1438,
+            "floor": 0.7315,
+            "selected": 0.8753,
+            "oracle": 0.92,
+            "headroom_captured": 0.7629
+          },
+          {
+            "params_b": 7.0,
+            "arm": "mbpp7B_inst__chat",
+            "gain": 0.1447,
+            "floor": 0.7188,
+            "selected": 0.8635,
+            "oracle": 0.9153,
+            "headroom_captured": 0.7364
+          },
+          {
+            "params_b": 14.0,
+            "arm": "mbpp14B_inst__shared",
+            "gain": 0.0773,
+            "floor": 0.8074,
+            "selected": 0.8847,
+            "oracle": 0.9224,
+            "headroom_captured": 0.6722
+          },
+          {
+            "params_b": 14.0,
+            "arm": "mbpp14B_inst__chat",
+            "gain": 0.0812,
+            "floor": 0.7941,
+            "selected": 0.8753,
+            "oracle": 0.9059,
+            "headroom_captured": 0.7263
+          },
+          {
+            "params_b": 32.0,
+            "arm": "mbpp32B_inst__chat",
+            "gain": 0.0426,
+            "floor": 0.8609,
+            "selected": 0.9035,
+            "oracle": 0.9176,
+            "headroom_captured": 0.7513
+          },
+          {
+            "params_b": 32.0,
+            "arm": "mbpp32B_inst__shared",
+            "gain": 0.0518,
+            "floor": 0.8494,
+            "selected": 0.9012,
+            "oracle": 0.9176,
+            "headroom_captured": 0.7595
+          }
+        ]
+      }
+    },
+    "robustness": {
+      "all_negative": true,
+      "range": [
+        -0.1192,
+        -0.0704
+      ],
+      "note": "the direction does not depend on the read, the magnitude does. Execution-guided filtering decays fastest and fits tightest; quote the read alongside the slope"
+    }
+  }
+}

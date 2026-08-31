@@ -80,10 +80,21 @@ The encoders agree with each other about pictures roughly eight times better
 than any one of them connects its own captions to its own pictures. A ratio of
 two caption-head-limited numbers cannot report much about the encoders.
 
-Tested directly by swapping the head. Replacing the caption tower with an
-unrelated `all-MiniLM-L6-v2` on the radiology gallery moves both terms by
-nearly the same factor: within scales 0.938, cross scales 0.973, gap 0.0347.
-That is what a shared bottleneck predicts. Test proposed by Dipankar Sarkar.
+Tested directly by swapping the head, a test proposed by Dipankar Sarkar. Our
+first run of it was degenerate and is superseded: it put one shared
+`all-MiniLM-L6-v2` in every vendor's caption slot, which removed the swapped
+side's dependence on the text vendor, so both swapped arms measured the same
+thing and the ratio test collapsed. Redone with a distinct caption tower per
+slot, five seeds, 1,000 held-out radiology items:
+
+| | native head | swapped head | ratio |
+|---|---:|---:|---:|
+| within r@1 | 0.0847 | 0.1021 | 1.2064 |
+| cross r@1 | 0.0872 | 0.1072 | 1.2308 |
+
+The gap between the two ratios is 0.0244 against a spread of 0.0476, so both
+legs move together when the caption head changes. That is what a shared
+bottleneck predicts. Read `head_swap_multi_roco.json`, not `head_swap_roco.json`.
 
 **Use the 0.8024 image-agreement number for portability claims.** It is
 measured without a shared space, against a floor of 0.0007, and it is not

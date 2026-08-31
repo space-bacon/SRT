@@ -460,6 +460,13 @@ at 3B to +0.0097 at 32B, where it captures 17% of the remaining headroom rather 
 60%. The selector has not stopped working. The room has gone, because a single sample
 from the 32B model already passes 0.8609.
 
+That slope is the chat-native read, which is the deployable one. A slope is only
+defined once you say which read produced it, so: agreement over the pool gives
+−0.0815 and execution-guided filtering gives −0.1192, the last of these fitting
+considerably tighter at r = −0.954 against −0.715. The direction does not depend on
+the read. The magnitude does, and the read we quote is the most conservative of the
+three. `hivemind_census.json` carries all three.
+
 That is the mirror image of Section 5.2. Format-induced similarity grows at +0.0441
 per decade while the value of choosing between samples falls at −0.0704. Larger models
 write more alike and leave less to choose between, and both trends point the same way:

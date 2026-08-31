@@ -20,6 +20,7 @@ ROOT = pathlib.Path("artifacts/nla")
 
 # (local dir, remote prefix, glob). Ordered as the card's Layout section reads.
 SETS = [
+    (".", ".", "hivemind_census.json"),
     ("atlas", "atlas", "*.json"),
     ("atlas/states", "atlas/states", "*.npz"),
     ("atlas/samples", "atlas/samples", "*.json"),
@@ -46,8 +47,12 @@ SCRIPTS = [
     "fetch_mbpp.py", "ensemble_ceiling.py",
     "code_select.py", "visible_tests.py", "verifier_select.py",
     "exec_guided_select.py", "consensus_select.py", "chat_consensus.py",
-    "holonomy_select.py",
+    "holonomy_select.py", "pooled_select.py",
 ]
+
+# The selector as something a reader can run, not only reproduce. Shipped whole so
+# the card's usage example works without cloning the source repository.
+PACKAGE = pathlib.Path("srt_select")
 
 
 def plan():
@@ -67,6 +72,9 @@ def plan():
         p = pathlib.Path("scripts") / s
         if p.is_file():
             items.append((p, f"scripts/{s}"))
+    for p in sorted(PACKAGE.glob("*.py")) + [PACKAGE / "README.md"]:
+        if p.is_file():
+            items.append((p, f"srt_select/{p.name}"))
     paper = pathlib.Path("paper_hivemind.md")
     if paper.is_file():
         items.append((paper, "paper_hivemind.md"))

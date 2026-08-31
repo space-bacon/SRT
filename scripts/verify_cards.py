@@ -32,6 +32,8 @@ DERIVED = {
     "scripts/publish_cxr_model.py": {
         5376: "gemma-4 hidden size, stated in the card",
         14: "ChestX-ray14 findings, stated in the card"},
+    "scripts/publish_hivemind.py": {
+        98.6: "resolved fraction 0.9861 from chat_consensus_mbpp.json, as a percent"},
 }
 
 # publisher -> artifacts whose numbers that card is allowed to quote
@@ -52,11 +54,29 @@ CARDS = {
     "scripts/publish_omni_dataset.py": [
         "artifacts/nla/omni/xvendor4.json",
         "artifacts/nla/omni/triadic_composition_roco.json",
-        "artifacts/nla/omni/head_swap_roco.json",
+        "artifacts/nla/omni/head_swap_multi_roco.json",
         "artifacts/nla/omni/geometry_compare_roco.json",
         "artifacts/nla/omni/rsicd_scene_probe.json",
         "artifacts/nla/omni/joint_frame_roco.json",
         "artifacts/nla/omni/joint_frame_rsicd.json"],
+    "scripts/publish_hivemind.py": [
+        "artifacts/nla/atlas/openweight_transport_atlas.json",
+        "artifacts/nla/atlas/hivemind_sampled_protocol.json",
+        "artifacts/nla/atlas/hivemind_posttraining_isolation.json",
+        "artifacts/nla/atlas/hivemind_template_decomp.json",
+        "artifacts/nla/atlas/hivemind_suppression.json",
+        "artifacts/nla/coder_ladder/scaling_curve.json",
+        "artifacts/nla/ministral_ladder/scaling_curve.json",
+        "artifacts/nla/ministral_suppression/results.json",
+        "artifacts/nla/crosslab_suppression/results.json",
+        "artifacts/nla/verifier/exec_guided.json",
+        "artifacts/nla/verifier/exec_guided_mbpp.json",
+        "artifacts/nla/verifier/consensus.json",
+        "artifacts/nla/verifier/consensus_mbpp.json",
+        "artifacts/nla/verifier/chat_consensus.json",
+        "artifacts/nla/verifier/chat_consensus_mbpp.json",
+        "artifacts/nla/hivemind_census.json",
+        "artifacts/nla/ensemble/union_ceiling_fixed.json"],
 }
 
 
@@ -68,13 +88,21 @@ def _as_number(tok):
 
 
 def card_text(path):
-    """Load the module without running main(), and return whatever it uploads."""
+    """Load the module without running main(), and return whatever it uploads.
+
+    A publisher may carry its card as a module string or point at a markdown
+    file. Only the string form used to be checked, so a file-backed card could
+    quote anything it liked and still pass.
+    """
     spec = importlib.util.spec_from_file_location("pub", path)
     mod = importlib.util.module_from_spec(spec)
     sys.argv = [path]
     spec.loader.exec_module(mod)
     parts = [getattr(mod, n) for n in ("CARD", "README", "MODEL_CARD")
              if isinstance(getattr(mod, n, None), str)]
+    ref = getattr(mod, "CARD_PATH", None)
+    if ref is not None and pathlib.Path(ref).is_file():
+        parts.append(pathlib.Path(ref).read_text())
     return "\n\n".join(parts)
 
 

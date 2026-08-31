@@ -1,0 +1,98 @@
+# srt_select
+
+Pick one of K model replies to a coding request, using only the replies.
+
+No reference solution, no test suite, no scoring model, no training. Run every
+candidate on the same synthesised inputs, group them by what they compute, and
+return a member of the largest group.
+
+```python
+from srt_select import select, choose
+
+best = select(user_message, replies)          # the chosen reply
+
+pick = choose(user_message, replies)          # or the decision itself
+pick.index, pick.entry, pick.ran, pick.clusters, pick.agreed
+```
+
+```
+echo '{"prompt": "write is_even(n)", "replies": ["...", "..."]}' | python -m srt_select
+```
+
+## What it is worth
+
+Against a random-single-draw floor and an any-candidate-passes oracle, over the
+generation pools in `artifacts/nla/`:
+
+| | problems | arms | floor | selected | oracle |
+|---|---:|---:|---:|---:|---:|
+| HumanEval | 164 | 36 | 0.1868 | **0.4426** | 0.4954 |
+| MBPP | 425 | 10 | 0.7185 | **0.8174** | 0.8887 |
+
+That is +0.2558 and +0.0989 over the floor, which is 82.9% and 58.1% of the
+headroom an oracle would capture.
+
+Those two rows are handed the benchmark's entry point and signature. Recovering
+both from the chat turn alone is the deployable case, and it costs coverage
+rather than accuracy:
+
+| | resolved | selected, unresolved scored as an arbitrary pick | floor |
+|---|---:|---:|---:|
+| HumanEval | 55.0% | 0.3096 | 0.1868 |
+| MBPP | 98.6% | 0.7991 | 0.7185 |
+
+HumanEval resolves on barely half its problems because its prompts are
+docstrings that often state no example and carry no annotations, so there is
+nothing to synthesise arguments from. MBPP states an example call for almost
+every problem, which is why it resolves on 98.6%. Coverage is the axis to
+improve, not the ranking.
+
+## What it is not
+
+**It is not a correctness check.** It returns the pool's majority opinion. When
+the pool is confidently wrong together, so is this. `pick.cluster_size` is the
+number of candidates that agreed, and a cluster of one is a coin flip wearing a
+result's clothes.
+
+**It does not help a model that is already good.** Selection value decays with
+scale at −0.0704 per decade: +0.1538 at 3B, +0.0097 at 32B. This buys the most
+where the pool is weakest and diverse, and nearly nothing at the top.
+
+**A learned verifier did worse.** Fitting a classifier on 47,232 execution
+labels reached 0.2639 on HumanEval against this method's 0.4426, and it did not
+transfer to MBPP. Executing the pool beat learning to score it, on both
+benchmarks.
+
+**The ordering against execution-guided filtering is a coverage effect.** On
+HumanEval, agreement reaches all 164 problems while visible-test filtering
+reaches 128, which is most of why agreement leads. On MBPP, where a visible
+assertion exists nearly everywhere, filtering leads instead.
+
+## Running untrusted code
+
+Selecting requires executing every candidate, so this is a remote code execution
+primitive if you point it at the wrong host. `srt_select.sandbox` documents the
+confinement in full: a fresh `-I` interpreter, clamped address-space, CPU and
+file-size limits, a stripped environment and a wall clock.
+
+Read that module before deploying. It is confinement, not a security boundary.
+Run it somewhere you are willing to lose.
+
+## Relationship to `scripts/`
+
+`scripts/chat_consensus.py` and `scripts/consensus_select.py` are the harness
+the published numbers came from and stay as the reproduction record. This
+package is the deployable extraction of it.
+`tests/test_srt_select.py::test_package_agrees_with_the_harness_it_was_extracted_from`
+pins the two together so they cannot drift apart silently.
+
+One deliberate difference: the package applies the resource guard to the probe
+step, which the harness applied only when executing test suites. A candidate
+killed by the guard is counted as one that did not run, so the guard can lower
+coverage and can never raise the score.
+
+## Provenance
+
+Generations, pass matrices and result files:
+[`RiverRider/srt-hivemind`](https://huggingface.co/datasets/RiverRider/srt-hivemind).
+Method and controls: `paper_hivemind.md` §5.4.
