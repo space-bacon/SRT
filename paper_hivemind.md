@@ -445,6 +445,30 @@ explain the baseline: only Qwen2.5 and SmolLM2 inject a branded persona at all,
 while Qwen3, gemma-2 and OLMo-2 inject no system prompt and Llama-3.2 injects only
 date metadata. They converge regardless.
 
+The six models above are 0.36B to 2B, so the same objection Section 5.2 answered for
+Section 5 applies here. We repeated the four persona arms on Ministral-3 at 3B, 8B
+and 14B, against that family's own chat baseline.
+
+| arm | intra | inter | intra drop | inter drop |
+|---|---:|---:|---:|---:|
+| chat (baseline) | 0.8424 | 0.8316 | | |
+| exotic, per model | 0.6454 | **0.4136** | +0.1970 | **+0.4180** |
+| exotic, per sample | **0.4094** | 0.4347 | **+0.4330** | +0.3969 |
+| deployed, per model | 0.8544 | 0.8218 | −0.0120 | +0.0098 |
+| deployed, per sample | 0.7687 | 0.7664 | +0.0737 | +0.0652 |
+
+The result holds and strengthens. Exotic personas take intra down 0.4330 and the
+cross-model term down 0.4180, against 0.2739 and 0.2647 on the small models.
+Deployed personas move the cross-model term by 0.0098 and actually raise intra by
+0.0120. At 3B to 14B, as at 0.36B to 2B, the lever works and the shipped personas do
+not pull it.
+
+One caveat on that table. These three rungs are one family, so its inter-model term
+measures agreement across scale within a lab rather than across labs, and its 0.8316
+baseline is correspondingly higher than the 0.6464 of the six-model set. The
+comparison that carries weight is exotic against deployed inside the same setup, not
+the absolute level.
+
 ## 6. What transport predicts
 
 Within any given level, transport still carries information about which pairs

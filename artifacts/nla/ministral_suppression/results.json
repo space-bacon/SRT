@@ -1,0 +1,61 @@
+{
+  "question": "does persona suppression survive at 3B to 14B",
+  "family": "Ministral-3, Mistral AI",
+  "scorer": "sentence-transformers/all-MiniLM-L6-v2",
+  "baseline": "chat arm from artifacts/nla/ministral_ladder",
+  "arms": {
+    "chat": {
+      "intra_mean": 0.8424,
+      "inter_mean": 0.8316,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.7889,
+      "floor": 0.1374
+    },
+    "persona_model": {
+      "intra_mean": 0.6454,
+      "inter_mean": 0.4136,
+      "frac_models_any_prompt_above_0.8": 0.6667,
+      "mean_frac_prompts_above_0.8": 0.0222,
+      "floor": 0.1806
+    },
+    "persona_sample": {
+      "intra_mean": 0.4094,
+      "inter_mean": 0.4347,
+      "frac_models_any_prompt_above_0.8": 0.0,
+      "mean_frac_prompts_above_0.8": 0.0,
+      "floor": 0.1498
+    },
+    "deployed_model": {
+      "intra_mean": 0.8544,
+      "inter_mean": 0.8218,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.8333,
+      "floor": 0.1392
+    },
+    "deployed_sample": {
+      "intra_mean": 0.7687,
+      "inter_mean": 0.7664,
+      "frac_models_any_prompt_above_0.8": 1.0,
+      "mean_frac_prompts_above_0.8": 0.3444,
+      "floor": 0.1437
+    }
+  },
+  "suppression": {
+    "persona_model": {
+      "intra_drop": 0.197,
+      "inter_drop": 0.418
+    },
+    "persona_sample": {
+      "intra_drop": 0.433,
+      "inter_drop": 0.3969
+    },
+    "deployed_model": {
+      "intra_drop": -0.012,
+      "inter_drop": 0.0098
+    },
+    "deployed_sample": {
+      "intra_drop": 0.0737,
+      "inter_drop": 0.0652
+    }
+  }
+}
