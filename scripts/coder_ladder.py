@@ -107,6 +107,7 @@ def main():
         if path is None:
             prog.tick(len(arms) * len(prompts))
             print(f"  {tag:16s} MISSING {repo}", flush=True)
+            failed.append(tag)
             continue
         try:
             run_model(tag, path, prompts, arms, render, out, prog,
@@ -114,8 +115,14 @@ def main():
         except Exception as e:
             prog.tick(len(arms) * len(prompts))
             print(f"  {tag:16s} FAILED {type(e).__name__}: {str(e)[:80]}", flush=True)
+            failed.append(tag)
+    # A swallowed OOM used to still print "complete"; make the exit code carry it.
     print(f"\nshard {a.shard} complete  {prog.fmt()}", flush=True)
+    if failed:
+        print(f"FAILED: {', '.join(failed)}", flush=True)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -42,6 +42,10 @@ def parse_args():
     p.add_argument("--prompts", type=int, default=60)
     p.add_argument("--max-new", type=int, default=128)
     p.add_argument("--batch", type=int, default=16)
+    p.add_argument("--sizes", nargs="*", default=SIZES)
+    p.add_argument("--arms", nargs="*", default=None)
+    # Generations are named by tag alone, so a different K must write elsewhere.
+    p.add_argument("--out", default=OUT)
     return p.parse_args()
 
 
@@ -66,35 +70,48 @@ def render(tok, stem, mode):
 
 def main():
     a = parse_args()
+    out = a.out
     prompts = STEMS[:a.prompts]
+    inst_arms = a.arms or INST_ARMS
+    base_arms = [m for m in (a.arms or BASE_ARMS) if m in BASE_ARMS]
     jobs = []
-    for s in SIZES:
-        jobs.append((f"ministral{s}_base", f"mistralai/Ministral-3-{s}-Base-2512", BASE_ARMS))
-        jobs.append((f"ministral{s}_inst", f"mistralai/Ministral-3-{s}-Instruct-2512", INST_ARMS))
-    order = {s: i for i, s in enumerate(reversed(SIZES))}
+    for s in a.sizes:
+        if base_arms:
+            jobs.append((f"ministral{s}_base",
+                         f"mistralai/Ministral-3-{s}-Base-2512", base_arms))
+        jobs.append((f"ministral{s}_inst",
+                     f"mistralai/Ministral-3-{s}-Instruct-2512", inst_arms))
+    order = {s: i for i, s in enumerate(reversed(a.sizes))}
     jobs.sort(key=lambda j: order[j[0].replace("ministral", "").split("_")[0]])
     mine = [j for i, j in enumerate(jobs) if i % a.shards == a.shard]
 
     prog = Progress(sum(len(arms) * len(prompts) for _, _, arms in mine))
     print(f"shard {a.shard}/{a.shards}  {len(mine)} models  {len(prompts)} prompts  "
-          f"K={a.k}  batch={a.batch}", flush=True)
+          f"K={a.k}  batch={a.batch}  -> {out}", flush=True)
     print(f"  {', '.join(t for t, _, _ in mine)}\n", flush=True)
 
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(out, exist_ok=True)
+    failed = []
     for tag, repo, arms in mine:
         path = snap(repo)
         if path is None:
             prog.tick(len(arms) * len(prompts))
             print(f"  {tag:18s} MISSING {repo}", flush=True)
+            failed.append(tag)
             continue
         try:
-            run_model(tag, path, prompts, arms, render, OUT, prog,
+            run_model(tag, path, prompts, arms, render, out, prog,
                       k=a.k, max_new=a.max_new, batch=a.batch, dtype=torch.bfloat16)
         except Exception as e:
             prog.tick(len(arms) * len(prompts))
             print(f"  {tag:18s} FAILED {type(e).__name__}: {str(e)[:80]}", flush=True)
+            failed.append(tag)
     print(f"\nshard {a.shard} complete  {prog.fmt()}", flush=True)
+    if failed:
+        print(f"FAILED: {', '.join(failed)}", flush=True)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

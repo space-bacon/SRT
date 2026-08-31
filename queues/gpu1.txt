@@ -1,0 +1,3 @@
+/venv/main/bin/python scripts/ministral_ladder.py --k 32 --prompts 164 --sizes 14B --arms chat --out artifacts/nla/min_k32 --batch 8
+/venv/main/bin/python scripts/ministral_ladder.py --k 32 --prompts 164 --sizes 8B --arms chat --out artifacts/nla/min_k32 --batch 12
+/venv/main/bin/python scripts/ministral_ladder.py --k 32 --prompts 164 --sizes 3B --arms chat --out artifacts/nla/min_k32 --batch 24
