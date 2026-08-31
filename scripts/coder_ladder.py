@@ -48,6 +48,12 @@ def parse_args():
     p.add_argument("--prompts", type=int, default=164)
     p.add_argument("--max-new", type=int, default=192)
     p.add_argument("--batch", type=int, default=32)
+    p.add_argument("--sizes", nargs="*", default=SIZES)
+    p.add_argument("--arms", nargs="*", default=None,
+                   help="restrict instruct arms; base arms are dropped unless 'raw' is kept")
+    # Generations are named by tag alone, so a different K must write elsewhere
+    # or it silently overwrites the published K=8 pools.
+    p.add_argument("--out", default=OUT)
     return p.parse_args()
 
 
@@ -72,27 +78,30 @@ def render(tok, stem, mode):
 
 def main():
     a = parse_args()
+    out = a.out
     he = json.load(open("data/humaneval.json"))[:a.prompts]
     prompts = [p["prompt"] for p in he]
-    json.dump([p["task_id"] for p in he], open(f"{OUT}/task_ids.json", "w")) \
-        if os.path.isdir(OUT) else None
+    os.makedirs(out, exist_ok=True)
+    json.dump([p["task_id"] for p in he], open(f"{out}/task_ids.json", "w"))
 
+    inst_arms = a.arms or INST_ARMS
+    base_arms = [m for m in (a.arms or BASE_ARMS) if m in BASE_ARMS]
     jobs = []
-    for s in SIZES:
-        jobs.append((f"coder{s}_base", f"Qwen/Qwen2.5-Coder-{s}", BASE_ARMS))
-        jobs.append((f"coder{s}_inst", f"Qwen/Qwen2.5-Coder-{s}-Instruct", INST_ARMS))
+    for s in a.sizes:
+        if base_arms:
+            jobs.append((f"coder{s}_base", f"Qwen/Qwen2.5-Coder-{s}", base_arms))
+        jobs.append((f"coder{s}_inst", f"Qwen/Qwen2.5-Coder-{s}-Instruct", inst_arms))
     # Largest first so the slow model starts immediately rather than last.
-    order = {s: i for i, s in enumerate(reversed(SIZES))}
+    order = {s: i for i, s in enumerate(reversed(a.sizes))}
     jobs.sort(key=lambda j: order[j[0].replace("coder", "").split("_")[0]])
     mine = [j for i, j in enumerate(jobs) if i % a.shards == a.shard]
 
     total = sum(len(arms) * len(prompts) for _, _, arms in mine)
     prog = Progress(total)
     print(f"shard {a.shard}/{a.shards}  {len(mine)} models  {len(prompts)} prompts  "
-          f"K={a.k}  batch={a.batch}", flush=True)
+          f"K={a.k}  batch={a.batch}  -> {out}", flush=True)
     print(f"  {', '.join(t for t, _, _ in mine)}\n", flush=True)
 
-    os.makedirs(OUT, exist_ok=True)
     for tag, repo, arms in mine:
         path = snap(repo)
         if path is None:
@@ -100,7 +109,7 @@ def main():
             print(f"  {tag:16s} MISSING {repo}", flush=True)
             continue
         try:
-            run_model(tag, path, prompts, arms, render, OUT, prog,
+            run_model(tag, path, prompts, arms, render, out, prog,
                       k=a.k, max_new=a.max_new, batch=a.batch, dtype=torch.bfloat16)
         except Exception as e:
             prog.tick(len(arms) * len(prompts))
