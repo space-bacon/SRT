@@ -1,0 +1,2 @@
+/venv/main/bin/python scripts/k_latency.py --model Qwen/Qwen2.5-Coder-14B-Instruct --out artifacts/nla/k_latency_14b.json
+/venv/main/bin/python scripts/k_latency.py --model Qwen/Qwen2.5-Coder-7B-Instruct --out artifacts/nla/k_latency_7b.json
