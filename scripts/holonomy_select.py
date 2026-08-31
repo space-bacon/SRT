@@ -11,6 +11,7 @@ Maps are fit on arms disjoint from the evaluated arms, so no candidate under
 evaluation contributes to the transport it is scored by.
 """
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -120,10 +121,12 @@ def main():
           f"eval {len(ev_texts)} ({len(a.eval_arms)} arms)", flush=True)
 
     cache = os.path.join(HERE, a.cache)
+    fh = hashlib.md5("|".join(a.fit_arms).encode()).hexdigest()[:8]
+    eh = hashlib.md5("|".join(a.eval_arms).encode()).hexdigest()[:8]
     XF, XE = {}, {}
     for tag, mid, dt in LOOP:
-        XF[tag] = encode(tag + "__fit", mid, dt, fit_texts, cache)
-        XE[tag] = encode(tag + "__eval", mid, dt, ev_texts, cache)
+        XF[tag] = encode(f"{tag}__fit_{fh}", mid, dt, fit_texts, cache)
+        XE[tag] = encode(f"{tag}__eval_{eh}", mid, dt, ev_texts, cache)
 
     tags = [t for t, _, _ in LOOP]
     # Ground truth for the evaluated arms.

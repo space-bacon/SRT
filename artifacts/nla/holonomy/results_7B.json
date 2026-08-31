@@ -1,0 +1,76 @@
+{
+  "n_fit": 5248,
+  "n_eval": 3936,
+  "loop": [
+    "qwen25_coder7b",
+    "olmo2_1b",
+    "tinyllama"
+  ],
+  "fit_arms": [
+    "coder0.5B_inst__chat",
+    "coder0.5B_inst__shared",
+    "coder1.5B_inst__chat",
+    "coder1.5B_inst__shared"
+  ],
+  "eval_arms": [
+    "coder7B_inst__chat",
+    "coder7B_inst__shared",
+    "coder7B_inst__shared_persona"
+  ],
+  "routes": {
+    "loop3_ABCA": {
+      "auroc_defect_predicts_wrong": 0.5098887275995847,
+      "auroc_low_defect_predicts_wrong": 0.4901112724004153,
+      "select_argmin_defect": 0.43089430894308944,
+      "select_argmax_defect": 0.5060975609756098,
+      "select_argmax_length_control": 0.38414634146341464,
+      "defect_vs_length_pearson": 0.25123720560186064,
+      "floor_pass1": 0.4903455284552846,
+      "oracle_passk": 0.8719512195121951,
+      "defect_mean": 0.056998183926238545,
+      "defect_std": 0.025097538938052184,
+      "argmin_minus_floor": -0.059451219512195175,
+      "argmax_minus_floor": 0.015752032520325143,
+      "argmax_minus_length_control": 0.12195121951219512,
+      "null_mean": 0.4903595528455284,
+      "null_p95": 0.5182926829268293,
+      "p_value_argmax": 0.1986
+    },
+    "loop2_ABA": {
+      "auroc_defect_predicts_wrong": 0.5114439066221026,
+      "auroc_low_defect_predicts_wrong": 0.4885560933778974,
+      "select_argmin_defect": 0.4369918699186992,
+      "select_argmax_defect": 0.49390243902439024,
+      "select_argmax_length_control": 0.38414634146341464,
+      "defect_vs_length_pearson": 0.24737633397225683,
+      "floor_pass1": 0.4903455284552846,
+      "oracle_passk": 0.8719512195121951,
+      "defect_mean": 0.04349342646681008,
+      "defect_std": 0.019772533255751457,
+      "argmin_minus_floor": -0.05335365853658541,
+      "argmax_minus_floor": 0.00355691056910562,
+      "argmax_minus_length_control": 0.1097560975609756,
+      "null_mean": 0.4903595528455284,
+      "null_p95": 0.5182926829268293,
+      "p_value_argmax": 0.4471
+    },
+    "loop2_ACA": {
+      "auroc_defect_predicts_wrong": 0.5081238150832477,
+      "auroc_low_defect_predicts_wrong": 0.49187618491675233,
+      "select_argmin_defect": 0.4349593495934959,
+      "select_argmax_defect": 0.491869918699187,
+      "select_argmax_length_control": 0.38414634146341464,
+      "defect_vs_length_pearson": 0.23846611426788816,
+      "floor_pass1": 0.4903455284552846,
+      "oracle_passk": 0.8719512195121951,
+      "defect_mean": 0.04209777922845198,
+      "defect_std": 0.01896873371840027,
+      "argmin_minus_floor": -0.055386178861788704,
+      "argmax_minus_floor": 0.0015243902439023849,
+      "argmax_minus_length_control": 0.10772357723577236,
+      "null_mean": 0.4903595528455284,
+      "null_p95": 0.5182926829268293,
+      "p_value_argmax": 0.4905
+    }
+  }
+}
