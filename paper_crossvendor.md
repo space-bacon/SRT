@@ -169,17 +169,37 @@ own captions to its own pictures, so a ratio of two caption-head-limited numbers
 cannot report much about encoders.
 
 Dipankar Sarkar proposed the test that settles it: hold the image side fixed and
-swap the caption tower. Replacing it with an unrelated `all-MiniLM-L6-v2` on the
-radiology gallery moves both terms by nearly the same factor.
+swap the caption tower. Our first run of that test was invalid and we replaced
+it. It substituted a single shared `all-MiniLM-L6-v2` for every vendor's caption
+head, which deleted the swapped side's dependence on the text vendor. Both
+swapped arms then estimated the same quantity, and they came back 0.0833 against
+0.0835. A ratio test whose two arms are the same number reduces to
+`cross_native / within_native`, so it was not a weak instrument, it was a
+degenerate one.
+
+The repair is one distinct caption tower per slot, so the swapped side still
+varies with the vendor: `all-MiniLM-L6-v2` for Qwen3-Omni, `bge-small-en-v1.5`
+for Gemma-4, `gte-base` for Mistral, `e5-base-v2` for Aria, assignment fixed and
+arbitrary. Five seeds, 1,000 held-out radiology items.
 
 | | native head | swapped head | ratio |
 |---|---:|---:|---:|
-| within r@1 | 0.0887 | 0.0833 | 0.938 |
-| cross r@1 | 0.0853 | 0.0830 | 0.973 |
+| within r@1 | 0.0847 ± 0.0033 | 0.1021 ± 0.0023 | 1.2064 ± 0.0304 |
+| cross r@1 | 0.0872 ± 0.0025 | 0.1072 ± 0.0030 | 1.2308 ± 0.0401 |
 
-That is what a shared bottleneck predicts, and it is the test designed to break
-the reframe rather than confirm it. **Report the legs separately.** The
-image-agreement number is the one that bears on the encoders.
+The two swapped arms now differ by 0.0051, so the instrument is live. The gap
+between the two ratios is −0.0244 against its own spread of 0.0476, which is half
+a standard deviation. Both legs move by the same factor when the caption head
+changes, which is what a shared bottleneck predicts, and this is the test
+designed to break the reframe rather than confirm it.
+
+Note the direction: swapping in a small generic sentence encoder **raises** r@1
+by about a fifth on both legs. The native multimodal caption heads are worse at
+this retrieval than an off-the-shelf text encoder, which is itself evidence that
+the caption head, not the image tower, is the binding constraint.
+
+**Report the legs separately.** The image-agreement number is the one that bears
+on the encoders.
 
 He raised a second objection we record without having resolved: the 8x gap
 contains a task-ceiling term that the comparison does not net out, because
@@ -250,6 +270,24 @@ since Wang scored 0.7381 random against 0.7451 official.
 The spread across backbones is 0.057 mean AUROC, which is a real limit on the
 single-model claim: linear presence of pathology replicates on all three, but
 beating the baseline does not, because Aria does not.
+
+**How wide is that margin, and is the floor a bound?** Both questions were put to
+us by Dipankar Sarkar, and both needed running. Taking Gemma-4 on the full
+112,120 films: the 0.7590 headline carries a 95% interval of 0.7500 to 0.7673,
+standard error 0.0045, so the 0.0139 margin over the split-matched baseline is
+3.09 standard errors. That interval is on the macro number as one quantity, not
+fourteen per-finding intervals averaged.
+
+The floor is not a bound, it is a distribution, and we had been quoting one draw
+from it. Refitting the shuffled-label probe under 20 seeds gives 0.5006 ± 0.0052,
+ranging 0.4910 to 0.5093. The single seed we originally published, 0.5002, sits
+inside that spread, so the published floor was representative rather than lucky,
+but it was reported with more precision than it has. The margin over the
+baseline is 2.65 floor standard deviations.
+
+One more null on the same artifact. Gemma-4 is ahead of the baseline on 12 of the
+14 findings. Across 20 shuffled refits that count was 0 in all 20, maximum 0. A
+fair coin gives 12 or more of 14 at p = 0.0065.
 
 **Now transport.** Probe fitted on one backbone, read on another's states through
 a train-only ridge map. The native row is the mean of the three single-backbone
@@ -383,6 +421,31 @@ of six.
 ![Round-trip r@1 by hop count, for routes crossing one, two and three
 distinct vendor boundaries, in radiology and satellite.](arxiv_crossvendor/figs/fig4_ladder.png)
 
+**Is it the count, or is it which edges?** Dipankar Sarkar raised the obvious
+alternative: some vendor pairs are simply worse maps, and a three-edge route is
+obliged to use more of them, so the ladder could be edge identity wearing edge
+count's clothes. The control is to measure every boundary alone at matched hop
+counts, then rebuild the ladder under every assignment of vendors to rungs.
+
+The per-edge spread is large enough for the objection to have teeth. At 36 hops
+the best single boundary in radiology is Qwen3-Omni to Mistral at 0.878 and the
+worst is Qwen3-Omni to Aria at 0.446, a range of 0.432. Satellite spans 0.584 to
+0.266.
+
+The ladder survives it. Across all six permutations of which three vendors fill
+the one-, two- and three-edge routes, the ordering is monotone six of six, in
+both domains. It also survives a stronger test. If crossing more boundaries cost
+nothing beyond the hops themselves, a two-edge route should score the product of
+its two edges' decay at half the hops each. It scores below that product, by
+0.078 in radiology and 0.063 in satellite. Distinct boundaries cost more than
+composing one boundary the same number of times.
+
+**What the control does not clear.** At 36 hops the worst single boundary sits
+only 0.058 above the three-edge rung in radiology, and 0.015 above it in
+satellite. A bad enough single edge nearly reaches the bottom rung on its own, so
+edge count is sufficient to order the rungs but is not the only thing that moves
+them. The ordering is the claim. The size of the split is not.
+
 **The first reading of this was wrong and is withdrawn.** We originally reported
 a three-way ordering and read it as evidence about *enclosed area*. Dipankar
 Sarkar pointed out that there-and-back also differs by composing a map with its
@@ -434,6 +497,8 @@ Kept because they bound the claims above.
 | A shared frame buys back loop degradation | **Not established.** Rank-matching rules out the trivial reading; what remains may only restate subspace reuse |
 | A two-vendor mapping needs a third vendor to mediate it | **Negative.** Routing through a third costs 0.0160 beyond the extra fitted hop it adds, so at one pass a direct pair is enough |
 | `retention` measures the vendor boundary | **Withdrawn.** Both terms are caption-head limited; report the legs separately |
+| The edge-count ladder is really edge identity | **Survives, with a limit.** Monotone in 6/6 vendor permutations in both domains, and two-edge routes fall 0.078 and 0.063 below the per-edge product. But the worst single edge comes within 0.058 and 0.015 of the three-edge rung |
+| The shuffled floor is a bound | **No, it is a distribution.** 0.5006 ± 0.0052 over 20 seeds, range 0.4910 to 0.5093. The published single seed was representative but over-precise |
 | Attention-style pooling beats mean for focal findings | **Falsified.** max −0.0537, top16 −0.0225 on focal findings |
 | Readout depth matters | **No.** 0.7600 to 0.7605 across 0.4 / 0.6 / 0.8 of depth |
 
@@ -480,8 +545,11 @@ All results are reproducible from published states.
 | live: one film, three backbones, pooled | `RiverRider/srt-cxr14-probe` |
 
 Scripts: `cxr_probe.py`, `cxr_probe_transport.py`, `cxr_probe_ensemble.py`,
-`rsicd_scene_probe.py`, `joint_frame.py`, `holonomy_palindrome.py`,
-`head_swap.py`.
+`cxr_probe_floor_seeds.py`, `rsicd_scene_probe.py`, `joint_frame.py`,
+`holonomy_palindrome.py`, `holonomy_edge_identity.py`, `head_swap_multi.py`.
+
+`head_swap.py` produced the degenerate first version of the §3.1 control and is
+kept only so the correction is auditable. Do not read `head_swap_roco.json`.
 
 Figures: `make_crossvendor_figures.py`, which reads every value from the result
 files below rather than carrying its own copy, so a regenerated artifact
@@ -489,9 +557,10 @@ regenerates the plot.
 
 Result files: `cxr14_probe_full112k.json`, `cxr14_probe_{qwen3omni,aria}.json`,
 `cxr14_transport.json`, `cxr14_ensemble3.json`, `cxr14_vendor_compare.json`,
-`rsicd_scene_probe.json`, `joint_frame_{roco,rsicd}.json`,
-`holonomy_palindrome_{roco,rsicd}.json`, `geometry_compare_roco.json`,
-`head_swap_roco.json`, `xvendor4.json`, `triadic_composition_roco.json`.
+`cxr14_floor_seeds.json`, `rsicd_scene_probe.json`, `joint_frame_{roco,rsicd}.json`,
+`holonomy_palindrome_{roco,rsicd}.json`,
+`holonomy_edge_identity_{roco,rsicd}.json`, `geometry_compare_roco.json`,
+`head_swap_multi_roco.json`, `xvendor4.json`, `triadic_composition_roco.json`.
 
 ---
 
@@ -523,9 +592,17 @@ a second backbone is worth more as a co-reader than as a replacement.
 
 ## Acknowledgments
 
-Dipankar Sarkar proposed the head-swap control in §3.1 and the palindrome control
-in §8, and raised the task-ceiling objection we record as unresolved. Two of our
-published readings did not survive his tests. Both are withdrawn above.
+Dipankar Sarkar proposed the head-swap control in §3.1, the palindrome control
+and the edge-identity control in §8, and the interval and seed-spread questions
+answered in §5. He also raised the task-ceiling objection we record as
+unresolved. Two of our published readings did not survive his tests and are
+withdrawn above, and a third, the first head-swap run, was degenerate and has
+been rebuilt.
+
+Samoed, on `embeddings-benchmark/mteb#5330`, asked whether the single-pass and
+composition split appears on text encoders that MTEB actually ranks. It does,
+though the edge-count ladder does not carry over. That result is in
+`mteb_composition.json`.
 
 ## References
 
