@@ -1,0 +1,94 @@
+{
+ "protocol": "top_p=0.9, temperature=1.0, K=8, 48 new tokens",
+ "matches": "arXiv:2510.22954 sampling settings",
+ "n_models": 12,
+ "n_prompts": 60,
+ "intra_model": {
+  "per_model": {
+   "qwen25_05b": {
+    "mean": 0.3385,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "qwen3_06b": {
+    "mean": 0.3422,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "gemma2_2b": {
+    "mean": 0.3485,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "llama32_1b": {
+    "mean": 0.375,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "llama32_3b": {
+    "mean": 0.3995,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "tinyllama": {
+    "mean": 0.3998,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "olmo2_1b": {
+    "mean": 0.3921,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "smollm2_360m": {
+    "mean": 0.3928,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "pythia_410m": {
+    "mean": 0.3087,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "qwen25_7b": {
+    "mean": 0.3653,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "gptoss_20b": {
+    "mean": 0.3536,
+    "frac_prompts_above_0.8": 0.0
+   },
+   "qwen25_7b_f32": {
+    "mean": 0.3574,
+    "frac_prompts_above_0.8": 0.0
+   }
+  },
+  "mean_across_models": 0.3644,
+  "range": [
+   0.3087,
+   0.3998
+  ],
+  "paper_claim": "79% of queries above 0.8"
+ },
+ "inter_model": {
+  "mean": 0.3401,
+  "range": [
+   0.2917,
+   0.4232
+  ],
+  "cross_lab_mean": 0.3389,
+  "paper_range": [
+   0.71,
+   0.82
+  ]
+ },
+ "floor_different_prompt": 0.0993,
+ "link_transport_vs_inter": {
+  "all": {
+   "n": 66,
+   "rho": 0.36,
+   "p": 0.002
+  },
+  "minus_anchor": {
+   "n": 65,
+   "rho": 0.3304,
+   "p": 0.0055
+  },
+  "cross_lab": {
+   "n": 59,
+   "rho": 0.3098,
+   "p": 0.0139
+  }
+ }
+}
