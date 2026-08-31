@@ -81,3 +81,8 @@ artifacts/nla/cxr14/
 
 # 17 MB and already published at RiverRider/srt-cxr14-frozen-probe.
 artifacts/nla/cxr14_manifest.json
+
+# Recomputable caches: hidden states and execution pass-matrices
+artifacts/nla/holonomy/states/
+artifacts/nla/verifier/passmat*/
+artifacts/nla/verifier/vismat*/

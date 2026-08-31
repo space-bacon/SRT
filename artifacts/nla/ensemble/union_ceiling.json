@@ -1,0 +1,83 @@
+{
+  "question": "is a multi-lab pool worth more than the best single model",
+  "k": 8,
+  "max_new": 512,
+  "n_problems": 164,
+  "members": {
+    "qwen25c_32b": {
+      "lab": "Alibaba",
+      "repo": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "k": 8,
+      "pass_at_1": 0.8986,
+      "pass_at_k": 0.9329
+    },
+    "gemma4_31b": {
+      "lab": "Google",
+      "repo": "google/gemma-4-31B-it",
+      "k": 8,
+      "pass_at_1": 0.9367,
+      "pass_at_k": 0.9634
+    },
+    "ministral_14b": {
+      "lab": "Mistral",
+      "repo": "mistralai/Ministral-3-14B-Instruct-2512",
+      "k": 8,
+      "pass_at_1": 0.8102,
+      "pass_at_k": 0.939
+    },
+    "glm47_flash": {
+      "lab": "Zhipu",
+      "repo": "zai-org/GLM-4.7-Flash",
+      "k": 8,
+      "pass_at_1": 0.0526,
+      "pass_at_k": 0.2927
+    },
+    "qwen3c_30b": {
+      "lab": "Alibaba",
+      "repo": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "k": 8,
+      "pass_at_1": 0.9002,
+      "pass_at_k": 0.9207
+    },
+    "ornith_35b": {
+      "lab": "Ornith/Qwen-arch",
+      "repo": "ornith-ai/Ornith-1.5-35B-A3B",
+      "k": 8,
+      "pass_at_1": 0.7027,
+      "pass_at_k": 0.9085
+    }
+  },
+  "union": {
+    "union_pass": 0.9756,
+    "best_single_pass_at_k": 0.9634,
+    "best_single": "gemma4_31b",
+    "union_minus_best": 0.0122,
+    "mean_single_pass_at_1": 0.7168,
+    "solved_by_exactly_one_model": {
+      "gemma4_31b": 0,
+      "glm47_flash": 0,
+      "ministral_14b": 0,
+      "ornith_35b": 0,
+      "qwen25c_32b": 0,
+      "qwen3c_30b": 0
+    },
+    "solved_by_none": 4,
+    "pairwise_jaccard": {
+      "gemma4_31b|glm47_flash": 0.3038,
+      "gemma4_31b|ministral_14b": 0.95,
+      "gemma4_31b|ornith_35b": 0.943,
+      "gemma4_31b|qwen25c_32b": 0.9437,
+      "gemma4_31b|qwen3c_30b": 0.9434,
+      "glm47_flash|ministral_14b": 0.3032,
+      "glm47_flash|ornith_35b": 0.3221,
+      "glm47_flash|qwen25c_32b": 0.3137,
+      "glm47_flash|qwen3c_30b": 0.3179,
+      "ministral_14b|ornith_35b": 0.9177,
+      "ministral_14b|qwen25c_32b": 0.9308,
+      "ministral_14b|qwen3c_30b": 0.9304,
+      "ornith_35b|qwen25c_32b": 0.9114,
+      "ornith_35b|qwen3c_30b": 0.9231,
+      "qwen25c_32b|qwen3c_30b": 0.9363
+    }
+  }
+}
