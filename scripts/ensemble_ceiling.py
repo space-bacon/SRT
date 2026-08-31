@@ -45,6 +45,17 @@ MODELS = [
     # Ornith is a Qwen3.5-architecture post-train, not an independent pretrain.
     ("ornith_35b", "ornith-ai/Ornith-1.5-35B-A3B", "Ornith/Qwen-arch"),
 ]
+
+# Reasoning-first MoE models, none of which fit on one 96 GB card. The decay law
+# was fit on dense non-reasoning Qwen2.5-Coder, so it has no standing to predict
+# how these sample under temperature: RL post-training could collapse candidate
+# diversity, or CoT branching could widen it. That is the open question here.
+FRONTIER = [
+    ("deepseek_v4_flash", "deepseek-ai/DeepSeek-V4-Flash", "DeepSeek"),
+    ("qwen38_flash_next", "Qwen/Qwen3.8-Flash-Next-FP8", "Alibaba"),
+    ("glm53_flash", "zai-org/GLM-5.3-Flash", "Zhipu"),
+]
+SETS = {"ensemble": MODELS, "frontier": FRONTIER}
 INSTR = "Complete the following Python function. Reply with the full function only.\n\n"
 
 
@@ -86,13 +97,18 @@ def main():
     ap.add_argument("--timeout", type=float, default=8.0)
     ap.add_argument("--workers", type=int, default=96)
     ap.add_argument("--out", default=f"{OUT}/union_ceiling.json")
+    ap.add_argument("--models", choices=sorted(SETS), default="ensemble")
+    ap.add_argument("--gen-dir", default=OUT)
+    ap.add_argument("--device-map", default=None,
+                    help="'auto' shards over every visible GPU; required for the frontier set")
     a = ap.parse_args()
 
     probs = json.load(open(os.path.join(HERE, a.probs)))
     stems = [p["prompt"] for p in probs]
-    mine = [m for i, m in enumerate(MODELS) if i % a.shards == a.shard]
+    models = SETS[a.models]
+    mine = [m for i, m in enumerate(models) if i % a.shards == a.shard]
     print(f"shard {a.shard}/{a.shards}  {len(mine)} models  {len(stems)} prompts  "
-          f"K={a.k}  max_new={a.max_new}", flush=True)
+          f"K={a.k}  max_new={a.max_new}  set={a.models}", flush=True)
 
     prog = Progress(len(mine) * len(stems))
     for tag, repo, lab in mine:
@@ -100,16 +116,17 @@ def main():
         if not p:
             print(f"  {tag:16s} MISSING {repo}", flush=True)
             continue
-        run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, OUT), prog,
-                  k=a.k, max_new=a.max_new, batch=a.batch, dtype=torch.bfloat16)
+        run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+                  k=a.k, max_new=a.max_new, batch=a.batch, dtype=torch.bfloat16,
+                  device_map=a.device_map)
     if a.gen_only:
         return
 
     ok, res = {}, {"question": "is a multi-lab pool worth more than the best single model",
                    "k": a.k, "max_new": a.max_new, "n_problems": len(probs),
                    "members": {}, }
-    for tag, repo, lab in MODELS:
-        f = os.path.join(HERE, OUT, f"{tag}__chat.json")
+    for tag, repo, lab in models:
+        f = os.path.join(HERE, a.gen_dir, f"{tag}__chat.json")
         if not os.path.isfile(f):
             print(f"  {tag:16s} no generations, skipped", flush=True)
             continue
