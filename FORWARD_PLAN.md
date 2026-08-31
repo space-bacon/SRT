@@ -456,6 +456,28 @@ Package: `srt_select`. Paper: `paper_hivemind.md` §5.4. Artifacts:
 `RiverRider/srt-hivemind`. Standing numbers: HumanEval 0.1868 → 0.4426
 (oracle 0.4954), MBPP 0.7185 → 0.8174 (oracle 0.8887).
 
+### 0. The shape of the plan *(hardware is a variable, not a constraint)*
+
+Establish the best number the method can produce, then size hardware to serve
+it. Designing around whatever box happens to be here inverts the order and
+throws away results that a different card would make deployable.
+
+The claim being chased: **a 14B with selection scores 0.8706 on MBPP against a
+32B's 0.8609 unaided**, so selection buys roughly one size class. It is a product
+claim only if K samples cost meaningfully less than K answers, which is a
+property of the serving stack.
+
+**Serving stack follows from that.** vLLM takes `SamplingParams.n`, giving K
+samples from one prefill with continuous batching, which is exactly this
+workload. The current lab path does not: `sunstone_server.py` calls
+`mlx_vlm.generate`, single-prompt only, so K there really would be K sequential
+turns. `mlx_lm.batch_generate` exists and takes a prompt list, but the
+shared-prefill behaviour is unverified. Measure before committing:
+`k_latency.py` on CUDA, `k_latency_mlx.py` on Apple Silicon.
+
+Order of work: measure the K curve, fix the best config, then choose hardware.
+Not the reverse.
+
 ### 1. The oracle gap is closed as a research direction *(answered 2026-08-31)*
 
 The pooled null said a diverse pool holds 162 of 164 solvable problems while no
