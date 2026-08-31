@@ -405,6 +405,32 @@ of problems.
 hivemind result licenses: convergence in phrasing is real and we reproduced it, but
 it should not be read as convergence in what the models actually get right.
 
+That gap is large enough to be worth closing, so we asked what closes it. Across the
+same 36 arms, selecting one candidate per problem by five different reads:
+
+| read | coverage | pass | share of the gap |
+|---|---:|---:|---:|
+| random single | 164 | 0.1868 | |
+| centered medoid similarity | 164 | 0.1921 | 1.7% |
+| learned verifier on encoder features | 164 | 0.2639 | 25.0% |
+| filter by the prompt's own examples | 128 | 0.4145 | 73.8% |
+| that filter plus the verifier | 128 | 0.4339 | 80.1% |
+| **agreement among candidates** | **164** | **0.4426** | **82.9%** |
+| oracle | 164 | 0.4954 | 100% |
+
+The verifier is trained on 47,232 execution labels drawn from these arms, split by
+problem so no candidate for a test problem is ever seen in training. It captures a
+quarter of the gap and loses to simply running the examples the prompt already
+states, by 0.1506.
+
+**What wins is the pool disagreeing with itself.** Synthesising inputs from each
+signature, running all eight candidates, and keeping the largest group that agrees on
+outputs recovers 82.9% of the gap. It needs no labels, no training, and no stated
+examples, so it covers all 164 problems where example-filtering reaches only 128.
+The homogeneity Section 5 measures is in the text; the residual disagreement, which
+is invisible to an encoder, is enough to pick a correct answer four times out of
+nine when a single sample manages fewer than two.
+
 ### 5.5 It can be suppressed, but not by anything anyone ships
 
 Everything above adds framing and watches similarity rise. That is an explanation,
@@ -609,6 +635,22 @@ nothing: centered minus raw is −0.0016, with 8 wins, 12 losses and 10 ties. Me
 voting beats a random single sample by +0.0064, which is 2.0% of the +0.3151
 headroom. Centering corrects similarity magnitudes and leaves the argmax alone.
 
+**Our learned verifier lost to a baseline that needs no learning.** Fitting a
+classifier on 47,232 execution labels was the one read that survived its nuisance
+knobs, at +0.0771 over the floor with a spread of 0.0090 across six configurations.
+It is still beaten by running the examples the prompt already contains (−0.1506) and
+by candidate agreement (−0.1787). We report it because the negative is the useful
+part: the supervised signal we paid for is worth a quarter of what falls out of
+executing the pool for free.
+
+**We twice weakened a baseline by accident, and both times it flattered us.** Our
+first example extractor read only doctest blocks with literal expected values,
+covering 54 of 164 problems at 0.60 assertions each, which would have shown
+example-filtering roughly level with the verifier. Repairing it to 128 problems at
+2.83 assertions moved that baseline from 0.3943 to 0.4145 and widened the verifier's
+deficit from −0.1304 to −0.1506. A handicapped comparison is a quiet form of
+overclaiming, and no control we ran on the verifier itself could have detected it.
+
 **A cross-model transport selector did not survive replication, and we published
 the claim before checking.** Scoring candidates by how far a hidden state fails to
 return after transport around a closed cross-lab loop gave +0.0727 over the floor
@@ -690,6 +732,9 @@ scores.
 - `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`
 - `scripts/ministral_ladder.py`, `artifacts/nla/ministral_ladder/`
 - `scripts/code_select.py`, `artifacts/nla/code_select/results.json`
+- `scripts/verifier_select.py` and `scripts/exec_guided_select.py`, `artifacts/nla/verifier/`
+- `scripts/visible_tests.py`, prompt-derived example extraction with canonical validation
+- `scripts/consensus_select.py`, `artifacts/nla/verifier/consensus.json`
 - `scripts/holonomy_select.py`, `artifacts/nla/holonomy/`, including the retraction sweep
 - `artifacts/nla/atlas/samples/` and `samples_instruct/`, sampled continuations
 - `scripts/bench_device.py`, same-task benchmark for cross-device comparison
