@@ -1,0 +1,1391 @@
+{
+  "n_candidates": 47232,
+  "n_arms": 36,
+  "n_problems": 164,
+  "scorer": "sentence-transformers/all-MiniLM-L6-v2",
+  "split": "GroupKFold by problem id",
+  "folds": 5,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "runs": {
+    "C0.1_seed0": {
+      "verifier": 0.2556,
+      "medoid_centered": 0.1921,
+      "floor": 0.1868,
+      "oracle": 0.4954,
+      "auroc": 0.7612,
+      "verifier_minus_floor": 0.0688,
+      "headroom_captured": 0.2229,
+      "per_arm": {
+        "coder0.5B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0213,
+          "medoid_centered": 0.0244,
+          "oracle": 0.1524
+        },
+        "coder0.5B_inst__chat": {
+          "verifier": 0.2866,
+          "floor": 0.1745,
+          "medoid_centered": 0.1646,
+          "oracle": 0.4695
+        },
+        "coder0.5B_inst__persona": {
+          "verifier": 0.0183,
+          "floor": 0.0381,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2134
+        },
+        "coder0.5B_inst__raw": {
+          "verifier": 0.0244,
+          "floor": 0.0259,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1829
+        },
+        "coder0.5B_inst__shared": {
+          "verifier": 0.2622,
+          "floor": 0.1692,
+          "medoid_centered": 0.2073,
+          "oracle": 0.4817
+        },
+        "coder0.5B_inst__shared_persona": {
+          "verifier": 0.2439,
+          "floor": 0.1562,
+          "medoid_centered": 0.1707,
+          "oracle": 0.4512
+        },
+        "coder1.5B_base__raw": {
+          "verifier": 0.0061,
+          "floor": 0.0373,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2012
+        },
+        "coder1.5B_inst__chat": {
+          "verifier": 0.4085,
+          "floor": 0.3178,
+          "medoid_centered": 0.3293,
+          "oracle": 0.7134
+        },
+        "coder1.5B_inst__persona": {
+          "verifier": 0.0488,
+          "floor": 0.0465,
+          "medoid_centered": 0.0671,
+          "oracle": 0.2805
+        },
+        "coder1.5B_inst__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0686,
+          "medoid_centered": 0.061,
+          "oracle": 0.3841
+        },
+        "coder1.5B_inst__shared": {
+          "verifier": 0.3902,
+          "floor": 0.2424,
+          "medoid_centered": 0.2561,
+          "oracle": 0.7073
+        },
+        "coder1.5B_inst__shared_persona": {
+          "verifier": 0.4268,
+          "floor": 0.2767,
+          "medoid_centered": 0.311,
+          "oracle": 0.6829
+        },
+        "coder14B_base__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0465,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2683
+        },
+        "coder14B_inst__chat": {
+          "verifier": 0.5305,
+          "floor": 0.3636,
+          "medoid_centered": 0.3476,
+          "oracle": 0.7866
+        },
+        "coder14B_inst__persona": {
+          "verifier": 0.1341,
+          "floor": 0.1052,
+          "medoid_centered": 0.128,
+          "oracle": 0.4573
+        },
+        "coder14B_inst__raw": {
+          "verifier": 0.0854,
+          "floor": 0.0755,
+          "medoid_centered": 0.0549,
+          "oracle": 0.3293
+        },
+        "coder14B_inst__shared": {
+          "verifier": 0.6768,
+          "floor": 0.5404,
+          "medoid_centered": 0.5854,
+          "oracle": 0.878
+        },
+        "coder14B_inst__shared_persona": {
+          "verifier": 0.5671,
+          "floor": 0.4329,
+          "medoid_centered": 0.5122,
+          "oracle": 0.7927
+        },
+        "coder32B_base__raw": {
+          "verifier": 0.0244,
+          "floor": 0.0366,
+          "medoid_centered": 0.0305,
+          "oracle": 0.25
+        },
+        "coder32B_inst__chat": {
+          "verifier": 0.3171,
+          "floor": 0.2401,
+          "medoid_centered": 0.2683,
+          "oracle": 0.5061
+        },
+        "coder32B_inst__persona": {
+          "verifier": 0.1037,
+          "floor": 0.0968,
+          "medoid_centered": 0.1159,
+          "oracle": 0.439
+        },
+        "coder32B_inst__raw": {
+          "verifier": 0.0427,
+          "floor": 0.0777,
+          "medoid_centered": 0.0671,
+          "oracle": 0.3354
+        },
+        "coder32B_inst__shared": {
+          "verifier": 0.2988,
+          "floor": 0.2264,
+          "medoid_centered": 0.2073,
+          "oracle": 0.5305
+        },
+        "coder32B_inst__shared_persona": {
+          "verifier": 0.2561,
+          "floor": 0.2058,
+          "medoid_centered": 0.1951,
+          "oracle": 0.4817
+        },
+        "coder3B_base__raw": {
+          "verifier": 0.0122,
+          "floor": 0.0213,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1341
+        },
+        "coder3B_inst__chat": {
+          "verifier": 0.4207,
+          "floor": 0.2774,
+          "medoid_centered": 0.25,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__persona": {
+          "verifier": 0.189,
+          "floor": 0.109,
+          "medoid_centered": 0.1402,
+          "oracle": 0.5427
+        },
+        "coder3B_inst__raw": {
+          "verifier": 0.0427,
+          "floor": 0.0549,
+          "medoid_centered": 0.0427,
+          "oracle": 0.2927
+        },
+        "coder3B_inst__shared": {
+          "verifier": 0.5244,
+          "floor": 0.2782,
+          "medoid_centered": 0.2317,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__shared_persona": {
+          "verifier": 0.4512,
+          "floor": 0.2409,
+          "medoid_centered": 0.1829,
+          "oracle": 0.6402
+        },
+        "coder7B_base__raw": {
+          "verifier": 0.0427,
+          "floor": 0.0495,
+          "medoid_centered": 0.0732,
+          "oracle": 0.2805
+        },
+        "coder7B_inst__chat": {
+          "verifier": 0.6768,
+          "floor": 0.5404,
+          "medoid_centered": 0.5122,
+          "oracle": 0.9024
+        },
+        "coder7B_inst__persona": {
+          "verifier": 0.1341,
+          "floor": 0.0945,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__raw": {
+          "verifier": 0.1159,
+          "floor": 0.1044,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__shared": {
+          "verifier": 0.6707,
+          "floor": 0.4931,
+          "medoid_centered": 0.5122,
+          "oracle": 0.878
+        },
+        "coder7B_inst__shared_persona": {
+          "verifier": 0.6159,
+          "floor": 0.4375,
+          "medoid_centered": 0.4024,
+          "oracle": 0.8354
+        }
+      }
+    },
+    "C0.1_seed1": {
+      "verifier": 0.2588,
+      "medoid_centered": 0.1921,
+      "floor": 0.1868,
+      "oracle": 0.4954,
+      "auroc": 0.7786,
+      "verifier_minus_floor": 0.072,
+      "headroom_captured": 0.2333,
+      "per_arm": {
+        "coder0.5B_base__raw": {
+          "verifier": 0.0122,
+          "floor": 0.0213,
+          "medoid_centered": 0.0244,
+          "oracle": 0.1524
+        },
+        "coder0.5B_inst__chat": {
+          "verifier": 0.2866,
+          "floor": 0.1745,
+          "medoid_centered": 0.1646,
+          "oracle": 0.4695
+        },
+        "coder0.5B_inst__persona": {
+          "verifier": 0.0122,
+          "floor": 0.0381,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2134
+        },
+        "coder0.5B_inst__raw": {
+          "verifier": 0.0183,
+          "floor": 0.0259,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1829
+        },
+        "coder0.5B_inst__shared": {
+          "verifier": 0.2805,
+          "floor": 0.1692,
+          "medoid_centered": 0.2073,
+          "oracle": 0.4817
+        },
+        "coder0.5B_inst__shared_persona": {
+          "verifier": 0.2439,
+          "floor": 0.1562,
+          "medoid_centered": 0.1707,
+          "oracle": 0.4512
+        },
+        "coder1.5B_base__raw": {
+          "verifier": 0.0061,
+          "floor": 0.0373,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2012
+        },
+        "coder1.5B_inst__chat": {
+          "verifier": 0.4268,
+          "floor": 0.3178,
+          "medoid_centered": 0.3293,
+          "oracle": 0.7134
+        },
+        "coder1.5B_inst__persona": {
+          "verifier": 0.0427,
+          "floor": 0.0465,
+          "medoid_centered": 0.0671,
+          "oracle": 0.2805
+        },
+        "coder1.5B_inst__raw": {
+          "verifier": 0.061,
+          "floor": 0.0686,
+          "medoid_centered": 0.061,
+          "oracle": 0.3841
+        },
+        "coder1.5B_inst__shared": {
+          "verifier": 0.4024,
+          "floor": 0.2424,
+          "medoid_centered": 0.2561,
+          "oracle": 0.7073
+        },
+        "coder1.5B_inst__shared_persona": {
+          "verifier": 0.4085,
+          "floor": 0.2767,
+          "medoid_centered": 0.311,
+          "oracle": 0.6829
+        },
+        "coder14B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0465,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2683
+        },
+        "coder14B_inst__chat": {
+          "verifier": 0.5366,
+          "floor": 0.3636,
+          "medoid_centered": 0.3476,
+          "oracle": 0.7866
+        },
+        "coder14B_inst__persona": {
+          "verifier": 0.1402,
+          "floor": 0.1052,
+          "medoid_centered": 0.128,
+          "oracle": 0.4573
+        },
+        "coder14B_inst__raw": {
+          "verifier": 0.0854,
+          "floor": 0.0755,
+          "medoid_centered": 0.0549,
+          "oracle": 0.3293
+        },
+        "coder14B_inst__shared": {
+          "verifier": 0.7012,
+          "floor": 0.5404,
+          "medoid_centered": 0.5854,
+          "oracle": 0.878
+        },
+        "coder14B_inst__shared_persona": {
+          "verifier": 0.5976,
+          "floor": 0.4329,
+          "medoid_centered": 0.5122,
+          "oracle": 0.7927
+        },
+        "coder32B_base__raw": {
+          "verifier": 0.0427,
+          "floor": 0.0366,
+          "medoid_centered": 0.0305,
+          "oracle": 0.25
+        },
+        "coder32B_inst__chat": {
+          "verifier": 0.3232,
+          "floor": 0.2401,
+          "medoid_centered": 0.2683,
+          "oracle": 0.5061
+        },
+        "coder32B_inst__persona": {
+          "verifier": 0.1037,
+          "floor": 0.0968,
+          "medoid_centered": 0.1159,
+          "oracle": 0.439
+        },
+        "coder32B_inst__raw": {
+          "verifier": 0.0488,
+          "floor": 0.0777,
+          "medoid_centered": 0.0671,
+          "oracle": 0.3354
+        },
+        "coder32B_inst__shared": {
+          "verifier": 0.2988,
+          "floor": 0.2264,
+          "medoid_centered": 0.2073,
+          "oracle": 0.5305
+        },
+        "coder32B_inst__shared_persona": {
+          "verifier": 0.2439,
+          "floor": 0.2058,
+          "medoid_centered": 0.1951,
+          "oracle": 0.4817
+        },
+        "coder3B_base__raw": {
+          "verifier": 0.0183,
+          "floor": 0.0213,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1341
+        },
+        "coder3B_inst__chat": {
+          "verifier": 0.4451,
+          "floor": 0.2774,
+          "medoid_centered": 0.25,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__persona": {
+          "verifier": 0.1646,
+          "floor": 0.109,
+          "medoid_centered": 0.1402,
+          "oracle": 0.5427
+        },
+        "coder3B_inst__raw": {
+          "verifier": 0.0366,
+          "floor": 0.0549,
+          "medoid_centered": 0.0427,
+          "oracle": 0.2927
+        },
+        "coder3B_inst__shared": {
+          "verifier": 0.5244,
+          "floor": 0.2782,
+          "medoid_centered": 0.2317,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__shared_persona": {
+          "verifier": 0.439,
+          "floor": 0.2409,
+          "medoid_centered": 0.1829,
+          "oracle": 0.6402
+        },
+        "coder7B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0495,
+          "medoid_centered": 0.0732,
+          "oracle": 0.2805
+        },
+        "coder7B_inst__chat": {
+          "verifier": 0.7195,
+          "floor": 0.5404,
+          "medoid_centered": 0.5122,
+          "oracle": 0.9024
+        },
+        "coder7B_inst__persona": {
+          "verifier": 0.1402,
+          "floor": 0.0945,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__raw": {
+          "verifier": 0.1159,
+          "floor": 0.1044,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__shared": {
+          "verifier": 0.6951,
+          "floor": 0.4931,
+          "medoid_centered": 0.5122,
+          "oracle": 0.878
+        },
+        "coder7B_inst__shared_persona": {
+          "verifier": 0.6341,
+          "floor": 0.4375,
+          "medoid_centered": 0.4024,
+          "oracle": 0.8354
+        }
+      }
+    },
+    "C0.1_seed2": {
+      "verifier": 0.2566,
+      "medoid_centered": 0.1921,
+      "floor": 0.1868,
+      "oracle": 0.4954,
+      "auroc": 0.76,
+      "verifier_minus_floor": 0.0698,
+      "headroom_captured": 0.2262,
+      "per_arm": {
+        "coder0.5B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0213,
+          "medoid_centered": 0.0244,
+          "oracle": 0.1524
+        },
+        "coder0.5B_inst__chat": {
+          "verifier": 0.2744,
+          "floor": 0.1745,
+          "medoid_centered": 0.1646,
+          "oracle": 0.4695
+        },
+        "coder0.5B_inst__persona": {
+          "verifier": 0.0183,
+          "floor": 0.0381,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2134
+        },
+        "coder0.5B_inst__raw": {
+          "verifier": 0.0244,
+          "floor": 0.0259,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1829
+        },
+        "coder0.5B_inst__shared": {
+          "verifier": 0.2744,
+          "floor": 0.1692,
+          "medoid_centered": 0.2073,
+          "oracle": 0.4817
+        },
+        "coder0.5B_inst__shared_persona": {
+          "verifier": 0.25,
+          "floor": 0.1562,
+          "medoid_centered": 0.1707,
+          "oracle": 0.4512
+        },
+        "coder1.5B_base__raw": {
+          "verifier": 0.0061,
+          "floor": 0.0373,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2012
+        },
+        "coder1.5B_inst__chat": {
+          "verifier": 0.4085,
+          "floor": 0.3178,
+          "medoid_centered": 0.3293,
+          "oracle": 0.7134
+        },
+        "coder1.5B_inst__persona": {
+          "verifier": 0.0549,
+          "floor": 0.0465,
+          "medoid_centered": 0.0671,
+          "oracle": 0.2805
+        },
+        "coder1.5B_inst__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0686,
+          "medoid_centered": 0.061,
+          "oracle": 0.3841
+        },
+        "coder1.5B_inst__shared": {
+          "verifier": 0.3963,
+          "floor": 0.2424,
+          "medoid_centered": 0.2561,
+          "oracle": 0.7073
+        },
+        "coder1.5B_inst__shared_persona": {
+          "verifier": 0.4024,
+          "floor": 0.2767,
+          "medoid_centered": 0.311,
+          "oracle": 0.6829
+        },
+        "coder14B_base__raw": {
+          "verifier": 0.0732,
+          "floor": 0.0465,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2683
+        },
+        "coder14B_inst__chat": {
+          "verifier": 0.5305,
+          "floor": 0.3636,
+          "medoid_centered": 0.3476,
+          "oracle": 0.7866
+        },
+        "coder14B_inst__persona": {
+          "verifier": 0.1524,
+          "floor": 0.1052,
+          "medoid_centered": 0.128,
+          "oracle": 0.4573
+        },
+        "coder14B_inst__raw": {
+          "verifier": 0.0793,
+          "floor": 0.0755,
+          "medoid_centered": 0.0549,
+          "oracle": 0.3293
+        },
+        "coder14B_inst__shared": {
+          "verifier": 0.6707,
+          "floor": 0.5404,
+          "medoid_centered": 0.5854,
+          "oracle": 0.878
+        },
+        "coder14B_inst__shared_persona": {
+          "verifier": 0.5671,
+          "floor": 0.4329,
+          "medoid_centered": 0.5122,
+          "oracle": 0.7927
+        },
+        "coder32B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0366,
+          "medoid_centered": 0.0305,
+          "oracle": 0.25
+        },
+        "coder32B_inst__chat": {
+          "verifier": 0.3293,
+          "floor": 0.2401,
+          "medoid_centered": 0.2683,
+          "oracle": 0.5061
+        },
+        "coder32B_inst__persona": {
+          "verifier": 0.0732,
+          "floor": 0.0968,
+          "medoid_centered": 0.1159,
+          "oracle": 0.439
+        },
+        "coder32B_inst__raw": {
+          "verifier": 0.0366,
+          "floor": 0.0777,
+          "medoid_centered": 0.0671,
+          "oracle": 0.3354
+        },
+        "coder32B_inst__shared": {
+          "verifier": 0.3049,
+          "floor": 0.2264,
+          "medoid_centered": 0.2073,
+          "oracle": 0.5305
+        },
+        "coder32B_inst__shared_persona": {
+          "verifier": 0.2744,
+          "floor": 0.2058,
+          "medoid_centered": 0.1951,
+          "oracle": 0.4817
+        },
+        "coder3B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0213,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1341
+        },
+        "coder3B_inst__chat": {
+          "verifier": 0.4329,
+          "floor": 0.2774,
+          "medoid_centered": 0.25,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__persona": {
+          "verifier": 0.1768,
+          "floor": 0.109,
+          "medoid_centered": 0.1402,
+          "oracle": 0.5427
+        },
+        "coder3B_inst__raw": {
+          "verifier": 0.0488,
+          "floor": 0.0549,
+          "medoid_centered": 0.0427,
+          "oracle": 0.2927
+        },
+        "coder3B_inst__shared": {
+          "verifier": 0.5244,
+          "floor": 0.2782,
+          "medoid_centered": 0.2317,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__shared_persona": {
+          "verifier": 0.4268,
+          "floor": 0.2409,
+          "medoid_centered": 0.1829,
+          "oracle": 0.6402
+        },
+        "coder7B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0495,
+          "medoid_centered": 0.0732,
+          "oracle": 0.2805
+        },
+        "coder7B_inst__chat": {
+          "verifier": 0.6768,
+          "floor": 0.5404,
+          "medoid_centered": 0.5122,
+          "oracle": 0.9024
+        },
+        "coder7B_inst__persona": {
+          "verifier": 0.1341,
+          "floor": 0.0945,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__raw": {
+          "verifier": 0.1159,
+          "floor": 0.1044,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__shared": {
+          "verifier": 0.6829,
+          "floor": 0.4931,
+          "medoid_centered": 0.5122,
+          "oracle": 0.878
+        },
+        "coder7B_inst__shared_persona": {
+          "verifier": 0.6402,
+          "floor": 0.4375,
+          "medoid_centered": 0.4024,
+          "oracle": 0.8354
+        }
+      }
+    },
+    "C1.0_seed0": {
+      "verifier": 0.2639,
+      "medoid_centered": 0.1921,
+      "floor": 0.1868,
+      "oracle": 0.4954,
+      "auroc": 0.7689,
+      "verifier_minus_floor": 0.0771,
+      "headroom_captured": 0.2498,
+      "per_arm": {
+        "coder0.5B_base__raw": {
+          "verifier": 0.0366,
+          "floor": 0.0213,
+          "medoid_centered": 0.0244,
+          "oracle": 0.1524
+        },
+        "coder0.5B_inst__chat": {
+          "verifier": 0.2744,
+          "floor": 0.1745,
+          "medoid_centered": 0.1646,
+          "oracle": 0.4695
+        },
+        "coder0.5B_inst__persona": {
+          "verifier": 0.0366,
+          "floor": 0.0381,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2134
+        },
+        "coder0.5B_inst__raw": {
+          "verifier": 0.0366,
+          "floor": 0.0259,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1829
+        },
+        "coder0.5B_inst__shared": {
+          "verifier": 0.2622,
+          "floor": 0.1692,
+          "medoid_centered": 0.2073,
+          "oracle": 0.4817
+        },
+        "coder0.5B_inst__shared_persona": {
+          "verifier": 0.2317,
+          "floor": 0.1562,
+          "medoid_centered": 0.1707,
+          "oracle": 0.4512
+        },
+        "coder1.5B_base__raw": {
+          "verifier": 0.0244,
+          "floor": 0.0373,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2012
+        },
+        "coder1.5B_inst__chat": {
+          "verifier": 0.4268,
+          "floor": 0.3178,
+          "medoid_centered": 0.3293,
+          "oracle": 0.7134
+        },
+        "coder1.5B_inst__persona": {
+          "verifier": 0.0549,
+          "floor": 0.0465,
+          "medoid_centered": 0.0671,
+          "oracle": 0.2805
+        },
+        "coder1.5B_inst__raw": {
+          "verifier": 0.061,
+          "floor": 0.0686,
+          "medoid_centered": 0.061,
+          "oracle": 0.3841
+        },
+        "coder1.5B_inst__shared": {
+          "verifier": 0.4207,
+          "floor": 0.2424,
+          "medoid_centered": 0.2561,
+          "oracle": 0.7073
+        },
+        "coder1.5B_inst__shared_persona": {
+          "verifier": 0.3902,
+          "floor": 0.2767,
+          "medoid_centered": 0.311,
+          "oracle": 0.6829
+        },
+        "coder14B_base__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0465,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2683
+        },
+        "coder14B_inst__chat": {
+          "verifier": 0.5366,
+          "floor": 0.3636,
+          "medoid_centered": 0.3476,
+          "oracle": 0.7866
+        },
+        "coder14B_inst__persona": {
+          "verifier": 0.1585,
+          "floor": 0.1052,
+          "medoid_centered": 0.128,
+          "oracle": 0.4573
+        },
+        "coder14B_inst__raw": {
+          "verifier": 0.0732,
+          "floor": 0.0755,
+          "medoid_centered": 0.0549,
+          "oracle": 0.3293
+        },
+        "coder14B_inst__shared": {
+          "verifier": 0.6768,
+          "floor": 0.5404,
+          "medoid_centered": 0.5854,
+          "oracle": 0.878
+        },
+        "coder14B_inst__shared_persona": {
+          "verifier": 0.6402,
+          "floor": 0.4329,
+          "medoid_centered": 0.5122,
+          "oracle": 0.7927
+        },
+        "coder32B_base__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0366,
+          "medoid_centered": 0.0305,
+          "oracle": 0.25
+        },
+        "coder32B_inst__chat": {
+          "verifier": 0.3293,
+          "floor": 0.2401,
+          "medoid_centered": 0.2683,
+          "oracle": 0.5061
+        },
+        "coder32B_inst__persona": {
+          "verifier": 0.122,
+          "floor": 0.0968,
+          "medoid_centered": 0.1159,
+          "oracle": 0.439
+        },
+        "coder32B_inst__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0777,
+          "medoid_centered": 0.0671,
+          "oracle": 0.3354
+        },
+        "coder32B_inst__shared": {
+          "verifier": 0.2927,
+          "floor": 0.2264,
+          "medoid_centered": 0.2073,
+          "oracle": 0.5305
+        },
+        "coder32B_inst__shared_persona": {
+          "verifier": 0.2561,
+          "floor": 0.2058,
+          "medoid_centered": 0.1951,
+          "oracle": 0.4817
+        },
+        "coder3B_base__raw": {
+          "verifier": 0.0183,
+          "floor": 0.0213,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1341
+        },
+        "coder3B_inst__chat": {
+          "verifier": 0.4451,
+          "floor": 0.2774,
+          "medoid_centered": 0.25,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__persona": {
+          "verifier": 0.1707,
+          "floor": 0.109,
+          "medoid_centered": 0.1402,
+          "oracle": 0.5427
+        },
+        "coder3B_inst__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0549,
+          "medoid_centered": 0.0427,
+          "oracle": 0.2927
+        },
+        "coder3B_inst__shared": {
+          "verifier": 0.5183,
+          "floor": 0.2782,
+          "medoid_centered": 0.2317,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__shared_persona": {
+          "verifier": 0.4939,
+          "floor": 0.2409,
+          "medoid_centered": 0.1829,
+          "oracle": 0.6402
+        },
+        "coder7B_base__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0495,
+          "medoid_centered": 0.0732,
+          "oracle": 0.2805
+        },
+        "coder7B_inst__chat": {
+          "verifier": 0.6585,
+          "floor": 0.5404,
+          "medoid_centered": 0.5122,
+          "oracle": 0.9024
+        },
+        "coder7B_inst__persona": {
+          "verifier": 0.1341,
+          "floor": 0.0945,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__raw": {
+          "verifier": 0.1159,
+          "floor": 0.1044,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__shared": {
+          "verifier": 0.6463,
+          "floor": 0.4931,
+          "medoid_centered": 0.5122,
+          "oracle": 0.878
+        },
+        "coder7B_inst__shared_persona": {
+          "verifier": 0.6463,
+          "floor": 0.4375,
+          "medoid_centered": 0.4024,
+          "oracle": 0.8354
+        }
+      }
+    },
+    "C1.0_seed1": {
+      "verifier": 0.2646,
+      "medoid_centered": 0.1921,
+      "floor": 0.1868,
+      "oracle": 0.4954,
+      "auroc": 0.7833,
+      "verifier_minus_floor": 0.0778,
+      "headroom_captured": 0.2521,
+      "per_arm": {
+        "coder0.5B_base__raw": {
+          "verifier": 0.0183,
+          "floor": 0.0213,
+          "medoid_centered": 0.0244,
+          "oracle": 0.1524
+        },
+        "coder0.5B_inst__chat": {
+          "verifier": 0.2866,
+          "floor": 0.1745,
+          "medoid_centered": 0.1646,
+          "oracle": 0.4695
+        },
+        "coder0.5B_inst__persona": {
+          "verifier": 0.0244,
+          "floor": 0.0381,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2134
+        },
+        "coder0.5B_inst__raw": {
+          "verifier": 0.0488,
+          "floor": 0.0259,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1829
+        },
+        "coder0.5B_inst__shared": {
+          "verifier": 0.25,
+          "floor": 0.1692,
+          "medoid_centered": 0.2073,
+          "oracle": 0.4817
+        },
+        "coder0.5B_inst__shared_persona": {
+          "verifier": 0.2378,
+          "floor": 0.1562,
+          "medoid_centered": 0.1707,
+          "oracle": 0.4512
+        },
+        "coder1.5B_base__raw": {
+          "verifier": 0.0183,
+          "floor": 0.0373,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2012
+        },
+        "coder1.5B_inst__chat": {
+          "verifier": 0.4329,
+          "floor": 0.3178,
+          "medoid_centered": 0.3293,
+          "oracle": 0.7134
+        },
+        "coder1.5B_inst__persona": {
+          "verifier": 0.0549,
+          "floor": 0.0465,
+          "medoid_centered": 0.0671,
+          "oracle": 0.2805
+        },
+        "coder1.5B_inst__raw": {
+          "verifier": 0.0732,
+          "floor": 0.0686,
+          "medoid_centered": 0.061,
+          "oracle": 0.3841
+        },
+        "coder1.5B_inst__shared": {
+          "verifier": 0.4146,
+          "floor": 0.2424,
+          "medoid_centered": 0.2561,
+          "oracle": 0.7073
+        },
+        "coder1.5B_inst__shared_persona": {
+          "verifier": 0.3963,
+          "floor": 0.2767,
+          "medoid_centered": 0.311,
+          "oracle": 0.6829
+        },
+        "coder14B_base__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0465,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2683
+        },
+        "coder14B_inst__chat": {
+          "verifier": 0.5366,
+          "floor": 0.3636,
+          "medoid_centered": 0.3476,
+          "oracle": 0.7866
+        },
+        "coder14B_inst__persona": {
+          "verifier": 0.1402,
+          "floor": 0.1052,
+          "medoid_centered": 0.128,
+          "oracle": 0.4573
+        },
+        "coder14B_inst__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0755,
+          "medoid_centered": 0.0549,
+          "oracle": 0.3293
+        },
+        "coder14B_inst__shared": {
+          "verifier": 0.6951,
+          "floor": 0.5404,
+          "medoid_centered": 0.5854,
+          "oracle": 0.878
+        },
+        "coder14B_inst__shared_persona": {
+          "verifier": 0.622,
+          "floor": 0.4329,
+          "medoid_centered": 0.5122,
+          "oracle": 0.7927
+        },
+        "coder32B_base__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0366,
+          "medoid_centered": 0.0305,
+          "oracle": 0.25
+        },
+        "coder32B_inst__chat": {
+          "verifier": 0.3415,
+          "floor": 0.2401,
+          "medoid_centered": 0.2683,
+          "oracle": 0.5061
+        },
+        "coder32B_inst__persona": {
+          "verifier": 0.1341,
+          "floor": 0.0968,
+          "medoid_centered": 0.1159,
+          "oracle": 0.439
+        },
+        "coder32B_inst__raw": {
+          "verifier": 0.0488,
+          "floor": 0.0777,
+          "medoid_centered": 0.0671,
+          "oracle": 0.3354
+        },
+        "coder32B_inst__shared": {
+          "verifier": 0.3049,
+          "floor": 0.2264,
+          "medoid_centered": 0.2073,
+          "oracle": 0.5305
+        },
+        "coder32B_inst__shared_persona": {
+          "verifier": 0.2744,
+          "floor": 0.2058,
+          "medoid_centered": 0.1951,
+          "oracle": 0.4817
+        },
+        "coder3B_base__raw": {
+          "verifier": 0.0061,
+          "floor": 0.0213,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1341
+        },
+        "coder3B_inst__chat": {
+          "verifier": 0.4329,
+          "floor": 0.2774,
+          "medoid_centered": 0.25,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__persona": {
+          "verifier": 0.1646,
+          "floor": 0.109,
+          "medoid_centered": 0.1402,
+          "oracle": 0.5427
+        },
+        "coder3B_inst__raw": {
+          "verifier": 0.0488,
+          "floor": 0.0549,
+          "medoid_centered": 0.0427,
+          "oracle": 0.2927
+        },
+        "coder3B_inst__shared": {
+          "verifier": 0.5305,
+          "floor": 0.2782,
+          "medoid_centered": 0.2317,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__shared_persona": {
+          "verifier": 0.4634,
+          "floor": 0.2409,
+          "medoid_centered": 0.1829,
+          "oracle": 0.6402
+        },
+        "coder7B_base__raw": {
+          "verifier": 0.061,
+          "floor": 0.0495,
+          "medoid_centered": 0.0732,
+          "oracle": 0.2805
+        },
+        "coder7B_inst__chat": {
+          "verifier": 0.6951,
+          "floor": 0.5404,
+          "medoid_centered": 0.5122,
+          "oracle": 0.9024
+        },
+        "coder7B_inst__persona": {
+          "verifier": 0.1463,
+          "floor": 0.0945,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__raw": {
+          "verifier": 0.1402,
+          "floor": 0.1044,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__shared": {
+          "verifier": 0.6585,
+          "floor": 0.4931,
+          "medoid_centered": 0.5122,
+          "oracle": 0.878
+        },
+        "coder7B_inst__shared_persona": {
+          "verifier": 0.6341,
+          "floor": 0.4375,
+          "medoid_centered": 0.4024,
+          "oracle": 0.8354
+        }
+      }
+    },
+    "C1.0_seed2": {
+      "verifier": 0.2644,
+      "medoid_centered": 0.1921,
+      "floor": 0.1868,
+      "oracle": 0.4954,
+      "auroc": 0.7651,
+      "verifier_minus_floor": 0.0776,
+      "headroom_captured": 0.2515,
+      "per_arm": {
+        "coder0.5B_base__raw": {
+          "verifier": 0.0366,
+          "floor": 0.0213,
+          "medoid_centered": 0.0244,
+          "oracle": 0.1524
+        },
+        "coder0.5B_inst__chat": {
+          "verifier": 0.2561,
+          "floor": 0.1745,
+          "medoid_centered": 0.1646,
+          "oracle": 0.4695
+        },
+        "coder0.5B_inst__persona": {
+          "verifier": 0.0366,
+          "floor": 0.0381,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2134
+        },
+        "coder0.5B_inst__raw": {
+          "verifier": 0.0427,
+          "floor": 0.0259,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1829
+        },
+        "coder0.5B_inst__shared": {
+          "verifier": 0.2744,
+          "floor": 0.1692,
+          "medoid_centered": 0.2073,
+          "oracle": 0.4817
+        },
+        "coder0.5B_inst__shared_persona": {
+          "verifier": 0.2561,
+          "floor": 0.1562,
+          "medoid_centered": 0.1707,
+          "oracle": 0.4512
+        },
+        "coder1.5B_base__raw": {
+          "verifier": 0.0366,
+          "floor": 0.0373,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2012
+        },
+        "coder1.5B_inst__chat": {
+          "verifier": 0.439,
+          "floor": 0.3178,
+          "medoid_centered": 0.3293,
+          "oracle": 0.7134
+        },
+        "coder1.5B_inst__persona": {
+          "verifier": 0.061,
+          "floor": 0.0465,
+          "medoid_centered": 0.0671,
+          "oracle": 0.2805
+        },
+        "coder1.5B_inst__raw": {
+          "verifier": 0.0793,
+          "floor": 0.0686,
+          "medoid_centered": 0.061,
+          "oracle": 0.3841
+        },
+        "coder1.5B_inst__shared": {
+          "verifier": 0.4085,
+          "floor": 0.2424,
+          "medoid_centered": 0.2561,
+          "oracle": 0.7073
+        },
+        "coder1.5B_inst__shared_persona": {
+          "verifier": 0.4207,
+          "floor": 0.2767,
+          "medoid_centered": 0.311,
+          "oracle": 0.6829
+        },
+        "coder14B_base__raw": {
+          "verifier": 0.0732,
+          "floor": 0.0465,
+          "medoid_centered": 0.0488,
+          "oracle": 0.2683
+        },
+        "coder14B_inst__chat": {
+          "verifier": 0.5366,
+          "floor": 0.3636,
+          "medoid_centered": 0.3476,
+          "oracle": 0.7866
+        },
+        "coder14B_inst__persona": {
+          "verifier": 0.122,
+          "floor": 0.1052,
+          "medoid_centered": 0.128,
+          "oracle": 0.4573
+        },
+        "coder14B_inst__raw": {
+          "verifier": 0.0671,
+          "floor": 0.0755,
+          "medoid_centered": 0.0549,
+          "oracle": 0.3293
+        },
+        "coder14B_inst__shared": {
+          "verifier": 0.6829,
+          "floor": 0.5404,
+          "medoid_centered": 0.5854,
+          "oracle": 0.878
+        },
+        "coder14B_inst__shared_persona": {
+          "verifier": 0.5854,
+          "floor": 0.4329,
+          "medoid_centered": 0.5122,
+          "oracle": 0.7927
+        },
+        "coder32B_base__raw": {
+          "verifier": 0.061,
+          "floor": 0.0366,
+          "medoid_centered": 0.0305,
+          "oracle": 0.25
+        },
+        "coder32B_inst__chat": {
+          "verifier": 0.3476,
+          "floor": 0.2401,
+          "medoid_centered": 0.2683,
+          "oracle": 0.5061
+        },
+        "coder32B_inst__persona": {
+          "verifier": 0.1341,
+          "floor": 0.0968,
+          "medoid_centered": 0.1159,
+          "oracle": 0.439
+        },
+        "coder32B_inst__raw": {
+          "verifier": 0.0488,
+          "floor": 0.0777,
+          "medoid_centered": 0.0671,
+          "oracle": 0.3354
+        },
+        "coder32B_inst__shared": {
+          "verifier": 0.2927,
+          "floor": 0.2264,
+          "medoid_centered": 0.2073,
+          "oracle": 0.5305
+        },
+        "coder32B_inst__shared_persona": {
+          "verifier": 0.2622,
+          "floor": 0.2058,
+          "medoid_centered": 0.1951,
+          "oracle": 0.4817
+        },
+        "coder3B_base__raw": {
+          "verifier": 0.0305,
+          "floor": 0.0213,
+          "medoid_centered": 0.0366,
+          "oracle": 0.1341
+        },
+        "coder3B_inst__chat": {
+          "verifier": 0.4268,
+          "floor": 0.2774,
+          "medoid_centered": 0.25,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__persona": {
+          "verifier": 0.1524,
+          "floor": 0.109,
+          "medoid_centered": 0.1402,
+          "oracle": 0.5427
+        },
+        "coder3B_inst__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0549,
+          "medoid_centered": 0.0427,
+          "oracle": 0.2927
+        },
+        "coder3B_inst__shared": {
+          "verifier": 0.5122,
+          "floor": 0.2782,
+          "medoid_centered": 0.2317,
+          "oracle": 0.7012
+        },
+        "coder3B_inst__shared_persona": {
+          "verifier": 0.4817,
+          "floor": 0.2409,
+          "medoid_centered": 0.1829,
+          "oracle": 0.6402
+        },
+        "coder7B_base__raw": {
+          "verifier": 0.0549,
+          "floor": 0.0495,
+          "medoid_centered": 0.0732,
+          "oracle": 0.2805
+        },
+        "coder7B_inst__chat": {
+          "verifier": 0.6707,
+          "floor": 0.5404,
+          "medoid_centered": 0.5122,
+          "oracle": 0.9024
+        },
+        "coder7B_inst__persona": {
+          "verifier": 0.1402,
+          "floor": 0.0945,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__raw": {
+          "verifier": 0.1402,
+          "floor": 0.1044,
+          "medoid_centered": 0.122,
+          "oracle": 0.4756
+        },
+        "coder7B_inst__shared": {
+          "verifier": 0.6646,
+          "floor": 0.4931,
+          "medoid_centered": 0.5122,
+          "oracle": 0.878
+        },
+        "coder7B_inst__shared_persona": {
+          "verifier": 0.628,
+          "floor": 0.4375,
+          "medoid_centered": 0.4024,
+          "oracle": 0.8354
+        }
+      }
+    }
+  },
+  "stability_across_seeds": {
+    "min": 0.0688,
+    "max": 0.0778,
+    "spread": 0.009
+  },
+  "length_control": {
+    "select": 0.2229,
+    "auroc": 0.581
+  },
+  "null": {
+    "mean": 0.1866,
+    "p95": 0.1926,
+    "p_value_best_verifier": 0.0
+  }
+}
