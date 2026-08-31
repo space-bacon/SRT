@@ -12,7 +12,28 @@ from huggingface_hub import HfApi, get_token
 REPO = "RiverRider/srt-omni-crossvendor-states"
 SRC = pathlib.Path("artifacts/nla/omni")
 SCRIPTS = ["build_omni_manifest.py", "omni_encode_all.py", "omni_joint_fit.py",
-           "xvendor_fit.py", "xvendor_fit_n.py", "omni_smoke.py"]
+           "xvendor_fit.py", "xvendor_fit_n.py", "omni_smoke.py",
+           "head_swap_multi.py", "head_swap.py", "holonomy_edge_identity.py",
+           "holonomy_palindrome.py", "mteb_composition.py", "joint_frame.py",
+           "rsicd_scene_probe.py", "cxr_probe_floor_seeds.py"]
+
+# Section 11 of paper_crossvendor.md promises every result is reproducible from
+# published states. It named twelve result files; this repo shipped three.
+RESULTS = [
+    "omni_joint.json", "xvendor.json", "xvendor4.json",
+    "head_swap_multi_roco.json", "head_swap_roco.json",
+    "holonomy_edge_identity_roco.json", "holonomy_edge_identity_rsicd.json",
+    "holonomy_palindrome_roco.json", "holonomy_palindrome_rsicd.json",
+    "joint_frame_roco.json", "joint_frame_rsicd.json",
+    "geometry_compare_roco.json", "triadic_composition_roco.json",
+    "rsicd_scene_probe.json", "mteb_composition.json",
+]
+
+# Chest results live a directory up, and the card cites them.
+CXR_RESULTS = [
+    "cxr14_floor_seeds.json", "cxr14_probe_full112k.json",
+    "cxr14_transport.json", "cxr14_ensemble3.json", "cxr14_vendor_compare.json",
+]
 
 CARD = """---
 license: apache-2.0
@@ -223,8 +244,18 @@ def main():
         up(p, f"states/{p.name}")
     for p in sorted(SRC.glob("*.pt")):
         up(p, f"maps/{p.name}")
-    for n in ["omni_joint.json", "xvendor.json", "xvendor4.json"]:
-        up(SRC / n, f"results/{n}")
+    for n in RESULTS:
+        p = SRC / n
+        if p.is_file():
+            up(p, f"results/{n}")
+        else:
+            print(f"  MISSING {n}")
+    for n in CXR_RESULTS:
+        p = SRC.parent / n
+        if p.is_file():
+            up(p, f"results/{n}")
+        else:
+            print(f"  MISSING {n}")
     for p in sorted((SRC / "manifests").glob("*.json")):
         up(p, f"manifests/{p.name}")
     for n in ["omni_manifest.json", "img_s0.json", "img_s1.json"]:
