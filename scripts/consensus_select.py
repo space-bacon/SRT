@@ -70,6 +70,53 @@ def _value(kind, rng):
     return rng.choice(POOL["int"] + POOL["str"])
 
 
+def _kind_of(v):
+    if isinstance(v, bool):
+        return "bool"
+    if isinstance(v, int):
+        return "int"
+    if isinstance(v, float):
+        return "float"
+    if isinstance(v, str):
+        return "str"
+    if isinstance(v, (list, tuple, set)):
+        name = type(v).__name__
+        inner = _kind_of(next(iter(v))) if v else "int"
+        return f"{name}[{inner}]"
+    if isinstance(v, dict):
+        return "dict[str]"
+    return "any"
+
+
+def inputs_from_example(visible_test, entry, n_cases, seed=0):
+    """Inputs for prompts that show an example call but no signature, as MBPP does.
+
+    The example's own arguments are case one; the rest are fresh values of the same
+    shapes, so agreement is tested beyond the single case the model was shown.
+    """
+    if not visible_test:
+        return []
+    try:
+        tree = ast.parse(visible_test)
+    except SyntaxError:
+        return []
+    call = next((n for n in ast.walk(tree)
+                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+                 and n.func.id == entry), None)
+    if call is None:
+        return []
+    try:
+        base = tuple(ast.literal_eval(x) for x in call.args)
+    except Exception:
+        return []
+    rng = random.Random(seed)
+    kinds = [_kind_of(v) for v in base]
+    out = [base]
+    for _ in range(max(0, n_cases - 1)):
+        out.append(tuple(_value(k, rng) for k in kinds))
+    return out
+
+
 def synth_inputs(prompt, entry, n_cases, seed=0):
     """Argument tuples derived from the signature's annotations."""
     rng = random.Random(seed)
@@ -135,7 +182,12 @@ def main():
     from verifier_select import pass_matrix
 
     probs = json.load(open(os.path.join(HERE, a.probs)))
-    cases = [synth_inputs(p["prompt"], p["entry_point"], a.cases) for p in probs]
+    cases = []
+    for p in probs:
+        c = synth_inputs(p["prompt"], p["entry_point"], a.cases)
+        if not c:
+            c = inputs_from_example(p.get("visible_test"), p["entry_point"], a.cases)
+        cases.append(c)
     print(f"{sum(1 for c in cases if c)} / {len(probs)} problems got synthesised inputs",
           flush=True)
 
