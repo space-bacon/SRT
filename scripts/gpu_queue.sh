@@ -19,7 +19,7 @@ if [[ "${1:-}" == "status" ]]; then
   nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader |
     while IFS=, read -r i mem util; do
       st="idle"; [[ -f logs/queue_gpu$i.pid ]] && kill -0 "$(cat logs/queue_gpu$i.pid)" 2>/dev/null && st="running"
-      last=$(tr '\r' '\n' < "logs/queue_gpu$i.log" 2>/dev/null | grep -av "^$" | tail -1 | tr -s ' ' | cut -c1-70)
+      last=$([[ -f "logs/queue_gpu$i.log" ]] && tr '\r' '\n' < "logs/queue_gpu$i.log" 2>/dev/null | grep -av "^$" | tail -1 | tr -s ' ' | cut -c1-70)
       printf '%-6s %-9s %s | %s\n' "$i" "$st" "${mem}${util}" "$last"
     done
   echo

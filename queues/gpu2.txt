@@ -1,4 +1,3 @@
-/venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/he_k32 --batch 16
-/venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 7B --arms shared --out artifacts/nla/he_k32 --batch 24
-/venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 3B 1.5B --arms shared --out artifacts/nla/he_k32 --batch 32
 /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/he_k32 --batch 12
+/venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 7B --arms shared --out artifacts/nla/he_k32 --batch 20
+/venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 3B 1.5B --arms shared --out artifacts/nla/he_k32 --batch 32
