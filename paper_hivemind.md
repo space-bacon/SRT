@@ -472,6 +472,35 @@ per decade while the value of choosing between samples falls at −0.0704. Large
 write more alike and leave less to choose between, and both trends point the same way:
 whatever variation the hivemind result measures, scale is removing it.
 
+**Pooling six frontier models across five labs buys nothing.** Every read above was
+measured inside one model's pool: eight samples, one lab, one tokenizer. The union
+ceiling of 0.9878 then said what a five-lab pool *could* reach, which is an oracle
+statement and not a method. Running an actual selector over the pooled set is the
+comparison that decides whether the ensemble framing survives, and we had not run it.
+
+It does not survive. On the same 164 problems, with 48 candidates pooled across
+Gemma-4-31B, GLM-4.7-Flash, Ministral-14B, Ornith-35B, Qwen2.5-Coder-32B and
+Qwen3-Coder-30B:
+
+| | pass | problems solved |
+|---|---:|---:|
+| best member, one sample | 0.9367 | — |
+| best member, its own eight, by agreement | 0.9390 | 154 |
+| **all 48 pooled, by agreement** | **0.9390** | **154** |
+| all 48 pooled, target recovered from replies alone | 0.9451 | 155 |
+| union oracle | 0.9878 | 162 |
+
+Pooling scores **+0.0000** against the best single model plus its own selector. Not a
+small gain, the same 154 problems. Recovering the target from the replies alone finds
+one more, which is a single problem in 164 and is not a result. Everything a real
+selector reaches sits within two problems; the oracle sits eight above all of it.
+
+The reading is that a diverse pool does contain more correct answers, and that
+agreement cannot find them. Agreement selects the majority, and pooling a weaker
+model into a stronger one's pool adds votes for whatever the pool already believed.
+The 0.9878 ceiling is real and remains unreachable by any selector we have. It should
+be read as a bound on what better selection could win, never as an ensembling result.
+
 ### 5.5 It can be suppressed, but not by anything anyone ships
 
 Everything above adds framing and watches similarity rise. That is an explanation,
@@ -651,6 +680,12 @@ demonstrates. Had they used gte-base, "same query" and "different query" would h
 been separated by 0.15 instead of 0.52.
 
 ## 10. Negative results
+
+**Pooling six frontier models from five labs adds nothing over the best one.** A
+selector over 48 pooled candidates solves the same 154 of 164 problems as that
+model's own eight, +0.0000. We had reported a union ceiling of 0.9878 for months
+without ever running a selector over the pool it describes, which let an oracle
+statement read as though it were an ensembling result. Section 5.4.
 
 **The mechanism link failed under greedy decoding**, cross-lab +0.2213 at
 p = 0.0866, and we published that null before establishing the decode was wrong.

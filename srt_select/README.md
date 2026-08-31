@@ -58,6 +58,15 @@ result's clothes.
 scale at −0.0704 per decade: +0.1538 at 3B, +0.0097 at 32B. This buys the most
 where the pool is weakest and diverse, and nearly nothing at the top.
 
+**Pooling several models into one pool buys nothing.** Over 48 candidates from
+six frontier models across five labs, selection scores 0.9390 on HumanEval,
+solving the same 154 of 164 problems as the best single member's own eight. The
+gain over that member plus its own selector is +0.0000. A diverse pool does hold
+more correct answers, 162 of 164 by oracle, and agreement cannot find them,
+because agreement returns the majority and extra members mostly add votes for
+what the pool already believed. Point this at one model's samples, not at an
+ensemble.
+
 **A learned verifier did worse.** Fitting a classifier on 47,232 execution
 labels reached 0.2639 on HumanEval against this method's 0.4426, and it did not
 transfer to MBPP. Executing the pool beat learning to score it, on both

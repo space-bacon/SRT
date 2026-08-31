@@ -76,6 +76,7 @@ CARDS = {
         "artifacts/nla/verifier/chat_consensus.json",
         "artifacts/nla/verifier/chat_consensus_mbpp.json",
         "artifacts/nla/hivemind_census.json",
+        "artifacts/nla/ensemble/pooled_select.json",
         "artifacts/nla/ensemble/union_ceiling_fixed.json"],
 }
 

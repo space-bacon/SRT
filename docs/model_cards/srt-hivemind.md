@@ -132,6 +132,14 @@ the union moves to **0.9878** against a best single model of **0.9634**, and GLM
 out to contribute the only 2 problems no other model solves. The first run reported
 zero unique solves for every model, which was an artifact of that one broken member.
 
+**The union ceiling is an oracle, and a selector does not reach it.** `pooled_select.json`
+runs real selection over all 48 pooled candidates from the six frontier members. It scores
+0.9390, solving the same 154 of 164 problems as the best member's own eight candidates,
+for a gain of **+0.0000**. Recovering the target from the replies alone finds one more
+problem, which is noise at this size. Read 0.9878 as a bound on what better selection
+could win, never as an ensembling result: pooling models buys nothing that one good
+model plus a selector does not already give.
+
 **The exec-versus-consensus ordering is a coverage effect, not a ranking.** MBPP states
 an example for 425 of 425 problems so filtering wins there; HumanEval states one for 128
 of 164 and agreement wins only by covering the other 36. Neither method is better in

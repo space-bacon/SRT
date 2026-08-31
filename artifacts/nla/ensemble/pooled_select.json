@@ -1,0 +1,37 @@
+{
+  "members": {
+    "gemma4_31b": {
+      "pass_at_1": 0.9367,
+      "pass_at_k": 0.9634
+    },
+    "glm47_flash": {
+      "pass_at_1": 0.7904,
+      "pass_at_k": 0.9512
+    },
+    "ministral_14b": {
+      "pass_at_1": 0.8102,
+      "pass_at_k": 0.939
+    },
+    "ornith_35b": {
+      "pass_at_1": 0.7027,
+      "pass_at_k": 0.9085
+    },
+    "qwen25c_32b": {
+      "pass_at_1": 0.8986,
+      "pass_at_k": 0.9329
+    },
+    "qwen3c_30b": {
+      "pass_at_1": 0.9002,
+      "pass_at_k": 0.9207
+    }
+  },
+  "best_member": "gemma4_31b",
+  "best_single_pass1": 0.9367,
+  "best_single_consensus": 0.939,
+  "pooled_consensus": 0.939,
+  "pooled_chat_only": 0.9451,
+  "union_oracle": 0.9878,
+  "pool_size": 48,
+  "pooled_minus_best_single_consensus": 0.0,
+  "pooled_minus_best_single_pass1": 0.0023
+}
