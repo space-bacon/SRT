@@ -84,6 +84,27 @@ HumanEval, agreement reaches all 164 problems while visible-test filtering
 reaches 128, which is most of why agreement leads. On MBPP, where a visible
 assertion exists nearly everywhere, filtering leads instead.
 
+## What K actually costs
+
+K samples do **not** cost K times one answer, and misreading this is what makes
+selection look undeployable when it is not.
+
+Autoregressive decode is memory-bandwidth bound. Every decode step streams the
+weights out of HBM once, and that cost is identical whether the step advances one
+sequence or thirty-two. Prefill is paid once and shared across the K samples. So
+K samples in a single batch cost far less than K separate answers, and the
+marginal sample is close to free until K spills past one batch.
+
+The curve has a knee, not a slope, and where the knee sits depends on the card
+and the model. Measure it on your own hardware with `scripts/k_latency.py` before
+choosing K.
+
+Two caveats. Under concurrency, batching K samples for one user eats batch
+capacity that would otherwise serve others, so it is nearly free for a single
+user and a real throughput cost under load. And because selection needs the
+samples before it can choose, it cannot move a published `pass@1` figure, which
+is by definition single-sample.
+
 ## Running untrusted code
 
 Selecting requires executing every candidate, so this is a remote code execution

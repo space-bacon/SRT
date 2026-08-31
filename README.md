@@ -156,6 +156,33 @@ nothing**: over 48 candidates from six frontier models across five labs it solve
 the same 154 of 164 problems as the best single member's own eight, a gain of
 +0.0000. Point it at one model's samples, not at an ensemble.
 
+### K samples do not cost K times one answer
+
+This is the economics the method rests on, and it is easy to get wrong.
+
+Autoregressive decode is **memory-bandwidth bound, not compute bound**. Each
+decode step streams the model weights out of HBM once, and that cost is the same
+whether the step advances one sequence or thirty-two. The prompt prefill is paid
+once and shared across all K samples. So K samples generated in a *single batch*
+cost far less than K separate answers, and the marginal sample is close to free
+until K exceeds what one batch holds.
+
+The cost curve therefore has a knee rather than a slope: flat while the batch
+absorbs K, stepping each time K spills into another batch. Where the knee sits is
+a property of the card and the model, so measure it on the hardware you serve
+from with `scripts/k_latency.py`.
+
+This is what makes the ladder result a product claim rather than a curiosity. A
+14B with selection scores 0.8706 on MBPP against a 32B's 0.8609 alone. If K=8
+cost eight answers you would simply run the 32B; because it does not, you get
+32B-class coding from a model that fits far more comfortably.
+
+Two honest caveats. Under concurrency, batching K samples for one user consumes
+capacity that would otherwise serve other users, so it is nearly free for a
+single user and a real throughput cost under load. And selection needs the K
+samples before it can choose, so it cannot improve a published `pass@1` number,
+which is single-sample by definition.
+
 Selecting means executing every candidate, so it is a remote code execution
 primitive if pointed at the wrong host. Read `srt_select/sandbox.py` before
 deploying. Full documentation in `srt_select/README.md`, method and controls in
