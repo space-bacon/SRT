@@ -82,6 +82,6 @@
   },
   "SUPERSEDED": {
     "by": "union_ceiling_fixed.json",
-    "reason": "GLM-4.7-Flash was rendered with its <think> block open, so it spent the whole 512-token budget on analysis and never emitted code. Its pass@1 here (0.0526) is a render bug, not a capability. Fixed run: 0.7904. Every union figure in this file understates the pool."
+    "reason": "GLM-4.7-Flash was rendered with its <think> block open, so it spent the whole 512-token budget on analysis and never emitted code. Its pass@1 here (0.0526) is a render bug, not a capability. Fixed run: 0.7904, union 0.9878, and GLM contributes 2 unique solves. Every figure in this file understates the pool. Do not cite."
   }
 }
