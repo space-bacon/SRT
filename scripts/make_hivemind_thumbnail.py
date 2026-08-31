@@ -116,10 +116,12 @@ def main() -> int:
     # The three cards are the three headline claims, in the order the paper makes
     # them: we recover the reported level, the format is what recovers it, and most
     # of that is a convention rather than anything in the weights.
-    frac = iso["instruct_chat"]["frac_models_any_prompt_above_0.8"]
+    # Share of the climb from our base arm to their stated 0.8 line. Both endpoints
+    # are ours and the target is their threshold, so no floor assumption enters.
+    climb = fmt / (0.80 - iso["base"]["intra_mean"])
     stats = [
-        (f"{chat_intra:.4f}", "we reproduce the level they report",
-         f"{frac * 100:.0f}% of models pass 0.8 on some prompt, at 0.36B to 2B", GREEN),
+        (f"{climb * 100:.0f}%", "of the way from base models to their 0.8 line",
+         f"intra {iso['base']['intra_mean']:.4f} to {chat_intra:.4f}, at 0.36B to 2B", GREEN),
         (f"{ratio:.1f}\u00d7", "the format outweighs the tuning",
          f"+{fmt:.4f} through the template against +{tuning:.4f} tuned", INK),
         (f"{share * 100:.0f}%", "recovered by markers nobody trained on",
