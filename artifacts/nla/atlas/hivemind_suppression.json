@@ -1,0 +1,242 @@
+{
+ "question": "does varied framing suppress the convergence",
+ "exotic_personas": [
+  "You are a blunt, opinionated essayist who despises cliches.",
+  "You are a working plumber giving plain practical advice.",
+  "You are a poet who answers in vivid concrete images.",
+  "You are a skeptical scientist who hedges every claim carefully.",
+  "You are an enthusiastic teenager texting a close friend.",
+  "You are a nineteenth-century letter writer, formal and unhurried.",
+  "You are a terse expert who answers in one short sentence.",
+  "You are a stand-up comedian working the answer into a bit."
+ ],
+ "deployed_personas": [
+  "You are a helpful, harmless, and honest AI assistant.",
+  "You are a large language model. Answer accurately and concisely.",
+  "You are an AI assistant. Provide clear, accurate and helpful responses.",
+  "You are a friendly and knowledgeable assistant. Be concise but thorough.",
+  "You are an AI assistant designed to be maximally helpful while remaining safe.",
+  "You are a helpful assistant. Answer directly and avoid unnecessary preamble.",
+  "You are an AI language model. Respond helpfully and without verbosity.",
+  "You are a thoughtful assistant. Give balanced, well-reasoned answers."
+ ],
+ "why_two_sets": "exotic voices are an upper bound nobody ships; the deployed set is what the industry actually uses, every one a variation on helpful assistant",
+ "native_template_note": "only Qwen2.5 and SmolLM2 inject a branded persona by default; Qwen3, gemma-2 and OLMo-2 inject no system prompt at all, and Llama-3.2 injects only date metadata. They converge regardless.",
+ "protocol": "top_p=0.9, temperature=1.0, K=8, 48 tokens",
+ "baseline": "the native chat arm from section 5",
+ "arms": {
+  "chat": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.6577,
+     "frac_prompts_above_0.8": 0.15
+    },
+    "qwen3_06b": {
+     "mean": 0.8064,
+     "frac_prompts_above_0.8": 0.5833
+    },
+    "gemma2_2b": {
+     "mean": 0.8101,
+     "frac_prompts_above_0.8": 0.6
+    },
+    "llama32_1b": {
+     "mean": 0.8196,
+     "frac_prompts_above_0.8": 0.75
+    },
+    "smollm2_360m": {
+     "mean": 0.4442,
+     "frac_prompts_above_0.8": 0.0167
+    },
+    "olmo2_1b": {
+     "mean": 0.8253,
+     "frac_prompts_above_0.8": 0.7333
+    }
+   },
+   "intra_mean": 0.7272,
+   "intra_range": [
+    0.4442,
+    0.8253
+   ],
+   "frac_models_any_prompt_above_0.8": 1.0,
+   "inter_mean": 0.6464,
+   "inter_cross_lab": 0.649,
+   "intra_minus_inter": 0.0808,
+   "floor": 0.1028
+  },
+  "persona_model": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.5672,
+     "frac_prompts_above_0.8": 0.0333
+    },
+    "qwen3_06b": {
+     "mean": 0.7634,
+     "frac_prompts_above_0.8": 0.3167
+    },
+    "gemma2_2b": {
+     "mean": 0.535,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "llama32_1b": {
+     "mean": 0.6765,
+     "frac_prompts_above_0.8": 0.15
+    },
+    "smollm2_360m": {
+     "mean": 0.3383,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "olmo2_1b": {
+     "mean": 0.5404,
+     "frac_prompts_above_0.8": 0.0167
+    }
+   },
+   "intra_mean": 0.5701,
+   "intra_range": [
+    0.3383,
+    0.7634
+   ],
+   "frac_models_any_prompt_above_0.8": 0.6667,
+   "inter_mean": 0.3817,
+   "inter_cross_lab": 0.3708,
+   "intra_minus_inter": 0.1885,
+   "floor": 0.1143
+  },
+  "persona_sample": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.4994,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "qwen3_06b": {
+     "mean": 0.6776,
+     "frac_prompts_above_0.8": 0.0667
+    },
+    "gemma2_2b": {
+     "mean": 0.3562,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "llama32_1b": {
+     "mean": 0.415,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "smollm2_360m": {
+     "mean": 0.3239,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "olmo2_1b": {
+     "mean": 0.4476,
+     "frac_prompts_above_0.8": 0.0333
+    }
+   },
+   "intra_mean": 0.4533,
+   "intra_range": [
+    0.3239,
+    0.6776
+   ],
+   "frac_models_any_prompt_above_0.8": 0.3333,
+   "inter_mean": 0.413,
+   "inter_cross_lab": 0.4083,
+   "intra_minus_inter": 0.0402,
+   "floor": 0.1114
+  },
+  "deployed_model": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.6698,
+     "frac_prompts_above_0.8": 0.2
+    },
+    "qwen3_06b": {
+     "mean": 0.8099,
+     "frac_prompts_above_0.8": 0.6167
+    },
+    "gemma2_2b": {
+     "mean": 0.834,
+     "frac_prompts_above_0.8": 0.7833
+    },
+    "llama32_1b": {
+     "mean": 0.8121,
+     "frac_prompts_above_0.8": 0.6833
+    },
+    "smollm2_360m": {
+     "mean": 0.4935,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "olmo2_1b": {
+     "mean": 0.7051,
+     "frac_prompts_above_0.8": 0.3
+    }
+   },
+   "intra_mean": 0.7207,
+   "intra_range": [
+    0.4935,
+    0.834
+   ],
+   "frac_models_any_prompt_above_0.8": 0.8333,
+   "inter_mean": 0.6441,
+   "inter_cross_lab": 0.6455,
+   "intra_minus_inter": 0.0766,
+   "floor": 0.0998
+  },
+  "deployed_sample": {
+   "per_model": {
+    "qwen25_05b": {
+     "mean": 0.6626,
+     "frac_prompts_above_0.8": 0.0833
+    },
+    "qwen3_06b": {
+     "mean": 0.8009,
+     "frac_prompts_above_0.8": 0.55
+    },
+    "gemma2_2b": {
+     "mean": 0.6293,
+     "frac_prompts_above_0.8": 0.0333
+    },
+    "llama32_1b": {
+     "mean": 0.7304,
+     "frac_prompts_above_0.8": 0.3
+    },
+    "smollm2_360m": {
+     "mean": 0.5331,
+     "frac_prompts_above_0.8": 0.0
+    },
+    "olmo2_1b": {
+     "mean": 0.7234,
+     "frac_prompts_above_0.8": 0.25
+    }
+   },
+   "intra_mean": 0.6799,
+   "intra_range": [
+    0.5331,
+    0.8009
+   ],
+   "frac_models_any_prompt_above_0.8": 0.8333,
+   "inter_mean": 0.6226,
+   "inter_cross_lab": 0.6224,
+   "intra_minus_inter": 0.0574,
+   "floor": 0.1061
+  }
+ },
+ "suppression": {
+  "persona_model": {
+   "intra_delta": -0.1571,
+   "inter_delta": -0.2647,
+   "floor_delta": 0.0115
+  },
+  "persona_sample": {
+   "intra_delta": -0.2739,
+   "inter_delta": -0.2334,
+   "floor_delta": 0.0086
+  },
+  "deployed_model": {
+   "intra_delta": -0.0065,
+   "inter_delta": -0.0023,
+   "floor_delta": -0.003
+  },
+  "deployed_sample": {
+   "intra_delta": -0.0473,
+   "inter_delta": -0.0238,
+   "floor_delta": 0.0033
+  }
+ },
+ "verdict": "Against a chat baseline of intra 0.7272 and inter 0.6464: exotic personas move intra by -0.2739 per sample and inter by -0.2647 per model. The personas the industry actually deploys move intra by -0.0473 and inter by -0.0023. The gap between those two is how much achievable diversity the field is leaving on the table."
+}

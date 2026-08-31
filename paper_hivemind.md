@@ -40,16 +40,25 @@ the assistant turn structure, not what the system prompt says.
 Two extensions close the obvious objections. Across the Qwen2.5-Coder ladder from
 0.5B to 14B, one lab and one recipe held fixed, the format effect **grows** with
 scale at +0.0473 per decade of parameters while the tuning term declines at
-−0.0285, so the split tilts further toward format as models get bigger. And on
+−0.0285, so the split tilts further toward format as models get bigger. On
 Ministral-3 from an eighth lab, at 3B, 8B and 14B, the decomposition reproduces
 with role structure worth +0.3809 to +0.4354, persona worth +0.0612 to +0.0821,
-and instruction tuning alone slightly negative.
+instruction tuning alone slightly negative, and the format effect rising at +0.0348
+per decade. In that family generic markers recover 94% to 104% of the full template
+effect, so the 66/34 split between framing and native tokens is a property of the
+original six models rather than a constant.
 
 A final measurement bounds what any of this licenses. Scoring the same code
 generations with an execution harness, an arm at 0.8638 intra-model similarity
 passes only 0.5404 of the time per sample while its 8-sample pool contains a
 passing solution 0.9024 of the time. Convergence in phrasing is not convergence in
 correctness.
+
+Finally we test whether the effect can be undone. Eight genuinely distinct personas
+cut inter-model similarity from 0.6464 to 0.3817 and intra-model from 0.7272 to
+0.4533, so the convergence is not locked into the weights. Eight personas of the
+kind actually deployed, each a rewording of "helpful assistant", move inter-model
+similarity by 0.0023. **The lever works and nothing shipped pulls it.**
 
 The homogeneity is not inherited from pretrained geometry and is not mostly bought
 by instruction tuning. It largely arrives with the deployment format, and most of
@@ -343,31 +352,34 @@ Mistral AI, a lab absent from that set, with matched base and instruct weights a
 |---|---:|---:|---:|
 | base raw | 0.4614 | 0.4473 | 0.4449 |
 | instruct raw | 0.4307 | 0.4251 | 0.4301 |
+| instruct chat | 0.8350 | 0.8380 | 0.8541 |
 | tuning alone | −0.0307 | −0.0222 | −0.0148 |
 | persona alone | +0.0612 | +0.0759 | +0.0821 |
 | role structure alone | **+0.3809** | **+0.4307** | **+0.4354** |
 | persona within the frame | +0.0268 | +0.0006 | +0.0068 |
+| full format effect | **+0.4043** | **+0.4129** | **+0.4240** |
 
 The ordering reproduces exactly. Role structure dominates, persona text alone is a
 minor term, and persona contributes almost nothing once a frame already exists. The
-`shared` arm reaches 0.8116 to 0.8655 intra against floors of 0.1329 to 0.1391, and
-clears the 0.8 threshold on 67% of prompts at 3B and 83% at both 8B and 14B, using
-markers Mistral never trained on.
+`shared` arm reaches 0.8116 to 0.8655 intra against floors of 0.1329 to 0.1391,
+using markers Mistral never trained on.
 
 Two things are sharper here than in Section 5.1. **Instruction tuning on its own is
 slightly negative**, between −0.0148 and −0.0307, so for this family the tuned
 weights supply none of the convergence and the frame supplies all of it. And the
-role-structure term is more than twice the +0.1583 we measured before, which says
-the 66/34 split of Section 5.1 is a property of those particular models rather than
-a constant.
+format effect is larger, +0.4043 to +0.4240 against +0.2837, on the same kind of
+prompt.
 
-**We exclude the Ministral chat arm.** Its generations are corrupted by template
-leakage, with `[INST]` and `</s>` markers appearing inside 70% of continuations at
-3B, 66% at 14B and 21% at 8B, plus empty generations at 3B and 14B. The resulting
-format gain oscillates in sign across rungs, which is the signature of broken data
-rather than a finding. Every other arm is clean, with zero empty and zero leaked
-generations, so the decomposition above stands while the native-token component
-does not have a value we trust for this family.
+**The native-token component does not replicate.** In Section 5.1 the model's own
+tuned tokens were worth +0.0962, a real 34% of the effect. Here generic markers
+recover 94% of the full template effect at 3B and then exceed it, at 104% for 8B and
+103% for 14B, so the native tokens are worth +0.0234, −0.0178 and −0.0114. The 66/34
+split is a property of those six models, not a constant. In this family the
+assistant frame is the whole mechanism.
+
+The format effect also **rises with scale here**, +0.0348 per decade across the three
+rungs, independently reproducing the direction found on the Qwen ladder in Section
+5.2 at +0.0473. Two families, two domains, two labs, same sign.
 
 ### 5.4 Homogeneous text, divergent correctness
 
@@ -388,6 +400,50 @@ of problems.
 **Embedding homogeneity does not imply outcome homogeneity.** This bounds what the
 hivemind result licenses: convergence in phrasing is real and we reproduced it, but
 it should not be read as convergence in what the models actually get right.
+
+### 5.5 It can be suppressed, but not by anything anyone ships
+
+Everything above adds framing and watches similarity rise. That is an explanation,
+not a remedy. The question a deployer would ask is the reverse one: if the shared
+frame causes the convergence, does breaking the frame undo it?
+
+We vary the persona in two directions against the same six models and the native
+chat arm as baseline. In `persona_model` each model gets a different voice and all
+eight of its samples share it, which is the deployer's lever for differentiating a
+product. In `persona_sample` each of the eight samples gets a different voice within
+one model, which is the diversity lever for making resampling useful again. We run
+both with eight genuinely distinct voices, and again with eight personas of the kind
+actually shipped, every one a rewording of "helpful assistant".
+
+| arm | intra | inter | cross-lab | floor | models any prompt > 0.8 |
+|---|---:|---:|---:|---:|---:|
+| chat (baseline) | 0.7272 | 0.6464 | 0.6490 | 0.1028 | 1.0000 |
+| exotic, per model | 0.5701 | **0.3817** | 0.3708 | 0.1143 | 0.6667 |
+| exotic, per sample | **0.4533** | 0.4130 | 0.4083 | 0.1114 | 0.3333 |
+| deployed, per model | 0.7207 | 0.6441 | 0.6455 | 0.0998 | 0.8333 |
+| deployed, per sample | 0.6799 | 0.6226 | 0.6224 | 0.1061 | 0.8333 |
+
+**The convergence is suppressible.** Genuinely different voices take inter-model
+similarity down by 0.2647, from 0.6464 to 0.3817, and per-sample variation takes
+intra-model similarity down by 0.2739, from 0.7272 to 0.4533. The fraction of models
+with any prompt above 0.8 falls from all of them to a third. Nothing about the
+homogeneity is locked in by the weights.
+
+**The personas the industry actually ships do essentially nothing.** Eight different
+production-style system prompts move inter-model similarity by 0.0023 and intra by
+0.0065. That is indistinguishable from not intervening at all. Varying them per
+sample buys 0.0473 of intra, still leaving 83% of models above the 0.8 line.
+
+This is the practical finding. The lever exists and it is a single string, but it
+only works if the string stops being a variation on "helpful assistant". Eight
+different ways of saying helpful assistant are, to the model, one persona. The
+industry has standardised on a register, and the register is the mechanism.
+
+Two supporting observations. The floor stays between 0.0998 and 0.1143 across all
+five arms, so none of the movement is a scale artifact. And default templates do not
+explain the baseline: only Qwen2.5 and SmolLM2 inject a branded persona at all,
+while Qwen3, gemma-2 and OLMo-2 inject no system prompt and Llama-3.2 injects only
+date metadata. They converge regardless.
 
 ## 6. What transport predicts
 
@@ -517,7 +573,17 @@ candidates. We record it because the three controls we ran all passed on the
 configuration that was wrong, and none of them could have caught it. Varying an
 arbitrary knob would have.
 
-**The Ministral chat arm produced unusable data.** Section 5.3.
+**The Ministral chat arm was silently corrupted by a tokenizer round-trip.**
+Rendering a chat template to a string and re-tokenizing it is standard practice and
+works for most families. Mistral's `MistralCommonBackend` does not survive it: the
+rendered `<s>[INST]` came back as the literal characters `<`, `s`, `>[`, `IN`,
+`ST`, `]` rather than the special ids 1 and 3, so the model read its own control
+tokens as prose. It responded by emitting template markup in 336 of 480
+continuations at 3B, 315 at 14B and 102 at 8B, with a format gain that oscillated
+in sign across rungs. Passing token ids directly fixes it, and the repaired arm is
+what Section 5.3 reports. The pre-fix generations are kept under
+`corrupt_chat_pre_fix/`. We record this because nothing about the failure looked
+like a tokenizer problem from the metric alone.
 
 ## 11. Limitations
 
@@ -537,9 +603,9 @@ arms spend part of that budget on preamble before content, so cross-arm comparis
 of anything other than similarity, capability in particular, are confounded by
 truncation. We make no capability claim across arms for that reason.
 
-Section 5.3 covers three rungs of one additional family and excludes its chat arm
-for data corruption. It replicates the ordering of the decomposition, not the
-native-token term.
+Section 5.3 covers three rungs of one additional family. It replicates the ordering
+of the decomposition and reverses the native-token term, which suggests that term
+is family-specific rather than general.
 
 We use a different scorer than they do. We matched the floor rather than the
 encoder because we do not have theirs, and Section 9 argues the floor is what
@@ -556,10 +622,10 @@ persona, or markers closer to a specific model's native format, could shift the
 66/34 split. We have shown that generic framing recovers most of the effect, not
 that this particular framing is optimal.
 
-We have not tested whether the effect can be suppressed. Everything here adds
-framing and measures convergence going up. Whether a deliberately varied set of
-frames drives it back down, which is what would matter for anyone trying to fix
-this, is untested.
+Section 5.5 shows the effect is suppressible with eight distinct personas, on 60
+stems and six models. It does not establish how far the register can be varied
+before a product stops being usable as an assistant, which is the constraint that
+actually binds a deployer.
 
 ## 12. Artifacts
 
@@ -570,6 +636,7 @@ scores.
 - `scripts/hivemind_sampled_protocol.py`, `artifacts/nla/atlas/hivemind_sampled_protocol.json`
 - `scripts/hivemind_posttraining_isolation.py`, `artifacts/nla/atlas/hivemind_posttraining_isolation.json`
 - `scripts/hivemind_template_decomp.py`, `artifacts/nla/atlas/hivemind_template_decomp.json`
+- `scripts/hivemind_suppression.py`, `artifacts/nla/atlas/hivemind_suppression.json`
 - `scripts/hivemind_mechanism_link.py`, `artifacts/nla/atlas/hivemind_mechanism_link.json`
 - `scripts/hivemind_human_baseline.py`, `artifacts/nla/hivemind_human_baseline.json`
 - `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`

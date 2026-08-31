@@ -59,8 +59,9 @@ def render(tok, stem, mode):
         return f"### User:\n{stem}\n\n### Assistant:\n", True, False
     if mode == "shared_persona":
         return f"{PERSONA}\n\n### User:\n{stem}\n\n### Assistant:\n", True, False
-    return tok.apply_chat_template([{"role": "user", "content": stem}],
-                                   tokenize=False, add_generation_prompt=True), False, False
+    # MistralCommonBackend cannot round-trip special tokens through a string.
+    return tok.apply_chat_template([{"role": "user", "content": stem}], tokenize=True,
+                                   add_generation_prompt=True)["input_ids"], False, False
 
 
 def main():

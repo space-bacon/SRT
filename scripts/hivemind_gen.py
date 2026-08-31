@@ -98,8 +98,13 @@ def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
                 for stem in chunk:
                     t, add_sp, per_sample = render(tok, stem, mode)
                     texts.extend(t if per_sample else [t])
-                b = tok(texts, return_tensors="pt", padding=True,
-                        add_special_tokens=add_sp).to(DEV)
+                if texts and isinstance(texts[0], list):
+                    # Pre-tokenized: some backends cannot round-trip specials through a string.
+                    b = tok.pad({"input_ids": texts}, return_tensors="pt",
+                                padding=True).to(DEV)
+                else:
+                    b = tok(texts, return_tensors="pt", padding=True,
+                            add_special_tokens=add_sp).to(DEV)
                 g = mod.generate(**b, max_new_tokens=max_new, do_sample=True,
                                  top_p=top_p, temperature=temp,
                                  num_return_sequences=1 if per_sample else k,
