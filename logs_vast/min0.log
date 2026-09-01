@@ -1,0 +1,101 @@
+shard 0/3  2 models  60 prompts  K=8  batch=16
+  ministral14B_base, ministral8B_inst
+
+  ministral14B_base all 1 arms cached   [   60/360  16.7%  elapsed 0:00  ETA 0:00  3795750/min]
+[transformers] You have loaded an FP8 model on CPU and have a CUDA or XPU device available, make sure to set your model on a GPU or XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or 'xpu'. 
+Loading weights:   0%|          | 0/1007 [00:00<?, ?it/s]Loading weights: 100%|██████████| 1007/1007 [00:00<00:00, 34152.97it/s]
+  ministral8B_inst loaded 2s, running 5 arm(s)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files:   9%|▉         | 1/11 [00:00<00:01,  6.22it/s]Fetching 11 files:  82%|████████▏ | 9/11 [00:00<00:00, 38.37it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 27.95it/s]
+  ministral8B_inst raw              16/60  [   76/360  21.1%  elapsed 0:55  ETA 3:29  82/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst raw            DONE          [  120/360  33.3%  elapsed 1:13  ETA 2:27  97/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst persona          16/60  [  136/360  37.8%  elapsed 1:19  ETA 2:11  102/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst persona        DONE          [  180/360  50.0%  elapsed 1:36  ETA 1:36  112/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst shared           16/60  [  196/360  54.4%  elapsed 1:42  ETA 1:25  115/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst shared         DONE          [  240/360  66.7%  elapsed 1:59  ETA 0:59  121/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst shared_persona   16/60  [  256/360  71.1%  elapsed 2:05  ETA 0:50  122/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst shared_persona DONE          [  300/360  83.3%  elapsed 2:22  ETA 0:28  126/min]
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst chat             16/60  [  316/360  87.8%  elapsed 2:28  ETA 0:20  128/min]
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] `MistralCommonBackend.apply_chat_template(..., tokenize=False)` is unsafe and may lead to unexpected behavior. Please consider using `tokenize=True` instead and don't encode the output manually.
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst chat           DONE          [  360/360 100.0%  elapsed 2:45  ETA 0:00  131/min]
+
+shard 0 complete  [  360/360 100.0%  elapsed 2:45  ETA 0:00  130/min]

@@ -1,0 +1,4 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 6048.02it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 12728.00it/s]
+trainer-code draft_cen: 0.0835263729095459
+trainer-code draft_cen: 0.15852057933807373

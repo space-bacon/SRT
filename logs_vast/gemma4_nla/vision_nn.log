@@ -1,0 +1,51 @@
+Traceback (most recent call last):
+  File "/venv/main/lib/python3.12/shutil.py", line 847, in move
+    os.rename(src, real_dst)
+OSError: [Errno 116] Stale file handle: '/workspace/.hf_home/hub/models--google--gemma-4-31B-it/blobs/5465974d23e1eca2c46c2809b26c997946ce0d90.eb175848.incomplete' -> '/workspace/.hf_home/hub/models--google--gemma-4-31B-it/blobs/5465974d23e1eca2c46c2809b26c997946ce0d90'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1949, in _copy_no_matter_what
+    shutil.copy2(src, dst)
+  File "/venv/main/lib/python3.12/shutil.py", line 475, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/venv/main/lib/python3.12/shutil.py", line 262, in copyfile
+    with open(dst, 'wb') as fdst:
+         ^^^^^^^^^^^^^^^
+OSError: [Errno 116] Stale file handle: '/workspace/.hf_home/hub/models--google--gemma-4-31B-it/blobs/5465974d23e1eca2c46c2809b26c997946ce0d90'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 224, in from_pretrained
+    processor_config_file = cached_file(pretrained_model_name_or_path, PROCESSOR_NAME, **cached_file_kwargs)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/hub.py", line 293, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/hub.py", line 527, in cached_files
+    raise e
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/hub.py", line 437, in cached_files
+    hf_hub_download(
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1241, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1889, in _download_to_tmp_and_move
+    _chmod_and_move(tmp_path, destination_path)
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1938, in _chmod_and_move
+    shutil.move(str(src), str(dst), copy_function=_copy_no_matter_what)
+  File "/venv/main/lib/python3.12/shutil.py", line 867, in move
+    copy_function(src, real_dst)
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1952, in _copy_no_matter_what
+    shutil.copyfile(src, dst)
+  File "/venv/main/lib/python3.12/shutil.py", line 262, in copyfile
+    with open(dst, 'wb') as fdst:
+         ^^^^^^^^^^^^^^^
+OSError: [Errno 116] Stale file handle: '/workspace/.hf_home/hub/models--google--gemma-4-31B-it/blobs/5465974d23e1eca2c46c2809b26c997946ce0d90'

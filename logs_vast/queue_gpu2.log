@@ -1,0 +1,247 @@
+QUEUE-START gpu=2 jobs=queues/gpu2.txt 2026-08-31T20:46:53+00:00
+QUEUE-JOB 1 gpu=2 2026-08-31T20:46:53+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/he_k32 --batch 16
+shard 0/1  1 models  164 prompts  K=32  batch=16  -> artifacts/nla/he_k32
+  coder14B_inst
+
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 28748.85it/s]
+[W831 20:46:58.614696666 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6488064, total: 101975851008).
+[W831 20:46:58.614797235 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6488064, total: 101975851008).
+  coder14B_inst    FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 136.00 MiB. GPU 0 has a total capacity of 
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 113, in main
+    run_model(tag, path, prompts, arms, render, out, prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 87, in run_model
+    mod = mod.to(DEV).eval()
+          ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 3768, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1383, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+  [Previous line repeated 2 more times]
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 964, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1369, in convert
+    return t.to(
+           ^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 136.00 MiB. GPU 0 has a total capacity of 94.97 GiB of which 6.19 MiB is free. Process 318203 has 90.66 GiB memory in use. Including non-PyTorch memory, this process has 4.29 GiB memory in use. Of the allocated memory 3.75 GiB is allocated by PyTorch, and 1.85 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 128, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 118, in main
+    failed.append(tag)
+    ^^^^^^
+NameError: name 'failed' is not defined
+QUEUE-FAIL 1 gpu=2 rc=1 2026-08-31T20:46:59+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/he_k32 --batch 16
+QUEUE-JOB 2 gpu=2 2026-08-31T20:47:09+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 7B --arms shared --out artifacts/nla/he_k32 --batch 24
+shard 0/1  1 models  164 prompts  K=32  batch=24  -> artifacts/nla/he_k32
+  coder7B_inst
+
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 19126.83it/s]
+[W831 20:47:13.930332893 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6553600, total: 101975851008).
+[W831 20:47:13.930681580 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6553600, total: 101975851008).
+  coder7B_inst     FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 113, in main
+    run_model(tag, path, prompts, arms, render, out, prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 87, in run_model
+    mod = mod.to(DEV).eval()
+          ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 3768, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1383, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+  [Previous line repeated 2 more times]
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 964, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1369, in convert
+    return t.to(
+           ^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 94.97 GiB of which 66.25 MiB is free. Process 318203 has 90.66 GiB memory in use. Including non-PyTorch memory, this process has 4.23 GiB memory in use. Of the allocated memory 3.67 GiB is allocated by PyTorch, and 19.36 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 128, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 118, in main
+    failed.append(tag)
+    ^^^^^^
+NameError: name 'failed' is not defined
+QUEUE-FAIL 2 gpu=2 rc=1 2026-08-31T20:47:15+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 7B --arms shared --out artifacts/nla/he_k32 --batch 24
+QUEUE-JOB 3 gpu=2 2026-08-31T20:47:25+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 3B 1.5B --arms shared --out artifacts/nla/he_k32 --batch 32
+shard 0/1  2 models  164 prompts  K=32  batch=32  -> artifacts/nla/he_k32
+  coder1.5B_inst, coder3B_inst
+
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 15435.01it/s]
+  coder1.5B_inst   loaded 1s, running 1 arm(s)
+[W831 20:47:29.816333453 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 21233664, total: 101975851008).
+[W831 20:47:29.816589691 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 21233664, total: 101975851008).
+  coder1.5B_inst   FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 88.00 MiB. GPU 0 has a total capacity of 9
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 113, in main
+    run_model(tag, path, prompts, arms, render, out, prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 108, in run_model
+    g = mod.generate(**b, max_new_tokens=max_new, do_sample=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2668, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2868, in _sample
+    outputs = self._prefill(
+              ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 3948, in _prefill
+    return self(**model_inputs, return_dict=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 452, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 1068, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 385, in forward
+    position_embeddings = self.rotary_emb(hidden_states, position_ids)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_rope_utils.py", line 128, in wrapper
+    return rope_forward(self, x, position_ids, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 99, in forward
+    cos = emb.cos() * self.attention_scaling
+          ^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 88.00 MiB. GPU 0 has a total capacity of 94.97 GiB of which 80.25 MiB is free. Process 318203 has 90.66 GiB memory in use. Including non-PyTorch memory, this process has 4.22 GiB memory in use. Of the allocated memory 3.54 GiB is allocated by PyTorch, and 15.44 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 128, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/root/srt-adapter/scripts/coder_ladder.py", line 118, in main
+    failed.append(tag)
+    ^^^^^^
+NameError: name 'failed' is not defined
+QUEUE-FAIL 3 gpu=2 rc=1 2026-08-31T20:47:30+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 3B 1.5B --arms shared --out artifacts/nla/he_k32 --batch 32
+QUEUE-DONE gpu=2 2026-08-31T20:47:40+00:00
+QUEUE-START gpu=2 jobs=queues/gpu2.txt 2026-08-31T20:48:43+00:00
+QUEUE-WAIT gpu=2 92849MiB in use, waiting
+QUEUE-WAIT gpu=2 92849MiB in use, waiting
+QUEUE-WAIT gpu=2 93189MiB in use, waiting
+QUEUE-WAIT gpu=2 93189MiB in use, waiting
+QUEUE-WAIT gpu=2 93189MiB in use, waiting
+QUEUE-WAIT gpu=2 97249MiB in use, waiting
+QUEUE-WAIT gpu=2 97249MiB in use, waiting
+QUEUE-WAIT gpu=2 97249MiB in use, waiting
+QUEUE-WAIT gpu=2 97249MiB in use, waiting
+QUEUE-WAIT gpu=2 93789MiB in use, waiting
+QUEUE-WAIT gpu=2 93789MiB in use, waiting
+QUEUE-WAIT gpu=2 93791MiB in use, waiting
+QUEUE-WAIT gpu=2 95531MiB in use, waiting
+QUEUE-WAIT gpu=2 95531MiB in use, waiting
+QUEUE-WAIT gpu=2 95531MiB in use, waiting
+QUEUE-WAIT-TIMEOUT gpu=2 still busy after 30m, starting anyway
+QUEUE-JOB 1 gpu=2 2026-08-31T21:18:50+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/he_k32 --batch 12
+shard 0/1  1 models  164 prompts  K=32  batch=12  -> artifacts/nla/he_k32
+  coder14B_inst
+
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 13040.90it/s]
+[W831 21:18:53.036614195 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6553600, total: 101975851008).
+[W831 21:18:53.041248786 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6553600, total: 101975851008).
+  coder14B_inst    FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 1.45 GiB. GPU 0 has a total capacity of 94
+
+shard 0 complete  [  164/164 100.0%  elapsed 0:03  ETA 0:00  3242/min]
+FAILED: coder14B_inst
+QUEUE-FAIL 1 gpu=2 rc=1 2026-08-31T21:18:54+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/he_k32 --batch 12
+QUEUE-WAIT gpu=2 95531MiB in use, waiting
+QUEUE-WAIT gpu=2 94049MiB in use, waiting
+QUEUE-WAIT gpu=2 95607MiB in use, waiting
+QUEUE-WAIT gpu=2 95869MiB in use, waiting
+QUEUE-WAIT gpu=2 86749MiB in use, waiting
+QUEUE-WAIT gpu=2 94149MiB in use, waiting
+QUEUE-WAIT gpu=2 94149MiB in use, waiting
+QUEUE-WAIT gpu=2 94149MiB in use, waiting
+QUEUE-WAIT gpu=2 97129MiB in use, waiting
+QUEUE-WAIT gpu=2 91329MiB in use, waiting
+QUEUE-WAIT gpu=2 90349MiB in use, waiting
+QUEUE-WAIT gpu=2 96565MiB in use, waiting
+QUEUE-WAIT gpu=2 92369MiB in use, waiting
+QUEUE-WAIT gpu=2 94749MiB in use, waiting
+QUEUE-WAIT gpu=2 94749MiB in use, waiting
+QUEUE-WAIT-TIMEOUT gpu=2 still busy after 30m, starting anyway
+QUEUE-JOB 2 gpu=2 2026-08-31T21:49:10+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 7B --arms shared --out artifacts/nla/he_k32 --batch 20
+shard 0/1  1 models  164 prompts  K=32  batch=20  -> artifacts/nla/he_k32
+  coder7B_inst
+
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 13822.94it/s]
+[W831 21:49:14.528372062 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6553600, total: 101975851008).
+[W831 21:49:14.528466421 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6553600, total: 101975851008).
+  coder7B_inst     FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 26.00 MiB. GPU 0 has a total capacity of 9
+
+shard 0 complete  [  164/164 100.0%  elapsed 0:03  ETA 0:00  3246/min]
+FAILED: coder7B_inst
+QUEUE-FAIL 2 gpu=2 rc=1 2026-08-31T21:49:15+00:00 :: /venv/main/bin/python scripts/coder_ladder.py --k 32 --sizes 7B --arms shared --out artifacts/nla/he_k32 --batch 20
+QUEUE-WAIT gpu=2 94749MiB in use, waiting
+QUEUE-WAIT gpu=2 94749MiB in use, waiting
+QUEUE-WAIT gpu=2 94749MiB in use, waiting
+QUEUE-WAIT gpu=2 96809MiB in use, waiting
+QUEUE-WAIT gpu=2 96809MiB in use, waiting
+QUEUE-WAIT gpu=2 96809MiB in use, waiting
+QUEUE-WAIT gpu=2 96809MiB in use, waiting
+QUEUE-WAIT gpu=2 96809MiB in use, waiting
+QUEUE-WAIT gpu=2 96809MiB in use, waiting
+QUEUE-WAIT gpu=2 96811MiB in use, waiting
+QUEUE-WAIT gpu=2 96811MiB in use, waiting
+QUEUE-WAIT gpu=2 96811MiB in use, waiting
+QUEUE-WAIT gpu=2 96811MiB in use, waiting
+QUEUE-WAIT gpu=2 96811MiB in use, waiting

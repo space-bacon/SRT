@@ -1,0 +1,50 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12971.81it/s]
+  coder0.5B_base__raw                n=164 k=8 pass=0.0213
+  coder0.5B_inst__chat               n=164 k=8 pass=0.1745
+  coder0.5B_inst__persona            n=164 k=8 pass=0.0381
+  coder0.5B_inst__raw                n=164 k=8 pass=0.0259
+  coder0.5B_inst__shared             n=164 k=8 pass=0.1692
+  coder0.5B_inst__shared_persona     n=164 k=8 pass=0.1562
+  coder1.5B_base__raw                n=164 k=8 pass=0.0373
+  coder1.5B_inst__chat               n=164 k=8 pass=0.3178
+  coder1.5B_inst__persona            n=164 k=8 pass=0.0465
+  coder1.5B_inst__raw                n=164 k=8 pass=0.0686
+  coder1.5B_inst__shared             n=164 k=8 pass=0.2424
+  coder1.5B_inst__shared_persona     n=164 k=8 pass=0.2767
+  coder14B_base__raw                 n=164 k=8 pass=0.0465
+  coder14B_inst__chat                n=164 k=8 pass=0.3636
+  coder14B_inst__persona             n=164 k=8 pass=0.1052
+  coder14B_inst__raw                 n=164 k=8 pass=0.0755
+  coder14B_inst__shared              n=164 k=8 pass=0.5404
+  coder14B_inst__shared_persona      n=164 k=8 pass=0.4329
+  coder32B_base__raw                 n=164 k=8 pass=0.0366
+  coder32B_inst__chat                n=164 k=8 pass=0.2401
+  coder32B_inst__persona             n=164 k=8 pass=0.0968
+  coder32B_inst__raw                 n=164 k=8 pass=0.0777
+  coder32B_inst__shared              n=164 k=8 pass=0.2264
+  coder32B_inst__shared_persona      n=164 k=8 pass=0.2058
+  coder3B_base__raw                  n=164 k=8 pass=0.0213
+  coder3B_inst__chat                 n=164 k=8 pass=0.2774
+  coder3B_inst__persona              n=164 k=8 pass=0.1090
+  coder3B_inst__raw                  n=164 k=8 pass=0.0549
+  coder3B_inst__shared               n=164 k=8 pass=0.2782
+  coder3B_inst__shared_persona       n=164 k=8 pass=0.2409
+  coder7B_base__raw                  n=164 k=8 pass=0.0495
+  coder7B_inst__chat                 n=164 k=8 pass=0.5404
+  coder7B_inst__persona              n=164 k=8 pass=0.0945
+  coder7B_inst__raw                  n=164 k=8 pass=0.1044
+  coder7B_inst__shared               n=164 k=8 pass=0.4931
+  coder7B_inst__shared_persona       n=164 k=8 pass=0.4375
+
+47,232 candidates over 36 arms, 164 problems
+  C0.1_seed0     verifier 0.2556  medoid 0.1921  floor 0.1868  oracle 0.4954  auroc 0.7612  captured 22.3%
+  C0.1_seed1     verifier 0.2588  medoid 0.1921  floor 0.1868  oracle 0.4954  auroc 0.7786  captured 23.3%
+  C0.1_seed2     verifier 0.2566  medoid 0.1921  floor 0.1868  oracle 0.4954  auroc 0.7600  captured 22.6%
+  C1.0_seed0     verifier 0.2639  medoid 0.1921  floor 0.1868  oracle 0.4954  auroc 0.7689  captured 25.0%
+  C1.0_seed1     verifier 0.2646  medoid 0.1921  floor 0.1868  oracle 0.4954  auroc 0.7833  captured 25.2%
+  C1.0_seed2     verifier 0.2644  medoid 0.1921  floor 0.1868  oracle 0.4954  auroc 0.7651  captured 25.1%
+
+  gain over floor across seeds: +0.0688 to +0.0778 (spread 0.0090)
+
+wrote /root/srt-adapter/artifacts/nla/verifier/results.json

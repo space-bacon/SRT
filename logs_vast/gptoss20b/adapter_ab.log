@@ -1,0 +1,116 @@
+18:57:51 srt.train INFO Device: cuda
+18:57:51 srt.train INFO Community SupCon: weight=2.000 temperature=0.100
+18:57:51 srt.train INFO Loss weights: div_supcon=1.000 listnet=0.500 chain_aux=0.050
+18:57:51 srt.train INFO Archetype SupCon: weight=0.000 temperature=0.100 mix_fraction=0.25
+18:57:51 srt.adapter INFO Loading backbone: openai/gpt-oss-20b in bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+You have loaded an FP4 model on CPU and have a CUDA/XPU device available, make sure to set your model on a GPU/XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or device_map = 'xpu'. 
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s]Fetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 314956.89it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s][AFetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 14465.55it/s]
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.37it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.66it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.36it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.06it/s]
+18:57:55 srt.adapter INFO Backbone: d=2880, L=24, MAH@[6, 12, 18], inject@[12, 18], community@3
+18:57:55 srt.adapter INFO Sliding-window attention: window=128, 12/24 sliding layers
+18:57:55 srt.adapter INFO SRT Adapter: 12,713,923 trainable, 1,804,459,584 frozen (backbone)
+18:57:57 srt.data.dataset INFO Loading dataset from data/all_train.jsonl
+18:58:35 srt.data.dataset INFO Loaded 1000000 samples from data/all_train.jsonl
+18:58:35 srt.data.dataset INFO Loading dataset from data/all_val.jsonl
+18:58:35 srt.data.dataset INFO Loaded 5000 samples from data/all_val.jsonl
+18:58:35 srt.train INFO Training: 375000 steps (3 epochs × 125000 batches)
+18:58:35 srt.train INFO === Epoch 1/3 ===
+18:59:49 srt.train INFO step=100  total=7063.510  ce=4.375  chain=369.5000  bif=0.4680  lr=6.00e-05  1.4 step/s
+18:59:49 srt.train INFO   diag: div_norms=[190.0, 276.0, 480.0]  inj_norms=[1616.0, 2912.0]  r_hat=0.0403±0.0654 [-0.1885, 0.2754]
+19:00:41 srt.train INFO step=200  total=225.326  ce=7.406  chain=58.1250  bif=0.1423  lr=1.20e-04  1.6 step/s
+19:00:41 srt.train INFO   diag: div_norms=[161.0, 193.0, 223.0]  inj_norms=[2048.0, 2880.0]  r_hat=0.5586±0.1787 [0.1338, 1.4062]
+19:01:32 srt.train INFO step=300  total=49.481  ce=7.594  chain=18.8750  bif=0.1514  lr=1.80e-04  1.7 step/s
+19:01:32 srt.train INFO   diag: div_norms=[150.0, 198.0, 233.0]  inj_norms=[2608.0, 2848.0]  r_hat=0.6562±0.3184 [-0.5195, 1.5000]
+19:02:17 srt.train INFO step=400  total=38.434  ce=6.781  chain=14.4688  bif=0.1629  lr=2.40e-04  1.8 step/s
+19:02:17 srt.train INFO   diag: div_norms=[86.5, 129.0, 177.0]  inj_norms=[2208.0, 3616.0]  r_hat=0.6094±0.2734 [-0.2100, 1.8750]
+19:03:04 srt.train INFO step=500  total=29.546  ce=6.906  chain=12.7812  bif=0.1095  lr=3.00e-04  1.9 step/s
+19:03:04 srt.train INFO   diag: div_norms=[83.5, 146.0, 213.0]  inj_norms=[2040.0, 3280.0]  r_hat=0.7500±0.2930 [-0.1680, 2.0938]
+19:03:48 srt.train INFO step=600  total=35.191  ce=6.531  chain=13.5000  bif=0.1505  lr=3.00e-04  1.9 step/s
+19:03:48 srt.train INFO   diag: div_norms=[179.0, 165.0, 240.0]  inj_norms=[2544.0, 3664.0]  r_hat=0.6289±0.3574 [-0.3457, 2.4219]
+19:04:29 srt.train INFO step=700  total=22.424  ce=5.844  chain=10.0312  bif=0.1008  lr=3.00e-04  2.0 step/s
+19:04:29 srt.train INFO   diag: div_norms=[52.25, 94.5, 144.0]  inj_norms=[2240.0, 3344.0]  r_hat=0.7656±0.3516 [-0.0786, 2.0625]
+19:05:11 srt.train INFO step=800  total=27.551  ce=5.750  chain=12.8906  bif=0.1206  lr=3.00e-04  2.0 step/s
+19:05:11 srt.train INFO   diag: div_norms=[56.5, 95.5, 149.0]  inj_norms=[2176.0, 2832.0]  r_hat=0.7148±0.3418 [-0.1123, 2.1250]
+19:05:50 srt.train INFO step=900  total=24.451  ce=5.406  chain=7.4453  bif=0.1019  lr=3.00e-04  2.1 step/s
+19:05:50 srt.train INFO   diag: div_norms=[50.75, 85.0, 115.0]  inj_norms=[2384.0, 3200.0]  r_hat=0.9258±0.4551 [-0.0874, 2.5000]
+19:06:32 srt.train INFO step=1000  total=23.278  ce=5.438  chain=7.7344  bif=0.0859  lr=3.00e-04  2.1 step/s
+19:06:32 srt.train INFO   diag: div_norms=[60.0, 101.5, 138.0]  inj_norms=[2384.0, 3056.0]  r_hat=0.7891±0.3613 [-0.2275, 2.2500]
+19:07:13 srt.train INFO step=1100  total=17.359  ce=5.000  chain=7.5000  bif=0.0624  lr=3.00e-04  2.1 step/s
+19:07:13 srt.train INFO   diag: div_norms=[37.5, 50.25, 71.5]  inj_norms=[2256.0, 3568.0]  r_hat=0.8008±0.5508 [-0.3301, 2.3125]
+19:07:54 srt.train INFO step=1200  total=17.247  ce=5.250  chain=6.9375  bif=0.0794  lr=3.00e-04  2.1 step/s
+19:07:54 srt.train INFO   diag: div_norms=[43.0, 60.5, 81.0]  inj_norms=[2240.0, 3616.0]  r_hat=0.7266±0.4434 [-0.2949, 2.0781]
+19:08:36 srt.train INFO step=1300  total=19.083  ce=5.250  chain=8.0938  bif=0.1186  lr=3.00e-04  2.2 step/s
+19:08:36 srt.train INFO   diag: div_norms=[56.25, 81.5, 106.0]  inj_norms=[2368.0, 3424.0]  r_hat=0.8906±0.5859 [-0.4023, 2.0781]
+19:09:17 srt.train INFO step=1400  total=16.076  ce=4.812  chain=6.4844  bif=0.0831  lr=3.00e-04  2.2 step/s
+19:09:17 srt.train INFO   diag: div_norms=[46.0, 67.5, 83.5]  inj_norms=[2144.0, 3504.0]  r_hat=0.9648±0.5000 [-0.4941, 1.9297]
+19:09:58 srt.train INFO step=1500  total=20.783  ce=4.875  chain=10.1172  bif=0.0589  lr=3.00e-04  2.2 step/s
+19:09:58 srt.train INFO   diag: div_norms=[37.25, 54.5, 70.0]  inj_norms=[2448.0, 3680.0]  r_hat=0.9180±0.4453 [-0.2383, 2.5469]
+19:10:37 srt.train INFO step=1600  total=16.366  ce=5.250  chain=6.5859  bif=0.0998  lr=3.00e-04  2.2 step/s
+19:10:37 srt.train INFO   diag: div_norms=[44.25, 87.5, 87.0]  inj_norms=[2960.0, 4800.0]  r_hat=0.8359±0.3340 [-0.1973, 2.1719]
+19:11:19 srt.train INFO step=1700  total=17.953  ce=4.938  chain=7.7969  bif=0.0889  lr=3.00e-04  2.2 step/s
+19:11:19 srt.train INFO   diag: div_norms=[40.5, 67.0, 63.5]  inj_norms=[2480.0, 3952.0]  r_hat=0.7695±0.3477 [-0.1904, 2.2188]
+19:12:01 srt.train INFO step=1800  total=22.638  ce=5.438  chain=10.5312  bif=0.0789  lr=3.00e-04  2.2 step/s
+19:12:01 srt.train INFO   diag: div_norms=[40.75, 53.25, 62.25]  inj_norms=[2272.0, 3808.0]  r_hat=0.5625±0.3047 [-0.3633, 2.0469]
+19:12:44 srt.train INFO step=1900  total=23.431  ce=5.094  chain=10.6250  bif=0.0774  lr=3.00e-04  2.2 step/s
+19:12:44 srt.train INFO   diag: div_norms=[60.0, 78.5, 57.25]  inj_norms=[3152.0, 5568.0]  r_hat=0.7812±0.3477 [-0.1709, 2.3438]
+19:13:26 srt.train INFO step=2000  total=25.618  ce=5.812  chain=11.5938  bif=0.1081  lr=3.00e-04  2.2 step/s
+19:13:26 srt.train INFO   diag: div_norms=[53.5, 65.0, 51.0]  inj_norms=[2944.0, 5600.0]  r_hat=0.7969±0.4023 [-0.1953, 2.2812]
+19:16:57 srt.train INFO VAL step=2000  total=29.846  ce=5.689  bif=0.1064
+19:16:57 srt.adapter INFO Saved adapter weights (41 tensors) to checkpoints/gptoss20b_phaseAB/best_adapter.pt
+19:16:57 srt.train INFO New best val loss: 29.8463
+19:16:57 srt.train INFO Saved training checkpoint at step 2000
+19:17:36 srt.train INFO step=2100  total=35.355  ce=5.594  chain=14.0938  bif=0.3936  lr=3.00e-04  1.8 step/s
+19:17:36 srt.train INFO   diag: div_norms=[70.5, 110.0, 58.5]  inj_norms=[2560.0, 4800.0]  r_hat=1.3125±0.4551 [-0.2256, 2.1875]
+19:18:17 srt.train INFO step=2200  total=31.140  ce=5.312  chain=12.5156  bif=0.1746  lr=3.00e-04  1.9 step/s
+19:18:17 srt.train INFO   diag: div_norms=[82.5, 109.0, 62.5]  inj_norms=[1808.0, 3184.0]  r_hat=1.0938±0.4258 [-0.2754, 2.2344]
+19:18:58 srt.train INFO step=2300  total=36.138  ce=5.031  chain=16.3125  bif=0.2618  lr=3.00e-04  1.9 step/s
+19:18:58 srt.train INFO   diag: div_norms=[96.5, 107.5, 59.5]  inj_norms=[1696.0, 3376.0]  r_hat=0.7148±0.3340 [-0.7578, 1.7812]
+19:19:40 srt.train INFO step=2400  total=29.494  ce=5.094  chain=12.5156  bif=0.1233  lr=3.00e-04  1.9 step/s
+19:19:40 srt.train INFO   diag: div_norms=[85.5, 94.0, 38.25]  inj_norms=[2272.0, 4800.0]  r_hat=0.7539±0.3730 [-0.1572, 1.8906]
+19:20:19 srt.train INFO step=2500  total=33.644  ce=5.562  chain=12.7812  bif=0.1635  lr=3.00e-04  1.9 step/s
+19:20:19 srt.train INFO   diag: div_norms=[89.5, 83.5, 34.75]  inj_norms=[2800.0, 4832.0]  r_hat=0.9180±0.4590 [0.0457, 2.1719]
+19:20:59 srt.train INFO step=2600  total=33.648  ce=5.562  chain=14.8125  bif=0.1807  lr=3.00e-04  1.9 step/s
+19:20:59 srt.train INFO   diag: div_norms=[105.5, 111.5, 45.25]  inj_norms=[2336.0, 4160.0]  r_hat=0.8086±0.3730 [-0.3281, 2.0469]
+19:21:41 srt.train INFO step=2700  total=44.562  ce=4.219  chain=18.0938  bif=0.1773  lr=3.00e-04  1.9 step/s
+19:21:41 srt.train INFO   diag: div_norms=[145.0, 133.0, 59.0]  inj_norms=[1672.0, 3232.0]  r_hat=0.5547±0.2402 [-0.3652, 1.7422]
+19:22:24 srt.train INFO step=2800  total=35.258  ce=5.000  chain=15.6250  bif=0.1294  lr=3.00e-04  2.0 step/s
+19:22:24 srt.train INFO   diag: div_norms=[129.0, 115.5, 41.0]  inj_norms=[2512.0, 3552.0]  r_hat=0.7305±0.3281 [-0.1387, 2.0469]
+19:23:04 srt.train INFO step=2900  total=24.703  ce=5.125  chain=10.4219  bif=0.1475  lr=3.00e-04  2.0 step/s
+19:23:04 srt.train INFO   diag: div_norms=[106.5, 90.5, 29.75]  inj_norms=[2912.0, 4480.0]  r_hat=0.7539±0.3262 [-0.2188, 2.2344]
+19:23:43 srt.train INFO step=3000  total=24.867  ce=4.656  chain=11.1250  bif=0.1018  lr=3.00e-04  2.0 step/s
+19:23:43 srt.train INFO   diag: div_norms=[110.0, 109.0, 37.5]  inj_norms=[2288.0, 3728.0]  r_hat=0.6562±0.3438 [-0.5938, 1.8125]
+19:24:23 srt.train INFO step=3100  total=28.149  ce=4.812  chain=10.7969  bif=0.1567  lr=3.00e-04  2.0 step/s
+19:24:23 srt.train INFO   diag: div_norms=[103.0, 95.5, 39.25]  inj_norms=[1864.0, 3872.0]  r_hat=0.7695±0.3242 [-0.2471, 2.1875]
+19:25:05 srt.train INFO step=3200  total=34.699  ce=4.562  chain=13.1250  bif=0.1525  lr=3.00e-04  2.0 step/s
+19:25:05 srt.train INFO   diag: div_norms=[112.5, 114.5, 46.25]  inj_norms=[1936.0, 3952.0]  r_hat=0.7930±0.3281 [-0.1562, 2.2969]
+19:25:45 srt.train INFO step=3300  total=27.496  ce=5.031  chain=11.8594  bif=0.1535  lr=3.00e-04  2.0 step/s
+19:25:45 srt.train INFO   diag: div_norms=[111.5, 118.5, 40.75]  inj_norms=[2720.0, 4288.0]  r_hat=0.9922±0.3535 [-0.4629, 2.0625]
+19:26:28 srt.train INFO step=3400  total=30.751  ce=4.688  chain=10.5312  bif=0.2651  lr=3.00e-04  2.0 step/s
+19:26:28 srt.train INFO   diag: div_norms=[107.5, 124.0, 45.0]  inj_norms=[1872.0, 3200.0]  r_hat=0.7266±0.3242 [-0.4824, 2.3281]
+19:27:09 srt.train INFO step=3500  total=32.801  ce=4.469  chain=13.5156  bif=0.0654  lr=3.00e-04  2.0 step/s
+19:27:09 srt.train INFO   diag: div_norms=[107.0, 116.0, 47.25]  inj_norms=[2224.0, 4800.0]  r_hat=0.6133±0.2812 [-0.7188, 1.8984]
+19:27:49 srt.train INFO step=3600  total=46.251  ce=4.156  chain=18.5312  bif=0.1737  lr=3.00e-04  2.1 step/s
+19:27:49 srt.train INFO   diag: div_norms=[118.5, 91.0, 53.75]  inj_norms=[1400.0, 3552.0]  r_hat=0.6250±0.3848 [-0.3418, 1.9453]
+19:28:31 srt.train INFO step=3700  total=36.119  ce=4.812  chain=11.5156  bif=0.1365  lr=3.00e-04  2.1 step/s
+19:28:31 srt.train INFO   diag: div_norms=[120.0, 100.0, 39.25]  inj_norms=[1864.0, 4416.0]  r_hat=0.6016±0.2832 [-0.1895, 1.9062]
+19:29:15 srt.train INFO step=3800  total=33.313  ce=4.719  chain=12.8125  bif=0.1819  lr=3.00e-04  2.1 step/s
+19:29:15 srt.train INFO   diag: div_norms=[110.5, 123.0, 53.0]  inj_norms=[1952.0, 4384.0]  r_hat=0.8633±0.4160 [-0.7852, 2.1562]
+19:29:57 srt.train INFO step=3900  total=37.012  ce=4.688  chain=13.6250  bif=0.1224  lr=3.00e-04  2.1 step/s
+19:29:57 srt.train INFO   diag: div_norms=[129.0, 160.0, 61.5]  inj_norms=[2192.0, 4000.0]  r_hat=1.1953±0.5117 [-0.4785, 2.6875]
+19:30:38 srt.train INFO step=4000  total=36.067  ce=4.375  chain=13.8438  bif=0.1485  lr=3.00e-04  2.1 step/s
+19:30:38 srt.train INFO   diag: div_norms=[122.0, 123.0, 51.25]  inj_norms=[1984.0, 3824.0]  r_hat=0.9180±0.3711 [-0.2617, 2.1875]
+19:34:07 srt.train INFO VAL step=4000  total=33.395  ce=4.538  bif=0.1341
+19:34:08 srt.train INFO Saved training checkpoint at step 4000
+19:34:49 srt.train INFO step=4100  total=30.705  ce=4.656  chain=11.1250  bif=0.1629  lr=3.00e-04  1.9 step/s
+19:34:49 srt.train INFO   diag: div_norms=[101.0, 124.5, 43.5]  inj_norms=[2128.0, 4192.0]  r_hat=0.6367±0.3066 [-0.5078, 2.0781]
+19:35:30 srt.train INFO step=4200  total=27.179  ce=4.688  chain=11.9531  bif=0.1239  lr=3.00e-04  1.9 step/s
+19:35:30 srt.train INFO   diag: div_norms=[107.5, 100.0, 43.0]  inj_norms=[1680.0, 3984.0]  r_hat=0.7383±0.3438 [-0.2461, 2.1562]
+19:36:10 srt.train INFO step=4300  total=23.902  ce=4.531  chain=10.1641  bif=0.1551  lr=3.00e-04  1.9 step/s
+19:36:10 srt.train INFO   diag: div_norms=[109.5, 86.5, 32.25]  inj_norms=[1872.0, 3680.0]  r_hat=0.8711±0.4473 [-0.6875, 2.5156]
+19:36:50 srt.train INFO step=4400  total=36.793  ce=4.781  chain=13.5938  bif=0.1711  lr=3.00e-04  1.9 step/s
+19:36:50 srt.train INFO   diag: div_norms=[105.0, 120.5, 40.25]  inj_norms=[2160.0, 4096.0]  r_hat=0.7812±0.2988 [-0.3574, 1.9922]
+19:37:32 srt.train INFO step=4500  total=26.862  ce=4.156  chain=12.0781  bif=0.1046  lr=3.00e-04  1.9 step/s
+19:37:32 srt.train INFO   diag: div_norms=[113.0, 88.0, 39.0]  inj_norms=[1712.0, 3504.0]  r_hat=0.7109±0.3730 [-0.5156, 2.2188]

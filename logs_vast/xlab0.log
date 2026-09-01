@@ -1,0 +1,32 @@
+shard 0/3  2 models  60 prompts  K=8
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 14398.55it/s]
+  qwen25c_14b      loaded 3s, running 5 arm(s)
+  qwen25c_14b      chat             16/60  [   16/600   2.7%  elapsed 0:14  ETA 8:41  67/min]
+  qwen25c_14b      chat           DONE          [   60/600  10.0%  elapsed 0:37  ETA 5:39  95/min]
+  qwen25c_14b      persona_model    16/60  [   76/600  12.7%  elapsed 0:45  ETA 5:16  99/min]
+  qwen25c_14b      persona_model  DONE          [  120/600  20.0%  elapsed 1:09  ETA 4:36  104/min]
+  qwen25c_14b      persona_sample   16/60  [  136/600  22.7%  elapsed 1:17  ETA 4:23  106/min]
+  qwen25c_14b      persona_sample DONE          [  180/600  30.0%  elapsed 1:40  ETA 3:54  107/min]
+  qwen25c_14b      deployed_model   16/60  [  196/600  32.7%  elapsed 1:48  ETA 3:43  108/min]
+  qwen25c_14b      deployed_model DONE          [  240/600  40.0%  elapsed 2:11  ETA 3:17  109/min]
+  qwen25c_14b      deployed_sample   16/60  [  256/600  42.7%  elapsed 2:19  ETA 3:07  110/min]
+  qwen25c_14b      deployed_sample DONE          [  300/600  50.0%  elapsed 2:42  ETA 2:42  110/min]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  71%|███████   | 840/1188 [00:00<00:00, 8375.92it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 5920.75it/s]
+  gemma4_31b       loaded 8s, running 5 arm(s)
+[W831 06:12:48.397640106 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 478150656 bytes (free: 305725440, total: 101975851008).
+[W831 06:12:50.767948364 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 541065216 bytes (free: 492371968, total: 101975851008).
+[W831 06:12:52.831372709 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 591396864 bytes (free: 144244736, total: 101975851008).
+[W831 06:12:54.258598751 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 624951296 bytes (free: 385417216, total: 101975851008).
+  gemma4_31b       chat             16/60  [  316/600  52.7%  elapsed 3:09  ETA 2:49  100/min]
+  gemma4_31b       chat           DONE          [  360/600  60.0%  elapsed 3:59  ETA 2:39  90/min]
+[W831 06:14:02.298402147 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 654311424 bytes (free: 528023552, total: 101975851008).
+[W831 06:14:03.420222354 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 679477248 bytes (free: 276365312, total: 101975851008).
+  gemma4_31b       persona_model    16/60  [  376/600  62.7%  elapsed 4:18  ETA 2:34  87/min]
+  gemma4_31b       persona_model  DONE          [  420/600  70.0%  elapsed 5:14  ETA 2:14  80/min]
+[W831 06:15:18.011099563 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 704643072 bytes (free: 553189376, total: 101975851008).
+  gemma4_31b       persona_sample   16/60  [  436/600  72.7%  elapsed 5:34  ETA 2:05  78/min]
+  gemma4_31b       persona_sample DONE          [  480/600  80.0%  elapsed 6:30  ETA 1:37  74/min]
+  gemma4_31b       deployed_model   16/60  [  496/600  82.7%  elapsed 6:50  ETA 1:26  73/min]
+  gemma4_31b       deployed_model DONE          [  540/600  90.0%  elapsed 7:46  ETA 0:51  69/min]
+  gemma4_31b       deployed_sample   16/60  [  556/600  92.7%  elapsed 8:06  ETA 0:38  69/min]
+  gemma4_31b       deployed_sample DONE          [  600/600 100.0%  elapsed 9:02  ETA 0:00  66/min]

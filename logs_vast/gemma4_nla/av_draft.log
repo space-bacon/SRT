@@ -1,0 +1,143 @@
+2026-07-08 18:23:04,696 train_nla_draft loading backbone google/gemma-4-31B-it
+2026-07-08 18:23:04,834 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:23:04,843 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 18:23:05,122 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-08 18:23:05,191 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:23:05,202 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 18:23:05,276 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-08 18:23:05,343 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:23:05,354 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-08 18:23:05,420 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2376.38it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  57%|█████▋    | 680/1188 [00:00<00:00, 6778.58it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 6643.70it/s]
+2026-07-08 18:23:05,907 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:23:05,917 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/generation_config.json "HTTP/1.1 200 OK"
+2026-07-08 18:23:12,613 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:23:12,624 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 18:23:12,691 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:23:12,701 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 18:23:12,828 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 18:23:12,898 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 18:23:14,700 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 18:23:14,732 train_nla_draft separator '\n→ ' -> [107, 238183, 236743]
+2026-07-08 18:23:15,012 train_nla_draft trainable=28,987,392
+2026-07-08 18:23:15,013 train_nla_draft warm-start AV from /workspace/srt-adapter/artifacts/nla/gemma4/ce_seq64_np16/best_av.pt
+2026-07-08 18:23:15,083 train_nla_draft warm-start: 2/2 keys
+2026-07-08 18:23:27,749 train_nla_draft loaded 10000 pairs; target pool N=10000
+2026-07-08 18:23:27,749 train_nla_draft train pairs=9500  val pairs=100
+2026-07-08 18:23:27,772 train_nla_draft retrieval pool=9500  ||mu||=143.6
+2026-07-08 18:23:27,773 train_nla_draft precomputing leave-one-out train drafts ...
+2026-07-08 18:23:36,646 train_nla_draft ep1 step 20  ce=4.0386  (8.7s)
+2026-07-08 18:23:45,345 train_nla_draft ep1 step 40  ce=4.1730  (17.4s)
+2026-07-08 18:23:54,021 train_nla_draft ep1 step 60  ce=4.0647  (26.1s)
+2026-07-08 18:24:02,788 train_nla_draft ep1 step 80  ce=4.0605  (34.9s)
+2026-07-08 18:24:11,588 train_nla_draft ep1 step 100  ce=4.3097  (43.7s)
+2026-07-08 18:24:20,453 train_nla_draft ep1 step 120  ce=4.0199  (52.5s)
+2026-07-08 18:24:29,363 train_nla_draft ep1 step 140  ce=4.1933  (61.4s)
+2026-07-08 18:24:38,276 train_nla_draft ep1 step 160  ce=3.9868  (70.4s)
+2026-07-08 18:24:47,255 train_nla_draft ep1 step 180  ce=3.9406  (79.3s)
+2026-07-08 18:24:56,234 train_nla_draft ep1 step 200  ce=4.0406  (88.3s)
+2026-07-08 18:25:05,334 train_nla_draft ep1 step 220  ce=3.9470  (97.4s)
+2026-07-08 18:25:14,300 train_nla_draft ep1 step 240  ce=4.0145  (106.4s)
+2026-07-08 18:25:23,348 train_nla_draft ep1 step 260  ce=3.8427  (115.4s)
+2026-07-08 18:25:32,412 train_nla_draft ep1 step 280  ce=3.9918  (124.5s)
+2026-07-08 18:25:41,450 train_nla_draft ep1 step 300  ce=3.8874  (133.5s)
+2026-07-08 18:25:50,461 train_nla_draft ep1 step 320  ce=3.9428  (142.5s)
+2026-07-08 18:25:59,512 train_nla_draft ep1 step 340  ce=3.8522  (151.6s)
+2026-07-08 18:26:08,573 train_nla_draft ep1 step 360  ce=4.0703  (160.7s)
+2026-07-08 18:26:17,636 train_nla_draft ep1 step 380  ce=3.9905  (169.7s)
+2026-07-08 18:26:26,686 train_nla_draft ep1 step 400  ce=4.0001  (178.8s)
+2026-07-08 18:26:35,735 train_nla_draft ep1 step 420  ce=3.8431  (187.8s)
+2026-07-08 18:26:44,905 train_nla_draft ep1 step 440  ce=3.9676  (197.0s)
+2026-07-08 18:26:53,948 train_nla_draft ep1 step 460  ce=4.0643  (206.0s)
+2026-07-08 18:27:03,121 train_nla_draft ep1 step 480  ce=3.8884  (215.2s)
+2026-07-08 18:27:12,254 train_nla_draft ep1 step 500  ce=3.9190  (224.3s)
+2026-07-08 18:27:21,365 train_nla_draft ep1 step 520  ce=3.9593  (233.4s)
+2026-07-08 18:27:30,484 train_nla_draft ep1 step 540  ce=3.9700  (242.6s)
+2026-07-08 18:27:39,519 train_nla_draft ep1 step 560  ce=3.9739  (251.6s)
+2026-07-08 18:27:48,588 train_nla_draft ep1 step 580  ce=3.8047  (260.7s)
+2026-07-08 18:27:57,669 train_nla_draft ep1 step 600  ce=3.8369  (269.8s)
+2026-07-08 18:40:35,772 train_nla_draft val @ 600  draft_cen=0.0535  greedy_cen=0.0379  best8_cen=0.1872
+2026-07-08 18:40:35,812 train_nla_draft   new best greedy_cen=0.0379 saved /workspace/srt-adapter/artifacts/nla/gemma4/draft_seq64_np16/best_av.pt
+2026-07-08 18:40:44,904 train_nla_draft ep1 step 620  ce=3.9404  (1037.0s)
+2026-07-08 18:40:54,015 train_nla_draft ep1 step 640  ce=4.0727  (1046.1s)
+2026-07-08 18:41:03,163 train_nla_draft ep1 step 660  ce=3.9367  (1055.2s)
+2026-07-08 18:41:12,258 train_nla_draft ep1 step 680  ce=3.8529  (1064.3s)
+2026-07-08 18:41:21,391 train_nla_draft ep1 step 700  ce=3.9354  (1073.5s)
+2026-07-08 18:41:30,492 train_nla_draft ep1 step 720  ce=3.9070  (1082.6s)
+2026-07-08 18:41:39,592 train_nla_draft ep1 step 740  ce=3.9280  (1091.7s)
+2026-07-08 18:41:48,690 train_nla_draft ep1 step 760  ce=3.8324  (1100.8s)
+2026-07-08 18:41:57,722 train_nla_draft ep1 step 780  ce=3.9791  (1109.8s)
+2026-07-08 18:42:06,791 train_nla_draft ep1 step 800  ce=3.7616  (1118.9s)
+2026-07-08 18:42:15,886 train_nla_draft ep1 step 820  ce=3.8716  (1128.0s)
+2026-07-08 18:42:24,901 train_nla_draft ep1 step 840  ce=3.8759  (1137.0s)
+2026-07-08 18:42:34,065 train_nla_draft ep1 step 860  ce=3.9469  (1146.1s)
+2026-07-08 18:42:43,121 train_nla_draft ep1 step 880  ce=3.8642  (1155.2s)
+2026-07-08 18:42:52,136 train_nla_draft ep1 step 900  ce=3.8407  (1164.2s)
+2026-07-08 18:43:01,175 train_nla_draft ep1 step 920  ce=3.7564  (1173.3s)
+2026-07-08 18:43:10,198 train_nla_draft ep1 step 940  ce=4.0250  (1182.3s)
+2026-07-08 18:43:19,243 train_nla_draft ep1 step 960  ce=3.8265  (1191.3s)
+2026-07-08 18:43:28,226 train_nla_draft ep1 step 980  ce=3.9950  (1200.3s)
+2026-07-08 18:43:37,247 train_nla_draft ep1 step 1000  ce=3.9889  (1209.3s)
+2026-07-08 18:43:46,325 train_nla_draft ep1 step 1020  ce=3.9622  (1218.4s)
+2026-07-08 18:43:55,366 train_nla_draft ep1 step 1040  ce=4.0096  (1227.5s)
+2026-07-08 18:44:04,386 train_nla_draft ep1 step 1060  ce=3.8569  (1236.5s)
+2026-07-08 18:44:13,448 train_nla_draft ep1 step 1080  ce=3.7601  (1245.5s)
+2026-07-08 18:44:22,433 train_nla_draft ep1 step 1100  ce=3.8914  (1254.5s)
+2026-07-08 18:44:31,519 train_nla_draft ep1 step 1120  ce=3.9126  (1263.6s)
+2026-07-08 18:44:40,601 train_nla_draft ep1 step 1140  ce=3.8335  (1272.7s)
+2026-07-08 18:44:49,619 train_nla_draft ep1 step 1160  ce=3.8461  (1281.7s)
+2026-07-08 18:44:58,595 train_nla_draft ep1 step 1180  ce=3.8967  (1290.7s)
+2026-07-08 18:45:07,610 train_nla_draft ep1 step 1200  ce=3.8647  (1299.7s)
+2026-07-08 18:57:45,866 train_nla_draft val @ 1200  draft_cen=0.0535  greedy_cen=0.0443  best8_cen=0.1785
+2026-07-08 18:57:45,938 train_nla_draft   new best greedy_cen=0.0443 saved /workspace/srt-adapter/artifacts/nla/gemma4/draft_seq64_np16/best_av.pt
+2026-07-08 18:57:55,013 train_nla_draft ep1 step 1220  ce=3.7264  (2067.1s)
+2026-07-08 18:58:04,080 train_nla_draft ep1 step 1240  ce=3.8868  (2076.2s)
+2026-07-08 18:58:13,088 train_nla_draft ep1 step 1260  ce=3.8703  (2085.2s)
+2026-07-08 18:58:22,187 train_nla_draft ep1 step 1280  ce=3.8647  (2094.3s)
+2026-07-08 18:58:31,294 train_nla_draft ep1 step 1300  ce=3.7998  (2103.4s)
+2026-07-08 18:58:40,434 train_nla_draft ep1 step 1320  ce=3.8575  (2112.5s)
+2026-07-08 18:58:49,453 train_nla_draft ep1 step 1340  ce=3.7413  (2121.5s)
+2026-07-08 18:58:58,449 train_nla_draft ep1 step 1360  ce=3.8940  (2130.5s)
+2026-07-08 18:59:07,583 train_nla_draft ep1 step 1380  ce=3.7474  (2139.7s)
+2026-07-08 18:59:16,608 train_nla_draft ep1 step 1400  ce=3.7511  (2148.7s)
+2026-07-08 18:59:25,601 train_nla_draft ep1 step 1420  ce=3.8524  (2157.7s)
+2026-07-08 18:59:34,725 train_nla_draft ep1 step 1440  ce=3.8899  (2166.8s)
+2026-07-08 18:59:43,700 train_nla_draft ep1 step 1460  ce=3.6709  (2175.8s)
+2026-07-08 18:59:52,748 train_nla_draft ep1 step 1480  ce=3.9095  (2184.8s)
+2026-07-08 19:00:01,818 train_nla_draft ep1 step 1500  ce=3.9172  (2193.9s)
+2026-07-08 19:00:15,597 train_nla_draft ep1 step 1520  ce=3.8177  (2207.7s)
+2026-07-08 19:00:24,900 train_nla_draft ep1 step 1540  ce=3.8601  (2217.0s)
+2026-07-08 19:00:34,812 train_nla_draft ep1 step 1560  ce=3.7955  (2226.9s)
+2026-07-08 19:00:51,225 train_nla_draft ep1 step 1580  ce=3.8244  (2243.3s)
+2026-07-08 19:01:04,109 train_nla_draft ep1 step 1600  ce=3.8394  (2256.2s)
+2026-07-08 19:01:13,154 train_nla_draft ep1 step 1620  ce=3.7927  (2265.2s)
+2026-07-08 19:01:22,156 train_nla_draft ep1 step 1640  ce=3.9359  (2274.2s)
+2026-07-08 19:01:31,159 train_nla_draft ep1 step 1660  ce=3.8014  (2283.2s)
+2026-07-08 19:01:40,250 train_nla_draft ep1 step 1680  ce=3.8512  (2292.3s)
+2026-07-08 19:01:49,291 train_nla_draft ep1 step 1700  ce=3.8044  (2301.4s)
+2026-07-08 19:01:58,319 train_nla_draft ep1 step 1720  ce=3.7197  (2310.4s)
+2026-07-08 19:02:07,425 train_nla_draft ep1 step 1740  ce=3.7099  (2319.5s)
+2026-07-08 19:02:16,511 train_nla_draft ep1 step 1760  ce=3.9246  (2328.6s)
+2026-07-08 19:02:25,592 train_nla_draft ep1 step 1780  ce=3.8760  (2337.7s)
+2026-07-08 19:02:34,623 train_nla_draft ep1 step 1800  ce=3.8752  (2346.7s)
+2026-07-08 19:15:30,932 train_nla_draft val @ 1800  draft_cen=0.0535  greedy_cen=0.0242  best8_cen=0.1884
+2026-07-08 19:15:30,932 train_nla_draft   no improvement (1/8)
+2026-07-08 19:15:40,037 train_nla_draft ep1 step 1820  ce=3.7746  (3132.1s)
+2026-07-08 19:15:49,211 train_nla_draft ep1 step 1840  ce=3.8560  (3141.3s)
+2026-07-08 19:15:58,298 train_nla_draft ep1 step 1860  ce=3.7341  (3150.4s)
+2026-07-08 19:16:07,427 train_nla_draft ep1 step 1880  ce=3.8980  (3159.5s)
+2026-07-08 19:16:16,536 train_nla_draft ep1 step 1900  ce=3.7945  (3168.6s)
+2026-07-08 19:16:25,680 train_nla_draft ep1 step 1920  ce=3.8009  (3177.8s)
+2026-07-08 19:16:34,715 train_nla_draft ep1 step 1940  ce=3.9946  (3186.8s)
+2026-07-08 19:16:43,772 train_nla_draft ep1 step 1960  ce=3.8350  (3195.9s)
+2026-07-08 19:16:52,865 train_nla_draft ep1 step 1980  ce=3.7384  (3204.9s)
+2026-07-08 19:17:01,931 train_nla_draft ep1 step 2000  ce=3.6313  (3214.0s)
+2026-07-08 19:17:11,130 train_nla_draft ep1 step 2020  ce=3.7324  (3223.2s)
+2026-07-08 19:17:20,160 train_nla_draft ep1 step 2040  ce=3.9806  (3232.2s)
+2026-07-08 19:17:29,226 train_nla_draft ep1 step 2060  ce=3.7991  (3241.3s)
+2026-07-08 19:17:38,252 train_nla_draft ep1 step 2080  ce=3.6698  (3250.3s)
+2026-07-08 19:17:47,257 train_nla_draft ep1 step 2100  ce=3.8067  (3259.3s)
+2026-07-08 19:17:56,344 train_nla_draft ep1 step 2120  ce=3.8565  (3268.4s)
+2026-07-08 19:18:05,350 train_nla_draft ep1 step 2140  ce=3.7931  (3277.4s)
+2026-07-08 19:18:14,321 train_nla_draft ep1 step 2160  ce=3.7402  (3286.4s)

@@ -1,0 +1,11 @@
+shard 2/4  1 models  425 prompts  K=32  max_new=384  arms=['chat']  -> artifacts/nla/mbpp_k32
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 17209.33it/s]
+  mbpp7B_inst      loaded 2s, running 1 arm(s)
+  mbpp7B_inst      chat             16/425  [   16/425   3.8%  elapsed 1:16  ETA 32:38  13/min]
+  mbpp7B_inst      chat             80/425  [   80/425  18.8%  elapsed 6:00  ETA 25:54  13/min]
+  mbpp7B_inst      chat            144/425  [  144/425  33.9%  elapsed 10:24  ETA 20:17  14/min]
+  mbpp7B_inst      chat            208/425  [  208/425  48.9%  elapsed 15:05  ETA 15:44  14/min]
+  mbpp7B_inst      chat            272/425  [  272/425  64.0%  elapsed 19:50  ETA 11:09  14/min]
+  mbpp7B_inst      chat            336/425  [  336/425  79.1%  elapsed 24:36  ETA 6:31  14/min]
+  mbpp7B_inst      chat            400/425  [  400/425  94.1%  elapsed 29:09  ETA 1:49  14/min]
+  mbpp7B_inst      chat           DONE          [  425/425 100.0%  elapsed 30:46  ETA 0:00  14/min]

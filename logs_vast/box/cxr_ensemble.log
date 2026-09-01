@@ -1,0 +1,28 @@
+112120 images encoded by all of ['gemma4', 'aria']
+  gemma4       dim 5376
+  aria         dim 2560
+  train 86524  test 25596  official test_list.txt
+  device: cpu
+
+fitting per-vendor probes
+  gemma4       0.7590   vs Wang +0.0139
+  aria         0.7080   vs Wang -0.0371
+
+fitting ensembles
+
+variant                      mean AUROC vs best single  vs Wang
+gemma4 alone                     0.7590        +0.0000  +0.0139
+aria alone                       0.7080        -0.0510  -0.0371
+logit mean (0 new params)        0.7626        +0.0036  +0.0175
+concat                           0.7543        -0.0047  +0.0092
+CONTROL gemma4+gemma4            0.7568        -0.0022  +0.0117
+
+paired patient-clustered bootstrap vs best single vendor
+  logit_mean   +0.0036  CI [+0.0008, +0.0061]  significant
+  concat       -0.0047  CI [-0.0076, -0.0020]  not significant
+
+best single   0.759 (gemma4)
+best ensemble 0.7626   vs Wang +0.0175
+capacity effect from the duplicate control -0.0022
+
+wrote /root/cxr14_ensemble.json

@@ -1,0 +1,34 @@
+18:44:56 srt.train INFO Device: cuda
+18:44:56 srt.train INFO Community SupCon: weight=2.000 temperature=0.100
+18:44:56 srt.train INFO Loss weights: div_supcon=1.000 listnet=0.500 chain_aux=0.050
+18:44:56 srt.train INFO Archetype SupCon: weight=0.000 temperature=0.100 mix_fraction=0.25
+18:44:56 srt.adapter INFO Loading backbone: openai/gpt-oss-20b in bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+You have loaded an FP4 model on CPU and have a CUDA/XPU device available, make sure to set your model on a GPU/XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or device_map = 'xpu'. 
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s]Fetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 23088.95it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s][AFetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 17458.52it/s]
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.35it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.66it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.37it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.06it/s]
+18:44:59 srt.adapter INFO Backbone: d=2880, L=24, MAH@[6, 12, 18], inject@[12, 18], community@3
+18:44:59 srt.adapter INFO Sliding-window attention: window=128, 12/24 sliding layers
+18:44:59 srt.adapter INFO SRT Adapter: 12,713,923 trainable, 1,804,459,584 frozen (backbone)
+18:45:01 srt.data.dataset INFO Loading dataset from data/all_train.jsonl
+18:45:40 srt.data.dataset INFO Loaded 1000000 samples from data/all_train.jsonl
+18:45:40 srt.data.dataset INFO Loading dataset from data/all_val.jsonl
+18:45:40 srt.data.dataset INFO Loaded 5000 samples from data/all_val.jsonl
+18:45:40 srt.train INFO Training: 187500 steps (3 epochs × 62500 batches)
+18:45:40 srt.train INFO === Epoch 1/3 ===
+18:47:23 srt.train INFO step=100  total=3542.383  ce=4.969  chain=260.8750  bif=0.5746  lr=6.00e-05  1.0 step/s
+18:47:23 srt.train INFO   diag: div_norms=[524.0, 245.0, 496.0]  inj_norms=[1072.0, 3024.0]  r_hat=0.0723±0.0933 [-0.2461, 0.4277]
+18:48:54 srt.train INFO step=200  total=1113.252  ce=4.562  chain=143.7500  bif=0.1847  lr=1.20e-04  1.0 step/s
+18:48:54 srt.train INFO   diag: div_norms=[406.0, 213.0, 384.0]  inj_norms=[1136.0, 2864.0]  r_hat=0.5430±0.2119 [-0.0928, 1.3906]
+18:50:17 srt.train INFO step=300  total=504.501  ce=4.375  chain=93.5625  bif=0.1742  lr=1.80e-04  1.1 step/s
+18:50:17 srt.train INFO   diag: div_norms=[340.0, 206.0, 330.0]  inj_norms=[1080.0, 2720.0]  r_hat=0.5742±0.2637 [-0.3340, 1.9688]
+18:51:38 srt.train INFO step=400  total=244.706  ce=4.438  chain=61.5000  bif=0.2420  lr=2.40e-04  1.1 step/s
+18:51:38 srt.train INFO   diag: div_norms=[280.0, 193.0, 278.0]  inj_norms=[1136.0, 2544.0]  r_hat=0.5820±0.2910 [-0.1963, 2.1406]
+18:52:59 srt.train INFO step=500  total=108.610  ce=4.406  chain=37.2500  bif=0.1112  lr=3.00e-04  1.1 step/s
+18:52:59 srt.train INFO   diag: div_norms=[226.0, 164.0, 224.0]  inj_norms=[1192.0, 2416.0]  r_hat=0.7773±0.3438 [-0.4258, 2.1094]
+18:54:18 srt.train INFO step=600  total=70.694  ce=4.219  chain=27.7188  bif=0.0901  lr=3.00e-04  1.2 step/s
+18:54:18 srt.train INFO   diag: div_norms=[161.0, 155.0, 198.0]  inj_norms=[1152.0, 2384.0]  r_hat=0.7383±0.3711 [-0.5469, 2.2344]
+18:55:36 srt.train INFO step=700  total=59.289  ce=4.188  chain=23.2500  bif=0.0813  lr=3.00e-04  1.2 step/s
+18:55:36 srt.train INFO   diag: div_norms=[122.0, 123.0, 161.0]  inj_norms=[960.0, 2208.0]  r_hat=0.7812±0.4004 [-0.3652, 2.1719]

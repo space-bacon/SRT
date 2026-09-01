@@ -1,0 +1,558 @@
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...mni/states/cxr14_aria.npz:   0%|          | 2.62MB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz:   0%|          | 2.62MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   0%|          | 2.62MB / 1.15GB,   ???B/s  
+New Data Upload               :   2%|▏         | 2.62MB /  134MB,   ???B/s  [A
+
+  ...mni/states/cxr14_aria.npz:   1%|▏         | 14.7MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   1%|▏         | 14.7MB / 1.15GB, 1.45MB/s  
+New Data Upload               :  11%|█         | 14.7MB /  134MB, 1.45MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   2%|▏         | 26.7MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   2%|▏         | 26.7MB / 1.15GB, 2.63MB/s  
+New Data Upload               :  13%|█▎        | 26.7MB /  201MB, 2.63MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   3%|▎         | 35.7MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   3%|▎         | 35.7MB / 1.15GB, 3.48MB/s  
+New Data Upload               :  18%|█▊        | 35.7MB /  201MB, 3.48MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   4%|▍         | 46.1MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   4%|▍         | 46.1MB / 1.15GB, 4.47MB/s  
+New Data Upload               :  23%|██▎       | 46.1MB /  201MB, 4.47MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   5%|▍         | 56.1MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   5%|▍         | 56.1MB / 1.15GB, 5.40MB/s  
+New Data Upload               :  28%|██▊       | 56.1MB /  201MB, 5.40MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▌         | 66.1MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▌         | 66.1MB / 1.15GB, 6.32MB/s  
+New Data Upload               :  33%|███▎      | 66.1MB /  201MB, 6.32MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▌         | 69.7MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▌         | 69.7MB / 1.15GB, 6.62MB/s  
+New Data Upload               :  35%|███▍      | 69.7MB /  201MB, 6.62MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▌         | 70.3MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▌         | 70.3MB / 1.15GB, 6.60MB/s  
+New Data Upload               :  35%|███▍      | 70.3MB /  201MB, 6.60MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▌         | 71.3MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▌         | 71.3MB / 1.15GB, 6.64MB/s  
+New Data Upload               :  35%|███▌      | 71.3MB /  201MB, 6.64MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▌         | 71.8MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▌         | 71.8MB / 1.15GB, 6.62MB/s  
+New Data Upload               :  36%|███▌      | 71.8MB /  201MB, 6.62MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▋         | 72.9MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▋         | 72.9MB / 1.15GB, 6.66MB/s  
+New Data Upload               :  36%|███▌      | 72.9MB /  201MB, 6.66MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   6%|▋         | 73.9MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   6%|▋         | 73.9MB / 1.15GB, 6.69MB/s  
+New Data Upload               :  37%|███▋      | 73.9MB /  201MB, 6.69MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   7%|▋         | 75.0MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   7%|▋         | 75.0MB / 1.15GB, 6.73MB/s  
+New Data Upload               :  37%|███▋      | 75.0MB /  201MB, 6.73MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   7%|▋         | 79.7MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   7%|▋         | 79.7MB / 1.15GB, 7.11MB/s  
+New Data Upload               :  40%|███▉      | 79.7MB /  201MB, 7.11MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   8%|▊         | 90.1MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   8%|▊         | 90.1MB / 1.15GB, 8.04MB/s  
+New Data Upload               :  34%|███▎      | 90.1MB /  268MB, 8.04MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:   9%|▉         |  101MB / 1.15GB            [A[AProcessing Files (0 / 1)      :   9%|▉         |  101MB / 1.15GB, 9.01MB/s  
+New Data Upload               :  38%|███▊      |  101MB /  268MB, 9.01MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  10%|▉         |  112MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  10%|▉         |  112MB / 1.15GB, 9.91MB/s  
+New Data Upload               :  33%|███▎      |  112MB /  335MB, 9.91MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  11%|█         |  124MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  11%|█         |  124MB / 1.15GB, 11.0MB/s  
+New Data Upload               :  37%|███▋      |  124MB /  335MB, 11.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  12%|█▏        |  135MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  12%|█▏        |  135MB / 1.15GB, 11.9MB/s  
+New Data Upload               :  40%|████      |  135MB /  335MB, 11.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  13%|█▎        |  146MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  13%|█▎        |  146MB / 1.15GB, 12.9MB/s  
+New Data Upload               :  44%|████▎     |  146MB /  335MB, 12.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  14%|█▍        |  158MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  14%|█▍        |  158MB / 1.15GB, 13.9MB/s  
+New Data Upload               :  39%|███▉      |  158MB /  402MB, 13.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  15%|█▍        |  170MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  15%|█▍        |  170MB / 1.15GB, 14.8MB/s  
+New Data Upload               :  42%|████▏     |  170MB /  402MB, 14.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  16%|█▌        |  182MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  16%|█▌        |  182MB / 1.15GB, 15.8MB/s  
+New Data Upload               :  45%|████▌     |  182MB /  402MB, 15.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  17%|█▋        |  194MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  17%|█▋        |  194MB / 1.15GB, 16.8MB/s  
+New Data Upload               :  48%|████▊     |  194MB /  402MB, 16.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  18%|█▊        |  205MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  18%|█▊        |  205MB / 1.15GB, 17.7MB/s  
+New Data Upload               :  51%|█████     |  205MB /  402MB, 17.7MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  19%|█▉        |  216MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  19%|█▉        |  216MB / 1.15GB, 18.5MB/s  
+New Data Upload               :  46%|████▌     |  216MB /  469MB, 18.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  20%|█▉        |  230MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  20%|█▉        |  230MB / 1.15GB, 19.6MB/s  
+New Data Upload               :  49%|████▉     |  230MB /  469MB, 19.6MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  21%|██        |  241MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  21%|██        |  241MB / 1.15GB, 20.4MB/s  
+New Data Upload               :  51%|█████▏    |  241MB /  469MB, 20.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  22%|██▏       |  250MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  22%|██▏       |  250MB / 1.15GB, 21.1MB/s  
+New Data Upload               :  53%|█████▎    |  250MB /  469MB, 21.1MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  23%|██▎       |  261MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  23%|██▎       |  261MB / 1.15GB, 21.8MB/s  
+New Data Upload               :  56%|█████▌    |  261MB /  469MB, 21.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  24%|██▎       |  273MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  24%|██▎       |  273MB / 1.15GB, 22.8MB/s  
+New Data Upload               :  58%|█████▊    |  273MB /  469MB, 22.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  25%|██▍       |  285MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  25%|██▍       |  285MB / 1.15GB, 23.6MB/s  
+New Data Upload               :  53%|█████▎    |  285MB /  537MB, 23.6MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  26%|██▌       |  296MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  26%|██▌       |  296MB / 1.15GB, 24.4MB/s  
+New Data Upload               :  55%|█████▌    |  296MB /  537MB, 24.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  27%|██▋       |  306MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  27%|██▋       |  306MB / 1.15GB, 25.1MB/s  
+New Data Upload               :  57%|█████▋    |  306MB /  537MB, 25.1MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  28%|██▊       |  317MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  28%|██▊       |  317MB / 1.15GB, 25.9MB/s  
+New Data Upload               :  59%|█████▉    |  317MB /  537MB, 25.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  29%|██▊       |  329MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  29%|██▊       |  329MB / 1.15GB, 26.7MB/s  
+New Data Upload               :  61%|██████    |  329MB /  537MB, 26.7MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  30%|██▉       |  341MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  30%|██▉       |  341MB / 1.15GB, 27.5MB/s  
+New Data Upload               :  56%|█████▋    |  341MB /  604MB, 27.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  31%|███       |  354MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  31%|███       |  354MB / 1.15GB, 28.5MB/s  
+New Data Upload               :  53%|█████▎    |  354MB /  671MB, 28.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  32%|███▏      |  367MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  32%|███▏      |  367MB / 1.15GB, 29.4MB/s  
+New Data Upload               :  55%|█████▍    |  367MB /  671MB, 29.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  33%|███▎      |  377MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  33%|███▎      |  377MB / 1.15GB, 30.0MB/s  
+New Data Upload               :  56%|█████▌    |  377MB /  671MB, 30.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  34%|███▍      |  390MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  34%|███▍      |  390MB / 1.15GB, 30.9MB/s  
+New Data Upload               :  53%|█████▎    |  390MB /  738MB, 30.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  36%|███▌      |  413MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  36%|███▌      |  413MB / 1.15GB, 32.7MB/s  
+New Data Upload               :  51%|█████▏    |  413MB /  805MB, 32.7MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  38%|███▊      |  432MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  38%|███▊      |  432MB / 1.15GB, 34.1MB/s  
+New Data Upload               :  54%|█████▎    |  432MB /  805MB, 34.1MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  39%|███▉      |  454MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  39%|███▉      |  454MB / 1.15GB, 35.7MB/s  
+New Data Upload               :  56%|█████▋    |  454MB /  805MB, 35.7MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  41%|████      |  472MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  41%|████      |  472MB / 1.15GB, 37.0MB/s  
+New Data Upload               :  59%|█████▊    |  472MB /  805MB, 37.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  43%|████▎     |  493MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  43%|████▎     |  493MB / 1.15GB, 38.5MB/s  
+New Data Upload               :  57%|█████▋    |  493MB /  872MB, 38.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  45%|████▍     |  513MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  45%|████▍     |  513MB / 1.15GB, 39.9MB/s  
+New Data Upload               :  59%|█████▉    |  513MB /  872MB, 39.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  46%|████▋     |  534MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  46%|████▋     |  534MB / 1.15GB, 41.4MB/s  
+New Data Upload               :  61%|██████    |  534MB /  872MB, 41.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  48%|████▊     |  549MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  48%|████▊     |  549MB / 1.15GB, 42.4MB/s  
+New Data Upload               :  63%|██████▎   |  549MB /  872MB, 42.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  49%|████▉     |  563MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  49%|████▉     |  563MB / 1.15GB, 43.2MB/s  
+New Data Upload               :  65%|██████▍   |  563MB /  872MB, 43.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  50%|█████     |  577MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  50%|█████     |  577MB / 1.15GB, 44.0MB/s  
+New Data Upload               :  66%|██████▌   |  577MB /  872MB, 44.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  52%|█████▏    |  599MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  52%|█████▏    |  599MB / 1.15GB, 45.6MB/s  
+New Data Upload               :  64%|██████▍   |  599MB /  939MB, 45.6MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  54%|█████▍    |  622MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  54%|█████▍    |  622MB / 1.15GB, 47.2MB/s  
+New Data Upload               :  62%|██████▏   |  622MB / 1.01GB, 47.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  56%|█████▋    |  649MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  56%|█████▋    |  649MB / 1.15GB, 49.1MB/s  
+New Data Upload               :  65%|██████▍   |  649MB / 1.01GB, 49.1MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  59%|█████▊    |  673MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  59%|█████▊    |  673MB / 1.15GB, 50.8MB/s  
+New Data Upload               :  67%|██████▋   |  673MB / 1.01GB, 50.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  60%|██████    |  694MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  60%|██████    |  694MB / 1.15GB, 52.1MB/s  
+New Data Upload               :  69%|██████▉   |  694MB / 1.01GB, 52.1MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  63%|██████▎   |  724MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  63%|██████▎   |  724MB / 1.15GB, 54.2MB/s  
+New Data Upload               :  67%|██████▋   |  723MB / 1.07GB, 54.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  65%|██████▌   |  750MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  65%|██████▌   |  750MB / 1.15GB, 56.0MB/s  
+New Data Upload               :  70%|██████▉   |  749MB / 1.07GB, 56.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  67%|██████▋   |  769MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  67%|██████▋   |  769MB / 1.15GB, 57.2MB/s  
+New Data Upload               :  72%|███████▏  |  769MB / 1.07GB, 57.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  69%|██████▉   |  795MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  69%|██████▉   |  795MB / 1.15GB, 59.0MB/s  
+New Data Upload               :  70%|██████▉   |  795MB / 1.14GB, 58.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  71%|███████▏  |  822MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  71%|███████▏  |  822MB / 1.15GB, 60.8MB/s  
+New Data Upload               :  71%|███████▏  |  820MB / 1.15GB, 60.6MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  74%|███████▍  |  849MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  74%|███████▍  |  849MB / 1.15GB, 62.5MB/s  
+New Data Upload               :  74%|███████▎  |  847MB / 1.15GB, 62.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  76%|███████▌  |  874MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  76%|███████▌  |  874MB / 1.15GB, 64.1MB/s  
+New Data Upload               :  76%|███████▌  |  872MB / 1.15GB, 63.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  78%|███████▊  |  899MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  78%|███████▊  |  899MB / 1.15GB, 65.7MB/s  
+New Data Upload               :  78%|███████▊  |  896MB / 1.15GB, 65.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  80%|████████  |  922MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  80%|████████  |  922MB / 1.15GB, 67.0MB/s  
+New Data Upload               :  80%|████████  |  919MB / 1.15GB, 66.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  82%|████████▏ |  945MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  82%|████████▏ |  945MB / 1.15GB, 68.4MB/s  
+New Data Upload               :  82%|████████▏ |  942MB / 1.15GB, 68.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  84%|████████▍ |  966MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  84%|████████▍ |  966MB / 1.15GB, 69.6MB/s  
+New Data Upload               :  84%|████████▍ |  963MB / 1.15GB, 69.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  86%|████████▌ |  986MB / 1.15GB            [A[AProcessing Files (0 / 1)      :  86%|████████▌ |  986MB / 1.15GB, 70.8MB/s  
+New Data Upload               :  86%|████████▌ |  984MB / 1.15GB, 70.6MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  87%|████████▋ | 1.00GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  87%|████████▋ | 1.00GB / 1.15GB, 71.6MB/s  
+New Data Upload               :  87%|████████▋ | 1.00GB / 1.15GB, 71.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  88%|████████▊ | 1.02GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  88%|████████▊ | 1.02GB / 1.15GB, 72.2MB/s  
+New Data Upload               :  88%|████████▊ | 1.02GB / 1.15GB, 72.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  90%|████████▉ | 1.03GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  90%|████████▉ | 1.03GB / 1.15GB, 72.7MB/s  
+New Data Upload               :  90%|████████▉ | 1.03GB / 1.15GB, 72.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  91%|█████████ | 1.04GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  91%|█████████ | 1.04GB / 1.15GB, 73.2MB/s  
+New Data Upload               :  91%|█████████ | 1.04GB / 1.15GB, 73.0MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  91%|█████████▏| 1.05GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  91%|█████████▏| 1.05GB / 1.15GB, 73.1MB/s  
+New Data Upload               :  91%|█████████▏| 1.05GB / 1.15GB, 72.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  92%|█████████▏| 1.06GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  92%|█████████▏| 1.06GB / 1.15GB, 73.5MB/s  
+New Data Upload               :  92%|█████████▏| 1.06GB / 1.15GB, 73.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  93%|█████████▎| 1.07GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  93%|█████████▎| 1.07GB / 1.15GB, 73.4MB/s  
+New Data Upload               :  93%|█████████▎| 1.07GB / 1.15GB, 73.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  94%|█████████▎| 1.08GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  94%|█████████▎| 1.08GB / 1.15GB, 73.5MB/s  
+New Data Upload               :  94%|█████████▎| 1.08GB / 1.15GB, 73.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  94%|█████████▍| 1.09GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  94%|█████████▍| 1.09GB / 1.15GB, 73.5MB/s  
+New Data Upload               :  94%|█████████▍| 1.08GB / 1.15GB, 73.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  95%|█████████▍| 1.09GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  95%|█████████▍| 1.09GB / 1.15GB, 73.4MB/s  
+New Data Upload               :  95%|█████████▍| 1.09GB / 1.15GB, 73.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  95%|█████████▌| 1.10GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  95%|█████████▌| 1.10GB / 1.15GB, 73.3MB/s  
+New Data Upload               :  95%|█████████▌| 1.10GB / 1.15GB, 73.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  96%|█████████▌| 1.11GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  96%|█████████▌| 1.11GB / 1.15GB, 73.4MB/s  
+New Data Upload               :  96%|█████████▌| 1.10GB / 1.15GB, 73.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  97%|█████████▋| 1.11GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  97%|█████████▋| 1.11GB / 1.15GB, 73.5MB/s  
+New Data Upload               :  97%|█████████▋| 1.11GB / 1.15GB, 73.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  98%|█████████▊| 1.12GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  98%|█████████▊| 1.12GB / 1.15GB, 73.6MB/s  
+New Data Upload               :  98%|█████████▊| 1.12GB / 1.15GB, 73.4MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  98%|█████████▊| 1.13GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  98%|█████████▊| 1.13GB / 1.15GB, 73.2MB/s  
+New Data Upload               :  98%|█████████▊| 1.12GB / 1.15GB, 73.1MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  98%|█████████▊| 1.13GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  98%|█████████▊| 1.13GB / 1.15GB, 73.0MB/s  
+New Data Upload               :  98%|█████████▊| 1.13GB / 1.15GB, 72.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  99%|█████████▉| 1.14GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  99%|█████████▉| 1.14GB / 1.15GB, 72.8MB/s  
+New Data Upload               :  99%|█████████▉| 1.13GB / 1.15GB, 72.6MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  99%|█████████▉| 1.14GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  99%|█████████▉| 1.14GB / 1.15GB, 72.5MB/s  
+New Data Upload               :  99%|█████████▉| 1.14GB / 1.15GB, 72.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz:  99%|█████████▉| 1.14GB / 1.15GB            [A[AProcessing Files (0 / 1)      :  99%|█████████▉| 1.14GB / 1.15GB, 72.1MB/s  
+New Data Upload               :  99%|█████████▉| 1.14GB / 1.15GB, 71.9MB/s  [A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 1.15GB / 1.15GB, 71.7MB/s  
+New Data Upload               : 100%|█████████▉| 1.14GB / 1.15GB, 71.5MB/s  [A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 1.15GB / 1.15GB, 71.3MB/s  
+New Data Upload               : 100%|█████████▉| 1.15GB / 1.15GB, 71.2MB/s  [A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 1.15GB / 1.15GB, 70.9MB/s  
+New Data Upload               : 100%|█████████▉| 1.15GB / 1.15GB, 70.7MB/s  [A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 1.15GB / 1.15GB, 68.0MB/s  
+New Data Upload               : 100%|█████████▉| 1.15GB / 1.15GB, 67.8MB/s  [A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 1.15GB / 1.15GB, 67.4MB/s  
+New Data Upload               : 100%|██████████| 1.15GB / 1.15GB, 67.3MB/s  [A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[A
+
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 1.15GB / 1.15GB, 65.7MB/s  
+New Data Upload               : 100%|██████████| 1.15GB / 1.15GB, 65.6MB/s  
+  ...mni/states/cxr14_aria.npz: 100%|█████████▉| 1.15GB / 1.15GB            
+  up states/cxr14_aria.npz  1150 MB  11s
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...tates/cxr14_qwen3omni.npz:   0%|          |  524kB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz:   0%|          |  524kB /  921MB            [A[AProcessing Files (0 / 1)      :   0%|          |  524kB /  921MB,   ???B/s  
+New Data Upload               :   1%|          |  524kB / 67.1MB,   ???B/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   1%|          | 7.86MB /  921MB            [A[AProcessing Files (0 / 1)      :   1%|          | 7.86MB /  921MB,   ???B/s  
+New Data Upload               :   6%|▌         | 7.86MB /  134MB,   ???B/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   2%|▏         | 18.4MB /  921MB            [A[AProcessing Files (0 / 1)      :   2%|▏         | 18.4MB /  921MB, 1.81MB/s  
+New Data Upload               :   9%|▉         | 18.4MB /  201MB, 1.81MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   3%|▎         | 29.9MB /  921MB            [A[AProcessing Files (0 / 1)      :   3%|▎         | 29.9MB /  921MB, 2.93MB/s  
+New Data Upload               :  15%|█▍        | 29.9MB /  201MB, 2.93MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   5%|▍         | 41.9MB /  921MB            [A[AProcessing Files (0 / 1)      :   5%|▍         | 41.9MB /  921MB, 4.09MB/s  
+New Data Upload               :  16%|█▌        | 41.9MB /  268MB, 4.09MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   6%|▌         | 53.5MB /  921MB            [A[AProcessing Files (0 / 1)      :   6%|▌         | 53.5MB /  921MB, 5.18MB/s  
+New Data Upload               :  16%|█▌        | 53.5MB /  335MB, 5.18MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   7%|▋         | 64.5MB /  921MB            [A[AProcessing Files (0 / 1)      :   7%|▋         | 64.5MB /  921MB, 6.21MB/s  
+New Data Upload               :  19%|█▉        | 64.5MB /  335MB, 6.21MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   8%|▊         | 76.6MB /  921MB            [A[AProcessing Files (0 / 1)      :   8%|▊         | 76.6MB /  921MB, 7.32MB/s  
+New Data Upload               :  19%|█▉        | 76.6MB /  402MB, 7.32MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:   9%|▉         | 86.5MB /  921MB            [A[AProcessing Files (0 / 1)      :   9%|▉         | 86.5MB /  921MB, 8.22MB/s  
+New Data Upload               :  18%|█▊        | 86.5MB /  469MB, 8.22MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  11%|█         | 99.2MB /  921MB            [A[AProcessing Files (0 / 1)      :  11%|█         | 99.2MB /  921MB, 9.37MB/s  
+New Data Upload               :  21%|██        | 99.2MB /  469MB, 9.37MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  12%|█▏        |  115MB /  921MB            [A[AProcessing Files (0 / 1)      :  12%|█▏        |  115MB /  921MB, 10.8MB/s  
+New Data Upload               :  21%|██▏       |  115MB /  537MB, 10.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  14%|█▍        |  129MB /  921MB            [A[AProcessing Files (0 / 1)      :  14%|█▍        |  129MB /  921MB, 12.1MB/s  
+New Data Upload               :  21%|██▏       |  129MB /  604MB, 12.0MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  16%|█▌        |  145MB /  921MB            [A[AProcessing Files (0 / 1)      :  16%|█▌        |  145MB /  921MB, 13.5MB/s  
+New Data Upload               :  20%|█▉        |  145MB /  738MB, 13.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  18%|█▊        |  162MB /  921MB            [A[AProcessing Files (0 / 1)      :  18%|█▊        |  162MB /  921MB, 14.9MB/s  
+New Data Upload               :  22%|██▏       |  161MB /  738MB, 14.9MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  21%|██        |  194MB /  921MB            [A[AProcessing Files (0 / 1)      :  21%|██        |  194MB /  921MB, 17.9MB/s  
+New Data Upload               :  24%|██▍       |  193MB /  805MB, 17.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  24%|██▍       |  222MB /  921MB            [A[AProcessing Files (0 / 1)      :  24%|██▍       |  222MB /  921MB, 20.4MB/s  
+New Data Upload               :  24%|██▍       |  221MB /  915MB, 20.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  27%|██▋       |  245MB /  921MB            [A[AProcessing Files (0 / 1)      :  27%|██▋       |  245MB /  921MB, 22.3MB/s  
+New Data Upload               :  27%|██▋       |  244MB /  915MB, 22.2MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  29%|██▉       |  271MB /  921MB            [A[AProcessing Files (0 / 1)      :  29%|██▉       |  271MB /  921MB, 24.6MB/s  
+New Data Upload               :  29%|██▉       |  270MB /  915MB, 24.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  32%|███▏      |  297MB /  921MB            [A[AProcessing Files (0 / 1)      :  32%|███▏      |  297MB /  921MB, 26.8MB/s  
+New Data Upload               :  32%|███▏      |  295MB /  915MB, 26.7MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  35%|███▍      |  321MB /  921MB            [A[AProcessing Files (0 / 1)      :  35%|███▍      |  321MB /  921MB, 28.9MB/s  
+New Data Upload               :  35%|███▍      |  319MB /  915MB, 28.7MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  37%|███▋      |  342MB /  921MB            [A[AProcessing Files (0 / 1)      :  37%|███▋      |  342MB /  921MB, 30.6MB/s  
+New Data Upload               :  37%|███▋      |  340MB /  915MB, 30.4MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  40%|████      |  370MB /  921MB            [A[AProcessing Files (0 / 1)      :  40%|████      |  370MB /  921MB, 32.9MB/s  
+New Data Upload               :  40%|████      |  367MB /  915MB, 32.6MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  42%|████▏     |  391MB /  921MB            [A[AProcessing Files (0 / 1)      :  42%|████▏     |  391MB /  921MB, 34.5MB/s  
+New Data Upload               :  42%|████▏     |  388MB /  915MB, 34.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  44%|████▍     |  406MB /  921MB            [A[AProcessing Files (0 / 1)      :  44%|████▍     |  406MB /  921MB, 35.6MB/s  
+New Data Upload               :  44%|████▍     |  403MB /  915MB, 35.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  47%|████▋     |  428MB /  921MB            [A[AProcessing Files (0 / 1)      :  47%|████▋     |  428MB /  921MB, 37.3MB/s  
+New Data Upload               :  46%|████▋     |  425MB /  915MB, 37.1MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  48%|████▊     |  446MB /  921MB            [A[AProcessing Files (0 / 1)      :  48%|████▊     |  446MB /  921MB, 38.6MB/s  
+New Data Upload               :  48%|████▊     |  443MB /  915MB, 38.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  51%|█████     |  469MB /  921MB            [A[AProcessing Files (0 / 1)      :  51%|█████     |  469MB /  921MB, 40.4MB/s  
+New Data Upload               :  51%|█████     |  466MB /  915MB, 40.1MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  53%|█████▎    |  486MB /  921MB            [A[AProcessing Files (0 / 1)      :  53%|█████▎    |  486MB /  921MB, 41.6MB/s  
+New Data Upload               :  53%|█████▎    |  483MB /  915MB, 41.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  55%|█████▍    |  504MB /  921MB            [A[AProcessing Files (0 / 1)      :  55%|█████▍    |  504MB /  921MB, 42.8MB/s  
+New Data Upload               :  55%|█████▍    |  501MB /  915MB, 42.6MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  56%|█████▋    |  519MB /  921MB            [A[AProcessing Files (0 / 1)      :  56%|█████▋    |  519MB /  921MB, 43.8MB/s  
+New Data Upload               :  56%|█████▋    |  516MB /  915MB, 43.6MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  58%|█████▊    |  531MB /  921MB            [A[AProcessing Files (0 / 1)      :  58%|█████▊    |  531MB /  921MB, 44.5MB/s  
+New Data Upload               :  58%|█████▊    |  527MB /  915MB, 44.2MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  59%|█████▉    |  544MB /  921MB            [A[AProcessing Files (0 / 1)      :  59%|█████▉    |  544MB /  921MB, 45.3MB/s  
+New Data Upload               :  59%|█████▉    |  540MB /  915MB, 45.0MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  61%|██████    |  562MB /  921MB            [A[AProcessing Files (0 / 1)      :  61%|██████    |  562MB /  921MB, 46.5MB/s  
+New Data Upload               :  61%|██████    |  559MB /  915MB, 46.2MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  63%|██████▎   |  577MB /  921MB            [A[AProcessing Files (0 / 1)      :  63%|██████▎   |  577MB /  921MB, 47.4MB/s  
+New Data Upload               :  63%|██████▎   |  573MB /  915MB, 47.1MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  65%|██████▍   |  595MB /  921MB            [A[AProcessing Files (0 / 1)      :  65%|██████▍   |  595MB /  921MB, 48.6MB/s  
+New Data Upload               :  65%|██████▍   |  591MB /  915MB, 48.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  67%|██████▋   |  612MB /  921MB            [A[AProcessing Files (0 / 1)      :  67%|██████▋   |  612MB /  921MB, 49.8MB/s  
+New Data Upload               :  67%|██████▋   |  609MB /  915MB, 49.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  68%|██████▊   |  627MB /  921MB            [A[AProcessing Files (0 / 1)      :  68%|██████▊   |  627MB /  921MB, 50.7MB/s  
+New Data Upload               :  68%|██████▊   |  624MB /  915MB, 50.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  70%|███████   |  647MB /  921MB            [A[AProcessing Files (0 / 1)      :  70%|███████   |  647MB /  921MB, 51.9MB/s  
+New Data Upload               :  70%|███████   |  643MB /  915MB, 51.6MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  72%|███████▏  |  662MB /  921MB            [A[AProcessing Files (0 / 1)      :  72%|███████▏  |  662MB /  921MB, 52.9MB/s  
+New Data Upload               :  72%|███████▏  |  658MB /  915MB, 52.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  74%|███████▍  |  683MB /  921MB            [A[AProcessing Files (0 / 1)      :  74%|███████▍  |  683MB /  921MB, 54.2MB/s  
+New Data Upload               :  74%|███████▍  |  678MB /  915MB, 53.9MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  76%|███████▌  |  701MB /  921MB            [A[AProcessing Files (0 / 1)      :  76%|███████▌  |  701MB /  921MB, 55.3MB/s  
+New Data Upload               :  76%|███████▌  |  696MB /  915MB, 55.0MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  78%|███████▊  |  720MB /  921MB            [A[AProcessing Files (0 / 1)      :  78%|███████▊  |  720MB /  921MB, 56.5MB/s  
+New Data Upload               :  78%|███████▊  |  716MB /  915MB, 56.2MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  80%|████████  |  738MB /  921MB            [A[AProcessing Files (0 / 1)      :  80%|████████  |  738MB /  921MB, 57.7MB/s  
+New Data Upload               :  80%|████████  |  734MB /  915MB, 57.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  82%|████████▏ |  758MB /  921MB            [A[AProcessing Files (0 / 1)      :  82%|████████▏ |  758MB /  921MB, 58.9MB/s  
+New Data Upload               :  82%|████████▏ |  754MB /  915MB, 58.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  84%|████████▍ |  775MB /  921MB            [A[AProcessing Files (0 / 1)      :  84%|████████▍ |  775MB /  921MB, 59.8MB/s  
+New Data Upload               :  84%|████████▍ |  770MB /  915MB, 59.4MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  86%|████████▌ |  793MB /  921MB            [A[AProcessing Files (0 / 1)      :  86%|████████▌ |  793MB /  921MB, 60.9MB/s  
+New Data Upload               :  86%|████████▌ |  788MB /  915MB, 60.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  88%|████████▊ |  811MB /  921MB            [A[AProcessing Files (0 / 1)      :  88%|████████▊ |  811MB /  921MB, 62.0MB/s  
+New Data Upload               :  88%|████████▊ |  806MB /  915MB, 61.6MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  90%|████████▉ |  827MB /  921MB            [A[AProcessing Files (0 / 1)      :  90%|████████▉ |  827MB /  921MB, 62.8MB/s  
+New Data Upload               :  90%|████████▉ |  822MB /  915MB, 62.4MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  91%|█████████ |  837MB /  921MB            [A[AProcessing Files (0 / 1)      :  91%|█████████ |  837MB /  921MB, 63.1MB/s  
+New Data Upload               :  91%|█████████ |  832MB /  915MB, 62.7MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  91%|█████████ |  839MB /  921MB            [A[AProcessing Files (0 / 1)      :  91%|█████████ |  839MB /  921MB, 62.7MB/s  
+New Data Upload               :  91%|█████████ |  834MB /  915MB, 62.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  91%|█████████▏|  842MB /  921MB            [A[AProcessing Files (0 / 1)      :  91%|█████████▏|  842MB /  921MB, 62.4MB/s  
+New Data Upload               :  91%|█████████▏|  837MB /  915MB, 62.0MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  92%|█████████▏|  844MB /  921MB            [A[AProcessing Files (0 / 1)      :  92%|█████████▏|  844MB /  921MB, 62.0MB/s  
+New Data Upload               :  92%|█████████▏|  839MB /  915MB, 61.6MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  92%|█████████▏|  848MB /  921MB            [A[AProcessing Files (0 / 1)      :  92%|█████████▏|  848MB /  921MB, 61.8MB/s  
+New Data Upload               :  92%|█████████▏|  843MB /  915MB, 61.4MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  92%|█████████▏|  851MB /  921MB            [A[AProcessing Files (0 / 1)      :  92%|█████████▏|  851MB /  921MB, 61.5MB/s  
+New Data Upload               :  92%|█████████▏|  845MB /  915MB, 61.1MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  93%|█████████▎|  853MB /  921MB            [A[AProcessing Files (0 / 1)      :  93%|█████████▎|  853MB /  921MB, 61.2MB/s  
+New Data Upload               :  93%|█████████▎|  848MB /  915MB, 60.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  93%|█████████▎|  856MB /  921MB            [A[AProcessing Files (0 / 1)      :  93%|█████████▎|  856MB /  921MB, 60.9MB/s  
+New Data Upload               :  93%|█████████▎|  851MB /  915MB, 60.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  93%|█████████▎|  860MB /  921MB            [A[AProcessing Files (0 / 1)      :  93%|█████████▎|  860MB /  921MB, 60.6MB/s  
+New Data Upload               :  93%|█████████▎|  855MB /  915MB, 60.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  94%|█████████▍|  863MB /  921MB            [A[AProcessing Files (0 / 1)      :  94%|█████████▍|  863MB /  921MB, 60.4MB/s  
+New Data Upload               :  94%|█████████▍|  858MB /  915MB, 60.0MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  94%|█████████▍|  867MB /  921MB            [A[AProcessing Files (0 / 1)      :  94%|█████████▍|  867MB /  921MB, 60.1MB/s  
+New Data Upload               :  94%|█████████▍|  861MB /  915MB, 59.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  94%|█████████▍|  870MB /  921MB            [A[AProcessing Files (0 / 1)      :  94%|█████████▍|  870MB /  921MB, 59.8MB/s  
+New Data Upload               :  94%|█████████▍|  865MB /  915MB, 59.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  95%|█████████▍|  874MB /  921MB            [A[AProcessing Files (0 / 1)      :  95%|█████████▍|  874MB /  921MB, 59.7MB/s  
+New Data Upload               :  95%|█████████▍|  869MB /  915MB, 59.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  95%|█████████▌|  877MB /  921MB            [A[AProcessing Files (0 / 1)      :  95%|█████████▌|  877MB /  921MB, 59.4MB/s  
+New Data Upload               :  95%|█████████▌|  872MB /  915MB, 59.1MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  96%|█████████▌|  881MB /  921MB            [A[AProcessing Files (0 / 1)      :  96%|█████████▌|  881MB /  921MB, 59.2MB/s  
+New Data Upload               :  96%|█████████▌|  876MB /  915MB, 58.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  96%|█████████▌|  884MB /  921MB            [A[AProcessing Files (0 / 1)      :  96%|█████████▌|  884MB /  921MB, 59.0MB/s  
+New Data Upload               :  96%|█████████▌|  879MB /  915MB, 58.7MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  97%|█████████▋|  889MB /  921MB            [A[AProcessing Files (0 / 1)      :  97%|█████████▋|  889MB /  921MB, 58.8MB/s  
+New Data Upload               :  97%|█████████▋|  883MB /  915MB, 58.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  97%|█████████▋|  892MB /  921MB            [A[AProcessing Files (0 / 1)      :  97%|█████████▋|  892MB /  921MB, 58.7MB/s  
+New Data Upload               :  97%|█████████▋|  887MB /  915MB, 58.3MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  97%|█████████▋|  897MB /  921MB            [A[AProcessing Files (0 / 1)      :  97%|█████████▋|  897MB /  921MB, 58.5MB/s  
+New Data Upload               :  97%|█████████▋|  891MB /  915MB, 58.2MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  98%|█████████▊|  901MB /  921MB            [A[AProcessing Files (0 / 1)      :  98%|█████████▊|  901MB /  921MB, 58.4MB/s  
+New Data Upload               :  98%|█████████▊|  895MB /  915MB, 58.0MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  98%|█████████▊|  905MB /  921MB            [A[AProcessing Files (0 / 1)      :  98%|█████████▊|  905MB /  921MB, 58.3MB/s  
+New Data Upload               :  98%|█████████▊|  900MB /  915MB, 57.9MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  99%|█████████▉|  910MB /  921MB            [A[AProcessing Files (0 / 1)      :  99%|█████████▉|  910MB /  921MB, 58.1MB/s  
+New Data Upload               :  99%|█████████▉|  905MB /  915MB, 57.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz:  99%|█████████▉|  915MB /  921MB            [A[AProcessing Files (0 / 1)      :  99%|█████████▉|  915MB /  921MB, 58.0MB/s  
+New Data Upload               :  99%|█████████▉|  910MB /  915MB, 57.7MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  919MB /  921MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉|  919MB /  921MB, 57.9MB/s  
+New Data Upload               : 100%|█████████▉|  914MB /  915MB, 57.5MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉|  920MB /  921MB, 57.4MB/s  
+New Data Upload               : 100%|█████████▉|  914MB /  915MB, 57.1MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  920MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  921MB /  921MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉|  921MB /  921MB, 54.1MB/s  
+New Data Upload               : 100%|██████████|  915MB /  915MB, 53.8MB/s  [A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  921MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  921MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  921MB /  921MB            [A[A
+
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  921MB /  921MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉|  921MB /  921MB, 52.7MB/s  
+New Data Upload               : 100%|██████████|  915MB /  915MB, 52.4MB/s  
+  ...tates/cxr14_qwen3omni.npz: 100%|█████████▉|  921MB /  921MB            
+  up states/cxr14_qwen3omni.npz  921 MB  9s
+  up results/cxr14_ensemble3.json  0 MB  0s
+  up results/cxr14_transport.json  0 MB  0s
+  up results/cxr14_vendor_compare.json  0 MB  0s
+  up results/cxr14_probe_qwen3omni.json  0 MB  1s
+  up scripts/cxr_probe_ensemble.py  0 MB  1s
+  up scripts/cxr_probe_transport.py  0 MB  1s
+  ALL UPLOADS DONE

@@ -1,0 +1,53 @@
+{
+  "question": "what does K cost in wall-clock per answer served",
+  "model": "Qwen/Qwen2.5-Coder-14B-Instruct",
+  "max_new": 384,
+  "n_prompts": 4,
+  "repeats": 3,
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "k": {
+    "1": {
+      "median_s": 2.542,
+      "min_s": 1.525,
+      "n": 8,
+      "vs_k1": 1.0,
+      "naive_expectation": 1
+    },
+    "2": {
+      "median_s": 3.057,
+      "min_s": 1.593,
+      "n": 8,
+      "vs_k1": 1.2,
+      "naive_expectation": 2
+    },
+    "4": {
+      "median_s": 3.373,
+      "min_s": 1.585,
+      "n": 8,
+      "vs_k1": 1.33,
+      "naive_expectation": 4
+    },
+    "8": {
+      "median_s": 3.663,
+      "min_s": 1.715,
+      "n": 8,
+      "vs_k1": 1.44,
+      "naive_expectation": 8
+    },
+    "16": {
+      "median_s": 3.852,
+      "min_s": 1.792,
+      "n": 8,
+      "vs_k1": 1.52,
+      "naive_expectation": 16
+    },
+    "32": {
+      "median_s": 4.337,
+      "min_s": 2.108,
+      "n": 8,
+      "vs_k1": 1.71,
+      "naive_expectation": 32
+    }
+  },
+  "reading": "vs_k1 far below k means batching absorbs the extra samples, so selection does not cost k times a single answer"
+}

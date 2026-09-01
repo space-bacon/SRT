@@ -1,0 +1,14 @@
+shard 0/4  3 models  164 prompts  K=8  batch=16
+  coder32B_base, coder7B_base, coder1.5B_base
+
+Loading weights:   0%|          | 0/771 [00:00<?, ?it/s]Loading weights: 100%|██████████| 771/771 [00:00<00:00, 9245.40it/s]
+  coder32B_base    loaded 7s, running 1 arm(s)
+  coder32B_base    raw              16/164  [   16/492   3.3%  elapsed 0:40  ETA 20:06  24/min]
+  coder32B_base    raw              80/164  [   80/492  16.3%  elapsed 3:10  ETA 16:23  25/min]
+[W831 05:46:42.933801752 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 2279604224 bytes (free: 838336512, total: 101975851008).
+  coder32B_base    raw             144/164  [  144/492  29.3%  elapsed 6:19  ETA 15:17  23/min]
+  coder32B_base    raw            DONE          [  164/492  33.3%  elapsed 7:19  ETA 14:38  22/min]
+  coder7B_base     all 1 arms cached   [  328/492  66.7%  elapsed 7:19  ETA 3:39  45/min]
+  coder1.5B_base   all 1 arms cached   [  492/492 100.0%  elapsed 7:19  ETA 0:00  67/min]
+
+shard 0 complete  [  492/492 100.0%  elapsed 7:19  ETA 0:00  67/min]

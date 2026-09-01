@@ -1,0 +1,184 @@
+########## exec_guided mbpp ##########
+mbpp: 425 problems, 425 with visible tests, 1.00 asserts each
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 14225.00it/s]
+  mbpp1.5B_inst__chat                pass 0.5662  visible-pass 0.5971
+  mbpp1.5B_inst__shared              pass 0.5829  visible-pass 0.6126
+  mbpp14B_inst__chat                 pass 0.7941  visible-pass 0.8238
+  mbpp14B_inst__shared               pass 0.8074  visible-pass 0.8344
+  mbpp32B_inst__chat                 pass 0.8609  visible-pass 0.8735
+  mbpp32B_inst__shared               pass 0.8494  visible-pass 0.8653
+  mbpp3B_inst__chat                  pass 0.6203  visible-pass 0.6644
+  mbpp3B_inst__shared                pass 0.6532  visible-pass 0.6994
+  mbpp7B_inst__chat                  pass 0.7188  visible-pass 0.7606
+  mbpp7B_inst__shared                pass 0.7315  visible-pass 0.7706
+  floor            0.7185
+  verifier         0.7292
+  exec             0.8492
+  exec_verifier    0.8485
+  oracle           0.8887
+
+  exec - floor          +0.1307
+  verifier - exec       -0.1200
+  exec+verifier - exec  -0.0007
+
+wrote /root/srt-adapter/artifacts/nla/verifier/exec_guided_mbpp.json
+########## consensus mbpp ##########
+420 / 425 problems got synthesised inputs
+  mbpp1.5B_inst__chat                consensus 0.6595  covered 420/425  floor 0.5662
+  mbpp1.5B_inst__shared              consensus 0.6976  covered 420/425  floor 0.5829
+  mbpp14B_inst__chat                 consensus 0.9102  covered 401/425  floor 0.7941
+  mbpp14B_inst__shared               consensus 0.8859  covered 412/425  floor 0.8074
+  mbpp32B_inst__chat                 consensus 0.8705  covered 417/425  floor 0.8609
+  mbpp32B_inst__shared               consensus 0.8585  covered 417/425  floor 0.8494
+  mbpp3B_inst__chat                  consensus 0.8079  covered 406/425  floor 0.6203
+  mbpp3B_inst__shared                consensus 0.8116  covered 414/425  floor 0.6532
+  mbpp7B_inst__chat                  consensus 0.8421  covered 418/425  floor 0.7188
+  mbpp7B_inst__shared                consensus 0.8301  covered 418/425  floor 0.7315
+
+  consensus 0.8174  floor 0.7185  oracle 0.8887  gain +0.0989
+
+wrote /root/srt-adapter/artifacts/nla/verifier/consensus_mbpp.json
+########## chat_consensus mbpp ##########
+<unknown>:5: SyntaxWarning: invalid escape sequence '\.'
+  mbpp1.5B_inst__chat                chat 0.6424  resolved 425/425  floor 0.5662  oracle 0.8118
+<unknown>:4: SyntaxWarning: invalid escape sequence '\d'
+  mbpp1.5B_inst__shared              chat 0.6729  resolved 425/425  floor 0.5829  oracle 0.8259
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:7: SyntaxWarning: invalid escape sequence '\D'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:8: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\.'
+  mbpp14B_inst__chat                 chat 0.8706  resolved 406/425  floor 0.7941  oracle 0.9059
+<unknown>:5: SyntaxWarning: invalid escape sequence '\D'
+<unknown>:6: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:8: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:9: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+  mbpp14B_inst__shared               chat 0.8659  resolved 416/425  floor 0.8074  oracle 0.9224
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+  mbpp32B_inst__chat                 chat 0.8706  resolved 422/425  floor 0.8609  oracle 0.9176
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+  mbpp32B_inst__shared               chat 0.8541  resolved 422/425  floor 0.8494  oracle 0.9176
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:3: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+  mbpp3B_inst__chat                  chat 0.7741  resolved 411/425  floor 0.6203  oracle 0.8635
+<unknown>:3: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+  mbpp3B_inst__shared                chat 0.7906  resolved 418/425  floor 0.6532  oracle 0.8871
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+  mbpp7B_inst__chat                  chat 0.8376  resolved 423/425  floor 0.7188  oracle 0.9153
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\B'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\w'
+  mbpp7B_inst__shared                chat 0.8118  resolved 423/425  floor 0.7315  oracle 0.9200
+
+  chat-only consensus 0.7991  floor 0.7185  oracle 0.8887  gain +0.0806  resolved 98.6%
+
+wrote /root/srt-adapter/artifacts/nla/verifier/chat_consensus_mbpp.json
+MBPP_EVAL_DONE

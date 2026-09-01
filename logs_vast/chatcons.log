@@ -1,0 +1,51 @@
+  coder0.5B_base__raw                chat 0.0366  resolved 2/164  floor 0.0213  oracle 0.1524
+  coder0.5B_inst__chat               chat 0.3415  resolved 160/164  floor 0.1745  oracle 0.4695
+  coder0.5B_inst__persona            chat 0.0427  resolved 0/164  floor 0.0381  oracle 0.2134
+  coder0.5B_inst__raw                chat 0.0244  resolved 0/164  floor 0.0259  oracle 0.1829
+  coder0.5B_inst__shared             chat 0.3049  resolved 154/164  floor 0.1692  oracle 0.4817
+  coder0.5B_inst__shared_persona     chat 0.3171  resolved 150/164  floor 0.1562  oracle 0.4512
+  coder1.5B_base__raw                chat 0.0427  resolved 11/164  floor 0.0373  oracle 0.2012
+  coder1.5B_inst__chat               chat 0.5610  resolved 160/164  floor 0.3178  oracle 0.7134
+  coder1.5B_inst__persona            chat 0.1463  resolved 58/164  floor 0.0465  oracle 0.2805
+  coder1.5B_inst__raw                chat 0.0915  resolved 23/164  floor 0.0686  oracle 0.3841
+<unknown>:11: SyntaxWarning: invalid escape sequence '\W'
+  coder1.5B_inst__shared             chat 0.4634  resolved 162/164  floor 0.2424  oracle 0.7073
+  coder1.5B_inst__shared_persona     chat 0.5061  resolved 160/164  floor 0.2767  oracle 0.6829
+<unknown>:1: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:1: SyntaxWarning: invalid escape sequence '\['
+<unknown>:1: SyntaxWarning: invalid escape sequence '\['
+  coder14B_base__raw                 chat 0.0488  resolved 3/164  floor 0.0465  oracle 0.2683
+  coder14B_inst__chat                chat 0.5610  resolved 157/164  floor 0.3636  oracle 0.7866
+  coder14B_inst__persona             chat 0.1890  resolved 43/164  floor 0.1052  oracle 0.4573
+  coder14B_inst__raw                 chat 0.1463  resolved 16/164  floor 0.0755  oracle 0.3293
+  coder14B_inst__shared              chat 0.7378  resolved 164/164  floor 0.5404  oracle 0.8780
+  coder14B_inst__shared_persona      chat 0.6829  resolved 159/164  floor 0.4329  oracle 0.7927
+  coder32B_base__raw                 chat 0.0305  resolved 0/164  floor 0.0366  oracle 0.2500
+  coder32B_inst__chat                chat 0.4268  resolved 150/164  floor 0.2401  oracle 0.5061
+  coder32B_inst__persona             chat 0.1585  resolved 36/164  floor 0.0968  oracle 0.4390
+  coder32B_inst__raw                 chat 0.1037  resolved 10/164  floor 0.0777  oracle 0.3354
+  coder32B_inst__shared              chat 0.3841  resolved 152/164  floor 0.2264  oracle 0.5305
+  coder32B_inst__shared_persona      chat 0.3476  resolved 146/164  floor 0.2058  oracle 0.4817
+  coder3B_base__raw                  chat 0.0244  resolved 1/164  floor 0.0213  oracle 0.1341
+  coder3B_inst__chat                 chat 0.5122  resolved 159/164  floor 0.2774  oracle 0.7012
+  coder3B_inst__persona              chat 0.2927  resolved 94/164  floor 0.1090  oracle 0.5427
+  coder3B_inst__raw                  chat 0.0671  resolved 22/164  floor 0.0549  oracle 0.2927
+  coder3B_inst__shared               chat 0.5000  resolved 158/164  floor 0.2782  oracle 0.7012
+<unknown>:12: SyntaxWarning: invalid escape sequence '\s'
+  coder3B_inst__shared_persona       chat 0.4390  resolved 150/164  floor 0.2409  oracle 0.6402
+<unknown>:1: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:1: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:1: SyntaxWarning: invalid escape sequence '\d'
+  coder7B_base__raw                  chat 0.0183  resolved 8/164  floor 0.0495  oracle 0.2805
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\.'
+  coder7B_inst__chat                 chat 0.7561  resolved 161/164  floor 0.5404  oracle 0.9024
+  coder7B_inst__persona              chat 0.2683  resolved 76/164  floor 0.0945  oracle 0.4756
+  coder7B_inst__raw                  chat 0.1463  resolved 14/164  floor 0.1044  oracle 0.4756
+  coder7B_inst__shared               chat 0.7378  resolved 164/164  floor 0.4931  oracle 0.8780
+  coder7B_inst__shared_persona       chat 0.6890  resolved 162/164  floor 0.4375  oracle 0.8354
+
+  chat-only consensus 0.3096  floor 0.1868  oracle 0.4954  gain +0.1228  resolved 55.0%
+
+wrote /root/srt-adapter/artifacts/nla/verifier/chat_consensus.json

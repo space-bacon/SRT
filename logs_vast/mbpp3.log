@@ -1,0 +1,19 @@
+shard 3/4  1 models  425 prompts  K=8  max_new=256
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 13165.98it/s]
+  mbpp3B_inst      loaded 2s, running 2 arm(s)
+  mbpp3B_inst      chat             16/425  [   16/850   1.9%  elapsed 0:13  ETA 11:36  72/min]
+  mbpp3B_inst      chat             80/425  [   80/850   9.4%  elapsed 0:49  ETA 7:52  98/min]
+  mbpp3B_inst      chat            144/425  [  144/850  16.9%  elapsed 1:22  ETA 6:43  105/min]
+  mbpp3B_inst      chat            208/425  [  208/850  24.5%  elapsed 1:57  ETA 6:03  106/min]
+  mbpp3B_inst      chat            272/425  [  272/850  32.0%  elapsed 2:32  ETA 5:24  107/min]
+  mbpp3B_inst      chat            336/425  [  336/850  39.5%  elapsed 3:08  ETA 4:48  107/min]
+  mbpp3B_inst      chat            400/425  [  400/850  47.1%  elapsed 3:44  ETA 4:12  107/min]
+  mbpp3B_inst      chat           DONE          [  425/850  50.0%  elapsed 3:58  ETA 3:58  107/min]
+  mbpp3B_inst      shared           16/425  [  441/850  51.9%  elapsed 4:06  ETA 3:48  107/min]
+  mbpp3B_inst      shared           80/425  [  505/850  59.4%  elapsed 4:40  ETA 3:11  108/min]
+  mbpp3B_inst      shared          144/425  [  569/850  66.9%  elapsed 5:11  ETA 2:34  109/min]
+  mbpp3B_inst      shared          208/425  [  633/850  74.5%  elapsed 5:45  ETA 1:58  110/min]
+  mbpp3B_inst      shared          272/425  [  697/850  82.0%  elapsed 6:18  ETA 1:23  110/min]
+  mbpp3B_inst      shared          336/425  [  761/850  89.5%  elapsed 6:52  ETA 0:48  111/min]
+  mbpp3B_inst      shared          400/425  [  825/850  97.1%  elapsed 7:26  ETA 0:13  111/min]
+  mbpp3B_inst      shared         DONE          [  850/850 100.0%  elapsed 7:39  ETA 0:00  111/min]

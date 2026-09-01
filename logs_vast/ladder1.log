@@ -1,0 +1,47 @@
+shard 1/4  3 models  164 prompts  K=8  batch=32
+  coder32B_inst, coder7B_inst, coder1.5B_inst
+
+Loading weights:   0%|          | 0/771 [00:00<?, ?it/s]Loading weights: 100%|██████████| 771/771 [00:00<00:00, 12981.13it/s]
+  coder32B_inst    loaded 4s, running 5 arm(s)
+  coder32B_inst    raw              32/164  [   32/2460   1.3%  elapsed 1:03  ETA 79:45  30/min]
+[W831 04:10:34.079270288 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3611295744 bytes (free: 2740518912, total: 101975851008).
+[W831 04:10:43.349070134 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3611295744 bytes (free: 3319332864, total: 101975851008).
+[W831 04:10:47.382809217 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3611295744 bytes (free: 3321430016, total: 101975851008).
+  coder32B_inst    FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 3.36 GiB. GPU 0 has a total capacity of 94
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 13849.06it/s]
+  coder7B_inst     loaded 1s, running 5 arm(s)
+  coder7B_inst     raw              32/164  [  884/2460  35.9%  elapsed 1:33  ETA 2:46  568/min]
+[W831 04:12:13.898529943 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3793747968 bytes (free: 3315138560, total: 101975851008).
+  coder7B_inst     raw             160/164  [ 1012/2460  41.1%  elapsed 3:09  ETA 4:30  321/min]
+  coder7B_inst     raw            DONE          [ 1016/2460  41.3%  elapsed 3:13  ETA 4:35  315/min]
+  coder7B_inst     persona          32/164  [ 1048/2460  42.6%  elapsed 3:30  ETA 4:43  299/min]
+  coder7B_inst     persona         160/164  [ 1176/2460  47.8%  elapsed 5:07  ETA 5:35  230/min]
+  coder7B_inst     persona        DONE          [ 1180/2460  48.0%  elapsed 5:11  ETA 5:38  227/min]
+  coder7B_inst     shared           32/164  [ 1212/2460  49.3%  elapsed 5:28  ETA 5:38  221/min]
+  coder7B_inst     shared          160/164  [ 1340/2460  54.5%  elapsed 7:05  ETA 5:55  189/min]
+  coder7B_inst     shared         DONE          [ 1344/2460  54.6%  elapsed 7:10  ETA 5:57  188/min]
+  coder7B_inst     shared_persona   32/164  [ 1376/2460  55.9%  elapsed 7:27  ETA 5:52  185/min]
+  coder7B_inst     shared_persona  160/164  [ 1504/2460  61.1%  elapsed 9:05  ETA 5:46  165/min]
+  coder7B_inst     shared_persona DONE          [ 1508/2460  61.3%  elapsed 9:09  ETA 5:47  165/min]
+  coder7B_inst     chat             32/164  [ 1540/2460  62.6%  elapsed 9:27  ETA 5:39  163/min]
+  coder7B_inst     chat            160/164  [ 1668/2460  67.8%  elapsed 11:08  ETA 5:17  150/min]
+  coder7B_inst     chat           DONE          [ 1672/2460  68.0%  elapsed 11:13  ETA 5:17  149/min]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:  91%|█████████ | 307/338 [00:00<00:00, 3049.60it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 3134.11it/s]
+  coder1.5B_inst   loaded 1s, running 5 arm(s)
+  coder1.5B_inst   raw              32/164  [ 1704/2460  69.3%  elapsed 11:22  ETA 5:02  150/min]
+  coder1.5B_inst   raw             160/164  [ 1832/2460  74.5%  elapsed 12:05  ETA 4:08  151/min]
+  coder1.5B_inst   raw            DONE          [ 1836/2460  74.6%  elapsed 12:07  ETA 4:07  151/min]
+  coder1.5B_inst   persona          32/164  [ 1868/2460  75.9%  elapsed 12:15  ETA 3:53  152/min]
+  coder1.5B_inst   persona         160/164  [ 1996/2460  81.1%  elapsed 12:59  ETA 3:01  154/min]
+  coder1.5B_inst   persona        DONE          [ 2000/2460  81.3%  elapsed 13:01  ETA 2:59  154/min]
+  coder1.5B_inst   shared           32/164  [ 2032/2460  82.6%  elapsed 13:09  ETA 2:46  154/min]
+  coder1.5B_inst   shared          160/164  [ 2160/2460  87.8%  elapsed 13:52  ETA 1:55  156/min]
+  coder1.5B_inst   shared         DONE          [ 2164/2460  88.0%  elapsed 13:54  ETA 1:54  156/min]
+  coder1.5B_inst   shared_persona   32/164  [ 2196/2460  89.3%  elapsed 14:03  ETA 1:41  156/min]
+  coder1.5B_inst   shared_persona  160/164  [ 2324/2460  94.5%  elapsed 14:47  ETA 0:51  157/min]
+  coder1.5B_inst   shared_persona DONE          [ 2328/2460  94.6%  elapsed 14:49  ETA 0:50  157/min]
+  coder1.5B_inst   chat             32/164  [ 2360/2460  95.9%  elapsed 14:57  ETA 0:38  158/min]
+  coder1.5B_inst   chat            160/164  [ 2488/2460 101.1%  elapsed 15:42  ETA -1:49  158/min]
+  coder1.5B_inst   chat           DONE          [ 2492/2460 101.3%  elapsed 15:44  ETA -1:47  158/min]
+
+shard 1 complete  [ 2492/2460 101.3%  elapsed 15:45  ETA -1:47  158/min]

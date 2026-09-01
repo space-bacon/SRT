@@ -1,0 +1,65 @@
+22:05:56 srt.phaseA_probe INFO Building model (device_map=None) ...
+22:05:56 srt.adapter INFO Loading backbone: openai/gpt-oss-20b in bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+You have loaded an FP4 model on CPU and have a CUDA/XPU device available, make sure to set your model on a GPU/XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or device_map = 'xpu'. 
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s]Fetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 19071.36it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s][AFetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 13532.14it/s]
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.44it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.72it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.45it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.15it/s]
+22:06:00 srt.adapter INFO Backbone: d=2880, L=24, MAH@[6, 12, 18], inject@[12, 18], community@3
+22:06:00 srt.adapter INFO Sliding-window attention: window=128, 12/24 sliding layers
+22:06:00 srt.adapter INFO SRT Adapter: 12,713,923 trainable, 1,804,459,584 frozen (backbone)
+22:06:01 srt.adapter INFO Loaded adapter weights from checkpoints/gptoss20b_phaseAB_v2/best_adapter.pt
+22:06:01 srt.phaseA_probe INFO Loaded adapter: checkpoints/gptoss20b_phaseAB_v2/best_adapter.pt
+22:06:01 srt.data.dataset INFO Loading dataset from data/all_val.jsonl
+22:06:02 srt.data.dataset INFO Loaded 3000 samples from data/all_val.jsonl
+22:06:06 srt.phaseA_probe INFO batch 10  regime_tokens=12977  comm_samples=80
+22:06:09 srt.phaseA_probe INFO batch 20  regime_tokens=25307  comm_samples=160
+22:06:12 srt.phaseA_probe INFO batch 30  regime_tokens=38382  comm_samples=240
+22:06:15 srt.phaseA_probe INFO batch 40  regime_tokens=52109  comm_samples=320
+22:06:19 srt.phaseA_probe INFO batch 50  regime_tokens=66683  comm_samples=400
+22:06:22 srt.phaseA_probe INFO batch 60  regime_tokens=79993  comm_samples=480
+22:06:25 srt.phaseA_probe INFO batch 70  regime_tokens=92572  comm_samples=560
+22:06:28 srt.phaseA_probe INFO batch 80  regime_tokens=107147  comm_samples=640
+22:06:31 srt.phaseA_probe INFO batch 90  regime_tokens=119282  comm_samples=720
+22:06:34 srt.phaseA_probe INFO batch 100  regime_tokens=134135  comm_samples=800
+22:06:38 srt.phaseA_probe INFO batch 110  regime_tokens=149606  comm_samples=880
+22:06:41 srt.phaseA_probe INFO batch 120  regime_tokens=164314  comm_samples=960
+22:06:45 srt.phaseA_probe INFO batch 130  regime_tokens=179259  comm_samples=1040
+22:06:48 srt.phaseA_probe INFO batch 140  regime_tokens=192912  comm_samples=1120
+22:06:51 srt.phaseA_probe INFO batch 150  regime_tokens=206905  comm_samples=1200
+22:06:54 srt.phaseA_probe INFO batch 160  regime_tokens=221497  comm_samples=1280
+22:06:57 srt.phaseA_probe INFO batch 170  regime_tokens=234641  comm_samples=1360
+22:07:00 srt.phaseA_probe INFO batch 180  regime_tokens=248182  comm_samples=1440
+22:07:03 srt.phaseA_probe INFO batch 190  regime_tokens=261422  comm_samples=1520
+22:07:06 srt.phaseA_probe INFO batch 200  regime_tokens=276215  comm_samples=1600
+22:07:09 srt.phaseA_probe INFO batch 210  regime_tokens=289541  comm_samples=1680
+22:07:12 srt.phaseA_probe INFO batch 220  regime_tokens=302263  comm_samples=1760
+22:07:15 srt.phaseA_probe INFO batch 230  regime_tokens=316260  comm_samples=1840
+22:07:18 srt.phaseA_probe INFO batch 240  regime_tokens=329521  comm_samples=1920
+22:07:22 srt.phaseA_probe INFO batch 250  regime_tokens=342587  comm_samples=2000
+22:07:25 srt.phaseA_probe INFO batch 260  regime_tokens=357589  comm_samples=2080
+22:07:28 srt.phaseA_probe INFO batch 270  regime_tokens=369363  comm_samples=2160
+22:07:31 srt.phaseA_probe INFO batch 280  regime_tokens=383407  comm_samples=2240
+22:07:34 srt.phaseA_probe INFO batch 290  regime_tokens=397724  comm_samples=2320
+22:07:37 srt.phaseA_probe INFO batch 300  regime_tokens=409991  comm_samples=2400
+22:07:40 srt.phaseA_probe INFO batch 310  regime_tokens=423966  comm_samples=2480
+22:07:43 srt.phaseA_probe INFO batch 320  regime_tokens=437932  comm_samples=2560
+22:07:46 srt.phaseA_probe INFO batch 330  regime_tokens=452074  comm_samples=2640
+22:07:49 srt.phaseA_probe INFO batch 340  regime_tokens=465056  comm_samples=2720
+22:07:52 srt.phaseA_probe INFO batch 350  regime_tokens=476998  comm_samples=2800
+22:07:55 srt.phaseA_probe INFO batch 360  regime_tokens=491505  comm_samples=2880
+22:07:58 srt.phaseA_probe INFO batch 370  regime_tokens=504295  comm_samples=2960
+22:08:00 srt.phaseA_probe INFO Saved raw community arrays to artifacts/regime_calibration/gptoss20b_phaseAB_v2_probe.community.npz
+22:08:00 srt.phaseA_probe INFO Community NMI: 3000 samples, 35 unique ids, k=64
+
+================================================================
+PHASE-A HELD-OUT PROBE — checkpoints/gptoss20b_phaseAB_v2/best_adapter.pt
+================================================================
+  Regime    tokens=510777  base=0.9455
+            ECE=0.0009  Brier=0.0152  AUROC=0.9742
+  r_hat     MAE=0.6156  Pearson=0.6894  (pred 0.569 / true 1.027)
+  Community NMI=0.4226  ARI=0.1347  (n=3000, ids=35, k=64)
+  Div norms L0=20.673  L1=30.047  L2=28.990
+================================================================
+Wrote artifacts/regime_calibration/gptoss20b_phaseAB_v2_probe.json

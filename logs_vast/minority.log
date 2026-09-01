@@ -1,0 +1,13 @@
+6 members: gemma4_31b, glm47_flash, ministral_14b, ornith_35b, qwen25c_32b, qwen3c_30b
+pooled to 48 candidates per problem
+
+  cluster purity            0.7730  (59 problems have an impure cluster)
+  oracle solvable           162 / 164
+  majority cluster correct  160
+  MINORITY-HELD (the prize) 2
+
+  stated examples would flip 0 of 0 that state any
+  correct cluster is a singleton in 0
+  median size-rank of correct cluster 2.5
+
+wrote /root/srt-adapter/artifacts/nla/ensemble/minority_clusters.json

@@ -1,0 +1,37 @@
+31 generation files, 164 problems
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 13977.39it/s]
+  coder0.5B_base__raw                floor 0.0213  raw 0.0244  cen 0.0244  oracle 0.1524  aniso 0.5966
+  coder0.5B_inst__chat               floor 0.1745  raw 0.1646  cen 0.1646  oracle 0.4695  aniso 0.8650
+  coder0.5B_inst__persona            floor 0.0381  raw 0.0427  cen 0.0488  oracle 0.2134  aniso 0.8009
+  coder0.5B_inst__raw                floor 0.0259  raw 0.0305  cen 0.0366  oracle 0.1829  aniso 0.7863
+  coder0.5B_inst__shared             floor 0.1692  raw 0.2317  cen 0.2073  oracle 0.4817  aniso 0.8508
+  coder0.5B_inst__shared_persona     floor 0.1562  raw 0.1707  cen 0.1707  oracle 0.4512  aniso 0.8571
+  coder1.5B_base__raw                floor 0.0373  raw 0.0671  cen 0.0488  oracle 0.2012  aniso 0.6371
+  coder1.5B_inst__chat               floor 0.3178  raw 0.3293  cen 0.3293  oracle 0.7134  aniso 0.8526
+  coder1.5B_inst__persona            floor 0.0465  raw 0.0427  cen 0.0671  oracle 0.2805  aniso 0.7684
+  coder1.5B_inst__raw                floor 0.0686  raw 0.0671  cen 0.0610  oracle 0.3841  aniso 0.7723
+  coder1.5B_inst__shared             floor 0.2424  raw 0.2683  cen 0.2561  oracle 0.7073  aniso 0.8414
+  coder1.5B_inst__shared_persona     floor 0.2767  raw 0.3232  cen 0.3110  oracle 0.6829  aniso 0.8510
+  coder14B_base__raw                 floor 0.0465  raw 0.0488  cen 0.0488  oracle 0.2683  aniso 0.6085
+  coder14B_inst__chat                floor 0.3636  raw 0.3659  cen 0.3476  oracle 0.7866  aniso 0.9055
+  coder14B_inst__persona             floor 0.1052  raw 0.1341  cen 0.1280  oracle 0.4573  aniso 0.7840
+  coder14B_inst__raw                 floor 0.0755  raw 0.0610  cen 0.0549  oracle 0.3293  aniso 0.7653
+  coder14B_inst__shared              floor 0.5404  raw 0.5854  cen 0.5854  oracle 0.8780  aniso 0.8974
+  coder14B_inst__shared_persona      floor 0.4329  raw 0.5122  cen 0.5122  oracle 0.7927  aniso 0.8932
+  coder3B_base__raw                  floor 0.0213  raw 0.0366  cen 0.0366  oracle 0.1341  aniso 0.6416
+  coder3B_inst__chat                 floor 0.2774  raw 0.2561  cen 0.2500  oracle 0.7012  aniso 0.8764
+  coder3B_inst__persona              floor 0.1090  raw 0.1402  cen 0.1402  oracle 0.5427  aniso 0.7900
+  coder3B_inst__raw                  floor 0.0549  raw 0.0366  cen 0.0427  oracle 0.2927  aniso 0.7499
+  coder3B_inst__shared               floor 0.2782  raw 0.2256  cen 0.2317  oracle 0.7012  aniso 0.8752
+  coder3B_inst__shared_persona       floor 0.2409  raw 0.1829  cen 0.1829  oracle 0.6402  aniso 0.8823
+  coder7B_base__raw                  floor 0.0495  raw 0.0549  cen 0.0732  oracle 0.2805  aniso 0.6215
+  coder7B_inst__chat                 floor 0.5404  raw 0.5244  cen 0.5122  oracle 0.9024  aniso 0.8638
+  coder7B_inst__persona              floor 0.0945  raw 0.1341  cen 0.1220  oracle 0.4756  aniso 0.6849
+  coder7B_inst__raw                  floor 0.1044  raw 0.1098  cen 0.1220  oracle 0.4756  aniso 0.7315
+  coder7B_inst__shared               floor 0.4931  raw 0.4939  cen 0.5122  oracle 0.8780  aniso 0.8648
+  coder7B_inst__shared_persona       floor 0.4375  raw 0.4146  cen 0.4024  oracle 0.8354  aniso 0.8719
+  task_ids                           ragged K, truncating to 11
+  task_ids                           floor 0.0000  raw 0.0000  cen 0.0000  oracle 0.0000  aniso 0.4444
+
+wrote /root/srt-adapter/artifacts/nla/code_select/results.json

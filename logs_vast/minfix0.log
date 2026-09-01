@@ -1,0 +1,8 @@
+shard 0/2  3 models  60 prompts  K=8  batch=16
+  ministral14B_base, ministral8B_base, ministral3B_base
+
+  ministral14B_base all 1 arms cached   [   60/180  33.3%  elapsed 0:00  ETA 0:00  4109824/min]
+  ministral8B_base all 1 arms cached   [  120/180  66.7%  elapsed 0:00  ETA 0:00  4785135/min]
+  ministral3B_base all 1 arms cached   [  180/180 100.0%  elapsed 0:00  ETA 0:00  5195376/min]
+
+shard 0 complete  [  180/180 100.0%  elapsed 0:00  ETA 0:00  5138796/min]

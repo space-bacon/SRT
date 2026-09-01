@@ -1,0 +1,35 @@
+112120 images encoded by all of ['gemma4', 'aria', 'qwen3omni']
+  gemma4       dim 5376
+  aria         dim 2560
+  qwen3omni    dim 2048
+  train 86524  test 25596  official test_list.txt
+  device: cuda
+
+fitting per-vendor probes
+  gemma4       0.7590   vs Wang +0.0139
+  aria         0.7080   vs Wang -0.0371
+  qwen3omni    0.7650   vs Wang +0.0199
+
+fitting ensembles
+  logit mean   0.7774
+  concat       0.7627
+  control      0.7626
+
+variant                      mean AUROC vs best single  vs Wang
+gemma4 alone                     0.7590        -0.0060  +0.0139
+aria alone                       0.7080        -0.0570  -0.0371
+qwen3omni alone                  0.7650        +0.0000  +0.0199
+logit mean (0 new params)        0.7774        +0.0124  +0.0323
+concat                           0.7627        -0.0023  +0.0176
+CONTROL qwen3omni+qwen3omni      0.7626        -0.0024  +0.0175
+
+paired patient-clustered bootstrap vs best single vendor
+  logit_mean   +0.0124  CI [+0.0082, +0.0168]  significant
+  concat       -0.0023  CI [-0.0070, +0.0028]  not significant
+wrote /root/cxr14_pooled_probe.pt
+
+best single   0.765 (qwen3omni)
+best ensemble 0.7774   vs Wang +0.0323
+capacity effect from the duplicate control -0.0024
+
+wrote /root/cxr14_ensemble3.json

@@ -1,0 +1,822 @@
+{
+  "question": "does a sharper probe buy accuracy, and can it buy back K",
+  "bench": "mbpp",
+  "n_problems": 425,
+  "cases_swept": [
+    2,
+    4,
+    6,
+    12,
+    24,
+    48
+  ],
+  "ks_swept": [
+    2,
+    4,
+    8
+  ],
+  "arms": {
+    "mbpp1.5B_inst__chat": {
+      "floor": 0.5662,
+      "oracle": 0.8118,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.5765,
+          "purity": 0.9856
+        },
+        "cases2_k4": {
+          "selected": 0.6329,
+          "purity": 0.9524
+        },
+        "cases2_k8": {
+          "selected": 0.6518,
+          "purity": 0.9238
+        },
+        "cases4_k2": {
+          "selected": 0.5765,
+          "purity": 0.9904
+        },
+        "cases4_k4": {
+          "selected": 0.6306,
+          "purity": 0.969
+        },
+        "cases4_k8": {
+          "selected": 0.6518,
+          "purity": 0.95
+        },
+        "cases6_k2": {
+          "selected": 0.5765,
+          "purity": 0.9976
+        },
+        "cases6_k4": {
+          "selected": 0.6306,
+          "purity": 0.981
+        },
+        "cases6_k8": {
+          "selected": 0.6588,
+          "purity": 0.9643
+        },
+        "cases12_k2": {
+          "selected": 0.5765,
+          "purity": 0.9976
+        },
+        "cases12_k4": {
+          "selected": 0.6259,
+          "purity": 0.9857
+        },
+        "cases12_k8": {
+          "selected": 0.6612,
+          "purity": 0.9762
+        },
+        "cases24_k2": {
+          "selected": 0.5765,
+          "purity": 1.0
+        },
+        "cases24_k4": {
+          "selected": 0.6282,
+          "purity": 0.9905
+        },
+        "cases24_k8": {
+          "selected": 0.6635,
+          "purity": 0.981
+        },
+        "cases48_k2": {
+          "selected": 0.5765,
+          "purity": 1.0
+        },
+        "cases48_k4": {
+          "selected": 0.6282,
+          "purity": 0.9905
+        },
+        "cases48_k8": {
+          "selected": 0.6635,
+          "purity": 0.981
+        }
+      }
+    },
+    "mbpp1.5B_inst__shared": {
+      "floor": 0.5829,
+      "oracle": 0.8259,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.6329,
+          "purity": 0.9928
+        },
+        "cases2_k4": {
+          "selected": 0.6541,
+          "purity": 0.9643
+        },
+        "cases2_k8": {
+          "selected": 0.7035,
+          "purity": 0.9357
+        },
+        "cases4_k2": {
+          "selected": 0.6329,
+          "purity": 0.9952
+        },
+        "cases4_k4": {
+          "selected": 0.6518,
+          "purity": 0.981
+        },
+        "cases4_k8": {
+          "selected": 0.7035,
+          "purity": 0.9571
+        },
+        "cases6_k2": {
+          "selected": 0.6329,
+          "purity": 0.9976
+        },
+        "cases6_k4": {
+          "selected": 0.64,
+          "purity": 0.9833
+        },
+        "cases6_k8": {
+          "selected": 0.7012,
+          "purity": 0.9667
+        },
+        "cases12_k2": {
+          "selected": 0.6329,
+          "purity": 0.9976
+        },
+        "cases12_k4": {
+          "selected": 0.6447,
+          "purity": 0.9905
+        },
+        "cases12_k8": {
+          "selected": 0.7012,
+          "purity": 0.9738
+        },
+        "cases24_k2": {
+          "selected": 0.6329,
+          "purity": 0.9976
+        },
+        "cases24_k4": {
+          "selected": 0.6471,
+          "purity": 0.9905
+        },
+        "cases24_k8": {
+          "selected": 0.7059,
+          "purity": 0.9762
+        },
+        "cases48_k2": {
+          "selected": 0.6329,
+          "purity": 0.9976
+        },
+        "cases48_k4": {
+          "selected": 0.6471,
+          "purity": 0.9905
+        },
+        "cases48_k8": {
+          "selected": 0.7059,
+          "purity": 0.9762
+        }
+      }
+    },
+    "mbpp14B_inst__chat": {
+      "floor": 0.7941,
+      "oracle": 0.9059,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.8235,
+          "purity": 0.9894
+        },
+        "cases2_k4": {
+          "selected": 0.8682,
+          "purity": 0.9749
+        },
+        "cases2_k8": {
+          "selected": 0.8776,
+          "purity": 0.9677
+        },
+        "cases4_k2": {
+          "selected": 0.8235,
+          "purity": 0.9974
+        },
+        "cases4_k4": {
+          "selected": 0.8682,
+          "purity": 0.99
+        },
+        "cases4_k8": {
+          "selected": 0.8776,
+          "purity": 0.9801
+        },
+        "cases6_k2": {
+          "selected": 0.8235,
+          "purity": 1.0
+        },
+        "cases6_k4": {
+          "selected": 0.8659,
+          "purity": 0.9924
+        },
+        "cases6_k8": {
+          "selected": 0.8729,
+          "purity": 0.9825
+        },
+        "cases12_k2": {
+          "selected": 0.8212,
+          "purity": 1.0
+        },
+        "cases12_k4": {
+          "selected": 0.8635,
+          "purity": 0.9949
+        },
+        "cases12_k8": {
+          "selected": 0.8706,
+          "purity": 0.99
+        },
+        "cases24_k2": {
+          "selected": 0.8212,
+          "purity": 1.0
+        },
+        "cases24_k4": {
+          "selected": 0.8612,
+          "purity": 0.9949
+        },
+        "cases24_k8": {
+          "selected": 0.8706,
+          "purity": 0.99
+        },
+        "cases48_k2": {
+          "selected": 0.8212,
+          "purity": 1.0
+        },
+        "cases48_k4": {
+          "selected": 0.8612,
+          "purity": 0.9949
+        },
+        "cases48_k8": {
+          "selected": 0.8706,
+          "purity": 0.9925
+        }
+      }
+    },
+    "mbpp14B_inst__shared": {
+      "floor": 0.8074,
+      "oracle": 0.9224,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.84,
+          "purity": 0.9874
+        },
+        "cases2_k4": {
+          "selected": 0.8706,
+          "purity": 0.9732
+        },
+        "cases2_k8": {
+          "selected": 0.8729,
+          "purity": 0.9589
+        },
+        "cases4_k2": {
+          "selected": 0.84,
+          "purity": 0.9925
+        },
+        "cases4_k4": {
+          "selected": 0.8706,
+          "purity": 0.9829
+        },
+        "cases4_k8": {
+          "selected": 0.8729,
+          "purity": 0.9686
+        },
+        "cases6_k2": {
+          "selected": 0.84,
+          "purity": 0.9924
+        },
+        "cases6_k4": {
+          "selected": 0.8729,
+          "purity": 0.9877
+        },
+        "cases6_k8": {
+          "selected": 0.8753,
+          "purity": 0.9782
+        },
+        "cases12_k2": {
+          "selected": 0.84,
+          "purity": 0.9949
+        },
+        "cases12_k4": {
+          "selected": 0.8706,
+          "purity": 0.9926
+        },
+        "cases12_k8": {
+          "selected": 0.88,
+          "purity": 0.9878
+        },
+        "cases24_k2": {
+          "selected": 0.84,
+          "purity": 0.9974
+        },
+        "cases24_k4": {
+          "selected": 0.8706,
+          "purity": 0.9926
+        },
+        "cases24_k8": {
+          "selected": 0.88,
+          "purity": 0.9926
+        },
+        "cases48_k2": {
+          "selected": 0.84,
+          "purity": 0.9974
+        },
+        "cases48_k4": {
+          "selected": 0.8706,
+          "purity": 0.995
+        },
+        "cases48_k8": {
+          "selected": 0.88,
+          "purity": 0.9926
+        }
+      }
+    },
+    "mbpp32B_inst__chat": {
+      "floor": 0.8609,
+      "oracle": 0.9176,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.8776,
+          "purity": 0.9928
+        },
+        "cases2_k4": {
+          "selected": 0.8824,
+          "purity": 0.9857
+        },
+        "cases2_k8": {
+          "selected": 0.88,
+          "purity": 0.981
+        },
+        "cases4_k2": {
+          "selected": 0.8776,
+          "purity": 0.9976
+        },
+        "cases4_k4": {
+          "selected": 0.8824,
+          "purity": 0.9928
+        },
+        "cases4_k8": {
+          "selected": 0.8729,
+          "purity": 0.9833
+        },
+        "cases6_k2": {
+          "selected": 0.8776,
+          "purity": 0.9976
+        },
+        "cases6_k4": {
+          "selected": 0.8824,
+          "purity": 0.9952
+        },
+        "cases6_k8": {
+          "selected": 0.8729,
+          "purity": 0.988
+        },
+        "cases12_k2": {
+          "selected": 0.8776,
+          "purity": 1.0
+        },
+        "cases12_k4": {
+          "selected": 0.8824,
+          "purity": 1.0
+        },
+        "cases12_k8": {
+          "selected": 0.8706,
+          "purity": 0.9952
+        },
+        "cases24_k2": {
+          "selected": 0.8776,
+          "purity": 1.0
+        },
+        "cases24_k4": {
+          "selected": 0.8824,
+          "purity": 1.0
+        },
+        "cases24_k8": {
+          "selected": 0.8706,
+          "purity": 0.9952
+        },
+        "cases48_k2": {
+          "selected": 0.8776,
+          "purity": 1.0
+        },
+        "cases48_k4": {
+          "selected": 0.8824,
+          "purity": 1.0
+        },
+        "cases48_k8": {
+          "selected": 0.8706,
+          "purity": 0.9951
+        }
+      }
+    },
+    "mbpp32B_inst__shared": {
+      "floor": 0.8494,
+      "oracle": 0.9176,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.8565,
+          "purity": 0.9905
+        },
+        "cases2_k4": {
+          "selected": 0.8635,
+          "purity": 0.9881
+        },
+        "cases2_k8": {
+          "selected": 0.8588,
+          "purity": 0.9785
+        },
+        "cases4_k2": {
+          "selected": 0.8565,
+          "purity": 0.9905
+        },
+        "cases4_k4": {
+          "selected": 0.8635,
+          "purity": 0.9905
+        },
+        "cases4_k8": {
+          "selected": 0.8612,
+          "purity": 0.9809
+        },
+        "cases6_k2": {
+          "selected": 0.8565,
+          "purity": 0.9952
+        },
+        "cases6_k4": {
+          "selected": 0.8612,
+          "purity": 0.9928
+        },
+        "cases6_k8": {
+          "selected": 0.8588,
+          "purity": 0.9856
+        },
+        "cases12_k2": {
+          "selected": 0.8612,
+          "purity": 0.9976
+        },
+        "cases12_k4": {
+          "selected": 0.8612,
+          "purity": 0.9951
+        },
+        "cases12_k8": {
+          "selected": 0.8612,
+          "purity": 0.9928
+        },
+        "cases24_k2": {
+          "selected": 0.8588,
+          "purity": 0.9976
+        },
+        "cases24_k4": {
+          "selected": 0.8588,
+          "purity": 0.9976
+        },
+        "cases24_k8": {
+          "selected": 0.8565,
+          "purity": 0.9952
+        },
+        "cases48_k2": {
+          "selected": 0.8588,
+          "purity": 0.9976
+        },
+        "cases48_k4": {
+          "selected": 0.8588,
+          "purity": 0.9976
+        },
+        "cases48_k8": {
+          "selected": 0.8565,
+          "purity": 0.9951
+        }
+      }
+    },
+    "mbpp3B_inst__chat": {
+      "floor": 0.6203,
+      "oracle": 0.8635,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.7012,
+          "purity": 0.9808
+        },
+        "cases2_k4": {
+          "selected": 0.7365,
+          "purity": 0.9512
+        },
+        "cases2_k8": {
+          "selected": 0.7788,
+          "purity": 0.9187
+        },
+        "cases4_k2": {
+          "selected": 0.7012,
+          "purity": 0.9918
+        },
+        "cases4_k4": {
+          "selected": 0.7388,
+          "purity": 0.9692
+        },
+        "cases4_k8": {
+          "selected": 0.7859,
+          "purity": 0.9483
+        },
+        "cases6_k2": {
+          "selected": 0.7012,
+          "purity": 0.9945
+        },
+        "cases6_k4": {
+          "selected": 0.7388,
+          "purity": 0.9794
+        },
+        "cases6_k8": {
+          "selected": 0.7835,
+          "purity": 0.9631
+        },
+        "cases12_k2": {
+          "selected": 0.7012,
+          "purity": 0.9945
+        },
+        "cases12_k4": {
+          "selected": 0.7388,
+          "purity": 0.9871
+        },
+        "cases12_k8": {
+          "selected": 0.7812,
+          "purity": 0.9704
+        },
+        "cases24_k2": {
+          "selected": 0.6988,
+          "purity": 0.9972
+        },
+        "cases24_k4": {
+          "selected": 0.7365,
+          "purity": 0.9896
+        },
+        "cases24_k8": {
+          "selected": 0.7812,
+          "purity": 0.9728
+        },
+        "cases48_k2": {
+          "selected": 0.6965,
+          "purity": 0.9972
+        },
+        "cases48_k4": {
+          "selected": 0.7341,
+          "purity": 0.9922
+        },
+        "cases48_k8": {
+          "selected": 0.7788,
+          "purity": 0.9752
+        }
+      }
+    },
+    "mbpp3B_inst__shared": {
+      "floor": 0.6532,
+      "oracle": 0.8871,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.7106,
+          "purity": 0.9817
+        },
+        "cases2_k4": {
+          "selected": 0.76,
+          "purity": 0.9407
+        },
+        "cases2_k8": {
+          "selected": 0.7929,
+          "purity": 0.9275
+        },
+        "cases4_k2": {
+          "selected": 0.7082,
+          "purity": 0.9921
+        },
+        "cases4_k4": {
+          "selected": 0.7624,
+          "purity": 0.9703
+        },
+        "cases4_k8": {
+          "selected": 0.8,
+          "purity": 0.9614
+        },
+        "cases6_k2": {
+          "selected": 0.7082,
+          "purity": 0.9948
+        },
+        "cases6_k4": {
+          "selected": 0.7647,
+          "purity": 0.9827
+        },
+        "cases6_k8": {
+          "selected": 0.8024,
+          "purity": 0.9734
+        },
+        "cases12_k2": {
+          "selected": 0.7082,
+          "purity": 0.9974
+        },
+        "cases12_k4": {
+          "selected": 0.7647,
+          "purity": 0.9876
+        },
+        "cases12_k8": {
+          "selected": 0.8024,
+          "purity": 0.9854
+        },
+        "cases24_k2": {
+          "selected": 0.7082,
+          "purity": 0.9974
+        },
+        "cases24_k4": {
+          "selected": 0.7576,
+          "purity": 0.9876
+        },
+        "cases24_k8": {
+          "selected": 0.7976,
+          "purity": 0.9854
+        },
+        "cases48_k2": {
+          "selected": 0.7082,
+          "purity": 0.9974
+        },
+        "cases48_k4": {
+          "selected": 0.7553,
+          "purity": 0.99
+        },
+        "cases48_k8": {
+          "selected": 0.7953,
+          "purity": 0.9878
+        }
+      }
+    },
+    "mbpp7B_inst__chat": {
+      "floor": 0.7188,
+      "oracle": 0.9153,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.7694,
+          "purity": 0.9897
+        },
+        "cases2_k4": {
+          "selected": 0.8188,
+          "purity": 0.9562
+        },
+        "cases2_k8": {
+          "selected": 0.84,
+          "purity": 0.9258
+        },
+        "cases4_k2": {
+          "selected": 0.7694,
+          "purity": 0.9948
+        },
+        "cases4_k4": {
+          "selected": 0.8212,
+          "purity": 0.9708
+        },
+        "cases4_k8": {
+          "selected": 0.8447,
+          "purity": 0.945
+        },
+        "cases6_k2": {
+          "selected": 0.7694,
+          "purity": 1.0
+        },
+        "cases6_k4": {
+          "selected": 0.8188,
+          "purity": 0.983
+        },
+        "cases6_k8": {
+          "selected": 0.84,
+          "purity": 0.9617
+        },
+        "cases12_k2": {
+          "selected": 0.7694,
+          "purity": 1.0
+        },
+        "cases12_k4": {
+          "selected": 0.8165,
+          "purity": 0.9878
+        },
+        "cases12_k8": {
+          "selected": 0.8424,
+          "purity": 0.9713
+        },
+        "cases24_k2": {
+          "selected": 0.7694,
+          "purity": 1.0
+        },
+        "cases24_k4": {
+          "selected": 0.8188,
+          "purity": 0.9878
+        },
+        "cases24_k8": {
+          "selected": 0.8424,
+          "purity": 0.9736
+        },
+        "cases48_k2": {
+          "selected": 0.7694,
+          "purity": 1.0
+        },
+        "cases48_k4": {
+          "selected": 0.8188,
+          "purity": 0.9877
+        },
+        "cases48_k8": {
+          "selected": 0.8424,
+          "purity": 0.9736
+        }
+      }
+    },
+    "mbpp7B_inst__shared": {
+      "floor": 0.7315,
+      "oracle": 0.92,
+      "grid": {
+        "cases2_k2": {
+          "selected": 0.7576,
+          "purity": 0.9851
+        },
+        "cases2_k4": {
+          "selected": 0.7812,
+          "purity": 0.9494
+        },
+        "cases2_k8": {
+          "selected": 0.8165,
+          "purity": 0.933
+        },
+        "cases4_k2": {
+          "selected": 0.76,
+          "purity": 0.995
+        },
+        "cases4_k4": {
+          "selected": 0.7835,
+          "purity": 0.9711
+        },
+        "cases4_k8": {
+          "selected": 0.8212,
+          "purity": 0.9569
+        },
+        "cases6_k2": {
+          "selected": 0.76,
+          "purity": 0.9975
+        },
+        "cases6_k4": {
+          "selected": 0.7812,
+          "purity": 0.9831
+        },
+        "cases6_k8": {
+          "selected": 0.8282,
+          "purity": 0.9665
+        },
+        "cases12_k2": {
+          "selected": 0.76,
+          "purity": 0.9975
+        },
+        "cases12_k4": {
+          "selected": 0.7812,
+          "purity": 0.9855
+        },
+        "cases12_k8": {
+          "selected": 0.8282,
+          "purity": 0.9761
+        },
+        "cases24_k2": {
+          "selected": 0.76,
+          "purity": 0.9975
+        },
+        "cases24_k4": {
+          "selected": 0.7788,
+          "purity": 0.9855
+        },
+        "cases24_k8": {
+          "selected": 0.8282,
+          "purity": 0.9808
+        },
+        "cases48_k2": {
+          "selected": 0.7576,
+          "purity": 0.9975
+        },
+        "cases48_k4": {
+          "selected": 0.7788,
+          "purity": 0.9855
+        },
+        "cases48_k8": {
+          "selected": 0.8282,
+          "purity": 0.9808
+        }
+      }
+    }
+  },
+  "summary": {
+    "cases12_k2": 0.7548,
+    "cases12_k4": 0.7849,
+    "cases12_k8": 0.8099,
+    "cases24_k2": 0.7543,
+    "cases24_k4": 0.784,
+    "cases24_k8": 0.8097,
+    "cases2_k2": 0.7546,
+    "cases2_k4": 0.7868,
+    "cases2_k8": 0.8073,
+    "cases48_k2": 0.7539,
+    "cases48_k4": 0.7835,
+    "cases48_k8": 0.8092,
+    "cases4_k2": 0.7546,
+    "cases4_k4": 0.7873,
+    "cases4_k8": 0.8092,
+    "cases6_k2": 0.7546,
+    "cases6_k4": 0.7856,
+    "cases6_k8": 0.8094
+  },
+  "summary_floor": 0.7185,
+  "summary_oracle": 0.8887
+}

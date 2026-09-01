@@ -1,0 +1,34 @@
+shard 2/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+[W901 00:02:26.658152592 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 1 while trying to map 20971520 bytes (free: 21168128, total: 101975851008).
+[W901 00:02:26.723144142 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 1 while trying to map 20971520 bytes (free: 21168128, total: 101975851008).
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 117, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, **kw)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 405, in from_pretrained
+    raise ValueError(
+ValueError: Unrecognized configuration class <class 'transformers.models.glm5_next.configuration_glm5_next.Glm5NextConfig'> for this kind of AutoModel: AutoModelForCausalLM.
+Model type should be one of GPT2Config, AfmoeConfig, ApertusConfig, ArceeConfig, AriaTextConfig, AXK1Config, AXK2Config, BambaConfig, BartConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BitNetConfig, BlenderbotConfig, BlenderbotSmallConfig, BloomConfig, BltConfig, CamembertConfig, CodeGenConfig, CohereConfig, Cohere2Config, Cohere2MoeConfig, CohereCompassTextConfig, CpmAntConfig, CTRLConfig, CwmConfig, Data2VecTextConfig, DbrxConfig, DeepseekV2Config, DeepseekV3Config, DeepseekV32Config, DeepseekV4Config, DiffLlamaConfig, DogeConfig, Dots1Config, ElectraConfig, Emu3Config, ErnieConfig, Ernie4_5Config, Ernie4_5_MoeConfig, Exaone4Config, ExaoneMoeConfig, FalconConfig, FalconH1Config, FalconMambaConfig, FlexOlmoConfig, FuyuConfig, GemmaConfig, Gemma2Config, Gemma3Config, Gemma3TextConfig, Gemma3nConfig, Gemma3nTextConfig, Gemma4Config, Gemma4AssistantConfig, Gemma4TextConfig, Gemma4UnifiedConfig, Gemma4UnifiedAssistantConfig, Gemma4UnifiedTextConfig, GitConfig, GlmConfig, Glm4Config, Glm4MoeConfig, Glm4MoeLiteConfig, GlmMoeDsaConfig, GotOcr2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GptOssConfig, GPTJConfig, GraniteConfig, GraniteSWAConfig, GraniteMoeConfig, GraniteMoeSWAConfig, GraniteMoeHybridConfig, GraniteMoeSharedConfig, HeliumConfig, HrmTextConfig, HunYuanDenseV1Config, HunYuanMoEV1Config, HYV3Config, HyperCLOVAXConfig, InklingTextConfig, Jais2Config, JambaConfig, JetMoeConfig, LagunaConfig, Lfm2Config, Lfm2MoeConfig, LlamaConfig, Llama4Config, Llama4TextConfig, LongcatFlashConfig, MambaConfig, Mamba2Config, MarianConfig, MBartConfig, MegatronBertConfig, MellumConfig, MiMoV2FlashConfig, MiniCPM3Config, MiniMaxConfig, MiniMaxM2Config, MiniMaxM3VLTextConfig, MinistralConfig, Ministral3Config, MistralConfig, MixtralConfig, MllamaConfig, ModernBertDecoderConfig, MoshiConfig, MptConfig, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NanoChatConfig, NemotronConfig, NemotronHConfig, OlmoConfig, Olmo2Config, Olmo3Config, OlmoHybridConfig, OlmoeConfig, OpenAIGPTConfig, OPTConfig, PegasusConfig, PersimmonConfig, PhiConfig, Phi3Config, Phi4MultimodalConfig, PhimoeConfig, PLBartConfig, ProphetNetConfig, Qwen2Config, Qwen2MoeConfig, Qwen3Config, Qwen3_5Config, Qwen3_5MoeConfig, Qwen3_5MoeTextConfig, Qwen3_5TextConfig, Qwen3MoeConfig, Qwen3NextConfig, Qwen4ExpConfig, Qwen4ExpTextConfig, RecurrentGemmaConfig, ReformerConfig, RemBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RwkvConfig, SeedOssConfig, SmolLM3Config, SolarOpenConfig, StableLmConfig, Starcoder2Config, TrOCRConfig, VaultGemmaConfig, WhisperConfig, XGLMConfig, XLMConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, xLSTMConfig, XmodConfig, YoutuConfig, ZambaConfig, Zamba2Config, ZayaConfig.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 189, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 126, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 121, in run_model
+    mod = AutoModelForImageTextToText.from_pretrained(mid, **kw)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4393, in from_pretrained
+    loading_info, disk_offload_index = cls._load_pretrained_model(model, state_dict, checkpoint_files, load_config)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4473, in _load_pretrained_model
+    caching_allocator_warmup(model, expanded_device_map, load_config.hf_quantizer)
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 5136, in caching_allocator_warmup
+    _ = torch.empty(int(byte_count // 2), dtype=torch.float16, device=device, requires_grad=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 69.99 GiB. GPU 1 has a total capacity of 94.97 GiB of which 25.49 GiB is free. Process 395414 has 68.93 GiB memory in use. Including non-PyTorch memory, this process has 552.00 MiB memory in use. Of the allocated memory 0 bytes is allocated by PyTorch, and 0 bytes is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

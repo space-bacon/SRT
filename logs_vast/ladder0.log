@@ -1,0 +1,24 @@
+shard 0/4  3 models  164 prompts  K=8  batch=32
+  coder32B_base, coder7B_base, coder1.5B_base
+
+Loading weights:   0%|          | 0/771 [00:00<?, ?it/s]Loading weights: 100%|██████████| 771/771 [00:00<00:00, 15867.25it/s]
+  coder32B_base    loaded 7s, running 1 arm(s)
+[W831 04:10:36.473415803 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 933232640 bytes (free: 882442240, total: 101975851008).
+  coder32B_base    raw              32/164  [   32/492   6.5%  elapsed 1:05  ETA 15:42  29/min]
+[W831 04:10:37.125805086 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3611295744 bytes (free: 993591296, total: 101975851008).
+[W831 04:10:45.578205305 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3611295744 bytes (free: 2916679680, total: 101975851008).
+[W831 04:10:49.600694154 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3611295744 bytes (free: 2918776832, total: 101975851008).
+  coder32B_base    FAILED OutOfMemoryError: CUDA out of memory. Tried to allocate 3.36 GiB. GPU 0 has a total capacity of 94
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  83%|████████▎ | 280/339 [00:00<00:00, 2789.37it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 2980.99it/s]
+  coder7B_base     loaded 5s, running 1 arm(s)
+  coder7B_base     raw              32/164  [  228/492  46.3%  elapsed 1:39  ETA 1:55  138/min]
+[W831 04:12:19.443986851 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3793747968 bytes (free: 2912485376, total: 101975851008).
+  coder7B_base     raw             160/164  [  356/492  72.4%  elapsed 3:15  ETA 1:14  109/min]
+  coder7B_base     raw            DONE          [  360/492  73.2%  elapsed 3:19  ETA 1:13  108/min]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 4062.07it/s]
+  coder1.5B_base   loaded 1s, running 1 arm(s)
+  coder1.5B_base   raw              32/164  [  392/492  79.7%  elapsed 3:28  ETA 0:53  113/min]
+  coder1.5B_base   raw             160/164  [  520/492 105.7%  elapsed 4:11  ETA -1:46  124/min]
+  coder1.5B_base   raw            DONE          [  524/492 106.5%  elapsed 4:13  ETA -1:44  124/min]
+
+shard 0 complete  [  524/492 106.5%  elapsed 4:13  ETA -1:44  124/min]

@@ -1,0 +1,18 @@
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 12538.28it/s]
+loaded in 3s
+  K=  1  median   2.54s
+  K=  2  median   3.06s
+  K=  4  median   3.37s
+  K=  8  median   3.66s
+  K= 16  median   3.85s
+  K= 32  median   4.34s
+
+  K    wall    vs K=1   naive
+    1    2.54s   1.00x   1x
+    2    3.06s   1.20x   2x
+    4    3.37s   1.33x   4x
+    8    3.66s   1.44x   8x
+   16    3.85s   1.52x   16x
+   32    4.34s   1.71x   32x
+
+wrote /root/srt-adapter/artifacts/nla/k_latency_14b.json

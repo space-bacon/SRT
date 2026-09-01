@@ -1,0 +1,203 @@
+10 arms, 425 problems
+  mbpp1.5B_inst__chat        cases   2 k 2  sel 0.5765  pure 0.9856
+  mbpp1.5B_inst__chat        cases   2 k 4  sel 0.6329  pure 0.9524
+  mbpp1.5B_inst__chat        cases   2 k 8  sel 0.6518  pure 0.9238
+  mbpp1.5B_inst__chat        cases   4 k 2  sel 0.5765  pure 0.9904
+  mbpp1.5B_inst__chat        cases   4 k 4  sel 0.6306  pure 0.9690
+  mbpp1.5B_inst__chat        cases   4 k 8  sel 0.6518  pure 0.9500
+  mbpp1.5B_inst__chat        cases   6 k 2  sel 0.5765  pure 0.9976
+  mbpp1.5B_inst__chat        cases   6 k 4  sel 0.6306  pure 0.9810
+  mbpp1.5B_inst__chat        cases   6 k 8  sel 0.6588  pure 0.9643
+  mbpp1.5B_inst__chat        cases  12 k 2  sel 0.5765  pure 0.9976
+  mbpp1.5B_inst__chat        cases  12 k 4  sel 0.6259  pure 0.9857
+  mbpp1.5B_inst__chat        cases  12 k 8  sel 0.6612  pure 0.9762
+  mbpp1.5B_inst__chat        cases  24 k 2  sel 0.5765  pure 1.0000
+  mbpp1.5B_inst__chat        cases  24 k 4  sel 0.6282  pure 0.9905
+  mbpp1.5B_inst__chat        cases  24 k 8  sel 0.6635  pure 0.9810
+  mbpp1.5B_inst__chat        cases  48 k 2  sel 0.5765  pure 1.0000
+  mbpp1.5B_inst__chat        cases  48 k 4  sel 0.6282  pure 0.9905
+  mbpp1.5B_inst__chat        cases  48 k 8  sel 0.6635  pure 0.9810
+  mbpp1.5B_inst__shared      cases   2 k 2  sel 0.6329  pure 0.9928
+  mbpp1.5B_inst__shared      cases   2 k 4  sel 0.6541  pure 0.9643
+  mbpp1.5B_inst__shared      cases   2 k 8  sel 0.7035  pure 0.9357
+  mbpp1.5B_inst__shared      cases   4 k 2  sel 0.6329  pure 0.9952
+  mbpp1.5B_inst__shared      cases   4 k 4  sel 0.6518  pure 0.9810
+  mbpp1.5B_inst__shared      cases   4 k 8  sel 0.7035  pure 0.9571
+  mbpp1.5B_inst__shared      cases   6 k 2  sel 0.6329  pure 0.9976
+  mbpp1.5B_inst__shared      cases   6 k 4  sel 0.6400  pure 0.9833
+  mbpp1.5B_inst__shared      cases   6 k 8  sel 0.7012  pure 0.9667
+  mbpp1.5B_inst__shared      cases  12 k 2  sel 0.6329  pure 0.9976
+  mbpp1.5B_inst__shared      cases  12 k 4  sel 0.6447  pure 0.9905
+  mbpp1.5B_inst__shared      cases  12 k 8  sel 0.7012  pure 0.9738
+  mbpp1.5B_inst__shared      cases  24 k 2  sel 0.6329  pure 0.9976
+  mbpp1.5B_inst__shared      cases  24 k 4  sel 0.6471  pure 0.9905
+  mbpp1.5B_inst__shared      cases  24 k 8  sel 0.7059  pure 0.9762
+  mbpp1.5B_inst__shared      cases  48 k 2  sel 0.6329  pure 0.9976
+  mbpp1.5B_inst__shared      cases  48 k 4  sel 0.6471  pure 0.9905
+  mbpp1.5B_inst__shared      cases  48 k 8  sel 0.7059  pure 0.9762
+  mbpp14B_inst__chat         cases   2 k 2  sel 0.8235  pure 0.9894
+  mbpp14B_inst__chat         cases   2 k 4  sel 0.8682  pure 0.9749
+  mbpp14B_inst__chat         cases   2 k 8  sel 0.8776  pure 0.9677
+  mbpp14B_inst__chat         cases   4 k 2  sel 0.8235  pure 0.9974
+  mbpp14B_inst__chat         cases   4 k 4  sel 0.8682  pure 0.9900
+  mbpp14B_inst__chat         cases   4 k 8  sel 0.8776  pure 0.9801
+  mbpp14B_inst__chat         cases   6 k 2  sel 0.8235  pure 1.0000
+  mbpp14B_inst__chat         cases   6 k 4  sel 0.8659  pure 0.9924
+  mbpp14B_inst__chat         cases   6 k 8  sel 0.8729  pure 0.9825
+  mbpp14B_inst__chat         cases  12 k 2  sel 0.8212  pure 1.0000
+  mbpp14B_inst__chat         cases  12 k 4  sel 0.8635  pure 0.9949
+  mbpp14B_inst__chat         cases  12 k 8  sel 0.8706  pure 0.9900
+  mbpp14B_inst__chat         cases  24 k 2  sel 0.8212  pure 1.0000
+  mbpp14B_inst__chat         cases  24 k 4  sel 0.8612  pure 0.9949
+  mbpp14B_inst__chat         cases  24 k 8  sel 0.8706  pure 0.9900
+  mbpp14B_inst__chat         cases  48 k 2  sel 0.8212  pure 1.0000
+  mbpp14B_inst__chat         cases  48 k 4  sel 0.8612  pure 0.9949
+  mbpp14B_inst__chat         cases  48 k 8  sel 0.8706  pure 0.9925
+  mbpp14B_inst__shared       cases   2 k 2  sel 0.8400  pure 0.9874
+  mbpp14B_inst__shared       cases   2 k 4  sel 0.8706  pure 0.9732
+  mbpp14B_inst__shared       cases   2 k 8  sel 0.8729  pure 0.9589
+  mbpp14B_inst__shared       cases   4 k 2  sel 0.8400  pure 0.9925
+  mbpp14B_inst__shared       cases   4 k 4  sel 0.8706  pure 0.9829
+  mbpp14B_inst__shared       cases   4 k 8  sel 0.8729  pure 0.9686
+  mbpp14B_inst__shared       cases   6 k 2  sel 0.8400  pure 0.9924
+  mbpp14B_inst__shared       cases   6 k 4  sel 0.8729  pure 0.9877
+  mbpp14B_inst__shared       cases   6 k 8  sel 0.8753  pure 0.9782
+  mbpp14B_inst__shared       cases  12 k 2  sel 0.8400  pure 0.9949
+  mbpp14B_inst__shared       cases  12 k 4  sel 0.8706  pure 0.9926
+  mbpp14B_inst__shared       cases  12 k 8  sel 0.8800  pure 0.9878
+  mbpp14B_inst__shared       cases  24 k 2  sel 0.8400  pure 0.9974
+  mbpp14B_inst__shared       cases  24 k 4  sel 0.8706  pure 0.9926
+  mbpp14B_inst__shared       cases  24 k 8  sel 0.8800  pure 0.9926
+  mbpp14B_inst__shared       cases  48 k 2  sel 0.8400  pure 0.9974
+  mbpp14B_inst__shared       cases  48 k 4  sel 0.8706  pure 0.9950
+  mbpp14B_inst__shared       cases  48 k 8  sel 0.8800  pure 0.9926
+  mbpp32B_inst__chat         cases   2 k 2  sel 0.8776  pure 0.9928
+  mbpp32B_inst__chat         cases   2 k 4  sel 0.8824  pure 0.9857
+  mbpp32B_inst__chat         cases   2 k 8  sel 0.8800  pure 0.9810
+  mbpp32B_inst__chat         cases   4 k 2  sel 0.8776  pure 0.9976
+  mbpp32B_inst__chat         cases   4 k 4  sel 0.8824  pure 0.9928
+  mbpp32B_inst__chat         cases   4 k 8  sel 0.8729  pure 0.9833
+  mbpp32B_inst__chat         cases   6 k 2  sel 0.8776  pure 0.9976
+  mbpp32B_inst__chat         cases   6 k 4  sel 0.8824  pure 0.9952
+  mbpp32B_inst__chat         cases   6 k 8  sel 0.8729  pure 0.9880
+  mbpp32B_inst__chat         cases  12 k 2  sel 0.8776  pure 1.0000
+  mbpp32B_inst__chat         cases  12 k 4  sel 0.8824  pure 1.0000
+  mbpp32B_inst__chat         cases  12 k 8  sel 0.8706  pure 0.9952
+  mbpp32B_inst__chat         cases  24 k 2  sel 0.8776  pure 1.0000
+  mbpp32B_inst__chat         cases  24 k 4  sel 0.8824  pure 1.0000
+  mbpp32B_inst__chat         cases  24 k 8  sel 0.8706  pure 0.9952
+  mbpp32B_inst__chat         cases  48 k 2  sel 0.8776  pure 1.0000
+  mbpp32B_inst__chat         cases  48 k 4  sel 0.8824  pure 1.0000
+  mbpp32B_inst__chat         cases  48 k 8  sel 0.8706  pure 0.9951
+  mbpp32B_inst__shared       cases   2 k 2  sel 0.8565  pure 0.9905
+  mbpp32B_inst__shared       cases   2 k 4  sel 0.8635  pure 0.9881
+  mbpp32B_inst__shared       cases   2 k 8  sel 0.8588  pure 0.9785
+  mbpp32B_inst__shared       cases   4 k 2  sel 0.8565  pure 0.9905
+  mbpp32B_inst__shared       cases   4 k 4  sel 0.8635  pure 0.9905
+  mbpp32B_inst__shared       cases   4 k 8  sel 0.8612  pure 0.9809
+  mbpp32B_inst__shared       cases   6 k 2  sel 0.8565  pure 0.9952
+  mbpp32B_inst__shared       cases   6 k 4  sel 0.8612  pure 0.9928
+  mbpp32B_inst__shared       cases   6 k 8  sel 0.8588  pure 0.9856
+  mbpp32B_inst__shared       cases  12 k 2  sel 0.8612  pure 0.9976
+  mbpp32B_inst__shared       cases  12 k 4  sel 0.8612  pure 0.9951
+  mbpp32B_inst__shared       cases  12 k 8  sel 0.8612  pure 0.9928
+  mbpp32B_inst__shared       cases  24 k 2  sel 0.8588  pure 0.9976
+  mbpp32B_inst__shared       cases  24 k 4  sel 0.8588  pure 0.9976
+  mbpp32B_inst__shared       cases  24 k 8  sel 0.8565  pure 0.9952
+  mbpp32B_inst__shared       cases  48 k 2  sel 0.8588  pure 0.9976
+  mbpp32B_inst__shared       cases  48 k 4  sel 0.8588  pure 0.9976
+  mbpp32B_inst__shared       cases  48 k 8  sel 0.8565  pure 0.9951
+  mbpp3B_inst__chat          cases   2 k 2  sel 0.7012  pure 0.9808
+  mbpp3B_inst__chat          cases   2 k 4  sel 0.7365  pure 0.9512
+  mbpp3B_inst__chat          cases   2 k 8  sel 0.7788  pure 0.9187
+  mbpp3B_inst__chat          cases   4 k 2  sel 0.7012  pure 0.9918
+  mbpp3B_inst__chat          cases   4 k 4  sel 0.7388  pure 0.9692
+  mbpp3B_inst__chat          cases   4 k 8  sel 0.7859  pure 0.9483
+  mbpp3B_inst__chat          cases   6 k 2  sel 0.7012  pure 0.9945
+  mbpp3B_inst__chat          cases   6 k 4  sel 0.7388  pure 0.9794
+  mbpp3B_inst__chat          cases   6 k 8  sel 0.7835  pure 0.9631
+  mbpp3B_inst__chat          cases  12 k 2  sel 0.7012  pure 0.9945
+  mbpp3B_inst__chat          cases  12 k 4  sel 0.7388  pure 0.9871
+  mbpp3B_inst__chat          cases  12 k 8  sel 0.7812  pure 0.9704
+  mbpp3B_inst__chat          cases  24 k 2  sel 0.6988  pure 0.9972
+  mbpp3B_inst__chat          cases  24 k 4  sel 0.7365  pure 0.9896
+  mbpp3B_inst__chat          cases  24 k 8  sel 0.7812  pure 0.9728
+  mbpp3B_inst__chat          cases  48 k 2  sel 0.6965  pure 0.9972
+  mbpp3B_inst__chat          cases  48 k 4  sel 0.7341  pure 0.9922
+  mbpp3B_inst__chat          cases  48 k 8  sel 0.7788  pure 0.9752
+  mbpp3B_inst__shared        cases   2 k 2  sel 0.7106  pure 0.9817
+  mbpp3B_inst__shared        cases   2 k 4  sel 0.7600  pure 0.9407
+  mbpp3B_inst__shared        cases   2 k 8  sel 0.7929  pure 0.9275
+  mbpp3B_inst__shared        cases   4 k 2  sel 0.7082  pure 0.9921
+  mbpp3B_inst__shared        cases   4 k 4  sel 0.7624  pure 0.9703
+  mbpp3B_inst__shared        cases   4 k 8  sel 0.8000  pure 0.9614
+  mbpp3B_inst__shared        cases   6 k 2  sel 0.7082  pure 0.9948
+  mbpp3B_inst__shared        cases   6 k 4  sel 0.7647  pure 0.9827
+  mbpp3B_inst__shared        cases   6 k 8  sel 0.8024  pure 0.9734
+  mbpp3B_inst__shared        cases  12 k 2  sel 0.7082  pure 0.9974
+  mbpp3B_inst__shared        cases  12 k 4  sel 0.7647  pure 0.9876
+  mbpp3B_inst__shared        cases  12 k 8  sel 0.8024  pure 0.9854
+  mbpp3B_inst__shared        cases  24 k 2  sel 0.7082  pure 0.9974
+  mbpp3B_inst__shared        cases  24 k 4  sel 0.7576  pure 0.9876
+  mbpp3B_inst__shared        cases  24 k 8  sel 0.7976  pure 0.9854
+  mbpp3B_inst__shared        cases  48 k 2  sel 0.7082  pure 0.9974
+  mbpp3B_inst__shared        cases  48 k 4  sel 0.7553  pure 0.9900
+  mbpp3B_inst__shared        cases  48 k 8  sel 0.7953  pure 0.9878
+  mbpp7B_inst__chat          cases   2 k 2  sel 0.7694  pure 0.9897
+  mbpp7B_inst__chat          cases   2 k 4  sel 0.8188  pure 0.9562
+  mbpp7B_inst__chat          cases   2 k 8  sel 0.8400  pure 0.9258
+  mbpp7B_inst__chat          cases   4 k 2  sel 0.7694  pure 0.9948
+  mbpp7B_inst__chat          cases   4 k 4  sel 0.8212  pure 0.9708
+  mbpp7B_inst__chat          cases   4 k 8  sel 0.8447  pure 0.9450
+  mbpp7B_inst__chat          cases   6 k 2  sel 0.7694  pure 1.0000
+  mbpp7B_inst__chat          cases   6 k 4  sel 0.8188  pure 0.9830
+  mbpp7B_inst__chat          cases   6 k 8  sel 0.8400  pure 0.9617
+  mbpp7B_inst__chat          cases  12 k 2  sel 0.7694  pure 1.0000
+  mbpp7B_inst__chat          cases  12 k 4  sel 0.8165  pure 0.9878
+  mbpp7B_inst__chat          cases  12 k 8  sel 0.8424  pure 0.9713
+  mbpp7B_inst__chat          cases  24 k 2  sel 0.7694  pure 1.0000
+  mbpp7B_inst__chat          cases  24 k 4  sel 0.8188  pure 0.9878
+  mbpp7B_inst__chat          cases  24 k 8  sel 0.8424  pure 0.9736
+  mbpp7B_inst__chat          cases  48 k 2  sel 0.7694  pure 1.0000
+  mbpp7B_inst__chat          cases  48 k 4  sel 0.8188  pure 0.9877
+  mbpp7B_inst__chat          cases  48 k 8  sel 0.8424  pure 0.9736
+  mbpp7B_inst__shared        cases   2 k 2  sel 0.7576  pure 0.9851
+  mbpp7B_inst__shared        cases   2 k 4  sel 0.7812  pure 0.9494
+  mbpp7B_inst__shared        cases   2 k 8  sel 0.8165  pure 0.9330
+  mbpp7B_inst__shared        cases   4 k 2  sel 0.7600  pure 0.9950
+  mbpp7B_inst__shared        cases   4 k 4  sel 0.7835  pure 0.9711
+  mbpp7B_inst__shared        cases   4 k 8  sel 0.8212  pure 0.9569
+  mbpp7B_inst__shared        cases   6 k 2  sel 0.7600  pure 0.9975
+  mbpp7B_inst__shared        cases   6 k 4  sel 0.7812  pure 0.9831
+  mbpp7B_inst__shared        cases   6 k 8  sel 0.8282  pure 0.9665
+  mbpp7B_inst__shared        cases  12 k 2  sel 0.7600  pure 0.9975
+  mbpp7B_inst__shared        cases  12 k 4  sel 0.7812  pure 0.9855
+  mbpp7B_inst__shared        cases  12 k 8  sel 0.8282  pure 0.9761
+  mbpp7B_inst__shared        cases  24 k 2  sel 0.7600  pure 0.9975
+  mbpp7B_inst__shared        cases  24 k 4  sel 0.7788  pure 0.9855
+  mbpp7B_inst__shared        cases  24 k 8  sel 0.8282  pure 0.9808
+  mbpp7B_inst__shared        cases  48 k 2  sel 0.7576  pure 0.9975
+  mbpp7B_inst__shared        cases  48 k 4  sel 0.7788  pure 0.9855
+  mbpp7B_inst__shared        cases  48 k 8  sel 0.8282  pure 0.9808
+
+  floor 0.7185  oracle 0.8887
+  cases12_k2       0.7548
+  cases12_k4       0.7849
+  cases12_k8       0.8099
+  cases24_k2       0.7543
+  cases24_k4       0.7840
+  cases24_k8       0.8097
+  cases2_k2        0.7546
+  cases2_k4        0.7868
+  cases2_k8        0.8073
+  cases48_k2       0.7539
+  cases48_k4       0.7835
+  cases48_k8       0.8092
+  cases4_k2        0.7546
+  cases4_k4        0.7873
+  cases4_k8        0.8092
+  cases6_k2        0.7546
+  cases6_k4        0.7856
+  cases6_k8        0.8094
+
+wrote /root/srt-adapter/artifacts/nla/verifier/probe_depth.json

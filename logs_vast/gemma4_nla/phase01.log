@@ -1,0 +1,19 @@
+=== phase 0: env check ===
+torch 2.12.0+cu130 cuda True
+env OK
+=== phase 1: gemma-4 load smoke ===
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [03:21<03:21, 201.58s/it]Fetching 2 files: 100%|██████████| 2/2 [03:21<00:00, 100.79s/it]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 13507.86it/s]
+Traceback (most recent call last):
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 289, in __getattr__
+    return self.data[item]
+           ~~~~~~~~~^^^^^^
+KeyError: 'cuda'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 291, in __getattr__
+    raise AttributeError
+AttributeError

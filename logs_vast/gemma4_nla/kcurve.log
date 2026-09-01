@@ -1,0 +1,233 @@
+2026-07-08 20:15:03,254 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 20:15:03,264 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 20:15:03,549 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-08 20:15:03,697 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 20:15:03,710 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 20:15:03,767 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-08 20:15:03,828 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 20:15:03,838 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-08 20:15:03,900 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2648.76it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  85%|████████▌ | 1014/1188 [00:00<00:00, 10131.94it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 10669.38it/s]
+2026-07-08 20:15:04,285 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 20:15:04,296 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/generation_config.json "HTTP/1.1 200 OK"
+2026-07-08 20:15:10,792 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 20:15:10,803 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 20:15:10,873 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 20:15:10,882 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 20:15:10,967 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 20:15:11,058 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 20:15:12,832 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 20:15:13,222 decode_probe AV loaded 2/2 keys (ckpt step 1200)
+2026-07-08 20:15:33,484 decode_probe tidx 6044
+  GOLD  : I started touching myself sexually at least when I was 7, is
+  GREEDY (0.385): S la l'on a l'idée d'un l'idée d'un l'idée d'un l'idée d'un 
+  BEST-S (0.541): T la la la la la! lala lala la la la! la la la la la lala la
+2026-07-08 20:15:40,843 decode_probe tidx 2890
+  GOLD  : Solid ash floating panel? I am currently building a cabinet 
+  GREEDY (0.667): SL1 10000000000000000000000000000000000000000000
+  BEST-S (0.729): KWOOD</strong> l s.t. a a. l l. l l l l l l l l l l l l l l 
+2026-07-08 20:15:48,251 decode_probe tidx 9399
+  GOLD  : First line - what is a "sharp" noise? (Normally I'm not this
+  GREEDY (0.659): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.688): C8 a a set of a set a set of set etc. an infinite process. a
+2026-07-08 20:15:55,646 decode_probe tidx 1917
+  GOLD  : Sure, but what makes it even more ugly is that the String is
+  GREEDY (0.428): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.564): B la l'on l'a l'on l'a l'on l'on l'a l'on l'a l'on l'a l'on 
+2026-07-08 20:16:03,066 decode_probe tidx 4919
+  GOLD  : Being new to trading, I have to say I like the Kraken interf
+  GREEDY (0.444): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.621):  single111-26941"
+    },
+    {
+        "model": "gpt-4o",
+  
+2026-07-08 20:16:10,514 decode_probe tidx 1729
+  GOLD  : Concept I’ve always loved to make music and after going to a
+  GREEDY (0.474): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.535): S la a l'ordinatateur et an l'affichage a l'ecran est a l'en
+2026-07-08 20:16:17,998 decode_probe tidx 429
+  GOLD  : Who else plays better with their eyes shut? Over the years, 
+  GREEDY (0.558): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.608): MonATM l l l l l l l l l l l l l l l l l l l l l l l l l l l
+2026-07-08 20:16:25,502 decode_probe tidx 7532
+  GOLD  : Found an unusual container of unknown grounds this morning a
+  GREEDY (0.514): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.557): T1-000000-S1-S26.00224-S1-000200782-12-2009-03-2
+2026-07-08 20:16:33,030 decode_probe tidx 337
+  GOLD  : "Fearless Girl" is designed to call attention to a new initi
+  GREEDY (0.463): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.569): N11 l la l l l l l l l l l l l l l l l l l l l l l l l l l l
+2026-07-08 20:16:40,589 decode_probe tidx 8223
+  GOLD  : Is anybody having problems with their banking apps today? I’
+  GREEDY (0.527): S la l'on a l'habitude de l'avoir, on a l'habitude de l'avoi
+  BEST-S (0.604): B2012-05-13 - 11:02:34  I'm an electrical engineer but my a 
+2026-07-08 20:16:48,160 decode_probe tidx 981
+  GOLD  : Emrald Court gurgaon, DLF The Belaire gurgaon, DLF Summit gu
+  GREEDY (0.524): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.550):  singleL L l l l l k k l k k k l k l l k l k l l k l l l l k
+2026-07-08 20:16:55,741 decode_probe tidx 4869
+  GOLD  : I think understanding the term 'objectification' is one of t
+  GREEDY (0.486): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.551): L la lalla lala la lala lala lala lala lala la lala la la la
+2026-07-08 20:17:03,334 decode_probe tidx 784
+  GOLD  : Potential tax law questions for running a KS for a friend. O
+  GREEDY (0.593): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.760): B 1 2 1 2 1 5 1 1 1 1 3 1 3 1 1 1 2 1 2 1 1 2 2 
+2026-07-08 20:17:10,943 decode_probe tidx 4840
+  GOLD  : Fair enough, Russia basically just ever so slightly pulled o
+  GREEDY (0.497): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.538): L8e night shifts starting in a few weeks. i hate peopleWho’e
+2026-07-08 20:17:18,562 decode_probe tidx 5592
+  GOLD  : I want to write a memoir but I have no idea where or how to 
+  GREEDY (0.391): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.600): Lまいった。 ありがとうございます。"></div-1000-1000-1000-1000-1000-1000-1000
+2026-07-08 20:17:26,232 decode_probe tidx 6301
+  GOLD  : I'm slightly dubious about the petrodollar argument myself, 
+  GREEDY (0.509): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.568): H2S was the last thing I a bit an an idea that a person can 
+2026-07-08 20:17:33,872 decode_probe tidx 2920
+  GOLD  : I have a BS in CS and a BA in neuroscience. How can I best u
+  GREEDY (0.352): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.577): S la a la l'école. Par l'idéologie et l'éducation. C'est l'é
+2026-07-08 20:17:41,517 decode_probe tidx 4053
+  GOLD  : Yes, but you better be a good shot. If you already own the r
+  GREEDY (0.539): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.618): T6147-11018 | the anaylsis a l a la l l l l l l l l l l l l 
+2026-07-08 20:17:49,164 decode_probe tidx 8506
+  GOLD  : I often get most indignant over critiques that later turn ou
+  GREEDY (0.463): SS a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+  BEST-S (0.564): H la reason a an idea a la a la reason l a la reason l la re
+2026-07-08 20:17:56,820 decode_probe tidx 1426
+  GOLD  : I'm pretty lucky here. A guy in my club has 3 (one of which 
+  GREEDY (0.511): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.547): S10 an only a basic set in the very same way as we do with a
+2026-07-08 20:18:04,480 decode_probe tidx 7626
+  GOLD  : My options at the moment are limited, so bear with me... For
+  GREEDY (0.527): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.594): T1 12.0000000000"7.-100% of the current value of least commo
+2026-07-08 20:18:12,142 decode_probe tidx 8837
+  GOLD  : 350lb newbie Hi all, I'm overweight and dieting. I would lik
+  GREEDY (0.507): S1000RR a small amount of money a month. I a a a a a a a a a
+  BEST-S (0.656): L111747-02-01-01-21-0302-00-01:2-1T00_21.jpg
+-01-0
+2026-07-08 20:18:19,820 decode_probe tidx 4911
+  GOLD  : Buddhism teaches that there is no self, and that ego is an i
+  GREEDY (0.518): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.554): S1.0.2’ve spent the last few years doing a really specific k
+2026-07-08 20:18:27,482 decode_probe tidx 8606
+  GOLD  : This is what made me a bit sad to see, that even Jacobin see
+  GREEDY (0.447): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.545): TL;DR: Don't worry, it's normal for kids' personalities to d
+2026-07-08 20:18:35,148 decode_probe tidx 2288
+  GOLD  : The difference is pretty huge. The dynamic range of the Fish
+  GREEDY (0.575): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.727): C Genomics high an accurate an high an high high high high h
+2026-07-08 20:18:42,814 decode_probe tidx 5916
+  GOLD  : Haha. Yes it does...point taken. Although SAB relies on the 
+  GREEDY (0.479): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.541): B la a l'occasion d'être l'hôte d'un événement et j'ai été t
+2026-07-08 20:18:50,484 decode_probe tidx 297
+  GOLD  : Do you think we'll ever see another team like the 2000 Raven
+  GREEDY (0.560): S la l'on a l'idée d'un l'idée d'un l'idée d'un l'idée d'un 
+  BEST-S (0.564): L la l'idée. Juste l'impression d'avoir l'impression d'être 
+2026-07-08 20:18:58,156 decode_probe tidx 2751
+  GOLD  : Get something with a stick. If you haven't driven a manual, 
+  GREEDY (0.516): S1000RR is a great bike. I love the bike. I love the engine,
+  BEST-S (0.552): B664, the original design had a sleek aesthetic that I appre
+2026-07-08 20:19:05,835 decode_probe tidx 4237
+  GOLD  : Man, I feel you. Though, I do regret everything...because if
+  GREEDY (0.461): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.545): H la vuvuzelas. No one likes it. Just ban it. Let's just sto
+2026-07-08 20:19:13,525 decode_probe tidx 137
+  GOLD  : Sure, but generally speaking, anyone who could apply SA to a
+  GREEDY (0.393): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.575): S la l'est a l'est l'est l'est l'est l'est... No wait, that'
+2026-07-08 20:19:21,202 decode_probe tidx 3531
+  GOLD  : In the first example, the comma is used because it is a head
+  GREEDY (0.468): SS a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+  BEST-S (0.626):  small and high small small a small any a small a small a sm
+2026-07-08 20:19:28,887 decode_probe tidx 3886
+  GOLD  : Chrono Cross was the real deal. I loved the combat system, t
+  GREEDY (0.496): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.654): S la maman l'a a lâchee early l'ancienne version, mais ça a 
+2026-07-08 20:19:36,591 decode_probe tidx 6147
+  GOLD  : We’re going to try to only buy things second hand unless we 
+  GREEDY (0.473): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.527): H44 a high blood pressure medication for blood pressure cont
+2026-07-08 20:19:44,274 decode_probe tidx 1899
+  GOLD  : I'm going to go ahead and be the bearer of bad/pessimist new
+  GREEDY (0.496): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.536): PS S 22 an S 23’s are essentially the same phone. I got the 
+2026-07-08 20:19:51,954 decode_probe tidx 5147
+  GOLD  : I suck at my job, but I can't leave yet. I’ve been at this j
+  GREEDY (0.455): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.532): B一天前，我的一个粉丝在她的朋友圈里发了一个类似“我打算在这个一个月内给自己安排一次给自己的一次深度休息，彻底地不工作一
+2026-07-08 20:19:59,632 decode_probe tidx 8950
+  GOLD  : Prepping uncooked meals I tend to get home late at night and
+  GREEDY (0.536): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.558): S - a a l o n g w i t h i n t h e n u a n s e s e d i a l s 
+2026-07-08 20:20:07,316 decode_probe tidx 3086
+  GOLD  : Actually... through pour overs, the extraction into the cup 
+  GREEDY (0.465): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.648): S la l’indice di breakthrough l’indice a l l’indice la l l l
+2026-07-08 20:20:15,006 decode_probe tidx 684
+  GOLD  : That inverse relationship is a funny thing. I tried to recov
+  GREEDY (0.548): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.590): B la an l' l l' l' l l l' l l' l l l' l l l' l l' l l' l l l
+2026-07-08 20:20:22,690 decode_probe tidx 7245
+  GOLD  : How do I attach a table top? I'm in the middle of a cherry t
+  GREEDY (0.538): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.645): N1 l l l l l l l l l l l l l l l l l l l l l l l l l l l t l
+2026-07-08 20:20:30,372 decode_probe tidx 7645
+  GOLD  : Noobs like me make sure you check your tyre pressures! (Was 
+  GREEDY (0.499): S la l'on a l'idée d'un l'idée d'un l'idée d'un l'idée d'un 
+  BEST-S (0.543): SuperCarlo is the latest in an array of new projects by the 
+2026-07-08 20:20:38,054 decode_probe tidx 3858
+  GOLD  : Would you stay at a company because you know it will be good
+  GREEDY (0.432): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.568): Small la l'ordinatore a l'interno. È l'unico modo per farla 
+2026-07-08 20:20:45,733 decode_probe tidx 5334
+  GOLD  : I suppose it all comes down to liberals hating Christians an
+  GREEDY (0.716): S la l'on a l'idée d'un l'idée d'un l'idée d'un l'idée d'un 
+  BEST-S (0.715): G la l'unité a l'unité l'unité l'unité l'unité l'unité l'uni
+2026-07-08 20:20:53,473 decode_probe tidx 6624
+  GOLD  : There are hundreds of them all over the country in local mar
+  GREEDY (0.437): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.529):  single - a very short comic strip about a girl who has high
+2026-07-08 20:21:01,153 decode_probe tidx 914
+  GOLD  : Feminism & Men Rights Movement - You Share The Same Goals; T
+  GREEDY (0.574): S la l'on a l'idée d'un l'idée d'un l'idée d'un l'idée d'un 
+  BEST-S (0.589): SmallS a great story. I really liked the way it started. I f
+2026-07-08 20:21:08,830 decode_probe tidx 8291
+  GOLD  : A humane way is elegant, but not strategic according to His 
+  GREEDY (0.477): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.568): B1-6000 a low cost low noise high power light energy efficie
+2026-07-08 20:21:16,508 decode_probe tidx 8687
+  GOLD  : I don't know enough about how EU institutions work to say wh
+  GREEDY (0.543): SL1.00000000000000000000000000000000000000000000
+  BEST-S (0.551): S1. an l l l in l l l l l l l l l l l l l l l l l l l l l l 
+2026-07-08 20:21:24,180 decode_probe tidx 9347
+  GOLD  : &009; &009; &009; 1999 F-117A shootdown --- The 1999 F-117A 
+  GREEDY (0.566): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.635): B115's the a beautiful a gorgeous high a lovely beautiful a 
+2026-07-08 20:21:31,851 decode_probe tidx 4233
+  GOLD  : If the price is cheap ? and you are not going to invest a lo
+  GREEDY (0.480): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.523): L少数
+目次にまとめられた項目が多すぎます。
+
+もっと簡潔にすることを検討してください。
+thought
+目次が多すぎる
+2026-07-08 20:21:39,519 decode_probe tidx 4894
+  GOLD  : Voting is probably your best bet at getting anything you wan
+  GREEDY (0.370): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.686): T la l'envers du décor, an l'envers du décor.
+C'est l'envers
+2026-07-08 20:21:47,194 decode_probe tidx 4337
+  GOLD  : Oof, that's rough. My half sister's father was a window inst
+  GREEDY (0.470): S la l'on a l'habitude de l'avoir, mais on a l'habitude de l
+  BEST-S (0.587): B la a a a a la la l la l l a la la l a l l a la l l a l l a
+2026-07-08 20:21:47,194 decode_probe wrote artifacts/nla/gemma4/kcurve_ce.jsonl

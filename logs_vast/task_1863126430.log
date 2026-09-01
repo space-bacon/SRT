@@ -1,0 +1,12 @@
+shard 0/1  1 models  164 prompts  K=32  batch=12  -> artifacts/nla/he_k32
+  coder14B_inst
+
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 13422.70it/s]
+  coder14B_inst    loaded 4s, running 1 arm(s)
+  coder14B_inst    shared           12/164  [   12/164   7.3%  elapsed 0:56  ETA 11:54  13/min]
+  coder14B_inst    shared           60/164  [   60/164  36.6%  elapsed 4:46  ETA 8:17  13/min]
+  coder14B_inst    shared          108/164  [  108/164  65.9%  elapsed 9:59  ETA 5:11  11/min]
+  coder14B_inst    shared          156/164  [  156/164  95.1%  elapsed 15:09  ETA 0:46  10/min]
+  coder14B_inst    shared         DONE          [  164/164 100.0%  elapsed 16:01  ETA 0:00  10/min]
+
+shard 0 complete  [  164/164 100.0%  elapsed 16:01  ETA 0:00  10/min]

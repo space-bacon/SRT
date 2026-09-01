@@ -1,0 +1,54 @@
+2026-07-08 18:20:47,924 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:20:47,935 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 18:20:48,217 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-08 18:20:48,311 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:20:48,320 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 18:20:48,457 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-08 18:20:48,515 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:20:48,524 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-08 18:20:48,615 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 2730.67it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 684/1188 [00:00<00:00, 6828.87it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 6922.55it/s]
+2026-07-08 18:20:49,067 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:20:49,076 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/generation_config.json "HTTP/1.1 200 OK"
+2026-07-08 18:20:55,578 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:20:55,587 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 18:20:55,716 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 18:20:55,728 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 18:20:55,813 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 18:20:55,880 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 18:20:57,663 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 18:20:58,040 decode_probe AV loaded 2/2 keys (ckpt step 1200)
+2026-07-08 18:21:16,211 decode_probe tidx 6044
+  GOLD  : I started touching myself sexually at least when I was 7, is
+  GREEDY (0.385): S la l'on a l'idée d'un l'idée d'un l'idée d'un l'idée d'un 
+  BEST-S (0.605): S la an l'entrée a l'idée d'un an l'idée d'un l'entrée a l'i
+2026-07-08 18:21:21,485 decode_probe tidx 2890
+  GOLD  : Solid ash floating panel? I am currently building a cabinet 
+  GREEDY (0.667): SL1 10000000000000000000000000000000000000000000
+  BEST-S (0.691): S8 l s l’ a s n l- a s l l s a l k l s a l k a l s l k l l a
+2026-07-08 18:21:26,762 decode_probe tidx 9399
+  GOLD  : First line - what is a "sharp" noise? (Normally I'm not this
+  GREEDY (0.659): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.684):  small and smallIn an a a an an a an an a an an a an an a an
+2026-07-08 18:21:32,049 decode_probe tidx 1917
+  GOLD  : Sure, but what makes it even more ugly is that the String is
+  GREEDY (0.428): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.558): A1. I'm a bit confused by some of the folks on the la lundah
+2026-07-08 18:21:37,351 decode_probe tidx 4919
+  GOLD  : Being new to trading, I have to say I like the Kraken interf
+  GREEDY (0.444): S1000RR a a a a a a a a a a a a a a a a a a a a a a a a a a 
+  BEST-S (0.426): C la l'amazione d'un couple l'incertitude a tendance a s'ins
+2026-07-08 18:21:42,677 decode_probe tidx 1729
+  GOLD  : Concept I’ve always loved to make music and after going to a
+  GREEDY (0.474): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.481): C9 is just a general standard for a small home studio. My ge
+2026-07-08 18:21:48,005 decode_probe tidx 429
+  GOLD  : Who else plays better with their eyes shut? Over the years, 
+  GREEDY (0.558): S la l'on a l'impression que l'on a l'impression que l'on a 
+  BEST-S (0.596):  singular world. I thinking thinking an a a la a la la l’ l'
+2026-07-08 18:21:53,350 decode_probe tidx 7532
+  GOLD  : Found an unusual container of unknown grounds this morning a
+  GREEDY (0.514): S la l'on a l'habitude de l'entendre, on a l'impression que 
+  BEST-S (0.538): S la l'// l'a l l l' l l l l l l l l l l l l l l l l l l l l
+2026-07-08 18:21:53,350 decode_probe wrote artifacts/nla/gemma4/decode_probe_ce.jsonl

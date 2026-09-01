@@ -1,0 +1,13 @@
+6 arms, 48 candidates per problem
+floor 0.8398  oracle 0.9878
+
+  n_cases   2   selected 0.9329   purity 0.7076   resolved 164/164
+  n_cases   4   selected 0.9390   purity 0.7591   resolved 164/164
+  n_cases   6   selected 0.9390   purity 0.7730   resolved 164/164
+  n_cases  12   selected 0.9390   purity 0.8287   resolved 163/164
+  n_cases  24   selected 0.9390   purity 0.8578   resolved 163/164
+  n_cases  48   selected 0.9390   purity 0.8909   resolved 163/164
+
+  best n_cases 4, +0.0000 over the default
+
+wrote /root/srt-adapter/artifacts/nla/ensemble/cases_sweep.json

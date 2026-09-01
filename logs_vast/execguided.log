@@ -1,0 +1,50 @@
+humaneval: 164 problems, 116 with visible tests, 1.96 asserts each
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 13341.98it/s]
+  coder0.5B_base__raw                pass 0.0213  visible-pass 0.0191
+  coder0.5B_inst__chat               pass 0.1745  visible-pass 0.1585
+  coder0.5B_inst__persona            pass 0.0381  visible-pass 0.0366
+  coder0.5B_inst__raw                pass 0.0259  visible-pass 0.0198
+  coder0.5B_inst__shared             pass 0.1692  visible-pass 0.1585
+  coder0.5B_inst__shared_persona     pass 0.1562  visible-pass 0.1418
+  coder1.5B_base__raw                pass 0.0373  visible-pass 0.0221
+  coder1.5B_inst__chat               pass 0.3178  visible-pass 0.2614
+  coder1.5B_inst__persona            pass 0.0465  visible-pass 0.0343
+  coder1.5B_inst__raw                pass 0.0686  visible-pass 0.0541
+  coder1.5B_inst__shared             pass 0.2424  visible-pass 0.2088
+  coder1.5B_inst__shared_persona     pass 0.2767  visible-pass 0.2149
+  coder14B_base__raw                 pass 0.0465  visible-pass 0.0229
+  coder14B_inst__chat                pass 0.3636  visible-pass 0.2866
+  coder14B_inst__persona             pass 0.1052  visible-pass 0.0701
+  coder14B_inst__raw                 pass 0.0755  visible-pass 0.0419
+  coder14B_inst__shared              pass 0.5404  visible-pass 0.4062
+  coder14B_inst__shared_persona      pass 0.4329  visible-pass 0.3308
+  coder32B_base__raw                 pass 0.0366  visible-pass 0.0267
+  coder32B_inst__chat                pass 0.2401  visible-pass 0.1905
+  coder32B_inst__persona             pass 0.0968  visible-pass 0.0655
+  coder32B_inst__raw                 pass 0.0777  visible-pass 0.0541
+  coder32B_inst__shared              pass 0.2264  visible-pass 0.1890
+  coder32B_inst__shared_persona      pass 0.2058  visible-pass 0.1707
+  coder3B_base__raw                  pass 0.0213  visible-pass 0.0114
+  coder3B_inst__chat                 pass 0.2774  visible-pass 0.2203
+  coder3B_inst__persona              pass 0.1090  visible-pass 0.0724
+  coder3B_inst__raw                  pass 0.0549  visible-pass 0.0328
+  coder3B_inst__shared               pass 0.2782  visible-pass 0.2195
+  coder3B_inst__shared_persona       pass 0.2409  visible-pass 0.1928
+  coder7B_base__raw                  pass 0.0495  visible-pass 0.0252
+  coder7B_inst__chat                 pass 0.5404  visible-pass 0.3910
+  coder7B_inst__persona              pass 0.0945  visible-pass 0.0625
+  coder7B_inst__raw                  pass 0.1044  visible-pass 0.0587
+  coder7B_inst__shared               pass 0.4931  visible-pass 0.3720
+  coder7B_inst__shared_persona       pass 0.4375  visible-pass 0.3346
+  floor            0.1868
+  verifier         0.2639
+  exec             0.3943
+  exec_verifier    0.4148
+  oracle           0.4954
+
+  exec - floor          +0.2075
+  verifier - exec       -0.1304
+  exec+verifier - exec  +0.0205
+
+wrote /root/srt-adapter/artifacts/nla/verifier/exec_guided.json

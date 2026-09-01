@@ -1,0 +1,6 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 6374.32it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 946/1188 [00:00<00:00, 9428.56it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 9209.56it/s]
+control -> 0.803 Chasm bridged. .-/++://-:/+//+:. :odmmmmmmmmmmmmmNNmy+. -ymmNNNmNNNNNNNNNNNNNNNm+. -sdmmmmNNNNNNNNNNNmmmmmNNNN
+stereogram -> 0.776 Chasm bridged. .-/++://-:/+//+:. :odmmmmmmmmmmmmmNNmy+. -ymmNNNmNNNNNNNNNNNNNNNm+. -sdmmmmNNNNNNNNNNNmmmmmNNNN
+disparity -> 0.815 Chasm bridged. .-/++://-:/+//+:. :odmmmmmmmmmmmmmNNmy+. -ymmNNNmNNNNNNNNNNNNNNNm+. -sdmmmmNNNNNNNNNNNmmmmmNNNN
+WROTE artifacts/nla/gemma4/vision_nn_decode.json

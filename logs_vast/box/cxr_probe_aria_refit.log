@@ -1,0 +1,33 @@
+112120 encoded images, dim 2560
+  train 86524  test 25596  patient overlap 0 (must be 0)
+  device: cpu
+
+fitting probe
+fitting shuffled-label floor
+  test set: 25596 images from 2797 patients (9.15 per patient)
+
+finding                 n_pos   AUROC           95% CI  shuffled  view-only
+Atelectasis              3279  0.6802   [0.666, 0.695]    0.5072     0.5106
+Cardiomegaly             1069  0.7379   [0.712, 0.760]    0.5146     0.5178
+Effusion                 4658  0.7306   [0.718, 0.743]    0.4847     0.5345
+Infiltration             6112  0.6647   [0.654, 0.674]    0.4997     0.6051
+Mass                     1748  0.6595   [0.634, 0.682]    0.4979     0.5563
+Nodule                   1623  0.6118   [0.591, 0.633]    0.4975     0.5557
+Pneumonia                 555  0.6201   [0.596, 0.644]    0.5060     0.5724
+Pneumothorax             2665  0.7884   [0.771, 0.804]    0.4954     0.5829
+Consolidation            1815  0.6749   [0.658, 0.691]    0.4925     0.6177
+Edema                     925  0.7987   [0.779, 0.818]    0.4940     0.6811
+Emphysema                1093  0.7750   [0.751, 0.796]    0.4931     0.5722
+Fibrosis                  435  0.7301   [0.698, 0.761]    0.5069     0.6455
+Pleural_Thickening       1143  0.6848   [0.663, 0.708]    0.4967     0.5872
+Hernia                     86  0.7552   [0.669, 0.835]    0.5364     0.6967
+
+mean AUROC 0.7080   shuffled floor 0.5016   view-only 0.5883
+14/14 findings beat the view-only baseline
+
+SPLIT-MATCHED, both on the official test_list.txt:
+  Wang et al. 2017, ResNet-50 fine-tuned end to end  0.7451
+  ours, frozen backbone + linear probe               0.7080   -0.0371, ahead on 2/14
+context only, NOT our split (random 70/10/20 patient-disjoint, not the official list): Wang 0.7381, Yao 0.8027, CheXNet 0.8414
+
+wrote /root/cxr14_probe_aria.json

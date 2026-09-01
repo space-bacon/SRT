@@ -1,0 +1,22 @@
+shard 1/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'

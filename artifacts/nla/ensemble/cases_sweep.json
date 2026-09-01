@@ -1,0 +1,41 @@
+{
+  "question": "does agreement need more probe inputs than the default 6",
+  "n_problems": 164,
+  "pool_size": 48,
+  "floor": 0.8398,
+  "oracle": 0.9878,
+  "sweep": {
+    "2": {
+      "selected": 0.9329,
+      "resolved": 164,
+      "purity": 0.7076
+    },
+    "4": {
+      "selected": 0.939,
+      "resolved": 164,
+      "purity": 0.7591
+    },
+    "6": {
+      "selected": 0.939,
+      "resolved": 164,
+      "purity": 0.773
+    },
+    "12": {
+      "selected": 0.939,
+      "resolved": 163,
+      "purity": 0.8287
+    },
+    "24": {
+      "selected": 0.939,
+      "resolved": 163,
+      "purity": 0.8578
+    },
+    "48": {
+      "selected": 0.939,
+      "resolved": 163,
+      "purity": 0.8909
+    }
+  },
+  "best_n_cases": 4,
+  "gain_over_default_6": 0.0
+}

@@ -1,0 +1,69 @@
+QUEUE-START gpu=3 jobs=queues/gpu3.txt 2026-08-31T20:46:53+00:00
+QUEUE-JOB 1 gpu=3 2026-08-31T20:46:53+00:00 :: /venv/main/bin/python scripts/mbpp_ladder.py --k 32 --sizes 1.5B 0.5B --arms chat --out artifacts/nla/mbpp_k32 --batch 24
+shard 0/1  2 models  425 prompts  K=32  max_new=384  arms=['chat']  -> artifacts/nla/mbpp_k32
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 28113.96it/s]
+  mbpp1.5B_inst    loaded 1s, running 1 arm(s)
+  mbpp1.5B_inst    chat             24/425  [   24/850   2.8%  elapsed 0:54  ETA 31:27  26/min]
+  mbpp1.5B_inst    chat            120/425  [  120/850  14.1%  elapsed 4:20  ETA 26:23  28/min]
+  mbpp1.5B_inst    chat            216/425  [  216/850  25.4%  elapsed 7:43  ETA 22:41  28/min]
+  mbpp1.5B_inst    chat            312/425  [  312/850  36.7%  elapsed 11:12  ETA 19:19  28/min]
+  mbpp1.5B_inst    chat            408/425  [  408/850  48.0%  elapsed 14:41  ETA 15:55  28/min]
+  mbpp1.5B_inst    chat           DONE          [  425/850  50.0%  elapsed 15:16  ETA 15:16  28/min]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 12912.95it/s]
+  mbpp0.5B_inst    loaded 0s, running 1 arm(s)
+  mbpp0.5B_inst    chat             24/425  [  449/850  52.8%  elapsed 15:46  ETA 14:05  28/min]
+  mbpp0.5B_inst    chat            120/425  [  545/850  64.1%  elapsed 17:44  ETA 9:55  31/min]
+  mbpp0.5B_inst    chat            216/425  [  641/850  75.4%  elapsed 19:42  ETA 6:25  33/min]
+  mbpp0.5B_inst    chat            312/425  [  737/850  86.7%  elapsed 21:42  ETA 3:19  34/min]
+  mbpp0.5B_inst    chat            408/425  [  833/850  98.0%  elapsed 23:42  ETA 0:29  35/min]
+  mbpp0.5B_inst    chat           DONE          [  850/850 100.0%  elapsed 24:02  ETA 0:00  35/min]
+QUEUE-OK 1 gpu=3 2026-08-31T21:10:58+00:00
+QUEUE-JOB 2 gpu=3 2026-08-31T21:11:08+00:00 :: /venv/main/bin/python scripts/mbpp_ladder.py --k 32 --sizes 14B --arms shared --out artifacts/nla/mbpp_k32 --batch 8
+shard 0/1  1 models  425 prompts  K=32  max_new=384  arms=['shared']  -> artifacts/nla/mbpp_k32
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 13120.02it/s]
+  mbpp14B_inst     loaded 4s, running 1 arm(s)
+  mbpp14B_inst     shared            8/425  [    8/425   1.9%  elapsed 0:39  ETA 34:15  12/min]
+  mbpp14B_inst     shared           40/425  [   40/425   9.4%  elapsed 5:15  ETA 50:35  8/min]
+  mbpp14B_inst     shared           72/425  [   72/425  16.9%  elapsed 8:42  ETA 42:42  8/min]
+  mbpp14B_inst     shared          104/425  [  104/425  24.5%  elapsed 11:55  ETA 36:47  9/min]
+  mbpp14B_inst     shared          136/425  [  136/425  32.0%  elapsed 13:59  ETA 29:43  10/min]
+  mbpp14B_inst     shared          168/425  [  168/425  39.5%  elapsed 17:25  ETA 26:39  10/min]
+  mbpp14B_inst     shared          200/425  [  200/425  47.1%  elapsed 22:44  ETA 25:35  9/min]
+  mbpp14B_inst     shared          232/425  [  232/425  54.6%  elapsed 25:50  ETA 21:29  9/min]
+  mbpp14B_inst     shared          264/425  [  264/425  62.1%  elapsed 28:59  ETA 17:40  9/min]
+  mbpp14B_inst     shared          296/425  [  296/425  69.6%  elapsed 33:20  ETA 14:32  9/min]
+  mbpp14B_inst     shared          328/425  [  328/425  77.2%  elapsed 36:08  ETA 10:41  9/min]
+  mbpp14B_inst     shared          360/425  [  360/425  84.7%  elapsed 38:21  ETA 6:55  9/min]
+  mbpp14B_inst     shared          392/425  [  392/425  92.2%  elapsed 41:07  ETA 3:27  10/min]
+  mbpp14B_inst     shared          424/425  [  424/425  99.8%  elapsed 44:13  ETA 0:06  10/min]
+  mbpp14B_inst     shared         DONE          [  425/425 100.0%  elapsed 44:17  ETA 0:00  10/min]
+QUEUE-OK 2 gpu=3 2026-08-31T21:55:28+00:00
+QUEUE-JOB 3 gpu=3 2026-08-31T21:55:38+00:00 :: /venv/main/bin/python scripts/mbpp_ladder.py --k 32 --sizes 7B 3B --arms shared --out artifacts/nla/mbpp_k32 --batch 16
+shard 0/1  2 models  425 prompts  K=32  max_new=384  arms=['shared']  -> artifacts/nla/mbpp_k32
+QUEUE-START gpu=3 jobs=queues/gpu_latency.txt 2026-08-31T21:55:41+00:00
+QUEUE-JOB 1 gpu=3 2026-08-31T21:55:41+00:00 :: /venv/main/bin/python scripts/k_latency.py --model Qwen/Qwen2.5-Coder-14B-Instruct --out artifacts/nla/k_latency_14b.json
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 13390.99it/s]
+  mbpp7B_inst      loaded 2s, running 1 arm(s)
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 12792.56it/s]
+loaded in 10s
+  K=  1  median   7.49s
+  mbpp7B_inst      shared           16/425  [   16/850   1.9%  elapsed 2:13  ETA 115:53  7/min]
+  mbpp7B_inst      shared           80/425  [   80/850   9.4%  elapsed 6:40  ETA 64:13  12/min]
+  mbpp7B_inst      shared          144/425  [  144/850  16.9%  elapsed 10:48  ETA 52:58  13/min]
+  mbpp7B_inst      shared          208/425  [  208/850  24.5%  elapsed 15:18  ETA 47:15  14/min]
+  mbpp7B_inst      shared          272/425  [  272/850  32.0%  elapsed 19:48  ETA 42:05  14/min]
+  mbpp7B_inst      shared          336/425  [  336/850  39.5%  elapsed 24:17  ETA 37:10  14/min]
+  mbpp7B_inst      shared          400/425  [  400/850  47.1%  elapsed 28:49  ETA 32:25  14/min]
+  mbpp7B_inst      shared         DONE          [  425/850  50.0%  elapsed 30:26  ETA 30:26  14/min]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 13130.65it/s]
+  mbpp3B_inst      loaded 1s, running 1 arm(s)
+  mbpp3B_inst      shared           16/425  [  441/850  51.9%  elapsed 31:15  ETA 28:59  14/min]
+  mbpp3B_inst      shared           80/425  [  505/850  59.4%  elapsed 34:33  ETA 23:36  15/min]
+  mbpp3B_inst      shared          144/425  [  569/850  66.9%  elapsed 37:38  ETA 18:35  15/min]
+  mbpp3B_inst      shared          208/425  [  633/850  74.5%  elapsed 40:54  ETA 14:01  15/min]
+  mbpp3B_inst      shared          272/425  [  697/850  82.0%  elapsed 44:08  ETA 9:41  16/min]
+  mbpp3B_inst      shared          336/425  [  761/850  89.5%  elapsed 47:25  ETA 5:32  16/min]
+  mbpp3B_inst      shared          400/425  [  825/850  97.1%  elapsed 50:46  ETA 1:32  16/min]
+  mbpp3B_inst      shared         DONE          [  850/850 100.0%  elapsed 51:58  ETA 0:00  16/min]
+QUEUE-OK 3 gpu=3 2026-08-31T22:47:39+00:00
+QUEUE-DONE gpu=3 2026-08-31T22:47:49+00:00

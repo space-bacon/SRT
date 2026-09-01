@@ -1,0 +1,295 @@
+[23:21:35] watching the box; will bank each artifact as it lands
+[23:22:00] pulling cxr14_probe_aria.json (0.0 MB)
+Welcome to vast.ai. If authentication fails, try again after a few seconds, and double check your ssh key.
+Have fun!
+AI agents: READ /etc/vast-agents-guide.md (also linked as ./AGENTS.md) before acting on or describing this instance: it is the operating guide. ('vast-capabilities' shows live state only, not the guide.)
+[23:22:02]   got cxr14_probe_aria.json
+[23:22:37] pulling cxr14_aria.npz (1150.5 MB)
+Welcome to vast.ai. If authentication fails, try again after a few seconds, and double check your ssh key.
+Have fun!
+AI agents: READ /etc/vast-agents-guide.md (also linked as ./AGENTS.md) before acting on or describing this instance: it is the operating guide. ('vast-capabilities' shows live state only, not the guide.)
+[23:24:09]   got cxr14_aria.npz
+[23:24:15] committed + cxr14_probe_aria.json
+[01:42:06] pulling cxr14_probe_qwen3omni.json (0.0 MB)
+Welcome to vast.ai. If authentication fails, try again after a few seconds, and double check your ssh key.
+Have fun!
+AI agents: READ /etc/vast-agents-guide.md (also linked as ./AGENTS.md) before acting on or describing this instance: it is the operating guide. ('vast-capabilities' shows live state only, not the guide.)
+[01:42:08]   got cxr14_probe_qwen3omni.json
+[01:42:33] pulling cxr14_vendor_compare.json (0.0 MB)
+Welcome to vast.ai. If authentication fails, try again after a few seconds, and double check your ssh key.
+Have fun!
+AI agents: READ /etc/vast-agents-guide.md (also linked as ./AGENTS.md) before acting on or describing this instance: it is the operating guide. ('vast-capabilities' shows live state only, not the guide.)
+[01:42:36]   got cxr14_vendor_compare.json
+[01:43:07] pulling cxr14_qwen3omni.npz (920.8 MB)
+Welcome to vast.ai. If authentication fails, try again after a few seconds, and double check your ssh key.
+Have fun!
+AI agents: READ /etc/vast-agents-guide.md (also linked as ./AGENTS.md) before acting on or describing this instance: it is the operating guide. ('vast-capabilities' shows live state only, not the guide.)
+[01:44:31]   got cxr14_qwen3omni.npz
+[01:44:34] committed + cxr14_probe_qwen3omni.json cxr14_vendor_compare.json
+[01:48:01] pulling cxr14_transport.json (0.0 MB)
+Welcome to vast.ai. If authentication fails, try again after a few seconds, and double check your ssh key.
+Have fun!
+AI agents: READ /etc/vast-agents-guide.md (also linked as ./AGENTS.md) before acting on or describing this instance: it is the operating guide. ('vast-capabilities' shows live state only, not the guide.)
+[01:48:04]   got cxr14_transport.json
+[01:48:12] committed + cxr14_transport.json
+[05:23:20] deadline reached, backing up what we have
+[05:23:20] === supabase
+  ^ cxr14/Users__burtron__development__srt-adapter__artifacts__nla__omni__states__cxr14_aria.npz (1150.5 MB in 25 parts)
+  ^ cxr14/Users__burtron__development__srt-adapter__artifacts__nla__omni__states__cxr14_qwen3omni.npz (920.8 MB in 20 parts)
+  ^ cxr14/Users__burtron__development__srt-adapter__artifacts__nla__omni__states__cxr14_gemma4.npz (470.7 MB in 10 parts)
+  ^ cxr14/Users__burtron__development__srt-adapter__artifacts__nla__omni__states__nlst_gemma4.npz (6.4 MB)
+uploaded 4 file(s) to SRT/cxr14/
+[05:25:48] supabase done
+  ^ cxr14_results/artifacts__nla__centered_eval_10k.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__centered_eval_10k_M200.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__centered_eval_30k.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__centered_eval_30k_M200.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__clip_bias_sim.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__corpus_dispersion.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__corpus_dispersion_diachronic.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__corpus_fair_diachronic.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_ensemble3.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_ensemble_gemma4_aria.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_pool_sweep.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_probe.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_probe_aria.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_probe_full112k.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_probe_full112k_rerun.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_probe_patientboot.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_probe_qwen3omni.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_transport.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__cxr14_vendor_compare.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__nlst_manifest.json (0.1 MB)
+  ^ cxr14_results/artifacts__nla__nlst_probe.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__oracle_ceiling_30k.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__oracle_ceiling_30k_v2.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_bestofn.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_bestofn_np16.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_bestofn_np8.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_ce_np16.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_ce_np16_M4.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_ce_np16_mlp.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__probe_ce_np32.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__quant_4bit_states.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__rerank_eval_ce_seq64_np16.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__rerank_eval_ce_seq64_np16_v2.json (0.0 MB)
+  ^ cxr14_results/artifacts__nla__roundtrip_bestofk.json (0.0 MB)
+uploaded 34 file(s) to SRT/cxr14_results/
+[05:25:55] supabase json done
+[05:25:55] === lacie
+
+=== development  <- /Users/burtron/development
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 293274
+Number of files transferred: 504
+Total file size: 212 GB
+Total transferred file size: 5538 MB
+Unmatched data: 5538 MB
+Matched data: 0 B
+File list size: 28460 kB
+File list generation time: 4.571 seconds
+File list transfer time: 4.968 seconds
+Total sent: 5567 MB
+Total received: 12392 B
+
+sent 5567M bytes  received 12392 bytes  14871k bytes/sec
+total size is 212G  speedup is 38.16
+
+=== hf-cache  <- /Users/burtron/.cache/huggingface
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 2264
+Number of files transferred: 162
+Total file size: 110 GB
+Total transferred file size: 2224 MB
+Unmatched data: 2224 MB
+Matched data: 0 B
+File list size: 254 kB
+File list generation time: 0.067 seconds
+File list transfer time: 0.038 seconds
+Total sent: 2224 MB
+Total received: 4244 B
+
+sent 2224M bytes  received 4244 bytes  16884k bytes/sec
+total size is 110G  speedup is 49.46
+
+=== Downloads  <- /Users/burtron/Downloads
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 28664
+Number of files transferred: 2
+Total file size: 9052 MB
+Total transferred file size: 29250 B
+Unmatched data: 29250 B
+Matched data: 0 B
+File list size: 4521 kB
+File list generation time: 0.513 seconds
+File list transfer time: 0.486 seconds
+Total sent: 4551 kB
+Total received: 70 B
+
+sent 4551k bytes  received 70 bytes  365k bytes/sec
+total size is 9052M  speedup is 1989.06
+
+=== Desktop  <- /Users/burtron/Desktop
+  $ rsync -rlptD --delete --partial --human-readable --stats ...
+Number of files: 17423
+Number of files transferred: 0
+Total file size: 11445 MB
+Total transferred file size: 0 B
+Unmatched data: 0 B
+Matched data: 0 B
+File list size: 2100 kB
+File list generation time: 29.548 seconds
+File list transfer time: 0.305 seconds
+Total sent: 2100 kB
+Total received: 212 B
+
+sent 2100k bytes  received 212 bytes  78146 bytes/sec
+total size is 11445M  speedup is 5448.50
+
+=== hf-repos: 51 repos
+  [1/51] space/RiverRider/0.6b-decodes-31b
+Fetching 1013 files:   0%|          | 0/1013 [00:00<?, ?it/s]Fetching 1013 files:   0%|          | 2/1013 [00:00<01:54,  8.82it/s]Fetching 1013 files:   2%|▏         | 21/1013 [00:00<00:23, 42.49it/s]Fetching 1013 files:   3%|▎         | 35/1013 [00:00<00:16, 59.86it/s]Fetching 1013 files:   4%|▍         | 42/1013 [00:01<00:29, 32.81it/s]Fetching 1013 files:   5%|▍         | 48/1013 [00:01<00:35, 27.10it/s]Fetching 1013 files:   7%|▋         | 67/1013 [00:01<00:22, 41.51it/s]Fetching 1013 files:   9%|▉         | 96/1013 [00:01<00:14, 64.01it/s]Fetching 1013 files:  12%|█▏        | 124/1013 [00:02<00:13, 64.66it/s]Fetching 1013 files:  13%|█▎        | 132/1013 [00:02<00:19, 45.41it/s]Fetching 1013 files:  17%|█▋        | 173/1013 [00:03<00:10, 77.66it/s]Fetching 1013 files:  18%|█▊        | 184/1013 [00:03<00:11, 74.37it/s]Fetching 1013 files:  20%|█▉        | 202/1013 [00:04<00:28, 28.38it/s]Fetching 1013 files:  24%|██▍       | 243/1013 [00:05<00:15, 50.82it/s]Fetching 1013 files:  26%|██▌       | 260/1013 [00:05<00:13, 57.69it/s]Fetching 1013 files:  27%|██▋       | 275/1013 [00:05<00:13, 55.89it/s]Fetching 1013 files:  29%|██▉       | 294/1013 [00:05<00:10, 67.78it/s]Fetching 1013 files:  32%|███▏      | 320/1013 [00:07<00:21, 31.82it/s]Fetching 1013 files:  33%|███▎      | 330/1013 [00:07<00:25, 27.16it/s]Fetching 1013 files:  34%|███▍      | 345/1013 [00:08<00:22, 29.12it/s]Fetching 1013 files:  36%|███▌      | 367/1013 [00:09<00:25, 25.72it/s]Fetching 1013 files:  40%|████      | 409/1013 [00:09<00:12, 47.39it/s]Fetching 1013 files:  43%|████▎     | 437/1013 [00:10<00:13, 41.70it/s]Fetching 1013 files:  44%|████▍     | 449/1013 [00:11<00:19, 29.10it/s]Fetching 1013 files:  52%|█████▏    | 524/1013 [00:11<00:07, 62.45it/s]Fetching 1013 files:  55%|█████▌    | 560/1013 [00:12<00:07, 63.73it/s]Fetching 1013 files:  59%|█████▊    | 593/1013 [00:12<00:05, 81.75it/s]Fetching 1013 files:  60%|██████    | 612/1013 [00:12<00:04, 80.84it/s]Fetching 1013 files:  65%|██████▍   | 655/1013 [00:12<00:03, 115.86it/s]Fetching 1013 files:  67%|██████▋   | 679/1013 [00:13<00:05, 57.33it/s] Fetching 1013 files:  69%|██████▉   | 704/1013 [00:13<00:04, 71.22it/s]Fetching 1013 files:  71%|███████▏  | 724/1013 [00:15<00:08, 34.60it/s]Fetching 1013 files:  73%|███████▎  | 738/1013 [00:16<00:12, 22.86it/s]Fetching 1013 files:  75%|███████▍  | 756/1013 [00:16<00:08, 29.24it/s]Fetching 1013 files:  77%|███████▋  | 785/1013 [00:17<00:05, 43.55it/s]Fetching 1013 files:  81%|████████  | 818/1013 [00:17<00:03, 64.36it/s]Fetching 1013 files:  86%|████████▌ | 873/1013 [00:17<00:01, 109.59it/s]Fetching 1013 files:  92%|█████████▏| 937/1013 [00:17<00:00, 171.53it/s]Fetching 1013 files:  96%|█████████▋| 977/1013 [00:17<00:00, 183.18it/s]Fetching 1013 files: 100%|██████████| 1013/1013 [00:17<00:00, 57.27it/s]
+  [2/51] space/RiverRider/0.6b-reads-27b
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 120.10it/s]
+  [3/51] model/RiverRider/Gemma-4-31B-it-SRT-Sunstone
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]Fetching 3 files: 100%|██████████| 3/3 [00:00<00:00, 16.54it/s]Fetching 3 files: 100%|██████████| 3/3 [00:00<00:00, 16.53it/s]
+  [4/51] model/RiverRider/gemma-4-31B-it-nf4
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files:  11%|█         | 1/9 [00:01<00:12,  1.56s/it]Fetching 9 files:  89%|████████▉ | 8/9 [00:01<00:00,  5.53it/s]Fetching 9 files: 100%|██████████| 9/9 [00:01<00:00,  4.84it/s]
+  [5/51] model/RiverRider/srt-adapter-gptoss20b
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files:  25%|██▌       | 1/4 [00:00<00:00,  4.32it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 17.24it/s]
+  [6/51] model/RiverRider/srt-adapter-qwen3-235b
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files:  20%|██        | 1/5 [00:00<00:01,  2.06it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00,  6.49it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00,  5.74it/s]
+  [7/51] dataset/RiverRider/srt-adapter-training-backup
+Fetching 643 files:   0%|          | 0/643 [00:00<?, ?it/s]Fetching 643 files:   0%|          | 1/643 [00:00<04:44,  2.26it/s]Fetching 643 files:   1%|          | 5/643 [00:00<01:41,  6.26it/s]Fetching 643 files:   1%|▏         | 9/643 [00:01<01:16,  8.29it/s]Fetching 643 files:   2%|▏         | 16/643 [00:01<01:09,  9.03it/s]Fetching 643 files:   3%|▎         | 21/643 [00:02<00:49, 12.46it/s]Fetching 643 files:   4%|▎         | 23/643 [00:02<00:54, 11.43it/s]Fetching 643 files:   4%|▍         | 25/643 [00:03<02:00,  5.13it/s]Fetching 643 files:   8%|▊         | 53/643 [00:03<00:24, 23.81it/s]Fetching 643 files:  13%|█▎        | 86/643 [00:04<00:20, 27.62it/s]Fetching 643 files:  23%|██▎       | 148/643 [00:04<00:07, 65.33it/s]Fetching 643 files:  27%|██▋       | 171/643 [00:05<00:09, 50.68it/s]Fetching 643 files:  29%|██▉       | 188/643 [00:06<00:13, 32.97it/s]Fetching 643 files:  42%|████▏     | 267/643 [00:08<00:09, 40.08it/s]Fetching 643 files:  48%|████▊     | 311/643 [00:09<00:07, 41.60it/s]Fetching 643 files:  58%|█████▊    | 374/643 [00:11<00:06, 39.97it/s]Fetching 643 files:  61%|██████    | 390/643 [00:11<00:05, 43.39it/s]Fetching 643 files:  75%|███████▌  | 483/643 [00:11<00:02, 74.44it/s]Fetching 643 files:  77%|███████▋  | 496/643 [00:13<00:03, 41.12it/s]Fetching 643 files:  80%|███████▉  | 512/643 [00:13<00:03, 40.39it/s]Fetching 643 files:  85%|████████▌ | 548/643 [00:15<00:02, 32.26it/s]Fetching 643 files:  90%|█████████ | 579/643 [00:16<00:01, 33.11it/s]Fetching 643 files:  92%|█████████▏| 592/643 [00:16<00:01, 34.06it/s]Fetching 643 files:  95%|█████████▍| 610/643 [00:16<00:00, 40.94it/s]Fetching 643 files:  98%|█████████▊| 631/643 [00:17<00:00, 38.25it/s]Fetching 643 files: 100%|█████████▉| 642/643 [00:17<00:00, 32.93it/s]Fetching 643 files: 100%|██████████| 643/643 [00:17<00:00, 35.78it/s]
+  [8/51] model/RiverRider/srt-adapter-v1.0
+Fetching 34 files:   0%|          | 0/34 [00:00<?, ?it/s]Fetching 34 files: 100%|██████████| 34/34 [00:00<00:00, 564.53it/s]
+  [9/51] space/RiverRider/srt-adapter-v1.0-demo
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s]Fetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 144.75it/s]
+  [10/51] model/RiverRider/srt-adapter-v18
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 85.83it/s]
+  [11/51] model/RiverRider/srt-adapter-v21a
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 84.15it/s]
+  [12/51] model/RiverRider/srt-adapter-v22c_a050
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 120.15it/s]
+  [13/51] model/RiverRider/srt-adapter-v8a
+Fetching 36 files:   0%|          | 0/36 [00:00<?, ?it/s]Fetching 36 files: 100%|██████████| 36/36 [00:00<00:00, 319.32it/s]Fetching 36 files: 100%|██████████| 36/36 [00:00<00:00, 319.00it/s]
+  [14/51] space/RiverRider/srt-adapter-v8a-demo
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s]Fetching 13 files:  85%|████████▍ | 11/13 [00:00<00:00, 89.73it/s]Fetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 105.94it/s]
+  [15/51] space/RiverRider/srt-browser-demo
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files:  55%|█████▍    | 6/11 [00:00<00:00, 39.66it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 68.85it/s]
+  [16/51] model/RiverRider/srt-browser-head-118k
+Fetching 33 files:   0%|          | 0/33 [00:00<?, ?it/s]Fetching 33 files: 100%|██████████| 33/33 [00:00<00:00, 361.93it/s]
+  [17/51] dataset/RiverRider/srt-coco-thumbs
+Fetching 10340 files:   0%|          | 0/10340 [00:00<?, ?it/s]Fetching 10340 files:   0%|          | 2/10340 [00:00<40:17,  4.28it/s]Fetching 10340 files:   0%|          | 15/10340 [00:00<05:31, 31.12it/s]Fetching 10340 files:   0%|          | 24/10340 [00:00<03:57, 43.34it/s]Fetching 10340 files:   0%|          | 33/10340 [00:00<03:10, 54.02it/s]Fetching 10340 files:   0%|          | 41/10340 [00:00<03:06, 55.10it/s]Fetching 10340 files:   0%|          | 48/10340 [00:01<02:58, 57.54it/s]Fetching 10340 files:   1%|          | 55/10340 [00:01<03:50, 44.58it/s]Fetching 10340 files:   1%|          | 66/10340 [00:01<02:56, 58.34it/s]Fetching 10340 files:   1%|          | 76/10340 [00:01<02:31, 67.53it/s]Fetching 10340 files:   1%|          | 90/10340 [00:01<02:06, 81.28it/s]Fetching 10340 files:   1%|          | 105/10340 [00:01<01:50, 92.34it/s]Fetching 10340 files:   1%|          | 115/10340 [00:01<01:54, 89.50it/s]Fetching 10340 files:   1%|          | 125/10340 [00:02<02:03, 82.52it/s]Fetching 10340 files:   1%|▏         | 135/10340 [00:02<02:01, 83.71it/s]Fetching 10340 files:   1%|▏         | 152/10340 [00:02<01:47, 94.43it/s]Fetching 10340 files:   2%|▏         | 162/10340 [00:02<02:09, 78.55it/s]Fetching 10340 files:   2%|▏         | 171/10340 [00:03<05:03, 33.55it/s]Fetching 10340 files:   2%|▏         | 178/10340 [00:04<08:01, 21.11it/s]Fetching 10340 files:   2%|▏         | 195/10340 [00:04<05:01, 33.70it/s]Fetching 10340 files:   2%|▏         | 204/10340 [00:04<04:25, 38.14it/s]Fetching 10340 files:   2%|▏         | 216/10340 [00:04<03:38, 46.40it/s]Fetching 10340 files:   2%|▏         | 233/10340 [00:04<02:45, 61.01it/s]Fetching 10340 files:   2%|▏         | 252/10340 [00:04<02:28, 67.79it/s]Fetching 10340 files:   3%|▎         | 263/10340 [00:04<02:21, 71.10it/s]Fetching 10340 files:   3%|▎         | 273/10340 [00:05<02:17, 72.99it/s]Fetching 10340 files:   3%|▎         | 291/10340 [00:05<01:49, 91.79it/s]Fetching 10340 files:   3%|▎         | 320/10340 [00:05<01:14, 134.56it/s]Fetching 10340 files:   3%|▎         | 337/10340 [00:05<01:25, 116.72it/s]Fetching 10340 files:   3%|▎         | 356/10340 [00:05<01:17, 128.65it/s]Fetching 10340 files:   4%|▎         | 375/10340 [00:05<01:15, 131.58it/s]Fetching 10340 files:   4%|▍         | 398/10340 [00:05<01:10, 141.85it/s]Fetching 10340 files:   4%|▍         | 438/10340 [00:05<00:49, 199.18it/s]Fetching 10340 files:   4%|▍         | 460/10340 [00:06<00:51, 192.12it/s]Fetching 10340 files:   5%|▍         | 494/10340 [00:06<00:45, 215.54it/s]Fetching 10340 files:   5%|▌         | 529/10340 [00:06<00:40, 244.07it/s]Fetching 10340 files:   5%|▌         | 555/10340 [00:06<00:54, 179.17it/s]Fetching 10340 files:   6%|▌         | 576/10340 [00:07<01:44, 93.05it/s] Fetching 10340 files:   6%|▌         | 592/10340 [00:07<02:21, 68.76it/s]Fetching 10340 files:   6%|▌         | 605/10340 [00:09<06:16, 25.85it/s]Fetching 10340 files:   6%|▌         | 638/10340 [00:09<03:52, 41.66it/s]Fetching 10340 files:   6%|▋         | 666/10340 [00:09<02:46, 58.03it/s]Fetching 10340 files:   7%|▋         | 704/10340 [00:09<01:51, 86.34it/s]Fetching 10340 files:   8%|▊         | 793/10340 [00:09<00:54, 173.74it/s]Fetching 10340 files:   8%|▊         | 833/10340 [00:09<00:47, 198.21it/s]Fetching 10340 files:   8%|▊         | 871/10340 [00:10<00:44, 213.67it/s]Fetching 10340 files:   9%|▉         | 935/10340 [00:10<00:33, 284.12it/s]Fetching 10340 files:  10%|▉         | 1002/10340 [00:10<00:27, 338.49it/s]Fetching 10340 files:  10%|█         | 1053/10340 [00:10<00:24, 372.81it/s]Fetching 10340 files:  11%|█         | 1113/10340 [00:10<00:23, 393.85it/s]Fetching 10340 files:  11%|█         | 1159/10340 [00:10<00:25, 355.94it/s]Fetching 10340 files:  12%|█▏        | 1200/10340 [00:10<00:25, 356.83it/s]Fetching 10340 files:  12%|█▏        | 1257/10340 [00:10<00:22, 404.05it/s]Fetching 10340 files:  13%|█▎        | 1301/10340 [00:11<00:22, 396.04it/s]Fetching 10340 files:  13%|█▎        | 1343/10340 [00:11<00:24, 369.15it/s]Fetching 10340 files:  13%|█▎        | 1382/10340 [00:11<00:28, 310.50it/s]Fetching 10340 files:  14%|█▎        | 1418/10340 [00:11<00:28, 317.06it/s]Fetching 10340 files:  14%|█▍        | 1452/10340 [00:11<00:28, 308.07it/s]Fetching 10340 files:  15%|█▍        | 1522/10340 [00:11<00:22, 392.41it/s]Fetching 10340 files:  15%|█▌        | 1563/10340 [00:11<00:27, 323.36it/s]Fetching 10340 files:  15%|█▌        | 1599/10340 [00:12<00:29, 296.16it/s]Fetching 10340 files:  16%|█▌        | 1631/10340 [00:12<00:29, 295.47it/s]Fetching 10340 files:  16%|█▌        | 1669/10340 [00:12<00:27, 310.81it/s]Fetching 10340 files:  16%|█▋        | 1702/10340 [00:12<00:28, 304.46it/s]Fetching 10340 files:  17%|█▋        | 1753/10340 [00:12<00:24, 356.76it/s]Fetching 10340 files:  17%|█▋        | 1791/10340 [00:13<01:27, 97.60it/s] Fetching 10340 files:  18%|█▊        | 1818/10340 [00:14<02:13, 63.80it/s]Fetching 10340 files:  18%|█▊        | 1907/10340 [00:15<01:50, 76.20it/s]Fetching 10340 files:  19%|█▉        | 1957/10340 [00:15<01:25, 98.57it/s]Fetching 10340 files:  19%|█▉        | 1980/10340 [00:16<01:38, 84.82it/s]Fetching 10340 files:  20%|█▉        | 2044/10340 [00:16<01:05, 127.54it/s]Fetching 10340 files:  20%|██        | 2116/10340 [00:16<00:44, 186.15it/s]Fetching 10340 files:  21%|██        | 2158/10340 [00:16<00:39, 206.42it/s]Fetching 10340 files:  21%|██▏       | 2201/10340 [00:16<00:35, 226.38it/s]Fetching 10340 files:  22%|██▏       | 2241/10340 [00:16<00:32, 252.21it/s]Fetching 10340 files:  22%|██▏       | 2312/10340 [00:16<00:23, 337.90it/s]Fetching 10340 files:  23%|██▎       | 2359/10340 [00:16<00:23, 345.11it/s]Fetching 10340 files:  23%|██▎       | 2403/10340 [00:17<00:22, 360.62it/s]Fetching 10340 files:  24%|██▍       | 2491/10340 [00:17<00:16, 483.58it/s]Fetching 10340 files:  25%|██▍       | 2548/10340 [00:17<00:16, 467.20it/s]Fetching 10340 files:  25%|██▌       | 2601/10340 [00:17<00:16, 462.48it/s]Fetching 10340 files:  26%|██▌       | 2669/10340 [00:17<00:15, 484.33it/s]Fetching 10340 files:  26%|██▋       | 2721/10340 [00:17<00:15, 481.21it/s]Fetching 10340 files:  27%|██▋       | 2818/10340 [00:17<00:12, 597.17it/s]Fetching 10340 files:  28%|██▊       | 2881/10340 [00:17<00:14, 527.15it/s]Fetching 10340 files:  28%|██▊       | 2937/10340 [00:18<00:15, 483.87it/s]Fetching 10340 files:  29%|██▉       | 2988/10340 [00:18<00:17, 420.93it/s]Fetching 10340 files:  29%|██▉       | 3050/10340 [00:18<00:15, 466.37it/s]Fetching 10340 files:  30%|██▉       | 3100/10340 [00:19<00:42, 168.69it/s]Fetching 10340 files:  30%|███       | 3137/10340 [00:20<01:13, 98.05it/s] Fetching 10340 files:  31%|███       | 3164/10340 [00:20<01:28, 81.40it/s]Fetching 10340 files:  31%|███       | 3191/10340 [00:20<01:15, 94.70it/s]Fetching 10340 files:  31%|███▏      | 3246/10340 [00:20<00:51, 137.11it/s]Fetching 10340 files:  32%|███▏      | 3277/10340 [00:20<00:45, 154.26it/s]Fetching 10340 files:  32%|███▏      | 3356/10340 [00:21<00:28, 242.01it/s]Fetching 10340 files:  33%|███▎      | 3399/10340 [00:21<00:27, 252.12it/s]Fetching 10340 files:  33%|███▎      | 3455/10340 [00:21<00:22, 301.27it/s]Fetching 10340 files:  34%|███▍      | 3497/10340 [00:21<00:24, 274.87it/s]Fetching 10340 files:  34%|███▍      | 3533/10340 [00:21<00:23, 289.73it/s]Fetching 10340 files:  35%|███▍      | 3579/10340 [00:21<00:21, 320.00it/s]Fetching 10340 files:  36%|███▌      | 3675/10340 [00:21<00:14, 469.04it/s]Fetching 10340 files:  36%|███▋      | 3756/10340 [00:21<00:11, 550.85it/s]Fetching 10340 files:  37%|███▋      | 3819/10340 [00:22<00:11, 559.80it/s]Fetching 10340 files:  38%|███▊      | 3881/10340 [00:22<00:11, 559.69it/s]Fetching 10340 files:  38%|███▊      | 3949/10340 [00:22<00:10, 587.51it/s]Fetching 10340 files:  39%|███▉      | 4011/10340 [00:22<00:10, 589.13it/s]Fetching 10340 files:  40%|███▉      | 4106/10340 [00:22<00:09, 690.68it/s]Fetching 10340 files:  40%|████      | 4178/10340 [00:22<00:09, 623.59it/s]Fetching 10340 files:  41%|████      | 4243/10340 [00:22<00:10, 554.91it/s]Fetching 10340 files:  42%|████▏     | 4302/10340 [00:22<00:11, 548.38it/s]Fetching 10340 files:  42%|████▏     | 4359/10340 [00:23<00:13, 456.79it/s]Fetching 10340 files:  43%|████▎     | 4409/10340 [00:23<00:21, 278.39it/s]Fetching 10340 files:  43%|████▎     | 4448/10340 [00:24<00:49, 119.05it/s]Fetching 10340 files:  43%|████▎     | 4476/10340 [00:25<01:19, 74.08it/s] Fetching 10340 files:  44%|████▎     | 4505/10340 [00:25<01:06, 87.84it/s]Fetching 10340 files:  44%|████▍     | 4591/10340 [00:25<00:37, 152.85it/s]Fetching 10340 files:  45%|████▌     | 4672/10340 [00:25<00:25, 221.05it/s]Fetching 10340 files:  46%|████▌     | 4724/10340 [00:25<00:21, 257.48it/s]Fetching 10340 files:  46%|████▌     | 4780/10340 [00:25<00:18, 303.16it/s]Fetching 10340 files:  47%|████▋     | 4843/10340 [00:26<00:15, 362.51it/s]Fetching 10340 files:  47%|████▋     | 4898/10340 [00:26<00:15, 345.98it/s]Fetching 10340 files:  48%|████▊     | 4991/10340 [00:26<00:11, 447.44it/s]Fetching 10340 files:  49%|████▉     | 5091/10340 [00:26<00:09, 566.35it/s]Fetching 10340 files:  50%|████▉     | 5161/10340 [00:26<00:09, 563.87it/s]Fetching 10340 files:  51%|█████     | 5227/10340 [00:26<00:09, 555.17it/s]Fetching 10340 files:  51%|█████     | 5289/10340 [00:26<00:11, 457.46it/s]Fetching 10340 files:  52%|█████▏    | 5342/10340 [00:27<00:11, 439.77it/s]Fetching 10340 files:  52%|█████▏    | 5391/10340 [00:27<00:12, 407.08it/s]Fetching 10340 files:  53%|█████▎    | 5446/10340 [00:27<00:11, 439.21it/s]Fetching 10340 files:  54%|█████▎    | 5542/10340 [00:27<00:08, 564.77it/s]Fetching 10340 files:  55%|█████▍    | 5659/10340 [00:27<00:06, 719.21it/s]Fetching 10340 files:  55%|█████▌    | 5737/10340 [00:28<00:21, 211.58it/s]Fetching 10340 files:  56%|█████▌    | 5816/10340 [00:28<00:17, 265.23it/s]Fetching 10340 files:  57%|█████▋    | 5877/10340 [00:29<00:29, 151.33it/s]Fetching 10340 files:  57%|█████▋    | 5922/10340 [00:29<00:25, 170.00it/s]Fetching 10340 files:  58%|█████▊    | 5971/10340 [00:29<00:22, 196.27it/s]Fetching 10340 files:  58%|█████▊    | 6012/10340 [00:30<00:20, 206.48it/s]Fetching 10340 files:  58%|█████▊    | 6048/10340 [00:30<00:18, 227.20it/s]Fetching 10340 files:  59%|█████▉    | 6092/10340 [00:30<00:16, 262.02it/s]Fetching 10340 files:  59%|█████▉    | 6130/10340 [00:30<00:14, 281.29it/s]Fetching 10340 files:  60%|██████    | 6210/10340 [00:30<00:10, 382.87it/s]Fetching 10340 files:  61%|██████    | 6324/10340 [00:30<00:07, 554.66it/s]Fetching 10340 files:  62%|██████▏   | 6392/10340 [00:30<00:06, 569.96it/s]Fetching 10340 files:  63%|██████▎   | 6508/10340 [00:30<00:05, 719.43it/s]Fetching 10340 files:  64%|██████▎   | 6589/10340 [00:30<00:05, 670.31it/s]Fetching 10340 files:  65%|██████▌   | 6761/10340 [00:30<00:03, 937.49it/s]Fetching 10340 files:  66%|██████▋   | 6864/10340 [00:31<00:05, 627.61it/s]Fetching 10340 files:  67%|██████▋   | 6949/10340 [00:31<00:05, 671.87it/s]Fetching 10340 files:  68%|██████▊   | 7033/10340 [00:31<00:06, 546.96it/s]Fetching 10340 files:  69%|██████▊   | 7102/10340 [00:32<00:09, 354.92it/s]Fetching 10340 files:  69%|██████▉   | 7156/10340 [00:32<00:11, 284.75it/s]Fetching 10340 files:  70%|███████   | 7260/10340 [00:33<00:23, 130.14it/s]Fetching 10340 files:  71%|███████   | 7335/10340 [00:34<00:17, 167.62it/s]Fetching 10340 files:  71%|███████▏  | 7379/10340 [00:35<00:26, 110.46it/s]Fetching 10340 files:  73%|███████▎  | 7512/10340 [00:35<00:15, 186.67it/s]Fetching 10340 files:  73%|███████▎  | 7574/10340 [00:35<00:12, 220.85it/s]Fetching 10340 files:  74%|███████▍  | 7697/10340 [00:35<00:08, 325.67it/s]Fetching 10340 files:  75%|███████▌  | 7776/10340 [00:35<00:07, 359.19it/s]Fetching 10340 files:  76%|███████▋  | 7896/10340 [00:35<00:05, 480.87it/s]Fetching 10340 files:  78%|███████▊  | 8103/10340 [00:35<00:02, 755.58it/s]Fetching 10340 files:  80%|███████▉  | 8224/10340 [00:35<00:02, 743.10it/s]Fetching 10340 files:  81%|████████  | 8331/10340 [00:38<00:13, 148.23it/s]Fetching 10340 files:  81%|████████▏ | 8407/10340 [00:38<00:14, 133.82it/s]Fetching 10340 files:  82%|████████▏ | 8463/10340 [00:40<00:18, 99.27it/s] Fetching 10340 files:  82%|████████▏ | 8530/10340 [00:40<00:16, 106.94it/s]Fetching 10340 files:  83%|████████▎ | 8563/10340 [00:41<00:17, 104.38it/s]Fetching 10340 files:  83%|████████▎ | 8630/10340 [00:41<00:15, 113.68it/s]Fetching 10340 files:  84%|████████▍ | 8690/10340 [00:41<00:12, 129.27it/s]Fetching 10340 files:  85%|████████▍ | 8780/10340 [00:42<00:13, 117.21it/s]Fetching 10340 files:  85%|████████▌ | 8800/10340 [00:43<00:14, 107.28it/s]Fetching 10340 files:  86%|████████▌ | 8853/10340 [00:43<00:12, 120.77it/s]Fetching 10340 files:  86%|████████▌ | 8896/10340 [00:43<00:12, 116.78it/s]Fetching 10340 files:  86%|████████▌ | 8912/10340 [00:44<00:23, 59.71it/s] Fetching 10340 files:  87%|████████▋ | 8945/10340 [00:45<00:28, 49.27it/s]Fetching 10340 files:  87%|████████▋ | 8977/10340 [00:46<00:21, 62.98it/s]Fetching 10340 files:  87%|████████▋ | 9015/10340 [00:46<00:19, 68.81it/s]Fetching 10340 files:  88%|████████▊ | 9055/10340 [00:47<00:24, 52.25it/s]Fetching 10340 files:  88%|████████▊ | 9076/10340 [00:47<00:22, 56.62it/s]Fetching 10340 files:  88%|████████▊ | 9120/10340 [00:49<00:29, 41.34it/s]Fetching 10340 files:  89%|████████▉ | 9220/10340 [00:49<00:13, 85.01it/s]Fetching 10340 files:  89%|████████▉ | 9250/10340 [00:49<00:11, 92.08it/s]Fetching 10340 files:  90%|████████▉ | 9275/10340 [00:51<00:20, 52.05it/s]Fetching 10340 files:  90%|████████▉ | 9293/10340 [00:51<00:17, 58.29it/s]Fetching 10340 files:  90%|█████████ | 9322/10340 [00:51<00:15, 63.73it/s]Fetching 10340 files:  91%|█████████ | 9369/10340 [00:53<00:22, 44.13it/s]Fetching 10340 files:  91%|█████████▏| 9445/10340 [00:54<00:15, 57.23it/s]Fetching 10340 files:  92%|█████████▏| 9488/10340 [00:54<00:12, 69.82it/s]Fetching 10340 files:  92%|█████████▏| 9551/10340 [00:54<00:08, 88.08it/s]Fetching 10340 files:  93%|█████████▎| 9572/10340 [00:55<00:09, 79.08it/s]Fetching 10340 files:  93%|█████████▎| 9622/10340 [00:56<00:10, 66.69it/s]Fetching 10340 files:  93%|█████████▎| 9667/10340 [00:57<00:10, 63.25it/s]Fetching 10340 files:  94%|█████████▎| 9690/10340 [00:57<00:09, 67.20it/s]Fetching 10340 files:  94%|█████████▍| 9714/10340 [00:58<00:12, 52.02it/s]Fetching 10340 files:  94%|█████████▍| 9749/10340 [00:58<00:08, 70.07it/s]Fetching 10340 files:  94%|█████████▍| 9768/10340 [00:58<00:08, 64.95it/s]Fetching 10340 files:  95%|█████████▍| 9780/10340 [00:58<00:08, 63.03it/s]Fetching 10340 files:  95%|█████████▍| 9790/10340 [00:59<00:16, 34.28it/s]Fetching 10340 files:  95%|█████████▍| 9805/10340 [01:01<00:24, 22.26it/s]Fetching 10340 files:  96%|█████████▌| 9882/10340 [01:01<00:08, 52.55it/s]Fetching 10340 files:  96%|█████████▌| 9943/10340 [01:02<00:05, 72.66it/s]Fetching 10340 files:  97%|█████████▋| 9991/10340 [01:02<00:03, 99.69it/s]Fetching 10340 files:  97%|█████████▋| 10014/10340 [01:02<00:03, 88.51it/s]Fetching 10340 files:  97%|█████████▋| 10050/10340 [01:02<00:03, 90.12it/s]Fetching 10340 files:  98%|█████████▊| 10088/10340 [01:03<00:02, 117.07it/s]Fetching 10340 files:  98%|█████████▊| 10150/10340 [01:03<00:01, 108.99it/s]Fetching 10340 files:  99%|█████████▊| 10190/10340 [01:04<00:01, 97.56it/s] Fetching 10340 files:  99%|█████████▉| 10251/10340 [01:04<00:00, 142.43it/s]Fetching 10340 files: 100%|█████████▉| 10299/10340 [01:04<00:00, 179.99it/s]Fetching 10340 files: 100%|█████████▉| 10334/10340 [01:04<00:00, 193.69it/s]Fetching 10340 files: 100%|██████████| 10340/10340 [01:04<00:00, 160.35it/s]
+  [18/51] dataset/RiverRider/srt-cxr14-frozen-probe
+Fetching 321 files:   0%|          | 0/321 [00:00<?, ?it/s]Fetching 321 files:   0%|          | 1/321 [00:00<01:36,  3.30it/s]Fetching 321 files:   1%|          | 3/321 [00:00<00:57,  5.49it/s]Fetching 321 files:   2%|▏         | 7/321 [00:00<00:35,  8.91it/s]Fetching 321 files:   3%|▎         | 11/321 [00:01<00:36,  8.58it/s]Fetching 321 files:   5%|▍         | 15/321 [00:01<00:25, 11.88it/s]Fetching 321 files:   6%|▌         | 18/321 [00:01<00:23, 13.17it/s]Fetching 321 files:   6%|▌         | 20/321 [00:01<00:23, 12.66it/s]Fetching 321 files:   7%|▋         | 22/321 [00:02<00:41,  7.16it/s]Fetching 321 files:   8%|▊         | 25/321 [00:02<00:31,  9.51it/s]Fetching 321 files:   8%|▊         | 27/321 [00:02<00:30,  9.70it/s]Fetching 321 files:   9%|▉         | 29/321 [00:02<00:26, 10.93it/s]Fetching 321 files:  10%|▉         | 31/321 [00:03<00:26, 11.06it/s]Fetching 321 files:  10%|█         | 33/321 [00:03<00:23, 12.06it/s]Fetching 321 files:  11%|█         | 35/321 [00:03<00:24, 11.49it/s]Fetching 321 files:  12%|█▏        | 37/321 [00:03<00:25, 11.14it/s]Fetching 321 files:  12%|█▏        | 39/321 [00:03<00:23, 11.89it/s]Fetching 321 files:  13%|█▎        | 41/321 [00:03<00:23, 12.02it/s]Fetching 321 files:  14%|█▍        | 45/321 [00:04<00:21, 12.57it/s]Fetching 321 files:  15%|█▌        | 49/321 [00:04<00:21, 12.59it/s]Fetching 321 files:  17%|█▋        | 53/321 [00:04<00:20, 13.35it/s]Fetching 321 files:  18%|█▊        | 57/321 [00:05<00:19, 13.32it/s]Fetching 321 files:  19%|█▉        | 61/321 [00:05<00:20, 12.78it/s]Fetching 321 files:  20%|██        | 65/321 [00:05<00:19, 13.17it/s]Fetching 321 files:  21%|██▏       | 69/321 [00:06<00:19, 12.96it/s]Fetching 321 files:  23%|██▎       | 73/321 [00:06<00:18, 13.08it/s]Fetching 321 files:  24%|██▍       | 77/321 [00:06<00:18, 13.47it/s]Fetching 321 files:  25%|██▌       | 81/321 [00:07<00:18, 12.84it/s]Fetching 321 files:  26%|██▋       | 85/321 [00:07<00:17, 13.38it/s]Fetching 321 files:  28%|██▊       | 89/321 [00:07<00:17, 13.50it/s]Fetching 321 files:  29%|██▉       | 93/321 [00:07<00:16, 13.66it/s]Fetching 321 files:  30%|███       | 97/321 [00:08<00:16, 13.53it/s]Fetching 321 files:  31%|███▏      | 101/321 [00:08<00:16, 13.55it/s]Fetching 321 files:  33%|███▎      | 105/321 [00:08<00:15, 13.62it/s]Fetching 321 files:  34%|███▍      | 109/321 [00:09<00:16, 13.02it/s]Fetching 321 files:  35%|███▌      | 113/321 [00:09<00:15, 13.31it/s]Fetching 321 files:  36%|███▋      | 117/321 [00:09<00:15, 12.80it/s]Fetching 321 files:  38%|███▊      | 121/321 [00:09<00:15, 13.19it/s]Fetching 321 files:  39%|███▉      | 125/321 [00:10<00:14, 13.21it/s]Fetching 321 files:  40%|████      | 129/321 [00:10<00:14, 13.33it/s]Fetching 321 files:  41%|████▏     | 133/321 [00:10<00:14, 13.22it/s]Fetching 321 files:  43%|████▎     | 137/321 [00:11<00:13, 13.59it/s]Fetching 321 files:  44%|████▍     | 141/321 [00:11<00:13, 13.54it/s]Fetching 321 files:  45%|████▌     | 145/321 [00:11<00:13, 13.50it/s]Fetching 321 files:  46%|████▋     | 149/321 [00:12<00:12, 13.54it/s]Fetching 321 files:  48%|████▊     | 153/321 [00:12<00:12, 13.35it/s]Fetching 321 files:  49%|████▉     | 157/321 [00:12<00:13, 12.32it/s]Fetching 321 files:  50%|████▉     | 160/321 [00:12<00:11, 13.69it/s]Fetching 321 files:  50%|█████     | 162/321 [00:12<00:10, 14.48it/s]Fetching 321 files:  51%|█████     | 164/321 [00:13<00:11, 13.31it/s]Fetching 321 files:  52%|█████▏    | 168/321 [00:13<00:11, 13.42it/s]Fetching 321 files:  54%|█████▎    | 172/321 [00:13<00:10, 13.70it/s]Fetching 321 files:  55%|█████▍    | 176/321 [00:14<00:11, 13.09it/s]Fetching 321 files:  56%|█████▌    | 180/321 [00:14<00:10, 13.43it/s]Fetching 321 files:  57%|█████▋    | 184/321 [00:14<00:10, 13.18it/s]Fetching 321 files:  59%|█████▊    | 188/321 [00:15<00:10, 12.57it/s]Fetching 321 files:  60%|█████▉    | 192/321 [00:15<00:09, 13.48it/s]Fetching 321 files:  61%|██████    | 196/321 [00:15<00:09, 13.25it/s]Fetching 321 files:  62%|██████▏   | 200/321 [00:15<00:09, 13.18it/s]Fetching 321 files:  64%|██████▎   | 204/321 [00:16<00:08, 13.39it/s]Fetching 321 files:  65%|██████▍   | 208/321 [00:17<00:13,  8.53it/s]Fetching 321 files:  66%|██████▌   | 212/321 [00:17<00:13,  7.89it/s]Fetching 321 files:  68%|██████▊   | 217/321 [00:17<00:10,  9.64it/s]Fetching 321 files:  69%|██████▉   | 221/321 [00:18<00:09, 10.45it/s]Fetching 321 files:  70%|███████   | 225/321 [00:18<00:08, 11.27it/s]Fetching 321 files:  71%|███████▏  | 229/321 [00:18<00:07, 11.68it/s]Fetching 321 files:  73%|███████▎  | 233/321 [00:19<00:07, 11.90it/s]Fetching 321 files:  74%|███████▍  | 237/321 [00:19<00:06, 12.34it/s]Fetching 321 files:  75%|███████▌  | 241/321 [00:19<00:06, 12.55it/s]Fetching 321 files:  76%|███████▋  | 245/321 [00:20<00:05, 12.84it/s]Fetching 321 files:  78%|███████▊  | 249/321 [00:20<00:05, 13.04it/s]Fetching 321 files:  79%|███████▉  | 253/321 [00:20<00:06, 11.10it/s]Fetching 321 files:  80%|████████  | 257/321 [00:21<00:05, 11.75it/s]Fetching 321 files:  81%|████████▏ | 261/321 [00:21<00:04, 12.00it/s]Fetching 321 files:  83%|████████▎ | 265/321 [00:21<00:04, 12.35it/s]Fetching 321 files:  84%|████████▍ | 269/321 [00:22<00:04, 12.46it/s]Fetching 321 files:  85%|████████▌ | 273/321 [00:22<00:03, 12.68it/s]Fetching 321 files:  86%|████████▋ | 277/321 [00:22<00:03, 13.04it/s]Fetching 321 files:  88%|████████▊ | 281/321 [00:22<00:03, 13.27it/s]Fetching 321 files:  89%|████████▉ | 285/321 [00:23<00:02, 13.55it/s]Fetching 321 files:  90%|█████████ | 289/321 [00:23<00:02, 13.08it/s]Fetching 321 files:  91%|█████████▏| 293/321 [00:23<00:02, 12.94it/s]Fetching 321 files:  93%|█████████▎| 297/321 [00:24<00:01, 13.49it/s]Fetching 321 files:  94%|█████████▍| 301/321 [00:24<00:01, 13.55it/s]Fetching 321 files:  95%|█████████▌| 305/321 [00:24<00:01, 14.63it/s]Fetching 321 files:  97%|█████████▋| 310/321 [00:24<00:00, 16.26it/s]Fetching 321 files:  98%|█████████▊| 314/321 [00:25<00:00, 16.16it/s]Fetching 321 files:  99%|█████████▉| 318/321 [00:25<00:00, 16.95it/s]Fetching 321 files:  99%|█████████▉| 318/321 [00:42<00:00, 16.95it/s]Fetching 321 files:  99%|█████████▉| 319/321 [01:18<00:09,  4.99s/it]Fetching 321 files: 100%|█████████▉| 320/321 [01:41<00:07,  7.11s/it]Fetching 321 files: 100%|██████████| 321/321 [01:41<00:00,  3.18it/s]
+  [19/51] model/RiverRider/srt-cxr14-linear-probe
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files:  17%|█▋        | 1/6 [00:00<00:01,  3.70it/s]Fetching 6 files:  50%|█████     | 3/6 [00:00<00:00,  6.15it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 10.08it/s]
+  [20/51] model/RiverRider/srt-cxr14-pooled-probe
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files:  20%|██        | 1/5 [00:00<00:01,  2.93it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 14.66it/s]
+  [21/51] space/RiverRider/srt-cxr14-probe
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files:  25%|██▌       | 1/4 [00:00<00:00,  4.92it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 15.35it/s]
+  [22/51] dataset/RiverRider/srt-depth-probe-artifacts
+Fetching 25 files:   0%|          | 0/25 [00:00<?, ?it/s]Fetching 25 files: 100%|██████████| 25/25 [00:00<00:00, 1190.20it/s]
+  [23/51] space/RiverRider/srt-introspect
+Fetching 39 files:   0%|          | 0/39 [00:00<?, ?it/s]Fetching 39 files: 100%|██████████| 39/39 [00:00<00:00, 537.21it/s]
+  [24/51] model/RiverRider/srt-nla-av-gemma2-2b-v1
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 1870.67it/s]
+  [25/51] model/RiverRider/srt-nla-av-gemma4
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 82.70it/s]
+  [26/51] model/RiverRider/srt-nla-av-gptoss20b
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]Fetching 3 files: 100%|██████████| 3/3 [00:00<00:00, 221.83it/s]
+  [27/51] model/RiverRider/srt-nla-av-llama32-3b
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 2110.87it/s]
+  [28/51] model/RiverRider/srt-nla-av-v1
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 340.54it/s]
+  [29/51] space/RiverRider/srt-nla-av-v1-demo
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 130.19it/s]
+  [30/51] space/RiverRider/srt-nla-demo
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 357.37it/s]
+  [31/51] model/RiverRider/srt-nla-gemma4-artifacts
+Fetching 77 files:   0%|          | 0/77 [00:00<?, ?it/s]Fetching 77 files:  26%|██▌       | 20/77 [00:00<00:00, 193.11it/s]Fetching 77 files:  87%|████████▋ | 67/77 [00:00<00:00, 288.54it/s]Fetching 77 files: 100%|██████████| 77/77 [00:00<00:00, 313.71it/s]
+  [32/51] dataset/RiverRider/srt-nla-gemma4-artifacts
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 285.07it/s]
+  [33/51] dataset/RiverRider/srt-nla-gptoss20b-artifacts
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 395.13it/s]
+  [34/51] space/RiverRider/srt-nla-gptoss20b-trace
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 254.44it/s]
+  [35/51] dataset/RiverRider/srt-nla-targets-gemma2-2b-v1
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]Fetching 3 files: 100%|██████████| 3/3 [00:00<00:00, 80.90it/s]
+  [36/51] dataset/RiverRider/srt-nla-targets-llama32-3b-v1
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]Fetching 3 files: 100%|██████████| 3/3 [00:00<00:00, 33.36it/s]
+  [37/51] dataset/RiverRider/srt-nla-targets-v1
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]Fetching 3 files: 100%|██████████| 3/3 [00:00<00:00, 72.14it/s]
+  [38/51] dataset/RiverRider/srt-omni-crossvendor-states
+Fetching 44 files:   0%|          | 0/44 [00:00<?, ?it/s]Fetching 44 files:   2%|▏         | 1/44 [00:00<00:10,  4.25it/s]Fetching 44 files:  11%|█▏        | 5/44 [00:00<00:02, 14.01it/s]Fetching 44 files:  20%|██        | 9/44 [00:00<00:02, 16.10it/s]Fetching 44 files:  41%|████      | 18/44 [00:00<00:01, 22.89it/s]Fetching 44 files:  59%|█████▉    | 26/44 [00:01<00:00, 31.89it/s]Fetching 44 files:  68%|██████▊   | 30/44 [00:01<00:00, 27.78it/s]Fetching 44 files: 100%|██████████| 44/44 [00:01<00:00, 44.13it/s]Fetching 44 files: 100%|██████████| 44/44 [00:01<00:00, 31.04it/s]
+  [39/51] space/RiverRider/srt-omni-demo
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 1255.93it/s]
+  [40/51] dataset/RiverRider/srt-omni-manifest
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 250.53it/s]
+  [41/51] model/RiverRider/srt-omni-shared-tower
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 310.13it/s]
+  [42/51] model/RiverRider/srt-omni-xvendor-towers
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 287.81it/s]
+  [43/51] dataset/RiverRider/srt-qwen38-coco-states
+Fetching 47 files:   0%|          | 0/47 [00:00<?, ?it/s]Fetching 47 files:   9%|▊         | 4/47 [00:00<00:01, 28.89it/s]Fetching 47 files:  55%|█████▌    | 26/47 [00:00<00:00, 114.62it/s]Fetching 47 files: 100%|██████████| 47/47 [00:00<00:00, 142.61it/s]
+  [44/51] space/RiverRider/srt-showcase
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 243.55it/s]
+  [45/51] space/RiverRider/srt-sunstone
+Fetching 155 files:   0%|          | 0/155 [00:00<?, ?it/s]Fetching 155 files:  33%|███▎      | 51/155 [00:00<00:00, 479.51it/s]Fetching 155 files:  66%|██████▋   | 103/155 [00:00<00:00, 496.04it/s]Fetching 155 files: 100%|██████████| 155/155 [00:00<00:00, 535.54it/s]
+  [46/51] model/RiverRider/srt-sunstone-linear-head
+Fetching 26 files:   0%|          | 0/26 [00:00<?, ?it/s]Fetching 26 files: 100%|██████████| 26/26 [00:00<00:00, 257.66it/s]Fetching 26 files: 100%|██████████| 26/26 [00:00<00:00, 257.41it/s]
+  [47/51] model/RiverRider/srt-verbalizer-v1
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 82.39it/s]
+  [48/51] space/RiverRider/walk-the-space
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files:  17%|█▋        | 1/6 [00:00<00:03,  1.37it/s]Fetching 6 files:  83%|████████▎ | 5/6 [00:01<00:00,  5.32it/s]Fetching 6 files: 100%|██████████| 6/6 [00:01<00:00,  5.37it/s]
+  [49/51] space/RiverRider/zooL4nD3r-demo
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 1890.35it/s]
+  [50/51] model/RiverRider/zooL4nD3r-v0.1
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 155.90it/s]
+  [51/51] dataset/RiverRider/zoolander-corpus-v23
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 176.52it/s]
+
+=== supabase bucket SRT
+  25 downloaded of 516 seen
+  50 downloaded of 541 seen
+  75 downloaded of 663 seen
+  100 downloaded of 716 seen
+  125 downloaded of 741 seen
+  150 downloaded of 12948 seen
+  175 downloaded of 94541 seen
+  200 downloaded of 94566 seen
+  225 downloaded of 94591 seen
+  94666 objects listed, 248 newly downloaded, 0 failed
+
+=== host-models: 13 backbones
+  [1/13] google/gemma-4-31B-it
+Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Fetching 12 files:  67%|██████▋   | 8/12 [00:00<00:00, 77.37it/s]Fetching 12 files: 100%|██████████| 12/12 [00:00<00:00, 103.61it/s]
+  [2/13] Qwen/Qwen3-0.6B
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 107.30it/s]
+  [3/13] Qwen/Qwen3.8-27B
+Fetching 32 files:   0%|          | 0/32 [00:00<?, ?it/s]Fetching 32 files:  34%|███▍      | 11/32 [00:00<00:00, 79.61it/s]Fetching 32 files:  78%|███████▊  | 25/32 [00:00<00:00, 109.41it/s]Fetching 32 files: 100%|██████████| 32/32 [00:00<00:00, 133.40it/s]
+  [4/13] Qwen/Qwen3-Omni-30B-A3B-Instruct
+Fetching 25 files:   0%|          | 0/25 [00:00<?, ?it/s]Fetching 25 files:  16%|█▌        | 4/25 [00:00<00:00, 28.80it/s]Fetching 25 files:  68%|██████▊   | 17/25 [00:00<00:00, 71.66it/s]Fetching 25 files: 100%|██████████| 25/25 [00:00<00:00, 77.87it/s]
+  [5/13] rhymes-ai/Aria
+Fetching 25 files:   0%|          | 0/25 [00:00<?, ?it/s]Fetching 25 files:  32%|███▏      | 8/25 [00:00<00:00, 51.19it/s]Fetching 25 files: 100%|██████████| 25/25 [00:00<00:00, 126.27it/s]
+  [6/13] mistralai/Mistral-Small-3.1-24B-Instruct-2503
+Fetching 24 files:   0%|          | 0/24 [00:00<?, ?it/s]Fetching 24 files:  25%|██▌       | 6/24 [00:00<00:00, 58.90it/s]Fetching 24 files:  96%|█████████▌| 23/24 [00:00<00:00, 116.07it/s]Fetching 24 files: 100%|██████████| 24/24 [00:00<00:00, 111.88it/s]
+  [7/13] google/gemma-2-2b
+Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Fetching 12 files: 100%|██████████| 12/12 [00:00<00:00, 256.48it/s]
+  [8/13] openai/gpt-oss-20b
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files: 100%|██████████| 15/15 [00:00<00:00, 170.16it/s]
+  [9/13] Qwen/Qwen2.5-7B
+Fetching 14 files:   0%|          | 0/14 [00:00<?, ?it/s]Fetching 14 files:  79%|███████▊  | 11/14 [00:00<00:00, 108.28it/s]Fetching 14 files: 100%|██████████| 14/14 [00:00<00:00, 137.70it/s]
+  [10/13] Qwen/Qwen2.5-VL-3B-Instruct
+Fetching 14 files:   0%|          | 0/14 [00:00<?, ?it/s]Fetching 14 files:  86%|████████▌ | 12/14 [00:00<00:00, 117.40it/s]Fetching 14 files: 100%|██████████| 14/14 [00:00<00:00, 136.78it/s]
+  [11/13] meta-llama/Llama-3.2-3B
+Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Fetching 12 files: 100%|██████████| 12/12 [00:00<00:00, 193.57it/s]
+  [12/13] Qwen/Qwen3-235B-A22B
+Fetching 128 files:   0%|          | 0/128 [00:00<?, ?it/s]Fetching 128 files:   2%|▏         | 2/128 [00:00<00:07, 17.12it/s]Fetching 128 files:   9%|▊         | 11/128 [00:00<00:02, 54.19it/s]Fetching 128 files:  16%|█▌        | 20/128 [00:00<00:02, 51.37it/s]Fetching 128 files:  30%|███       | 39/128 [00:00<00:01, 85.82it/s]Fetching 128 files:  39%|███▉      | 50/128 [00:00<00:00, 84.78it/s]Fetching 128 files:  46%|████▌     | 59/128 [00:00<00:00, 72.81it/s]Fetching 128 files:  56%|█████▋    | 72/128 [00:00<00:00, 86.96it/s]Fetching 128 files:  64%|██████▍   | 82/128 [00:01<00:00, 52.92it/s]Fetching 128 files:  70%|███████   | 90/128 [00:01<00:01, 37.37it/s]Fetching 128 files:  76%|███████▌  | 97/128 [00:02<00:00, 32.34it/s]Fetching 128 files:  88%|████████▊ | 112/128 [00:02<00:00, 38.76it/s]Fetching 128 files:  91%|█████████▏| 117/128 [00:02<00:00, 28.48it/s]Fetching 128 files:  96%|█████████▌| 123/128 [00:02<00:00, 32.23it/s]Fetching 128 files: 100%|██████████| 128/128 [00:02<00:00, 45.20it/s]
+  [13/13] Qwen/Qwen3-235B-A22B-FP8
+Fetching 58 files:   0%|          | 0/58 [00:00<?, ?it/s]Fetching 58 files:   2%|▏         | 1/58 [00:00<00:08,  6.80it/s]Fetching 58 files:  19%|█▉        | 11/58 [00:00<00:00, 49.82it/s]Fetching 58 files:  31%|███       | 18/58 [00:01<00:03, 11.80it/s]Fetching 58 files:  48%|████▊     | 28/58 [00:01<00:01, 20.93it/s]Fetching 58 files:  59%|█████▊    | 34/58 [00:02<00:01, 13.55it/s]Fetching 58 files: 100%|██████████| 58/58 [00:02<00:00, 25.07it/s]
+
+done in 0.31 h -> /Volumes/LaCie/SRT-ARCHIVE
+[05:44:20] lacie done
+[05:44:20] === all banking complete

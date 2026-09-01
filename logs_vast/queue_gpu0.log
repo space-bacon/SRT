@@ -1,0 +1,35 @@
+QUEUE-START gpu=0 jobs=queues/gpu0.txt 2026-08-31T21:12:32+00:00
+QUEUE-JOB 1 gpu=0 2026-08-31T21:12:32+00:00 :: /venv/main/bin/python scripts/mbpp_ladder.py --k 64 --sizes 7B --arms chat --out artifacts/nla/mbpp_k64 --batch 8
+shard 0/1  1 models  425 prompts  K=64  max_new=384  arms=['chat']  -> artifacts/nla/mbpp_k64
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 13739.59it/s]
+  mbpp7B_inst      loaded 2s, running 1 arm(s)
+  mbpp7B_inst      chat              8/425  [    8/425   1.9%  elapsed 1:09  ETA 60:29  7/min]
+  mbpp7B_inst      chat             40/425  [   40/425   9.4%  elapsed 5:51  ETA 56:21  7/min]
+  mbpp7B_inst      chat             72/425  [   72/425  16.9%  elapsed 10:15  ETA 50:16  7/min]
+  mbpp7B_inst      chat            104/425  [  104/425  24.5%  elapsed 14:53  ETA 45:59  7/min]
+  mbpp7B_inst      chat            136/425  [  136/425  32.0%  elapsed 19:11  ETA 40:45  7/min]
+  mbpp7B_inst      chat            168/425  [  168/425  39.5%  elapsed 23:30  ETA 35:57  7/min]
+  mbpp7B_inst      chat            200/425  [  200/425  47.1%  elapsed 28:12  ETA 31:44  7/min]
+  mbpp7B_inst      chat            232/425  [  232/425  54.6%  elapsed 32:42  ETA 27:12  7/min]
+  mbpp7B_inst      chat            264/425  [  264/425  62.1%  elapsed 36:53  ETA 22:30  7/min]
+  mbpp7B_inst      chat            296/425  [  296/425  69.6%  elapsed 41:35  ETA 18:07  7/min]
+  mbpp7B_inst      chat            328/425  [  328/425  77.2%  elapsed 46:05  ETA 13:37  7/min]
+  mbpp7B_inst      chat            360/425  [  360/425  84.7%  elapsed 49:47  ETA 8:59  7/min]
+  mbpp7B_inst      chat            392/425  [  392/425  92.2%  elapsed 54:00  ETA 4:32  7/min]
+  mbpp7B_inst      chat            424/425  [  424/425  99.8%  elapsed 58:17  ETA 0:08  7/min]
+  mbpp7B_inst      chat           DONE          [  425/425 100.0%  elapsed 58:23  ETA 0:00  7/min]
+QUEUE-OK 1 gpu=0 2026-08-31T22:10:59+00:00
+QUEUE-JOB 2 gpu=0 2026-08-31T22:11:09+00:00 :: /venv/main/bin/python scripts/mbpp_ladder.py --k 64 --sizes 3B --arms chat --out artifacts/nla/mbpp_k64 --batch 12
+shard 0/1  1 models  425 prompts  K=64  max_new=384  arms=['chat']  -> artifacts/nla/mbpp_k64
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 14073.21it/s]
+  mbpp3B_inst      loaded 1s, running 1 arm(s)
+  mbpp3B_inst      chat             12/425  [   12/425   2.8%  elapsed 1:20  ETA 46:14  9/min]
+  mbpp3B_inst      chat             60/425  [   60/425  14.1%  elapsed 6:21  ETA 38:41  9/min]
+  mbpp3B_inst      chat            108/425  [  108/425  25.4%  elapsed 11:28  ETA 33:40  9/min]
+  mbpp3B_inst      chat            156/425  [  156/425  36.7%  elapsed 16:17  ETA 28:05  10/min]
+  mbpp3B_inst      chat            204/425  [  204/425  48.0%  elapsed 21:23  ETA 23:10  10/min]
+  mbpp3B_inst      chat            252/425  [  252/425  59.3%  elapsed 26:23  ETA 18:06  10/min]
+  mbpp3B_inst      chat            300/425  [  300/425  70.6%  elapsed 31:29  ETA 13:07  10/min]
+  mbpp3B_inst      chat            348/425  [  348/425  81.9%  elapsed 36:27  ETA 8:03  10/min]
+  mbpp3B_inst      chat            396/425  [  396/425  93.2%  elapsed 41:31  ETA 3:02  10/min]
+  mbpp3B_inst      chat           DONE          [  425/425 100.0%  elapsed 44:22  ETA 0:00  10/min]

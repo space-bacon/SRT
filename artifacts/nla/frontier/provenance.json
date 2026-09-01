@@ -1,0 +1,48 @@
+{
+  "question": "what are the frontier trio, and what does the hardware allow",
+  "source": "sizes from the Hugging Face Hub API, not from the plan note",
+  "members": {
+    "deepseek_v4_flash": {
+      "repo": "deepseek-ai/DeepSeek-V4-Flash",
+      "lab": "DeepSeek",
+      "hub_gb": 159.6,
+      "n_files": 73,
+      "sha": "60d8d70770c6776ff598c94bb586a859a38244f1",
+      "local": true,
+      "path": "/workspace/.hf_home/hub/models--deepseek-ai--DeepSeek-V4-Flash/snapshots/60d8d70770c6776ff598c94bb586a859a38244f1/"
+    },
+    "qwen38_flash_next": {
+      "repo": "Qwen/Qwen3.8-Flash-Next-FP8",
+      "lab": "Alibaba",
+      "hub_gb": 185.6,
+      "n_files": 144,
+      "sha": "236dfdf285828023ca3bcd3f37366c58a3469b13",
+      "local": true,
+      "path": "/workspace/.hf_home/hub/models--Qwen--Qwen3.8-Flash-Next-FP8/snapshots/236dfdf285828023ca3bcd3f37366c58a3469b13/"
+    },
+    "glm53_flash": {
+      "repo": "zai-org/GLM-5.3-Flash",
+      "lab": "Zhipu",
+      "hub_gb": 328.4,
+      "n_files": 72,
+      "sha": "03eb5366286afd40d2221b1d9c63a6dd1ba4832e",
+      "local": true,
+      "path": "/workspace/.hf_home/hub/models--zai-org--GLM-5.3-Flash/snapshots/03eb5366286afd40d2221b1d9c63a6dd1ba4832e/"
+    }
+  },
+  "total_gb": 673.6,
+  "gpus": {
+    "count": 4,
+    "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "mib_each": 97887,
+    "mib_total": 391548,
+    "gb_total": 410.6
+  },
+  "fit": {
+    "largest_model_gb": 328.4,
+    "fits_on_one_card": false,
+    "cards_needed_largest": 4,
+    "note": "sequential over all cards: two-cards-each leaves too little for KV cache on the 185.6 GB member"
+  },
+  "status": "generation not yet run; this file records inputs only"
+}

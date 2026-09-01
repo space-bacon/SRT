@@ -1,0 +1,377 @@
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+loading Qwen3OmniMoeThinkerForConditionalGeneration
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files:   7%|▋         | 1/15 [01:12<16:57, 72.65s/it]Fetching 15 files:  13%|█▎        | 2/15 [01:12<06:30, 30.03s/it]Fetching 15 files:  27%|██▋       | 4/15 [01:17<02:17, 12.51s/it]Fetching 15 files:  33%|███▎      | 5/15 [01:20<01:37,  9.70s/it]Fetching 15 files:  40%|████      | 6/15 [01:20<01:01,  6.80s/it]Fetching 15 files:  47%|████▋     | 7/15 [01:21<00:40,  5.01s/it]Fetching 15 files:  53%|█████▎    | 8/15 [01:23<00:28,  4.12s/it]Fetching 15 files:  60%|██████    | 9/15 [01:55<01:15, 12.51s/it]Fetching 15 files:  67%|██████▋   | 10/15 [02:00<00:51, 10.27s/it]Fetching 15 files:  80%|████████  | 12/15 [02:07<00:21,  7.19s/it]Fetching 15 files:  93%|█████████▎| 14/15 [02:08<00:04,  4.38s/it]Fetching 15 files: 100%|██████████| 15/15 [02:08<00:00,  8.54s/it]
+Loading weights:   0%|          | 0/1407 [00:00<?, ?it/s]Loading weights:  37%|███▋      | 527/1407 [00:00<00:00, 4014.26it/s]Loading weights:  66%|██████▌   | 929/1407 [00:03<00:02, 230.81it/s] Loading weights:  78%|███████▊  | 1102/1407 [00:04<00:01, 200.10it/s]Loading weights: 100%|██████████| 1407/1407 [00:04<00:00, 300.53it/s]
+[transformers] [1mQwen3OmniMoeThinkerForConditionalGeneration LOAD REPORT[0m from: Qwen/Qwen3-Omni-30B-A3B-Instruct
+Key                                                                                      | Status     |  | 
+-----------------------------------------------------------------------------------------+------------+--+-
+talker.model.layers.{0...19}.mlp.experts.down_proj                                       | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert.gate_proj.weight                          | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.mlp.up_proj.weight                    | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.k_norm.weight                                     | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.q_proj.weight         | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.k_proj.weight                                     | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv1.conv.weight                          | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.o_proj.weight         | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv2.conv.weight                          | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.experts.gate_up_proj                                    | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.gate.weight                                             | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert.down_proj.weight                          | UNEXPECTED |  | 
+talker.model.layers.{0...19}.input_layernorm.weight                                      | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.q_proj.weight                                     | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.v_proj.weight                                     | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv2.conv.bias                            | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert_gate.weight                               | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act2.alpha                                 | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act1.beta                                  | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.0.alpha                                              | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp_layer_scale.scale           | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc2.weight                                               | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.o_proj.weight                                     | UNEXPECTED |  | 
+talker.code_predictor.model.codec_embedding.{0...14}.weight                              | UNEXPECTED |  | 
+talker.model.layers.{0...19}.post_attention_layernorm.weight                             | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.o_proj.weight               | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert.up_proj.weight                            | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.q_norm.weight                                     | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.gamma                                                         | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.input_layernorm.weight          | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp.down_proj.weight            | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.0.conv.weight                                                   | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp.gate_proj.weight            | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act2.beta                                  | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv1.conv.bias                            | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.post_attention_layernorm.weight | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.k_proj.weight         | UNEXPECTED |  | 
+code2wav.decoder.{0, 6}.conv.weight                                                      | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.dwconv.conv.weight                                            | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.1.conv.weight                                        | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp.up_proj.weight              | UNEXPECTED |  | 
+talker.code_predictor.lm_head.{0...14}.weight                                            | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.v_proj.weight               | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.q_norm.weight               | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.dwconv.conv.bias                                              | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.mlp.down_proj.weight                  | UNEXPECTED |  | 
+code2wav.pre_transformer.norm.weight                                                     | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.v_proj.weight         | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn_layer_scale.scale     | UNEXPECTED |  | 
+code2wav.decoder.{0, 6}.conv.bias                                                        | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.input_layernorm.weight                | UNEXPECTED |  | 
+talker.text_projection.linear_fc1.weight                                                 | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc1.weight                                               | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.norm.weight                                                   | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act1.alpha                                 | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.1.conv.bias                                          | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.norm.bias                                                     | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv1.weight                                                | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc2.bias                                                 | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.k_proj.weight               | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.post_attention_layernorm.weight       | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv2.weight                                                | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.mlp.gate_proj.weight                  | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.q_proj.weight               | UNEXPECTED |  | 
+talker.model.codec_embedding.weight                                                      | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.0.beta                                               | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.k_norm.weight               | UNEXPECTED |  | 
+code2wav.decoder.5.alpha                                                                 | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv2.bias                                                  | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.0.conv.bias                                                     | UNEXPECTED |  | 
+talker.codec_head.weight                                                                 | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc1.bias                                                 | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv1.bias                                                  | UNEXPECTED |  | 
+talker.text_projection.linear_fc1.bias                                                   | UNEXPECTED |  | 
+talker.code_predictor.model.norm.weight                                                  | UNEXPECTED |  | 
+talker.text_projection.linear_fc2.bias                                                   | UNEXPECTED |  | 
+talker.text_projection.linear_fc2.weight                                                 | UNEXPECTED |  | 
+code2wav.code_embedding.weight                                                           | UNEXPECTED |  | 
+code2wav.decoder.5.beta                                                                  | UNEXPECTED |  | 
+talker.model.norm.weight                                                                 | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+depth 48, d 2048, tap L29, content tokens {'image': 151655, 'audio': 151675, 'video': 151656}
+  100/28030 3.40/s ok=100 eta 136.8m
+  200/28030 3.45/s ok=200 eta 134.3m
+  300/28030 3.48/s ok=300 eta 132.9m
+  400/28030 3.49/s ok=400 eta 131.9m
+  500/28030 3.50/s ok=500 eta 131.3m
+  600/28030 3.52/s ok=600 eta 130.0m
+  700/28030 3.54/s ok=700 eta 128.8m
+  800/28030 3.55/s ok=800 eta 127.8m
+  900/28030 3.56/s ok=900 eta 127.0m
+  1000/28030 3.57/s ok=1000 eta 126.3m
+  1100/28030 3.57/s ok=1100 eta 125.7m
+  1200/28030 3.58/s ok=1200 eta 125.0m
+  1300/28030 3.58/s ok=1300 eta 124.4m
+  1400/28030 3.59/s ok=1400 eta 123.7m
+  1500/28030 3.59/s ok=1500 eta 123.1m
+  1600/28030 3.59/s ok=1600 eta 122.6m
+  1700/28030 3.60/s ok=1700 eta 122.0m
+  1800/28030 3.60/s ok=1800 eta 121.6m
+  1900/28030 3.60/s ok=1900 eta 121.1m
+  2000/28030 3.60/s ok=2000 eta 120.6m
+  2100/28030 3.60/s ok=2100 eta 120.1m
+  2200/28030 3.60/s ok=2200 eta 119.6m
+  2300/28030 3.60/s ok=2300 eta 119.1m
+  2400/28030 3.60/s ok=2400 eta 118.5m
+  2500/28030 3.60/s ok=2500 eta 118.1m
+  2600/28030 3.60/s ok=2600 eta 117.6m
+  2700/28030 3.60/s ok=2700 eta 117.3m
+  2800/28030 3.60/s ok=2800 eta 116.8m
+  2900/28030 3.60/s ok=2900 eta 116.3m
+  3000/28030 3.60/s ok=3000 eta 115.8m
+  3100/28030 3.60/s ok=3100 eta 115.3m
+  3200/28030 3.60/s ok=3200 eta 114.9m
+  3300/28030 3.60/s ok=3300 eta 114.5m
+  3400/28030 3.60/s ok=3400 eta 114.1m
+  3500/28030 3.60/s ok=3500 eta 113.6m
+  3600/28030 3.60/s ok=3600 eta 113.1m
+  3700/28030 3.60/s ok=3700 eta 112.6m
+  3800/28030 3.60/s ok=3800 eta 112.1m
+  3900/28030 3.60/s ok=3900 eta 111.6m
+  4000/28030 3.60/s ok=4000 eta 111.1m
+  4100/28030 3.61/s ok=4100 eta 110.6m
+  4200/28030 3.61/s ok=4200 eta 110.1m
+  4300/28030 3.61/s ok=4300 eta 109.7m
+  4400/28030 3.60/s ok=4400 eta 109.2m
+  4500/28030 3.60/s ok=4500 eta 108.8m
+  4600/28030 3.60/s ok=4600 eta 108.4m
+  4700/28030 3.60/s ok=4700 eta 107.9m
+  4800/28030 3.60/s ok=4800 eta 107.5m
+  4900/28030 3.60/s ok=4900 eta 107.1m
+  5000/28030 3.60/s ok=5000 eta 106.6m
+  5100/28030 3.60/s ok=5100 eta 106.1m
+  5200/28030 3.60/s ok=5200 eta 105.7m
+  5300/28030 3.60/s ok=5300 eta 105.2m
+  5400/28030 3.60/s ok=5400 eta 104.7m
+  5500/28030 3.60/s ok=5500 eta 104.3m
+  5600/28030 3.60/s ok=5600 eta 103.8m
+  5700/28030 3.60/s ok=5700 eta 103.4m
+  5800/28030 3.60/s ok=5800 eta 102.9m
+  5900/28030 3.60/s ok=5900 eta 102.4m
+  6000/28030 3.60/s ok=6000 eta 101.9m
+  6100/28030 3.60/s ok=6100 eta 101.5m
+  6200/28030 3.60/s ok=6200 eta 101.0m
+  6300/28030 3.60/s ok=6300 eta 100.5m
+  6400/28030 3.60/s ok=6400 eta 100.0m
+  6500/28030 3.61/s ok=6500 eta 99.5m
+  6600/28030 3.61/s ok=6600 eta 99.0m
+  6700/28030 3.61/s ok=6700 eta 98.6m
+  6800/28030 3.61/s ok=6800 eta 98.1m
+  6900/28030 3.61/s ok=6900 eta 97.6m
+  7000/28030 3.61/s ok=7000 eta 97.2m
+  7100/28030 3.61/s ok=7100 eta 96.7m
+  7200/28030 3.61/s ok=7200 eta 96.3m
+  7300/28030 3.61/s ok=7300 eta 95.8m
+  7400/28030 3.61/s ok=7400 eta 95.3m
+  7500/28030 3.61/s ok=7500 eta 94.9m
+  7600/28030 3.61/s ok=7600 eta 94.4m
+  7700/28030 3.61/s ok=7700 eta 93.9m
+  7800/28030 3.61/s ok=7800 eta 93.5m
+  7900/28030 3.61/s ok=7900 eta 93.0m
+  8000/28030 3.61/s ok=8000 eta 92.5m
+  8100/28030 3.61/s ok=8100 eta 92.1m
+  8200/28030 3.61/s ok=8200 eta 91.6m
+  8300/28030 3.61/s ok=8300 eta 91.2m
+  8400/28030 3.61/s ok=8400 eta 90.7m
+  8500/28030 3.61/s ok=8500 eta 90.2m
+  8600/28030 3.61/s ok=8600 eta 89.7m
+  8700/28030 3.61/s ok=8700 eta 89.3m
+  8800/28030 3.61/s ok=8800 eta 88.8m
+  8900/28030 3.61/s ok=8900 eta 88.4m
+  9000/28030 3.61/s ok=9000 eta 87.9m
+  9100/28030 3.61/s ok=9100 eta 87.5m
+  9200/28030 3.61/s ok=9200 eta 87.0m
+  9300/28030 3.61/s ok=9300 eta 86.5m
+  9400/28030 3.61/s ok=9400 eta 86.1m
+  9500/28030 3.61/s ok=9500 eta 85.6m
+  9600/28030 3.61/s ok=9600 eta 85.1m
+  9700/28030 3.61/s ok=9700 eta 84.7m
+  9800/28030 3.61/s ok=9800 eta 84.2m
+  9900/28030 3.61/s ok=9900 eta 83.7m
+  10000/28030 3.61/s ok=10000 eta 83.3m
+  10100/28030 3.61/s ok=10100 eta 82.8m
+  10200/28030 3.61/s ok=10200 eta 82.4m
+  10300/28030 3.61/s ok=10300 eta 81.9m
+  10400/28030 3.61/s ok=10400 eta 81.5m
+  10500/28030 3.61/s ok=10500 eta 81.0m
+  10600/28030 3.61/s ok=10600 eta 80.5m
+  10700/28030 3.61/s ok=10700 eta 80.1m
+  10800/28030 3.61/s ok=10800 eta 79.6m
+  10900/28030 3.61/s ok=10900 eta 79.2m
+  11000/28030 3.61/s ok=11000 eta 78.7m
+  11100/28030 3.61/s ok=11100 eta 78.3m
+  11200/28030 3.61/s ok=11200 eta 77.8m
+  11300/28030 3.61/s ok=11300 eta 77.3m
+  11400/28030 3.61/s ok=11400 eta 76.9m
+  11500/28030 3.61/s ok=11500 eta 76.4m
+  11600/28030 3.61/s ok=11600 eta 76.0m
+  11700/28030 3.61/s ok=11700 eta 75.5m
+  11800/28030 3.61/s ok=11800 eta 75.0m
+  11900/28030 3.61/s ok=11900 eta 74.6m
+  12000/28030 3.60/s ok=12000 eta 74.1m
+  12100/28030 3.60/s ok=12100 eta 73.7m
+  12200/28030 3.60/s ok=12200 eta 73.2m
+  12300/28030 3.60/s ok=12300 eta 72.7m
+  12400/28030 3.60/s ok=12400 eta 72.3m
+  12500/28030 3.60/s ok=12500 eta 71.8m
+  12600/28030 3.61/s ok=12600 eta 71.3m
+  12700/28030 3.61/s ok=12700 eta 70.9m
+  12800/28030 3.61/s ok=12800 eta 70.4m
+  12900/28030 3.60/s ok=12900 eta 70.0m
+  13000/28030 3.60/s ok=13000 eta 69.5m
+  13100/28030 3.60/s ok=13100 eta 69.0m
+  13200/28030 3.60/s ok=13200 eta 68.6m
+  13300/28030 3.60/s ok=13300 eta 68.1m
+  13400/28030 3.60/s ok=13400 eta 67.6m
+  13500/28030 3.60/s ok=13500 eta 67.2m
+  13600/28030 3.60/s ok=13600 eta 66.7m
+  13700/28030 3.60/s ok=13700 eta 66.3m
+  13800/28030 3.60/s ok=13800 eta 65.8m
+  13900/28030 3.60/s ok=13900 eta 65.3m
+  14000/28030 3.60/s ok=14000 eta 64.9m
+  14100/28030 3.60/s ok=14100 eta 64.4m
+  14200/28030 3.60/s ok=14200 eta 64.0m
+  14300/28030 3.60/s ok=14300 eta 63.5m
+  14400/28030 3.60/s ok=14400 eta 63.0m
+  14500/28030 3.60/s ok=14500 eta 62.6m
+  14600/28030 3.60/s ok=14600 eta 62.1m
+  14700/28030 3.60/s ok=14700 eta 61.6m
+  14800/28030 3.60/s ok=14800 eta 61.2m
+  14900/28030 3.60/s ok=14900 eta 60.7m
+  15000/28030 3.60/s ok=15000 eta 60.3m
+  15100/28030 3.60/s ok=15100 eta 59.8m
+  15200/28030 3.60/s ok=15200 eta 59.3m
+  15300/28030 3.60/s ok=15300 eta 58.9m
+  15400/28030 3.60/s ok=15400 eta 58.4m
+  15500/28030 3.60/s ok=15500 eta 58.0m
+  15600/28030 3.60/s ok=15600 eta 57.5m
+  15700/28030 3.60/s ok=15700 eta 57.0m
+  15800/28030 3.60/s ok=15800 eta 56.6m
+  15900/28030 3.60/s ok=15900 eta 56.1m
+  16000/28030 3.60/s ok=16000 eta 55.6m
+  16100/28030 3.60/s ok=16100 eta 55.2m
+  16200/28030 3.60/s ok=16200 eta 54.7m
+  16300/28030 3.60/s ok=16300 eta 54.2m
+  16400/28030 3.60/s ok=16400 eta 53.8m
+  16500/28030 3.60/s ok=16500 eta 53.3m
+  16600/28030 3.60/s ok=16600 eta 52.9m
+  16700/28030 3.60/s ok=16700 eta 52.4m
+  16800/28030 3.60/s ok=16800 eta 51.9m
+  16900/28030 3.60/s ok=16900 eta 51.5m
+  17000/28030 3.60/s ok=17000 eta 51.0m
+  17100/28030 3.60/s ok=17100 eta 50.5m
+  17200/28030 3.60/s ok=17200 eta 50.1m
+  17300/28030 3.61/s ok=17300 eta 49.6m
+  17400/28030 3.61/s ok=17400 eta 49.1m
+  17500/28030 3.61/s ok=17500 eta 48.7m
+  17600/28030 3.61/s ok=17600 eta 48.2m
+  17700/28030 3.61/s ok=17700 eta 47.7m
+  17800/28030 3.61/s ok=17800 eta 47.3m
+  17900/28030 3.61/s ok=17900 eta 46.8m
+  18000/28030 3.61/s ok=18000 eta 46.4m
+  18100/28030 3.61/s ok=18100 eta 45.9m
+  18200/28030 3.61/s ok=18200 eta 45.4m
+  18300/28030 3.61/s ok=18300 eta 45.0m
+  18400/28030 3.61/s ok=18400 eta 44.5m
+  18500/28030 3.61/s ok=18500 eta 44.0m
+  18600/28030 3.61/s ok=18600 eta 43.6m
+  18700/28030 3.61/s ok=18700 eta 43.1m
+  18800/28030 3.61/s ok=18800 eta 42.7m
+  18900/28030 3.61/s ok=18900 eta 42.2m
+  19000/28030 3.61/s ok=19000 eta 41.7m
+  19100/28030 3.61/s ok=19100 eta 41.3m
+  19200/28030 3.61/s ok=19200 eta 40.8m
+  19300/28030 3.61/s ok=19300 eta 40.3m
+  19400/28030 3.61/s ok=19400 eta 39.9m
+  19500/28030 3.61/s ok=19500 eta 39.4m
+  19600/28030 3.61/s ok=19600 eta 38.9m
+  19700/28030 3.61/s ok=19700 eta 38.5m
+  19800/28030 3.61/s ok=19800 eta 38.0m
+  19900/28030 3.61/s ok=19900 eta 37.6m
+  20000/28030 3.61/s ok=20000 eta 37.1m
+  20100/28030 3.61/s ok=20100 eta 36.6m
+  20200/28030 3.61/s ok=20200 eta 36.2m
+  20300/28030 3.61/s ok=20300 eta 35.7m
+  20400/28030 3.61/s ok=20400 eta 35.2m
+  20500/28030 3.61/s ok=20500 eta 34.8m
+  20600/28030 3.61/s ok=20600 eta 34.3m
+  20700/28030 3.61/s ok=20700 eta 33.9m
+  20800/28030 3.61/s ok=20800 eta 33.4m
+  20900/28030 3.61/s ok=20900 eta 32.9m
+  21000/28030 3.61/s ok=21000 eta 32.5m
+  21100/28030 3.61/s ok=21100 eta 32.0m
+  21200/28030 3.61/s ok=21200 eta 31.5m
+  21300/28030 3.61/s ok=21300 eta 31.1m
+  21400/28030 3.61/s ok=21400 eta 30.6m
+  21500/28030 3.61/s ok=21500 eta 30.2m
+  21600/28030 3.61/s ok=21600 eta 29.7m
+  21700/28030 3.61/s ok=21700 eta 29.2m
+  21800/28030 3.61/s ok=21800 eta 28.8m
+  21900/28030 3.61/s ok=21900 eta 28.3m
+  22000/28030 3.61/s ok=22000 eta 27.8m
+  22100/28030 3.61/s ok=22100 eta 27.4m
+  22200/28030 3.61/s ok=22200 eta 26.9m
+  22300/28030 3.61/s ok=22300 eta 26.5m
+  22400/28030 3.61/s ok=22400 eta 26.0m
+  22500/28030 3.61/s ok=22500 eta 25.5m
+  22600/28030 3.61/s ok=22600 eta 25.1m
+  22700/28030 3.61/s ok=22700 eta 24.6m
+  22800/28030 3.61/s ok=22800 eta 24.1m
+  22900/28030 3.61/s ok=22900 eta 23.7m
+  23000/28030 3.61/s ok=23000 eta 23.2m
+  23100/28030 3.61/s ok=23100 eta 22.8m
+  23200/28030 3.61/s ok=23200 eta 22.3m
+  23300/28030 3.61/s ok=23300 eta 21.8m
+  23400/28030 3.61/s ok=23400 eta 21.4m
+  23500/28030 3.61/s ok=23500 eta 20.9m
+  23600/28030 3.61/s ok=23600 eta 20.4m
+  23700/28030 3.61/s ok=23700 eta 20.0m
+  23800/28030 3.61/s ok=23800 eta 19.5m
+  23900/28030 3.61/s ok=23900 eta 19.1m
+  24000/28030 3.61/s ok=24000 eta 18.6m
+  24100/28030 3.61/s ok=24100 eta 18.1m
+  24200/28030 3.61/s ok=24200 eta 17.7m
+  24300/28030 3.61/s ok=24300 eta 17.2m
+  24400/28030 3.61/s ok=24400 eta 16.7m
+  24500/28030 3.61/s ok=24500 eta 16.3m
+  24600/28030 3.61/s ok=24600 eta 15.8m
+  24700/28030 3.61/s ok=24700 eta 15.4m
+  24800/28030 3.61/s ok=24800 eta 14.9m
+  24900/28030 3.61/s ok=24900 eta 14.4m
+  25000/28030 3.61/s ok=25000 eta 14.0m
+  25100/28030 3.61/s ok=25100 eta 13.5m
+  25200/28030 3.61/s ok=25200 eta 13.1m
+  25300/28030 3.61/s ok=25300 eta 12.6m
+  25400/28030 3.61/s ok=25400 eta 12.1m
+  25500/28030 3.61/s ok=25500 eta 11.7m
+  25600/28030 3.61/s ok=25600 eta 11.2m
+  25700/28030 3.61/s ok=25700 eta 10.7m
+  25800/28030 3.61/s ok=25800 eta 10.3m
+  25900/28030 3.61/s ok=25900 eta 9.8m
+  26000/28030 3.61/s ok=26000 eta 9.4m
+  26100/28030 3.61/s ok=26100 eta 8.9m
+  26200/28030 3.61/s ok=26200 eta 8.4m
+  26300/28030 3.61/s ok=26300 eta 8.0m
+  26400/28030 3.61/s ok=26400 eta 7.5m
+  26500/28030 3.61/s ok=26500 eta 7.1m
+  26600/28030 3.61/s ok=26600 eta 6.6m
+  26700/28030 3.61/s ok=26700 eta 6.1m
+  26800/28030 3.61/s ok=26800 eta 5.7m
+  26900/28030 3.61/s ok=26900 eta 5.2m
+  27000/28030 3.61/s ok=27000 eta 4.8m
+  27100/28030 3.61/s ok=27100 eta 4.3m
+  27200/28030 3.61/s ok=27200 eta 3.8m
+  27300/28030 3.61/s ok=27300 eta 3.4m
+  27400/28030 3.61/s ok=27400 eta 2.9m
+  27500/28030 3.61/s ok=27500 eta 2.4m
+  27600/28030 3.61/s ok=27600 eta 2.0m
+  27700/28030 3.61/s ok=27700 eta 1.5m
+  27800/28030 3.61/s ok=27800 eta 1.1m
+  27900/28030 3.61/s ok=27900 eta 0.6m
+  28000/28030 3.61/s ok=28000 eta 0.1m
+
+encoded 28030/28030
+  image: 28030/28030 ok (0 errors)
+wrote /root/cxr14_qwen3omni_s0.npz

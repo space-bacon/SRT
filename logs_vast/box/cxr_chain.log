@@ -1,0 +1,142 @@
+  shard 0: 28030 rows
+  shard 1: 28030 rows
+  shard 2: 28030 rows
+  shard 3: 28030 rows
+  total 112120
+=== gemma4 already merged, skipping
+=== aria: encoding on 4 GPUs, 2026-08-29 22:56:13
+=== aria: merging, 2026-08-30 00:32:13
+aria: 112120 rows, 112120 ok, item (112120, 2560) -> /root/cxr14_aria.npz
+=== aria: probing
+112120 encoded images, dim 2560
+  train 86524  test 25596  patient overlap 0 (must be 0)
+  device: cuda
+
+fitting probe
+fitting shuffled-label floor
+  test set: 25596 images from 2797 patients (9.15 per patient)
+
+finding                 n_pos   AUROC           95% CI  shuffled  view-only
+Atelectasis              3279  0.6802   [0.666, 0.695]    0.5072     0.5152
+Cardiomegaly             1069  0.7379   [0.712, 0.760]    0.5146     0.5322
+Effusion                 4658  0.7306   [0.718, 0.743]    0.4847     0.5443
+Infiltration             6112  0.6647   [0.654, 0.674]    0.4997     0.6110
+Mass                     1748  0.6595   [0.634, 0.682]    0.4979     0.5515
+Nodule                   1623  0.6118   [0.591, 0.633]    0.4975     0.5366
+Pneumonia                 555  0.6201   [0.596, 0.644]    0.5060     0.5581
+Pneumothorax             2665  0.7884   [0.771, 0.804]    0.4954     0.5696
+Consolidation            1815  0.6749   [0.658, 0.691]    0.4924     0.6022
+Edema                     925  0.7987   [0.779, 0.818]    0.4940     0.6605
+Emphysema                1093  0.7750   [0.751, 0.796]    0.4931     0.5664
+Fibrosis                  435  0.7301   [0.698, 0.761]    0.5069     0.6383
+Pleural_Thickening       1143  0.6848   [0.663, 0.708]    0.4967     0.5737
+Hernia                     86  0.7553   [0.669, 0.835]    0.5366     0.6985
+
+mean AUROC 0.7080   shuffled floor 0.5016   view-only 0.5827
+14/14 findings beat the view-only baseline
+
+SPLIT-MATCHED, both on the official test_list.txt:
+  Wang et al. 2017, ResNet-50 fine-tuned end to end  0.7451
+  ours, frozen backbone + linear probe               0.7080   -0.0371, ahead on 2/14
+context only, NOT our split (random 70/10/20 patient-disjoint, not the official list): Wang 0.7381, Yao 0.8027, CheXNet 0.8414
+
+wrote /root/cxr14_probe_aria.json
+overlay         2.0T  136G  1.9T   7% /
+=== mistral: encoding on 4 GPUs, 2026-08-30 00:32:33
+=== mistral: merging, 2026-08-30 03:26:34
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/merge_shards.py", line 45, in <module>
+    main()
+  File "/root/srt-adapter/scripts/merge_shards.py", line 25, in main
+    parts = [np.load(f"{a.prefix}_{a.tag}_s{i}.npz", allow_pickle=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 471, in load
+    ret = NpzFile(fid, own_fid=own_fid, allow_pickle=allow_pickle,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 197, in __init__
+    _zip = zipfile_factory(fid)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 112, in zipfile_factory
+    return zipfile.ZipFile(file, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/zipfile/__init__.py", line 1371, in __init__
+    self._RealGetContents()
+  File "/venv/main/lib/python3.12/zipfile/__init__.py", line 1438, in _RealGetContents
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
+=== mistral: probing
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/cxr_probe.py", line 284, in <module>
+    main()
+  File "/root/srt-adapter/scripts/cxr_probe.py", line 158, in main
+    z = np.load(a.states)
+        ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 454, in load
+    fid = stack.enter_context(open(os.fspath(file), "rb"))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/root/cxr14_mistral.npz'
+overlay         2.0T  181G  1.9T   9% /
+=== qwen3omni: encoding on 4 GPUs, 2026-08-30 03:26:35
+=== qwen3omni: merging, 2026-08-30 05:39:35
+qwen3omni: 112120 rows, 112120 ok, item (112120, 2048) -> /root/cxr14_qwen3omni.npz
+=== qwen3omni: probing
+112120 encoded images, dim 2048
+  train 86524  test 25596  patient overlap 0 (must be 0)
+  device: cuda
+
+fitting probe
+fitting shuffled-label floor
+  test set: 25596 images from 2797 patients (9.15 per patient)
+
+finding                 n_pos   AUROC           95% CI  shuffled  view-only
+Atelectasis              3279  0.7282   [0.713, 0.743]    0.5186     0.5106
+Cardiomegaly             1069  0.8246   [0.798, 0.847]    0.4869     0.5178
+Effusion                 4658  0.7899   [0.778, 0.801]    0.4768     0.5345
+Infiltration             6112  0.6921   [0.681, 0.703]    0.5046     0.6051
+Mass                     1748  0.7387   [0.713, 0.763]    0.5294     0.5563
+Nodule                   1623  0.6989   [0.677, 0.718]    0.4953     0.5557
+Pneumonia                 555  0.6704   [0.644, 0.697]    0.5381     0.5724
+Pneumothorax             2665  0.8419   [0.825, 0.856]    0.4782     0.5829
+Consolidation            1815  0.7080   [0.692, 0.723]    0.5075     0.6177
+Edema                     925  0.8291   [0.811, 0.848]    0.4963     0.6811
+Emphysema                1093  0.8502   [0.831, 0.868]    0.4798     0.5722
+Fibrosis                  435  0.7747   [0.745, 0.805]    0.5061     0.6455
+Pleural_Thickening       1143  0.7360   [0.715, 0.756]    0.5001     0.5872
+Hernia                     86  0.8270   [0.767, 0.874]    0.4397     0.6967
+
+mean AUROC 0.7650   shuffled floor 0.4970   view-only 0.5883
+14/14 findings beat the view-only baseline
+
+SPLIT-MATCHED, both on the official test_list.txt:
+  Wang et al. 2017, ResNet-50 fine-tuned end to end  0.7451
+  ours, frozen backbone + linear probe               0.7650   +0.0199, ahead on 12/14
+context only, NOT our split (random 70/10/20 patient-disjoint, not the official list): Wang 0.7381, Yao 0.8027, CheXNet 0.8414
+
+wrote /root/cxr14_probe_qwen3omni.json
+overlay         2.0T  247G  1.8T  13% /
+
+=== ALL VENDORS DONE 2026-08-30 05:40:12
+  missing /root/cxr14_probe_gemma4.json
+  missing /root/cxr14_probe_mistral.json
+finding                  qwen3omni       aria  view-only  all beat
+Atelectasis                 0.7282     0.6802     0.5106       yes
+Cardiomegaly                0.8246     0.7379     0.5178       yes
+Effusion                    0.7899     0.7306     0.5345       yes
+Infiltration                0.6921     0.6647     0.6051       yes
+Mass                        0.7387     0.6595     0.5563       yes
+Nodule                      0.6989     0.6118     0.5557       yes
+Pneumonia                   0.6704     0.6201     0.5724       yes
+Pneumothorax                0.8419     0.7884     0.5829       yes
+Consolidation               0.7080     0.6749     0.6177       yes
+Edema                       0.8291     0.7987     0.6811       yes
+Emphysema                   0.8502     0.7750     0.5722       yes
+Fibrosis                    0.7747     0.7301     0.6455       yes
+Pleural_Thickening          0.7360     0.6848     0.5872       yes
+Hernia                      0.8270     0.7552     0.6967       yes
+
+mean AUROC by vendor: qwen3omni 0.7650  aria 0.7080
+spread across vendors 0.0570
+14/14 findings clear the view baseline in every vendor
+split-matched baseline 0.7451 (Wang et al. 2017, arXiv:1705.02315v5 Table 17, ResNet-50 fine-tuned end to end, official test_list.txt)
+
+wrote /root/cxr14_vendor_compare.json

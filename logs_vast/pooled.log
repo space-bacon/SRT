@@ -1,0 +1,19 @@
+6 members: gemma4_31b, glm47_flash, ministral_14b, ornith_35b, qwen25c_32b, qwen3c_30b
+  gemma4_31b         pass@1 0.9367  pass@k 0.9634
+  glm47_flash        pass@1 0.7904  pass@k 0.9512
+  ministral_14b      pass@1 0.8102  pass@k 0.9390
+  ornith_35b         pass@1 0.7027  pass@k 0.9085
+  qwen25c_32b        pass@1 0.8986  pass@k 0.9329
+  qwen3c_30b         pass@1 0.9002  pass@k 0.9207
+
+strongest member by pass@1: gemma4_31b
+
+  best member one sample        0.9367
+  best member + own agreement   0.9390
+  POOLED agreement (48 cands)   0.9390
+  pooled, chat-only recovery    0.9451
+  union oracle                  0.9878
+
+  pooling vs best-single-with-selector  +0.0000
+
+wrote /root/srt-adapter/artifacts/nla/ensemble/pooled_select.json

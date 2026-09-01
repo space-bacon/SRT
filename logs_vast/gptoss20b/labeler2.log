@@ -1,0 +1,24 @@
+You have loaded an FP4 model on CPU and have a CUDA/XPU device available, make sure to set your model on a GPU/XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or device_map = 'xpu'. 
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s]Fetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 8326.46it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s][AFetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 7682.22it/s]
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.10it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.50it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.20it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  1.86it/s]
+48/4096  e.g. 0 -> 'conversation and communication'
+288/4096  e.g. 240 -> '1'
+528/4096  e.g. 480 -> '[??]'
+768/4096  e.g. 720 -> '0/12b0e77f-5fb'
+1008/4096  e.g. 960 -> 'legal and advanced'
+1248/4096  e.g. 1200 -> '1'
+1488/4096  e.g. 1440 -> 'The question is about the integral of'
+1728/4096  e.g. 1680 -> 'math and code'
+1968/4096  e.g. 1920 -> 'code generation and debugging'
+2208/4096  e.g. 2160 -> 'punctuation and formatting'
+2448/4096  e.g. 2400 -> 'data extraction and text extraction'
+2688/4096  e.g. 2640 -> ''
+2928/4096  e.g. 2880 -> 'automaton'
+3168/4096  e.g. 3120 -> '0'
+3408/4096  e.g. 3360 -> ''
+3648/4096  e.g. 3600 -> 'programming and code'
+3888/4096  e.g. 3840 -> 'general knowledge'
+4096/4096  e.g. 4080 -> 'programming and code explanation'
+wrote artifacts/nla/gptoss20b/codebook_labels.json  (3436/4096 non-empty)

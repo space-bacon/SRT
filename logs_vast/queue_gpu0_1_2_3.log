@@ -1,0 +1,563 @@
+QUEUE-START gpu=0,1,2,3 jobs=queues/trio.txt 2026-08-31T21:46:56+00:00
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:59607MiB 2:94749MiB 3:65707MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:68007MiB 2:94749MiB 3:65707MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:69687MiB 2:94749MiB 3:65707MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:70407MiB 2:94749MiB 3:65707MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:80687MiB 2:96809MiB 3:65707MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:80687MiB 2:96809MiB 3:63400MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:19821MiB 2:96809MiB 3:38465MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:31663MiB 2:96809MiB 3:40265MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:38223MiB 2:96809MiB 3:40265MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:45443MiB 2:96809MiB 3:40265MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:42607MiB 1:45473MiB 2:96809MiB 3:40265MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:43727MiB 1:47953MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:21095MiB 1:49473MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:31417MiB 1:58013MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:31417MiB 1:58013MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:31877MiB 1:29233MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32017MiB 1:30353MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32017MiB 1:60107MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32177MiB 1:70169MiB 2:96811MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32177MiB 1:70169MiB 2:15247MiB 3:41785MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32177MiB 1:75689MiB 2:23807MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32177MiB 1:78509MiB 2:28137MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32719MiB 1:78509MiB 2:32977MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32719MiB 1:84129MiB 2:37737MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32719MiB 1:84129MiB 2:48877MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32719MiB 2:58237MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32719MiB 2:66897MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32719MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32919MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32919MiB 3:41857MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32919MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32919MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:32919MiB
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:33619MiB
+QUEUE-JOB 1 gpu=0,1,2,3 2026-08-31T22:55:47+00:00 :: /venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 0 --shards 3 --k 8 --max-new 1024 --batch 4 --device-map auto --gen-only
+shard 0/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+QUEUE-RETRY 1 gpu=0,1,2,3 attempt=1 2026-08-31T22:55:52+00:00
+shard 0/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+QUEUE-RETRY 1 gpu=0,1,2,3 attempt=2 2026-08-31T22:56:57+00:00
+QUEUE-WAIT gpu=0,1,2,3 busy: 0:88929MiB 1:79589MiB 2:79563MiB 3:73443MiB
+shard 0/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+QUEUE-RETRY 1 gpu=0,1,2,3 attempt=3 2026-08-31T22:59:48+00:00
+QUEUE-FAIL 1 gpu=0,1,2,3 after 3 attempts 2026-08-31T23:00:48+00:00 :: /venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 0 --shards 3 --k 8 --max-new 1024 --batch 4 --device-map auto --gen-only
+QUEUE-JOB 2 gpu=0,1,2,3 2026-08-31T23:00:59+00:00 :: /venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 1 --shards 3 --k 8 --max-new 1024 --batch 4 --device-map auto --gen-only
+shard 1/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+QUEUE-RETRY 2 gpu=0,1,2,3 attempt=1 2026-08-31T23:01:04+00:00
+shard 1/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+QUEUE-RETRY 2 gpu=0,1,2,3 attempt=2 2026-08-31T23:02:09+00:00
+shard 1/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 85, in run_model
+    mod = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype, device_map=device_map)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 402, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4270, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/auto.py", line 363, in get_hf_quantizer
+    config = hf_quantizer.update_tp_plan(config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/quantizers/quantizer_finegrained_fp8.py", line 195, in update_tp_plan
+    updated_plan = {k: layer_overrides.get(v, v) for k, v in base_plan.items()}
+                       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+QUEUE-RETRY 2 gpu=0,1,2,3 attempt=3 2026-08-31T23:03:15+00:00
+QUEUE-FAIL 2 gpu=0,1,2,3 after 3 attempts 2026-08-31T23:04:15+00:00 :: /venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 1 --shards 3 --k 8 --max-new 1024 --batch 4 --device-map auto --gen-only
+QUEUE-JOB 3 gpu=0,1,2,3 2026-08-31T23:04:25+00:00 :: /venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 2 --shards 3 --k 8 --max-new 1024 --batch 2 --device-map auto --gen-only
+shard 2/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Loading weights:   0%|          | 0/1872 [00:00<?, ?it/s]Loading weights:   5%|▍         | 91/1872 [00:00<00:10, 173.07it/s]Loading weights:   6%|▌         | 109/1872 [00:00<00:11, 151.06it/s]Loading weights:   7%|▋         | 129/1872 [00:01<00:17, 100.84it/s]Loading weights:   7%|▋         | 139/1872 [00:01<00:18, 94.49it/s] Loading weights:   9%|▊         | 162/1872 [00:01<00:23, 71.38it/s]Loading weights:   9%|▉         | 170/1872 [00:01<00:25, 67.07it/s]Loading weights:  10%|█         | 195/1872 [00:02<00:26, 62.37it/s]Loading weights:  11%|█         | 202/1872 [00:02<00:28, 57.96it/s]Loading weights:  12%|█▏        | 228/1872 [00:02<00:29, 55.53it/s]Loading weights:  12%|█▎        | 234/1872 [00:03<00:30, 53.65it/s]Loading weights:  14%|█▍        | 266/1872 [00:03<00:27, 58.53it/s]Loading weights:  15%|█▍        | 272/1872 [00:03<00:27, 57.17it/s]Loading weights:  16%|█▌        | 299/1872 [00:04<00:30, 51.57it/s]Loading weights:  16%|█▋        | 305/1872 [00:04<00:32, 48.96it/s]Loading weights:  18%|█▊        | 332/1872 [00:04<00:29, 51.57it/s]Loading weights:  18%|█▊        | 337/1872 [00:05<00:32, 47.51it/s]Loading weights:  19%|█▉        | 365/1872 [00:05<00:28, 52.56it/s]Loading weights:  20%|█▉        | 370/1872 [00:05<00:32, 46.72it/s]Loading weights:  22%|██▏       | 403/1872 [00:06<00:21, 67.91it/s]Loading weights:  23%|██▎       | 436/1872 [00:06<00:21, 67.51it/s]Loading weights:  24%|██▎       | 443/1872 [00:06<00:23, 61.06it/s]Loading weights:  25%|██▌       | 469/1872 [00:07<00:19, 70.41it/s]Loading weights:  25%|██▌       | 476/1872 [00:07<00:25, 53.91it/s]Loading weights:  27%|██▋       | 502/1872 [00:07<00:20, 68.16it/s]Loading weights:  27%|██▋       | 510/1872 [00:07<00:25, 52.52it/s]Loading weights:  29%|██▉       | 540/1872 [00:08<00:17, 78.17it/s]Loading weights:  29%|██▉       | 551/1872 [00:08<00:21, 60.12it/s]Loading weights:  31%|███       | 573/1872 [00:08<00:19, 67.23it/s]Loading weights:  31%|███       | 582/1872 [00:09<00:24, 52.12it/s]Loading weights:  32%|███▏      | 606/1872 [00:09<00:17, 71.07it/s]Loading weights:  33%|███▎      | 616/1872 [00:09<00:22, 55.02it/s]Loading weights:  34%|███▍      | 639/1872 [00:09<00:17, 70.93it/s]Loading weights:  35%|███▍      | 649/1872 [00:10<00:20, 60.05it/s]Loading weights:  36%|███▌      | 677/1872 [00:10<00:15, 77.43it/s]Loading weights:  37%|███▋      | 686/1872 [00:10<00:19, 60.82it/s]Loading weights:  38%|███▊      | 712/1872 [00:10<00:18, 63.81it/s]Loading weights:  40%|███▉      | 743/1872 [00:11<00:14, 80.63it/s]Loading weights:  40%|████      | 752/1872 [00:11<00:17, 64.86it/s]Loading weights:  41%|████▏     | 776/1872 [00:11<00:14, 77.21it/s]Loading weights:  43%|████▎     | 814/1872 [00:12<00:12, 84.21it/s]Loading weights:  44%|████▍     | 823/1872 [00:12<00:13, 76.87it/s]Loading weights:  45%|████▌     | 847/1872 [00:12<00:11, 85.45it/s]Loading weights:  46%|████▌     | 856/1872 [00:12<00:12, 82.83it/s]Loading weights:  47%|████▋     | 880/1872 [00:12<00:11, 83.37it/s]Loading weights:  49%|████▉     | 913/1872 [00:13<00:11, 82.20it/s]Loading weights:  51%|█████     | 951/1872 [00:13<00:10, 87.08it/s]Loading weights:  51%|█████▏    | 960/1872 [00:13<00:10, 87.12it/s]Loading weights:  53%|█████▎    | 984/1872 [00:14<00:10, 81.46it/s]Loading weights:  54%|█████▍    | 1017/1872 [00:14<00:10, 83.98it/s]Loading weights:  55%|█████▍    | 1026/1872 [00:14<00:09, 84.67it/s]Loading weights:  56%|█████▌    | 1050/1872 [00:14<00:09, 85.87it/s]Loading weights:  58%|█████▊    | 1088/1872 [00:15<00:09, 80.81it/s]Loading weights:  59%|█████▊    | 1097/1872 [00:15<00:11, 69.35it/s]Loading weights:  60%|█████▉    | 1123/1872 [00:15<00:10, 74.54it/s]Loading weights:  62%|██████▏   | 1154/1872 [00:16<00:07, 94.18it/s]Loading weights:  63%|██████▎   | 1187/1872 [00:16<00:07, 90.77it/s]Loading weights:  64%|██████▍   | 1197/1872 [00:16<00:08, 80.12it/s]Loading weights:  65%|██████▌   | 1225/1872 [00:17<00:07, 92.21it/s]Loading weights:  66%|██████▌   | 1235/1872 [00:17<00:09, 69.58it/s]Loading weights:  67%|██████▋   | 1258/1872 [00:17<00:08, 72.92it/s]Loading weights:  68%|██████▊   | 1266/1872 [00:17<00:10, 59.74it/s]Loading weights:  69%|██████▉   | 1291/1872 [00:18<00:07, 73.25it/s]Loading weights:  69%|██████▉   | 1299/1872 [00:18<00:10, 57.30it/s]Loading weights:  71%|███████   | 1324/1872 [00:18<00:07, 71.18it/s]Loading weights:  71%|███████   | 1332/1872 [00:18<00:09, 59.90it/s]Loading weights:  73%|███████▎  | 1362/1872 [00:19<00:06, 78.58it/s]Loading weights:  73%|███████▎  | 1371/1872 [00:19<00:08, 62.49it/s]Loading weights:  75%|███████▍  | 1395/1872 [00:19<00:06, 69.31it/s]Loading weights:  75%|███████▍  | 1403/1872 [00:19<00:07, 60.94it/s]Loading weights:  76%|███████▋  | 1428/1872 [00:20<00:06, 73.66it/s]Loading weights:  77%|███████▋  | 1436/1872 [00:20<00:06, 63.27it/s]Loading weights:  78%|███████▊  | 1461/1872 [00:20<00:06, 68.33it/s]Loading weights:  78%|███████▊  | 1468/1872 [00:21<00:07, 51.42it/s]Loading weights:  80%|████████  | 1499/1872 [00:21<00:05, 71.33it/s]Loading weights: 100%|█████████▉| 1869/1872 [00:21<00:00, 555.26it/s]Loading weights: 100%|██████████| 1872/1872 [00:21<00:00, 87.37it/s] 
+[transformers] [1mGlm5NextForConditionalGeneration LOAD REPORT[0m from: /workspace/.hf_home/hub/models--zai-org--GLM-5.3-Flash/snapshots/03eb5366286afd40d2221b1d9c63a6dd1ba4832e/
+Key                                                                                  | Status  | 
+-------------------------------------------------------------------------------------+---------+-
+model.language_model.layers.{0...44}.self_attn.forget_gate.f_b_proj.weight_scale_inv | MISSING | 
+model.language_model.layers.{0...44}.self_attn.forget_gate.f_a_proj.weight_scale_inv | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+[transformers] The following generation flags are not valid and may be ignored: ['top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[transformers] This FP8 model spans multiple CUDA devices in one process; routing its FP8 linear and experts layers through Triton/grouped_mm instead of DeepGEMM (DeepGEMM's cached kernels are bound to a single CUDA context and corrupt across devices). Run tensor/expert parallel (one device per process) to use the faster DeepGEMM path.
+  glm53_flash      loaded 89s, running 1 arm(s), sharded over 4 gpu(s)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 2046.00it/s]
+[W831 23:06:07.320039528 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 12124160, total: 101975851008).
+[W831 23:06:07.715997659 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 1 while trying to map 20971520 bytes (free: 20512768, total: 101975851008).
+[W831 23:06:07.733703610 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 1 while trying to map 20971520 bytes (free: 22609920, total: 101975851008).
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 116, in run_model
+    g = mod.generate(**b, max_new_tokens=max_new, do_sample=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2668, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2868, in _sample
+    outputs = self._prefill(
+              ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 3948, in _prefill
+    return self(**model_inputs, return_dict=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 2164, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1973, in forward
+    outputs = self.language_model(
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 1068, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1481, in forward
+    hidden_states, topk_indices = decoder_layer(
+                                  ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_layers.py", line 114, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1299, in forward
+    hidden_states = self.self_attn(
+                    ^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/integrations/accelerate.py", line 1010, in wrapped
+    output = forward_func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 713, in forward
+    core_attn_out, last_recurrent_state = chunk_kimi_delta_attention(
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/kernels/layer/layer.py", line 616, in forward
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/integrations/hub_kernels.py", line 861, in wrapped
+    return implementation(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 533, in chunk_kimi_delta_attention
+    attn = -(k_beta.unsqueeze(-2) * key.unsqueeze(-3) * decay_mask).sum(dim=-1).masked_fill(mask, 0)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 6.00 GiB. GPU 1 has a total capacity of 94.97 GiB of which 3.24 GiB is free. Including non-PyTorch memory, this process has 91.72 GiB memory in use. Of the allocated memory 89.91 GiB is allocated by PyTorch, and 1.14 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+QUEUE-RETRY 3 gpu=0,1,2,3 attempt=1 2026-08-31T23:06:10+00:00
+shard 2/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Loading weights:   0%|          | 0/1872 [00:00<?, ?it/s]Loading weights:   5%|▍         | 91/1872 [00:00<00:12, 140.55it/s]Loading weights:   6%|▌         | 106/1872 [00:01<00:19, 92.93it/s]Loading weights:   7%|▋         | 129/1872 [00:01<00:20, 86.99it/s]Loading weights:   7%|▋         | 137/1872 [00:01<00:23, 73.74it/s]Loading weights:   9%|▊         | 162/1872 [00:01<00:22, 77.47it/s]Loading weights:   9%|▉         | 169/1872 [00:02<00:26, 64.52it/s]Loading weights:  10%|█         | 195/1872 [00:02<00:24, 68.79it/s]Loading weights:  11%|█         | 202/1872 [00:02<00:29, 56.98it/s]Loading weights:  12%|█▏        | 228/1872 [00:02<00:24, 66.45it/s]Loading weights:  13%|█▎        | 235/1872 [00:03<00:33, 48.52it/s]Loading weights:  14%|█▍        | 266/1872 [00:03<00:28, 56.96it/s]Loading weights:  15%|█▍        | 272/1872 [00:04<00:36, 43.76it/s]Loading weights:  16%|█▌        | 299/1872 [00:04<00:28, 54.35it/s]Loading weights:  16%|█▋        | 305/1872 [00:04<00:37, 41.83it/s]Loading weights:  18%|█▊        | 332/1872 [00:05<00:30, 50.94it/s]Loading weights:  18%|█▊        | 338/1872 [00:05<00:39, 39.05it/s]Loading weights:  19%|█▉        | 365/1872 [00:05<00:28, 53.25it/s]Loading weights:  20%|█▉        | 371/1872 [00:06<00:36, 41.17it/s]Loading weights:  22%|██▏       | 403/1872 [00:06<00:26, 55.38it/s]Loading weights:  23%|██▎       | 436/1872 [00:07<00:25, 57.44it/s]Loading weights:  24%|██▎       | 442/1872 [00:07<00:29, 49.16it/s]Loading weights:  25%|██▌       | 469/1872 [00:07<00:22, 63.69it/s]Loading weights:  25%|██▌       | 476/1872 [00:08<00:24, 56.31it/s]Loading weights:  27%|██▋       | 502/1872 [00:08<00:19, 71.85it/s]Loading weights:  27%|██▋       | 510/1872 [00:08<00:21, 62.63it/s]Loading weights:  29%|██▉       | 540/1872 [00:08<00:15, 84.29it/s]Loading weights:  29%|██▉       | 550/1872 [00:08<00:17, 74.41it/s]Loading weights:  31%|███       | 573/1872 [00:09<00:15, 82.18it/s]Loading weights:  31%|███       | 582/1872 [00:09<00:18, 71.25it/s]Loading weights:  32%|███▏      | 606/1872 [00:09<00:15, 80.78it/s]Loading weights:  33%|███▎      | 615/1872 [00:09<00:18, 69.49it/s]Loading weights:  34%|███▍      | 639/1872 [00:09<00:14, 82.75it/s]Loading weights:  35%|███▍      | 648/1872 [00:10<00:17, 69.76it/s]Loading weights:  36%|███▌      | 677/1872 [00:10<00:13, 90.18it/s]Loading weights:  37%|███▋      | 687/1872 [00:10<00:15, 77.17it/s]Loading weights:  38%|███▊      | 710/1872 [00:10<00:15, 76.59it/s]Loading weights:  38%|███▊      | 718/1872 [00:11<00:20, 56.88it/s]Loading weights:  40%|███▉      | 743/1872 [00:11<00:16, 69.20it/s]Loading weights:  40%|████      | 751/1872 [00:11<00:20, 54.05it/s]Loading weights:  41%|████▏     | 776/1872 [00:12<00:16, 65.46it/s]Loading weights:  43%|████▎     | 814/1872 [00:12<00:14, 70.97it/s]Loading weights:  44%|████▍     | 822/1872 [00:12<00:16, 64.96it/s]Loading weights:  45%|████▌     | 847/1872 [00:12<00:13, 74.71it/s]Loading weights:  46%|████▌     | 855/1872 [00:13<00:15, 66.12it/s]Loading weights:  47%|████▋     | 880/1872 [00:13<00:13, 75.67it/s]Loading weights:  47%|████▋     | 888/1872 [00:13<00:14, 67.04it/s]Loading weights:  49%|████▉     | 913/1872 [00:13<00:12, 78.43it/s]Loading weights:  49%|████▉     | 921/1872 [00:14<00:13, 68.49it/s]Loading weights:  51%|█████     | 951/1872 [00:14<00:10, 89.52it/s]Loading weights:  51%|█████▏    | 960/1872 [00:14<00:12, 75.60it/s]Loading weights:  53%|█████▎    | 984/1872 [00:14<00:11, 74.70it/s]Loading weights:  53%|█████▎    | 992/1872 [00:15<00:13, 64.79it/s]Loading weights:  54%|█████▍    | 1017/1872 [00:15<00:13, 64.23it/s]Loading weights:  55%|█████▍    | 1024/1872 [00:15<00:17, 48.52it/s]Loading weights:  56%|█████▌    | 1050/1872 [00:16<00:14, 55.60it/s]Loading weights:  56%|█████▋    | 1056/1872 [00:16<00:16, 50.36it/s]Loading weights:  58%|█████▊    | 1088/1872 [00:16<00:11, 67.22it/s]Loading weights:  58%|█████▊    | 1095/1872 [00:16<00:12, 59.79it/s]Loading weights:  60%|█████▉    | 1121/1872 [00:17<00:09, 77.33it/s]Loading weights:  60%|██████    | 1129/1872 [00:17<00:11, 65.91it/s]Loading weights:  62%|██████▏   | 1154/1872 [00:17<00:09, 76.66it/s]Loading weights:  63%|██████▎   | 1187/1872 [00:17<00:08, 77.08it/s]Loading weights:  64%|██████▍   | 1195/1872 [00:18<00:10, 66.04it/s]Loading weights:  65%|██████▌   | 1225/1872 [00:18<00:07, 83.54it/s]Loading weights:  66%|██████▌   | 1234/1872 [00:18<00:09, 65.21it/s]Loading weights:  67%|██████▋   | 1258/1872 [00:19<00:10, 61.27it/s]Loading weights:  68%|██████▊   | 1265/1872 [00:19<00:13, 46.68it/s]Loading weights:  69%|██████▉   | 1291/1872 [00:20<00:11, 49.14it/s]Loading weights:  69%|██████▉   | 1297/1872 [00:20<00:15, 37.22it/s]Loading weights:  71%|███████   | 1324/1872 [00:21<00:12, 42.53it/s]Loading weights:  71%|███████   | 1329/1872 [00:21<00:15, 34.14it/s]Loading weights:  73%|███████▎  | 1362/1872 [00:21<00:11, 45.15it/s]Loading weights:  73%|███████▎  | 1367/1872 [00:22<00:14, 35.66it/s]Loading weights:  75%|███████▍  | 1395/1872 [00:22<00:10, 47.19it/s]Loading weights:  75%|███████▍  | 1400/1872 [00:23<00:12, 36.63it/s]Loading weights:  76%|███████▋  | 1428/1872 [00:23<00:09, 48.81it/s]Loading weights:  77%|███████▋  | 1434/1872 [00:23<00:10, 42.69it/s]Loading weights:  78%|███████▊  | 1461/1872 [00:23<00:07, 56.63it/s]Loading weights:  78%|███████▊  | 1467/1872 [00:24<00:08, 47.04it/s]Loading weights:  80%|████████  | 1499/1872 [00:24<00:05, 74.39it/s]Loading weights: 100%|██████████| 1872/1872 [00:24<00:00, 76.44it/s]
+[transformers] [1mGlm5NextForConditionalGeneration LOAD REPORT[0m from: /workspace/.hf_home/hub/models--zai-org--GLM-5.3-Flash/snapshots/03eb5366286afd40d2221b1d9c63a6dd1ba4832e/
+Key                                                                                  | Status  | 
+-------------------------------------------------------------------------------------+---------+-
+model.language_model.layers.{0...44}.self_attn.forget_gate.f_a_proj.weight_scale_inv | MISSING | 
+model.language_model.layers.{0...44}.self_attn.forget_gate.f_b_proj.weight_scale_inv | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+[transformers] The following generation flags are not valid and may be ignored: ['top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[transformers] This FP8 model spans multiple CUDA devices in one process; routing its FP8 linear and experts layers through Triton/grouped_mm instead of DeepGEMM (DeepGEMM's cached kernels are bound to a single CUDA context and corrupt across devices). Run tensor/expert parallel (one device per process) to use the faster DeepGEMM path.
+  glm53_flash      loaded 92s, running 1 arm(s), sharded over 4 gpu(s)
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 1662.73it/s]
+[W831 23:08:53.074967825 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 12124160, total: 101975851008).
+[W831 23:08:54.206232825 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 12124160, total: 101975851008).
+[W831 23:08:54.368563012 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 12124160, total: 101975851008).
+[W831 23:08:54.605232531 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 12124160, total: 101975851008).
+[W831 23:08:54.670516869 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16318464, total: 101975851008).
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 116, in run_model
+    g = mod.generate(**b, max_new_tokens=max_new, do_sample=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2668, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2868, in _sample
+    outputs = self._prefill(
+              ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 3948, in _prefill
+    return self(**model_inputs, return_dict=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 2164, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1973, in forward
+    outputs = self.language_model(
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 1068, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1481, in forward
+    hidden_states, topk_indices = decoder_layer(
+                                  ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_layers.py", line 114, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1299, in forward
+    hidden_states = self.self_attn(
+                    ^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/integrations/accelerate.py", line 1010, in wrapped
+    output = forward_func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 713, in forward
+    core_attn_out, last_recurrent_state = chunk_kimi_delta_attention(
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/kernels/layer/layer.py", line 616, in forward
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/integrations/hub_kernels.py", line 861, in wrapped
+    return implementation(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 533, in chunk_kimi_delta_attention
+    attn = -(k_beta.unsqueeze(-2) * key.unsqueeze(-3) * decay_mask).sum(dim=-1).masked_fill(mask, 0)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 6.00 GiB. GPU 0 has a total capacity of 94.97 GiB of which 5.93 GiB is free. Including non-PyTorch memory, this process has 89.03 GiB memory in use. Of the allocated memory 87.62 GiB is allocated by PyTorch, and 456.26 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+QUEUE-RETRY 3 gpu=0,1,2,3 attempt=2 2026-08-31T23:08:56+00:00
+shard 2/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Loading weights:   0%|          | 0/1872 [00:00<?, ?it/s]Loading weights:   5%|▍         | 91/1872 [00:00<00:12, 143.77it/s]Loading weights:   6%|▌         | 106/1872 [00:00<00:15, 111.00it/s]Loading weights:   7%|▋         | 129/1872 [00:01<00:20, 84.73it/s] Loading weights:   7%|▋         | 137/1872 [00:01<00:22, 76.46it/s]Loading weights:   9%|▊         | 162/1872 [00:02<00:27, 62.81it/s]Loading weights:   9%|▉         | 168/1872 [00:02<00:29, 57.19it/s]Loading weights:  10%|█         | 195/1872 [00:02<00:27, 60.89it/s]Loading weights:  11%|█         | 201/1872 [00:02<00:33, 50.33it/s]Loading weights:  12%|█▏        | 228/1872 [00:03<00:26, 62.06it/s]Loading weights:  12%|█▎        | 234/1872 [00:03<00:31, 51.72it/s]Loading weights:  14%|█▍        | 266/1872 [00:03<00:20, 80.11it/s]Loading weights:  15%|█▍        | 276/1872 [00:03<00:24, 63.95it/s]Loading weights:  16%|█▌        | 299/1872 [00:04<00:22, 68.53it/s]Loading weights:  16%|█▋        | 307/1872 [00:04<00:23, 65.33it/s]Loading weights:  18%|█▊        | 332/1872 [00:04<00:21, 70.82it/s]Loading weights:  18%|█▊        | 340/1872 [00:04<00:25, 59.99it/s]Loading weights:  19%|█▉        | 365/1872 [00:05<00:19, 76.51it/s]Loading weights:  20%|█▉        | 374/1872 [00:05<00:23, 63.01it/s]Loading weights:  22%|██▏       | 403/1872 [00:05<00:17, 82.68it/s]Loading weights:  23%|██▎       | 436/1872 [00:06<00:18, 75.64it/s]Loading weights:  24%|██▍       | 445/1872 [00:06<00:21, 65.52it/s]Loading weights:  25%|██▌       | 469/1872 [00:06<00:18, 74.71it/s]Loading weights:  25%|██▌       | 477/1872 [00:06<00:22, 63.04it/s]Loading weights:  27%|██▋       | 502/1872 [00:06<00:16, 84.07it/s]Loading weights:  27%|██▋       | 512/1872 [00:07<00:16, 82.27it/s]Loading weights:  29%|██▉       | 540/1872 [00:07<00:15, 87.16it/s]Loading weights:  29%|██▉       | 550/1872 [00:07<00:15, 86.66it/s]Loading weights:  31%|███       | 573/1872 [00:07<00:16, 78.60it/s]Loading weights:  31%|███       | 582/1872 [00:07<00:16, 79.69it/s]Loading weights:  32%|███▏      | 606/1872 [00:08<00:17, 73.74it/s]Loading weights:  33%|███▎      | 614/1872 [00:08<00:17, 73.75it/s]Loading weights:  34%|███▍      | 639/1872 [00:08<00:16, 75.73it/s]Loading weights:  35%|███▍      | 647/1872 [00:08<00:16, 75.39it/s]Loading weights:  36%|███▌      | 677/1872 [00:09<00:13, 87.00it/s]Loading weights:  37%|███▋      | 686/1872 [00:09<00:14, 82.36it/s]Loading weights:  38%|███▊      | 710/1872 [00:09<00:14, 81.13it/s]Loading weights:  38%|███▊      | 718/1872 [00:09<00:16, 71.43it/s]Loading weights:  40%|███▉      | 743/1872 [00:09<00:12, 91.90it/s]Loading weights:  40%|████      | 753/1872 [00:10<00:15, 73.62it/s]Loading weights:  41%|████▏     | 776/1872 [00:10<00:11, 93.10it/s]Loading weights:  43%|████▎     | 814/1872 [00:10<00:11, 92.10it/s]Loading weights:  44%|████▍     | 824/1872 [00:10<00:13, 77.96it/s]Loading weights:  45%|████▌     | 847/1872 [00:11<00:10, 93.77it/s]Loading weights:  46%|████▌     | 858/1872 [00:11<00:12, 80.90it/s]Loading weights:  47%|████▋     | 880/1872 [00:11<00:11, 87.20it/s]Loading weights:  48%|████▊     | 890/1872 [00:11<00:13, 73.91it/s]Loading weights:  49%|████▉     | 913/1872 [00:11<00:10, 91.12it/s]Loading weights:  49%|████▉     | 923/1872 [00:12<00:12, 76.10it/s]Loading weights:  51%|█████     | 951/1872 [00:12<00:09, 99.36it/s]Loading weights:  51%|█████▏    | 962/1872 [00:12<00:11, 81.26it/s]Loading weights:  53%|█████▎    | 984/1872 [00:12<00:09, 89.21it/s]Loading weights:  53%|█████▎    | 994/1872 [00:12<00:10, 86.82it/s]Loading weights:  54%|█████▍    | 1017/1872 [00:13<00:09, 85.69it/s]Loading weights:  55%|█████▍    | 1026/1872 [00:13<00:11, 71.14it/s]Loading weights:  56%|█████▌    | 1050/1872 [00:13<00:10, 81.77it/s]Loading weights:  57%|█████▋    | 1059/1872 [00:13<00:11, 71.53it/s]Loading weights:  58%|█████▊    | 1088/1872 [00:14<00:08, 90.21it/s]Loading weights:  59%|█████▊    | 1098/1872 [00:14<00:09, 79.27it/s]Loading weights:  60%|█████▉    | 1121/1872 [00:14<00:07, 97.24it/s]Loading weights:  60%|██████    | 1132/1872 [00:14<00:09, 77.48it/s]Loading weights:  62%|██████▏   | 1154/1872 [00:14<00:07, 93.51it/s]Loading weights:  63%|██████▎   | 1187/1872 [00:15<00:07, 86.35it/s]Loading weights:  64%|██████▍   | 1197/1872 [00:15<00:09, 74.53it/s]Loading weights:  65%|██████▌   | 1225/1872 [00:15<00:06, 95.01it/s]Loading weights:  66%|██████▌   | 1236/1872 [00:15<00:08, 74.33it/s]Loading weights:  67%|██████▋   | 1258/1872 [00:16<00:07, 76.82it/s]Loading weights:  68%|██████▊   | 1267/1872 [00:16<00:09, 66.47it/s]Loading weights:  69%|██████▉   | 1291/1872 [00:16<00:10, 54.64it/s]Loading weights:  69%|██████▉   | 1298/1872 [00:17<00:13, 43.09it/s]Loading weights:  71%|███████   | 1324/1872 [00:17<00:09, 55.96it/s]Loading weights:  71%|███████   | 1331/1872 [00:17<00:11, 47.68it/s]Loading weights:  73%|███████▎  | 1362/1872 [00:18<00:08, 59.66it/s]Loading weights:  73%|███████▎  | 1369/1872 [00:18<00:09, 51.15it/s]Loading weights:  75%|███████▍  | 1395/1872 [00:18<00:06, 73.04it/s]Loading weights:  75%|███████▌  | 1405/1872 [00:18<00:07, 63.91it/s]Loading weights:  76%|███████▋  | 1428/1872 [00:19<00:06, 70.44it/s]Loading weights:  77%|███████▋  | 1436/1872 [00:19<00:07, 58.72it/s]Loading weights:  78%|███████▊  | 1461/1872 [00:19<00:04, 84.28it/s]Loading weights:  79%|███████▊  | 1473/1872 [00:19<00:05, 68.56it/s]Loading weights:  80%|████████  | 1499/1872 [00:20<00:04, 84.85it/s]Loading weights: 100%|██████████| 1872/1872 [00:20<00:00, 93.14it/s]
+[transformers] [1mGlm5NextForConditionalGeneration LOAD REPORT[0m from: /workspace/.hf_home/hub/models--zai-org--GLM-5.3-Flash/snapshots/03eb5366286afd40d2221b1d9c63a6dd1ba4832e/
+Key                                                                                  | Status  | 
+-------------------------------------------------------------------------------------+---------+-
+model.language_model.layers.{0...44}.self_attn.forget_gate.f_b_proj.weight_scale_inv | MISSING | 
+model.language_model.layers.{0...44}.self_attn.forget_gate.f_a_proj.weight_scale_inv | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+[transformers] The following generation flags are not valid and may be ignored: ['top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[transformers] This FP8 model spans multiple CUDA devices in one process; routing its FP8 linear and experts layers through Triton/grouped_mm instead of DeepGEMM (DeepGEMM's cached kernels are bound to a single CUDA context and corrupt across devices). Run tensor/expert parallel (one device per process) to use the faster DeepGEMM path.
+  glm53_flash      loaded 79s, running 1 arm(s), sharded over 4 gpu(s)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 1680.59it/s]
+[W831 23:11:28.438817855 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 12124160, total: 101975851008).
+[W831 23:11:28.833824558 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 1 while trying to map 20971520 bytes (free: 22609920, total: 101975851008).
+[W831 23:11:28.851509739 CUDACachingAllocator.cpp:508] expandable_segments: memory mapping failed with OOM on device 1 while trying to map 20971520 bytes (free: 22609920, total: 101975851008).
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 182, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 119, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 116, in run_model
+    g = mod.generate(**b, max_new_tokens=max_new, do_sample=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2668, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 2868, in _sample
+    outputs = self._prefill(
+              ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/generation/utils.py", line 3948, in _prefill
+    return self(**model_inputs, return_dict=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 2164, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1973, in forward
+    outputs = self.language_model(
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/generic.py", line 1068, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1481, in forward
+    hidden_states, topk_indices = decoder_layer(
+                                  ^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/modeling_layers.py", line 114, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 1299, in forward
+    hidden_states = self.self_attn(
+                    ^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/accelerate/hooks.py", line 192, in new_forward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/integrations/accelerate.py", line 1010, in wrapped
+    output = forward_func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 713, in forward
+    core_attn_out, last_recurrent_state = chunk_kimi_delta_attention(
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/kernels/layer/layer.py", line 616, in forward
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/integrations/hub_kernels.py", line 861, in wrapped
+    return implementation(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/models/glm5_next/modeling_glm5_next.py", line 533, in chunk_kimi_delta_attention
+    attn = -(k_beta.unsqueeze(-2) * key.unsqueeze(-3) * decay_mask).sum(dim=-1).masked_fill(mask, 0)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 6.00 GiB. GPU 1 has a total capacity of 94.97 GiB of which 3.58 GiB is free. Including non-PyTorch memory, this process has 91.39 GiB memory in use. Of the allocated memory 89.91 GiB is allocated by PyTorch, and 825.08 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+QUEUE-RETRY 3 gpu=0,1,2,3 attempt=3 2026-08-31T23:11:31+00:00
+QUEUE-FAIL 3 gpu=0,1,2,3 after 3 attempts 2026-08-31T23:12:31+00:00 :: /venv/main/bin/python scripts/ensemble_ceiling.py --models frontier --gen-dir artifacts/nla/frontier --shard 2 --shards 3 --k 8 --max-new 1024 --batch 2 --device-map auto --gen-only
+QUEUE-DONE gpu=0,1,2,3 2026-08-31T23:12:41+00:00

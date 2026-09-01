@@ -1,0 +1,19 @@
+shard 0/1  6 models  164 prompts  K=8  max_new=512
+  qwen25c_32b      all 1 arms cached   [  164/984  16.7%  elapsed 0:00  ETA 0:00  6095400/min]
+  gemma4_31b       all 1 arms cached   [  328/984  33.3%  elapsed 0:00  ETA 0:00  5761021/min]
+  ministral_14b    all 1 arms cached   [  492/984  50.0%  elapsed 0:00  ETA 0:00  6391485/min]
+  glm47_flash      all 1 arms cached   [  656/984  66.7%  elapsed 0:00  ETA 0:00  4308924/min]
+  qwen3c_30b       all 1 arms cached   [  820/984  83.3%  elapsed 0:00  ETA 0:00  4592508/min]
+  ornith_35b       all 1 arms cached   [  984/984 100.0%  elapsed 0:00  ETA 0:00  4157824/min]
+  qwen25c_32b      Alibaba   pass@1 0.8986  pass@8 0.9329
+  gemma4_31b       Google    pass@1 0.9367  pass@8 0.9634
+  ministral_14b    Mistral   pass@1 0.8102  pass@8 0.9390
+  glm47_flash      Zhipu     pass@1 0.0526  pass@8 0.2927
+  qwen3c_30b       Alibaba   pass@1 0.9002  pass@8 0.9207
+  ornith_35b       Ornith/Qwen-arch pass@1 0.7027  pass@8 0.9085
+
+  union 0.9756  best single 0.9634 (gemma4_31b)  gain +0.0122
+  solved by exactly one model: {'gemma4_31b': 0, 'glm47_flash': 0, 'ministral_14b': 0, 'ornith_35b': 0, 'qwen25c_32b': 0, 'qwen3c_30b': 0}
+  solved by none: 4
+
+wrote /root/srt-adapter/artifacts/nla/ensemble/union_ceiling.json

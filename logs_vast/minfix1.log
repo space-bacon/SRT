@@ -1,0 +1,32 @@
+shard 1/2  3 models  60 prompts  K=8  batch=16
+  ministral14B_inst, ministral8B_inst, ministral3B_inst
+
+[transformers] You have loaded an FP8 model on CPU and have a CUDA or XPU device available, make sure to set your model on a GPU or XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or 'xpu'. 
+Loading weights:   0%|          | 0/1145 [00:00<?, ?it/s]Loading weights: 100%|██████████| 1145/1145 [00:00<00:00, 13723.17it/s]
+  ministral14B_inst loaded 3s, running 1 arm(s)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|██████████| 11/11 [00:00<00:00, 2598.55it/s]
+  ministral14B_inst chat             16/60  [  256/900  28.4%  elapsed 0:38  ETA 1:35  403/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral14B_inst chat           DONE          [  300/900  33.3%  elapsed 0:55  ETA 1:51  324/min]
+Loading weights:   0%|          | 0/1007 [00:00<?, ?it/s]Loading weights: 100%|██████████| 1007/1007 [00:00<00:00, 13707.68it/s]
+  ministral8B_inst loaded 1s, running 1 arm(s)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst chat             16/60  [  556/900  61.8%  elapsed 1:21  ETA 0:50  407/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral8B_inst chat           DONE          [  600/900  66.7%  elapsed 1:36  ETA 0:48  373/min]
+Loading weights:   0%|          | 0/822 [00:00<?, ?it/s]Loading weights: 100%|██████████| 822/822 [00:00<00:00, 11312.15it/s]
+  ministral3B_inst loaded 1s, running 1 arm(s)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral3B_inst chat             16/60  [  856/900  95.1%  elapsed 2:05  ETA 0:06  410/min]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+  ministral3B_inst chat           DONE          [  900/900 100.0%  elapsed 2:16  ETA 0:00  396/min]
+
+shard 1 complete  [  900/900 100.0%  elapsed 2:16  ETA 0:00  395/min]

@@ -1,0 +1,35 @@
+shard 2/3  1 models  60 prompts  K=8
+[transformers] The tokenizer you are loading from '/root/.hf_home/hub/models--mistralai--Mistral-Small-3.1-24B-Instruct-2503/snapshots/68faf511d618ef198fef186659617cfd2eb8e33a/' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Loading weights:   0%|          | 0/585 [00:00<?, ?it/s]Loading weights:  44%|████▍     | 257/585 [00:00<00:00, 2533.72it/s]Loading weights:  90%|█████████ | 527/585 [00:00<00:00, 2608.48it/s]Loading weights: 100%|██████████| 585/585 [00:00<00:00, 2644.74it/s]
+[transformers] The tied weights mapping and config for this model specifies to tie model.language_model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints with different values, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning.
+  mistralsmall_24b loaded 16s, running 5 arm(s)
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/crosslab_suppression.py", line 52, in render
+    o = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=True)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3085, in apply_chat_template
+    chat_template = self.get_chat_template(chat_template, tools)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3270, in get_chat_template
+    raise ValueError(
+ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed! For information about writing templates and setting the tokenizer.chat_template attribute, please see the documentation at https://huggingface.co/docs/transformers/main/en/chat_templating
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/crosslab_suppression.py", line 128, in <module>
+    main()
+  File "/root/srt-adapter/scripts/crosslab_suppression.py", line 86, in main
+    run_model(tag, p, prompts, MODES, make_render(idx, a.k),
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 99, in run_model
+    t, add_sp, per_sample = render(tok, stem, mode)
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/srt-adapter/scripts/crosslab_suppression.py", line 55, in render
+    o = tok.apply_chat_template(
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3085, in apply_chat_template
+    chat_template = self.get_chat_template(chat_template, tools)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3270, in get_chat_template
+    raise ValueError(
+ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed! For information about writing templates and setting the tokenizer.chat_template attribute, please see the documentation at https://huggingface.co/docs/transformers/main/en/chat_templating

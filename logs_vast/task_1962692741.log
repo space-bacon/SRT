@@ -1,0 +1,34 @@
+shard 0/3  1 models  164 prompts  K=8  max_new=1024  set=frontier
+Loading weights:   0%|          | 0/1736 [00:00<?, ?it/s]Loading weights:   1%|          | 20/1736 [00:00<01:16, 22.32it/s]Loading weights:   3%|▎         | 53/1736 [00:02<01:04, 26.09it/s]Loading weights:   6%|▌         | 97/1736 [00:03<00:53, 30.87it/s]Loading weights:   8%|▊         | 134/1736 [00:04<00:51, 30.99it/s]Loading weights:  10%|█         | 178/1736 [00:05<00:47, 33.05it/s]Loading weights:  12%|█▏        | 215/1736 [00:06<00:47, 32.14it/s]Loading weights:  15%|█▍        | 259/1736 [00:08<00:43, 33.84it/s]Loading weights:  17%|█▋        | 296/1736 [00:09<00:43, 32.85it/s]Loading weights:  20%|█▉        | 340/1736 [00:10<00:41, 33.92it/s]Loading weights:  22%|██▏       | 377/1736 [00:11<00:41, 32.87it/s]Loading weights:  24%|██▍       | 421/1736 [00:12<00:39, 33.67it/s]Loading weights:  26%|██▋       | 458/1736 [00:14<00:38, 32.79it/s]Loading weights:  29%|██▉       | 502/1736 [00:15<00:36, 33.60it/s]Loading weights:  31%|███       | 539/1736 [00:16<00:36, 32.62it/s]Loading weights:  34%|███▎      | 583/1736 [00:17<00:34, 33.81it/s]Loading weights:  36%|███▌      | 620/1736 [00:19<00:33, 32.94it/s]Loading weights:  38%|███▊      | 664/1736 [00:20<00:31, 34.32it/s]Loading weights:  40%|████      | 701/1736 [00:21<00:30, 33.63it/s]Loading weights:  43%|████▎     | 745/1736 [00:22<00:28, 34.99it/s]Loading weights:  45%|████▌     | 782/1736 [00:24<00:31, 30.26it/s]Loading weights:  48%|████▊     | 826/1736 [00:25<00:27, 33.31it/s]Loading weights:  50%|████▉     | 863/1736 [00:26<00:26, 33.14it/s]Loading weights:  52%|█████▏    | 907/1736 [00:27<00:24, 33.86it/s]Loading weights:  54%|█████▍    | 944/1736 [00:28<00:23, 33.14it/s]Loading weights:  57%|█████▋    | 988/1736 [00:29<00:21, 34.49it/s]Loading weights:  59%|█████▉    | 1025/1736 [00:31<00:21, 33.65it/s]Loading weights:  62%|██████▏   | 1069/1736 [00:32<00:19, 34.63it/s]Loading weights:  64%|██████▎   | 1106/1736 [00:33<00:16, 37.71it/s]Loading weights:  66%|██████▌   | 1150/1736 [00:33<00:14, 39.99it/s]Loading weights:  68%|██████▊   | 1187/1736 [00:34<00:13, 39.57it/s]Loading weights:  71%|███████   | 1231/1736 [00:36<00:12, 39.72it/s]Loading weights:  73%|███████▎  | 1268/1736 [00:37<00:12, 36.60it/s]Loading weights:  76%|███████▌  | 1312/1736 [00:38<00:11, 36.83it/s]Loading weights:  78%|███████▊  | 1349/1736 [00:39<00:10, 35.19it/s]Loading weights:  80%|████████  | 1393/1736 [00:40<00:09, 35.86it/s]Loading weights:  82%|████████▏ | 1430/1736 [00:41<00:08, 34.31it/s]Loading weights:  85%|████████▍ | 1474/1736 [00:43<00:07, 36.68it/s]Loading weights:  87%|████████▋ | 1511/1736 [00:44<00:06, 35.01it/s]Loading weights:  90%|████████▉ | 1555/1736 [00:45<00:05, 35.46it/s]Loading weights:  92%|█████████▏| 1592/1736 [00:46<00:04, 34.07it/s]Loading weights:  94%|█████████▍| 1636/1736 [00:47<00:02, 34.97it/s]Loading weights:  96%|█████████▋| 1673/1736 [00:49<00:01, 33.47it/s]Loading weights:  99%|█████████▉| 1717/1736 [00:50<00:00, 34.25it/s]Loading weights: 100%|██████████| 1736/1736 [00:50<00:00, 34.55it/s]
+[transformers] This FP8 model spans multiple CUDA devices in one process; routing its FP8 linear and experts layers through Triton/grouped_mm instead of DeepGEMM (DeepGEMM's cached kernels are bound to a single CUDA context and corrupt across devices). Run tensor/expert parallel (one device per process) to use the faster DeepGEMM path.
+  deepseek_v4_flash loaded 60s, running 1 arm(s), sharded over 4 gpu(s)
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 81, in render
+    o = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=True,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3085, in apply_chat_template
+    chat_template = self.get_chat_template(chat_template, tools)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3270, in get_chat_template
+    raise ValueError(
+ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed! For information about writing templates and setting the tokenizer.chat_template attribute, please see the documentation at https://huggingface.co/docs/transformers/main/en/chat_templating
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 189, in <module>
+    main()
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 126, in main
+    run_model(tag, p, stems, ["chat"], render, os.path.join(HERE, a.gen_dir), prog,
+  File "/root/srt-adapter/scripts/hivemind_gen.py", line 138, in run_model
+    t, add_sp, per_sample = render(tok, stem, mode)
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/srt-adapter/scripts/ensemble_ceiling.py", line 84, in render
+    o = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=True)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3085, in apply_chat_template
+    chat_template = self.get_chat_template(chat_template, tools)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3270, in get_chat_template
+    raise ValueError(
+ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed! For information about writing templates and setting the tokenizer.chat_template attribute, please see the documentation at https://huggingface.co/docs/transformers/main/en/chat_templating

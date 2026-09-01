@@ -1,0 +1,41 @@
+164 / 164 problems got synthesised inputs
+  coder0.5B_base__raw                consensus 0.1593  covered 113/164  floor 0.0213
+  coder0.5B_inst__chat               consensus 0.3457  covered 162/164  floor 0.1745
+  coder0.5B_inst__persona            consensus 0.2917  covered 96/164  floor 0.0381
+  coder0.5B_inst__raw                consensus 0.2561  covered 82/164  floor 0.0259
+  coder0.5B_inst__shared             consensus 0.3161  covered 155/164  floor 0.1692
+  coder0.5B_inst__shared_persona     consensus 0.3311  covered 151/164  floor 0.1562
+  coder1.5B_base__raw                consensus 0.1892  covered 111/164  floor 0.0373
+  coder1.5B_inst__chat               consensus 0.5563  covered 160/164  floor 0.3178
+  coder1.5B_inst__persona            consensus 0.2556  covered 133/164  floor 0.0465
+  coder1.5B_inst__raw                consensus 0.3284  covered 134/164  floor 0.0686
+  coder1.5B_inst__shared             consensus 0.4815  covered 162/164  floor 0.2424
+  coder1.5B_inst__shared_persona     consensus 0.5188  covered 160/164  floor 0.2767
+  coder14B_base__raw                 consensus 0.3434  covered 99/164  floor 0.0465
+  coder14B_inst__chat                consensus 0.5796  covered 157/164  floor 0.3636
+  coder14B_inst__persona             consensus 0.4275  covered 138/164  floor 0.1052
+  coder14B_inst__raw                 consensus 0.5281  covered 89/164  floor 0.0755
+  coder14B_inst__shared              consensus 0.7439  covered 164/164  floor 0.5404
+  coder14B_inst__shared_persona      consensus 0.6813  covered 160/164  floor 0.4329
+  coder32B_base__raw                 consensus 0.3061  covered 98/164  floor 0.0366
+  coder32B_inst__chat                consensus 0.4733  covered 150/164  floor 0.2401
+  coder32B_inst__persona             consensus 0.4874  covered 119/164  floor 0.0968
+  coder32B_inst__raw                 consensus 0.3962  covered 106/164  floor 0.0777
+  coder32B_inst__shared              consensus 0.4342  covered 152/164  floor 0.2264
+  coder32B_inst__shared_persona      consensus 0.3973  covered 146/164  floor 0.2058
+  coder3B_base__raw                  consensus 0.2024  covered 84/164  floor 0.0213
+  coder3B_inst__chat                 consensus 0.5157  covered 159/164  floor 0.2774
+  coder3B_inst__persona              consensus 0.4406  covered 143/164  floor 0.1090
+  coder3B_inst__raw                  consensus 0.38  covered 100/164  floor 0.0549
+  coder3B_inst__shared               consensus 0.5253  covered 158/164  floor 0.2782
+  coder3B_inst__shared_persona       consensus 0.5067  covered 150/164  floor 0.2409
+  coder7B_base__raw                  consensus 0.3229  covered 96/164  floor 0.0495
+  coder7B_inst__chat                 consensus 0.7578  covered 161/164  floor 0.5404
+  coder7B_inst__persona              consensus 0.4254  covered 134/164  floor 0.0945
+  coder7B_inst__raw                  consensus 0.6275  covered 102/164  floor 0.1044
+  coder7B_inst__shared               consensus 0.7317  covered 164/164  floor 0.4931
+  coder7B_inst__shared_persona       consensus 0.6687  covered 163/164  floor 0.4375
+
+  consensus 0.4426  floor 0.1868  oracle 0.4954  gain +0.2558
+
+wrote /root/srt-adapter/artifacts/nla/verifier/consensus.json

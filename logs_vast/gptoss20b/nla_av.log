@@ -1,0 +1,169 @@
+2026-07-01 20:13:52,716 train_nla_act loading backbone openai/gpt-oss-20b
+`torch_dtype` is deprecated! Use `dtype` instead!
+You have loaded an FP4 model on CPU and have a CUDA/XPU device available, make sure to set your model on a GPU/XPU device in order to run your model. To remove this warning, pass device_map = 'cuda' or device_map = 'xpu'. 
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s]Fetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 17693.84it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 41 files:   0%|          | 0/41 [00:00<?, ?it/s][AFetching 41 files: 100%|██████████| 41/41 [00:00<00:00, 15866.99it/s]
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.42it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.69it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.40it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.11it/s]
+2026-07-01 20:13:57,826 train_nla_act AV num_prefix_tokens=16  trainable=8,412,480
+2026-07-01 20:14:00,451 train_nla_act loaded 200000 pairs; target pool N=200000
+2026-07-01 20:14:00,468 train_nla_act multi-layer trace pairs over layers [6, 12, 18, 24] — activation loss/val read each example at its own layer (CE is layer-agnostic)
+2026-07-01 20:14:00,475 train_nla_act train pairs=190000  val pairs=512
+2026-07-01 20:14:00,476 train_nla_act cosine LR: total_steps=23750 warmup=100 peak_lr=0.0003
+2026-07-01 20:14:05,097 train_nla_act ep1 step 20  act_loss=0.5424  ce=7.4064  train_fve=0.4576  (4.6s)
+2026-07-01 20:14:08,669 train_nla_act ep1 step 40  act_loss=0.4983  ce=8.2914  train_fve=0.5017  (8.2s)
+2026-07-01 20:14:12,229 train_nla_act ep1 step 60  act_loss=0.4943  ce=7.6023  train_fve=0.5057  (11.8s)
+2026-07-01 20:14:15,833 train_nla_act ep1 step 80  act_loss=0.4707  ce=6.5287  train_fve=0.5293  (15.4s)
+2026-07-01 20:14:19,474 train_nla_act ep1 step 100  act_loss=0.4581  ce=7.3818  train_fve=0.5419  (19.0s)
+2026-07-01 20:14:23,112 train_nla_act ep1 step 120  act_loss=0.4445  ce=6.5754  train_fve=0.5555  (22.6s)
+2026-07-01 20:14:26,701 train_nla_act ep1 step 140  act_loss=0.4393  ce=6.1775  train_fve=0.5607  (26.2s)
+2026-07-01 20:14:30,240 train_nla_act ep1 step 160  act_loss=0.4438  ce=6.1674  train_fve=0.5562  (29.8s)
+2026-07-01 20:14:33,779 train_nla_act ep1 step 180  act_loss=0.4213  ce=5.5726  train_fve=0.5787  (33.3s)
+2026-07-01 20:14:37,314 train_nla_act ep1 step 200  act_loss=0.4539  ce=6.2634  train_fve=0.5461  (36.8s)
+2026-07-01 20:16:24,404 train_nla_act val @ 200  tf_fve=0.5448  disc_fve=0.5352
+2026-07-01 20:16:24,442 train_nla_act   new best (sel=0.5352 tf=0.5448 disc=0.5352) saved /workspace/srt-adapter/artifacts/nla/gptoss20b/av_full_trace/best_av.pt
+2026-07-01 20:16:27,826 train_nla_act ep1 step 220  act_loss=0.4548  ce=5.6536  train_fve=0.5452  (147.4s)
+2026-07-01 20:16:31,258 train_nla_act ep1 step 240  act_loss=0.4756  ce=5.6441  train_fve=0.5244  (150.8s)
+2026-07-01 20:16:34,671 train_nla_act ep1 step 260  act_loss=0.4761  ce=5.7433  train_fve=0.5239  (154.2s)
+2026-07-01 20:16:38,120 train_nla_act ep1 step 280  act_loss=0.4766  ce=5.0868  train_fve=0.5234  (157.6s)
+2026-07-01 20:16:41,553 train_nla_act ep1 step 300  act_loss=0.4640  ce=5.1692  train_fve=0.5360  (161.1s)
+2026-07-01 20:16:45,033 train_nla_act ep1 step 320  act_loss=0.4756  ce=5.4113  train_fve=0.5244  (164.6s)
+2026-07-01 20:16:48,835 train_nla_act ep1 step 340  act_loss=0.4781  ce=5.5463  train_fve=0.5219  (168.4s)
+2026-07-01 20:16:52,314 train_nla_act ep1 step 360  act_loss=0.4930  ce=5.2972  train_fve=0.5070  (171.8s)
+2026-07-01 20:16:55,742 train_nla_act ep1 step 380  act_loss=0.4974  ce=5.2130  train_fve=0.5026  (175.3s)
+2026-07-01 20:16:59,229 train_nla_act ep1 step 400  act_loss=0.4990  ce=5.8860  train_fve=0.5010  (178.8s)
+2026-07-01 20:18:41,608 train_nla_act val @ 400  tf_fve=0.5084  disc_fve=0.5444
+2026-07-01 20:18:41,675 train_nla_act   new best (sel=0.5444 tf=0.5084 disc=0.5444) saved /workspace/srt-adapter/artifacts/nla/gptoss20b/av_full_trace/best_av.pt
+2026-07-01 20:18:45,100 train_nla_act ep1 step 420  act_loss=0.4960  ce=5.6106  train_fve=0.5040  (284.6s)
+2026-07-01 20:18:48,541 train_nla_act ep1 step 440  act_loss=0.5063  ce=5.7678  train_fve=0.4937  (288.1s)
+2026-07-01 20:18:51,978 train_nla_act ep1 step 460  act_loss=0.5121  ce=5.2688  train_fve=0.4879  (291.5s)
+2026-07-01 20:18:55,415 train_nla_act ep1 step 480  act_loss=0.5186  ce=5.5257  train_fve=0.4814  (294.9s)
+2026-07-01 20:18:58,880 train_nla_act ep1 step 500  act_loss=0.5200  ce=5.5448  train_fve=0.4800  (298.4s)
+2026-07-01 20:19:02,332 train_nla_act ep1 step 520  act_loss=0.5137  ce=5.1276  train_fve=0.4863  (301.9s)
+2026-07-01 20:19:05,805 train_nla_act ep1 step 540  act_loss=0.5266  ce=5.1710  train_fve=0.4734  (305.3s)
+2026-07-01 20:19:09,264 train_nla_act ep1 step 560  act_loss=0.5068  ce=5.2477  train_fve=0.4932  (308.8s)
+2026-07-01 20:19:12,760 train_nla_act ep1 step 580  act_loss=0.5333  ce=5.3851  train_fve=0.4667  (312.3s)
+2026-07-01 20:19:16,242 train_nla_act ep1 step 600  act_loss=0.5235  ce=5.6533  train_fve=0.4765  (315.8s)
+2026-07-01 20:20:58,675 train_nla_act val @ 600  tf_fve=0.4709  disc_fve=0.5503
+2026-07-01 20:20:58,742 train_nla_act   new best (sel=0.5503 tf=0.4709 disc=0.5503) saved /workspace/srt-adapter/artifacts/nla/gptoss20b/av_full_trace/best_av.pt
+2026-07-01 20:21:02,132 train_nla_act ep1 step 620  act_loss=0.5355  ce=5.3567  train_fve=0.4645  (421.7s)
+2026-07-01 20:21:05,603 train_nla_act ep1 step 640  act_loss=0.5356  ce=4.9150  train_fve=0.4644  (425.1s)
+2026-07-01 20:21:09,056 train_nla_act ep1 step 660  act_loss=0.5411  ce=5.6364  train_fve=0.4589  (428.6s)
+2026-07-01 20:21:12,503 train_nla_act ep1 step 680  act_loss=0.5436  ce=5.5505  train_fve=0.4564  (432.0s)
+2026-07-01 20:21:15,958 train_nla_act ep1 step 700  act_loss=0.5516  ce=5.1917  train_fve=0.4484  (435.5s)
+2026-07-01 20:21:19,416 train_nla_act ep1 step 720  act_loss=0.5373  ce=5.0799  train_fve=0.4627  (438.9s)
+2026-07-01 20:21:22,885 train_nla_act ep1 step 740  act_loss=0.5475  ce=5.6114  train_fve=0.4525  (442.4s)
+2026-07-01 20:21:26,359 train_nla_act ep1 step 760  act_loss=0.5525  ce=5.5113  train_fve=0.4475  (445.9s)
+2026-07-01 20:21:29,869 train_nla_act ep1 step 780  act_loss=0.5642  ce=5.2990  train_fve=0.4358  (449.4s)
+2026-07-01 20:21:33,353 train_nla_act ep1 step 800  act_loss=0.5599  ce=5.1340  train_fve=0.4401  (452.9s)
+2026-07-01 20:23:15,533 train_nla_act val @ 800  tf_fve=0.4442  disc_fve=0.5516
+2026-07-01 20:23:15,599 train_nla_act   new best (sel=0.5516 tf=0.4442 disc=0.5516) saved /workspace/srt-adapter/artifacts/nla/gptoss20b/av_full_trace/best_av.pt
+2026-07-01 20:23:19,015 train_nla_act ep1 step 820  act_loss=0.5530  ce=5.1592  train_fve=0.4470  (558.5s)
+2026-07-01 20:23:22,439 train_nla_act ep1 step 840  act_loss=0.5535  ce=4.7394  train_fve=0.4465  (562.0s)
+2026-07-01 20:23:25,875 train_nla_act ep1 step 860  act_loss=0.5702  ce=5.1862  train_fve=0.4298  (565.4s)
+2026-07-01 20:23:29,305 train_nla_act ep1 step 880  act_loss=0.5641  ce=5.5428  train_fve=0.4359  (568.8s)
+2026-07-01 20:23:32,775 train_nla_act ep1 step 900  act_loss=0.5645  ce=4.8012  train_fve=0.4355  (572.3s)
+2026-07-01 20:23:36,210 train_nla_act ep1 step 920  act_loss=0.5797  ce=5.0841  train_fve=0.4203  (575.7s)
+2026-07-01 20:23:39,686 train_nla_act ep1 step 940  act_loss=0.5791  ce=5.2699  train_fve=0.4209  (579.2s)
+2026-07-01 20:23:43,250 train_nla_act ep1 step 960  act_loss=0.5598  ce=4.9647  train_fve=0.4402  (582.8s)
+2026-07-01 20:23:46,707 train_nla_act ep1 step 980  act_loss=0.5747  ce=5.5101  train_fve=0.4253  (586.2s)
+2026-07-01 20:23:50,190 train_nla_act ep1 step 1000  act_loss=0.5671  ce=4.7985  train_fve=0.4329  (589.7s)
+2026-07-01 20:25:32,777 train_nla_act val @ 1000  tf_fve=0.4360  disc_fve=0.5615
+2026-07-01 20:25:32,835 train_nla_act   new best (sel=0.5615 tf=0.4360 disc=0.5615) saved /workspace/srt-adapter/artifacts/nla/gptoss20b/av_full_trace/best_av.pt
+2026-07-01 20:25:36,260 train_nla_act ep1 step 1020  act_loss=0.5569  ce=5.6288  train_fve=0.4431  (695.8s)
+2026-07-01 20:25:39,663 train_nla_act ep1 step 1040  act_loss=0.5586  ce=5.3474  train_fve=0.4414  (699.2s)
+2026-07-01 20:25:43,138 train_nla_act ep1 step 1060  act_loss=0.5520  ce=4.7545  train_fve=0.4480  (702.7s)
+2026-07-01 20:25:46,598 train_nla_act ep1 step 1080  act_loss=0.5509  ce=5.0464  train_fve=0.4491  (706.1s)
+2026-07-01 20:25:50,048 train_nla_act ep1 step 1100  act_loss=0.5698  ce=4.9757  train_fve=0.4302  (709.6s)
+2026-07-01 20:25:53,531 train_nla_act ep1 step 1120  act_loss=0.5779  ce=5.2340  train_fve=0.4221  (713.1s)
+2026-07-01 20:25:56,983 train_nla_act ep1 step 1140  act_loss=0.5851  ce=4.9830  train_fve=0.4149  (716.5s)
+2026-07-01 20:26:00,467 train_nla_act ep1 step 1160  act_loss=0.5871  ce=4.6560  train_fve=0.4129  (720.0s)
+2026-07-01 20:26:03,968 train_nla_act ep1 step 1180  act_loss=0.5885  ce=5.0749  train_fve=0.4115  (723.5s)
+2026-07-01 20:26:07,451 train_nla_act ep1 step 1200  act_loss=0.5782  ce=4.8001  train_fve=0.4218  (727.0s)
+2026-07-01 20:27:50,003 train_nla_act val @ 1200  tf_fve=0.4244  disc_fve=0.5498
+2026-07-01 20:27:50,003 train_nla_act   no improvement (1/8)
+2026-07-01 20:27:53,449 train_nla_act ep1 step 1220  act_loss=0.5715  ce=5.3273  train_fve=0.4285  (833.0s)
+2026-07-01 20:27:56,917 train_nla_act ep1 step 1240  act_loss=0.5768  ce=5.0023  train_fve=0.4232  (836.4s)
+2026-07-01 20:28:00,338 train_nla_act ep1 step 1260  act_loss=0.5720  ce=4.7985  train_fve=0.4280  (839.9s)
+2026-07-01 20:28:03,787 train_nla_act ep1 step 1280  act_loss=0.5765  ce=5.0523  train_fve=0.4235  (843.3s)
+2026-07-01 20:28:07,265 train_nla_act ep1 step 1300  act_loss=0.5599  ce=4.9528  train_fve=0.4401  (846.8s)
+2026-07-01 20:28:10,734 train_nla_act ep1 step 1320  act_loss=0.5889  ce=5.5982  train_fve=0.4111  (850.3s)
+2026-07-01 20:28:14,252 train_nla_act ep1 step 1340  act_loss=0.5792  ce=5.0155  train_fve=0.4208  (853.8s)
+2026-07-01 20:28:17,728 train_nla_act ep1 step 1360  act_loss=0.5784  ce=4.7309  train_fve=0.4216  (857.3s)
+2026-07-01 20:28:21,207 train_nla_act ep1 step 1380  act_loss=0.5410  ce=4.6587  train_fve=0.4590  (860.7s)
+2026-07-01 20:28:24,693 train_nla_act ep1 step 1400  act_loss=0.5709  ce=4.8584  train_fve=0.4291  (864.2s)
+2026-07-01 20:30:07,000 train_nla_act val @ 1400  tf_fve=0.4208  disc_fve=0.5597
+2026-07-01 20:30:07,000 train_nla_act   no improvement (2/8)
+2026-07-01 20:30:10,438 train_nla_act ep1 step 1420  act_loss=0.5794  ce=4.8963  train_fve=0.4206  (970.0s)
+2026-07-01 20:30:13,868 train_nla_act ep1 step 1440  act_loss=0.5866  ce=4.7053  train_fve=0.4134  (973.4s)
+2026-07-01 20:30:17,301 train_nla_act ep1 step 1460  act_loss=0.5783  ce=5.3842  train_fve=0.4217  (976.8s)
+2026-07-01 20:30:20,750 train_nla_act ep1 step 1480  act_loss=0.5812  ce=5.1542  train_fve=0.4188  (980.3s)
+2026-07-01 20:30:24,223 train_nla_act ep1 step 1500  act_loss=0.5737  ce=5.2662  train_fve=0.4263  (983.7s)
+2026-07-01 20:30:27,672 train_nla_act ep1 step 1520  act_loss=0.5564  ce=5.5144  train_fve=0.4436  (987.2s)
+2026-07-01 20:30:31,164 train_nla_act ep1 step 1540  act_loss=0.5918  ce=5.0001  train_fve=0.4082  (990.7s)
+2026-07-01 20:30:34,662 train_nla_act ep1 step 1560  act_loss=0.5962  ce=5.0729  train_fve=0.4038  (994.2s)
+2026-07-01 20:30:38,143 train_nla_act ep1 step 1580  act_loss=0.5788  ce=5.2305  train_fve=0.4212  (997.7s)
+2026-07-01 20:30:41,636 train_nla_act ep1 step 1600  act_loss=0.5628  ce=4.2264  train_fve=0.4372  (1001.2s)
+2026-07-01 20:32:23,843 train_nla_act val @ 1600  tf_fve=0.4299  disc_fve=0.5600
+2026-07-01 20:32:23,843 train_nla_act   no improvement (3/8)
+2026-07-01 20:32:27,284 train_nla_act ep1 step 1620  act_loss=0.5733  ce=4.4525  train_fve=0.4267  (1106.8s)
+2026-07-01 20:32:30,734 train_nla_act ep1 step 1640  act_loss=0.5545  ce=4.8832  train_fve=0.4455  (1110.3s)
+2026-07-01 20:32:34,197 train_nla_act ep1 step 1660  act_loss=0.5699  ce=5.2152  train_fve=0.4301  (1113.7s)
+2026-07-01 20:32:37,653 train_nla_act ep1 step 1680  act_loss=0.5554  ce=4.9646  train_fve=0.4446  (1117.2s)
+2026-07-01 20:32:41,134 train_nla_act ep1 step 1700  act_loss=0.5711  ce=4.7503  train_fve=0.4289  (1120.7s)
+2026-07-01 20:32:44,636 train_nla_act ep1 step 1720  act_loss=0.5736  ce=5.1194  train_fve=0.4264  (1124.2s)
+2026-07-01 20:32:48,172 train_nla_act ep1 step 1740  act_loss=0.5783  ce=4.3573  train_fve=0.4217  (1127.7s)
+2026-07-01 20:32:51,693 train_nla_act ep1 step 1760  act_loss=0.5759  ce=4.8771  train_fve=0.4241  (1131.2s)
+2026-07-01 20:32:55,194 train_nla_act ep1 step 1780  act_loss=0.5628  ce=5.5876  train_fve=0.4372  (1134.7s)
+2026-07-01 20:32:58,709 train_nla_act ep1 step 1800  act_loss=0.5727  ce=5.0658  train_fve=0.4273  (1138.2s)
+2026-07-01 20:34:40,977 train_nla_act val @ 1800  tf_fve=0.4384  disc_fve=0.5569
+2026-07-01 20:34:40,977 train_nla_act   no improvement (4/8)
+2026-07-01 20:34:44,418 train_nla_act ep1 step 1820  act_loss=0.5616  ce=4.5425  train_fve=0.4384  (1243.9s)
+2026-07-01 20:34:47,875 train_nla_act ep1 step 1840  act_loss=0.5749  ce=4.8045  train_fve=0.4251  (1247.4s)
+2026-07-01 20:34:51,321 train_nla_act ep1 step 1860  act_loss=0.5962  ce=4.4530  train_fve=0.4038  (1250.8s)
+2026-07-01 20:34:54,762 train_nla_act ep1 step 1880  act_loss=0.5801  ce=5.0208  train_fve=0.4199  (1254.3s)
+2026-07-01 20:34:58,224 train_nla_act ep1 step 1900  act_loss=0.5958  ce=5.1285  train_fve=0.4042  (1257.7s)
+2026-07-01 20:35:01,712 train_nla_act ep1 step 1920  act_loss=0.5800  ce=5.2920  train_fve=0.4200  (1261.2s)
+2026-07-01 20:35:05,191 train_nla_act ep1 step 1940  act_loss=0.5675  ce=5.2388  train_fve=0.4325  (1264.7s)
+2026-07-01 20:35:08,647 train_nla_act ep1 step 1960  act_loss=0.5860  ce=4.6361  train_fve=0.4140  (1268.2s)
+2026-07-01 20:35:12,155 train_nla_act ep1 step 1980  act_loss=0.5719  ce=5.2559  train_fve=0.4281  (1271.7s)
+2026-07-01 20:35:15,638 train_nla_act ep1 step 2000  act_loss=0.5715  ce=4.8957  train_fve=0.4285  (1275.2s)
+2026-07-01 20:36:58,257 train_nla_act val @ 2000  tf_fve=0.4224  disc_fve=0.5534
+2026-07-01 20:36:58,257 train_nla_act   no improvement (5/8)
+2026-07-01 20:37:01,704 train_nla_act ep1 step 2020  act_loss=0.5690  ce=5.1662  train_fve=0.4310  (1381.2s)
+2026-07-01 20:37:05,137 train_nla_act ep1 step 2040  act_loss=0.5708  ce=4.8537  train_fve=0.4292  (1384.7s)
+2026-07-01 20:37:08,598 train_nla_act ep1 step 2060  act_loss=0.5602  ce=4.4863  train_fve=0.4398  (1388.1s)
+2026-07-01 20:37:12,016 train_nla_act ep1 step 2080  act_loss=0.5619  ce=5.0070  train_fve=0.4381  (1391.5s)
+2026-07-01 20:37:15,468 train_nla_act ep1 step 2100  act_loss=0.5673  ce=4.6723  train_fve=0.4327  (1395.0s)
+2026-07-01 20:37:18,932 train_nla_act ep1 step 2120  act_loss=0.5769  ce=5.2368  train_fve=0.4231  (1398.5s)
+2026-07-01 20:37:22,412 train_nla_act ep1 step 2140  act_loss=0.5816  ce=5.0331  train_fve=0.4184  (1401.9s)
+2026-07-01 20:37:25,873 train_nla_act ep1 step 2160  act_loss=0.5786  ce=5.1372  train_fve=0.4214  (1405.4s)
+2026-07-01 20:37:29,359 train_nla_act ep1 step 2180  act_loss=0.5795  ce=4.6509  train_fve=0.4205  (1408.9s)
+2026-07-01 20:37:32,812 train_nla_act ep1 step 2200  act_loss=0.5938  ce=4.6669  train_fve=0.4062  (1412.3s)
+2026-07-01 20:39:15,407 train_nla_act val @ 2200  tf_fve=0.4202  disc_fve=0.5453
+2026-07-01 20:39:15,407 train_nla_act   no improvement (6/8)
+2026-07-01 20:39:18,842 train_nla_act ep1 step 2220  act_loss=0.5805  ce=4.8891  train_fve=0.4195  (1518.4s)
+2026-07-01 20:39:22,268 train_nla_act ep1 step 2240  act_loss=0.5768  ce=4.6682  train_fve=0.4232  (1521.8s)
+2026-07-01 20:39:25,688 train_nla_act ep1 step 2260  act_loss=0.5813  ce=4.6943  train_fve=0.4187  (1525.2s)
+2026-07-01 20:39:29,142 train_nla_act ep1 step 2280  act_loss=0.5604  ce=5.0756  train_fve=0.4396  (1528.7s)
+2026-07-01 20:39:32,620 train_nla_act ep1 step 2300  act_loss=0.5789  ce=4.9370  train_fve=0.4211  (1532.1s)
+2026-07-01 20:39:36,104 train_nla_act ep1 step 2320  act_loss=0.5765  ce=5.0115  train_fve=0.4235  (1535.6s)
+2026-07-01 20:39:39,593 train_nla_act ep1 step 2340  act_loss=0.5785  ce=4.9632  train_fve=0.4215  (1539.1s)
+2026-07-01 20:39:43,091 train_nla_act ep1 step 2360  act_loss=0.5724  ce=5.2138  train_fve=0.4276  (1542.6s)
+2026-07-01 20:39:46,586 train_nla_act ep1 step 2380  act_loss=0.5748  ce=4.8199  train_fve=0.4252  (1546.1s)
+2026-07-01 20:39:50,038 train_nla_act ep1 step 2400  act_loss=0.5898  ce=4.6596  train_fve=0.4102  (1549.6s)
+2026-07-01 20:41:32,668 train_nla_act val @ 2400  tf_fve=0.4100  disc_fve=0.5536
+2026-07-01 20:41:32,668 train_nla_act   no improvement (7/8)
+2026-07-01 20:41:36,107 train_nla_act ep1 step 2420  act_loss=0.5704  ce=5.1279  train_fve=0.4296  (1655.6s)
+2026-07-01 20:41:39,515 train_nla_act ep1 step 2440  act_loss=0.5851  ce=4.7761  train_fve=0.4149  (1659.0s)
+2026-07-01 20:41:42,973 train_nla_act ep1 step 2460  act_loss=0.5848  ce=5.0882  train_fve=0.4152  (1662.5s)
+2026-07-01 20:41:46,451 train_nla_act ep1 step 2480  act_loss=0.5769  ce=5.0679  train_fve=0.4231  (1666.0s)
+2026-07-01 20:41:49,894 train_nla_act ep1 step 2500  act_loss=0.5688  ce=4.8905  train_fve=0.4312  (1669.4s)
+2026-07-01 20:41:53,357 train_nla_act ep1 step 2520  act_loss=0.5746  ce=4.8642  train_fve=0.4254  (1672.9s)
+2026-07-01 20:41:56,817 train_nla_act ep1 step 2540  act_loss=0.5862  ce=5.1065  train_fve=0.4138  (1676.3s)
+2026-07-01 20:42:00,270 train_nla_act ep1 step 2560  act_loss=0.5964  ce=4.8164  train_fve=0.4036  (1679.8s)
+2026-07-01 20:42:03,702 train_nla_act ep1 step 2580  act_loss=0.5918  ce=4.7680  train_fve=0.4082  (1683.2s)
+2026-07-01 20:42:07,157 train_nla_act ep1 step 2600  act_loss=0.5907  ce=4.3145  train_fve=0.4093  (1686.7s)
+2026-07-01 20:43:49,727 train_nla_act val @ 2600  tf_fve=0.4142  disc_fve=0.5519
+2026-07-01 20:43:49,727 train_nla_act   no improvement (8/8)
+2026-07-01 20:43:49,727 train_nla_act early stop

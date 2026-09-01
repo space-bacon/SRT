@@ -1,0 +1,132 @@
+2026-07-08 21:03:15,681 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:15,692 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:15,951 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:15,962 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:16,049 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 21:03:16,109 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 21:03:18,043 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 21:03:18,136 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:18,148 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:18,237 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-08 21:03:18,291 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:18,302 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:18,377 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-08 21:03:18,449 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:18,460 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:18,532 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3695.42it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 12199.31it/s]
+2026-07-08 21:03:18,910 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:18,921 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/generation_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:18,990 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:19,000 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:19,071 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:03:19,081 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:03:19,265 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 21:03:19,330 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 21:03:21,218 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 21:03:27,684 sample_targets corpus-encode mode: 10000 rows from data/caption_pool.jsonl
+2026-07-08 21:03:31,155 sample_targets encoded 400 / 10000
+2026-07-08 21:03:34,035 sample_targets encoded 800 / 10000
+2026-07-08 21:03:37,114 sample_targets encoded 1200 / 10000
+2026-07-08 21:03:40,193 sample_targets encoded 1600 / 10000
+2026-07-08 21:03:43,210 sample_targets encoded 2000 / 10000
+2026-07-08 21:03:46,381 sample_targets encoded 2400 / 10000
+2026-07-08 21:03:49,643 sample_targets encoded 2800 / 10000
+2026-07-08 21:03:53,180 sample_targets encoded 3200 / 10000
+2026-07-08 21:03:56,431 sample_targets encoded 3600 / 10000
+2026-07-08 21:03:59,591 sample_targets encoded 4000 / 10000
+2026-07-08 21:04:02,888 sample_targets encoded 4400 / 10000
+2026-07-08 21:04:06,030 sample_targets encoded 4800 / 10000
+2026-07-08 21:04:09,034 sample_targets encoded 5200 / 10000
+2026-07-08 21:04:12,195 sample_targets encoded 5600 / 10000
+2026-07-08 21:04:15,710 sample_targets encoded 6000 / 10000
+2026-07-08 21:04:19,114 sample_targets encoded 6400 / 10000
+2026-07-08 21:04:22,381 sample_targets encoded 6800 / 10000
+2026-07-08 21:04:25,741 sample_targets encoded 7200 / 10000
+2026-07-08 21:04:29,158 sample_targets encoded 7600 / 10000
+2026-07-08 21:04:32,690 sample_targets encoded 8000 / 10000
+2026-07-08 21:04:35,913 sample_targets encoded 8400 / 10000
+2026-07-08 21:04:39,217 sample_targets encoded 8800 / 10000
+2026-07-08 21:04:42,377 sample_targets encoded 9200 / 10000
+2026-07-08 21:04:45,525 sample_targets encoded 9600 / 10000
+2026-07-08 21:04:48,676 sample_targets encoded 10000 / 10000
+2026-07-08 21:04:50,965 sample_targets wrote artifacts/nla/gemma4/targets_caps_L47.pt (10000 sequences)
+2026-07-08 21:04:55,284 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:55,292 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:55,356 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:55,417 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:55,428 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:55,491 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:55,555 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.jinja "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:55,564 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/chat_template.jinja "HTTP/1.1 200 OK"
+2026-07-08 21:04:55,633 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/audio_tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:55,711 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:55,774 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:55,785 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:55,884 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:55,952 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/chat_template.jinja "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:55,963 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/chat_template.jinja "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,034 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/audio_tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:56,117 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:56,128 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,204 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:56,267 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:56,276 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,344 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:56,411 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:56,420 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,484 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:56,562 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:56,574 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,644 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:56,703 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:56,712 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,826 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:56,836 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:56,904 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:56,964 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 21:04:58,756 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 21:04:58,847 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:58,857 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:58,925 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:59,021 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:59,081 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/processor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:59,090 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/processor_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:59,149 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:59,211 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:59,269 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:59,280 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:59,335 srt.nla.backbones loading google/gemma-4-31B-it via Gemma4ForConditionalGeneration (multimodal host)
+2026-07-08 21:04:59,401 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:59,413 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:59,478 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-07-08 21:04:59,539 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/model.safetensors.index.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:04:59,550 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/model.safetensors.index.json "HTTP/1.1 200 OK"
+2026-07-08 21:04:59,627 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/revision/main "HTTP/1.1 200 OK"
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 3994.58it/s]
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:  77%|███████▋  | 910/1188 [00:00<00:00, 9073.57it/s]Loading weights: 100%|██████████| 1188/1188 [00:00<00:00, 9157.50it/s]
+2026-07-08 21:05:00,010 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:05:00,020 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/generation_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:05:06,722 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:05:06,732 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/config.json "HTTP/1.1 200 OK"
+2026-07-08 21:05:06,796 httpx HTTP Request: HEAD https://huggingface.co/google/gemma-4-31B-it/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-08 21:05:06,807 httpx HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/google/gemma-4-31B-it/3548789868c5356dbf307c98e6f609007b82b3eb/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-08 21:05:06,872 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-08 21:05:06,937 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-08 21:05:08,845 httpx HTTP Request: GET https://huggingface.co/api/models/google/gemma-4-31B-it "HTTP/1.1 200 OK"
+2026-07-08 21:05:12,469 vision_retrieval pool N=10000  ||mu_txt||=139.9
+2026-07-08 21:05:17,410 vision_retrieval ||mu_img||=117.2 (from 24 probes)
+2026-07-08 21:05:17,619 vision_retrieval control.png
+2026-07-08 21:05:17,619 vision_retrieval   0.570 | A view of a park bench through a split tree trunk.
+2026-07-08 21:05:17,619 vision_retrieval   0.566 | A view of a bathroom toilet, tub, and sink with a mirror cut out.
+2026-07-08 21:05:17,619 vision_retrieval   0.563 | A brand new toilet with a bow across the seat.
+2026-07-08 21:05:17,794 vision_retrieval stereogram.png
+2026-07-08 21:05:17,794 vision_retrieval   0.638 | An image of half a bathroom and half stairs.
+2026-07-08 21:05:17,794 vision_retrieval   0.636 | A filthy bathroom full of debris, broken glass, and grime.
+2026-07-08 21:05:17,794 vision_retrieval   0.634 | A wooden table filled with office supplies and cooking utensils.
+2026-07-08 21:05:17,971 vision_retrieval disparity.png
+2026-07-08 21:05:17,971 vision_retrieval   0.565 | A view of a bathroom toilet, tub, and sink with a mirror cut out.
+2026-07-08 21:05:17,971 vision_retrieval   0.562 | A view of a park bench through a split tree trunk.
+2026-07-08 21:05:17,971 vision_retrieval   0.562 | A bathroom has a toilet seat shaped like a shell.
+2026-07-08 21:05:17,971 vision_retrieval wrote artifacts/nla/gemma4/vision_caps_retrieval.json

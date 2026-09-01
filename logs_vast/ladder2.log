@@ -1,0 +1,20 @@
+shard 2/4  3 models  164 prompts  K=8  batch=32
+  coder14B_base, coder3B_base, coder0.5B_base
+
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights:  50%|████▉     | 287/579 [00:00<00:00, 2846.82it/s]Loading weights:  99%|█████████▉| 572/579 [00:00<00:00, 2452.51it/s]Loading weights: 100%|██████████| 579/579 [00:00<00:00, 2533.19it/s]
+  coder14B_base    loaded 17s, running 1 arm(s)
+  coder14B_base    raw              32/164  [   32/492   6.5%  elapsed 0:56  ETA 13:29  34/min]
+  coder14B_base    raw             160/164  [  160/492  32.5%  elapsed 4:35  ETA 9:32  35/min]
+  coder14B_base    raw            DONE          [  164/492  33.3%  elapsed 4:44  ETA 9:29  35/min]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  69%|██████▉   | 299/434 [00:00<00:00, 2982.64it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 3073.41it/s]
+  coder3B_base     loaded 2s, running 1 arm(s)
+  coder3B_base     raw              32/164  [  196/492  39.8%  elapsed 4:58  ETA 7:31  39/min]
+  coder3B_base     raw             160/164  [  324/492  65.9%  elapsed 6:04  ETA 3:09  53/min]
+  coder3B_base     raw            DONE          [  328/492  66.7%  elapsed 6:07  ETA 3:03  54/min]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3869.88it/s]
+  coder0.5B_base   loaded 1s, running 1 arm(s)
+  coder0.5B_base   raw              32/164  [  360/492  73.2%  elapsed 6:13  ETA 2:16  58/min]
+  coder0.5B_base   raw             160/164  [  488/492  99.2%  elapsed 6:37  ETA 0:03  74/min]
+  coder0.5B_base   raw            DONE          [  492/492 100.0%  elapsed 6:38  ETA 0:00  74/min]
+
+shard 2 complete  [  492/492 100.0%  elapsed 6:38  ETA 0:00  74/min]
