@@ -32,30 +32,6 @@ DEV = "mps" if torch.backends.mps.is_available() else (
     "cuda" if torch.cuda.is_available() else "cpu")
 
 
-class _NoOverride(dict):
-    """Missing experts-impl entry means no rewrite, so return {} rather than None."""
-
-    def get(self, key, default=None):
-        v = super().get(key, default)
-        return {} if v is None else v
-
-
-def patch_fp8_tp_plan():
-    """transformers 5.16.1 cannot load fine-grained-FP8 checkpoints without this.
-
-    `quantizer_finegrained_fp8.update_tp_plan` looks the experts implementation up in
-    `FP8Experts._impl_tp_layer_overrides`, gets None when that impl has no entry, then
-    calls `.get` on it and raises. A missing entry means "no rewrite", so an empty
-    mapping is the value the code already assumes it has. With it the plan rewrite
-    reduces to the identity plus the library's own expert-scale sharding step, and the
-    plan governs tensor parallelism, which we never enable. Real entries are preserved.
-    """
-    from transformers.integrations.finegrained_fp8 import FP8Experts
-    tbl = FP8Experts._impl_tp_layer_overrides
-    if not isinstance(tbl, _NoOverride):
-        FP8Experts._impl_tp_layer_overrides = _NoOverride(tbl)
-
-
 class Progress:
     def __init__(self, total):
         self.total, self.done, self.t0 = total, 0, time.time()
@@ -101,7 +77,6 @@ def run_model(tag, mid, prompts, modes, render, out_dir, prog, k=8, max_new=48,
         return have
 
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    patch_fp8_tp_plan()
     t0 = time.time()
     tok = AutoTokenizer.from_pretrained(mid)
     if tok.pad_token is None:
