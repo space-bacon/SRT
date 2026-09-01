@@ -1546,6 +1546,16 @@ encoder because we do not have theirs, and Section 9 argues the floor is what
 matters. That argument could be wrong.</p>
 <p>Transport is measured on COCO captions, a narrow domain, and may not generalize to
 reasoning or code.</p>
+<p>Transport is controlled across labs, not across corpora. The lineage control
+separates same-company pairs from cross-company pairs and finds the premium worth
+0.0357, which rules out a channel specific to one company's architecture,
+tokenizer and training recipe. It does not rule out a cause common to the whole
+field. Every model measured here was pretrained on heavily overlapping web-scale
+English, so "shared training distribution" and "a general property of learning
+language" predict the same near-ceiling transport and this design cannot separate
+them. Section 13 states the second reading; a reader who prefers the first is not
+contradicted by anything we measured. Separating them needs models pretrained on
+disjoint corpora, which the open-weight ecosystem does not currently supply.</p>
 <p>The correlation in Section 6 is roughly a tenth of the variance. It orders pairs;
 it does not explain them.</p>
 <p>Section 5.1 uses one persona sentence and one generic marker format. A different
