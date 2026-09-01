@@ -21,14 +21,11 @@ import numpy as np
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STOPS = ["\nclass ", "\ndef ", "\n#", "\nif __name__", "\nprint(", "\n@", "\nassert "]
 
-# Cap memory/CPU/file writes in the child before any generated code runs.
-GUARD = (
-    "import resource,os\n"
-    "resource.setrlimit(resource.RLIMIT_AS,(4<<30,4<<30))\n"
-    "resource.setrlimit(resource.RLIMIT_CPU,(10,10))\n"
-    "resource.setrlimit(resource.RLIMIT_FSIZE,(0,0))\n"
-    "os.environ['OMP_NUM_THREADS']='1'\n"
-)
+sys.path.insert(0, HERE)
+# Setting the hard limit too raises on macOS whenever it exceeds the inherited one,
+# which killed every child before it ran and scored the whole pool as failing.
+# srt_select.sandbox clamps each limit to the inherited hard limit instead.
+from srt_select.sandbox import GUARD  # noqa: E402
 
 
 def extract(prompt, completion, entry):
