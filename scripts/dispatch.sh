@@ -22,8 +22,10 @@ mkdir -p queues logs
 PENDING="queues/pending.txt"
 STATE="logs/dispatch.state"
 LOCK="logs/dispatch.lock"
+BUSY="logs/dispatch.busy"
 FREE_MB=4000
 
+mkdir -p "$BUSY"
 touch "$PENDING" "$STATE"
 
 # A task's identity is the hash of its text, so re-adding the same command is
@@ -32,8 +34,13 @@ task_id() { printf '%s' "$1" | cksum | cut -d' ' -f1; }
 
 claimed() { grep -q "^$1 " "$STATE" 2>/dev/null; }
 
+# A card we have handed out is busy from that instant, whatever nvidia-smi says. A
+# large model spends a minute reading shards before it allocates anything, so
+# occupancy inferred from memory.used alone lets the next task land on top of it.
+# nvidia-smi still decides for cards taken by somebody outside this dispatcher.
 gpu_free() {
   local used
+  [[ -e "$BUSY/$1" ]] && return 1
   used=$(nvidia-smi --id="$1" --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null)
   [[ -z "$used" ]] && return 1
   (( used < FREE_MB ))
@@ -59,6 +66,7 @@ start)
   exec 9>"$LOCK"
   flock -n 9 || { echo "a dispatcher is already running"; exit 1; }
   echo "dispatcher up $(date -Is)" >> logs/dispatch.log
+  rm -f "$BUSY"/*
   {
     while :; do
       # Rebuild the free list each pass; another agent may take a card at any time.
@@ -73,8 +81,10 @@ start)
         claimed "$id" && continue
         (( ${#free[@]} >= need )) || continue
 
-        assign=$(IFS=,; echo "${free[*]:0:$need}")
+        take=("${free[@]:0:$need}")
+        assign=$(IFS=,; echo "${take[*]}")
         free=("${free[@]:$need}")
+        for g in "${take[@]}"; do : > "$BUSY/$g"; done
         printf '%s %s %s\n' "$id" "$assign" "$(date -Is)" >> "$STATE"
         echo "DISPATCH $id -> gpu $assign :: $cmd" >> logs/dispatch.log
 
@@ -87,10 +97,9 @@ start)
           else
             echo "FAIL $id gpu=$assign rc=$? $(date -Is) :: $cmd" >> logs/dispatch.log
           fi
+          for g in "${take[@]}"; do rm -f "$BUSY/$g"; done
         ) &
         progressed=1
-        # One launch per pass: the card needs a moment before it reads as busy.
-        sleep 20
         break
       done < "$PENDING"
 
