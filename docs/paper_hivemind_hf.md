@@ -467,12 +467,35 @@ from the 32B model already passes 0.8609.
 **Read the other way, that decay is the useful part.** The 14B rung with selection
 reaches 0.8706, and the 32B rung unaided reaches 0.8609, on the same 425 problems.
 Selecting among eight samples from a 14B is worth about one size class, which is the
-only practical claim this section supports. It is worth exactly as much as sampling
-eight times costs, and that cost is a property of the serving stack rather than of
-the method: decode is memory-bandwidth bound, so K samples in one batch stream the
-weights once, while K samples served sequentially do not. We have not measured that
-curve, so we do not claim the trade is favourable, only that this is where the
-question sits.
+only practical claim this section supports. What it costs is a property of the
+serving stack rather than of the method: decode is memory-bandwidth bound, so K
+samples in one batch stream the weights once, while K samples served sequentially do
+not.
+
+Measured on that 14B, one card, 384 new tokens, one turn per call:
+
+| K | wall-clock per turn | vs K = 1 | naive expectation |
+|---:|---:|---:|---:|
+| 1 | 2.542 s | 1.00x | 1 |
+| 2 | 3.057 s | 1.20x | 2 |
+| 4 | 3.373 s | 1.33x | 4 |
+| 8 | **3.663 s** | **1.44x** | 8 |
+| 16 | 3.852 s | 1.52x | 16 |
+| 32 | 4.337 s | 1.71x | 32 |
+
+**Eight samples cost 1.44 times one sample, not eight times**, and thirty-two cost
+1.71 rather than thirty-two. The one-size-class gain is therefore bought for under
+half again the wall clock of a single answer, and on this hardware the trade is
+favourable. The curve is the shape the mechanism predicts, close to flat while the
+batch absorbs K and rising slowly after, so the marginal sample is nearly free until
+K exceeds what the card will hold at once.
+
+Two things bound that number. It is one model on one otherwise idle card, and an idle
+card is the favourable case, because the spare batch capacity the extra samples ride
+on is free only while nobody else is using it. On a server already batching concurrent
+requests that capacity is already sold, and the marginal cost of K rises toward the
+naive line. The table also times generation alone, while agreement additionally has to
+execute every candidate, which is CPU work it does not include.
 
 That slope is the chat-native read, which is the deployable one. A slope is only
 defined once you say which read produced it, so: agreement over the pool gives
@@ -858,6 +881,7 @@ scores.
 - `scripts/hivemind_census.py`, `artifacts/nla/hivemind_census.json`, the corpus census and all three decay slopes
 - `scripts/make_hivemind_figures.py`, which reads every plotted value from the artifacts above
 - `artifacts/nla/atlas/samples/` and `samples_instruct/`, sampled continuations
+- `scripts/k_latency.py`, `artifacts/nla/k_latency_14b.json`, what K costs in wall-clock
 - `scripts/bench_device.py`, same-task benchmark for cross-device comparison
 
 Sections 1 through 5.1 and 6 through 10 ran on a single Apple M2 Ultra with 64 GB
