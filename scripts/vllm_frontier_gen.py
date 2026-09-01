@@ -70,6 +70,8 @@ def main() -> int:
     ap.add_argument("--max-new", type=int, default=1024)
     ap.add_argument("--probs", default="data/humaneval.json")
     ap.add_argument("--gpu-frac", type=float, default=0.90)
+    ap.add_argument("--kv-cache-dtype", default="auto",
+                    help="DeepSeek's fp8_ds_mla layout accepts only fp8 here")
     ap.add_argument("--out-dir", default="artifacts/nla/frontier")
     a = ap.parse_args()
 
@@ -87,7 +89,8 @@ def main() -> int:
 
     from vllm import LLM, SamplingParams
     llm = LLM(model=path, tensor_parallel_size=a.tp, trust_remote_code=True,
-              gpu_memory_utilization=a.gpu_frac, max_model_len=4096)
+              gpu_memory_utilization=a.gpu_frac, max_model_len=4096,
+              kv_cache_dtype=a.kv_cache_dtype)
     sp = SamplingParams(n=a.k, temperature=1.0, top_p=0.9, max_tokens=a.max_new)
     outs = llm.generate(prompts, sp)
 
