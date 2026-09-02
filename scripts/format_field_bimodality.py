@@ -57,17 +57,18 @@ def embed(texts, batch=256):
 
 
 def dip(x):
-    """Hartigan's dip: sup distance from the ECDF to its closest unimodal fit.
+    """Hartigan's dip test. Returns (statistic, p).
 
-    Approximated by the gap between the ECDF and the greatest convex minorant /
-    least concave majorant, which is what the exact statistic measures.
+    The hand-rolled version this replaces returned a constant for every input,
+    including a clean bimodal mixture, so it never tested anything. BC and GMM
+    BIC both fire on non-Gaussianity rather than on two modes specifically: a
+    skewed unimodal exponential scores BIC gap +43.8 against a >10 threshold. The
+    dip is the only one of the three that actually tests unimodality, so it is
+    required for the call rather than being one vote of three.
     """
-    x = np.sort(np.asarray(x, float))
-    n = len(x)
-    ecdf = np.arange(1, n + 1) / n
-    lo = np.maximum.accumulate(ecdf - np.linspace(0, 1, n))
-    hi = np.minimum.accumulate((ecdf - np.linspace(0, 1, n))[::-1])[::-1]
-    return float(np.max(np.abs(lo - hi)) / 2)
+    import diptest
+    d, p = diptest.diptest(np.asarray(x, float))
+    return float(d), float(p)
 
 
 def bimodality_coefficient(x):
@@ -102,7 +103,7 @@ def main() -> None:
 
     rows_out = []
     print("Per-problem order at each field strength: one branch or two?")
-    print(f"{'alpha':>6s} {'mean':>7s} {'sd':>6s} {'dip':>7s} {'BC':>6s} "
+    print(f"{'alpha':>6s} {'mean':>7s} {'sd':>6s} {'dip p':>7s} {'BC':>6s} "
           f"{'BIC1-BIC2':>10s} {'minor w':>8s}  reading")
     for f in sorted(glob.glob(os.path.join(a.gen_dir, a.pattern))):
         al = float(os.path.basename(f).split("_a")[1].split("__")[0])
@@ -112,16 +113,17 @@ def main() -> None:
         iu, ju = zip(*itertools.combinations(range(k), 2))
         per = (E[:, iu, :] * E[:, ju, :]).sum(-1).mean(1)
 
-        d = dip(per)
+        d, dp = dip(per)
         bc = bimodality_coefficient(per)
         b1, b2, w = gmm_bic(per)
         delta = (b1 - b2) if b1 is not None else float("nan")
-        flag = "TWO" if (bc > 0.555 and delta > 10) else "one"
+        # The dip is the only real unimodality test here, so it gates the call.
+        flag = "TWO" if (dp < 0.05 and bc > 0.555 and delta > 10) else "one"
         rows_out.append({"alpha": al, "mean": float(per.mean()),
-                         "sd": float(per.std()), "dip": d, "bc": bc,
+                         "sd": float(per.std()), "dip": d, "dip_p": dp, "bc": bc,
                          "bic1_minus_bic2": delta, "minor_weight": w,
                          "reading": flag})
-        print(f"{al:6.2f} {per.mean():7.4f} {per.std():6.4f} {d:7.4f} {bc:6.3f} "
+        print(f"{al:6.2f} {per.mean():7.4f} {per.std():6.4f} {dp:7.3f} {bc:6.3f} "
               f"{delta:10.1f} {w if w is not None else float('nan'):8.3f}  {flag}")
 
     os.makedirs(os.path.dirname(a.out), exist_ok=True)

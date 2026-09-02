@@ -276,6 +276,61 @@ narrow is barely resolved by a grid of 0.1. What would settle it: a dense grid
 across alpha 0.02 to 0.30, repeat seeds to show the branches are not a sampling
 artifact, and a second model to show the window is not a quirk of this one.
 
+## Outcome: the coexistence window is not supported
+
+Scored against the predictions registered in commit c8e5a454, before the
+analysis.
+
+| | registered | result |
+|---|---|---|
+| P1 | bimodality in a contiguous run inside [0.08, 0.22], at least two of 0.12/0.14/0.16/0.18 | **FAIL**, zero of four |
+| P2 | minority weight decreases monotonically across the window | **FAIL** |
+| P3 | spread peaks inside the window | **FAIL**, spread declines monotonically, max at alpha 0.02 |
+| P4 | the 1.5B shows a window in [0.05, 0.30] | **pass**, but see below |
+
+**The detector was broken and it was flattering the hypothesis.** The dip
+function in the first version of `format_field_bimodality.py` returned 0.0030 for
+every input. Validated afterwards against known distributions, it gives the same
+0.0030 for a unimodal normal, a clean bimodal mixture and a skewed exponential.
+It is a constant in $n$ and it never tested anything, while the script's own
+docstring called it one of "three independent readings".
+
+The two remaining detectors are not independent either. Both fire on
+non-Gaussianity rather than on two modes. A **unimodal** skewed exponential
+scores a BIC gap of +43.8 against the >10 threshold used here. At low field the
+per-problem order distribution has sd near 0.19 against a hard ceiling at 1.0,
+which is exactly the geometry that produces left skew.
+
+With a real Hartigan dip gating the call, the two "TWO branches" points that
+motivated this section evaporate: alpha 0.10 and 0.20 give dip p = 0.946 and
+0.736. Their BC and BIC values are unchanged and still look impressive. They were
+measuring skew.
+
+On the dense 25-point grid only alpha 0.04 and 0.06 survive, and **25 dip tests at
+p < 0.05 expect 1.25 false positives by chance**. Two is the false-positive rate.
+
+**P4 passes as written, and the wording was the flaw.** On the 1.5B the dip test
+finds genuine bimodality at alpha 0.10, 0.15 and 0.20, all at p = 0.000 and all
+inside the registered interval. But alpha = 0.00 is bimodal too, at p = 0.023.
+Two branches with no field at all. A transition has to *create* the split; here
+the split pre-exists and the field destroys it, with sd collapsing from 0.244 to
+0.064 between alpha 0.20 and 0.25. P4 should have required unimodality at zero
+field, and did not. That is the population-heterogeneity confound we registered
+against the NLA test and failed to guard against in our own.
+
+**The two models also disagree.** Same test, same interval: the 3B flags none of
+0.12/0.14/0.16/0.18, the 1.5B flags 0.10/0.15/0.20 at p = 0.000. Whatever the
+1.5B is showing is not a property of the template.
+
+**The standing reading is the one from before the bimodality detour: a saturating
+field.** Order rises from 0.737 to 0.892 and flattens past alpha ~= 0.3, spread
+collapses monotonically from 0.19 to 0.035, and no field strength on the 3B shows
+two branches. Roughly 40% of the template's embedding magnitude buys the whole
+effect.
+
+Per the pre-registration we are not relocating the window, switching order
+parameter, or dropping the 3B as a different regime.
+
 ## Pre-registration, written before the dense grid was analysed
 
 This note has changed its mechanism six times in one day, and every version fitted

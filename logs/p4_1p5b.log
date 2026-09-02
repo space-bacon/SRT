@@ -1,0 +1,30 @@
+Per-problem order at each field strength: one branch or two?
+ alpha    mean     sd   dip p     BC  BIC1-BIC2  minor w  reading
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12307.72it/s]
+  0.00  0.8605 0.2658   0.023  0.916     1331.4    0.244  TWO
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12986.63it/s]
+  0.05  0.8776 0.2501   0.137  0.911     1389.2    0.213  one
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 10801.14it/s]
+  0.10  0.7565 0.2326   0.000  0.729      700.6    0.427  TWO
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 17706.19it/s]
+  0.15  0.8174 0.2258   0.000  0.799      113.0    0.314  TWO
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 14771.20it/s]
+  0.20  0.7186 0.2438   0.000  0.728      652.2    0.384  TWO
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 16845.91it/s]
+  0.25  0.8395 0.0635   0.867  0.590       82.2    0.072  one
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 14756.57it/s]
+  0.30  0.8426 0.0583   0.877  0.480       46.1    0.079  one
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 13366.33it/s]
+  0.40  0.8754 0.0332   0.419  0.340       -6.2    0.395  one
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 13646.26it/s]
+  0.60  0.8758 0.0371   0.992  0.414      -11.0    0.440  one
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 9825.41it/s]
+  0.80  0.8792 0.0332   0.968  0.392      -11.5    0.467  one
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 11393.66it/s]
+  1.00  0.8784 0.0360   0.976  0.377       -9.7    0.403  one
+
+  bimodal at 4/11 field strengths
+  alphas flagged: 0.00, 0.10, 0.15, 0.20
+  minority weight across those: 0.244 to 0.427
+
+wrote artifacts/nla/field_sweep_1p5b/bimodality.json
