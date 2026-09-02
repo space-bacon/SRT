@@ -1,0 +1,344 @@
+{
+ "question": "does the chat-template effect hold across model scale",
+ "family": "Qwen2.5-Coder, one lab, one recipe, one tokenizer",
+ "domain": "MBPP prompts",
+ "scorer": "sentence-transformers/all-MiniLM-L6-v2",
+ "per_arm": {
+  "mbpp0.5B_base__raw": {
+   "intra": 0.7349,
+   "frac_above_0.8": 0.1576,
+   "floor": 0.3033,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp0.5B_inst__chat": {
+   "intra": 0.8814,
+   "frac_above_0.8": 0.9388,
+   "floor": 0.2956,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp0.5B_inst__persona": {
+   "intra": 0.8369,
+   "frac_above_0.8": 0.8071,
+   "floor": 0.3144,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp0.5B_inst__raw": {
+   "intra": 0.8588,
+   "frac_above_0.8": 0.8753,
+   "floor": 0.3134,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp0.5B_inst__shared": {
+   "intra": 0.8565,
+   "frac_above_0.8": 0.9035,
+   "floor": 0.2953,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp0.5B_inst__shared_persona": {
+   "intra": 0.8551,
+   "frac_above_0.8": 0.8753,
+   "floor": 0.303,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp1.5B_base__raw": {
+   "intra": 0.7578,
+   "frac_above_0.8": 0.2612,
+   "floor": 0.3039,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp1.5B_inst__chat": {
+   "intra": 0.8475,
+   "frac_above_0.8": 0.8847,
+   "floor": 0.2815,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp1.5B_inst__persona": {
+   "intra": 0.8101,
+   "frac_above_0.8": 0.6141,
+   "floor": 0.3155,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp1.5B_inst__raw": {
+   "intra": 0.8196,
+   "frac_above_0.8": 0.6941,
+   "floor": 0.3059,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp1.5B_inst__shared": {
+   "intra": 0.8481,
+   "frac_above_0.8": 0.8565,
+   "floor": 0.3263,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp1.5B_inst__shared_persona": {
+   "intra": 0.8519,
+   "frac_above_0.8": 0.8824,
+   "floor": 0.3287,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp14B_base__raw": {
+   "intra": 0.7785,
+   "frac_above_0.8": 0.4118,
+   "floor": 0.3014,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp14B_inst__chat": {
+   "intra": 0.963,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3215,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp14B_inst__persona": {
+   "intra": 0.9147,
+   "frac_above_0.8": 0.9812,
+   "floor": 0.3252,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp14B_inst__raw": {
+   "intra": 0.9507,
+   "frac_above_0.8": 0.9906,
+   "floor": 0.3187,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp14B_inst__shared": {
+   "intra": 0.9459,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3216,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp14B_inst__shared_persona": {
+   "intra": 0.9615,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3214,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp32B_base__raw": {
+   "intra": 0.755,
+   "frac_above_0.8": 0.2824,
+   "floor": 0.3057,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp32B_inst__chat": {
+   "intra": 0.9755,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3196,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp32B_inst__persona": {
+   "intra": 0.9389,
+   "frac_above_0.8": 0.9976,
+   "floor": 0.3342,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp32B_inst__raw": {
+   "intra": 0.9576,
+   "frac_above_0.8": 0.9929,
+   "floor": 0.3182,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp32B_inst__shared": {
+   "intra": 0.975,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3189,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp32B_inst__shared_persona": {
+   "intra": 0.974,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3199,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp3B_base__raw": {
+   "intra": 0.7657,
+   "frac_above_0.8": 0.3388,
+   "floor": 0.3035,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp3B_inst__chat": {
+   "intra": 0.9092,
+   "frac_above_0.8": 0.9788,
+   "floor": 0.3076,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp3B_inst__persona": {
+   "intra": 0.8594,
+   "frac_above_0.8": 0.8871,
+   "floor": 0.327,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp3B_inst__raw": {
+   "intra": 0.8589,
+   "frac_above_0.8": 0.88,
+   "floor": 0.3182,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp3B_inst__shared": {
+   "intra": 0.8738,
+   "frac_above_0.8": 0.9153,
+   "floor": 0.3152,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp3B_inst__shared_persona": {
+   "intra": 0.8871,
+   "frac_above_0.8": 0.9412,
+   "floor": 0.3144,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp7B_base__raw": {
+   "intra": 0.7757,
+   "frac_above_0.8": 0.36,
+   "floor": 0.3011,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp7B_inst__chat": {
+   "intra": 0.9385,
+   "frac_above_0.8": 1.0,
+   "floor": 0.3148,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp7B_inst__persona": {
+   "intra": 0.5667,
+   "frac_above_0.8": 0.1812,
+   "floor": 0.2487,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp7B_inst__raw": {
+   "intra": 0.9122,
+   "frac_above_0.8": 0.96,
+   "floor": 0.3212,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp7B_inst__shared": {
+   "intra": 0.9054,
+   "frac_above_0.8": 0.9741,
+   "floor": 0.3194,
+   "n_prompts": 425,
+   "k": 8
+  },
+  "mbpp7B_inst__shared_persona": {
+   "intra": 0.9061,
+   "frac_above_0.8": 0.9788,
+   "floor": 0.3182,
+   "n_prompts": 425,
+   "k": 8
+  }
+ },
+ "curve": {
+  "0.5B": {
+   "params_b": 0.5,
+   "base_raw": 0.7349,
+   "inst_raw": 0.8588,
+   "inst_chat": 0.8814,
+   "inst_shared": 0.8565,
+   "tuning_gain": 0.1239,
+   "format_gain": 0.0226,
+   "total_gain": 0.1465,
+   "frac_above_0.8_chat": 0.9388,
+   "floor_chat": 0.2956
+  },
+  "1.5B": {
+   "params_b": 1.5,
+   "base_raw": 0.7578,
+   "inst_raw": 0.8196,
+   "inst_chat": 0.8475,
+   "inst_shared": 0.8481,
+   "tuning_gain": 0.0618,
+   "format_gain": 0.0279,
+   "total_gain": 0.0897,
+   "frac_above_0.8_chat": 0.8847,
+   "floor_chat": 0.2815
+  },
+  "3B": {
+   "params_b": 3.1,
+   "base_raw": 0.7657,
+   "inst_raw": 0.8589,
+   "inst_chat": 0.9092,
+   "inst_shared": 0.8738,
+   "tuning_gain": 0.0932,
+   "format_gain": 0.0503,
+   "total_gain": 0.1435,
+   "frac_above_0.8_chat": 0.9788,
+   "floor_chat": 0.3076
+  },
+  "7B": {
+   "params_b": 7.6,
+   "base_raw": 0.7757,
+   "inst_raw": 0.9122,
+   "inst_chat": 0.9385,
+   "inst_shared": 0.9054,
+   "tuning_gain": 0.1365,
+   "format_gain": 0.0263,
+   "total_gain": 0.1628,
+   "frac_above_0.8_chat": 1.0,
+   "floor_chat": 0.3148
+  },
+  "14B": {
+   "params_b": 14.8,
+   "base_raw": 0.7785,
+   "inst_raw": 0.9507,
+   "inst_chat": 0.963,
+   "inst_shared": 0.9459,
+   "tuning_gain": 0.1722,
+   "format_gain": 0.0123,
+   "total_gain": 0.1845,
+   "frac_above_0.8_chat": 1.0,
+   "floor_chat": 0.3215
+  },
+  "32B": {
+   "params_b": 32.8,
+   "base_raw": 0.755,
+   "inst_raw": 0.9576,
+   "inst_chat": 0.9755,
+   "inst_shared": 0.975,
+   "tuning_gain": 0.2026,
+   "format_gain": 0.0179,
+   "total_gain": 0.2205,
+   "frac_above_0.8_chat": 1.0,
+   "floor_chat": 0.3196
+  }
+ },
+ "trend": {
+  "format_gain_slope_per_decade": -0.007,
+  "tuning_gain_slope_per_decade": 0.0585,
+  "format_gain_range": [
+   0.0123,
+   0.0503
+  ],
+  "paper_small_model_format_gain": 0.3623,
+  "reading": "a slope near zero means the format effect is scale-free and the small-model objection to section 5 fails; a clearly negative slope means it decays with scale and the paper needs to say so"
+ }
+}

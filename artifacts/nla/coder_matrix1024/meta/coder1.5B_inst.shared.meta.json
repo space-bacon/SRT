@@ -1,0 +1,1 @@
+{"tag": "coder1.5B_inst", "arm": "shared", "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct", "k": 8, "max_new": 1024, "n_candidates": 1312, "truncated": 207, "truncated_frac": 0.1578}

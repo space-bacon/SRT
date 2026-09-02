@@ -1,0 +1,1 @@
+{"tag": "coder14B_base", "arm": "raw", "model": "Qwen/Qwen2.5-Coder-14B", "k": 8, "max_new": 1024, "n_candidates": 1312, "truncated": 321, "truncated_frac": 0.2447}

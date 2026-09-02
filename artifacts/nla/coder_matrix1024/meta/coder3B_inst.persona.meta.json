@@ -1,0 +1,1 @@
+{"tag": "coder3B_inst", "arm": "persona", "model": "Qwen/Qwen2.5-Coder-3B-Instruct", "k": 8, "max_new": 1024, "n_candidates": 1312, "truncated": 521, "truncated_frac": 0.3971}
