@@ -52,9 +52,9 @@ effect, so the 66/34 split between framing and native tokens is a property of th
 original six models rather than a constant.
 
 A final measurement bounds what any of this licenses. Scoring the same code
-generations with an execution harness, an arm at 0.8638 intra-model similarity
-passes only 0.5404 of the time per sample while its 8-sample pool contains a
-passing solution 0.9024 of the time. Convergence in phrasing is not convergence in
+generations with an execution harness, an arm at 0.8765 intra-model similarity
+passes 0.7904 of the time per sample while its 8-sample pool contains a
+passing solution 0.9573 of the time. Convergence in phrasing is not convergence in
 correctness.
 
 Finally we test whether the effect can be undone. Eight genuinely distinct personas
@@ -437,14 +437,14 @@ High intra-model similarity is a claim about text, not about being right. On cod
 we can measure both on the same samples.
 
 Using a sandboxed executor validated at 164/164 on HumanEval canonical solutions,
-we scored every candidate behind the arms above. `coder7B_inst__chat` sits at 0.8638
+we scored every candidate behind the arms above. `coder7B_inst__chat` sits at 0.8765
 intra, comfortably inside hivemind territory, while a single sample from it passes
-0.5404 of the time and the K = 8 pool contains a passing solution 0.9024 of the
+0.7904 of the time and the K = 8 pool contains a passing solution 0.9573 of the
 time.
 
-Across all 30 arms the gap between the pool and a single sample averages **+0.3151**
-and reaches +0.4649. For comparison the same quantity on GSM8K is +0.060. Samples
-that an encoder scores as 0.86 similar disagree about correctness on roughly a third
+Across all 36 arms the gap between the pool and a single sample averages **+0.2667**
+and reaches +0.5960. For comparison the same quantity on GSM8K is +0.060. Samples
+that an encoder scores as 0.88 similar disagree about correctness on roughly a sixth
 of problems.
 
 **Embedding homogeneity does not imply outcome homogeneity.** This bounds what the
@@ -452,59 +452,71 @@ hivemind result licenses: convergence in phrasing is real and we reproduced it, 
 it should not be read as convergence in what the models actually get right.
 
 That gap is large enough to be worth closing, so we asked what closes it. Across a
-36-arm set that adds the six 32B arms, selecting one candidate per problem by five
-different reads:
+36-arm set that adds the six 32B arms, on the 1024-token pools, selecting one
+candidate per problem by five different reads:
 
 | read | coverage | pass | share of the gap |
 |---|---:|---:|---:|
-| random single | 164 | 0.1868 | |
-| centered medoid similarity | 164 | 0.1921 | 1.7% |
-| learned verifier on encoder features | 164 | 0.2639 | 25.0% |
-| filter by the prompt's own examples | 128 | 0.4145 | 73.8% |
-| that filter plus the verifier | 128 | 0.4339 | 80.1% |
-| **agreement among candidates** | **164** | **0.4426** | **82.9%** |
-| oracle | 164 | 0.4954 | 100% |
+| random single | 164 | 0.4679 | |
+| centered medoid similarity | 164 | 0.4919 | 9.0% |
+| learned verifier on encoder features | 164 | 0.5102 | 15.9% |
+| agreement among candidates | 164 | 0.6301 | 60.8% |
+| filter by the prompt's own examples | 128 | 0.6496 | 68.1% |
+| **that filter plus the verifier** | 128 | **0.6585** | **71.5%** |
+| oracle | 164 | 0.7346 | 100% |
 
 The verifier is trained on 47,232 execution labels drawn from these arms, split by
 problem so no candidate for a test problem is ever seen in training. It captures a
-quarter of the gap and loses to simply running the examples the prompt already
-states, by 0.1506.
+sixth of the gap and loses to simply running the examples the prompt already
+states, by 0.1394. Its AUROC is 0.778, and a length-only control scores 0.526,
+essentially chance, so what the verifier learned is not length.
 
 ![Pass rate for each read on both benchmarks, from the random-single floor to the
 any-candidate oracle. The supervised verifier loses to two baselines that need no
-training, and the order of the two free baselines flips between
-benchmarks.](arxiv_hivemind/figs/fig3_reads.png)
+training.](arxiv_hivemind/figs/fig3_reads.png)
 
-**What wins is the pool disagreeing with itself.** Synthesising inputs from each
-signature, running all eight candidates, and keeping the largest group that agrees on
-outputs recovers 82.9% of the gap. It needs no labels, no training, and no stated
-examples, so it covers all 164 problems where example-filtering reaches only 128.
-The homogeneity Section 5 measures is in the text; the residual disagreement, which
-is invisible to an encoder, is enough to pick a correct answer four times out of
-nine when a single sample manages fewer than two.
+**Running the prompt's own examples is the strongest single read, and agreement is
+the strongest one that covers everything.** Filtering candidates by the examples
+the docstring already states recovers 68.1% of the gap on the 128 problems that
+state one. Synthesising inputs from each signature, running all eight candidates,
+and keeping the largest group that agrees on outputs recovers 60.8%, needs no
+labels, no training and no stated examples, and so covers all 164 problems. The
+homogeneity Section 5 measures is in the text; the residual disagreement, which is
+invisible to an encoder, is enough to pick a correct answer nearly two times out of
+three when a single sample manages fewer than one in two.
 
-Repeating all of it on MBPP, 425 problems over ten arms of the same family, changes
-the ranking and is the reason we report both:
+Repeating all of it on MBPP, 425 problems over ten arms of the same family, gives
+the same ordering:
 
 | read | HumanEval share | MBPP share |
 |---|---:|---:|
-| learned verifier | 25.0% | **6.3%** |
-| filter by the prompt's own examples | 73.8% | **76.8%** |
-| that filter plus the verifier | 80.1% | 76.4% |
-| agreement among candidates | **82.9%** | 58.1% |
+| learned verifier | 15.9% | **6.3%** |
+| filter by the prompt's own examples | 68.1% | **76.8%** |
+| that filter plus the verifier | 71.5% | 76.4% |
+| agreement among candidates | 60.8% | 58.1% |
 
-**The verifier does not transfer.** A quarter of the gap on the benchmark it was
-tuned against becomes 6.3% on the other one, and adding it to example-filtering now
-costs 0.0007 rather than gaining. Together with the earlier finding that surface
-features alone reach 0.2229 of its 0.2646, most of what it learned was the shape of
-HumanEval rather than the shape of correct code.
+**The verifier does not transfer.** A sixth of the gap on the benchmark it was
+tuned against becomes 6.3% on the other one, and adding it to example-filtering
+gains 0.0089 on HumanEval and costs 0.0007 on MBPP. Most of what it learned was
+the shape of HumanEval rather than the shape of correct code.
 
-**The order of the other two is a coverage effect, not a ranking.** MBPP states an
-example for 425 of 425 problems, so filtering reaches everything and wins. HumanEval
-states one for 128 of 164, and agreement wins there only by covering the remaining
-36. Neither method is better than the other in general. What decides it is whether
-the prompt happens to say what the answer should be, which is a property of the
+**The two free reads are close on both benchmarks, and coverage decides between
+them.** Example-filtering leads agreement by 7 points on HumanEval and 19 on MBPP,
+where every problem states an example so filtering reaches all 425. On HumanEval
+it reaches 128 of 164, and agreement's edge is that it covers the remaining 36.
+Neither read is better than the other in general. What decides it is whether the
+prompt happens to say what the answer should be, which is a property of the
 benchmark rather than of the reader.
+
+**A note on the budget.** An earlier version of this table was computed on
+192-token pools, where 43% to 80% of candidates were cut off mid-function. On that
+data agreement appeared to recover 82.9% of the gap and to lead example-filtering,
+and the verifier appeared to capture 25%. Truncated candidates cannot execute, so
+much of what looked like selection was the reads discarding broken code, against
+a floor that included the broken code. At 1024 tokens the floor rises from 0.1868
+to 0.4679, every read's share falls, and example-filtering moves ahead of
+agreement. The ordering on clean HumanEval now matches the ordering on MBPP, which
+was clean all along.
 
 **None of it survives scale.** Reading the MBPP arms by rung, the gain from selecting
 among eight candidates decays at **−0.0704 per decade of parameters**, from +0.1538
@@ -823,26 +835,32 @@ Section 8.
 candidates is severe, 0.7929 mean pairwise cosine across 30 arms, so we expected
 centering by the pool mean to be necessary before consensus voting. It changes
 nothing: centered minus raw is −0.0016, with 8 wins, 12 losses and 10 ties. Medoid
-voting beats a random single sample by +0.0064, which is 2.0% of the +0.3151
+voting beats a random single sample by +0.0240, which is 9.0% of the +0.2667
 headroom. Centering corrects similarity magnitudes and leaves the argmax alone.
 
 **Our learned verifier lost to a baseline that needs no learning.** Fitting a
 classifier on 47,232 execution labels was the one read that survived its nuisance
-knobs, at +0.0771 over the floor with a spread of 0.0090 across six configurations.
-It is still beaten by running the examples the prompt already contains (−0.1506) and
-by candidate agreement (−0.1787). **It also fails to transfer**, falling from 25.0%
+knobs, at +0.0423 over the floor with a spread of 0.0032 across six configurations.
+It is still beaten by running the examples the prompt already contains (−0.1394) and
+by candidate agreement (−0.1199). **It also fails to transfer**, falling from 15.9%
 of the gap on HumanEval to 6.3% on MBPP, where appending it to example-filtering
 makes that baseline slightly worse. We report it because the negative is the useful
 part: the supervised signal we paid for is worth a quarter of what falls out of
 executing the pool for free, on one benchmark, and almost nothing on the other.
 
-**We twice weakened a baseline by accident, and both times it flattered us.** Our
-first example extractor read only doctest blocks with literal expected values,
+**We three times weakened a comparison by accident, and each time it flattered us.**
+Our first example extractor read only doctest blocks with literal expected values,
 covering 54 of 164 problems at 0.60 assertions each, which would have shown
 example-filtering roughly level with the verifier. Repairing it to 128 problems at
-2.83 assertions moved that baseline from 0.3943 to 0.4145 and widened the verifier's
-deficit from −0.1304 to −0.1506. A handicapped comparison is a quiet form of
-overclaiming, and no control we ran on the verifier itself could have detected it.
+2.83 assertions moved that baseline up and widened the verifier's deficit. Then the
+whole HumanEval matrix turned out to have been generated at a 192-token budget that
+cut off 43% to 80% of instruct-arm candidates mid-function. On those pools every
+selection read looked stronger than it is, because discarding broken code looks
+like skill against a floor that includes the broken code: agreement appeared to
+recover 82.9% of the gap where the clean figure is 60.8%, the verifier 25.0% where
+it is 15.9%, and the Consensus demo's mean selector gain read +0.2013 where it is
++0.0595. A handicapped comparison is a quiet form of overclaiming, and no control
+we ran on the readers themselves could have detected any of the three.
 
 **A cross-model transport selector did not survive replication, and we published
 the claim before checking.** Scoring candidates by how far a hidden state fails to

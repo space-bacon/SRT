@@ -1,0 +1,302 @@
+{
+  "bench": "humaneval",
+  "n_problems": 164,
+  "arms": {
+    "coder0.5B_base__raw": {
+      "chat_consensus": 0.1768,
+      "on_resolved_only": 0.0,
+      "resolved": 2,
+      "n": 164,
+      "floor": 0.1966,
+      "oracle": 0.4451
+    },
+    "coder0.5B_inst__chat": {
+      "chat_consensus": 0.5732,
+      "on_resolved_only": 0.5767,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.4314,
+      "oracle": 0.8049
+    },
+    "coder0.5B_inst__persona": {
+      "chat_consensus": 0.0305,
+      "on_resolved_only": 0.4,
+      "resolved": 5,
+      "n": 164,
+      "floor": 0.013,
+      "oracle": 0.0976
+    },
+    "coder0.5B_inst__raw": {
+      "chat_consensus": 0.0305,
+      "on_resolved_only": 0.0,
+      "resolved": 1,
+      "n": 164,
+      "floor": 0.0343,
+      "oracle": 0.1646
+    },
+    "coder0.5B_inst__shared": {
+      "chat_consensus": 0.5183,
+      "on_resolved_only": 0.5153,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.3598,
+      "oracle": 0.75
+    },
+    "coder0.5B_inst__shared_persona": {
+      "chat_consensus": 0.5427,
+      "on_resolved_only": 0.5427,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.3902,
+      "oracle": 0.7439
+    },
+    "coder1.5B_base__raw": {
+      "chat_consensus": 0.3049,
+      "on_resolved_only": 0.0,
+      "resolved": 2,
+      "n": 164,
+      "floor": 0.2805,
+      "oracle": 0.6646
+    },
+    "coder1.5B_inst__chat": {
+      "chat_consensus": 0.7073,
+      "on_resolved_only": 0.7117,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.6181,
+      "oracle": 0.9085
+    },
+    "coder1.5B_inst__persona": {
+      "chat_consensus": 0.2744,
+      "on_resolved_only": 0.3879,
+      "resolved": 116,
+      "n": 164,
+      "floor": 0.0823,
+      "oracle": 0.3902
+    },
+    "coder1.5B_inst__raw": {
+      "chat_consensus": 0.2561,
+      "on_resolved_only": 0.4231,
+      "resolved": 52,
+      "n": 164,
+      "floor": 0.1532,
+      "oracle": 0.4451
+    },
+    "coder1.5B_inst__shared": {
+      "chat_consensus": 0.6646,
+      "on_resolved_only": 0.6646,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.5831,
+      "oracle": 0.8598
+    },
+    "coder1.5B_inst__shared_persona": {
+      "chat_consensus": 0.7378,
+      "on_resolved_only": 0.7423,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.6296,
+      "oracle": 0.8902
+    },
+    "coder14B_base__raw": {
+      "chat_consensus": 0.3841,
+      "on_resolved_only": 0.0,
+      "resolved": 1,
+      "n": 164,
+      "floor": 0.362,
+      "oracle": 0.7744
+    },
+    "coder14B_inst__chat": {
+      "chat_consensus": 0.9085,
+      "on_resolved_only": 0.9085,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.8697,
+      "oracle": 0.9634
+    },
+    "coder14B_inst__persona": {
+      "chat_consensus": 0.4207,
+      "on_resolved_only": 0.6126,
+      "resolved": 111,
+      "n": 164,
+      "floor": 0.1425,
+      "oracle": 0.6707
+    },
+    "coder14B_inst__raw": {
+      "chat_consensus": 0.3171,
+      "on_resolved_only": 0.5333,
+      "resolved": 30,
+      "n": 164,
+      "floor": 0.2744,
+      "oracle": 0.5549
+    },
+    "coder14B_inst__shared": {
+      "chat_consensus": 0.8963,
+      "on_resolved_only": 0.8963,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.846,
+      "oracle": 0.9451
+    },
+    "coder14B_inst__shared_persona": {
+      "chat_consensus": 0.9024,
+      "on_resolved_only": 0.9024,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.8598,
+      "oracle": 0.9573
+    },
+    "coder32B_base__raw": {
+      "chat_consensus": 0.3841,
+      "on_resolved_only": 0.5,
+      "resolved": 2,
+      "n": 164,
+      "floor": 0.3819,
+      "oracle": 0.7988
+    },
+    "coder32B_inst__chat": {
+      "chat_consensus": 0.9146,
+      "on_resolved_only": 0.9141,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.8933,
+      "oracle": 0.9512
+    },
+    "coder32B_inst__persona": {
+      "chat_consensus": 0.6098,
+      "on_resolved_only": 0.8333,
+      "resolved": 120,
+      "n": 164,
+      "floor": 0.1898,
+      "oracle": 0.689
+    },
+    "coder32B_inst__raw": {
+      "chat_consensus": 0.25,
+      "on_resolved_only": 0.55,
+      "resolved": 20,
+      "n": 164,
+      "floor": 0.1913,
+      "oracle": 0.3232
+    },
+    "coder32B_inst__shared": {
+      "chat_consensus": 0.9146,
+      "on_resolved_only": 0.9141,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.8727,
+      "oracle": 0.9451
+    },
+    "coder32B_inst__shared_persona": {
+      "chat_consensus": 0.8963,
+      "on_resolved_only": 0.8951,
+      "resolved": 162,
+      "n": 164,
+      "floor": 0.8803,
+      "oracle": 0.9451
+    },
+    "coder3B_base__raw": {
+      "chat_consensus": 0.3049,
+      "on_resolved_only": null,
+      "resolved": 0,
+      "n": 164,
+      "floor": 0.3399,
+      "oracle": 0.7134
+    },
+    "coder3B_inst__chat": {
+      "chat_consensus": 0.8293,
+      "on_resolved_only": 0.8293,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.7645,
+      "oracle": 0.9634
+    },
+    "coder3B_inst__persona": {
+      "chat_consensus": 0.5793,
+      "on_resolved_only": 0.6118,
+      "resolved": 152,
+      "n": 164,
+      "floor": 0.2454,
+      "oracle": 0.8415
+    },
+    "coder3B_inst__raw": {
+      "chat_consensus": 0.2622,
+      "on_resolved_only": 0.3333,
+      "resolved": 57,
+      "n": 164,
+      "floor": 0.1822,
+      "oracle": 0.4756
+    },
+    "coder3B_inst__shared": {
+      "chat_consensus": 0.8537,
+      "on_resolved_only": 0.8537,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.779,
+      "oracle": 0.9573
+    },
+    "coder3B_inst__shared_persona": {
+      "chat_consensus": 0.8415,
+      "on_resolved_only": 0.8415,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.7812,
+      "oracle": 0.9451
+    },
+    "coder7B_base__raw": {
+      "chat_consensus": 0.372,
+      "on_resolved_only": 0.0,
+      "resolved": 3,
+      "n": 164,
+      "floor": 0.4223,
+      "oracle": 0.8537
+    },
+    "coder7B_inst__chat": {
+      "chat_consensus": 0.8537,
+      "on_resolved_only": 0.8528,
+      "resolved": 163,
+      "n": 164,
+      "floor": 0.7904,
+      "oracle": 0.9573
+    },
+    "coder7B_inst__persona": {
+      "chat_consensus": 0.1951,
+      "on_resolved_only": 0.4808,
+      "resolved": 52,
+      "n": 164,
+      "floor": 0.1075,
+      "oracle": 0.5183
+    },
+    "coder7B_inst__raw": {
+      "chat_consensus": 0.2744,
+      "on_resolved_only": 0.5,
+      "resolved": 10,
+      "n": 164,
+      "floor": 0.2401,
+      "oracle": 0.6341
+    },
+    "coder7B_inst__shared": {
+      "chat_consensus": 0.872,
+      "on_resolved_only": 0.8765,
+      "resolved": 162,
+      "n": 164,
+      "floor": 0.8186,
+      "oracle": 0.9451
+    },
+    "coder7B_inst__shared_persona": {
+      "chat_consensus": 0.8598,
+      "on_resolved_only": 0.8598,
+      "resolved": 164,
+      "n": 164,
+      "floor": 0.8369,
+      "oracle": 0.9573
+    }
+  },
+  "note": "selector sees only the prompt text and the candidate replies",
+  "summary": {
+    "floor": 0.4679,
+    "chat_consensus": 0.5476,
+    "oracle": 0.7346,
+    "resolved": 0.6228,
+    "gain_over_floor": 0.0797
+  }
+}

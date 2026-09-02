@@ -150,9 +150,10 @@ def fig_scale(out):
 
 def fig_reads(out):
     """What each read is worth, and how the order flips between benchmarks."""
-    he = load("verifier/exec_guided.json")
+    # HumanEval reads on the 1024-token pools; the verifier/ copies are the 192-token run.
+    he = load("verifier_1024/exec_guided.json")
     mb = load("verifier/exec_guided_mbpp.json")
-    hec = load("verifier/consensus.json")
+    hec = load("verifier_1024/consensus.json")
     mbc = load("verifier/consensus_mbpp.json")
     if not all([he, mb, hec, mbc]):
         return "reads: missing one of the verifier artifacts"
