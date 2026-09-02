@@ -6,16 +6,17 @@ and the largest cluster is the pool's majority opinion. No ground truth, no
 stated examples, no training, no scoring model.
 
 Measured on the generations in `artifacts/nla/`, against a random-single-draw
-floor and an any-candidate-passes oracle:
+floor and an any-candidate-passes oracle, every problem scored, unresolved pools
+falling back to the first reply as `select()` does:
 
                        floor    selected   oracle
-  HumanEval, 36 arms   0.1868   0.4426     0.4954
-  MBPP, 10 arms        0.7185   0.8174     0.8887
+  HumanEval, 36 arms   0.4679   0.5854     0.7346
+  MBPP, 10 arms        0.7185   0.8094     0.8887
 
 Those two rows are given the benchmark's entry point and signature. Recovering
 both from the chat turn alone costs coverage, not accuracy: HumanEval resolves
-on 55.0% of problems and MBPP on 98.6%, and scoring the unresolved ones as an
-arbitrary pick still leaves 0.3096 and 0.7991.
+on 62.3% of problems and MBPP on 98.6%, and scoring the unresolved ones as an
+arbitrary pick still leaves 0.5476 and 0.7991.
 
 The gap between selected and oracle is what a better selector could still win.
 The gap between floor and selected is what this one is worth.

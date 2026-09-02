@@ -460,7 +460,7 @@ candidate per problem by five different reads:
 | random single | 164 | 0.4679 | |
 | centered medoid similarity | 164 | 0.4919 | 9.0% |
 | learned verifier on encoder features | 164 | 0.5102 | 15.9% |
-| agreement among candidates | 164 | 0.6301 | 60.8% |
+| agreement among candidates | 164 | 0.5854 | 44.1% |
 | filter by the prompt's own examples | 128 | 0.6496 | 68.1% |
 | **that filter plus the verifier** | 128 | **0.6585** | **71.5%** |
 | oracle | 164 | 0.7346 | 100% |
@@ -479,11 +479,14 @@ training.](arxiv_hivemind/figs/fig3_reads.png)
 the strongest one that covers everything.** Filtering candidates by the examples
 the docstring already states recovers 68.1% of the gap on the 128 problems that
 state one. Synthesising inputs from each signature, running all eight candidates,
-and keeping the largest group that agrees on outputs recovers 60.8%, needs no
-labels, no training and no stated examples, and so covers all 164 problems. The
+and keeping the largest group that agrees on outputs recovers 44.1%, needs no
+labels, no training and no stated examples, and so applies to all 164 problems.
+Where no candidate produces a runnable signature the read falls back to the first
+candidate, which is what the shipped selector does; charging those problems as
+failures instead gives 0.5840, so the fallback is worth 0.0014. The
 homogeneity Section 5 measures is in the text; the residual disagreement, which is
-invisible to an encoder, is enough to pick a correct answer nearly two times out of
-three when a single sample manages fewer than one in two.
+invisible to an encoder, is enough to lift a pool from under one in two to nearly
+three in five.
 
 Repeating all of it on MBPP, 425 problems over ten arms of the same family, gives
 the same ordering:
@@ -493,30 +496,33 @@ the same ordering:
 | learned verifier | 15.9% | **6.3%** |
 | filter by the prompt's own examples | 68.1% | **76.8%** |
 | that filter plus the verifier | 71.5% | 76.4% |
-| agreement among candidates | 60.8% | 58.1% |
+| agreement among candidates | 44.1% | 53.4% |
 
 **The verifier does not transfer.** A sixth of the gap on the benchmark it was
 tuned against becomes 6.3% on the other one, and adding it to example-filtering
 gains 0.0089 on HumanEval and costs 0.0007 on MBPP. Most of what it learned was
 the shape of HumanEval rather than the shape of correct code.
 
-**The two free reads are close on both benchmarks, and coverage decides between
-them.** Example-filtering leads agreement by 7 points on HumanEval and 19 on MBPP,
+**Example-filtering leads agreement on both benchmarks, and coverage is what
+agreement buys.** The lead is 6 points on HumanEval and 4 on MBPP,
 where every problem states an example so filtering reaches all 425. On HumanEval
-it reaches 128 of 164, and agreement's edge is that it covers the remaining 36.
-Neither read is better than the other in general. What decides it is whether the
-prompt happens to say what the answer should be, which is a property of the
-benchmark rather than of the reader.
+it reaches 128 of 164, and agreement's edge is that it applies to the remaining 36.
+Whether the prompt happens to say what the answer should be is a property of the
+benchmark rather than of the reader, and it decides which read to run first.
 
-**A note on the budget.** An earlier version of this table was computed on
-192-token pools, where 43% to 80% of candidates were cut off mid-function. On that
-data agreement appeared to recover 82.9% of the gap and to lead example-filtering,
-and the verifier appeared to capture 25%. Truncated candidates cannot execute, so
-much of what looked like selection was the reads discarding broken code, against
-a floor that included the broken code. At 1024 tokens the floor rises from 0.1868
-to 0.4679, every read's share falls, and example-filtering moves ahead of
-agreement. The ordering on clean HumanEval now matches the ordering on MBPP, which
-was clean all along.
+**A note on the budget, and on a denominator.** An earlier version of this table
+was computed on 192-token pools, where 43% to 80% of candidates were cut off
+mid-function, and it averaged the agreement read over the problems it covered while
+the floor and oracle were averaged over all 164. On that data agreement appeared to
+recover 82.9% of the gap and to lead example-filtering, and the verifier appeared
+to capture 25%. The denominator error alone was worth 0.4426 against 0.3762 on
+those pools, 82.9% against 61.4%, and let 12 of 36 arms appear to beat their own
+oracle, which no selector can do. Truncated candidates cannot execute, so much of
+what looked like selection was the reads discarding broken code, against a floor
+that included the broken code. At 1024 tokens the floor rises from 0.1868 to
+0.4679, every read's share falls, and example-filtering moves ahead of agreement.
+The ordering on clean HumanEval now matches the ordering on MBPP, which was clean
+all along; MBPP agreement moves from 0.8174 to 0.8094 under the same correction.
 
 **None of it survives scale.** Reading the MBPP arms by rung, the gain from selecting
 among eight candidates decays at **−0.0704 per decade of parameters**, from +0.1538
@@ -559,7 +565,7 @@ execute every candidate, which is CPU work it does not include.
 
 That slope is the chat-native read, which is the deployable one. A slope is only
 defined once you say which read produced it, so: agreement over the pool gives
-−0.0815 and execution-guided filtering gives −0.1192, the last of these fitting
+−0.0830 and execution-guided filtering gives −0.1192, the last of these fitting
 considerably tighter at r = −0.954 against −0.715. The direction does not depend on
 the read. The magnitude does, and the read we quote is the most conservative of the
 three. `hivemind_census.json` carries all three.
@@ -842,13 +848,13 @@ headroom. Centering corrects similarity magnitudes and leaves the argmax alone.
 classifier on 47,232 execution labels was the one read that survived its nuisance
 knobs, at +0.0423 over the floor with a spread of 0.0032 across six configurations.
 It is still beaten by running the examples the prompt already contains (−0.1394) and
-by candidate agreement (−0.1199). **It also fails to transfer**, falling from 15.9%
+by candidate agreement (−0.0752). **It also fails to transfer**, falling from 15.9%
 of the gap on HumanEval to 6.3% on MBPP, where appending it to example-filtering
 makes that baseline slightly worse. We report it because the negative is the useful
 part: the supervised signal we paid for is worth a quarter of what falls out of
 executing the pool for free, on one benchmark, and almost nothing on the other.
 
-**We three times weakened a comparison by accident, and each time it flattered us.**
+**We four times weakened a comparison by accident, and each time it flattered us.**
 Our first example extractor read only doctest blocks with literal expected values,
 covering 54 of 164 problems at 0.60 assertions each, which would have shown
 example-filtering roughly level with the verifier. Repairing it to 128 problems at
@@ -856,11 +862,18 @@ example-filtering roughly level with the verifier. Repairing it to 128 problems 
 whole HumanEval matrix turned out to have been generated at a 192-token budget that
 cut off 43% to 80% of instruct-arm candidates mid-function. On those pools every
 selection read looked stronger than it is, because discarding broken code looks
-like skill against a floor that includes the broken code: agreement appeared to
-recover 82.9% of the gap where the clean figure is 60.8%, the verifier 25.0% where
-it is 15.9%, and the Consensus demo's mean selector gain read +0.2013 where it is
-+0.0595. A handicapped comparison is a quiet form of overclaiming, and no control
-we ran on the readers themselves could have detected any of the three.
+like skill against a floor that includes the broken code: the verifier appeared to
+capture 25.0% of the gap where the clean figure is 15.9%, and the Consensus demo's
+mean selector gain read +0.2013 where it is +0.0595. Then the agreement read turned
+out to have been averaged over the problems it covered while its floor and oracle
+were averaged over all of them, which let 12 of 36 arms appear to beat their own
+oracle and put agreement at 82.9% of the gap on the 192-token pools where the
+all-problem figure is 61.4%, and at 60.8% on the clean pools where it is 44.1%. That
+one was found by a reader, Dipankar Sarkar, working from the published artifact,
+after we had already corrected the budget. A handicapped comparison is a quiet form
+of overclaiming, and no control we ran on the readers themselves could have detected
+any of the four. The one check that would have caught the last is the cheapest:
+no arm may exceed its own oracle.
 
 **A cross-model transport selector did not survive replication, and we published
 the claim before checking.** Scoring candidates by how far a hidden state fails to
@@ -972,7 +985,10 @@ scores.
   `artifacts/nla/verifier_1024/` (1024 tokens, the reads in Section 5.4) and
   `artifacts/nla/verifier/` (192 tokens, superseded)
 - `scripts/visible_tests.py`, prompt-derived example extraction with canonical validation
-- `scripts/consensus_select.py`, `artifacts/nla/verifier_1024/consensus.json`
+- `scripts/consensus_select.py`, `artifacts/nla/verifier_1024/consensus.json`.
+  The `*_covered_only_superseded.json` siblings in `verifier/` and `verifier_1024/`
+  are the earlier runs whose `summary.consensus` averaged covered problems only;
+  each carries a `SUPERSEDED` key saying so
 - `scripts/chat_consensus.py`, selection from a chat turn with no benchmark metadata
 - `scripts/mbpp_ladder.py` and `scripts/fetch_mbpp.py`, `artifacts/nla/mbpp_ladder/`
 - `scripts/holonomy_select.py`, `artifacts/nla/holonomy/`, including the retraction sweep

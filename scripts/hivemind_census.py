@@ -56,7 +56,7 @@ def count(dirs):
 # one. The paper quotes the chat-native read, because that is the deployable one.
 READS = [
     ("chat_consensus", "chat_consensus_mbpp.json", "arms", "chat_consensus"),
-    ("consensus", "consensus_mbpp.json", "arms", "consensus_on_covered"),
+    ("consensus", "consensus_mbpp.json", "arms", "consensus"),
     ("exec_guided", "exec_guided_mbpp.json", "per_arm", "exec"),
 ]
 PUBLISHED_READ = "chat_consensus"

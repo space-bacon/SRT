@@ -192,7 +192,8 @@ def main():
 
     res = {"n_cases": a.cases, "arms": {},
            "coverage": int(sum(1 for c in cases if c))}
-    agg = {"floor": [], "consensus": [], "oracle": []}
+    agg = {"floor": [], "consensus": [], "consensus_strict": [],
+           "consensus_on_covered": [], "oracle": []}
     for f in files:
         arm = os.path.basename(f)[:-5]
         rows = json.load(open(f))
@@ -226,21 +227,38 @@ def main():
             picks.append(next(j for j in valid if got[j] == top))
         sel = [bool(ok[i, picks[i]]) for i in range(len(rows)) if picks[i] is not None]
         covered = sum(1 for p in picks if p is not None)
+        # Score every problem. Uncovered pools fall back to candidate 0, which is
+        # what srt_select.select() and chat_consensus.py do; `strict` charges them
+        # as failures. Floor and oracle are over all rows, so `consensus` must be too.
+        full = [bool(ok[i, picks[i] if picks[i] is not None else 0])
+                for i in range(len(rows))]
+        strict = [bool(ok[i, picks[i]]) if picks[i] is not None else False
+                  for i in range(len(rows))]
         res["arms"][arm] = {
+            "consensus": round(float(np.mean(full)), 4),
+            "consensus_strict": round(float(np.mean(strict)), 4),
             "consensus_on_covered": round(float(np.mean(sel)), 4) if sel else None,
             "covered_problems": covered,
             "floor": round(float(ok.mean()), 4),
             "oracle": round(float(ok.any(1).mean()), 4)}
         agg["floor"].append(ok.mean())
         agg["oracle"].append(ok.any(1).mean())
-        agg["consensus"].append(np.mean(sel) if sel else 0.0)
-        print(f"  {arm:34s} consensus {res['arms'][arm]['consensus_on_covered']}  "
-              f"covered {covered}/{len(rows)}  floor {ok.mean():.4f}", flush=True)
+        agg["consensus"].append(np.mean(full))
+        agg["consensus_strict"].append(np.mean(strict))
+        agg["consensus_on_covered"].append(np.mean(sel) if sel else 0.0)
+        print(f"  {arm:34s} consensus {res['arms'][arm]['consensus']:.4f}  "
+              f"strict {res['arms'][arm]['consensus_strict']:.4f}  "
+              f"covered {covered}/{len(rows)}  floor {ok.mean():.4f}  "
+              f"oracle {ok.any(1).mean():.4f}", flush=True)
 
     res["summary"] = {k: round(float(np.mean(v)), 4) for k, v in agg.items()}
     res["summary"]["consensus_minus_floor"] = round(
         res["summary"]["consensus"] - res["summary"]["floor"], 4)
+    res["summary"]["consensus_strict_minus_floor"] = round(
+        res["summary"]["consensus_strict"] - res["summary"]["floor"], 4)
     print(f"\n  consensus {res['summary']['consensus']:.4f}  "
+          f"strict {res['summary']['consensus_strict']:.4f}  "
+          f"covered-only {res['summary']['consensus_on_covered']:.4f}  "
           f"floor {res['summary']['floor']:.4f}  oracle {res['summary']['oracle']:.4f}  "
           f"gain {res['summary']['consensus_minus_floor']:+.4f}", flush=True)
 

@@ -1,289 +1,218 @@
 {
+  "SUPERSEDED": "summary.consensus here is the mean over covered problems only while floor and oracle are over all problems; 12/36 HumanEval arms exceed their own oracle. Use the sibling file without this key, whose consensus scores every problem (uncovered pools fall back to candidate 0) and whose consensus_strict charges them as failures. Reported by dipankarsarkar, 2026-09-02.",
   "n_cases": 6,
   "arms": {
     "coder0.5B_base__raw": {
-      "consensus": 0.1098,
-      "consensus_strict": 0.1098,
       "consensus_on_covered": 0.1593,
       "covered_problems": 113,
       "floor": 0.0213,
       "oracle": 0.1524
     },
     "coder0.5B_inst__chat": {
-      "consensus": 0.3415,
-      "consensus_strict": 0.3415,
       "consensus_on_covered": 0.3457,
       "covered_problems": 162,
       "floor": 0.1745,
       "oracle": 0.4695
     },
     "coder0.5B_inst__persona": {
-      "consensus": 0.1707,
-      "consensus_strict": 0.1707,
       "consensus_on_covered": 0.2917,
       "covered_problems": 96,
       "floor": 0.0381,
       "oracle": 0.2134
     },
     "coder0.5B_inst__raw": {
-      "consensus": 0.128,
-      "consensus_strict": 0.128,
       "consensus_on_covered": 0.2561,
       "covered_problems": 82,
       "floor": 0.0259,
       "oracle": 0.1829
     },
     "coder0.5B_inst__shared": {
-      "consensus": 0.2988,
-      "consensus_strict": 0.2988,
       "consensus_on_covered": 0.3161,
       "covered_problems": 155,
       "floor": 0.1692,
       "oracle": 0.4817
     },
     "coder0.5B_inst__shared_persona": {
-      "consensus": 0.3049,
-      "consensus_strict": 0.3049,
       "consensus_on_covered": 0.3311,
       "covered_problems": 151,
       "floor": 0.1562,
       "oracle": 0.4512
     },
     "coder1.5B_base__raw": {
-      "consensus": 0.128,
-      "consensus_strict": 0.128,
       "consensus_on_covered": 0.1892,
       "covered_problems": 111,
       "floor": 0.0373,
       "oracle": 0.2012
     },
     "coder1.5B_inst__chat": {
-      "consensus": 0.5427,
-      "consensus_strict": 0.5427,
       "consensus_on_covered": 0.5563,
       "covered_problems": 160,
       "floor": 0.3178,
       "oracle": 0.7134
     },
     "coder1.5B_inst__persona": {
-      "consensus": 0.2073,
-      "consensus_strict": 0.2073,
       "consensus_on_covered": 0.2556,
       "covered_problems": 133,
       "floor": 0.0465,
       "oracle": 0.2805
     },
     "coder1.5B_inst__raw": {
-      "consensus": 0.2683,
-      "consensus_strict": 0.2683,
       "consensus_on_covered": 0.3284,
       "covered_problems": 134,
       "floor": 0.0686,
       "oracle": 0.3841
     },
     "coder1.5B_inst__shared": {
-      "consensus": 0.4756,
-      "consensus_strict": 0.4756,
       "consensus_on_covered": 0.4815,
       "covered_problems": 162,
       "floor": 0.2424,
       "oracle": 0.7073
     },
     "coder1.5B_inst__shared_persona": {
-      "consensus": 0.5061,
-      "consensus_strict": 0.5061,
       "consensus_on_covered": 0.5188,
       "covered_problems": 160,
       "floor": 0.2767,
       "oracle": 0.6829
     },
     "coder14B_base__raw": {
-      "consensus": 0.2073,
-      "consensus_strict": 0.2073,
       "consensus_on_covered": 0.3434,
       "covered_problems": 99,
       "floor": 0.0465,
       "oracle": 0.2683
     },
     "coder14B_inst__chat": {
-      "consensus": 0.5549,
-      "consensus_strict": 0.5549,
       "consensus_on_covered": 0.5796,
       "covered_problems": 157,
       "floor": 0.3636,
       "oracle": 0.7866
     },
     "coder14B_inst__persona": {
-      "consensus": 0.3598,
-      "consensus_strict": 0.3598,
       "consensus_on_covered": 0.4275,
       "covered_problems": 138,
       "floor": 0.1052,
       "oracle": 0.4573
     },
     "coder14B_inst__raw": {
-      "consensus": 0.2866,
-      "consensus_strict": 0.2866,
       "consensus_on_covered": 0.5281,
       "covered_problems": 89,
       "floor": 0.0755,
       "oracle": 0.3293
     },
     "coder14B_inst__shared": {
-      "consensus": 0.7439,
-      "consensus_strict": 0.7439,
       "consensus_on_covered": 0.7439,
       "covered_problems": 164,
       "floor": 0.5404,
       "oracle": 0.878
     },
     "coder14B_inst__shared_persona": {
-      "consensus": 0.6646,
-      "consensus_strict": 0.6646,
       "consensus_on_covered": 0.6813,
       "covered_problems": 160,
       "floor": 0.4329,
       "oracle": 0.7927
     },
     "coder32B_base__raw": {
-      "consensus": 0.1829,
-      "consensus_strict": 0.1829,
       "consensus_on_covered": 0.3061,
       "covered_problems": 98,
       "floor": 0.0366,
       "oracle": 0.25
     },
     "coder32B_inst__chat": {
-      "consensus": 0.4329,
-      "consensus_strict": 0.4329,
       "consensus_on_covered": 0.4733,
       "covered_problems": 150,
       "floor": 0.2401,
       "oracle": 0.5061
     },
     "coder32B_inst__persona": {
-      "consensus": 0.3537,
-      "consensus_strict": 0.3537,
       "consensus_on_covered": 0.4874,
       "covered_problems": 119,
       "floor": 0.0968,
       "oracle": 0.439
     },
     "coder32B_inst__raw": {
-      "consensus": 0.2561,
-      "consensus_strict": 0.2561,
       "consensus_on_covered": 0.3962,
       "covered_problems": 106,
       "floor": 0.0777,
       "oracle": 0.3354
     },
     "coder32B_inst__shared": {
-      "consensus": 0.4024,
-      "consensus_strict": 0.4024,
       "consensus_on_covered": 0.4342,
       "covered_problems": 152,
       "floor": 0.2264,
       "oracle": 0.5305
     },
     "coder32B_inst__shared_persona": {
-      "consensus": 0.3537,
-      "consensus_strict": 0.3537,
       "consensus_on_covered": 0.3973,
       "covered_problems": 146,
       "floor": 0.2058,
       "oracle": 0.4817
     },
     "coder3B_base__raw": {
-      "consensus": 0.1037,
-      "consensus_strict": 0.1037,
       "consensus_on_covered": 0.2024,
       "covered_problems": 84,
       "floor": 0.0213,
       "oracle": 0.1341
     },
     "coder3B_inst__chat": {
-      "consensus": 0.5,
-      "consensus_strict": 0.5,
       "consensus_on_covered": 0.5157,
       "covered_problems": 159,
       "floor": 0.2774,
       "oracle": 0.7012
     },
     "coder3B_inst__persona": {
-      "consensus": 0.3841,
-      "consensus_strict": 0.3841,
       "consensus_on_covered": 0.4406,
       "covered_problems": 143,
       "floor": 0.109,
       "oracle": 0.5427
     },
     "coder3B_inst__raw": {
-      "consensus": 0.2317,
-      "consensus_strict": 0.2317,
       "consensus_on_covered": 0.38,
       "covered_problems": 100,
       "floor": 0.0549,
       "oracle": 0.2927
     },
     "coder3B_inst__shared": {
-      "consensus": 0.5061,
-      "consensus_strict": 0.5061,
       "consensus_on_covered": 0.5253,
       "covered_problems": 158,
       "floor": 0.2782,
       "oracle": 0.7012
     },
     "coder3B_inst__shared_persona": {
-      "consensus": 0.4634,
-      "consensus_strict": 0.4634,
       "consensus_on_covered": 0.5067,
       "covered_problems": 150,
       "floor": 0.2409,
       "oracle": 0.6402
     },
     "coder7B_base__raw": {
-      "consensus": 0.189,
-      "consensus_strict": 0.189,
       "consensus_on_covered": 0.3229,
       "covered_problems": 96,
       "floor": 0.0495,
       "oracle": 0.2805
     },
     "coder7B_inst__chat": {
-      "consensus": 0.75,
-      "consensus_strict": 0.7439,
       "consensus_on_covered": 0.7578,
       "covered_problems": 161,
       "floor": 0.5404,
       "oracle": 0.9024
     },
     "coder7B_inst__persona": {
-      "consensus": 0.3476,
-      "consensus_strict": 0.3476,
       "consensus_on_covered": 0.4254,
       "covered_problems": 134,
       "floor": 0.0945,
       "oracle": 0.4756
     },
     "coder7B_inst__raw": {
-      "consensus": 0.3902,
-      "consensus_strict": 0.3902,
       "consensus_on_covered": 0.6275,
       "covered_problems": 102,
       "floor": 0.1044,
       "oracle": 0.4756
     },
     "coder7B_inst__shared": {
-      "consensus": 0.7317,
-      "consensus_strict": 0.7317,
       "consensus_on_covered": 0.7317,
       "covered_problems": 164,
       "floor": 0.4931,
       "oracle": 0.878
     },
     "coder7B_inst__shared_persona": {
-      "consensus": 0.6646,
-      "consensus_strict": 0.6646,
       "consensus_on_covered": 0.6687,
       "covered_problems": 163,
       "floor": 0.4375,
@@ -293,11 +222,8 @@
   "coverage": 164,
   "summary": {
     "floor": 0.1868,
-    "consensus": 0.3762,
-    "consensus_strict": 0.376,
-    "consensus_on_covered": 0.4426,
+    "consensus": 0.4426,
     "oracle": 0.4954,
-    "consensus_minus_floor": 0.1894,
-    "consensus_strict_minus_floor": 0.1892
+    "consensus_minus_floor": 0.2558
   }
 }

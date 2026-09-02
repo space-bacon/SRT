@@ -91,7 +91,7 @@ superseded 192-token HumanEval run; `ensemble/` holds six frontier models from f
 |---|---:|---:|
 | random single | 0.4679 | 0.7185 |
 | learned verifier | 0.5102 | 0.7292 |
-| agreement among candidates | 0.6301 | 0.8174 |
+| agreement among candidates | 0.5854 | 0.8094 |
 | filter by the prompt's examples | **0.6496** | **0.8492** |
 | that filter plus the verifier | 0.6585 | 0.8485 |
 | oracle | 0.7346 | 0.8887 |
@@ -114,8 +114,8 @@ from srt_select import select
 best = select(user_message, replies)
 ```
 
-Handed the benchmark's entry point and signature it scores 0.6301 on HumanEval and
-0.8174 on MBPP, against floors of 0.4679 and 0.7185. Recovering the entry point and
+Handed the benchmark's entry point and signature it scores 0.5854 on HumanEval and
+0.8094 on MBPP, against floors of 0.4679 and 0.7185. Recovering the entry point and
 the argument shapes from the chat turn alone is the deployable case, and it costs
 coverage rather than accuracy: 62.3% of HumanEval problems resolve and 98.6% of MBPP
 ones do, giving 0.5476 and 0.7991 when unresolved problems are scored as an arbitrary
@@ -148,11 +148,20 @@ model plus a selector does not already give.
 
 **Example-filtering leads on both benchmarks, and agreement is the coverage play.**
 Filtering by the prompt's stated examples recovers 68.1% of the gap on HumanEval and
-76.8% on MBPP; agreement recovers 60.8% and 58.1%. MBPP states an example for 425 of
+76.8% on MBPP; agreement recovers 44.1% and 53.4%. MBPP states an example for 425 of
 425 problems; HumanEval states one for 128 of 164, and agreement covers the other 36.
 On the superseded 192-token HumanEval pools agreement appeared to lead at 82.9%. That
 ordering was a truncation artifact: agreement was discarding code that could not run,
 against a floor that included it.
+
+**`consensus*_covered_only_superseded.json` carry a `SUPERSEDED` key.** Those runs
+averaged the agreement read over the problems it could run while the floor and oracle
+were averaged over all of them, so 12 of 36 HumanEval arms appeared to beat their own
+oracle. The files without the key score every problem: `consensus` falls back to the
+first reply where nothing runs, as `srt_select.select()` does, and `consensus_strict`
+charges those problems as failures. On the 192-token pools the correction is 0.4426 to
+0.3762; on the 1024-token pools 0.6301 to 0.5854; on MBPP 0.8174 to 0.8094. Found by
+Dipankar Sarkar from the published artifact.
 
 **The learned verifier does not transfer.** It captures 15.9% of the gap on HumanEval
 and 6.3% on MBPP, and on MBPP appending it to example-filtering makes that baseline
@@ -163,7 +172,7 @@ negative result.
 **Selection value decays with scale**, at −0.0704 per decade on MBPP, from +0.1538 at
 3B to +0.0097 at 32B, and at −0.0676 per decade on the 1024-token HumanEval matrix. It
 is a weak-model amplifier and does not push a strong model past its own ceiling. The
-MBPP slope is the chat-native read; agreement gives −0.0815 and execution-guided
+MBPP slope is the chat-native read; agreement gives −0.0830 and execution-guided
 filtering −0.1192, so the direction is read-independent and the quoted figure is the
 most conservative of the three. See `hivemind_census.json`.
 

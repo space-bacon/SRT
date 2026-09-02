@@ -26,14 +26,21 @@ generation pools in `artifacts/nla/`:
 
 | | problems | arms | floor | selected | oracle |
 |---|---:|---:|---:|---:|---:|
-| HumanEval | 164 | 36 | 0.4679 | **0.6301** | 0.7346 |
-| MBPP | 425 | 10 | 0.7185 | **0.8174** | 0.8887 |
+| HumanEval | 164 | 36 | 0.4679 | **0.5854** | 0.7346 |
+| MBPP | 425 | 10 | 0.7185 | **0.8094** | 0.8887 |
 
-That is +0.1622 and +0.0989 over the floor, which is 60.8% and 58.1% of the
-headroom an oracle would capture. HumanEval pools are generated at 1024 new
-tokens (`artifacts/nla/coder_matrix1024/`); an earlier 192-token run put the
-selected score at 0.4426 against a 0.1868 floor, and that 82.9% share was
-inflated by truncated candidates that could not execute.
+That is +0.1175 and +0.0909 over the floor, which is 44.1% and 53.4% of the
+headroom an oracle would capture. Every problem is scored; where no candidate
+produces a runnable signature the pick falls back to the first reply, exactly as
+`select()` does. Charging those problems as failures instead gives 0.5840 and
+0.7962. HumanEval pools are generated at 1024 new tokens
+(`artifacts/nla/coder_matrix1024/`). Two earlier versions of this table were
+wrong in ways that flattered the method: a 192-token run put the selected score
+at 0.4426 against a 0.1868 floor, inflated by truncated candidates that could
+not execute, and until 2026-09-02 the selected column was averaged over covered
+problems only while the floor and oracle were averaged over all of them, which
+read 0.6301 and 0.8174 here. That denominator error was found by Dipankar Sarkar
+from the published artifact.
 
 Those two rows are handed the benchmark's entry point and signature. Recovering
 both from the chat turn alone is the deployable case, and it costs coverage
@@ -78,13 +85,13 @@ separates are not the ones that pass. Raising it only costs coverage, since
 every extra input is another chance for a candidate to crash.
 
 **A learned verifier did worse.** Fitting a classifier on 47,232 execution
-labels reached 0.5102 on HumanEval against this method's 0.6301, and it did not
+labels reached 0.5102 on HumanEval against this method's 0.5854, and it did not
 transfer to MBPP. Executing the pool beat learning to score it, on both
 benchmarks.
 
 **Execution-guided filtering leads where it applies; agreement covers the rest.**
 Filtering by the prompt's stated examples reaches 0.6496 on HumanEval and 0.8492
-on MBPP against this method's 0.6301 and 0.8174. It applies to 128 of 164
+on MBPP against this method's 0.5854 and 0.8094. It applies to 128 of 164
 HumanEval problems and 425 of 425 MBPP problems; agreement applies to every
 problem, which is what it buys. Use the filter when the prompt states an
 example and fall back to agreement when it does not. That combination is not

@@ -2,60 +2,80 @@
   "n_cases": 6,
   "arms": {
     "mbpp1.5B_inst__chat": {
+      "consensus": 0.6588,
+      "consensus_strict": 0.6518,
       "consensus_on_covered": 0.6595,
       "covered_problems": 420,
       "floor": 0.5662,
       "oracle": 0.8118
     },
     "mbpp1.5B_inst__shared": {
+      "consensus": 0.7012,
+      "consensus_strict": 0.6894,
       "consensus_on_covered": 0.6976,
       "covered_problems": 420,
       "floor": 0.5829,
       "oracle": 0.8259
     },
     "mbpp14B_inst__chat": {
+      "consensus": 0.8729,
+      "consensus_strict": 0.8588,
       "consensus_on_covered": 0.9102,
       "covered_problems": 401,
       "floor": 0.7941,
       "oracle": 0.9059
     },
     "mbpp14B_inst__shared": {
+      "consensus": 0.8753,
+      "consensus_strict": 0.8588,
       "consensus_on_covered": 0.8859,
       "covered_problems": 412,
       "floor": 0.8074,
       "oracle": 0.9224
     },
     "mbpp32B_inst__chat": {
+      "consensus": 0.8729,
+      "consensus_strict": 0.8541,
       "consensus_on_covered": 0.8705,
       "covered_problems": 417,
       "floor": 0.8609,
       "oracle": 0.9176
     },
     "mbpp32B_inst__shared": {
+      "consensus": 0.8588,
+      "consensus_strict": 0.8424,
       "consensus_on_covered": 0.8585,
       "covered_problems": 417,
       "floor": 0.8494,
       "oracle": 0.9176
     },
     "mbpp3B_inst__chat": {
+      "consensus": 0.7835,
+      "consensus_strict": 0.7718,
       "consensus_on_covered": 0.8079,
       "covered_problems": 406,
       "floor": 0.6203,
       "oracle": 0.8635
     },
     "mbpp3B_inst__shared": {
+      "consensus": 0.8024,
+      "consensus_strict": 0.7906,
       "consensus_on_covered": 0.8116,
       "covered_problems": 414,
       "floor": 0.6532,
       "oracle": 0.8871
     },
     "mbpp7B_inst__chat": {
+      "consensus": 0.84,
+      "consensus_strict": 0.8282,
       "consensus_on_covered": 0.8421,
       "covered_problems": 418,
       "floor": 0.7188,
       "oracle": 0.9153
     },
     "mbpp7B_inst__shared": {
+      "consensus": 0.8282,
+      "consensus_strict": 0.8165,
       "consensus_on_covered": 0.8301,
       "covered_problems": 418,
       "floor": 0.7315,
@@ -65,8 +85,11 @@
   "coverage": 420,
   "summary": {
     "floor": 0.7185,
-    "consensus": 0.8174,
+    "consensus": 0.8094,
+    "consensus_strict": 0.7962,
+    "consensus_on_covered": 0.8174,
     "oracle": 0.8887,
-    "consensus_minus_floor": 0.0989
+    "consensus_minus_floor": 0.0909,
+    "consensus_strict_minus_floor": 0.0777
   }
 }
