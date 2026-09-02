@@ -333,6 +333,63 @@ window after seeing where the flags land, nor by switching order parameter, nor
 by dropping the 1.5B as "a different regime". If the result is mixed we will
 report it as mixed and leave the claim unsupported.
 
+## Second pre-registration: closing the loop on NLA best-of-K
+
+The framework above was built on the format data and has been fitted to it six
+times. The only way to make it pay rent is to predict something on a system it
+was not built from, and state the prediction first.
+
+`paper_nla.md` section 12 already reads best-of-$K$ as a pitchfork control
+parameter, with a below-threshold branch at the greedy/modal $\hat{x}$ and an
+above-threshold branch on the paraphrase manifold. That is a bimodality claim.
+It has never been tested distributionally. If the coexistence-window reading is
+real rather than a story we tell about smooth curves, it should predict one here
+too.
+
+**A units error in Figure 12 that has to be fixed either way.** The caption gives
+the low branch at "centred cosine 0.59 to 0.63" and the high branch at "0.99".
+Those are different units. In centred fve on the same backbone the published
+values are: random floor 0.510, greedy 0.586, paraphrase-all 0.625, NN-in-pool
+0.663, paraphrase-best 0.799, replay 0.968. The 0.99 is $\rho_{\text{cen}}$, the
+fraction of the paraphrase ceiling, not centred cosine. **The high branch in
+centred units is 0.799, not 0.99.** The banked K-curve, oracle top-1 centred:
+K=1 0.573, K=2 0.617, K=4 0.652, K=8 0.686, K=16 0.716, K=32 0.747, K=64 0.777.
+
+**What we cannot do, and it is our own fault.** None of the banked NLA artifacts
+carry per-target arrays. `rerank_eval_*.json` and `oracle_ceiling_*.json` hold
+means and a few percentiles only. We saved exactly the statistic that cannot see
+branch structure, which is the same error we nearly made this morning. Testing
+this requires regenerating per-target centred cosines.
+
+**Predictions, before any per-target NLA data is generated or inspected:**
+
+- **N1.** The per-target distribution of best-of-$K$ centred fve is bimodal, by
+  the same criteria used for the format sweep (BC > 0.555 and BIC1−BIC2 > 10), for
+  at least two contiguous values of $K$ in {2, 4, 8, 16, 32}.
+- **N2.** The two modes sit near 0.586 (greedy) and near 0.799 (paraphrase-best),
+  within 0.05. Not near 0.99.
+- **N3.** The weight in the upper mode increases monotonically with $K$.
+- **N4.** At $K$ = 1 the distribution is unimodal, since with one sample there is
+  nothing to select across.
+
+**The alternative explanation we are obliged to rule out, and expect to lose to.**
+Bimodality across targets can simply mean some targets are easy to verbalise and
+some are not, which is heterogeneity in the population and not a transition in a
+control parameter. This is a serious confound and it is the more likely
+explanation on priors. The discriminating test is N4 plus the shape of the change:
+target heterogeneity predicts bimodality already present at $K$ = 1 and merely
+translating rightward as $K$ grows, whereas a transition predicts unimodality at
+$K$ = 1 and a window that opens and then closes.
+
+**Also note best-of-$K$ max is monotone in $K$ by construction**, so the
+distribution will shift right no matter what. A rightward shift is not evidence.
+Only the splitting is.
+
+**Falsifiers.** Unimodal at every $K$; or bimodal at $K$ = 1 (heterogeneity, not
+transition); or modes not where N2 says; or upper-mode weight not monotone. Any of
+these and we report that the section 12 pitchfork reading is unsupported by its
+own data, and say so in the paper rather than in a footnote.
+
 ## The ceiling objection, tested
 
 A high baseline leaves less room, so a smaller gain is expected mechanically and
