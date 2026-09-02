@@ -278,6 +278,67 @@ narrow is barely resolved by a grid of 0.1. What would settle it: a dense grid
 across alpha 0.02 to 0.30, repeat seeds to show the branches are not a sampling
 artifact, and a second model to show the window is not a quirk of this one.
 
+## Outcome of the NLA test: no branches at any K
+
+Run 2026-09-02 on a fresh 2400-target sample (Qwen2.5-7B, layer 20, seq 64,
+per-dim std 1.84), the canonical `RiverRider/srt-nla-av-v1` checkpoint, M = 200,
+K = 64. The means reproduce the banked run to within noise: greedy 0.5878 against
+0.5860, K-curve 0.585 / 0.621 / 0.652 / 0.686 / 0.724 / 0.758 / 0.793 against
+0.573 / 0.617 / 0.652 / 0.686 / 0.716 / 0.747 / 0.777. So this is the same system
+the paper describes, and now with the per-target matrix kept.
+
+| K | mean | sd | dip p | BC | BIC gap | branches |
+|---|---|---|---|---|---|---|
+| 1 | 0.5846 | 0.0892 | 0.955 | 0.463 | 45.0 | one |
+| 2 | 0.6208 | 0.0894 | 0.875 | 0.509 | 40.6 | one |
+| 4 | 0.6524 | 0.0943 | 0.911 | 0.537 | 48.7 | one |
+| 8 | 0.6862 | 0.0974 | 0.769 | 0.508 | 31.2 | one |
+| 16 | 0.7237 | 0.1024 | 0.742 | 0.553 | 30.5 | one |
+| 32 | 0.7580 | 0.0996 | 0.950 | 0.510 | 10.9 | one |
+| 64 | 0.7931 | 0.0982 | 0.846 | 0.443 | −8.0 | one |
+
+| | registered | result |
+|---|---|---|
+| N1 | bimodal at two contiguous K in {2..32} | **FAIL**, bimodal at none |
+| N2 | modes near 0.586 and 0.799 | **FAIL**, nothing to locate |
+| N3 | upper-mode weight monotone in K | **FAIL**, no upper mode |
+| N4 | unimodal at K = 1 | pass, dip p = 0.955 |
+
+The per-target distribution of best-of-$K$ centred fve is unimodal at every $K$
+from 1 to 64, with dip p between 0.74 and 0.96 throughout. The spread barely
+moves, 0.089 to 0.102. The whole population slides rightward together as $K$
+grows, which is what a monotone max over exchangeable samples does by
+construction and is evidence of nothing.
+
+Worth noting what the two broken detectors would have said. BC sits at 0.44 to
+0.55, under the flag but only just, and the GMM BIC gap is 31 to 49 at low $K$,
+three to five times the threshold we were using this morning. Without the real
+dip test gating the call, $K$ = 1 through 16 would have been flagged as two
+branches, and we would have reported a pitchfork in the NLA sampling
+distribution. It is a skewed unimodal distribution against a hard ceiling, the
+same shape that fooled us on the format sweep.
+
+**The section 12 pitchfork reading is unsupported by its own data.** There is no
+greedy branch and no paraphrase-manifold branch in the per-target distribution.
+There is one population whose max improves smoothly with $K$. The qualitative
+observations that motivated the reading remain true (the greedy gap is real,
+logp cannot rank candidates, cosine to an anchor can), but they do not need a
+bifurcation to explain them and the distribution does not show one.
+
+## Where the framework stands after two closed loops
+
+Two pre-registered tests on two systems, one of which the framework was not
+fitted to. Eight predictions. Six fail, and the two that pass are the null
+predictions (unimodal at zero field, unimodal at $K$ = 1), which the alternative
+explanation also predicts. Nothing the pitchfork reading uniquely predicted
+happened.
+
+What survives is what was measured without the framework: the template is a
+saturating one-sided field on output order, the effect is domain-conditional,
+and best-of-$K$ selection on HumanEval saturates by $K$ = 8. Those results
+stand on their own. The bifurcation is an analogy, and on these two systems the
+data do not support promoting it past that.
+
 ## Outcome: the coexistence window is not supported
 
 Scored against the predictions registered in commit c8e5a454, before the
