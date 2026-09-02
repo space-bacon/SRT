@@ -78,14 +78,17 @@ separates are not the ones that pass. Raising it only costs coverage, since
 every extra input is another chance for a candidate to crash.
 
 **A learned verifier did worse.** Fitting a classifier on 47,232 execution
-labels reached 0.2639 on HumanEval against this method's 0.4426, and it did not
+labels reached 0.5102 on HumanEval against this method's 0.6301, and it did not
 transfer to MBPP. Executing the pool beat learning to score it, on both
 benchmarks.
 
-**The ordering against execution-guided filtering is a coverage effect.** On
-HumanEval, agreement reaches all 164 problems while visible-test filtering
-reaches 128, which is most of why agreement leads. On MBPP, where a visible
-assertion exists nearly everywhere, filtering leads instead.
+**Execution-guided filtering leads where it applies; agreement covers the rest.**
+Filtering by the prompt's stated examples reaches 0.6496 on HumanEval and 0.8492
+on MBPP against this method's 0.6301 and 0.8174. It applies to 128 of 164
+HumanEval problems and 425 of 425 MBPP problems; agreement applies to every
+problem, which is what it buys. Use the filter when the prompt states an
+example and fall back to agreement when it does not. That combination is not
+measured here; the filter plus a learned verifier reaches 0.6585 on HumanEval.
 
 ## What K actually costs
 
