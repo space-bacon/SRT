@@ -2,8 +2,10 @@
 
 Working note, 2026-09-02. Status: the template acts as a one-sided floor on
 output order, measured per problem on two benchmarks with the mechanical artifact
-that would fake it quantified and removed. Not yet a bifurcation: we have a
-saturating field, not a control-parameter sweep.
+that would fake it quantified and removed. Under a continuous field the response
+is a saturating curve with no branch structure; a claimed coexistence window was
+pre-registered, tested, and retracted (see "Outcome"). This is a susceptibility
+result, not a bifurcation, and the pitchfork remains an analogy here.
 
 ## What we set out to check
 
@@ -467,14 +469,13 @@ should not carry the argument alone.
    holds the relation inside one benchmark; the MBPP repeat showed the endpoint is
    a floor rather than a destination. Both are above.
 
-2. **A continuous control parameter.** This is now the experiment that matters.
-   The five arms (raw, persona, shared, shared_persona, chat) are an ordinal
-   ladder of framing strength, not a dial. A one-sided floor is exactly the shape
-   that should show a threshold as the field is weakened continuously, and a
-   threshold in an order parameter against a continuous control is the thing we do
-   not yet have. Interpolating the template's contribution, for instance by
-   scaling the embeddings of the template tokens by a coefficient between zero and
-   one, gives a real dial rather than four rungs.
+2. **A continuous control parameter. Done, and it did not show a threshold.**
+   The field sweep above interpolates the template's embedding contribution from
+   0 to 1. The response is a saturating curve, flat past alpha ~= 0.3, with no
+   two-branch structure on the 3B once a valid unimodality test is used. The
+   1.5B shows a pre-existing split that the field erases, which is heterogeneity
+   and not a transition. If the pitchfork is to be more than an analogy for this
+   system, the control parameter is not template strength.
 
 3. **Where the floor sits, and whether it is one number.** The floor reads at
    roughly 0.88 on both benchmarks, but eight bins cannot separate "one constant"

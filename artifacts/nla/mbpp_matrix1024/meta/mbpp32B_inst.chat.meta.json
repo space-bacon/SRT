@@ -1,0 +1,1 @@
+{"tag": "mbpp32B_inst", "arm": "chat", "model": "Qwen/Qwen2.5-Coder-32B-Instruct", "k": 8, "max_new": 1024, "n_candidates": 3400, "truncated": 0, "truncated_frac": 0.0}

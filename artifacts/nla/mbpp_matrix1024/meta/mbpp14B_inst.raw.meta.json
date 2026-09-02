@@ -1,0 +1,1 @@
+{"tag": "mbpp14B_inst", "arm": "raw", "model": "Qwen/Qwen2.5-Coder-14B-Instruct", "k": 8, "max_new": 1024, "n_candidates": 3400, "truncated": 6, "truncated_frac": 0.0018}

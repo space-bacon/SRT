@@ -1,0 +1,1 @@
+{"tag": "mbpp3B_base", "arm": "raw", "model": "Qwen/Qwen2.5-Coder-3B", "k": 8, "max_new": 1024, "n_candidates": 3400, "truncated": 47, "truncated_frac": 0.0138}

@@ -1,0 +1,1 @@
+{"tag": "mbpp7B_inst", "arm": "shared_persona", "model": "Qwen/Qwen2.5-Coder-7B-Instruct", "k": 8, "max_new": 1024, "n_candidates": 3400, "truncated": 0, "truncated_frac": 0.0}
