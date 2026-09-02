@@ -1,0 +1,519 @@
+{
+ "protocol": {
+  "gallery": "gallery_123k_v3.srtidx",
+  "gallery_rows": 123287,
+  "image_side": "frozen to shipped v3 gallery",
+  "train": "COCO train2017, one of five captions sampled per epoch",
+  "n_train_images": 118287,
+  "n_train_captions": 591753,
+  "eval": "replay_123k.json: 5,001 val2017 captions, gold = gallery row",
+  "n_eval_captions": 5001,
+  "proj_dim": 1024,
+  "tau": 0.05,
+  "epochs": 20,
+  "lr": 0.001,
+  "fit_batch": 1024,
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "device": "mps",
+  "chance_t2i_r@1_full": 8e-06
+ },
+ "reference_0.6B_v3_text_tower": {
+  "t2i_r@1": 0.1092,
+  "t2i_r@5": 0.2442,
+  "t2i_r@10": 0.3307,
+  "t2i_median_rank": 36,
+  "source": "replay_123k.json pytorch_t2i; card row 'PyTorch fp16 (reference)'"
+ },
+ "rungs": {
+  "e5-base": {
+   "reader": "intfloat/e5-base-v2",
+   "params": 109482240,
+   "payload_mb_fp16": 219.0,
+   "d_txt": 768,
+   "text_head_mb_fp16": 1.57,
+   "full_gallery": {
+    "t2i_r@1": 0.1421,
+    "t2i_r@5": 0.292,
+    "t2i_r@10": 0.3823,
+    "t2i_median_rank": 24.0
+   },
+   "full_gallery_t2i_r@1_range": [
+    0.1394,
+    0.1456
+   ],
+   "pool": {
+    "i2t_r@1": 0.7983,
+    "i2t_r@5": 0.968,
+    "i2t_r@10": 0.9943,
+    "i2t_median_rank": 1.0,
+    "t2i_r@1": 0.66,
+    "t2i_r@5": 0.9205,
+    "t2i_r@10": 0.9686,
+    "t2i_median_rank": 1.0,
+    "pool_images": 1000.0
+   },
+   "shuffled_control": {
+    "t2i_r@1": 0.0,
+    "t2i_r@5": 0.0,
+    "t2i_r@10": 0.0,
+    "t2i_median_rank": 59628.6667
+   },
+   "per_seed": [
+    {
+     "seed": 0,
+     "full_gallery": {
+      "t2i_r@1": 0.1394,
+      "t2i_r@5": 0.2913,
+      "t2i_r@10": 0.3817,
+      "t2i_median_rank": 24
+     },
+     "pool": {
+      "i2t_r@1": 0.792,
+      "i2t_r@5": 0.963,
+      "i2t_r@10": 0.993,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6567,
+      "t2i_r@5": 0.9204,
+      "t2i_r@10": 0.9668,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 59458
+     }
+    },
+    {
+     "seed": 1,
+     "full_gallery": {
+      "t2i_r@1": 0.1456,
+      "t2i_r@5": 0.2943,
+      "t2i_r@10": 0.3853,
+      "t2i_median_rank": 24
+     },
+     "pool": {
+      "i2t_r@1": 0.8,
+      "i2t_r@5": 0.97,
+      "i2t_r@10": 0.995,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6587,
+      "t2i_r@5": 0.9208,
+      "t2i_r@10": 0.9684,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 62594
+     }
+    },
+    {
+     "seed": 2,
+     "full_gallery": {
+      "t2i_r@1": 0.1412,
+      "t2i_r@5": 0.2905,
+      "t2i_r@10": 0.3799,
+      "t2i_median_rank": 24
+     },
+     "pool": {
+      "i2t_r@1": 0.803,
+      "i2t_r@5": 0.971,
+      "i2t_r@10": 0.995,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6645,
+      "t2i_r@5": 0.9202,
+      "t2i_r@10": 0.9706,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 56834
+     }
+    }
+   ],
+   "vs_0.6B_t2i_r@1": 0.0329,
+   "seconds": 37.1
+  },
+  "gte-base": {
+   "reader": "thenlper/gte-base",
+   "params": 109482240,
+   "payload_mb_fp16": 219.0,
+   "d_txt": 768,
+   "text_head_mb_fp16": 1.57,
+   "full_gallery": {
+    "t2i_r@1": 0.1319,
+    "t2i_r@5": 0.2828,
+    "t2i_r@10": 0.368,
+    "t2i_median_rank": 25.6667
+   },
+   "full_gallery_t2i_r@1_range": [
+    0.1306,
+    0.1334
+   ],
+   "pool": {
+    "i2t_r@1": 0.7843,
+    "i2t_r@5": 0.966,
+    "i2t_r@10": 0.992,
+    "i2t_median_rank": 1.0,
+    "t2i_r@1": 0.6526,
+    "t2i_r@5": 0.9132,
+    "t2i_r@10": 0.9665,
+    "t2i_median_rank": 1.0,
+    "pool_images": 1000.0
+   },
+   "shuffled_control": {
+    "t2i_r@1": 0.0,
+    "t2i_r@5": 0.0,
+    "t2i_r@10": 0.0,
+    "t2i_median_rank": 60013.0
+   },
+   "per_seed": [
+    {
+     "seed": 0,
+     "full_gallery": {
+      "t2i_r@1": 0.1306,
+      "t2i_r@5": 0.2817,
+      "t2i_r@10": 0.3695,
+      "t2i_median_rank": 26
+     },
+     "pool": {
+      "i2t_r@1": 0.785,
+      "i2t_r@5": 0.965,
+      "i2t_r@10": 0.992,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6505,
+      "t2i_r@5": 0.912,
+      "t2i_r@10": 0.9664,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 60523
+     }
+    },
+    {
+     "seed": 1,
+     "full_gallery": {
+      "t2i_r@1": 0.1334,
+      "t2i_r@5": 0.2831,
+      "t2i_r@10": 0.3701,
+      "t2i_median_rank": 26
+     },
+     "pool": {
+      "i2t_r@1": 0.784,
+      "i2t_r@5": 0.966,
+      "i2t_r@10": 0.991,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6515,
+      "t2i_r@5": 0.9134,
+      "t2i_r@10": 0.9652,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 62421
+     }
+    },
+    {
+     "seed": 2,
+     "full_gallery": {
+      "t2i_r@1": 0.1318,
+      "t2i_r@5": 0.2835,
+      "t2i_r@10": 0.3645,
+      "t2i_median_rank": 25
+     },
+     "pool": {
+      "i2t_r@1": 0.784,
+      "i2t_r@5": 0.967,
+      "i2t_r@10": 0.993,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6557,
+      "t2i_r@5": 0.9142,
+      "t2i_r@10": 0.9678,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 57095
+     }
+    }
+   ],
+   "vs_0.6B_t2i_r@1": 0.0227,
+   "seconds": 212.4
+  },
+  "bge-small": {
+   "reader": "BAAI/bge-small-en-v1.5",
+   "params": 33360000,
+   "payload_mb_fp16": 66.7,
+   "d_txt": 384,
+   "text_head_mb_fp16": 0.79,
+   "full_gallery": {
+    "t2i_r@1": 0.1145,
+    "t2i_r@5": 0.254,
+    "t2i_r@10": 0.3349,
+    "t2i_median_rank": 32.0
+   },
+   "full_gallery_t2i_r@1_range": [
+    0.1122,
+    0.1162
+   ],
+   "pool": {
+    "i2t_r@1": 0.743,
+    "i2t_r@5": 0.9583,
+    "i2t_r@10": 0.9853,
+    "i2t_median_rank": 1.0,
+    "t2i_r@1": 0.6276,
+    "t2i_r@5": 0.9017,
+    "t2i_r@10": 0.96,
+    "t2i_median_rank": 1.0,
+    "pool_images": 1000.0
+   },
+   "shuffled_control": {
+    "t2i_r@1": 0.0,
+    "t2i_r@5": 0.0,
+    "t2i_r@10": 0.0,
+    "t2i_median_rank": 61124.6667
+   },
+   "per_seed": [
+    {
+     "seed": 0,
+     "full_gallery": {
+      "t2i_r@1": 0.1152,
+      "t2i_r@5": 0.2543,
+      "t2i_r@10": 0.3363,
+      "t2i_median_rank": 32
+     },
+     "pool": {
+      "i2t_r@1": 0.741,
+      "i2t_r@5": 0.957,
+      "i2t_r@10": 0.983,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6285,
+      "t2i_r@5": 0.9002,
+      "t2i_r@10": 0.9596,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 62597
+     }
+    },
+    {
+     "seed": 1,
+     "full_gallery": {
+      "t2i_r@1": 0.1162,
+      "t2i_r@5": 0.2535,
+      "t2i_r@10": 0.3353,
+      "t2i_median_rank": 32
+     },
+     "pool": {
+      "i2t_r@1": 0.742,
+      "i2t_r@5": 0.96,
+      "i2t_r@10": 0.986,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6263,
+      "t2i_r@5": 0.903,
+      "t2i_r@10": 0.9602,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 63851
+     }
+    },
+    {
+     "seed": 2,
+     "full_gallery": {
+      "t2i_r@1": 0.1122,
+      "t2i_r@5": 0.2543,
+      "t2i_r@10": 0.3331,
+      "t2i_median_rank": 32
+     },
+     "pool": {
+      "i2t_r@1": 0.746,
+      "i2t_r@5": 0.958,
+      "i2t_r@10": 0.987,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6281,
+      "t2i_r@5": 0.9018,
+      "t2i_r@10": 0.9602,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 56926
+     }
+    }
+   ],
+   "vs_0.6B_t2i_r@1": 0.0053,
+   "seconds": 33.6
+  },
+  "minilm": {
+   "reader": "sentence-transformers/all-MiniLM-L6-v2",
+   "params": 22713216,
+   "payload_mb_fp16": 45.4,
+   "d_txt": 384,
+   "text_head_mb_fp16": 0.79,
+   "full_gallery": {
+    "t2i_r@1": 0.1055,
+    "t2i_r@5": 0.2508,
+    "t2i_r@10": 0.3326,
+    "t2i_median_rank": 34.3333
+   },
+   "full_gallery_t2i_r@1_range": [
+    0.103,
+    0.107
+   ],
+   "pool": {
+    "i2t_r@1": 0.7533,
+    "i2t_r@5": 0.9653,
+    "i2t_r@10": 0.9893,
+    "i2t_median_rank": 1.0,
+    "t2i_r@1": 0.6178,
+    "t2i_r@5": 0.8983,
+    "t2i_r@10": 0.9577,
+    "t2i_median_rank": 1.0,
+    "pool_images": 1000.0
+   },
+   "shuffled_control": {
+    "t2i_r@1": 0.0,
+    "t2i_r@5": 0.0,
+    "t2i_r@10": 0.0,
+    "t2i_median_rank": 60490.6667
+   },
+   "per_seed": [
+    {
+     "seed": 0,
+     "full_gallery": {
+      "t2i_r@1": 0.1066,
+      "t2i_r@5": 0.2515,
+      "t2i_r@10": 0.3353,
+      "t2i_median_rank": 34
+     },
+     "pool": {
+      "i2t_r@1": 0.766,
+      "i2t_r@5": 0.962,
+      "i2t_r@10": 0.992,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6175,
+      "t2i_r@5": 0.9004,
+      "t2i_r@10": 0.9562,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 60460
+     }
+    },
+    {
+     "seed": 1,
+     "full_gallery": {
+      "t2i_r@1": 0.107,
+      "t2i_r@5": 0.2498,
+      "t2i_r@10": 0.3315,
+      "t2i_median_rank": 35
+     },
+     "pool": {
+      "i2t_r@1": 0.749,
+      "i2t_r@5": 0.968,
+      "i2t_r@10": 0.988,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6161,
+      "t2i_r@5": 0.898,
+      "t2i_r@10": 0.9586,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 62557
+     }
+    },
+    {
+     "seed": 2,
+     "full_gallery": {
+      "t2i_r@1": 0.103,
+      "t2i_r@5": 0.2511,
+      "t2i_r@10": 0.3309,
+      "t2i_median_rank": 34
+     },
+     "pool": {
+      "i2t_r@1": 0.745,
+      "i2t_r@5": 0.966,
+      "i2t_r@10": 0.988,
+      "i2t_median_rank": 1,
+      "t2i_r@1": 0.6197,
+      "t2i_r@5": 0.8966,
+      "t2i_r@10": 0.9584,
+      "t2i_median_rank": 1,
+      "pool_images": 1000
+     },
+     "shuffled": {
+      "t2i_r@1": 0.0,
+      "t2i_r@5": 0.0,
+      "t2i_r@10": 0.0,
+      "t2i_median_rank": 58455
+     }
+    }
+   ],
+   "vs_0.6B_t2i_r@1": -0.0037,
+   "seconds": 33.6
+  }
+ },
+ "parity": {
+  "runtime": "candle 0.11 f32 CPU (blackwidow runtime BertReader) vs sentence-transformers/PyTorch fp32",
+  "bge-small": {
+   "worst_embedding_max_abs_diff": 1.71e-07,
+   "worst_projection_cos": 0.999999,
+   "top1_agreement": "8/8",
+   "top5_overlap": "40/40"
+  },
+  "e5-base": {
+   "worst_embedding_max_abs_diff": 1.96e-07,
+   "worst_projection_cos": 0.999999,
+   "top1_agreement": "8/8",
+   "top5_overlap": "40/40"
+  },
+  "note": "No anchor needed: the fp32 sentence encoder reproduces PyTorch to float rounding, so the 4 KB per-runtime mean that the Q4 0.6B tower required is not part of this deployment. Fixtures: artifacts/local/reader_swap/heads/parity_*.json; check: blackwidow runtime/examples/reader_parity.rs."
+ },
+ "caveats": [
+  "Image side is the shipped v3 gallery, which was projected by a head fitted against Qwen3-0.6B text on 118k pairs; the sentence encoders inherit that projection rather than a space fitted for them. The reader ladder (both sides fitted, 4k pairs) shows a larger sentence-encoder margin; this frozen-side result is the drop-in number, not the ceiling.",
+  "The four encoders were trained on sentence-pair corpora that include COCO caption text (never these images or gallery rows). The 0.6B reference is a base LLM with no such exposure.",
+  "Eval is the card's replay set: 5,001 val2017 captions from 1,000 images, gold = gallery row, over all 123,287 rows. Train is train2017 only; no val image is fitted. Three head-init seeds, reported mean with [min,max]; MPS matmuls are not bitwise deterministic so a re-run moves the third decimal.",
+  "mpnet is excluded from this run because candle-transformers has no MPNet; the four rungs here are BERT-family and load with the same code path."
+ ]
+}
