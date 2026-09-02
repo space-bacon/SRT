@@ -1,0 +1,13 @@
+{
+  "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+  "tag": "mistralsmall_24b",
+  "format": "hf_chat_template",
+  "k": 8,
+  "max_new": 1024,
+  "tensor_parallel": 1,
+  "n_prompts": 164,
+  "n_samples": 1312,
+  "truncated": 0,
+  "truncated_frac": 0.0,
+  "reading": "a high truncated_frac means the budget, not the model, is what any low pass rate measures"
+}
