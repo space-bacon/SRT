@@ -26,11 +26,14 @@ generation pools in `artifacts/nla/`:
 
 | | problems | arms | floor | selected | oracle |
 |---|---:|---:|---:|---:|---:|
-| HumanEval | 164 | 36 | 0.1868 | **0.4426** | 0.4954 |
+| HumanEval | 164 | 36 | 0.4679 | **0.6301** | 0.7346 |
 | MBPP | 425 | 10 | 0.7185 | **0.8174** | 0.8887 |
 
-That is +0.2558 and +0.0989 over the floor, which is 82.9% and 58.1% of the
-headroom an oracle would capture.
+That is +0.1622 and +0.0989 over the floor, which is 60.8% and 58.1% of the
+headroom an oracle would capture. HumanEval pools are generated at 1024 new
+tokens (`artifacts/nla/coder_matrix1024/`); an earlier 192-token run put the
+selected score at 0.4426 against a 0.1868 floor, and that 82.9% share was
+inflated by truncated candidates that could not execute.
 
 Those two rows are handed the benchmark's entry point and signature. Recovering
 both from the chat turn alone is the deployable case, and it costs coverage
@@ -38,10 +41,10 @@ rather than accuracy:
 
 | | resolved | selected, unresolved scored as an arbitrary pick | floor |
 |---|---:|---:|---:|
-| HumanEval | 55.0% | 0.3096 | 0.1868 |
+| HumanEval | 62.3% | 0.5476 | 0.4679 |
 | MBPP | 98.6% | 0.7991 | 0.7185 |
 
-HumanEval resolves on barely half its problems because its prompts are
+HumanEval resolves on under two thirds of its problems because its prompts are
 docstrings that often state no example and carry no annotations, so there is
 nothing to synthesise arguments from. MBPP states an example call for almost
 every problem, which is why it resolves on 98.6%. Coverage is the axis to

@@ -55,13 +55,18 @@ Held-out retrieval through a fitted map reaches **0.9181** across lab boundaries
 a shuffled floor of **0.00101** and a self-map ceiling of **0.999**. Transport cost is
 **0.0787**. Shared corporate lineage is worth only 0.0357 of that.
 
-### `coder_ladder/` — the scale test, Qwen2.5-Coder 0.5B to 32B
+### `coder_matrix1024/` — the scale test, Qwen2.5-Coder 0.5B to 32B
 
-36 arms, 164 HumanEval prompts, K=8. `scaling_curve.json` holds the per-rung table.
+36 arms, 164 HumanEval prompts, K=8, 1024 new tokens. `scaling_curve.json` holds the
+per-rung table.
 
-The format effect **grows** monotonically with scale, from 0.0787 at 0.5B to **0.1520**
-at 32B, a slope of **+0.0441 per decade** over a 66x range. The tuning term moves the
-other way at **−0.0220**.
+The format effect **grows** with scale, from 0.0878 at 0.5B to **0.1589** at 32B, a
+slope of **+0.0433 per decade** over a 66x range. The tuning term moves the other way
+at **−0.0402**.
+
+`coder_ladder/` is the same matrix at 192 new tokens, where 43% to 80% of candidates
+were cut off mid-function. Its similarity slope (+0.0441) matches the clean run; its
+pass rates do not, and every pass-rate figure below reads from the 1024-token pools.
 
 ### `ministral_ladder/` — independent replication, Mistral 3B/8B/14B
 
@@ -76,19 +81,20 @@ Eight genuinely distinct personas take inter-model similarity from **0.6464** to
 leave it at **0.6441**. Across three labs at 14B-31B the deployed arm is worse than
 inert: inter-model similarity *rises*, an inter_drop of **−0.0111**.
 
-### `mbpp_ladder/`, `ensemble/`, `verifier/`, `code_select/` — what the pool is worth
+### `mbpp_ladder/`, `ensemble/`, `verifier_1024/`, `code_select/` — what the pool is worth
 
-Candidate pools and execution outcomes. `verifier/` holds the read comparison on both
-benchmarks; `ensemble/` holds six frontier models from five labs.
+Candidate pools and execution outcomes. `verifier_1024/` holds the HumanEval read
+comparison on the 1024-token pools and copies of the MBPP reads; `verifier/` is the
+superseded 192-token HumanEval run; `ensemble/` holds six frontier models from five labs.
 
 | read | HumanEval | MBPP |
 |---|---:|---:|
-| random single | 0.1868 | 0.7185 |
-| learned verifier | 0.2639 | 0.7292 |
-| filter by the prompt's examples | 0.4145 | **0.8492** |
-| that filter plus the verifier | 0.4339 | 0.8485 |
-| agreement among candidates | **0.4426** | 0.8174 |
-| oracle | 0.4954 | 0.8887 |
+| random single | 0.4679 | 0.7185 |
+| learned verifier | 0.5102 | 0.7292 |
+| agreement among candidates | 0.6301 | 0.8174 |
+| filter by the prompt's examples | **0.6496** | **0.8492** |
+| that filter plus the verifier | 0.6585 | 0.8485 |
+| oracle | 0.7346 | 0.8887 |
 
 ### `holonomy/` — a retracted selector, kept
 
@@ -108,13 +114,13 @@ from srt_select import select
 best = select(user_message, replies)
 ```
 
-Handed the benchmark's entry point and signature it scores 0.4426 on HumanEval and
-0.8174 on MBPP, against floors of 0.1868 and 0.7185. Recovering the entry point and
+Handed the benchmark's entry point and signature it scores 0.6301 on HumanEval and
+0.8174 on MBPP, against floors of 0.4679 and 0.7185. Recovering the entry point and
 the argument shapes from the chat turn alone is the deployable case, and it costs
-coverage rather than accuracy: 55.0% of HumanEval problems resolve and 98.6% of MBPP
-ones do, giving 0.3096 and 0.7991 when unresolved problems are scored as an arbitrary
-pick. `verifier/chat_consensus.json` and `verifier/chat_consensus_mbpp.json` are those
-two runs.
+coverage rather than accuracy: 62.3% of HumanEval problems resolve and 98.6% of MBPP
+ones do, giving 0.5476 and 0.7991 when unresolved problems are scored as an arbitrary
+pick. `verifier_1024/chat_consensus.json` and `verifier/chat_consensus_mbpp.json` are
+those two runs.
 
 Selecting means executing every candidate, so it is a remote code execution primitive
 if pointed at the wrong host. `srt_select.sandbox` states what the confinement does
@@ -140,23 +146,29 @@ problem, which is noise at this size. Read 0.9878 as a bound on what better sele
 could win, never as an ensembling result: pooling models buys nothing that one good
 model plus a selector does not already give.
 
-**The exec-versus-consensus ordering is a coverage effect, not a ranking.** MBPP states
-an example for 425 of 425 problems so filtering wins there; HumanEval states one for 128
-of 164 and agreement wins only by covering the other 36. Neither method is better in
-general.
+**Example-filtering leads on both benchmarks, and agreement is the coverage play.**
+Filtering by the prompt's stated examples recovers 68.1% of the gap on HumanEval and
+76.8% on MBPP; agreement recovers 60.8% and 58.1%. MBPP states an example for 425 of
+425 problems; HumanEval states one for 128 of 164, and agreement covers the other 36.
+On the superseded 192-token HumanEval pools agreement appeared to lead at 82.9%. That
+ordering was a truncation artifact: agreement was discarding code that could not run,
+against a floor that included it.
 
-**The learned verifier does not transfer.** It captures 25.0% of the gap on HumanEval
+**The learned verifier does not transfer.** It captures 15.9% of the gap on HumanEval
 and 6.3% on MBPP, and on MBPP appending it to example-filtering makes that baseline
-slightly worse. It is reported as a negative result.
+slightly worse. Its AUROC is 0.778 on both budgets; a length-only control that scored
+0.581 on the 192-token pools scores 0.526 on the clean ones. It is reported as a
+negative result.
 
-**Selection value decays with scale**, at −0.0704 per decade, from +0.1538 at 3B to
-+0.0097 at 32B. It is a weak-model amplifier and does not push a strong model past its
-own ceiling. That slope is the chat-native read; agreement gives −0.0815 and
-execution-guided filtering −0.1192, so the direction is read-independent and the
-quoted figure is the most conservative of the three. See `hivemind_census.json`.
+**Selection value decays with scale**, at −0.0704 per decade on MBPP, from +0.1538 at
+3B to +0.0097 at 32B, and at −0.0676 per decade on the 1024-token HumanEval matrix. It
+is a weak-model amplifier and does not push a strong model past its own ceiling. The
+MBPP slope is the chat-native read; agreement gives −0.0815 and execution-guided
+filtering −0.1192, so the direction is read-independent and the quoted figure is the
+most conservative of the three. See `hivemind_census.json`.
 
 **Ladder magnitudes are not comparable across domains.** Code prompts constrain output
-far more than open-ended stems, so instruct-raw already sits at 0.73-0.79 on HumanEval
+far more than open-ended stems, so instruct-raw already sits at 0.74-0.79 on HumanEval
 against 0.4435 on prose. Compare slopes across domains, not levels.
 
 **The Ministral chat arm was regenerated.** Its first version is kept under

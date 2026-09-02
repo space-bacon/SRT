@@ -27,6 +27,7 @@ SETS = [
     ("atlas/samples", "atlas/samples", "*.json"),
     ("atlas/samples_instruct", "atlas/samples_instruct", "*.json"),
     ("coder_ladder", "coder_ladder", "*.json"),
+    ("coder_matrix1024", "coder_matrix1024", "*.json"),
     ("ministral_ladder", "ministral_ladder", "*.json"),
     ("ministral_ladder/corrupt_chat_pre_fix", "ministral_ladder/corrupt_chat_pre_fix", "*.json"),
     ("ministral_suppression", "ministral_suppression", "*.json"),
@@ -35,6 +36,7 @@ SETS = [
     ("ensemble", "ensemble", "*.json"),
     ("ensemble/excluded", "ensemble/excluded", "*.json"),
     ("verifier", "verifier", "*.json"),
+    ("verifier_1024", "verifier_1024", "*.json"),
     ("code_select", "code_select", "*.json"),
     ("holonomy", "holonomy", "*.json"),
 ]
@@ -44,6 +46,7 @@ SCRIPTS = [
     "hivemind_posttraining_isolation.py", "hivemind_template_decomp.py",
     "hivemind_suppression.py", "hivemind_mechanism_link.py",
     "coder_ladder.py", "coder_ladder_analyze.py", "ministral_ladder.py",
+    "coder_regen_vllm.py", "coder_matrix_vllm.py",
     "ministral_suppression.py", "crosslab_suppression.py", "mbpp_ladder.py",
     "fetch_mbpp.py", "ensemble_ceiling.py",
     "code_select.py", "visible_tests.py", "verifier_select.py",

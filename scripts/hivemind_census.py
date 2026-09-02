@@ -25,12 +25,12 @@ ROOT = pathlib.Path("artifacts/nla")
 OUT = ROOT / "hivemind_census.json"
 
 # Arms the corpus claim covers. Excludes atlas prose samples, which are scored
-# for similarity rather than executed, and the two superseded directories.
+# for similarity rather than executed, and the three superseded directories.
 CENSUS_DIRS = [
-    "coder_ladder", "ministral_ladder", "mbpp_ladder",
+    "coder_matrix1024", "ministral_ladder", "mbpp_ladder",
     "ensemble", "crosslab_suppression", "ministral_suppression",
 ]
-EXCLUDED_DIRS = ["ensemble/excluded", "ministral_ladder/corrupt_chat_pre_fix"]
+EXCLUDED_DIRS = ["coder_ladder", "ensemble/excluded", "ministral_ladder/corrupt_chat_pre_fix"]
 
 PARAMS_B = {"1.5B": 1.5, "3B": 3.0, "7B": 7.0, "14B": 14.0, "32B": 32.0}
 
