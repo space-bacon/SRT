@@ -24,6 +24,7 @@ untrusted code in-process can. Run it somewhere you are willing to lose.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 
@@ -60,12 +61,18 @@ ENV = {
     "OMP_NUM_THREADS": "1",
 }
 
+# An OS-level wrapper prepended to every child, e.g. on Linux as root:
+#   SRT_SELECT_WRAP="unshare -n -- setpriv --reuid=65534 --regid=65534 --clear-groups"
+# gives the child no network and an unprivileged uid. The rlimits above are
+# process-local and cannot do either.
+WRAP = os.environ.get("SRT_SELECT_WRAP", "").split()
+
 
 def run(program: str, timeout: float = 8.0) -> subprocess.CompletedProcess | None:
     """Execute `program` under the guard. None if it did not finish cleanly."""
     try:
         p = subprocess.run(
-            [sys.executable, "-I", "-c", GUARD + program],
+            [*WRAP, sys.executable, "-I", "-c", GUARD + program],
             capture_output=True, text=True, timeout=timeout, cwd="/tmp", env=ENV,
         )
     except (subprocess.TimeoutExpired, OSError):

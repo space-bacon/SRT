@@ -40,6 +40,8 @@ class Selection:
     cluster_size: int = 0
     clusters: int = 0
     reason: str | None = None
+    # Cluster id per candidate, ordered by cluster size; -1 means it did not run.
+    groups: list | None = None
 
     @property
     def agreed(self) -> bool:
@@ -70,13 +72,17 @@ def choose(user_text: str, replies, n_cases: int = 2, timeout: float = 8.0,
     sigs = [run_json(probe_program(c, entry, cases), timeout) for c in codes]
     ran = [i for i, s in enumerate(sigs) if s is not None]
     if not ran:
-        return Selection(None, entry=entry, kinds=kinds, reason="no candidate ran")
+        return Selection(None, entry=entry, kinds=kinds, reason="no candidate ran",
+                         groups=[-1] * len(codes))
 
-    top, votes = Counter(sigs[i] for i in ran).most_common(1)[0]
+    ranked = Counter(sigs[i] for i in ran).most_common()
+    top, votes = ranked[0]
+    group_of = {sig: g for g, (sig, _) in enumerate(ranked)}
     return Selection(
         index=next(i for i in ran if sigs[i] == top),
         entry=entry, kinds=kinds, ran=len(ran), cluster_size=votes,
-        clusters=len({sigs[i] for i in ran}),
+        clusters=len(ranked),
+        groups=[group_of[s] if s is not None else -1 for s in sigs],
     )
 
 
