@@ -837,12 +837,16 @@ Section 8.
 
 **Seven-lab agreement was an artifact of reading one prompt.** Section 7.
 
-**Centered semantic voting does not select better code.** Anisotropy among code
-candidates is severe, 0.7929 mean pairwise cosine across 30 arms, so we expected
-centering by the pool mean to be necessary before consensus voting. It changes
-nothing: centered minus raw is −0.0016, with 8 wins, 12 losses and 10 ties. Medoid
-voting beats a random single sample by +0.0240, which is 9.0% of the +0.2667
-headroom. Centering corrects similarity magnitudes and leaves the argmax alone.
+**Semantic voting barely selects better code, centered or not.** Anisotropy among
+code candidates is severe, 0.8048 mean pairwise cosine across the 36 clean arms, so
+we expected centering by the pool mean to be necessary before medoid voting. On the
+1024-token pools it helps a little: centered minus raw is +0.0063, with 19 wins, 6
+losses and 11 ties. But the raw medoid clears the floor by only +0.0177 and the
+centered one by +0.0240, which is 9.0% of the +0.2667 headroom. Centering corrects
+similarity magnitudes and changes the outcome on 25 of 36 arms, almost always for
+the better; what the encoder sees is still mostly not correctness. On the superseded 192-token pools the same
+comparison read −0.0016 with 8 wins, 12 losses and 10 ties, so the truncated pools
+also hid the small centering effect.
 
 **Our learned verifier lost to a baseline that needs no learning.** Fitting a
 classifier on 47,232 execution labels was the one read that survived its nuisance
@@ -913,8 +917,11 @@ arm gives instruct models a format their base siblings never had, which is the
 point of the comparison, but it also means the two arms differ in effective task
 as well as in weights.
 
-The HumanEval scale ladder now uses 1024 new tokens; the Ministral replication
-ladder still uses 128 and has not been regenerated. At 1024 tokens, 0.2% of chat
+The HumanEval scale ladder now uses 1024 new tokens. The Ministral replication
+ladder uses 128 and has not been regenerated: it is prose continuations scored for
+similarity only, with no execution and no capability claim, so a fixed-length cut
+is the protocol there rather than a defect, as it is for the 48-token atlas
+continuations. At 1024 tokens on HumanEval, 0.2% of chat
 candidates and 21.8% of raw candidates are cut off, so the residual truncation
 confound runs against the raw arm, not the chat arm. Cross-arm comparisons of
 capability remain confounded by that asymmetry, and we make no capability claim
@@ -973,7 +980,9 @@ scores.
 - `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`,
   the superseded 192-token ladder, kept for the budget comparison
 - `scripts/ministral_ladder.py`, `artifacts/nla/ministral_ladder/`
-- `scripts/code_select.py`, `artifacts/nla/code_select/results.json`. That file
+- `scripts/code_select.py`, `artifacts/nla/code_select/results_1024.json`, the
+  raw-versus-centered medoid comparison on the 1024-token pools. `results.json` in
+  the same directory is the 192-token run. That file
   carries a 31st arm-shaped entry keyed `task_ids`, because the arm glob matched
   a bookkeeping file whose 164 entries passed the length check and whose task-id
   strings were then sliced into 11 single-character "candidates". Every pass
