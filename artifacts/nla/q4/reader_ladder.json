@@ -1,0 +1,194 @@
+{
+  "protocol": {
+    "image_states": "/Users/burtron/.cache/huggingface/hub/datasets--RiverRider--srt-qwen38-coco-states/snapshots/0949381f7cc5a9a5c641af896647d9c0106bab67/qwen38_coco_ls/images.pt",
+    "image_layer": 52,
+    "n_train": 4000,
+    "n_eval_images": 1000,
+    "n_eval_captions": 5001,
+    "proj_dim": 1024,
+    "tau": 0.05,
+    "epochs": 60,
+    "seed": 0,
+    "device": "mps",
+    "chance_i2t_r@1": 0.0002
+  },
+  "reference_0.6B": {
+    "reader": "Qwen/Qwen3-0.6B",
+    "text_layer": 28,
+    "params": 600000000,
+    "bridge": {
+      "i2t_r@1": 0.356,
+      "i2t_r@5": 0.681,
+      "i2t_r@10": 0.794,
+      "t2i_r@1": 0.2294,
+      "t2i_r@5": 0.4909,
+      "t2i_r@10": 0.6207
+    },
+    "shuffled_control": {
+      "i2t_r@1": 0.002,
+      "i2t_r@5": 0.007,
+      "i2t_r@10": 0.008,
+      "t2i_r@1": 0.0008,
+      "t2i_r@5": 0.004,
+      "t2i_r@10": 0.0074
+    }
+  },
+  "rungs": {
+    "minilm": {
+      "reader": "sentence-transformers/all-MiniLM-L6-v2",
+      "params": 22713216,
+      "payload_mb_fp16": 45.4,
+      "d_txt": 384,
+      "text_head_mb_fp16": 0.79,
+      "text_head_mb_int8": 0.39,
+      "bridge": {
+        "i2t_r@1": 0.464,
+        "i2t_r@5": 0.759,
+        "i2t_r@10": 0.865,
+        "i2t_median_rank": 2,
+        "t2i_r@1": 0.3477,
+        "t2i_r@5": 0.6475,
+        "t2i_r@10": 0.7618,
+        "t2i_median_rank": 3
+      },
+      "shuffled_control": {
+        "i2t_r@1": 0.001,
+        "i2t_r@5": 0.006,
+        "i2t_r@10": 0.011,
+        "i2t_median_rank": 941,
+        "t2i_r@1": 0.002,
+        "t2i_r@5": 0.006,
+        "t2i_r@10": 0.012,
+        "t2i_median_rank": 477
+      },
+      "seconds": 16.1
+    },
+    "bge-small": {
+      "reader": "BAAI/bge-small-en-v1.5",
+      "params": 33360000,
+      "payload_mb_fp16": 66.7,
+      "d_txt": 384,
+      "text_head_mb_fp16": 0.79,
+      "text_head_mb_int8": 0.39,
+      "bridge": {
+        "i2t_r@1": 0.5,
+        "i2t_r@5": 0.802,
+        "i2t_r@10": 0.884,
+        "i2t_median_rank": 1,
+        "t2i_r@1": 0.3689,
+        "t2i_r@5": 0.6823,
+        "t2i_r@10": 0.7874,
+        "t2i_median_rank": 2
+      },
+      "shuffled_control": {
+        "i2t_r@1": 0.0,
+        "i2t_r@5": 0.002,
+        "i2t_r@10": 0.009,
+        "i2t_median_rank": 1026,
+        "t2i_r@1": 0.001,
+        "t2i_r@5": 0.004,
+        "t2i_r@10": 0.0086,
+        "t2i_median_rank": 509
+      },
+      "seconds": 11.8
+    },
+    "embed-table": {
+      "reader": "Qwen/Qwen3-0.6B input-embedding mean",
+      "params": 155582464,
+      "payload_mb_fp16": 311.2,
+      "payload_mb_fp16_pruned_to_seen_vocab": 17.7,
+      "vocab_seen": 8643,
+      "d_txt": 1024,
+      "text_head_mb_fp16": 2.1,
+      "text_head_mb_int8": 1.05,
+      "bridge": {
+        "i2t_r@1": 0.393,
+        "i2t_r@5": 0.72,
+        "i2t_r@10": 0.835,
+        "i2t_median_rank": 2,
+        "t2i_r@1": 0.2869,
+        "t2i_r@5": 0.5689,
+        "t2i_r@10": 0.6899,
+        "t2i_median_rank": 4
+      },
+      "shuffled_control": {
+        "i2t_r@1": 0.001,
+        "i2t_r@5": 0.005,
+        "i2t_r@10": 0.009,
+        "i2t_median_rank": 898,
+        "t2i_r@1": 0.0008,
+        "t2i_r@5": 0.004,
+        "t2i_r@10": 0.0092,
+        "t2i_median_rank": 523
+      },
+      "seconds": 12.5
+    },
+    "hash-bow": {
+      "reader": "hashed uni+bigram counts, 4096 features",
+      "params": 0,
+      "payload_mb_fp16": 0.0,
+      "d_txt": 4096,
+      "text_head_mb_fp16": 8.39,
+      "text_head_mb_int8": 4.19,
+      "bridge": {
+        "i2t_r@1": 0.197,
+        "i2t_r@5": 0.487,
+        "i2t_r@10": 0.618,
+        "i2t_median_rank": 6,
+        "t2i_r@1": 0.132,
+        "t2i_r@5": 0.3333,
+        "t2i_r@10": 0.4435,
+        "t2i_median_rank": 15
+      },
+      "shuffled_control": {
+        "i2t_r@1": 0.0,
+        "i2t_r@5": 0.005,
+        "i2t_r@10": 0.009,
+        "i2t_median_rank": 740,
+        "t2i_r@1": 0.0004,
+        "t2i_r@5": 0.004,
+        "t2i_r@10": 0.007,
+        "t2i_median_rank": 497
+      },
+      "seconds": 7.6
+    },
+    "hash-bow-1k": {
+      "reader": "hashed uni+bigram counts, 1024 features",
+      "params": 0,
+      "payload_mb_fp16": 0.0,
+      "d_txt": 1024,
+      "text_head_mb_fp16": 2.1,
+      "text_head_mb_int8": 1.05,
+      "bridge": {
+        "i2t_r@1": 0.205,
+        "i2t_r@5": 0.497,
+        "i2t_r@10": 0.622,
+        "i2t_median_rank": 6,
+        "t2i_r@1": 0.1368,
+        "t2i_r@5": 0.3471,
+        "t2i_r@10": 0.4587,
+        "t2i_median_rank": 14
+      },
+      "shuffled_control": {
+        "i2t_r@1": 0.001,
+        "i2t_r@5": 0.003,
+        "i2t_r@10": 0.006,
+        "i2t_median_rank": 803,
+        "t2i_r@1": 0.0002,
+        "t2i_r@5": 0.0032,
+        "t2i_r@10": 0.0072,
+        "t2i_median_rank": 509
+      },
+      "seconds": 5.8
+    }
+  },
+  "reference_27B_matched_text_tower": {
+    "i2t_r@1": 0.433,
+    "source": "artifacts/nla/q4/browser_text_tower.json interpretation.claim: matched Qwen3.8-27B text tower on identical images at identical training scale"
+  },
+  "caveats": [
+    "all-MiniLM-L6-v2 and bge-small were trained on sentence-pair corpora that include COCO caption TEXT (caption-caption pairs), so they arrive with caption-shaped geometry; they never saw these images, their states, or the pairing. embed-table and hash-bow have no such exposure and are the clean rungs.",
+    "single split (images 0-3999 fit, 4000-4999 score), single seed; the 0.6B reference used the same split and training scale but selected its layer on the eval pool and reported the 60-epoch fit that scored below its 25-epoch fit (0.356 vs 0.382).",
+    "i2t is scored over 1,000 images against 5,001 captions; chance R@1 is 0.0002 and every shuffled control sits at 0.000 to 0.001 with median rank 740 to 1026."
+  ]
+}
