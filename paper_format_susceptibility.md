@@ -1,9 +1,9 @@
 # Format as an ordering field: susceptibility, not a scaling law
 
-Working note, 2026-09-02. Status: a fixed-endpoint result measured per problem
-inside one benchmark, plus a cross-benchmark correlation it explains. The
-mechanical artifact that would fake it has been measured and removed. Not yet a
-bifurcation: we have an attractor and its basin, not a control-parameter sweep.
+Working note, 2026-09-02. Status: the template acts as a one-sided floor on
+output order, measured per problem on two benchmarks with the mechanical artifact
+that would fake it quantified and removed. Not yet a bifurcation: we have a
+saturating field, not a control-parameter sweep.
 
 ## What we set out to check
 
@@ -132,18 +132,57 @@ at r = +0.080.** Stratifying by half-A raw order into four equal bins:
 The raw column spans 0.282. The chat column spans 0.012.
 
 So the format is not adding a fixed increment of order, and it is not adding an
-increment that shrinks with baseline either. **It is pulling every problem to the
-same level of order, near 0.89, regardless of where that problem started.** The
-gain varies across bins only because the starting point varies. The destination
-does not move.
+increment that shrinks with baseline either. On HumanEval it pulls every problem
+to roughly 0.89 regardless of where that problem started. The gain varies across
+bins only because the starting point varies.
 
-That is an attractor with a basin, not a susceptibility gradient. It is a
-stronger claim than the one the two-benchmark correlation supported, and it
-explains that correlation as a consequence: if the endpoint is fixed, then
-`gain = endpoint - start` is necessarily a decreasing function of the start, both
-within a benchmark and across benchmarks. MBPP shows a small format effect
-because MBPP's raw arm already sits near the same endpoint, not because MBPP is
-insensitive to framing.
+## MBPP corrects that reading: a floor, not a fixed point
+
+Read on HumanEval alone, the above says the template has a fixed destination.
+Running the identical test on MBPP shows that conclusion was too strong, and
+shows why.
+
+| | direct corr(raw_A, chat) | chat column span |
+|---|---|---|
+| HumanEval | +0.080 | 0.012 |
+| MBPP | **+0.654** | **0.100** |
+
+On MBPP the chat arm's order is not independent of the raw arm's at all, and the
+chat column is not flat. The difference is that MBPP's raw arm is already more
+ordered than HumanEval's, and in two of its four bins it is already more ordered
+than the level HumanEval's chat arm converges to.
+
+Putting all eight bins from both benchmarks on one axis and splitting at 0.88:
+
+| bench | bin | raw_A | chat | delta | |
+|---|---|---|---|---|---|
+| HumanEval | 0 | 0.6062 | 0.8909 | **+0.2846** | below |
+| HumanEval | 1 | 0.7482 | 0.8950 | +0.1468 | below |
+| HumanEval | 2 | 0.8226 | 0.8909 | +0.0683 | below |
+| MBPP | 0 | 0.7907 | 0.8699 | +0.0792 | below |
+| MBPP | 1 | 0.8725 | 0.9021 | +0.0295 | below |
+| HumanEval | 3 | 0.8880 | 0.9032 | +0.0152 | above |
+| MBPP | 2 | 0.9266 | 0.9348 | +0.0082 | above |
+| MBPP | 3 | 0.9815 | **0.9700** | **−0.0115** | above |
+
+    starting below 0.88 (5 bins):  0.7681 -> 0.8898   +0.1217
+    starting at or above (3 bins): 0.9320 -> 0.9360   +0.0040
+
+**The template imposes a floor on order, not a destination.** Below roughly 0.88
+it lifts hard, and lands the system on the floor. At or above it, the template
+does essentially nothing, thirty times less, and in the most ordered bin it
+slightly reduces order.
+
+The HumanEval-only picture looked like a fixed point because no HumanEval bin
+ever starts above the floor. That is a good illustration of why a second domain
+was worth the compute: the single-domain reading was not wrong about HumanEval,
+it was wrong about what HumanEval was showing.
+
+This still explains the cross-benchmark correlation, and better. With a one-sided
+floor, `gain = max(floor, start) - start` falls to zero as `start` rises past the
+floor, which is what the -0.870 was measuring. MBPP's format effect is small
+because most of MBPP already sits at or above the floor, and its most ordered
+problems are actively made slightly less orderly by the template.
 
 Per-rung, with floors, showing the effect is not an anisotropy artifact:
 
@@ -181,26 +220,27 @@ should not carry the argument alone.
 
 ## What settles it
 
-1. **Done, and it changed the claim.** The per-problem test above holds the
-   relation inside one benchmark and shows the endpoint is fixed. See that
-   section. What remains is to check whether the endpoint is the same constant on
-   MBPP: if the chat arm lands near 0.89 there too, the attractor is a property of
-   the template rather than of the benchmark, which is the strong version.
+1. **Done twice, and the second run corrected the first.** The per-problem test
+   holds the relation inside one benchmark; the MBPP repeat showed the endpoint is
+   a floor rather than a destination. Both are above.
 
-2. **A continuous control parameter.** The five arms we have (raw, persona,
-   shared, shared_persona, chat) are an ordinal ladder of framing strength, not a
-   dial. Interpolating framing strength, for instance by varying how much of the
-   template is present, turns four points into a curve. This is now the single
-   most valuable experiment, because a fixed endpoint reached from many starts is
-   exactly what should show a threshold as the field is weakened.
+2. **A continuous control parameter.** This is now the experiment that matters.
+   The five arms (raw, persona, shared, shared_persona, chat) are an ordinal
+   ladder of framing strength, not a dial. A one-sided floor is exactly the shape
+   that should show a threshold as the field is weakened continuously, and a
+   threshold in an order parameter against a continuous control is the thing we do
+   not yet have. Interpolating the template's contribution, for instance by
+   scaling the embeddings of the template tokens by a coefficient between zero and
+   one, gives a real dial rather than four rungs.
 
-3. **Where the basin ends.** Bin 0 starts at 0.606 and still lands at 0.891. We
-   have not found a problem disordered enough to escape. Deliberately
-   underdetermined prompts would locate the edge of the basin, if there is one.
+3. **Where the floor sits, and whether it is one number.** The floor reads at
+   roughly 0.88 on both benchmarks, but eight bins cannot separate "one constant"
+   from "two similar constants". A third domain would.
 
-4. **A third domain picked in advance.** State the predicted chat-arm endpoint
-   before running it. That is the difference between fitting the data and
-   predicting it.
+4. **The negative cell.** MBPP's most ordered bin goes 0.9815 to 0.9700 under the
+   template. If the template genuinely reduces order in already-committed cases,
+   that is a second, opposite effect and worth isolating rather than rounding to
+   zero.
 
 ## Consequences for the papers
 
@@ -221,7 +261,8 @@ should not carry the argument alone.
     artifacts/nla/coder_matrix1024/scaling_curve.json    HumanEval, 36 arms, 1024 tok
     artifacts/nla/mbpp_matrix1024/scaling_curve.json     MBPP, 36 arms, 1024 tok
     artifacts/nla/coder_matrix1024/meta/                 per-arm finish_reason truncation
-    artifacts/nla/format_susceptibility_perproblem.json  per-problem split-half test
+    artifacts/nla/format_susceptibility_perproblem.json       HumanEval per-problem
+    artifacts/nla/format_susceptibility_perproblem_mbpp.json  MBPP per-problem
     scripts/coder_matrix_vllm.py                         generation
     scripts/coder_ladder_analyze.py                      aggregate similarity
     scripts/format_susceptibility_perproblem.py          per-problem test
