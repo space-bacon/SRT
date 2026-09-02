@@ -47,7 +47,8 @@ def parse_args():
     p.add_argument("--epochs", type=int, default=60)
     p.add_argument("--lr", type=float, default=2e-3)
     p.add_argument("--fit-batch", type=int, default=256)
-    p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--seeds", type=int, nargs="*", default=[0],
+                   help="head init + batch order seeds; the split is fixed by file order")
     p.add_argument("--device", default="mps" if torch.backends.mps.is_available() else "cpu")
     p.add_argument("--out", type=Path, default=HERE / "artifacts/nla/q4/reader_ladder.json")
     return p.parse_args()
@@ -108,14 +109,24 @@ def retrieval(head, mu_i, mu_t, img, cap, owner_idx, dev):
 # ---------------------------------------------------------------- readers
 # Each returns (features [n, d] float32, description dict with a payload estimate).
 
-def read_sentence_transformer(name, texts, dev):
+def read_sentence_transformer(name, texts, dev, prefix=""):
     from sentence_transformers import SentenceTransformer
     st = SentenceTransformer(name, device=dev if dev != "mps" else "mps")
-    X = st.encode(texts, batch_size=256, convert_to_numpy=True, show_progress_bar=False,
-                  normalize_embeddings=False).astype(np.float32)
+    X = st.encode([prefix + t for t in texts], batch_size=256, convert_to_numpy=True,
+                  show_progress_bar=False, normalize_embeddings=False).astype(np.float32)
     n_params = sum(p.numel() for p in st.parameters())
     return torch.from_numpy(X), {"reader": name, "params": n_params,
                                  "payload_mb_fp16": round(n_params * 2 / 1e6, 1)}
+
+
+ENCODERS = {
+    "minilm": ("sentence-transformers/all-MiniLM-L6-v2", ""),
+    "bge-small": ("BAAI/bge-small-en-v1.5", ""),
+    "mpnet": ("sentence-transformers/all-mpnet-base-v2", ""),
+    "gte-base": ("thenlper/gte-base", ""),
+    # e5 is trained with an instruction prefix; captions are queries here.
+    "e5-base": ("intfloat/e5-base-v2", "query: "),
+}
 
 
 def read_embed_table(texts, dev, model_name="Qwen/Qwen3-0.6B"):
@@ -190,7 +201,7 @@ def main() -> None:
         "protocol": {"image_states": str(args.image_states), "image_layer": image_layer,
                      "n_train": int(len(tr_imgs)), "n_eval_images": int(len(ev_img)),
                      "n_eval_captions": int(len(ev_cap)), "proj_dim": PROJ_DIM, "tau": TAU,
-                     "epochs": args.epochs, "seed": args.seed, "device": dev,
+                     "epochs": args.epochs, "seeds": args.seeds, "device": dev,
                      "chance_i2t_r@1": round(1.0 / len(ev_cap), 6)},
         "reference_0.6B": None if ref is None else {
             "reader": ref["text_tower"], "text_layer": ref["text_layer"], "params": 600_000_000,
@@ -200,10 +211,8 @@ def main() -> None:
 
     for name in args.readers:
         t0 = time.time()
-        if name == "minilm":
-            X, desc = read_sentence_transformer("sentence-transformers/all-MiniLM-L6-v2", texts, dev)
-        elif name == "bge-small":
-            X, desc = read_sentence_transformer("BAAI/bge-small-en-v1.5", texts, dev)
+        if name in ENCODERS:
+            X, desc = read_sentence_transformer(ENCODERS[name][0], texts, dev, ENCODERS[name][1])
         elif name == "embed-table":
             X, desc = read_embed_table(texts, dev)
         elif name == "hash-bow":
@@ -213,22 +222,33 @@ def main() -> None:
         else:
             raise SystemExit(f"unknown reader {name}")
         d_txt = X.shape[1]
-        head, mi, mt = fit(img[tr_imgs], X[tr_pairs], args)
-        real = retrieval(head, mi, mt, img[ev_img], X[ev_cap], owner[ev_cap] - n_train, dev)
-        sh, smi, smt = fit(img[tr_imgs], X[tr_pairs], args, shuffle=True)
-        shuf = retrieval(sh, smi, smt, img[ev_img], X[ev_cap], owner[ev_cap] - n_train, dev)
+        per_seed = []
+        for seed in args.seeds:
+            args.seed = seed
+            head, mi, mt = fit(img[tr_imgs], X[tr_pairs], args)
+            real = retrieval(head, mi, mt, img[ev_img], X[ev_cap], owner[ev_cap] - n_train, dev)
+            sh, smi, smt = fit(img[tr_imgs], X[tr_pairs], args, shuffle=True)
+            shuf = retrieval(sh, smi, smt, img[ev_img], X[ev_cap], owner[ev_cap] - n_train, dev)
+            per_seed.append({"seed": seed, "bridge": real, "shuffled_control": shuf})
+        keys = per_seed[0]["bridge"].keys()
+        agg = lambda arm: {k: round(float(np.mean([s[arm][k] for s in per_seed])), 4) for k in keys}
+        rng_ = lambda arm, k: [min(s[arm][k] for s in per_seed), max(s[arm][k] for s in per_seed)]
+        real, shuf = agg("bridge"), agg("shuffled_control")
         desc.update({
             "d_txt": int(d_txt),
             "text_head_mb_fp16": round(d_txt * PROJ_DIM * 2 / 1e6, 2),
             "text_head_mb_int8": round(d_txt * PROJ_DIM / 1e6, 2),
             "bridge": real, "shuffled_control": shuf,
+            "bridge_i2t_r@1_range": rng_("bridge", "i2t_r@1"),
+            "per_seed": per_seed,
             "seconds": round(time.time() - t0, 1),
         })
         results["rungs"][name] = desc
-        print(f"{name:12s} d={d_txt:5d}  i2t R@1 {real['i2t_r@1']:.4f} R@5 {real['i2t_r@5']:.4f} "
-              f"median {real['i2t_median_rank']:>4d} | t2i R@1 {real['t2i_r@1']:.4f} "
-              f"median {real['t2i_median_rank']:>4d} | shuffled R@1 {shuf['i2t_r@1']:.4f} "
-              f"median {shuf['i2t_median_rank']:>4d} | {desc['seconds']}s", flush=True)
+        lo, hi = desc["bridge_i2t_r@1_range"]
+        print(f"{name:12s} d={d_txt:5d}  i2t R@1 {real['i2t_r@1']:.4f} [{lo:.3f},{hi:.3f}] "
+              f"R@5 {real['i2t_r@5']:.4f} median {real['i2t_median_rank']:>5.1f} | "
+              f"t2i R@1 {real['t2i_r@1']:.4f} | shuffled R@1 {shuf['i2t_r@1']:.4f} "
+              f"median {shuf['i2t_median_rank']:>6.1f} | {desc['seconds']}s", flush=True)
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(results, indent=2))
 
