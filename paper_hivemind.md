@@ -900,10 +900,12 @@ arm gives instruct models a format their base siblings never had, which is the
 point of the comparison, but it also means the two arms differ in effective task
 as well as in weights.
 
-The scale and replication ladders use 192 and 128 new tokens respectively. Chat
-arms spend part of that budget on preamble before content, so cross-arm comparisons
-of anything other than similarity, capability in particular, are confounded by
-truncation. We make no capability claim across arms for that reason.
+The HumanEval scale ladder now uses 1024 new tokens; the Ministral replication
+ladder still uses 128 and has not been regenerated. At 1024 tokens, 0.2% of chat
+candidates and 21.8% of raw candidates are cut off, so the residual truncation
+confound runs against the raw arm, not the chat arm. Cross-arm comparisons of
+capability remain confounded by that asymmetry, and we make no capability claim
+across arms.
 
 Section 5.3 covers three rungs of one additional family. It replicates the ordering
 of the decomposition and reverses the native-token term, which suggests that term
@@ -952,7 +954,11 @@ scores.
 - `scripts/hivemind_suppression.py`, `artifacts/nla/atlas/hivemind_suppression.json`
 - `scripts/hivemind_mechanism_link.py`, `artifacts/nla/atlas/hivemind_mechanism_link.json`
 - `scripts/hivemind_human_baseline.py`, `artifacts/nla/hivemind_human_baseline.json`
-- `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`
+- `scripts/coder_regen_vllm.py` and `scripts/coder_matrix_vllm.py`,
+  `artifacts/nla/coder_matrix1024/`, the 36-arm HumanEval matrix at 1024 new
+  tokens that every HumanEval number in Sections 5.2 and 5.4 now reads from
+- `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`,
+  the superseded 192-token ladder, kept for the budget comparison
 - `scripts/ministral_ladder.py`, `artifacts/nla/ministral_ladder/`
 - `scripts/code_select.py`, `artifacts/nla/code_select/results.json`. That file
   carries a 31st arm-shaped entry keyed `task_ids`, because the arm glob matched
@@ -960,10 +966,13 @@ scores.
   strings were then sliced into 11 single-character "candidates". Every pass
   metric on it is zero. The 30-arm figures exclude it; a loader that takes every
   dict in the file returns 0.3049 rather than 0.3151. The glob is fixed; the
-  artifact is left as published.
-- `scripts/verifier_select.py` and `scripts/exec_guided_select.py`, `artifacts/nla/verifier/`
+  artifact is left as published. Both numbers are from the 192-token pools and
+  are superseded by `artifacts/nla/verifier_1024/`.
+- `scripts/verifier_select.py` and `scripts/exec_guided_select.py`,
+  `artifacts/nla/verifier_1024/` (1024 tokens, the reads in Section 5.4) and
+  `artifacts/nla/verifier/` (192 tokens, superseded)
 - `scripts/visible_tests.py`, prompt-derived example extraction with canonical validation
-- `scripts/consensus_select.py`, `artifacts/nla/verifier/consensus.json`
+- `scripts/consensus_select.py`, `artifacts/nla/verifier_1024/consensus.json`
 - `scripts/chat_consensus.py`, selection from a chat turn with no benchmark metadata
 - `scripts/mbpp_ladder.py` and `scripts/fetch_mbpp.py`, `artifacts/nla/mbpp_ladder/`
 - `scripts/holonomy_select.py`, `artifacts/nla/holonomy/`, including the retraction sweep
