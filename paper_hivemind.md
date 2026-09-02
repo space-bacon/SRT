@@ -1074,6 +1074,11 @@ identical outputs indicated a bug, which exposed that our agreement metric was
 wrong; on greedy versus sampled decoding, which reversed a published null; and on
 running the matched-pair follow-up, which produced Section 5.
 
+To Dipankar Sarkar, who downloaded the published artifact, reran the Section 5.4
+reads from it, found that the agreement read was averaged over a different set of
+problems than its floor, and retracted his own first reading of the same data in
+the same thread. That is what the artifact is published for.
+
 ## References
 
 Jiang, L., Chai, Y., Li, M., Liu, M., Fok, R., Dziri, N., Tsvetkov, Y., Sap, M.,
