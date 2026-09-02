@@ -205,7 +205,9 @@ def main():
     av = ActivationVerbalizer(cfg, backbone, tok).to(device).eval()
 
     log.info("warm-start from %s", args.av_ckpt)
-    sd = torch.load(args.av_ckpt, map_location="cpu", weights_only=False)
+    from pathlib import PosixPath, PurePosixPath
+    with torch.serialization.safe_globals([PosixPath, PurePosixPath]):
+        sd = torch.load(args.av_ckpt, map_location="cpu", weights_only=True)
     if isinstance(sd, dict):
         for k in ("trainable", "av", "av_state_dict", "model", "state_dict"):
             if k in sd and isinstance(sd[k], dict):
@@ -214,7 +216,8 @@ def main():
     log.info("warm-start: missing=%d unexpected=%d", len(missing), len(unexpected))
 
     log.info("loading targets %s", args.targets)
-    obj = torch.load(args.targets, map_location="cpu", weights_only=False)
+    with torch.serialization.safe_globals([PosixPath, PurePosixPath]):
+        obj = torch.load(args.targets, map_location="cpu", weights_only=True)
     pool_all = torch.stack([a[-1].float() for a in obj["activations"]], 0)
     N_all = pool_all.size(0)
     M = min(args.num_vectors, N_all)
@@ -361,6 +364,16 @@ def main():
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w") as f:
         json.dump(out, f, indent=2)
+
+    # The means above cannot see branch structure. Keep the per-target matrix so
+    # the pre-registered bimodality test in paper_format_susceptibility.md can run.
+    import numpy as np
+    np.savez_compressed(
+        args.out.with_suffix(".pertarget.npz"),
+        sampled_cen=sampled_cen_all.numpy(), sampled_raw=sampled_raw_all.numpy(),
+        sampled_logp=sampled_logp_all.numpy(),
+        greedy_cen=greedy_cen_per.numpy(), greedy_raw=greedy_raw_per.numpy(),
+    )
 
     log.info("======== Anchors ========")
     log.info("anisotropy ||mu||      = %.3f", mu_norm)
