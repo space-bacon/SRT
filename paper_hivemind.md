@@ -38,9 +38,12 @@ model's own tuned tokens supply the remaining 34%. What drives the convergence i
 the assistant turn structure, not what the system prompt says.
 
 Two extensions close the obvious objections. Across the Qwen2.5-Coder ladder from
-0.5B to 32B, one lab and one recipe held fixed, the format effect **grows**
-monotonically with scale at +0.0441 per decade of parameters while the tuning term
-declines at −0.0220, so the split tilts further toward format as models get bigger. On
+0.5B to 32B, one lab and one recipe held fixed, the format effect **grows** with
+scale on HumanEval at +0.0433 per decade of parameters while the tuning term
+declines at −0.0402, so the split tilts further toward format as models get bigger.
+The same 36 arms on MBPP show a format effect a fifth the size and no slope, so the
+scaling claim is domain-conditional; what holds across both is that the template
+adds most where the bare prompt leaves the model least ordered. On
 Ministral-3 from an eighth lab, at 3B, 8B and 14B, the decomposition reproduces
 with role structure worth +0.3809 to +0.4354, persona worth +0.0612 to +0.0821,
 instruction tuning alone slightly negative, and the format effect rising at +0.0348
@@ -317,40 +320,75 @@ anyone deploys, and that convergence at that size could be a small-model artifac
 
 We ran four arms across the Qwen2.5-Coder ladder, base raw, instruct raw, shared
 markers and the model's own chat template, one lab, one recipe and
-one tokenizer held fixed from 0.5B to 32B, on 164 HumanEval prompts with K = 8.
-Holding the family fixed removes lineage as a confound, so the only thing varying
-across rungs is parameter count.
+one tokenizer held fixed from 0.5B to 32B, on 164 HumanEval prompts with K = 8 and
+a 1024-token generation budget. Holding the family fixed removes lineage as a
+confound, so the only thing varying across rungs is parameter count.
 
 | size | params (B) | base raw | inst raw | inst chat | shared | tuning | format |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| 0.5B | 0.5 | 0.5966 | 0.7863 | 0.8650 | 0.8508 | +0.1897 | +0.0787 |
-| 1.5B | 1.5 | 0.6371 | 0.7723 | 0.8526 | 0.8414 | +0.1352 | +0.0803 |
-| 3B | 3.1 | 0.6416 | 0.7499 | 0.8764 | 0.8752 | +0.1083 | +0.1265 |
-| 7B | 7.6 | 0.6215 | 0.7315 | 0.8638 | 0.8648 | +0.1100 | +0.1323 |
-| 14B | 14.8 | 0.6085 | 0.7653 | 0.9055 | 0.8974 | +0.1568 | +0.1402 |
-| 32B | 32.8 | 0.6570 | 0.7845 | 0.9365 | 0.9104 | +0.1275 | +0.1520 |
+| 0.5B | 0.5 | 0.5593 | 0.7879 | 0.8757 | 0.8730 | +0.2286 | +0.0878 |
+| 1.5B | 1.5 | 0.6076 | 0.7776 | 0.8744 | 0.8591 | +0.1700 | +0.0968 |
+| 3B | 3.1 | 0.6226 | 0.7406 | 0.8896 | 0.8885 | +0.1180 | +0.1490 |
+| 7B | 7.6 | 0.6160 | 0.7409 | 0.8765 | 0.8760 | +0.1249 | +0.1356 |
+| 14B | 14.8 | 0.5861 | 0.7493 | 0.9125 | 0.8990 | +0.1632 | +0.1632 |
+| 32B | 32.8 | 0.6454 | 0.7825 | 0.9414 | 0.9213 | +0.1371 | +0.1589 |
 
-**The format effect grows with scale**, monotonically across all six rungs, from
-+0.0787 at 0.5B to +0.1520 at 32B, a slope of +0.0441 per decade of parameters. The
-small-model objection is answered in the direction that matters: over a 66x range
-the effect does not wash out, it strengthens at every step. The tuning term moves
-the other way, at −0.0220 per decade, so the split between weights and format tilts
-further toward format as scale increases. At 32B the chat arm reaches 0.9365, the
-highest intra-model similarity anywhere in this paper.
+**The format effect grows with scale on HumanEval**, from +0.0878 at 0.5B to
++0.1589 at 32B, a slope of +0.0433 per decade of parameters. It is not monotonic:
+the column dips at 7B and again at 32B. But over a 66x range the effect does not
+wash out, and the small-model objection is answered in that sense. The tuning term
+moves the other way, at −0.0402 per decade, so the split between weights and format
+tilts further toward format as scale increases. At 32B the chat arm reaches 0.9414,
+the highest intra-model similarity anywhere in this paper.
 
-**Generic markers come close to native tokens in this domain, but not uniformly.**
-The `shared` arm recovers 82% of the format gain at 0.5B, rises to 99% at 3B and
-101% at 7B, where the untrained markers slightly exceed the model's own template at
-0.8648 against 0.8638, then falls back to 94% at 14B and 83% at 32B. Across the
-ladder the range is 82% to 101%, against 66% in the prose setting of Section 5.1.
-The tuned tokens buy more at the ends of the ladder than in the middle, and we do
-not have an account of why.
+**On MBPP the same 36 arms show no such slope.** Running the identical matrix on
+425 MBPP prompts gives a format effect of +0.0123 to +0.0503, about a fifth of the
+HumanEval magnitude, with a slope of −0.0070 per decade, and the tuning slope also
+inverts to +0.0585. The scaling claim is domain-conditional, and we state it as
+such.
+
+| size | base raw | inst raw | inst chat | shared | tuning | format |
+|---|---:|---:|---:|---:|---:|---:|
+| 0.5B | 0.7349 | 0.8588 | 0.8814 | 0.8565 | +0.1239 | +0.0226 |
+| 1.5B | 0.7578 | 0.8196 | 0.8475 | 0.8481 | +0.0618 | +0.0279 |
+| 3B | 0.7657 | 0.8589 | 0.9092 | 0.8738 | +0.0932 | +0.0503 |
+| 7B | 0.7757 | 0.9122 | 0.9385 | 0.9054 | +0.1365 | +0.0263 |
+| 14B | 0.7785 | 0.9507 | 0.9630 | 0.9459 | +0.1722 | +0.0123 |
+| 32B | 0.7550 | 0.9576 | 0.9755 | 0.9750 | +0.2026 | +0.0179 |
+
+What the two domains share is not a slope against parameters but a relation
+against the baseline: pooled over both, the format gain correlates with the
+instruct-raw level at r = −0.870, and the same sign holds within each domain
+alone. MBPP's instruct-raw arm already sits at 0.82 to 0.96 before any framing,
+and the template adds little to a system that is already ordered. Scale on
+HumanEval was standing in for how underdetermined the bare prompt leaves the
+continuation, and a function signature leaves it far more open than a
+natural-language task statement does. The per-problem version of this test, with
+model, family, tokenizer and budget all fixed, is in the companion note
+`paper_format_susceptibility.md`.
+
+**Generic markers come close to native tokens on HumanEval, but not uniformly.**
+The `shared` arm recovers 97% of the format gain at 0.5B, 84% at 1.5B, 99% at 3B
+and 100% at 7B, where the untrained markers match the model's own template at
+0.8760 against 0.8765, then 92% at 14B and 87% at 32B. Across the ladder the range
+is 84% to 100%, against 66% in the prose setting of Section 5.1. On MBPP the
+recovery is erratic, from −39% to +102%, because the format gain it is divided by
+is itself small.
 
 Absolute levels are much higher here than in Section 5.1, with instruct raw already
-at 0.73 to 0.79 before any framing, because a function signature and docstring
-constrain the output far more than an open-ended stem. The gains are therefore
-measured against a compressed ceiling, and the magnitudes are not comparable across
-the two domains. The slope is.
+at 0.74 to 0.79 on HumanEval before any framing, because a function signature and
+docstring constrain the output far more than an open-ended stem. The gains are
+therefore measured against a compressed ceiling, and the magnitudes are not
+comparable across the two domains.
+
+**A note on the budget.** An earlier version of this table was generated at 192
+tokens, which cut off 43% to 80% of instruct-arm completions mid-answer. The
+budget did not bind equally across arms, so the format comparison was confounded
+by which arm ran out of room first. Regenerating at 1024 tokens reproduced the
+HumanEval slope almost exactly, +0.0433 against the earlier +0.0441, while the
+truncation ordering inverted completely: at 192 tokens the chat arm was the more
+truncated one, at 1024 the raw arm is, 21.8% against 0.2%. An effect that keeps
+its sign, magnitude and slope across that reversal is not a truncation artifact.
 
 ### 5.3 An independent lab reproduces the decomposition
 
@@ -388,8 +426,10 @@ split is a property of those six models, not a constant. In this family the
 assistant frame is the whole mechanism.
 
 The format effect also **rises with scale here**, +0.0348 per decade across the three
-rungs, independently reproducing the direction found on the Qwen ladder in Section
-5.2 at +0.0473. Two families, two domains, two labs, same sign.
+rungs, independently reproducing the direction found on the Qwen HumanEval ladder in
+Section 5.2 at +0.0433. Two families, two labs, same sign, on prose and on
+HumanEval; the MBPP counterexample in Section 5.2 shows the sign is not universal
+across domains.
 
 ### 5.4 Homogeneous text, divergent correctness
 
@@ -512,7 +552,8 @@ considerably tighter at r = −0.954 against −0.715. The direction does not de
 the read. The magnitude does, and the read we quote is the most conservative of the
 three. `hivemind_census.json` carries all three.
 
-That is the mirror image of Section 5.2. Format-induced similarity grows at +0.0441
+That is the mirror image of Section 5.2. On HumanEval, format-induced similarity
+grows at +0.0433
 per decade while the value of choosing between samples falls at −0.0704. Larger models
 write more alike and leave less to choose between, and both trends point the same way:
 whatever variation the hivemind result measures, scale is removing it.
@@ -829,8 +870,9 @@ like a tokenizer problem from the metric alone.
 ## 11. Limitations
 
 Section 5.2 takes the ladder to 32B within one family and finds the format effect
-growing at +0.0441 per decade, which answers the small-model objection over a 66x
-range. It does not reach frontier scale, and it does not show that a 500B model
+growing at +0.0433 per decade on HumanEval, which answers the small-model objection
+over a 66x range there, while MBPP shows no such slope. It does not reach frontier
+scale, and it does not show that a 500B model
 reaches the reported level by this route.
 
 Our prompts are 60 hand-written open-ended stems, not 26,070 mined from real
