@@ -202,6 +202,80 @@ what generic continuation looks like. Against its own floor the chat arm is
 further above baseline than the raw arm is, so the ordering is not an artifact of
 the encoder's geometry.
 
+## A continuous field, and a two-branch window
+
+Everything above uses four discrete arms, which is a ladder rather than a control
+parameter, so it cannot show a threshold. To get a dial we build the templated
+sequence as prefix + stem + suffix, so template positions are known exactly, then
+replace the embedding at each template position with
+
+    e' = neutral + alpha * (e - neutral)
+
+where `neutral` is the mean of the embedding matrix. At alpha = 1 this is exactly
+the chat arm. At alpha = 0 the template positions are still present, at the same
+length and the same positions, carrying the average token instead of turn
+structure. That is a better control than the raw arm, which confounds the
+template's presence with its content. Here only the content moves.
+
+**The dial validates against the arm it replaces.** At alpha = 0 intra-model
+order is 0.7372; the raw arm in the 36-arm matrix, with no template tokens at
+all, is 0.7406. They agree to 0.003. Neutralising the template's meaning
+reproduces not having a template, which is what the construction was for.
+
+Qwen2.5-Coder-3B, 164 HumanEval problems, K = 8, 1024 tokens, truncation 0.0% to
+0.5% across all eleven points:
+
+| alpha | mean | sd | BC | BIC1−BIC2 | minority w | branches |
+|---|---|---|---|---|---|---|
+| 0.00 | 0.7372 | **0.1865** | 0.506 | 3.5 | — | one |
+| 0.10 | 0.8345 | 0.0963 | **0.690** | **133.2** | 0.241 | **TWO** |
+| 0.20 | 0.7989 | 0.1143 | **0.685** | **100.5** | 0.267 | **TWO** |
+| 0.30 | 0.8759 | 0.0395 | 0.486 | 20.7 | — | one |
+| 0.40 | 0.8922 | 0.0360 | 0.398 | 0.8 | — | one |
+| 0.50 | 0.8918 | 0.0359 | 0.426 | −5.5 | — | one |
+| 0.60 | 0.8908 | 0.0336 | 0.327 | −9.9 | — | one |
+| 0.70 | 0.8876 | 0.0346 | 0.372 | −4.9 | — | one |
+| 0.80 | 0.8920 | 0.0376 | 0.432 | 28.1 | — | one |
+| 0.90 | 0.8910 | 0.0373 | 0.431 | 20.7 | — | one |
+| 1.00 | 0.8897 | 0.0351 | 0.336 | −11.0 | — | one |
+
+**In the mean, this is a saturating field.** Order climbs from 0.7372 to 0.8922
+between alpha 0 and 0.4, then is flat to alpha 1 within 0.005 across six points.
+Forty percent of the template's embedding magnitude buys the whole effect. There
+is also no dead zone: alpha = 0.1 already gains +0.097. Read as a mean, that is
+saturation, not a threshold, and it is what we first concluded.
+
+**The mean is the wrong instrument, and we said so before checking.** A pitchfork
+does not predict a shifted mean. It predicts two branches with a moving mixture
+weight, and a population splitting between a low and a high branch produces a
+perfectly smooth mean. Testing the distribution instead, by bimodality
+coefficient (flag at 0.555), Hartigan-style dip, and one- versus two-component
+GMM BIC (10 is conventionally very strong):
+
+**Bimodality appears only at alpha = 0.10 and 0.20**, in the steep region below
+the knee, on two independent readings at once: BC 0.690 and 0.685, BIC gaps of
+133 and 100. Every other field strength is single-moded.
+
+**Fluctuations collapse through the window.** The spread of the order parameter
+runs 0.187, 0.096, 0.114, 0.040, then holds near 0.035. A fivefold collapse as
+the system commits to one branch.
+
+**The anomaly we dismissed was the signal.** We called alpha = 0.20's mean of
+0.7989 noise because it broke monotonicity. It is not noise: alpha = 0.20 carries
+more weight in the low branch than alpha = 0.10 does, 0.267 against 0.241, which
+is exactly why its mean sits lower. A mixture-weight difference, not measurement
+error.
+
+So there is a coexistence window, and it sits where a transition should sit. That
+is the branch structure the mean could not see.
+
+**What this is not.** Two flagged points out of eleven, 164 problems each, one
+model, one benchmark, one seed. The minority weight moves 0.241 to 0.267, which
+is not a clean monotone sweep and is not meaningful at this n. A window this
+narrow is barely resolved by a grid of 0.1. What would settle it: a dense grid
+across alpha 0.02 to 0.30, repeat seeds to show the branches are not a sampling
+artifact, and a second model to show the window is not a quirk of this one.
+
 ## The ceiling objection, tested
 
 A high baseline leaves less room, so a smaller gain is expected mechanically and

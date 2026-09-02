@@ -1,0 +1,334 @@
+{
+  "question": "what does sampling more buy a small model",
+  "bench": "humaneval",
+  "gen_dir": "artifacts/nla/coder_k64",
+  "n_problems": 164,
+  "cases": 2,
+  "arms": {
+    "coder0.5B_inst__chat": {
+      "pool_k": 64,
+      "k": {
+        "1": {
+          "selected": 0.4207,
+          "floor": 0.4207,
+          "oracle": 0.4207,
+          "resolved": 164,
+          "gain_over_floor": 0.0
+        },
+        "2": {
+          "selected": 0.4817,
+          "floor": 0.4268,
+          "oracle": 0.561,
+          "resolved": 149,
+          "gain_over_floor": 0.0549
+        },
+        "4": {
+          "selected": 0.5427,
+          "floor": 0.4375,
+          "oracle": 0.689,
+          "resolved": 163,
+          "gain_over_floor": 0.1052
+        },
+        "8": {
+          "selected": 0.5671,
+          "floor": 0.4436,
+          "oracle": 0.7622,
+          "resolved": 164,
+          "gain_over_floor": 0.1235
+        },
+        "16": {
+          "selected": 0.5671,
+          "floor": 0.439,
+          "oracle": 0.8293,
+          "resolved": 164,
+          "gain_over_floor": 0.128
+        },
+        "32": {
+          "selected": 0.5793,
+          "floor": 0.444,
+          "oracle": 0.8841,
+          "resolved": 164,
+          "gain_over_floor": 0.1353
+        },
+        "64": {
+          "selected": 0.5671,
+          "floor": 0.4399,
+          "oracle": 0.9146,
+          "resolved": 164,
+          "gain_over_floor": 0.1272
+        }
+      }
+    },
+    "coder1.5B_inst__chat": {
+      "pool_k": 64,
+      "k": {
+        "1": {
+          "selected": 0.6402,
+          "floor": 0.6402,
+          "oracle": 0.6402,
+          "resolved": 164,
+          "gain_over_floor": 0.0
+        },
+        "2": {
+          "selected": 0.689,
+          "floor": 0.625,
+          "oracle": 0.7378,
+          "resolved": 157,
+          "gain_over_floor": 0.064
+        },
+        "4": {
+          "selected": 0.7195,
+          "floor": 0.6113,
+          "oracle": 0.8293,
+          "resolved": 162,
+          "gain_over_floor": 0.1082
+        },
+        "8": {
+          "selected": 0.75,
+          "floor": 0.6136,
+          "oracle": 0.8841,
+          "resolved": 164,
+          "gain_over_floor": 0.1364
+        },
+        "16": {
+          "selected": 0.7561,
+          "floor": 0.6136,
+          "oracle": 0.9512,
+          "resolved": 164,
+          "gain_over_floor": 0.1425
+        },
+        "32": {
+          "selected": 0.7622,
+          "floor": 0.6223,
+          "oracle": 0.9634,
+          "resolved": 164,
+          "gain_over_floor": 0.1399
+        },
+        "64": {
+          "selected": 0.7439,
+          "floor": 0.6194,
+          "oracle": 0.9756,
+          "resolved": 164,
+          "gain_over_floor": 0.1245
+        }
+      }
+    },
+    "coder14B_inst__chat": {
+      "pool_k": 64,
+      "k": {
+        "1": {
+          "selected": 0.8659,
+          "floor": 0.8659,
+          "oracle": 0.8659,
+          "resolved": 164,
+          "gain_over_floor": 0.0
+        },
+        "2": {
+          "selected": 0.8902,
+          "floor": 0.8689,
+          "oracle": 0.9207,
+          "resolved": 159,
+          "gain_over_floor": 0.0213
+        },
+        "4": {
+          "selected": 0.9146,
+          "floor": 0.8628,
+          "oracle": 0.9512,
+          "resolved": 164,
+          "gain_over_floor": 0.0518
+        },
+        "8": {
+          "selected": 0.9207,
+          "floor": 0.8712,
+          "oracle": 0.9512,
+          "resolved": 164,
+          "gain_over_floor": 0.0495
+        },
+        "16": {
+          "selected": 0.9207,
+          "floor": 0.8784,
+          "oracle": 0.9573,
+          "resolved": 164,
+          "gain_over_floor": 0.0423
+        },
+        "32": {
+          "selected": 0.9207,
+          "floor": 0.8731,
+          "oracle": 0.9634,
+          "resolved": 164,
+          "gain_over_floor": 0.0476
+        },
+        "64": {
+          "selected": 0.9085,
+          "floor": 0.8765,
+          "oracle": 0.9756,
+          "resolved": 164,
+          "gain_over_floor": 0.032
+        }
+      }
+    },
+    "coder32B_inst__chat": {
+      "pool_k": 64,
+      "k": {
+        "1": {
+          "selected": 0.8476,
+          "floor": 0.8476,
+          "oracle": 0.8476,
+          "resolved": 164,
+          "gain_over_floor": 0.0
+        },
+        "2": {
+          "selected": 0.872,
+          "floor": 0.8659,
+          "oracle": 0.9085,
+          "resolved": 162,
+          "gain_over_floor": 0.0061
+        },
+        "4": {
+          "selected": 0.8841,
+          "floor": 0.8735,
+          "oracle": 0.9329,
+          "resolved": 163,
+          "gain_over_floor": 0.0107
+        },
+        "8": {
+          "selected": 0.8902,
+          "floor": 0.8811,
+          "oracle": 0.9451,
+          "resolved": 163,
+          "gain_over_floor": 0.0091
+        },
+        "16": {
+          "selected": 0.8902,
+          "floor": 0.8826,
+          "oracle": 0.9451,
+          "resolved": 164,
+          "gain_over_floor": 0.0076
+        },
+        "32": {
+          "selected": 0.8902,
+          "floor": 0.8832,
+          "oracle": 0.9451,
+          "resolved": 164,
+          "gain_over_floor": 0.0071
+        },
+        "64": {
+          "selected": 0.8902,
+          "floor": 0.8839,
+          "oracle": 0.9512,
+          "resolved": 164,
+          "gain_over_floor": 0.0064
+        }
+      }
+    },
+    "coder3B_inst__chat": {
+      "pool_k": 64,
+      "k": {
+        "1": {
+          "selected": 0.7622,
+          "floor": 0.7622,
+          "oracle": 0.7622,
+          "resolved": 164,
+          "gain_over_floor": 0.0
+        },
+        "2": {
+          "selected": 0.7805,
+          "floor": 0.7439,
+          "oracle": 0.8354,
+          "resolved": 162,
+          "gain_over_floor": 0.0366
+        },
+        "4": {
+          "selected": 0.8049,
+          "floor": 0.75,
+          "oracle": 0.9085,
+          "resolved": 163,
+          "gain_over_floor": 0.0549
+        },
+        "8": {
+          "selected": 0.8049,
+          "floor": 0.7614,
+          "oracle": 0.939,
+          "resolved": 163,
+          "gain_over_floor": 0.0434
+        },
+        "16": {
+          "selected": 0.8171,
+          "floor": 0.7637,
+          "oracle": 0.9512,
+          "resolved": 163,
+          "gain_over_floor": 0.0534
+        },
+        "32": {
+          "selected": 0.8171,
+          "floor": 0.7681,
+          "oracle": 0.9817,
+          "resolved": 164,
+          "gain_over_floor": 0.049
+        },
+        "64": {
+          "selected": 0.8232,
+          "floor": 0.769,
+          "oracle": 0.9878,
+          "resolved": 164,
+          "gain_over_floor": 0.0542
+        }
+      }
+    },
+    "coder7B_inst__chat": {
+      "pool_k": 64,
+      "k": {
+        "1": {
+          "selected": 0.7317,
+          "floor": 0.7317,
+          "oracle": 0.7317,
+          "resolved": 164,
+          "gain_over_floor": 0.0
+        },
+        "2": {
+          "selected": 0.7927,
+          "floor": 0.7957,
+          "oracle": 0.8963,
+          "resolved": 161,
+          "gain_over_floor": -0.003
+        },
+        "4": {
+          "selected": 0.811,
+          "floor": 0.7912,
+          "oracle": 0.9268,
+          "resolved": 164,
+          "gain_over_floor": 0.0198
+        },
+        "8": {
+          "selected": 0.8232,
+          "floor": 0.7934,
+          "oracle": 0.9573,
+          "resolved": 164,
+          "gain_over_floor": 0.0297
+        },
+        "16": {
+          "selected": 0.8232,
+          "floor": 0.79,
+          "oracle": 0.9695,
+          "resolved": 164,
+          "gain_over_floor": 0.0332
+        },
+        "32": {
+          "selected": 0.8232,
+          "floor": 0.7868,
+          "oracle": 0.9695,
+          "resolved": 164,
+          "gain_over_floor": 0.0364
+        },
+        "64": {
+          "selected": 0.8232,
+          "floor": 0.7859,
+          "oracle": 0.9756,
+          "resolved": 164,
+          "gain_over_floor": 0.0373
+        }
+      }
+    }
+  },
+  "note": "pass matrix computed once per arm over the full pool, then sliced, so the K points are nested subsets of one pool"
+}
