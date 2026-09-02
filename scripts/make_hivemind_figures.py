@@ -105,7 +105,8 @@ def fig_decomposition(out):
 
 def fig_scale(out):
     """Format similarity rises with scale while selection value falls."""
-    curve = load("coder_ladder/scaling_curve.json")
+    # The 192-token coder_ladder curve is superseded; see paper 5.2's budget note.
+    curve = load("coder_matrix1024/scaling_curve.json")
     census = load("hivemind_census.json")
     if not curve or not census:
         return "scale: missing scaling_curve.json or hivemind_census.json"

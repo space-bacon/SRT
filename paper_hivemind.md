@@ -553,15 +553,16 @@ the read. The magnitude does, and the read we quote is the most conservative of 
 three. `hivemind_census.json` carries all three.
 
 That is the mirror image of Section 5.2. On HumanEval, format-induced similarity
-grows at +0.0433
-per decade while the value of choosing between samples falls at −0.0704. Larger models
+grows at +0.0433 per decade while the value of choosing between samples falls at
+−0.0704 on MBPP and −0.0676 on HumanEval, the latter measured on the same
+1024-token pools as the format slope. Larger models
 write more alike and leave less to choose between, and both trends point the same way:
 whatever variation the hivemind result measures, scale is removing it.
 
 ![The two slopes crossing, on a log parameter axis. Format-induced similarity is one
-point per rung; selection value is plotted as its ten arms with the fitted line,
-since two arms share each rung and joining them would imply structure the data does
-not carry. The fit is loose at r = −0.715, which the scatter
+point per rung on HumanEval; selection value is plotted as its ten MBPP arms with the
+fitted line, since two arms share each rung and joining them would imply structure
+the data does not carry. The fit is loose at r = −0.715, which the scatter
 shows.](arxiv_hivemind/figs/fig2_scale.png)
 
 **Pooling six frontier models across five labs buys nothing.** Every read above was
