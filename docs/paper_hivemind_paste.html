@@ -621,7 +621,8 @@ a scale artifact.</p>
 <h3>5.2 The effect does not shrink with scale</h3>
 <p>The standing objection to Section 5 is that 0.36B to 2B models are not the systems
 anyone deploys, and that convergence at that size could be a small-model artifact.</p>
-<p>We ran the same four arms across the Qwen2.5-Coder ladder, one lab, one recipe and
+<p>We ran four arms across the Qwen2.5-Coder ladder, base raw, instruct raw, shared
+markers and the model's own chat template, one lab, one recipe and
 one tokenizer held fixed from 0.5B to 32B, on 164 HumanEval prompts with K = 8.
 Holding the family fixed removes lineage as a confound, so the only thing varying
 across rungs is parameter count.</p>
@@ -817,8 +818,9 @@ of problems.</p>
 <p><strong>Embedding homogeneity does not imply outcome homogeneity.</strong> This bounds what the
 hivemind result licenses: convergence in phrasing is real and we reproduced it, but
 it should not be read as convergence in what the models actually get right.</p>
-<p>That gap is large enough to be worth closing, so we asked what closes it. Across the
-same 36 arms, selecting one candidate per problem by five different reads:</p>
+<p>That gap is large enough to be worth closing, so we asked what closes it. Across a
+36-arm set that adds the six 32B arms, selecting one candidate per problem by five
+different reads:</p>
 <table>
 <thead>
 <tr>
@@ -1579,7 +1581,7 @@ scores.</p>
 <li><code>scripts/hivemind_human_baseline.py</code>, <code>artifacts/nla/hivemind_human_baseline.json</code></li>
 <li><code>scripts/coder_ladder.py</code> and <code>scripts/coder_ladder_analyze.py</code>, <code>artifacts/nla/coder_ladder/</code></li>
 <li><code>scripts/ministral_ladder.py</code>, <code>artifacts/nla/ministral_ladder/</code></li>
-<li><code>scripts/code_select.py</code>, <code>artifacts/nla/code_select/results.json</code></li>
+<li><code>scripts/code_select.py</code>, <code>artifacts/nla/code_select/results.json</code>. That file carries a 31st arm-shaped entry keyed <code>task_ids</code>, because the arm glob matched a bookkeeping file whose 164 entries passed the length check and whose task-id strings were then sliced into 11 single-character "candidates". Every pass metric on it is zero. The 30-arm figures exclude it; a loader that takes every dict in the file returns 0.3049 rather than 0.3151. The glob is fixed; the artifact is left as published.</li>
 <li><code>scripts/verifier_select.py</code> and <code>scripts/exec_guided_select.py</code>, <code>artifacts/nla/verifier/</code></li>
 <li><code>scripts/visible_tests.py</code>, prompt-derived example extraction with canonical validation</li>
 <li><code>scripts/consensus_select.py</code>, <code>artifacts/nla/verifier/consensus.json</code></li>

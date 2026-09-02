@@ -77,8 +77,15 @@ def main() -> int:
 
     path = snap(a.model)
     if path is None:
-        print(f"MISSING {a.model}", flush=True)
-        return 1
+        # A fresh box has an empty hub, and the hubs probed above do not include
+        # the default cache, so resolve through the Hub rather than giving up.
+        from huggingface_hub import snapshot_download
+        print(f"fetching {a.model}", flush=True)
+        try:
+            path = snapshot_download(a.model, max_workers=8)
+        except Exception as e:
+            print(f"MISSING {a.model}: {type(e).__name__}: {str(e)[:200]}", flush=True)
+            return 1
     tag = a.tag or a.model.split("/")[-1].replace(".", "").replace("-", "_").lower()
 
     probs = json.load(open(os.path.join(HERE, a.probs)))

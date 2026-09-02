@@ -979,7 +979,7 @@ adapter (five categories — single-definition, multiple-definition,
 noun, verb, proper name — $64$K tokens total), all seven SRT signals
 separate the categories by one-way ANOVA ($F$ from $16.4$ for nll to
 $127.0$ for $\hat{r}$; every $p \approx 0$, though at this $n$
-significance is guaranteed and the effect sizes are the honest
+significance is guaranteed and the effect sizes are the informative
 quantity, e.g. $\hat{r}$ spans $0.508$–$0.610$ across categories).
 The informative structure is in the *inversions*: single-definition
 words are maximal on the SRT-side signals (margin, $\hat{r}$,
@@ -1415,7 +1415,7 @@ sign arrived as a word or an image. Artifacts:
 `scripts/cross_modal_readout.py`,
 `artifacts/nla/gemma4/{readout_selection,cross_modal_readout}.json`.
 
-**An honest null on the same backbone.** We also ran the §11.5.6
+**A null on the same backbone.** We also ran the §11.5.6
 metacognition layer-sweep on gemma-4-31B (TriviaQA, $n=1000$, accuracy
 $0.764$). Here the mid-layer prescription did *not* transfer: the best
 probe layer was the *last* ($L60$, AUROC $0.785$), and the
@@ -1499,7 +1499,7 @@ for the recovered figure and the real one. When the encoding is absent,
 the read-out reports the absence rather than confabulating a figure.
 The autostereogram is therefore not a counterexample to the transfer
 claim but a boundary condition on it: supply the disparity the eyes
-would supply, and the boundary moves. Two honest caveats. This is a
+would supply, and the boundary moves. Two caveats. This is a
 single shape and a single seed. And the community read-out is a coarse
 $64$-dimensional discourse code, so on a synthetic white-on-black
 silhouette it lands on generic shape words rather than the literal token
@@ -1541,7 +1541,7 @@ per-category retrieval now ships live in the public demo Space. The
 stereogram of §11.6.2 closes its own loop here: against a pool augmented
 with $88$ programmatic shape and texture captions, its rank-one
 retrieval is "An abstract mosaic of tiny colored squares" ($0.694$),
-the honest texture report of §11.6.2 now expressed as a full sentence.
+the texture report of §11.6.2 now expressed as a full sentence.
 
 The boundary is equally clean, though §11.6.4 revises its
 interpretation. The synthetic white-heart control ranks its exact
@@ -1721,7 +1721,7 @@ same run re-scored the synthetic boundary probes with the image-side
 mean taken from the $4{,}000$ natural fit photographs rather than from
 synthetic probes or the small demo gallery. The white-heart control's
 exact caption jumps from rank $352$ to rank $5$ (pool $\approx 10$k),
-and the autostereogram's honest texture caption ("An abstract mosaic of
+and the autostereogram's texture caption ("An abstract mosaic of
 tiny colored squares.") ranks $1$. Applying the Procrustes map degrades
 both again (ranks $121$ and $35$), consistent with the retrieval
 result. The practical rule generalizes the standing anisotropy lesson
@@ -1738,7 +1738,7 @@ thumbnails it is not, and $150$ in-domain images beat $4{,}000$
 out-of-domain ones
 (`artifacts/nla/gemma4/procrustes/gallery_rescore_coco_mean.log`).
 
-One honest caveat on the probe comparison: the original 88-caption pool
+One caveat on the probe comparison: the original 88-caption pool
 augmentation was lost with the box that produced §11.6.3, so the probe
 pool here is the same $10$k COCO captions plus a reconstructed
 $14$-caption set containing the identical heart and mosaic strings
@@ -1824,7 +1824,7 @@ and identical anchor frames (replay $1.00$, NN $0.674$, floor $0.502$).
 Instruction tuning therefore does not measurably change verbalizability
 within this family. The steeper Qwen slope that motivated the conjecture
 is a cross-family difference, confounded with architecture and scale, not
-an effect of tuning. One honest caveat: the base verbalizer was
+an effect of tuning. One caveat: the base verbalizer was
 early-stopped at a slightly lower validation than the instruction-tuned
 run, which may account for the small level offset, but the slope, which
 is the quantity the conjecture concerned, is unchanged. The negative is
@@ -2235,7 +2235,7 @@ the curated contestedness ($\rho=-0.05$) or the baseline load
 ($\rho=+0.17$). The cause is architectural: the community-to-MAH
 pathway adds the community vector as a uniform bias to the
 interpretant, a global style knob rather than a per-sign
-disambiguator. The honest reading is that the contestedness coupling,
+disambiguator. The reading the data supports is that the contestedness coupling,
 robust as it is correlationally, is encoded in each sign's
 representation rather than causally produced by sensitivity to the
 community index in the released adapters; confirming the causal
@@ -2276,7 +2276,7 @@ $2.51$ vs $2.55$) and more late (1960s, $2.81$ vs $2.71$), with the
 crossover near $1900$–$1940$; the signs whose load rose most are the
 core contested ones (sovereignty $+0.52$, rights $+0.44$, justice,
 property, tyranny), not the controls. Under the word-level test this
-pattern is not distinguishable from chance. The honest
+pattern is not distinguishable from chance. The
 limit is that it is the *consequence* of rising $U_{\text{com}}$, not
 a directly measured per-era $U_{\text{com}}$: the whole-passage
 community-dispersion proxy is degenerate on this read-out (the
@@ -2289,7 +2289,7 @@ negative that localizes the coupling to each sign's representation
 rather than to the community-forcing pathway.
 
 We do not claim a law. We claim a replicated dissociation and a
-falsifiable target, and we note the honest shape of the result: the
+falsifiable target, and we note the shape of the result: the
 readout most observers would expect to carry the semiotic signal
 (the bifurcation order parameter) does *not* move; the one that does
 (metapragmatic divergence) is driven, on Qwen, first by referential
@@ -2349,7 +2349,7 @@ a detector of the disagreement that thickness tends to provoke.
 
 ---
 
-## 13. Honest expectations and open problems
+## 13. Expectations and open problems
 
 We close in the program's standard register: what we expect the
 next phase to deliver, what we do not, and where the load-bearing

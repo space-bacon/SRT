@@ -93,7 +93,12 @@ def main():
 
     probs = json.load(open(os.path.join(HERE, a.probs)))
     op = os.path.join(HERE, a.out)
-    files = sorted(glob.glob(os.path.join(HERE, a.gen_dir, "*.json")))
+    # The generation directory also holds bookkeeping files (task_ids.json,
+    # scaling_curve.json). task_ids.json has one entry per problem, so it passes
+    # the length check below, and slicing its strings yields k = 11 "candidates"
+    # of single characters. Arm files are the ones tagged `<rung>_<variant>`.
+    files = sorted(f for f in glob.glob(os.path.join(HERE, a.gen_dir, "*.json"))
+                   if "__" in os.path.basename(f))
     if a.only:
         files = [f for f in files if a.only in os.path.basename(f)]
     print(f"{len(files)} generation files, {len(probs)} problems", flush=True)

@@ -1,0 +1,72 @@
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 22389.52it/s]
+coder3B_inst: 164 problems left, K=8, max_new=512
+  5/164  39s elapsed  eta 21m
+  10/164  80s elapsed  eta 21m
+  15/164  116s elapsed  eta 19m
+  20/164  157s elapsed  eta 19m
+  25/164  192s elapsed  eta 18m
+  30/164  225s elapsed  eta 17m
+  35/164  265s elapsed  eta 16m
+  40/164  306s elapsed  eta 16m
+  45/164  349s elapsed  eta 15m
+  50/164  387s elapsed  eta 15m
+  55/164  420s elapsed  eta 14m
+  60/164  462s elapsed  eta 13m
+  65/164  506s elapsed  eta 13m
+  70/164  555s elapsed  eta 12m
+  75/164  604s elapsed  eta 12m
+  80/164  649s elapsed  eta 11m
+  85/164  693s elapsed  eta 11m
+  90/164  741s elapsed  eta 10m
+  95/164  788s elapsed  eta 10m
+  100/164  833s elapsed  eta 9m
+  105/164  878s elapsed  eta 8m
+  110/164  927s elapsed  eta 8m
+  115/164  975s elapsed  eta 7m
+  120/164  1023s elapsed  eta 6m
+  125/164  1070s elapsed  eta 6m
+  130/164  1120s elapsed  eta 5m
+  135/164  1166s elapsed  eta 4m
+  140/164  1210s elapsed  eta 3m
+  145/164  1256s elapsed  eta 3m
+  150/164  1303s elapsed  eta 2m
+  155/164  1347s elapsed  eta 1m
+  160/164  1393s elapsed  eta 1m
+  164/164  1426s elapsed  eta 0m
+wrote artifacts/nla/coder_regen/coder3B_inst__chat.json
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 7217.73it/s]
+coder7B_inst: 164 problems left, K=8, max_new=512
+  5/164  63s elapsed  eta 33m
+  10/164  123s elapsed  eta 32m
+  15/164  186s elapsed  eta 31m
+  20/164  241s elapsed  eta 29m
+  25/164  300s elapsed  eta 28m
+  30/164  350s elapsed  eta 26m
+  35/164  420s elapsed  eta 26m
+  40/164  487s elapsed  eta 25m
+  45/164  554s elapsed  eta 24m
+  50/164  619s elapsed  eta 24m
+  55/164  670s elapsed  eta 22m
+  60/164  743s elapsed  eta 21m
+  65/164  816s elapsed  eta 21m
+  70/164  872s elapsed  eta 20m
+  75/164  931s elapsed  eta 18m
+  80/164  990s elapsed  eta 17m
+  85/164  1058s elapsed  eta 16m
+  90/164  1116s elapsed  eta 15m
+  95/164  1178s elapsed  eta 14m
+  100/164  1230s elapsed  eta 13m
+  105/164  1279s elapsed  eta 12m
+  110/164  1349s elapsed  eta 11m
+  115/164  1415s elapsed  eta 10m
+  120/164  1478s elapsed  eta 9m
+  125/164  1537s elapsed  eta 8m
+  130/164  1606s elapsed  eta 7m
+  135/164  1667s elapsed  eta 6m
+  140/164  1723s elapsed  eta 5m
+  145/164  1782s elapsed  eta 4m
+  150/164  1846s elapsed  eta 3m
+  155/164  1908s elapsed  eta 2m
+  160/164  1972s elapsed  eta 1m
+  164/164  2017s elapsed  eta 0m
+wrote artifacts/nla/coder_regen/coder7B_inst__chat.json

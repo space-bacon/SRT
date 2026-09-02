@@ -1,0 +1,78 @@
+  coder0.5B_inst__chat           K=1   sel 0.1951  floor 0.1951  oracle 0.1951  gain +0.0000
+  coder0.5B_inst__chat           K=2   sel 0.2439  floor 0.1921  oracle 0.2927  gain +0.0518
+  coder0.5B_inst__chat           K=4   sel 0.2500  floor 0.1921  oracle 0.3720  gain +0.0579
+  coder0.5B_inst__chat           K=8   sel 0.3354  floor 0.1913  oracle 0.5183  gain +0.1441
+  coder0.5B_inst__chat           K=16  sel 0.3415  floor 0.1928  oracle 0.6037  gain +0.1486
+  coder0.5B_inst__chat           K=32  sel 0.3598  floor 0.1892  oracle 0.6890  gain +0.1705
+  coder0.5B_inst__chat           done in 121s
+  coder1.5B_inst__chat           K=1   sel 0.3049  floor 0.3049  oracle 0.3049  gain +0.0000
+<unknown>:3: SyntaxWarning: invalid escape sequence '\s'
+  coder1.5B_inst__chat           K=2   sel 0.4024  floor 0.2866  oracle 0.4390  gain +0.1159
+<unknown>:3: SyntaxWarning: invalid escape sequence '\s'
+  coder1.5B_inst__chat           K=4   sel 0.4695  floor 0.2805  oracle 0.5610  gain +0.1890
+<unknown>:2: SyntaxWarning: invalid escape sequence '\('
+<unknown>:14: SyntaxWarning: invalid escape sequence '\?'
+<unknown>:3: SyntaxWarning: invalid escape sequence '\s'
+  coder1.5B_inst__chat           K=8   sel 0.4939  floor 0.2995  oracle 0.7073  gain +0.1944
+<unknown>:2: SyntaxWarning: invalid escape sequence '\('
+<unknown>:14: SyntaxWarning: invalid escape sequence '\?'
+<unknown>:3: SyntaxWarning: invalid escape sequence '\s'
+  coder1.5B_inst__chat           K=16  sel 0.5122  floor 0.2950  oracle 0.8049  gain +0.2172
+<unknown>:2: SyntaxWarning: invalid escape sequence '\('
+<unknown>:14: SyntaxWarning: invalid escape sequence '\?'
+<unknown>:3: SyntaxWarning: invalid escape sequence '\s'
+  coder1.5B_inst__chat           K=32  sel 0.5488  floor 0.3014  oracle 0.8720  gain +0.2473
+  coder1.5B_inst__chat           done in 93s
+  coder14B_inst__chat            K=1   sel 0.3476  floor 0.3476  oracle 0.3476  gain +0.0000
+  coder14B_inst__chat            K=2   sel 0.4451  floor 0.3628  oracle 0.4756  gain +0.0823
+  coder14B_inst__chat            K=4   sel 0.5366  floor 0.3765  oracle 0.6646  gain +0.1601
+  coder14B_inst__chat            K=8   sel 0.5610  floor 0.3697  oracle 0.7561  gain +0.1913
+  coder14B_inst__chat            K=16  sel 0.5732  floor 0.3624  oracle 0.8232  gain +0.2107
+  coder14B_inst__chat            K=32  sel 0.5915  floor 0.3681  oracle 0.8476  gain +0.2233
+  coder14B_inst__chat            done in 180s
+  coder32B_inst__chat            K=1   sel 0.2378  floor 0.2378  oracle 0.2378  gain +0.0000
+  coder32B_inst__chat            K=2   sel 0.2805  floor 0.2378  oracle 0.3110  gain +0.0427
+  coder32B_inst__chat            K=4   sel 0.3171  floor 0.2287  oracle 0.4085  gain +0.0884
+  coder32B_inst__chat            K=8   sel 0.3963  floor 0.2439  oracle 0.5183  gain +0.1524
+  coder32B_inst__chat            K=16  sel 0.3902  floor 0.2386  oracle 0.6037  gain +0.1517
+  coder32B_inst__chat            K=32  sel 0.3963  floor 0.2389  oracle 0.6524  gain +0.1574
+  coder32B_inst__chat            done in 137s
+  coder3B_inst__chat             K=1   sel 0.3049  floor 0.3049  oracle 0.3049  gain +0.0000
+<unknown>:9: SyntaxWarning: invalid escape sequence '\('
+  coder3B_inst__chat             K=2   sel 0.4085  floor 0.2866  oracle 0.4268  gain +0.1220
+<unknown>:9: SyntaxWarning: invalid escape sequence '\('
+  coder3B_inst__chat             K=4   sel 0.5061  floor 0.2820  oracle 0.5915  gain +0.2241
+<unknown>:9: SyntaxWarning: invalid escape sequence '\('
+  coder3B_inst__chat             K=8   sel 0.5183  floor 0.2652  oracle 0.6951  gain +0.2530
+<unknown>:9: SyntaxWarning: invalid escape sequence '\('
+  coder3B_inst__chat             K=16  sel 0.5061  floor 0.2622  oracle 0.7805  gain +0.2439
+<unknown>:9: SyntaxWarning: invalid escape sequence '\('
+<unknown>:5: SyntaxWarning: invalid escape sequence '\s'
+  coder3B_inst__chat             K=32  sel 0.5427  floor 0.2673  oracle 0.8232  gain +0.2753
+  coder3B_inst__chat             done in 176s
+  coder7B_inst__chat             K=1   sel 0.5732  floor 0.5732  oracle 0.5732  gain +0.0000
+<unknown>:7: SyntaxWarning: invalid escape sequence '\w'
+  coder7B_inst__chat             K=2   sel 0.6463  floor 0.5488  oracle 0.6890  gain +0.0976
+<unknown>:7: SyntaxWarning: invalid escape sequence '\w'
+  coder7B_inst__chat             K=4   sel 0.7073  floor 0.5442  oracle 0.8354  gain +0.1631
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:7: SyntaxWarning: invalid escape sequence '\w'
+  coder7B_inst__chat             K=8   sel 0.7256  floor 0.5503  oracle 0.8963  gain +0.1753
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:7: SyntaxWarning: invalid escape sequence '\w'
+  coder7B_inst__chat             K=16  sel 0.7561  floor 0.5457  oracle 0.9329  gain +0.2104
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:5: SyntaxWarning: invalid escape sequence '\.'
+<unknown>:7: SyntaxWarning: invalid escape sequence '\w'
+<unknown>:4: SyntaxWarning: invalid escape sequence '\d'
+<unknown>:23: SyntaxWarning: invalid escape sequence '\d'
+  coder7B_inst__chat             K=32  sel 0.7561  floor 0.5467  oracle 0.9451  gain +0.2094
+  coder7B_inst__chat             done in 101s
+
+  artifacts/nla/he_k32_k_scaling.json

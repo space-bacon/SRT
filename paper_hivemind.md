@@ -315,7 +315,8 @@ a scale artifact.
 The standing objection to Section 5 is that 0.36B to 2B models are not the systems
 anyone deploys, and that convergence at that size could be a small-model artifact.
 
-We ran the same four arms across the Qwen2.5-Coder ladder, one lab, one recipe and
+We ran four arms across the Qwen2.5-Coder ladder, base raw, instruct raw, shared
+markers and the model's own chat template, one lab, one recipe and
 one tokenizer held fixed from 0.5B to 32B, on 164 HumanEval prompts with K = 8.
 Holding the family fixed removes lineage as a confound, so the only thing varying
 across rungs is parameter count.
@@ -410,8 +411,9 @@ of problems.
 hivemind result licenses: convergence in phrasing is real and we reproduced it, but
 it should not be read as convergence in what the models actually get right.
 
-That gap is large enough to be worth closing, so we asked what closes it. Across the
-same 36 arms, selecting one candidate per problem by five different reads:
+That gap is large enough to be worth closing, so we asked what closes it. Across a
+36-arm set that adds the six 32B arms, selecting one candidate per problem by five
+different reads:
 
 | read | coverage | pass | share of the gap |
 |---|---:|---:|---:|
@@ -891,7 +893,13 @@ scores.
 - `scripts/hivemind_human_baseline.py`, `artifacts/nla/hivemind_human_baseline.json`
 - `scripts/coder_ladder.py` and `scripts/coder_ladder_analyze.py`, `artifacts/nla/coder_ladder/`
 - `scripts/ministral_ladder.py`, `artifacts/nla/ministral_ladder/`
-- `scripts/code_select.py`, `artifacts/nla/code_select/results.json`
+- `scripts/code_select.py`, `artifacts/nla/code_select/results.json`. That file
+  carries a 31st arm-shaped entry keyed `task_ids`, because the arm glob matched
+  a bookkeeping file whose 164 entries passed the length check and whose task-id
+  strings were then sliced into 11 single-character "candidates". Every pass
+  metric on it is zero. The 30-arm figures exclude it; a loader that takes every
+  dict in the file returns 0.3049 rather than 0.3151. The glob is fixed; the
+  artifact is left as published.
 - `scripts/verifier_select.py` and `scripts/exec_guided_select.py`, `artifacts/nla/verifier/`
 - `scripts/visible_tests.py`, prompt-derived example extraction with canonical validation
 - `scripts/consensus_select.py`, `artifacts/nla/verifier/consensus.json`

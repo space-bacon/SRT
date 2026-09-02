@@ -13,6 +13,7 @@ The demo that reads this file never executes anything.
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import os
 import random
@@ -29,6 +30,22 @@ from chat_consensus import code_of, infer_kinds, pick_entry  # noqa: E402
 from consensus_select import _value, probe_program, run_capture  # noqa: E402
 
 RUNGS = ["0.5B", "1.5B", "3B", "7B", "14B", "32B"]
+
+
+def discover(gen_dir: str, passmat: str) -> list[tuple[str, str]]:
+    """(label, arm) pairs. The size ladder keeps its short labels; any other
+    directory, such as the frontier ensemble, is labelled by arm name."""
+    ladder = [(r, f"coder{r}_inst__chat") for r in RUNGS]
+    if any(os.path.exists(os.path.join(gen_dir, f"{a}.json")) for _, a in ladder):
+        return ladder
+    out = []
+    for f in sorted(glob.glob(os.path.join(gen_dir, "*.json"))):
+        arm = os.path.basename(f)[:-5]
+        if "__" not in arm:
+            continue
+        if os.path.exists(os.path.join(passmat, f"{arm}.npz")):
+            out.append((arm.split("__")[0], arm))
+    return out
 
 
 def cluster(prompt: str, replies: list[str], n_cases: int, timeout: float, seed: int = 0):
@@ -88,8 +105,7 @@ def main() -> None:
         for p in probs
     ]
 
-    for rung in RUNGS:
-        arm = f"coder{rung}_inst__chat"
+    for rung, arm in discover(a.gen_dir, a.passmat):
         gen_p = os.path.join(a.gen_dir, f"{arm}.json")
         mat_p = os.path.join(a.passmat, f"{arm}.npz")
         if not (os.path.exists(gen_p) and os.path.exists(mat_p)):
@@ -118,11 +134,22 @@ def main() -> None:
             entries.append(rec)
 
         picked = [e for e in entries if e.get("ok")]
+        # Two conventions, because they differ on strong models. `selected_pass`
+        # falls back to an arbitrary candidate when the pool does not resolve,
+        # as a deployment would and as chat_consensus.py already does.
+        # `selected_pass_strict` charges every unresolved pool as a failure,
+        # which penalises declining a problem the model may have answered.
+        deploy = [
+            (1.0 if e["pick_passed"] else 0.0) if e.get("ok")
+            else (1.0 if e["passed"][0] else 0.0)
+            for e in entries
+        ]
         out["rungs"][rung] = {
             "arm": arm,
             "single_sample_pass": float(ok.mean()),
             "oracle_pass": float(ok.any(1).mean()),
-            "selected_pass": (
+            "selected_pass": (sum(deploy) / len(deploy) if deploy else 0.0),
+            "selected_pass_strict": (
                 sum(1 for e in picked if e["pick_passed"]) / len(entries) if entries else 0.0
             ),
             "resolved": len(picked),

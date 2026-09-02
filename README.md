@@ -177,7 +177,7 @@ This is what makes the ladder result a product claim rather than a curiosity. A
 cost eight answers you would simply run the 32B; because it does not, you get
 32B-class coding from a model that fits far more comfortably.
 
-Two honest caveats. Under concurrency, batching K samples for one user consumes
+Two caveats. Under concurrency, batching K samples for one user consumes
 capacity that would otherwise serve other users, so it is nearly free for a
 single user and a real throughput cost under load. And selection needs the K
 samples before it can choose, so it cannot improve a published `pass@1` number,
@@ -318,7 +318,7 @@ same head serves a Raspberry-Pi-class device doing overnight photo tagging,
 a Mac doing interactive local search, and a datacenter serving a fleet —
 train once, read everywhere. The intelligence lives in the substrate; the
 semiotic layer is a set of linear taps small enough to ship as a config
-file and honest enough to audit by inspection.
+file and small enough to audit by inspection.
 
 Engineering guide (deployment tiers, calibration rules, reproduction recipe):
 [docs/CROSSMODAL_LINEAR_HEAD.md](docs/CROSSMODAL_LINEAR_HEAD.md). Head:

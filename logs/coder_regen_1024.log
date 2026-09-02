@@ -1,0 +1,36 @@
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 44567.57it/s]
+coder3B_t1024: 164 problems left, K=8, max_new=1024
+  5/164  42s elapsed  eta 22m
+  10/164  84s elapsed  eta 21m
+  15/164  123s elapsed  eta 20m
+  20/164  166s elapsed  eta 20m
+  25/164  207s elapsed  eta 19m
+  30/164  240s elapsed  eta 18m
+  35/164  288s elapsed  eta 18m
+  40/164  331s elapsed  eta 17m
+  45/164  375s elapsed  eta 17m
+  50/164  417s elapsed  eta 16m
+  55/164  452s elapsed  eta 15m
+  60/164  495s elapsed  eta 14m
+  65/164  541s elapsed  eta 14m
+  70/164  591s elapsed  eta 13m
+  75/164  646s elapsed  eta 13m
+  80/164  694s elapsed  eta 12m
+  85/164  745s elapsed  eta 12m
+  90/164  793s elapsed  eta 11m
+  95/164  847s elapsed  eta 10m
+  100/164  896s elapsed  eta 10m
+  105/164  942s elapsed  eta 9m
+  110/164  995s elapsed  eta 8m
+  115/164  1046s elapsed  eta 7m
+  120/164  1101s elapsed  eta 7m
+  125/164  1154s elapsed  eta 6m
+  130/164  1212s elapsed  eta 5m
+  135/164  1263s elapsed  eta 5m
+  140/164  1310s elapsed  eta 4m
+  145/164  1361s elapsed  eta 3m
+  150/164  1416s elapsed  eta 2m
+  155/164  1463s elapsed  eta 1m
+  160/164  1510s elapsed  eta 1m
+  164/164  1549s elapsed  eta 0m
+wrote artifacts/nla/coder_regen/coder3B_t1024__chat.json
