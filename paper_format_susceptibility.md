@@ -276,6 +276,63 @@ narrow is barely resolved by a grid of 0.1. What would settle it: a dense grid
 across alpha 0.02 to 0.30, repeat seeds to show the branches are not a sampling
 artifact, and a second model to show the window is not a quirk of this one.
 
+## Pre-registration, written before the dense grid was analysed
+
+This note has changed its mechanism six times in one day, and every version fitted
+the data it was shown:
+
+1. the format effect grows with scale (published), killed by MBPP
+2. it is susceptibility, gain tracks baseline disorder, r = -0.870
+3. it is a fixed endpoint near 0.89, killed by MBPP the same afternoon
+4. it is a one-sided floor at 0.88
+5. it is a saturating field and not a bifurcation, from the mean
+6. there is a two-branch coexistence window, from the distribution
+
+A frame that accommodates every result is not being tested by any of them. Some
+of those turns were genuine corrections forced by new data, but the pattern is
+also exactly what motivated reasoning looks like from the inside, and we cannot
+tell the two apart from where we are standing. So the predictions below are
+recorded before the analysis, and we are bound by them.
+
+**Provenance, stated exactly.** At the time of writing, generations exist on disk
+for 5 of the 14 new alpha values. None have been embedded, scored or inspected.
+This is pre-registration of the analysis, not of the data collection, and it is
+weaker than the real thing. Say so when reporting.
+
+**If the coexistence window is real:**
+
+- **P1, contiguity.** Bimodality (BC > 0.555 and BIC1−BIC2 > 10) appears in a
+  contiguous run of alphas inside [0.08, 0.22], including at least two of
+  0.12, 0.14, 0.16, 0.18.
+- **P2, mixture sweep.** Minority weight *decreases* monotonically as alpha rises
+  across the window, since raising the field should move mass into the ordered
+  branch.
+- **P3, fluctuation peak.** The standard deviation of per-problem order peaks
+  *inside* the window and falls on both sides.
+- **P4, replication.** The 1.5B shows a window somewhere in [0.05, 0.30].
+
+**Two of these already look bad, and we are saying so first.** On the coarse grid
+the minority weight ran 0.241 at alpha 0.10 and 0.267 at alpha 0.20, which is the
+wrong direction for P2. And the largest spread was 0.1865 at alpha = 0.00, at the
+edge rather than inside the window, which is the wrong shape for P3. We described
+both as "not meaningful at this n" when we first saw them. Under P2 and P3 they
+are predictions, and if the dense grid reproduces them the window is not a
+mixture sweep.
+
+**Falsifiers, any one of which we will report as such:**
+
+- no bimodal points at all in 0.12 to 0.18: the original two were flukes
+- bimodal points scattered outside [0.08, 0.22]: the flag is tracking noise, not a
+  transition
+- minority weight not monotone across the window: not a mixture sweep
+- the 1.5B shows no window: an artifact of one model rather than a property of the
+  template
+
+**What we will not do.** We will not rescue the hypothesis by relocating the
+window after seeing where the flags land, nor by switching order parameter, nor
+by dropping the 1.5B as "a different regime". If the result is mixed we will
+report it as mixed and leave the claim unsupported.
+
 ## The ceiling objection, tested
 
 A high baseline leaves less room, so a smaller gain is expected mechanically and
