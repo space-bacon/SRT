@@ -31,14 +31,16 @@ OUT = ROOT / "docs" / "substack_hivemind.html"
 ASSETS = ROOT / "docs" / "substack_assets"
 ASSETS.mkdir(exist_ok=True)
 
-INK = "#1a1a1a"
-MUTED = "#7a7a7a"
-GRID = "#e6e2da"
-VIOLET = "#5b4bd6"
-VIOLET_LT = "#c7c0f2"
-RED = "#b3402f"
-GREY = "#bdbdbd"
-PAPER = "#ffffff"
+# sunstonenorth.com theme tokens (OKLCH in the site's stylesheet, converted to hex)
+INK = "#43332c"        # neutral / base-content
+MUTED = "#8a7a6e"      # secondary
+GRID = "#e9e0d2"       # base-300
+TERRA = "#b96a45"      # primary, terracotta
+TERRA_LT = "#e6c4ae"   # terracotta tint for secondary bars
+OCHRE = "#d89a5f"      # accent
+RED = "#a4472f"        # error, for floors
+SAND = "#d9cdbb"       # neutral bars, between base-300 and secondary
+PAPER = "#fbf8f3"      # base-100, ivory
 
 plt.rcParams.update({
     "font.family": ["Helvetica Neue", "Helvetica", "Arial", "DejaVu Sans"],
@@ -79,9 +81,9 @@ def fig_suspects(out):
     fig.subplots_adjust(left=0.01, right=0.99, top=0.86, bottom=0.02)
     ax.set_xlim(0, 3); ax.set_ylim(0, 1); ax.axis("off")
     cols = [
-        ("Born alike", "shared internal\ngeometry from\npretraining", "True. Does not\nproduce the writing.", GREY),
-        ("Raised alike", "alignment and\ninstruction tuning", "Small.\nAbout a fifth of it.", VIOLET_LT),
-        ("Dressed alike", "the chat template:\nsystem, user,\nassistant turns", "Most of it.\nAnd reversible.", VIOLET),
+        ("Born alike", "shared internal\ngeometry from\npretraining", "True. Does not\nproduce the writing.", SAND),
+        ("Raised alike", "alignment and\ninstruction tuning", "Small.\nAbout a fifth of it.", TERRA_LT),
+        ("Dressed alike", "the chat template:\nsystem, user,\nassistant turns", "Most of it.\nAnd reversible.", TERRA),
     ]
     for i, (h, what, verdict, c) in enumerate(cols):
         x = i + 0.08
@@ -107,13 +109,13 @@ def fig_scale(out):
     ax.tick_params(axis="x", length=0, labelsize=9, colors=MUTED)
     ax.axhline(0, color=INK, lw=1.2, zorder=1)
     ax.axvspan(*THEIR_FLOOR, ymin=0.22, ymax=0.33, color=GRID, zorder=0)
-    ax.axvspan(*THEIRS, ymin=0.22, ymax=0.33, color=VIOLET_LT, zorder=0)
+    ax.axvspan(*THEIRS, ymin=0.22, ymax=0.33, color=TERRA_LT, zorder=0)
     ax.text((THEIR_FLOOR[0] + THEIR_FLOOR[1]) / 2, -0.55, "their floor:\nunrelated answers", ha="center",
             va="top", fontsize=8.4, color=MUTED, linespacing=1.3)
     ax.text((THEIRS[0] + THEIRS[1]) / 2, -0.55, "their models,\nbetween labs", ha="center", va="top",
-            fontsize=8.4, color=VIOLET, linespacing=1.3)
+            fontsize=8.4, color=TERRA, linespacing=1.3)
     pts = [(b["floor"], "our floor", MUTED, 0.5), (b["intra_mean"], "base models", INK, 0.5),
-           (r["intra_mean"], "tuned weights,\nbare prompt", INK, 1.05), (c["intra_mean"], "same weights,\nchat template", VIOLET, 0.5)]
+           (r["intra_mean"], "tuned weights,\nbare prompt", INK, 1.05), (c["intra_mean"], "same weights,\nchat template", TERRA, 0.5)]
     for x, lab, col, dy in pts:
         ax.plot([x], [0], "o", ms=8, color=col, zorder=3)
         ax.annotate(f"{lab}\n{x:.2f}", (x, 0), (x, dy), ha="center", va="bottom", fontsize=8.6, color=col,
@@ -129,10 +131,10 @@ def fig_steps(out):
     labels = ["base model,\nbare prompt", "tuned weights,\nbare prompt", "tuned weights,\nchat template"]
     vals = [b["intra_mean"], r["intra_mean"], c["intra_mean"]]
     fig, ax = plt.subplots(figsize=(7.2, 4.4))
-    ax.axhspan(*THEIRS, color=VIOLET_LT, alpha=0.45, lw=0, zorder=0)
-    ax.text(2.42, THEIRS[0] + 0.01, "band reported\nfor frontier\nmodels", fontsize=8.4, color=VIOLET,
+    ax.axhspan(*THEIRS, color=TERRA_LT, alpha=0.45, lw=0, zorder=0)
+    ax.text(2.42, THEIRS[0] + 0.01, "band reported\nfor frontier\nmodels", fontsize=8.4, color=TERRA,
             va="bottom", ha="left", linespacing=1.3)
-    bars = ax.bar(labels, vals, width=0.56, color=[GREY, VIOLET_LT, VIOLET], edgecolor="none", zorder=2)
+    bars = ax.bar(labels, vals, width=0.56, color=[SAND, TERRA_LT, TERRA], edgecolor="none", zorder=2)
     for bar, v in zip(bars, vals):
         ax.text(bar.get_x() + bar.get_width() / 2, v + 0.015, f"{v:.3f}", ha="center", fontsize=10, color=INK)
     floor = c["floor"]
@@ -143,9 +145,9 @@ def fig_steps(out):
     y1 = r["intra_mean"] + 0.10; y2 = c["intra_mean"] + 0.10
     ax.annotate("", (0.72, y1), (0.0, y1), arrowprops=dict(arrowstyle="->", color=INK, lw=0.9))
     ax.text(0.36, y1 + 0.015, f"swap in the tuned weights  +{d1:.2f}", ha="center", fontsize=9, color=INK)
-    ax.annotate("", (1.72, y2), (1.0, y2), arrowprops=dict(arrowstyle="->", color=VIOLET, lw=0.9))
+    ax.annotate("", (1.72, y2), (1.0, y2), arrowprops=dict(arrowstyle="->", color=TERRA, lw=0.9))
     ax.text(1.36, y2 + 0.015, f"add the chat template  +{d2:.2f} more\n(+{dt:.2f} from base)", ha="center", fontsize=9,
-            color=VIOLET, fontweight="medium", linespacing=1.25)
+            color=TERRA, fontweight="medium", linespacing=1.25)
     ax.set_ylim(0, 0.98); ax.set_xlim(-0.5, 2.9)
     ax.set_ylabel("within-model similarity", fontsize=9.5, color=MUTED)
     ax.tick_params(axis="x", length=0, labelsize=9.5)
@@ -160,13 +162,13 @@ def fig_decomp(out):
     """What inside the template carries the effect. Persona-alone is its own arm, not a term of the sum;
     the three chained bars add to the full chat-minus-raw effect."""
     d = dec["decomposition"]
-    chain = [("turn structure\n(generic markers)", d["role_structure_alone"], VIOLET),
-             ("persona inside\nthe structure", d["persona_added_within_structure"], VIOLET_LT),
-             ("the model's own\ntuned tokens", d["native_token_premium"], VIOLET_LT)]
+    chain = [("turn structure\n(generic markers)", d["role_structure_alone"], TERRA),
+             ("persona inside\nthe structure", d["persona_added_within_structure"], TERRA_LT),
+             ("the model's own\ntuned tokens", d["native_token_premium"], TERRA_LT)]
     fig, ax = plt.subplots(figsize=(7.2, 4.1))
     # the persona-alone arm, on its own
     pa = d["persona_alone"]
-    ax.bar(0, pa, width=0.56, color=GREY, edgecolor="none", zorder=2)
+    ax.bar(0, pa, width=0.56, color=SAND, edgecolor="none", zorder=2)
     ax.text(0, 0.008, f"{pa:+.3f}", ha="center", fontsize=10, color=INK)
     ax.axvline(0.85, color=GRID, lw=1)
     ax.text(0, -0.075, "on its own,\nno turn structure", ha="center", fontsize=8, color=MUTED, linespacing=1.25)
@@ -203,7 +205,7 @@ def fig_heatmap(out):
     labs = {t: atlas["models"][t]["lab"] for t in tags}
     M = [[atlas["matrix"][a][b] for b in tags] for a in tags]
     fig, ax = plt.subplots(figsize=(7.2, 6.4))
-    im = ax.imshow(M, cmap=matplotlib.colors.LinearSegmentedColormap.from_list("v", ["#f3f1fb", VIOLET]),
+    im = ax.imshow(M, cmap=matplotlib.colors.LinearSegmentedColormap.from_list("t", ["#f4eee4", TERRA_LT, TERRA, "#7e3f22"]),
                    vmin=0.7, vmax=1.0)
     for i in range(len(tags)):
         for j in range(len(tags)):
@@ -228,10 +230,10 @@ def fig_ladder(out):
     rows = sorted(ladder["curve"].values(), key=lambda r: r["params_b"])
     xs = [r["params_b"] for r in rows]
     fig, ax = plt.subplots(figsize=(7.2, 3.6))
-    ax.plot(xs, [r["format_gain"] for r in rows], "o-", color=VIOLET, lw=1.8, ms=6, label="format (chat template)")
-    ax.plot(xs, [r["tuning_gain"] for r in rows], "s-", color=GREY, lw=1.4, ms=5, label="tuning (weights alone)")
+    ax.plot(xs, [r["format_gain"] for r in rows], "o-", color=TERRA, lw=1.8, ms=6, label="format (chat template)")
+    ax.plot(xs, [r["tuning_gain"] for r in rows], "s-", color=SAND, lw=1.4, ms=5, label="tuning (weights alone)")
     for r in rows:
-        ax.text(r["params_b"], r["format_gain"] + 0.012, f"{r['format_gain']:.2f}", ha="center", fontsize=8.4, color=VIOLET)
+        ax.text(r["params_b"], r["format_gain"] + 0.012, f"{r['format_gain']:.2f}", ha="center", fontsize=8.4, color=TERRA)
     ax.set_xscale("log"); ax.set_xticks(xs); ax.set_xticklabels([f"{x:g}B" for x in xs])
     ax.tick_params(axis="x", which="minor", length=0)
     ax.set_ylim(0, 0.27)
@@ -252,7 +254,7 @@ def fig_correctness(out):
     ax.set_xlim(0, 1.0); ax.set_ylim(-0.6, 2.6)
     for s in ("left", "bottom"): ax.spines[s].set_visible(False)
     ax.set_yticks([]); ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0]); ax.tick_params(axis="x", length=0, labelsize=9, colors=MUTED)
-    rows = [(2, sim, "how alike its eight answers read", VIOLET),
+    rows = [(2, sim, "how alike its eight answers read", TERRA),
             (1, single, "how often one answer is correct", INK),
             (0, pool, "how often at least one of the eight is correct", INK)]
     for y, v, lab, col in rows:
@@ -276,7 +278,7 @@ def fig_suppression(out):
            ("eight distinct voices,\none per model", 0.5156)]
     fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.4), sharey=True)
     for ax, rows, head in ((axes[0], small, "six models, 0.36B to 2B"), (axes[1], big, "three labs, 14B to 31B")):
-        cols = [GREY, VIOLET_LT, VIOLET]
+        cols = [SAND, TERRA_LT, TERRA]
         ys = range(len(rows))[::-1]
         ax.barh(list(ys), [r[1] for r in rows], height=0.55, color=cols, edgecolor="none")
         for y, (lab, v) in zip(ys, rows):
@@ -319,7 +321,7 @@ def b64(path: Path) -> str:
 def figure_html(src: str, caption: str, alt: str) -> str:
     return (f'<figure style="margin:28px 0;text-align:center;">'
             f'<img src="{src}" alt="{alt}" style="width:100%;max-width:100%;height:auto;" />'
-            f'<figcaption style="font-size:0.86em;color:#666;margin-top:8px;line-height:1.45;">{caption}</figcaption>'
+            f'<figcaption style="font-size:0.86em;color:#8a7a6e;margin-top:8px;line-height:1.45;">{caption}</figcaption>'
             f"</figure>")
 
 
@@ -332,9 +334,9 @@ def main() -> None:
     shot = ASSETS / "yejin_choi_reply.png"
     md_img = re.compile(r"!\[([^\]]*)\]\(substack_assets/yejin_choi_reply\.png\)")
     if shot.exists():
-        md = md_img.sub(lambda m: f'<figure style="margin:20px 0;text-align:center;"><img src="{b64(shot)}" alt="{m.group(1)}" style="max-width:100%;height:auto;border:1px solid #e6e2da;border-radius:6px;" /></figure>', md)
+        md = md_img.sub(lambda m: f'<figure style="margin:20px 0;text-align:center;"><img src="{b64(shot)}" alt="{m.group(1)}" style="max-width:100%;height:auto;border:1px solid #e9e0d2;border-radius:6px;" /></figure>', md)
     else:
-        md = md_img.sub('<div style="border:1px dashed #b3402f;color:#b3402f;padding:14px;margin:20px 0;font-size:0.9em;">'
+        md = md_img.sub('<div style="border:1px dashed #a4472f;color:#a4472f;padding:14px;margin:20px 0;font-size:0.9em;">'
                         "Screenshot missing: save the reply as docs/substack_assets/yejin_choi_reply.png and rebuild.</div>", md)
     html = markdown.markdown(md, extensions=["extra", "smarty"])
     for key, (_, name, caption) in FIGS.items():
@@ -345,7 +347,7 @@ def main() -> None:
     page = ("<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\">"
             "<title>Why Every Chatbot Sounds the Same</title></head>\n"
             "<body style=\"max-width:720px;margin:0 auto;font-family:Georgia,serif;line-height:1.6;"
-            "color:#1a1a1a;padding:24px;\">\n" + html + "\n</body></html>\n")
+            "color:#2b2420;padding:24px;\">\n" + html + "\n</body></html>\n")
     OUT.write_text(page)
     print(f"wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1e6:.1f} MB)")
 
