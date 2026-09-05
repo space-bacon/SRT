@@ -12,6 +12,7 @@ base_model:
   - intfloat/e5-base-v2
   - thenlper/gte-base
   - sentence-transformers/all-MiniLM-L6-v2
+base_model_relation: adapter
 datasets:
   - detection-datasets/coco
 ---
