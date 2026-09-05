@@ -54,7 +54,7 @@ On the 1,000-image sub-pool: t2i R@1 0.63 to 0.66, i2t R@1 0.74 to 0.80, median 
 
 What the table says: with the gallery untouched, a 110M sentence encoder beats the 600M LLM tower by 0.033 R@1 and moves the median correct photograph from rank 36 to 24 of 123,287; bge-small matches the tower at a sixth of the bytes; MiniLM is level at an eighth. The reader and the chat model are separate purchases.
 
-Which to use: **bge-small** is the default in Black Window (best accuracy per byte, and the same model already runs the tab's text memory). **e5-base** when 220 MB is affordable and retrieval quality matters most; remember its `query: ` prefix. **MiniLM** for the smallest footprint.
+Which to use: **bge-small** is the default in the browser engine (best accuracy per byte, and the same model already runs the tab's text memory). **e5-base** when 220 MB is affordable and retrieval quality matters most; remember its `query: ` prefix. **MiniLM** for the smallest footprint.
 
 ## Parity fixtures (`parity_bge-small.json`, `parity_e5-base.json`)
 
