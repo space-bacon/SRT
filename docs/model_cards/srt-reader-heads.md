@@ -20,7 +20,7 @@ datasets:
 
 Four text heads, 0.8 to 1.6 MB each, that let an ordinary sentence encoder search the SRT browser gallery of 123,287 COCO photographs in place of a 600M-parameter LLM text tower. Every number below has a file in this repository; the code is in [space-bacon/SRT](https://github.com/space-bacon/SRT).
 
-**Where they run.** [Black Window](https://blackwindow.xyz), the in-browser chat, loads `bge-small-en-v1.5` plus `text_head_bge-small_v3gallery.safetensors` as its reader: the encoder embeds every caption, note and passage the tab reads; the head projects text into the gallery's space for photograph retrieval. On a desktop with WebGPU the same encoder runs on the GPU through ONNX Runtime at several hundred passages a second and holds the tab's memory (the Weave); on a phone it runs in wasm. Search works with no chat model loaded at all (`?reader=bge-small&chat=0`).
+**Where they run.** The SRT in-browser chat engine loads `bge-small-en-v1.5` plus `text_head_bge-small_v3gallery.safetensors` as its reader: the encoder embeds every caption, note and passage the tab reads; the head projects text into the gallery's space for photograph retrieval. On a desktop with WebGPU the same encoder runs on the GPU through ONNX Runtime at several hundred passages a second and holds the tab's memory (the Weave); on a phone it runs in wasm. Search works with no chat model loaded at all (`?reader=bge-small&chat=0`).
 
 ## What a head is
 
