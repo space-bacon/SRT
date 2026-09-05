@@ -19,9 +19,9 @@ datasets:
 
 # SRT reader heads
 
-Four text heads, 0.8 to 1.6 MB each, that let an ordinary sentence encoder search the SRT browser gallery of 123,287 COCO photographs in place of a 600M-parameter LLM text tower. Every number below has a file in this repository; the code is in [space-bacon/SRT](https://github.com/space-bacon/SRT).
+Four text heads, 0.8 to 1.6 MB each, that let an ordinary sentence encoder search the SRT browser gallery of 123,287 COCO photographs in place of a 600M-parameter LLM text tower. Every number below can be recomputed from the files in this repository with `check_head.py`.
 
-**Where they run.** The SRT in-browser chat engine loads `bge-small-en-v1.5` plus `text_head_bge-small_v3gallery.safetensors` as its reader: the encoder embeds every caption, note and passage the tab reads; the head projects text into the gallery's space for photograph retrieval. On a desktop with WebGPU the same encoder runs on the GPU through ONNX Runtime at several hundred passages a second and holds the tab's memory (the Weave); on a phone it runs in wasm. Search works with no chat model loaded at all (`?reader=bge-small&chat=0`).
+**Where they run.** The SRT in-browser chat engine loads `bge-small-en-v1.5` plus `text_head_bge-small_v3gallery.safetensors` as its reader: the encoder embeds every caption, note and passage the tab reads; the head projects text into the gallery's space for photograph retrieval. The same encoder runs the tab's text memory on WebGPU at several hundred passages a second; on a phone it runs in wasm.
 
 ## What a head is
 
@@ -35,9 +35,9 @@ projection = (embedding - mu_txt) @ txt.weight.T + txt.bias     # 1,024-d
 score = cosine(projection, gallery_row)
 ```
 
-Each `.safetensors` file carries three tensors in fp16: `mu_txt` (the encoder's training-set mean, `d_txt`), `txt.weight` (`1024 x d_txt`) and `txt.bias` (`1024`). Its metadata records the reader, seed, epochs and the scores below.
+Each `.safetensors` file carries three tensors in fp16: `mu_txt` (the encoder's training-set mean, `d_txt`), `txt.weight` (`1024 x d_txt`) and `txt.bias` (`1024`).
 
-Training: symmetric InfoNCE (τ = 0.05) against the fixed gallery vectors, COCO train2017 only (118,287 images, one of five captions sampled per epoch), 20 epochs, lr 1e-3, batch 1,024, three head-initialisation seeds. Evaluation: the gallery card's own replay set, 5,001 val2017 captions against all 123,287 rows (chance R@1 = 0.000008), plus the 1,000-image sub-pool those captions belong to. Full protocol and per-seed results: `reader_swap_123k.json`.
+The heads were fitted against the fixed gallery vectors on COCO train2017 captions only, three head-initialisation seeds. Evaluation: 5,001 val2017 captions (`replay_123k.json`, each with its gold gallery row) against all 123,287 rows (chance R@1 = 0.000008), plus the 1,000-image sub-pool those captions belong to. Per-seed results: `reader_swap_123k.json`.
 
 ## Results (`reader_swap_123k.json`)
 
@@ -59,7 +59,16 @@ Which to use: **bge-small** is the default in the browser engine (best accuracy 
 
 ## Parity fixtures (`parity_bge-small.json`, `parity_e5-base.json`)
 
-Eight probe captions with the PyTorch encoder embedding, the projection through the head, and the top-5 gallery rows and keys. The Rust runtime's candle port ([`runtime/examples/reader_parity.rs`](https://github.com/space-bacon/blackwidow) in the engine repo) reproduces them to a maximum embedding difference of 2e-7, projection cosine 0.999999, top-1 and top-5 identical on every probe. That is why no per-runtime recalibration vector ships with these heads: the 4 KB mean that earlier SRT heads carried corrected a Q4 LLM tap, and an fp32 sentence encoder has nothing to correct.
+Eight probe captions with the PyTorch encoder embedding, the projection through the head, and the top-5 gallery rows and keys. The engine's candle port reproduces them to a maximum embedding difference of 2e-7, projection cosine 0.999999, top-1 and top-5 identical on every probe; `check_head.py` here recomputes the same three stages from the encoder and the head (`max |embedding gap| 1.79e-07, top-1 8/8, top-5 8/8` on bge-small). That is why no per-runtime recalibration vector ships with these heads: the 4 KB mean that earlier SRT heads carried corrected a Q4 LLM tap, and an fp32 sentence encoder has nothing to correct.
+
+## Checking the numbers
+
+```
+pip install sentence-transformers safetensors huggingface_hub numpy torch
+python check_head.py --reader bge-small
+```
+
+Fetches the head, the fixture, the evaluation set and the gallery from the Hub, runs the parity check, then scores the 5,001 captions against all 123,287 rows (about 2 s on an M2 for the scoring). Expected: `t2i R@1 0.1152  R@5 0.2541  R@10 0.3365  median rank 32`, against the tower's 0.1092 / 0.2442 / 0.3307 / 36.
 
 ## Using a head
 
@@ -79,16 +88,18 @@ p = torch.nn.functional.normalize(p, dim=-1)                           # compare
 
 Encoder settings per head: bge-small `cls` pooling, no prefix; e5-base `mean` pooling, prefix `query: `; gte-base and MiniLM `mean` pooling, no prefix; all L2-normalised, max length 64 tokens at fitting time.
 
-Gallery rows: `gallery_123k_v3.srtidx` on [RiverRider/srt-browser-head-118k](https://huggingface.co/RiverRider/srt-browser-head-118k), read by `read_srtidx` in `scripts/reader_swap.py` or by the Rust `Index` in `srt-geometry`.
+Gallery rows: `gallery_123k_v3.srtidx` on [RiverRider/srt-browser-head-118k](https://huggingface.co/RiverRider/srt-browser-head-118k); `read_srtidx` in `check_head.py` reads the format.
 
 ## Files
 
 | file | what |
 |---|---|
 | `text_head_{bge-small,e5-base,gte-base,minilm}_v3gallery.safetensors` | the heads, fp16, seed 0 of the three fitted |
-| `reader_swap_123k.json` | protocol, per-seed and mean scores, controls, the 0.6B reference row |
-| `parity_bge-small.json`, `parity_e5-base.json` | eight-probe fixtures for the runtime port |
+| `reader_swap_123k.json` | per-seed and mean scores, controls, the 0.6B reference row |
+| `replay_123k.json` | the 5,001 evaluation captions with their gold gallery rows |
+| `parity_bge-small.json`, `parity_e5-base.json` | eight-probe fixtures |
+| `check_head.py` | recomputes parity and the replay scores from the files above |
 
 ## Scope
 
-These heads read the v3 gallery only; a gallery projected by a different image head needs its own fit (`scripts/reader_swap.py --readers ...`, about 40 s per reader on an M2 Ultra). The encoders saw COCO caption text in their own pretraining, so the comparison against the 0.6B tower is a drop-in measurement, not a claim about text the encoders never met; the shuffled controls and the 4,000-pair reader ladder (`reader_ladder_3seed.json` in the SRT repo) are the clean rungs. Fitted 2026-09-02.
+These heads read the v3 gallery only; a gallery projected by a different image head needs its own fit. The encoders saw COCO caption text in their own pretraining, so the comparison against the 0.6B tower is a drop-in measurement, not a claim about text the encoders never met; the shuffled controls are the clean rung. Fitted 2026-09-02.
