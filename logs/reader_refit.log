@@ -1,0 +1,11 @@
+Fetching 33 files:   0%|          | 0/33 [00:00<?, ?it/s]Fetching 33 files: 100%|██████████| 33/33 [00:00<00:00, 10902.02it/s]
+raw train states: 118287 images from /Users/burtron/.cache/huggingface/hub/datasets--RiverRider--srt-qwen38-coco-states/snapshots/0949381f7cc5a9a5c641af896647d9c0106bab67/raw118k
+images (123287, 5120) in v3 row order
+118287 train images, 591753 captions, 5001 eval captions
+    epoch 1/40 loss 1.1527
+    epoch 11/40 loss 0.7618
+    epoch 21/40 loss 0.7809
+    epoch 31/40 loss 0.7232
+    epoch 40/40 loss 0.7453
+/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

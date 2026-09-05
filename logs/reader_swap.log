@@ -1,0 +1,36 @@
+gallery (123287, 1024) from gallery_123k_v3.srtidx
+118287 train images, 591753 train captions, 5001 eval captions over 1000 val images, gallery 123287
+bge-small: encoding 591753 + 5001 captions
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6991.27it/s]
+  encoded in 89s
+    epoch 1/20 loss 0.9789
+    epoch 6/20 loss 0.8268
+    epoch 11/20 loss 0.7901
+    epoch 16/20 loss 0.8072
+    epoch 20/20 loss 0.8715
+  seed 0: full-gallery t2i R@1 0.1142 R@5 0.2539 R@10 0.3371 median 32 | pool-1000 i2t R@1 0.7420 t2i R@1 0.6275 | shuffled R@1 0.0000 median 63183
+bge-small  full-gallery t2i R@1 0.1142 [0.1142, 0.1142] (0.6B v3: 0.1092) median 32 | 101.5s
+
+e5-base: encoding 591753 + 5001 captions
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 5891.42it/s]
+  encoded in 192s
+    epoch 1/20 loss 0.8007
+    epoch 6/20 loss 0.7238
+    epoch 11/20 loss 0.6742
+    epoch 16/20 loss 0.7083
+    epoch 20/20 loss 0.7441
+  seed 0: full-gallery t2i R@1 0.1396 R@5 0.2915 R@10 0.3815 median 23 | pool-1000 i2t R@1 0.7930 t2i R@1 0.6583 | shuffled R@1 0.0000 median 60058
+e5-base    full-gallery t2i R@1 0.1396 [0.1396, 0.1396] (0.6B v3: 0.1092) median 23 | 205.4s
+
+minilm: encoding 591753 + 5001 captions
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6231.53it/s]
+  encoded in 58s
+    epoch 1/20 loss 1.0260
+    epoch 6/20 loss 0.8761
+    epoch 11/20 loss 0.8388
+    epoch 16/20 loss 0.8401
+    epoch 20/20 loss 0.8839
+  seed 0: full-gallery t2i R@1 0.1058 R@5 0.2513 R@10 0.3357 median 34 | pool-1000 i2t R@1 0.7660 t2i R@1 0.6175 | shuffled R@1 0.0000 median 60076
+minilm     full-gallery t2i R@1 0.1058 [0.1058, 0.1058] (0.6B v3: 0.1092) median 34 | 70.5s
+
+wrote /Users/burtron/development/srt-adapter/artifacts/nla/q4/reader_swap_123k.json

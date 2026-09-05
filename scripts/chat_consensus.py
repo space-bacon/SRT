@@ -190,6 +190,9 @@ def main():
             "floor": round(float(ok.mean()), 4),
             "oracle": round(float(ok.any(1).mean()), 4)}
         v = res["arms"][arm]
+        # Scored over every problem, so bounded by the oracle; `on_resolved_only` is a declared subset rate.
+        if v["chat_consensus"] > v["oracle"] + 1e-9:
+            raise SystemExit(f"{arm}: chat_consensus {v['chat_consensus']} exceeds oracle {v['oracle']}")
         agg["floor"].append(ok.mean())
         agg["chat_consensus"].append(np.mean(full))
         agg["oracle"].append(ok.any(1).mean())

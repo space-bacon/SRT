@@ -157,11 +157,16 @@ against a floor that included it.
 **`consensus*_covered_only_superseded.json` carry a `SUPERSEDED` key.** Those runs
 averaged the agreement read over the problems it could run while the floor and oracle
 were averaged over all of them, so 12 of 36 HumanEval arms appeared to beat their own
-oracle. The files without the key score every problem: `consensus` falls back to the
+oracle on the 192-token pools and 7 of 36 on the 1024-token pools (1 of 10 on MBPP).
+The files without the key score every problem: `consensus` falls back to the
 first reply where nothing runs, as `srt_select.select()` does, and `consensus_strict`
 charges those problems as failures. On the 192-token pools the correction is 0.4426 to
 0.3762; on the 1024-token pools 0.6301 to 0.5854; on MBPP 0.8174 to 0.8094. Found by
-Dipankar Sarkar from the published artifact.
+Dipankar Sarkar from the published artifact. The bound is now enforced twice: per arm
+inside `consensus_select.py` and `chat_consensus.py`, and as one pass over every results
+file by `scripts/check_oracle_bound.py`, which holds all-rows selector columns to their
+oracle and reports declared subset rates (`consensus_on_covered`, `on_resolved_only`)
+without judging them.
 
 **The learned verifier does not transfer.** It captures 15.9% of the gap on HumanEval
 and 6.3% on MBPP, and on MBPP appending it to example-filtering makes that baseline

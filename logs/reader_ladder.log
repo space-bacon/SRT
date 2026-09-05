@@ -1,0 +1,12 @@
+image states (5000, 5120) L52
+25014 captions, 4000 train pairs, 1000 eval images, 5001 eval captions
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 7173.20it/s]
+minilm       d=  384  i2t R@1 0.4640 R@5 0.7590 median    2 | t2i R@1 0.3477 median    3 | shuffled R@1 0.0010 median  941 | 16.1s
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6407.75it/s]
+bge-small    d=  384  i2t R@1 0.5000 R@5 0.8020 median    1 | t2i R@1 0.3689 median    2 | shuffled R@1 0.0000 median 1026 | 11.8s
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:01<06:55,  1.34s/it]Loading weights:  60%|█████▉    | 186/311 [00:01<00:00, 177.82it/s]Loading weights:  93%|█████████▎| 290/311 [00:01<00:00, 214.96it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 167.37it/s]
+embed-table  d= 1024  i2t R@1 0.3930 R@5 0.7200 median    2 | t2i R@1 0.2869 median    4 | shuffled R@1 0.0010 median  898 | 12.5s
+hash-bow     d= 4096  i2t R@1 0.1970 R@5 0.4870 median    6 | t2i R@1 0.1320 median   15 | shuffled R@1 0.0000 median  740 | 7.6s
+hash-bow-1k  d= 1024  i2t R@1 0.2050 R@5 0.4970 median    6 | t2i R@1 0.1368 median   14 | shuffled R@1 0.0010 median  803 | 5.8s
+
+wrote /Users/burtron/development/srt-adapter/artifacts/nla/q4/reader_ladder.json

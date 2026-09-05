@@ -1,0 +1,57 @@
+164 / 164 problems got synthesised inputs
+  coder0.5B_base__raw                consensus 0.1098  strict 0.1098  covered 113/164  floor 0.0213  oracle 0.1524
+  coder0.5B_inst__chat               consensus 0.3415  strict 0.3415  covered 162/164  floor 0.1745  oracle 0.4695
+  coder0.5B_inst__persona            consensus 0.1707  strict 0.1707  covered 96/164  floor 0.0381  oracle 0.2134
+  coder0.5B_inst__raw                consensus 0.1280  strict 0.1280  covered 82/164  floor 0.0259  oracle 0.1829
+  coder0.5B_inst__shared             consensus 0.2988  strict 0.2988  covered 155/164  floor 0.1692  oracle 0.4817
+  coder0.5B_inst__shared_persona     consensus 0.3049  strict 0.3049  covered 151/164  floor 0.1562  oracle 0.4512
+  coder1.5B_base__raw                consensus 0.1280  strict 0.1280  covered 111/164  floor 0.0373  oracle 0.2012
+  coder1.5B_inst__chat               consensus 0.5427  strict 0.5427  covered 160/164  floor 0.3178  oracle 0.7134
+  coder1.5B_inst__persona            consensus 0.2073  strict 0.2073  covered 133/164  floor 0.0465  oracle 0.2805
+  coder1.5B_inst__raw                consensus 0.2683  strict 0.2683  covered 134/164  floor 0.0686  oracle 0.3841
+  coder1.5B_inst__shared             consensus 0.4756  strict 0.4756  covered 162/164  floor 0.2424  oracle 0.7073
+  coder1.5B_inst__shared_persona     consensus 0.5061  strict 0.5061  covered 160/164  floor 0.2767  oracle 0.6829
+  coder14B_base__raw                 consensus 0.2073  strict 0.2073  covered 99/164  floor 0.0465  oracle 0.2683
+  coder14B_inst__chat                consensus 0.5549  strict 0.5549  covered 157/164  floor 0.3636  oracle 0.7866
+  coder14B_inst__persona             consensus 0.3598  strict 0.3598  covered 138/164  floor 0.1052  oracle 0.4573
+  coder14B_inst__raw                 consensus 0.2866  strict 0.2866  covered 89/164  floor 0.0755  oracle 0.3293
+  coder14B_inst__shared              consensus 0.7439  strict 0.7439  covered 164/164  floor 0.5404  oracle 0.8780
+  coder14B_inst__shared_persona      consensus 0.6646  strict 0.6646  covered 160/164  floor 0.4329  oracle 0.7927
+  coder32B_base__raw                 consensus 0.1829  strict 0.1829  covered 98/164  floor 0.0366  oracle 0.2500
+  coder32B_inst__chat                consensus 0.4329  strict 0.4329  covered 150/164  floor 0.2401  oracle 0.5061
+  coder32B_inst__persona             consensus 0.3537  strict 0.3537  covered 119/164  floor 0.0968  oracle 0.4390
+  coder32B_inst__raw                 consensus 0.2561  strict 0.2561  covered 106/164  floor 0.0777  oracle 0.3354
+  coder32B_inst__shared              consensus 0.4024  strict 0.4024  covered 152/164  floor 0.2264  oracle 0.5305
+  coder32B_inst__shared_persona      consensus 0.3537  strict 0.3537  covered 146/164  floor 0.2058  oracle 0.4817
+  coder3B_base__raw                  consensus 0.1037  strict 0.1037  covered 84/164  floor 0.0213  oracle 0.1341
+  coder3B_inst__chat                 consensus 0.5000  strict 0.5000  covered 159/164  floor 0.2774  oracle 0.7012
+  coder3B_inst__persona              consensus 0.3841  strict 0.3841  covered 143/164  floor 0.1090  oracle 0.5427
+  coder3B_inst__raw                  consensus 0.2317  strict 0.2317  covered 100/164  floor 0.0549  oracle 0.2927
+  coder3B_inst__shared               consensus 0.5061  strict 0.5061  covered 158/164  floor 0.2782  oracle 0.7012
+  coder3B_inst__shared_persona       consensus 0.4634  strict 0.4634  covered 150/164  floor 0.2409  oracle 0.6402
+  coder7B_base__raw                  consensus 0.1890  strict 0.1890  covered 96/164  floor 0.0495  oracle 0.2805
+  coder7B_inst__chat                 consensus 0.7500  strict 0.7439  covered 161/164  floor 0.5404  oracle 0.9024
+  coder7B_inst__persona              consensus 0.3476  strict 0.3476  covered 134/164  floor 0.0945  oracle 0.4756
+  coder7B_inst__raw                  consensus 0.3902  strict 0.3902  covered 102/164  floor 0.1044  oracle 0.4756
+  coder7B_inst__shared               consensus 0.7317  strict 0.7317  covered 164/164  floor 0.4931  oracle 0.8780
+  coder7B_inst__shared_persona       consensus 0.6646  strict 0.6646  covered 163/164  floor 0.4375  oracle 0.8354
+
+  consensus 0.3762  strict 0.3760  covered-only 0.4426  floor 0.1868  oracle 0.4954  gain +0.1894
+
+wrote /Users/burtron/development/srt-adapter/artifacts/nla/verifier/consensus_fixed.json
+420 / 425 problems got synthesised inputs
+  mbpp1.5B_inst__chat                consensus 0.6588  strict 0.6518  covered 420/425  floor 0.5662  oracle 0.8118
+  mbpp1.5B_inst__shared              consensus 0.7012  strict 0.6894  covered 420/425  floor 0.5829  oracle 0.8259
+  mbpp14B_inst__chat                 consensus 0.8729  strict 0.8588  covered 401/425  floor 0.7941  oracle 0.9059
+  mbpp14B_inst__shared               consensus 0.8753  strict 0.8588  covered 412/425  floor 0.8074  oracle 0.9224
+  mbpp32B_inst__chat                 consensus 0.8729  strict 0.8541  covered 417/425  floor 0.8609  oracle 0.9176
+  mbpp32B_inst__shared               consensus 0.8588  strict 0.8424  covered 417/425  floor 0.8494  oracle 0.9176
+  mbpp3B_inst__chat                  consensus 0.7835  strict 0.7718  covered 406/425  floor 0.6203  oracle 0.8635
+  mbpp3B_inst__shared                consensus 0.8024  strict 0.7906  covered 414/425  floor 0.6532  oracle 0.8871
+  mbpp7B_inst__chat                  consensus 0.8400  strict 0.8282  covered 418/425  floor 0.7188  oracle 0.9153
+  mbpp7B_inst__shared                consensus 0.8282  strict 0.8165  covered 418/425  floor 0.7315  oracle 0.9200
+
+  consensus 0.8094  strict 0.7962  covered-only 0.8174  floor 0.7185  oracle 0.8887  gain +0.0909
+
+wrote /Users/burtron/development/srt-adapter/artifacts/nla/verifier/consensus_mbpp_fixed.json
+LOCAL_CONS_DONE

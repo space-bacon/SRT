@@ -241,6 +241,11 @@ def main():
             "covered_problems": covered,
             "floor": round(float(ok.mean()), 4),
             "oracle": round(float(ok.any(1).mean()), 4)}
+        # No arm may exceed its own oracle on a column scored over all problems. `consensus_on_covered`
+        # is a declared subset rate and is exempt; scripts/check_oracle_bound.py applies the same rule repo-wide.
+        for col in ("consensus", "consensus_strict"):
+            if res["arms"][arm][col] > res["arms"][arm]["oracle"] + 1e-9:
+                raise SystemExit(f"{arm}: {col} {res['arms'][arm][col]} exceeds oracle {res['arms'][arm]['oracle']}; a subset was averaged against a full denominator")
         agg["floor"].append(ok.mean())
         agg["oracle"].append(ok.any(1).mean())
         agg["consensus"].append(np.mean(full))

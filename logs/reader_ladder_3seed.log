@@ -1,0 +1,18 @@
+image states (5000, 5120) L52
+25014 captions, 4000 train pairs, 1000 eval images, 5001 eval captions
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6417.35it/s]
+mpnet        d=  768  i2t R@1 0.5223 [0.515,0.530] R@5 0.8293 median   1.0 | t2i R@1 0.3950 | shuffled R@1 0.0017 median 1031.0 | 32.9s
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6597.06it/s]
+gte-base     d=  768  i2t R@1 0.5220 [0.512,0.536] R@5 0.8160 median   1.0 | t2i R@1 0.3772 | shuffled R@1 0.0013 median  986.0 | 28.3s
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6466.07it/s]
+e5-base      d=  768  i2t R@1 0.5333 [0.521,0.554] R@5 0.8393 median   1.0 | t2i R@1 0.3943 | shuffled R@1 0.0017 median 1038.0 | 28.5s
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11113.03it/s]
+bge-small    d=  384  i2t R@1 0.5007 [0.497,0.504] R@5 0.8110 median   1.3 | t2i R@1 0.3688 | shuffled R@1 0.0017 median 1042.7 | 22.4s
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8628.01it/s]
+minilm       d=  384  i2t R@1 0.4740 [0.469,0.482] R@5 0.7703 median   2.0 | t2i R@1 0.3520 | shuffled R@1 0.0007 median  939.7 | 21.0s
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:40,  7.67it/s]Loading weights:  68%|██████▊   | 210/311 [00:00<00:00, 1079.05it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 976.80it/s] 
+embed-table  d= 1024  i2t R@1 0.3910 [0.376,0.400] R@5 0.7157 median   2.0 | t2i R@1 0.2902 | shuffled R@1 0.0020 median  855.7 | 22.5s
+hash-bow     d= 4096  i2t R@1 0.2007 [0.197,0.203] R@5 0.4847 median   6.0 | t2i R@1 0.1306 | shuffled R@1 0.0020 median  751.0 | 22.2s
+hash-bow-1k  d= 1024  i2t R@1 0.2053 [0.199,0.216] R@5 0.4990 median   5.3 | t2i R@1 0.1391 | shuffled R@1 0.0007 median  748.0 | 17.7s
+
+wrote artifacts/nla/q4/reader_ladder_3seed.json

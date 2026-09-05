@@ -870,14 +870,17 @@ like skill against a floor that includes the broken code: the verifier appeared 
 capture 25.0% of the gap where the clean figure is 15.9%, and the Consensus demo's
 mean selector gain read +0.2013 where it is +0.0595. Then the agreement read turned
 out to have been averaged over the problems it covered while its floor and oracle
-were averaged over all of them, which let 12 of 36 arms appear to beat their own
+were averaged over all of them, which let 12 of 36 arms (7 of 36 on the 1024-token pools) appear to beat their own
 oracle and put agreement at 82.9% of the gap on the 192-token pools where the
 all-problem figure is 61.4%, and at 60.8% on the clean pools where it is 44.1%. That
 one was found by a reader, Dipankar Sarkar, working from the published artifact,
 after we had already corrected the budget. A handicapped comparison is a quiet form
 of overclaiming, and no control we ran on the readers themselves could have detected
 any of the four. The one check that would have caught the last is the cheapest:
-no arm may exceed its own oracle.
+no arm may exceed its own oracle. It is now enforced per arm in the selector scripts
+and as one pass over every results file (`scripts/check_oracle_bound.py`), holding the
+columns scored over all problems to the bound and reporting the declared subset rates
+beside them without judging them.
 
 **A cross-model transport selector did not survive replication, and we published
 the claim before checking.** Scoring candidates by how far a hidden state fails to

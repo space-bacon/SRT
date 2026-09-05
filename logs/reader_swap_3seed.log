@@ -1,0 +1,89 @@
+gallery (123287, 1024) from gallery_123k_v3.srtidx
+118287 train images, 591753 train captions, 5001 eval captions over 1000 val images, gallery 123287
+e5-base: cache hit (591753, 768)
+    epoch 1/20 loss 0.8032
+    epoch 6/20 loss 0.7231
+    epoch 11/20 loss 0.6753
+    epoch 16/20 loss 0.7078
+    epoch 20/20 loss 0.7439
+  seed 0: full-gallery t2i R@1 0.1394 R@5 0.2913 R@10 0.3817 median 24 | pool-1000 i2t R@1 0.7920 t2i R@1 0.6567 | shuffled R@1 0.0000 median 59458
+    epoch 1/20 loss 0.8194
+    epoch 6/20 loss 0.7830
+    epoch 11/20 loss 0.7537
+    epoch 16/20 loss 0.6703
+    epoch 20/20 loss 0.7039
+  seed 1: full-gallery t2i R@1 0.1456 R@5 0.2943 R@10 0.3853 median 24 | pool-1000 i2t R@1 0.8000 t2i R@1 0.6587 | shuffled R@1 0.0000 median 62594
+    epoch 1/20 loss 0.8058
+    epoch 6/20 loss 0.8064
+    epoch 11/20 loss 0.7020
+    epoch 16/20 loss 0.7207
+    epoch 20/20 loss 0.6999
+  seed 2: full-gallery t2i R@1 0.1412 R@5 0.2905 R@10 0.3799 median 24 | pool-1000 i2t R@1 0.8030 t2i R@1 0.6645 | shuffled R@1 0.0000 median 56834
+e5-base    full-gallery t2i R@1 0.1421 [0.1394, 0.1456] (0.6B v3: 0.1092) median 24 | 37.1s
+
+gte-base: encoding 591753 + 5001 captions
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 5884.48it/s]
+  encoded in 175s
+    epoch 1/20 loss 0.8503
+    epoch 6/20 loss 0.7395
+    epoch 11/20 loss 0.7006
+    epoch 16/20 loss 0.7118
+    epoch 20/20 loss 0.7604
+  seed 0: full-gallery t2i R@1 0.1306 R@5 0.2817 R@10 0.3695 median 26 | pool-1000 i2t R@1 0.7850 t2i R@1 0.6505 | shuffled R@1 0.0000 median 60523
+    epoch 1/20 loss 0.8385
+    epoch 6/20 loss 0.8110
+    epoch 11/20 loss 0.7857
+    epoch 16/20 loss 0.7017
+    epoch 20/20 loss 0.7446
+  seed 1: full-gallery t2i R@1 0.1334 R@5 0.2831 R@10 0.3701 median 26 | pool-1000 i2t R@1 0.7840 t2i R@1 0.6515 | shuffled R@1 0.0000 median 62421
+    epoch 1/20 loss 0.8473
+    epoch 6/20 loss 0.8015
+    epoch 11/20 loss 0.7409
+    epoch 16/20 loss 0.7667
+    epoch 20/20 loss 0.7301
+  seed 2: full-gallery t2i R@1 0.1318 R@5 0.2835 R@10 0.3645 median 25 | pool-1000 i2t R@1 0.7840 t2i R@1 0.6557 | shuffled R@1 0.0000 median 57095
+gte-base   full-gallery t2i R@1 0.1319 [0.1306, 0.1334] (0.6B v3: 0.1092) median 26 | 212.4s
+
+bge-small: cache hit (591753, 384)
+    epoch 1/20 loss 0.9734
+    epoch 6/20 loss 0.8277
+    epoch 11/20 loss 0.7906
+    epoch 16/20 loss 0.8067
+    epoch 20/20 loss 0.8709
+  seed 0: full-gallery t2i R@1 0.1152 R@5 0.2543 R@10 0.3363 median 32 | pool-1000 i2t R@1 0.7410 t2i R@1 0.6285 | shuffled R@1 0.0000 median 62597
+    epoch 1/20 loss 0.9662
+    epoch 6/20 loss 0.8822
+    epoch 11/20 loss 0.8929
+    epoch 16/20 loss 0.8012
+    epoch 20/20 loss 0.8208
+  seed 1: full-gallery t2i R@1 0.1162 R@5 0.2535 R@10 0.3353 median 32 | pool-1000 i2t R@1 0.7420 t2i R@1 0.6263 | shuffled R@1 0.0000 median 63851
+    epoch 1/20 loss 1.0012
+    epoch 6/20 loss 0.9071
+    epoch 11/20 loss 0.8514
+    epoch 16/20 loss 0.8707
+    epoch 20/20 loss 0.8372
+  seed 2: full-gallery t2i R@1 0.1122 R@5 0.2543 R@10 0.3331 median 32 | pool-1000 i2t R@1 0.7460 t2i R@1 0.6281 | shuffled R@1 0.0000 median 56926
+bge-small  full-gallery t2i R@1 0.1145 [0.1122, 0.1162] (0.6B v3: 0.1092) median 32 | 33.6s
+
+minilm: cache hit (591753, 384)
+    epoch 1/20 loss 1.0267
+    epoch 6/20 loss 0.8743
+    epoch 11/20 loss 0.8388
+    epoch 16/20 loss 0.8408
+    epoch 20/20 loss 0.8843
+  seed 0: full-gallery t2i R@1 0.1066 R@5 0.2515 R@10 0.3353 median 34 | pool-1000 i2t R@1 0.7660 t2i R@1 0.6175 | shuffled R@1 0.0000 median 60460
+    epoch 1/20 loss 1.0028
+    epoch 6/20 loss 0.9410
+    epoch 11/20 loss 0.8875
+    epoch 16/20 loss 0.8270
+    epoch 20/20 loss 0.8478
+  seed 1: full-gallery t2i R@1 0.1070 R@5 0.2498 R@10 0.3315 median 35 | pool-1000 i2t R@1 0.7490 t2i R@1 0.6161 | shuffled R@1 0.0000 median 62557
+    epoch 1/20 loss 0.9989
+    epoch 6/20 loss 0.9082
+    epoch 11/20 loss 0.8874
+    epoch 16/20 loss 0.8965
+    epoch 20/20 loss 0.8736
+  seed 2: full-gallery t2i R@1 0.1030 R@5 0.2511 R@10 0.3309 median 34 | pool-1000 i2t R@1 0.7450 t2i R@1 0.6197 | shuffled R@1 0.0000 median 58455
+minilm     full-gallery t2i R@1 0.1055 [0.103, 0.107] (0.6B v3: 0.1092) median 34 | 33.6s
+
+wrote /Users/burtron/development/srt-adapter/artifacts/nla/q4/reader_swap_123k.json
