@@ -36,6 +36,8 @@ SECRET_EXCLUDE = [".env", ".env.*", "*.key", "*.pem", "*.p12", "*.pfx",
                   "secrets*.yml"]
 LOCAL = [(HOME / "development", "development"),
          (HOME / ".cache/huggingface", "hf-cache"),
+         # Black Window's Weave stores (the master/paper stores hold hours of the 1T's notes) and its model files.
+         (HOME / "Library/Application Support/xyz.blackwindow.app", "blackwindow-app"),
          (HOME / "Downloads", "Downloads"),
          (HOME / "Desktop", "Desktop")]
 

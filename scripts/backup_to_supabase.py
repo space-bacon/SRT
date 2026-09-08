@@ -34,6 +34,11 @@ SYNC_SETS: dict[str, tuple[Path, set[str]]] = {
     "srt_adapter_private": (ROOT / "private", set()),
     "srt_data": (DEV / "SRT" / "data", set()),
     "srt_checkpoints": (DEV / "SRT" / "checkpoints", set()),
+    # Black Window's Weave stores: the notes the 1T wrote live only here. Models are downloads, the Reddit
+    # test stores rebuild from the corpus in minutes, and weave.master is skipped while a run writes into it
+    # (weave.master.pre-kimi is the consistent snapshot; drop that exclusion once the run is done).
+    "blackwindow_weave": (Path.home() / "Library" / "Application Support" / "xyz.blackwindow.app",
+                          {"models", "weave.reddit1650k", "weave.reddit300k", "weave.reddit1k", "weave.master"}),
 }
 
 
