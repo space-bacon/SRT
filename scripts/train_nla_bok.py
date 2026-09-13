@@ -460,9 +460,11 @@ def main() -> None:
                 if v_cen > best_val:
                     best_val = v_cen; bad = 0
                     state = {n: p.detach().cpu() for n, p in av.named_parameters() if p.requires_grad}
+                    tmp = best_path.with_name(best_path.name + ".tmp")
                     torch.save({"trainable": state, "step": step,
                                 "val_greedy_cen": v_cen, "val_greedy_raw": v_raw,
-                                "cfg": vars(args)}, best_path)
+                                "cfg": vars(args)}, tmp)
+                    tmp.replace(best_path)  # the run's only good checkpoint: never half-written over
                     logger.info("  new best greedy_cen=%.4f  saved %s", v_cen, best_path)
                 else:
                     bad += 1

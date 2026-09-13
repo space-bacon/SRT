@@ -1,0 +1,36 @@
+{
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../sunstone"
+        },
+        {
+            "path": "../blackwidow"
+        },
+        {
+            "path": "../BlackWindow"
+        },
+        {
+            "path": "../SunstoneNorth"
+        },
+        {
+            "path": "../sunstonenorthlabs"
+        }
+    ],
+    "settings": {
+        "sunstone.weave.exclude": [
+            "**/artifacts/**",
+            "**/data/**",
+            "**/checkpoints/**",
+            "**/logs_vast/**",
+            "**/.hf_home/**",
+            "**/models/**",
+            "**/space_*/**",
+            "**/media/**",
+            "**/bench/results/**",
+            "**/.vscode-test/**"
+        ]
+    }
+}

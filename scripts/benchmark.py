@@ -388,10 +388,11 @@ def main() -> None:
     # Write outputs
     metrics_path = out_dir / "metrics.json"
     traces_path = out_dir / "traces.json"
-    with open(metrics_path, "w") as f:
-        json.dump(result["metrics"], f, indent=2)
-    with open(traces_path, "w") as f:
-        json.dump(result["traces"], f, indent=2)
+    for path, payload in ((metrics_path, result["metrics"]), (traces_path, result["traces"])):
+        tmp = path.with_name(path.name + ".tmp")
+        with open(tmp, "w") as f:
+            json.dump(payload, f, indent=2)
+        tmp.replace(path)  # a crash mid-write must not take the previous run's results with it
 
     logger.info("Wrote %s", metrics_path)
     logger.info("Wrote %s", traces_path)
