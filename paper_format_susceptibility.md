@@ -574,3 +574,40 @@ should not carry the argument alone.
 
 Both matrices: 47,232 generations each on HumanEval, same encoder, same
 different-prompt floors, bfloat16, K = 8, top_p 0.9, temperature 1.0.
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Found by a
+cross-repository audit begun 2026-09-13 that re-read every quoted figure against the artifact
+that produced it.
+
+### R1 (2026-09-14) — the token budget also reverses a result outside this paper
+
+This paper exists because a 192-token budget bound unequally across arms, cutting 43% to 80% of
+candidates off mid-function. The same truncation reverses a second result that was reported
+elsewhere as a general finding, and the reversal is worth recording here because this is where
+the budget effect is documented.
+
+A standing note held that centring does not transfer to ranking or selection, citing 30 arms
+at mean centred-minus-raw −0.00163. That is `code_select/results.json`, the **192-token** pools.
+On the 1024-token pools it goes the other way:
+
+| pool | arms | mean centred−raw | mean/sem | win / loss / tie | sign test p |
+|---|---:|---:|---:|---|---:|
+| 192-token | 30 | −0.00163 | −0.80 | 8 / 12 / 10 | 0.5034 |
+| 1024-token | 36 | **+0.00627** | **+2.49** | 19 / 6 / 11 | **0.0146** |
+
+Paired on the 30 arms present in both pools, 1024 minus 192 is **+0.00955, mean/sem +3.53**,
+17 wins to 7. At 192 tokens the test could only have resolved a mean above 0.00409 at two
+standard errors and saw −0.00163, so that arm was underpowered rather than null. Anisotropy is
+not the variable: 0.7929 against 0.8048, and the more anisotropic set is the one centring helps.
+
+### R2 (2026-09-14) — the retraction in §1 stands, and the similarity slope survived it
+
+The pitchfork reading was pre-registered, tested and retracted, and §1 says so. The audit
+confirms the separation the paper draws: the detector was broken, and the similarity slope
+measured beside it (+0.0441 at 192 tokens) matches the clean 1024-token run (+0.0433 per decade,
+0.0878 at 0.5B to 0.1589 at 32B). The pass-rate figures from the 192-token matrix do not
+survive and every pass rate should be read from the 1024-token pools.

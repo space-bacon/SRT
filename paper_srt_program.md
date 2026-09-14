@@ -1119,3 +1119,28 @@ blind to either tower, are his. The remaining errors are ours.
 - Silverstein, M. (1976). Shifters, linguistic categories, and
   cultural description. In K. H. Basso & H. A. Selby (Eds.), *Meaning
   in Anthropology* (pp. 11–55). University of New Mexico Press.
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Found by a
+cross-repository audit begun 2026-09-13 that re-read every quoted figure against the artifact
+that produced it.
+
+### R1 (2026-09-14) — audited, no claim corrected
+
+Every quoted figure was re-read against its artifact. The diachronic retraction already in the
+body stands, and the mean-image proposal that was raised and withdrawn by the same review is
+correctly recorded as withdrawn. Two claims this paper inherits from component papers now carry
+revisions there, and a reader should take those with it: the format-versus-tuning ratio in the
+hivemind paper is **3.6×** rather than 4.6× when both steps are measured marginally, and the
+cross-vendor image agreement of 0.8024 in the crossvendor paper is **radiology (ROCO)**, not
+photographs.
+
+### R2 (2026-09-14) — one number this programme would not quote today
+
+`0.9181` held-out cross-lab transport is quoted here as it is elsewhere. It should always appear
+with its floor and ceiling, a shuffled floor of **0.00101** and a self-map ceiling of **0.999**,
+because a retrieval figure without its floor is uninterpretable and this programme says so in
+print. Where the figure appears above without them, read it with them.

@@ -1079,3 +1079,53 @@ Ethayarajh, K. *How Contextual are Contextualized Word Representations?* EMNLP 2
 Lin, T.-Y. et al. *Microsoft COCO: Common Objects in Context*. ECCV 2014.
 
 Zhao, W. et al. *WildChat: 1M ChatGPT Interaction Logs in the Wild*. ICLR 2024.
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Each entry says what
+it changes, and nothing is silently overwritten. Found by a cross-repository audit begun
+2026-09-13 that re-read every quoted figure against the artifact that produced it.
+
+### R1 (2026-09-14) — "4.6 times the work" divides a cumulative by a marginal
+
+§4 states **"The format does roughly 4.6 times the work of the tuning."** That ratio is
+`0.3623 / 0.0786`. The table immediately above it is correctly headed *"Deltas against the
+matched base arm"*, so both rows are measured from base: instruction tuning alone is +0.0786,
+and tuning **through** the chat template is +0.3623. The template's own step is therefore
+`0.3623 − 0.0786 = 0.2837`, and the ratio of the format's contribution to the tuning's is
+**3.6×, not 4.6×**.
+
+The 4.6 figure is defensible only as "everything the deployed configuration adds, against what
+tuning adds", which is not what the sentence claims. The table is unaffected and the direction
+of the result is unchanged: the format does most of the work. Quote **+0.2837** when comparing
+the two steps, and **+0.3623** only when stating the distance from base to deployed.
+
+### R2 (2026-09-14) — the within-lab premium of 0.0357 is understated
+
+§2 reports a within-minus-cross transport premium of **0.0357** and reads it as the entire value
+of shared corporate lineage. The atlas behind it counts `qwen25_7b` and `qwen25_7b_f32` as
+different labs. They are the same weights at two precisions, they transport at 0.999, and that
+pair sits on the **cross-lab** side of the split, which inflates the cross-lab mean and shrinks
+the premium. The true premium is larger than 0.0357 by an amount this run cannot state, because
+removing the pair changes both arms. The qualitative claim it supports, that lineage buys little
+against the cross-lab baseline, survives; the number is a lower bound rather than a measurement.
+
+### R3 (2026-09-14) — there is no MBPP pool-length comparison
+
+The artifact tree files MBPP consensus results under both `verifier/` and `verifier_1024/`,
+which elsewhere denote the 192-token and 1024-token pools. Those two MBPP files are
+**byte-identical**, sha256 `17166fcc3e8f…`, 2,403 bytes, written one minute apart, with all ten
+arms equal. There is exactly one MBPP consensus run, filed twice. Anyone computing an MBPP
+pool-length effect from the directory names gets zero and would read it as a finding. The
+HumanEval pool-length comparison in those directories is real; the MBPP one does not exist.
+
+### R4 (2026-09-14) — the paper carried the denominator correction; four other surfaces did not
+
+§7 already states the `consensus_on_covered` denominator error and gives 0.4426 against 0.3762
+on HumanEval and 0.8174 against 0.8094 on MBPP. That correction, found by Dipankar Sarkar from
+the published artifact, did not reach the repository README, CHANGELOG, FORWARD_PLAN,
+SESSION_HANDOFF or the published HTML paste, which continued to quote the superseded figures.
+No change is required here. The entry exists so that a reader who meets the old numbers on
+another surface knows which is current: **0.3762 and 0.8094**.

@@ -2918,3 +2918,42 @@ bibliographic entries are in §14.
 
 ---
 
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Found by a
+cross-repository audit begun 2026-09-13 that re-read every quoted figure against the artifact
+that produced it.
+
+### R1 (2026-09-14) — audited, and the retraction in Test 4 is the model to copy
+
+Every quoted figure in this paper was re-read against its artifact. No claim required
+correction. The in-body retraction at Test 4, which states plainly that the result is withdrawn
+and leaves the figures visible with the reason, is the pattern the rest of the programme now
+follows and is why this paper needed no repair.
+
+### R2 (2026-09-14) — three artifact filenames are not the runs published here
+
+A reader opening the obvious filename gets a different run. No claim in this paper is wrong; the
+trap is in the artifact tree.
+
+| you open | you get | the published run |
+|---|---|---|
+| `artifacts/nla/cxr14_probe.json` | mean AUROC 0.7179, 34,999 rows, the pilot | `cxr14_probe_full112k.json`, **0.7590**, 86,524 / 25,596, 2,797 test patients |
+| `artifacts/nla/verbalizer/verb_eval_val2017.json` | r@1 0.084, median 45, 1 epoch | `verb_eval_val2017_3ep.json`, **r@1 0.120, median 25** |
+| `artifacts/nla/code_select/results.json` | 31 top-level keys | 30 arms; `task_ids` is not an arm |
+
+`verb_eval_gallery_val2017.json` scores r@1 0.161, median 18, better than both published arms,
+and carries a `comparability_warning` stating why it must not be tabled beside them: the
+verbalizer reads the gallery row that is also the retrieval target. No document violates it.
+
+### R3 (2026-09-14) — a house-style defect, recorded rather than silently edited
+
+This paper uses "honest" as a property of a number or a caveat in 16 places. A result cannot be
+honest; a writer can. The usage asserts virtue in place of a fact, implies the figures published
+elsewhere were not, and is unfalsifiable where "conservative", "unconfounded", "measured" or
+"survives the control" are checkable. Labelling a caveat as honest is the worst case, because
+stating the caveat is the honesty. The text is left as published; future surfaces use the
+checkable word.

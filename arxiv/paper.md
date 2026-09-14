@@ -958,3 +958,32 @@ Given backbone depth $L$:
 - Community discovery layer: $\max(1, \lfloor L/7 \rfloor)$
 
 For Qwen 2.5-7B ($L = 28$): MAH @ [7, 14, 21], inject @ [14, 21], community @ 4.
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Found by a
+cross-repository audit begun 2026-09-13 that re-read every quoted figure against the artifact
+that produced it.
+
+### R1 (2026-09-14) — audited, no claim corrected
+
+Every quoted figure was re-read against its artifact and no claim in this paper required
+correction.
+
+### R2 (2026-09-14) — two inherited numbers now read differently
+
+Where this paper draws on the component results, two of them have been re-labelled and a reader
+should carry the revisions with them. The format-versus-tuning comparison in the hivemind paper
+is **3.6×** rather than 4.6× when both steps are measured marginally from the same base: tuning
+alone is +0.0786 and the chat template's own step is +0.2837, where +0.3623 is the cumulative
+distance from base to deployed. And the cross-vendor image agreement of **0.8024 is radiology
+(ROCO)**, not photographs; the photograph run reaches 0.2862 cross against 0.2898 within, a
+retention of 0.9876.
+
+### R3 (2026-09-14) — quote transport with its floor
+
+Held-out cross-lab transport of **0.9181** should appear with the shuffled floor of **0.00101**
+and the self-map ceiling of **0.999**. A retrieval figure without its floor is uninterpretable,
+which is this programme's own published rule.

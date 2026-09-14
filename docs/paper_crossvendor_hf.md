@@ -636,3 +636,61 @@ throughout §5 and §6)
 Yao, L., Poblenz, E., Dagunts, D., Covington, B., Bernard, D., Lyman, K. (2017).
 Learning to diagnose from scratch by exploiting dependencies among labels.
 arXiv:1710.10501.
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Each entry says what
+it changes, and nothing is silently overwritten. Found by a cross-repository audit begun
+2026-09-13 that re-read every quoted figure against the artifact that produced it.
+
+### R1 (2026-09-14) — §3's headline table is radiology, under a heading that says photographs
+
+§3 opens **"Photographs: vendors agree about which picture"**, describes four backbones encoding
+a shared gallery against a 1,000-image pool, and gives 0.8024 for cross-vendor image agreement,
+0.7864 routed through a third vendor, and a shuffled floor of 0.0007.
+
+All three come from `artifacts/nla/omni/triadic_composition_roco.json`
+(`mean_direct = 0.8024167`, `mean_best_via = 0.7864167`, `mean_shuffled_floor = 0.0006667`).
+**ROCO is the radiology caption corpus.** The photograph run is `xvendor4.json`, and it is the
+source of the 0.2862 / 0.2898 / retention 0.9876 figures that appear four lines below the same
+table. Section 3 therefore places two corpora under one heading, and the heading names the
+wrong one.
+
+There is **no** photograph image-to-image agreement figure in the artifacts. Every JSON under
+`artifacts/` was searched for a value within 5e-5 of 0.8024 and the only cross-vendor hit is the
+ROCO file. The fix is to name the corpus, not to substitute a number. Read the table as
+*"cross-vendor image agreement on radiology, ROCO"*.
+
+The corpus-matched set, all four vendors, 5,000 aligned, 1,000 holdout, 12 ordered cross pairs:
+
+| corpus | artifact | cross r@1 | within r@1 | retention | CI95 |
+|---|---|---:|---:|---:|---|
+| photographs, COCO | `xvendor4.json` | 0.2862 | 0.2898 | 0.9876 | [0.9550, 1.0229] |
+| radiology, ROCO | `roco_xvendor4.json` | 0.0935 | 0.0965 | 0.9689 | [0.8982, 1.0495] |
+| satellite, RSICD | `rsicd_xvendor4.json` | 0.0716 | 0.0738 | 0.9706 | [0.8985, 1.0562] |
+
+The same three numbers propagated to the repository README, FORWARD_PLAN, leverage.md, the HF
+and Substack renderings of this paper, the master paper and its LaTeX source. A reader meeting
+0.8024 anywhere should attach ROCO to it.
+
+### R2 (2026-09-14) — the retention ratio is retired, and why
+
+§5's cross-vendor retention sits near 0.99 and refuses to move under isotropic noise, spectral
+truncation or spectral complement, because both of its terms are throttled by the same caption
+head: within-vendor text-to-image reaches 0.1050 against image agreement of 0.8024. A noise
+ladder walked within-vendor r@1 from 0.0940 down to 0.0030 against a chance floor of 0.0010 and
+the ratio stayed pinned at 1.0. A ratio of two caption-head-limited numbers reports on the
+caption head, not the encoders. Both legs are now reported separately, and a retention figure
+should not be quoted without the within-vendor denominator beside it.
+
+### R3 (2026-09-14) — artifact filenames checked, no defect in this paper
+
+Three artifact filenames in this programme hold a different run from the published one:
+`cxr14_probe.json` is a 34,999-row pilot at 0.7179 where the published run is
+`cxr14_probe_full112k.json` at 0.7590; `verb_eval_val2017.json` is the 1-epoch run where the
+published one is `verb_eval_val2017_3ep.json`; and `code_select/results.json` has 31 top-level
+keys for 30 arms because `task_ids` is shaped like an arm. This paper cites
+`cxr14_probe_full112k.json` by name and is unaffected. The entry is recorded so a reader
+opening the obvious filename knows it is not the run.

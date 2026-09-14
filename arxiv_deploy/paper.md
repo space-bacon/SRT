@@ -566,3 +566,32 @@ Qwen Team (2025). *Qwen3 Technical Report.* arXiv:2505.09388.
 browser tier vendors its quantized Qwen3 implementation, modified only to
 expose a hidden-state tap.
 
+
+---
+
+## Revisions
+
+Corrections found after publication. The body above is left as published. Found by a
+cross-repository audit begun 2026-09-13 that re-read every quoted figure against the artifact
+that produced it.
+
+### R1 (2026-09-14) — audited, no claim corrected, and the rule stated here was being broken elsewhere
+
+Every quoted figure was re-read against its artifact and no claim required correction. This
+paper states that a retrieval figure quoted without its pool size is uninterpretable, including
+our own earlier ones, and that a pool size is the difference between 0.2306 and 0.0148. The
+audit found that rule violated on a live public surface: `BlackWindow/wasm/index.html` read
+"fitted on got 0.230… One mean vector of about four kilobytes restored it to 0.195" with no pool
+stated. Those are **1,000-item** pool figures. At the shipped 123,287-image pool the same
+comparison is **0.1092 → 0.0000 → 0.0350**. Because `rank ≈ n·p(q)` makes `k/n` the invariant,
+that page's 0.195 is not a deployment R@1 but a deployment **R@123**.
+
+Nothing above changes. The entry records that the paper was right and the surface was not, which
+is the direction a reader should assume when the two disagree.
+
+### R2 (2026-09-14) — the pool-free form to prefer
+
+`cross_runtime_browser_rung_123k.json` states the same result in the form that survives a change
+of pool: the anchor moves the median from 44,578 to **176**, the top **0.143%** of the gallery,
+against a chance median of ~61,644 which is `n/2`. Where this paper quotes an `R@k`, the
+rank-over-pool form beside it is the one to carry into another deployment.
