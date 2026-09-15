@@ -175,6 +175,16 @@ TICS = {
     "signposting": [r"the interesting", r"worth sitting with", r"crucially",
                     r"notably", r"more than it sounds", r"the shape of the thing",
                     r"is closer to your question"],
+    # The significance subtitle: a title that claims its own importance instead of naming
+    # its content. "X, and the Y That Makes It Mean Something" was caught by the user on a
+    # paper title 2026-09-15. Same family as signposting, missed because signposting was
+    # only ever run over body prose. A subtitle states what was measured, not why to care.
+    "significance subtitle": [r",? and (the|why) [a-z ]{0,24}(matters|means|changes)",
+                              r"makes? it (mean|matter|count)",
+                              r"that (changes|explains) everything",
+                              r"and why (it|that|this) matters",
+                              r"what (it|this|that) really means",
+                              r"the (one|thing|part) that makes"],
     "negated capability": [r"no eyes", r"cannot see", r"never been shown", r"no vision"],
     "authorship denial": [r"not chosen by us", r"nobody ", r"we did not choose"],
     "hedging": [r"\barguably\b", r"\bsomewhat\b", r"\bperhaps\b", r"\bmight suggest\b",
