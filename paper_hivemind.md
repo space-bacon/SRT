@@ -880,7 +880,14 @@ any of the four. The one check that would have caught the last is the cheapest:
 no arm may exceed its own oracle. It is now enforced per arm in the selector scripts
 and as one pass over every results file (`scripts/check_oracle_bound.py`), holding the
 columns scored over all problems to the bound and reporting the declared subset rates
-beside them without judging them.
+beside them without judging them. The first version of that pass was narrower than
+this sentence: it matched a single key and an allowlist of column names, so it judged
+266 of the bounded cells and returned silently on every file shaped differently, which
+is the same failure it was written to catch. It now walks to any object carrying a
+numeric `oracle`, judges every numeric sibling unless exempt for a stated reason, and
+prints what it scanned, judged and skipped. On the current artifacts that is 746 files
+scanned, 22 carrying an oracle, 2,501 cells judged and 930 skipped with reasons, no
+violations.
 
 **A cross-model transport selector did not survive replication, and we published
 the claim before checking.** Scoring candidates by how far a hidden state fails to
