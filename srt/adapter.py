@@ -29,6 +29,14 @@ from srt.modules.rrm import ReflexiveRecurrentModule
 from srt.modules.ben import BifurcationEstimationNetwork, BENOutput
 from srt.modules.community import CommunityDiscoveryHead, CommunityOutput
 
+# transformers 5.x renamed the decoder-layer cache kwarg (4.x:
+# `past_key_value`, 5.x: `past_key_values`). Wrong name = silently swallowed
+# by **kwargs = cache never used = degenerate cached generation.
+import transformers as _tf
+
+_PKV_KWARG = ("past_key_values"
+              if int(_tf.__version__.split(".")[0]) >= 5 else "past_key_value")
+
 logger = logging.getLogger(__name__)
 
 
@@ -146,7 +154,13 @@ class SRTAdapter(nn.Module):
         logger.info("Loading backbone: %s in %s%s", config.backbone_id,
                     config.backbone_dtype,
                     f" (device_map={device_map})" if device_map else "")
-        load_kwargs: dict = {"torch_dtype": load_dtype}
+        # transformers renamed `torch_dtype` to `dtype` (new name available
+        # from 4.56, old name removed in 5.x); stay compatible with both.
+        import transformers as _tf
+        _dtype_key = ("dtype" if tuple(int(x) for x in
+                      _tf.__version__.split(".")[:2]) >= (4, 56)
+                      else "torch_dtype")
+        load_kwargs: dict = {_dtype_key: load_dtype}
         if device_map is not None:
             # Sharded load (multi-GPU / CPU-offload). accelerate dispatches the
             # model and attaches AlignDevicesHooks that move each module's
@@ -577,7 +591,13 @@ class SRTAdapter(nn.Module):
         for layer_i, layer in enumerate(self._layers):
             layer_kwargs: dict = {
                 "position_ids": position_ids,
-                "past_key_value": backbone_cache,
+                # transformers 5.x renamed the decoder-layer kwarg
+                # `past_key_value` -> `past_key_values`. The old name lands
+                # silently in **kwargs, so the cache is never used and every
+                # decode step sees only its own token (KV-cached generation
+                # degenerates to word salad). Pass whichever name the layer
+                # declares.
+                _PKV_KWARG: backbone_cache,
                 "use_cache": True,
                 "cache_position": cache_position,
             }

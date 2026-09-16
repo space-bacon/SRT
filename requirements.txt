@@ -2,10 +2,13 @@
 # Gradio. ZeroGPU images ship Python 3.10 + CUDA 12.1, so a default torch
 # wheel is fine here (no Blackwell sm_120 requirement).
 torch>=2.2
-# HARD PIN: transformers 5.x BREAKS the adapter's KV-cached manual generation
-# (degenerate output on Qwen2.5-7B; verified on a CUDA box: 5.7.0 garbles,
-# 4.53.3 is correct). forward() parity is bit-exact under 5.x but multi-step
-# cached decoding is not. CVE-2026-1839 (Trainer RCE) stays mitigated by the
+# PINNED FOR REPRODUCIBILITY on Spaces, not for compatibility. The adapter runs
+# on 4.x and 5.x through two call-site shims in srt/adapter.py, `_dtype_key`
+# (torch_dtype -> dtype) and `_PKV_KWARG` (past_key_value -> past_key_values).
+# The note that stood here said 5.x breaks KV-cached manual generation; that was
+# the decoder-layer kwarg rename landing silently in **kwargs so the cache was
+# never used, diagnosed and fixed in fe389f30 and verified on 5.14.
+# CVE-2026-1839 (Trainer RCE) stays mitigated by the
 # torch>=2.6 floor below, and we never invoke the HF Trainer.
 # CVE-2026-4372 (config.json `_attn_implementation_internal` RCE, patched only
 # in 5.3.0) and CVE-2026-5241 (LightGlue loading-path RCE, patched only in
