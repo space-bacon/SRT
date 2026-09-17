@@ -1,0 +1,7 @@
+{
+  "//": "artifacts/ is 820 MB over 1,234 files and data/ is 619 MB over 6,029 files, together 98% of what this repository puts in the weave and 96% of a six-folder store. Indexing them cost 4h57m and crashed the page on its heap. They are measurement JSON and training corpora: a number is read from an artifact, not recalled as prose.",
+  "sunstone.weave.exclude": [
+    "**/artifacts/**",
+    "**/data/**"
+  ]
+}
