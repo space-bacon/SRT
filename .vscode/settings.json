@@ -1,9 +1,8 @@
 {
   "//": "artifacts/ is 820 MB over 1,234 files and data/ is 619 MB over 6,029 files, together 98% of what this repository puts in the weave and 96% of a six-folder store. Indexing them cost 4h57m and crashed the page on its heap. They are measurement JSON and training corpora: a number is read from an artifact, not recalled as prose.",
-  "//private": "private/ is 10.9 MB and one conversational transcript is 10.8 MB of it. sunstone/src/weave.ts:394 records that it took the top hit on 17 of 38 questions, which is why PER_SOURCE exists; the cap limits it to two passages a search and does not stop it crowding the top. It restates conclusions in the vocabulary of the questions without carrying the artifact's number.",
+  "//private": "private/ was excluded on 2026-09-17 and put back the same day. Assessment run i scored 7 of 20 against 10 with it in, and transcript_substrate_invariance_full.md is the only file in this repository naming mistral_24b, aria_25b and qwen38_27b, which is trap item T3's answer: T3 passed with the folder woven and hit the round cap without it. The folder crowds results and also carries them.",
   "sunstone.weave.exclude": [
     "**/artifacts/**",
-    "**/data/**",
-    "**/private/**"
+    "**/data/**"
   ]
 }
