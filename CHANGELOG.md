@@ -12,9 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   they produce, return a member of the largest group. The entry point and the
   argument shapes are recovered from the candidates themselves, so it takes a
   chat turn rather than a benchmark row. On HumanEval it moves a random single
-  draw from 0.1868 to **0.4426** against an oracle of 0.4954, and on MBPP from
-  0.7185 to **0.8174** against 0.8887, which is 82.9% and 58.1% of the available
-  headroom. It beats a verifier trained on 47,232 execution labels (0.2639 on
+  draw from 0.1868 to **0.3762** against an oracle of 0.4954, and on MBPP from
+  0.7185 to **0.8094** against 0.8887, which is 61.4% and 53.4% of the available
+  headroom. (This entry read 0.4426 / 0.8174 and 82.9% / 58.1% until 2026-09-21;
+  those were the wrong metric column of `artifacts/nla/verifier/consensus.json`
+  and `consensus_mbpp.json`.)
+  It beats a verifier trained on 47,232 execution labels (0.2639 on
   HumanEval, and that verifier does not transfer to MBPP). Recovering the target
   from the chat turn alone costs coverage rather than accuracy: 55.0% of
   HumanEval problems resolve and 98.6% of MBPP ones, giving 0.3096 and 0.7991.
@@ -204,9 +207,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - State-identity red-teaming instrument and studies on gpt-oss-20b
   (`scripts/redteam_states.py`, word-category / token-structure studies;
   `paper_nla.md` §11.5).
-- Repository mirrored to
-  [`space-bacon/SRT-Sunstone`](https://github.com/space-bacon/SRT-Sunstone)
-  as a standalone public home for the Sunstone line.
+- Repository mirrored to `space-bacon/SRT-Sunstone` as a standalone public home
+  for the Sunstone line. **Abandoned; do not use.** It stopped receiving pushes at
+  `1ba0b4b` and is **517 commits behind** this repository as of 2026-09-21, so it
+  serves superseded figures with none of the corrections since. The link is
+  removed rather than followed. `space-bacon/SRT` is the only home.
 - **SRT adapter ported to a frozen Qwen3-235B-A22B (22B-active MoE) backbone.**
   First SRT read-out adapter on a frontier-scale host. Phase-A (read-only)
   checkpoint released as

@@ -453,8 +453,9 @@ gap may be largely an anisotropy story. Quick prior-art check:
 ## Selection — next push, in priority order
 
 Package: `srt_select`. Paper: `paper_hivemind.md` §5.4. Artifacts:
-`RiverRider/srt-hivemind`. Standing numbers: HumanEval 0.1868 → 0.4426
-(oracle 0.4954), MBPP 0.7185 → 0.8174 (oracle 0.8887).
+`RiverRider/srt-hivemind`. Standing numbers: HumanEval 0.1868 → 0.3762
+(oracle 0.4954), MBPP 0.7185 → 0.8094 (oracle 0.8887). Corrected 2026-09-21 from
+0.4426 / 0.8174, which were the wrong metric column.
 
 ### 0. The shape of the plan *(hardware is a variable, not a constraint)*
 
@@ -462,10 +463,13 @@ Establish the best number the method can produce, then size hardware to serve
 it. Designing around whatever box happens to be here inverts the order and
 throws away results that a different card would make deployable.
 
-The claim being chased: **a 14B with selection scores 0.8706 on MBPP against a
-32B's 0.8609 unaided**, so selection buys roughly one size class. It is a product
-claim only if K samples cost meaningfully less than K answers, which is a
-property of the serving stack.
+The claim being chased: **a 14B with selection reaches 0.8729 on MBPP under the
+execution selector**, on 425 problems over 10 arms. The earlier form of this
+line, "0.8706 against a 32B's 0.8609 unaided", compared two selectors across two
+artifacts; like against like the rungs tie exactly, so selection does not buy a
+size class here and the sentence is withdrawn. It is a product
+claim only if K samples cost meaningfully less than K answers, which is a property
+of the serving stack.
 
 **Serving stack follows from that.** vLLM takes `SamplingParams.n`, giving K
 samples from one prefill with continuous batching, which is exactly this

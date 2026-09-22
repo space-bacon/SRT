@@ -138,15 +138,26 @@ chat turn rather than a benchmark row.
 
 | | problems | arms | floor | selected | oracle |
 |---|---:|---:|---:|---:|---:|
-| HumanEval | 164 | 36 | 0.1868 | **0.4426** | 0.4954 |
-| MBPP | 425 | 10 | 0.7185 | **0.8174** | 0.8887 |
+| HumanEval | 164 | 36 | 0.1868 | **0.3762** | 0.4954 |
+| MBPP | 425 | 10 | 0.7185 | **0.8094** | 0.8887 |
 
-That is 82.9% and 58.1% of the headroom an oracle would capture. It beats a
+That is 61.4% and 53.4% of the headroom an oracle would capture. It beats a
 verifier trained on 47,232 execution labels, which reached 0.2639 on HumanEval
 and did not transfer to MBPP. Recovering the target from the chat turn alone
 costs coverage rather than accuracy: HumanEval resolves on 55.0% of problems and
 MBPP on 98.6%, giving 0.3096 and 0.7991 with unresolved problems scored as an
 arbitrary pick.
+
+This table read **0.4426** and **0.8174**, 82.9% and 58.1%, until 2026-09-21.
+Those figures are real and are in the artifacts; they are the wrong column.
+`artifacts/nla/verifier/consensus.json` and `consensus_mbpp.json` each carry both
+`consensus` and `consensus_on_covered`, and the second scores only the problems
+an arm could resolve a target for, which on HumanEval is about 134 of 164. Drop
+the ones you could not attempt and the score rises, so `consensus_on_covered` is
+not the number to quote as a method's score. The table above is `consensus`,
+which counts an unresolved problem as a failure. The gap is 0.0664 on HumanEval
+and 21.5 points of headroom share. Coverage is 164 on HumanEval and 420 of 425 on
+MBPP.
 
 **Three things it does not do.** It is not a correctness check, it returns the
 pool's majority, and a pool that is confidently wrong together defeats it.
@@ -173,9 +184,17 @@ a property of the card and the model, so measure it on the hardware you serve
 from with `scripts/k_latency.py`.
 
 This is what makes the ladder result a product claim rather than a curiosity. A
-14B with selection scores 0.8706 on MBPP against a 32B's 0.8609 alone. If K=8
-cost eight answers you would simply run the 32B; because it does not, you get
-32B-class coding from a model that fits far more comfortably.
+14B with selection reaches **0.8729** on MBPP under the execution selector, and
+**0.8753** at its best rung, on 425 problems over 10 arms. If K=8 cost eight
+answers you would simply run the 32B; because it does not, you get 32B-class
+coding from a model that fits far more comfortably.
+
+This paragraph said "0.8706 against a 32B's 0.8609 alone" until 2026-09-21, and
+that comparison was two files and two selectors: 0.8706 is the text-only
+`chat_consensus` selector and 0.8609 is the 32B's own floor in a different
+artifact. Like against like the two rungs **tie exactly**, 0.8706 against 0.8706
+and 0.8729 against 0.8729. The error ran against us, which is why the corrected
+figure is higher than the one it replaces.
 
 Two caveats. Under concurrency, batching K samples for one user consumes
 capacity that would otherwise serve other users, so it is nearly free for a
@@ -379,6 +398,12 @@ vendor's space into another's and lands on the right picture:
 | **cross-vendor image agreement, direct map** | **0.8024** | 1000 |
 | routed through a third vendor | 0.7864 | 1000 |
 | shuffled floor | 0.0007 | 1000 |
+
+**The corpus is ROCO radiology**, 5,000 aligned pairs and a 1,000-image holdout,
+from `artifacts/nla/omni/triadic_composition_roco.json`. These three figures
+appeared under a "Photographs" heading on eleven surfaces until 2026-09-21; no
+photograph image-to-image figure exists in the artifacts at all. The photograph
+result is the retention one below, on COCO.
 
 Embedding lock-in is weaker than usually assumed: a gallery encoded once
 remains searchable by a different vendor's encoder.

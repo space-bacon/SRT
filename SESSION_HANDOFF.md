@@ -5,8 +5,9 @@
 1. **`srt_select` is the deliverable.** `select(user_message, replies)` returns
    one of K replies by executing them all on synthesised inputs and taking a
    member of the largest output-agreement cluster. No tests, no reference, no
-   scoring model, no training, no weights. HumanEval 0.1868 → **0.4426**
-   (oracle 0.4954), MBPP 0.7185 → **0.8174** (oracle 0.8887). Beats a verifier
+   scoring model, no training, no weights. HumanEval 0.1868 → **0.3762**
+   (oracle 0.4954), MBPP 0.7185 → **0.8094** (oracle 0.8887), corrected
+   2026-09-21 from 0.4426 / 0.8174. Beats a verifier
    trained on 47,232 execution labels. From a chat turn alone it costs coverage
    not accuracy: 55.0% / 98.6% resolved → 0.3096 / 0.7991.
 
@@ -272,9 +273,11 @@ active jobs — all data is safe on HF/git/local, spin down at will.
    fusion (`scripts/stereo_decode.py`) recovers the heart and both the
    caption head and read-out then name it. Composite figure at
    `artifacts/nla/gemma4/stereo/stereo_figure.png`.
-3. **Repo duplicated** to `github.com/space-bacon/SRT-Sunstone` (mirror
-   push, all branches + tags) and cloned locally at
-   `/Users/burtron/development/SRT-Sunstone`, synced to `7da4691`.
+3. **Repo duplicated** to `space-bacon/SRT-Sunstone` (mirror push, all branches
+   + tags) and cloned locally at `/Users/burtron/development/SRT-Sunstone`,
+   synced to `7da4691`. **That mirror is abandoned as of 2026-09-21**: it stopped
+   at `1ba0b4b`, 517 commits behind, and carries figures three corrections have
+   moved since. Do not push to it or link to it.
 4. **gptoss20b trace_pairs_L18.jsonl** committed to git (13MB).
 5. (Press/outreach item moved out of the repo.)
 
