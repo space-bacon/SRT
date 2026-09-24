@@ -13,7 +13,7 @@ that is the operational queue.
 >    fine-tuned ResNet-50, ahead on 12 of 14 findings. Split-matched,
 >    patient-disjoint, three controls, published as dataset, model and Space.
 > 2. **The caption head is the bottleneck, and it is now measured.**
->    Cross-vendor image agreement is **0.8024** against a 0.0007 floor;
+>    Cross-vendor image agreement is **0.8024** against a 0.0007 floor, on ROCO radiology images;
 >    within-vendor text-to-image is **0.1050**. Swapping the caption tower
 >    moves both terms together (0.938 and 0.973), so the head is the shared
 >    constraint. That 8x gap sits in one component and is the largest piece
@@ -52,7 +52,7 @@ with a reviewer-legible headline.
 ## 2. Attack the caption head
 
 The largest measured gap in the program: 0.8024 image agreement against 0.1050
-text-to-image, with the head confirmed as the shared bottleneck by swap. Every
+text-to-image, both on ROCO radiology, with the head confirmed as the shared bottleneck by swap. Every
 retention-style number is throttled by it and the cross-vendor product is capped
 by it. Options: a better head architecture, more pair data, a stronger
 objective, or a distilled teacher. States for four vendors across three domains

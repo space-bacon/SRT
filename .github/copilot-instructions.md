@@ -5,7 +5,7 @@ When asked where something is or how it works in this repository, call the Black
 Measurement rules:
 
 - Centre before you trust a cosine. Any similarity over hidden states or adapter embeddings is anisotropy-adjusted first: subtract the pool mean fitted on the relevant population, then take cosine. Print the raw anisotropy and a mismatched or permuted floor from the same comparison beside every result. Anisotropy here has been measured as high as 0.9874, where raw cosine carries no information at all. Fit the mean per vendor, per modality, per domain, from the train split only; a mean carried across domains under-corrects and the confound is indistinguishable from the effect being tested.
-- Centring is for interpreting magnitudes, not for ranking. Subtracting a global mean rarely moves an argmax, so it does not rescue a selector.
+- Centring is required for interpreting magnitudes. Whether it helps a ranking depends on the pool, so measure it per selector: on HumanEval selection it moved nothing on 192-token pools (30 arms, mean -0.0016, mean/sem -0.80) and helped on 1024-token pools (36 arms, +0.0063, mean/sem +2.49, 19 wins to 6), per C3.
 - Average the signed difference, then take the absolute value. Averaging absolute differences across seeds is biased upward, worst exactly where the gap is small against its noise.
 - Underpowered is not refuted. Report gap over its standard deviation and the smallest effect the test could have seen, and say which of the two you mean.
 - Every number carries a population. State the benchmark, the split, the arm count and which contrast it is, especially when the flattering reading is the cumulative one. A ratio without its denominator is not a result.

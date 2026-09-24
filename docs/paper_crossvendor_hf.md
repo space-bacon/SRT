@@ -140,6 +140,8 @@ concatenates a backbone *with itself* can show that.
 
 ## 3. Photographs: vendors agree about which picture
 
+*Revised 2026-09-14, see R1: the table below is radiology (ROCO), not photographs. The photograph figures are the 0.2862 against 0.2898 paragraph under it.*
+
 Four backbones encode a shared gallery. A ridge map fitted between two vendors'
 image states moves a picture from one vendor's space into another's, where it is
 matched against a 1,000-image pool.
