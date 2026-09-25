@@ -557,9 +557,10 @@ with gr.Blocks(title="Two rival models, one memory", css=CSS,
             gr.Markdown(
                 "Qwen3-Omni encodes photographs, sounds and video clips. "
                 "A **single linear tower** places all three beside text in one "
-                "index, and it beats a separate tower per modality on every "
-                "modality: mixed gallery 0.2885 against 0.2667, and video "
-                "0.2486 against 0.1730.\n\n"
+                "index, and it loses nothing against a separate tower per "
+                "modality. On video it is ahead: 0.2486 against 0.1730 in the "
+                "first run, and +0.0638 at sign p 0.010 over five seeds paired "
+                "by query.\n\n"
                 "Ask for something and see what comes back. The results are "
                 "not filtered by kind."
             )

@@ -550,19 +550,24 @@ field forbidding comparison against full-rank pairwise.
 
 The claim that `retention` is insensitive to the vendor boundary rests on both
 of its terms being limited by the caption head. The test that settles it is to
-hold the image side fixed and swap the head. An unrelated off-the-shelf
-encoder, `all-MiniLM-L6-v2`, as the caption tower on ROCO:
+hold the image side fixed and swap the head. The first run put one shared
+`all-MiniLM-L6-v2` in every vendor's caption slot, which left both swapped arms
+measuring the same quantity, so the ratio test collapsed; it is superseded. With
+a distinct off-the-shelf tower per vendor (`all-MiniLM-L6-v2`,
+`bge-small-en-v1.5`, `gte-base`, `e5-base-v2`), five seeds and 1,000 held-out
+ROCO items:
 
 | | native head | swapped head | ratio |
 |---|---:|---:|---:|
-| within r@1 | 0.0887 | 0.0833 | 0.938 |
-| cross r@1 | 0.0853 | 0.0830 | 0.973 |
+| within r@1 | 0.0847 ± 0.0033 | 0.1021 ± 0.0023 | 1.2064 ± 0.0304 |
+| cross r@1 | 0.0872 ± 0.0025 | 0.1072 ± 0.0030 | 1.2308 ± 0.0401 |
 
-Both terms scale by nearly the same factor, gap 0.0347. That is what
-"limited by the shared head" predicts, and it is the test designed to break
-the reframe. Test proposed by Dipankar Sarkar.
+Both terms rise by about a fifth, and the two ratios differ by −0.0244 ± 0.0476,
+gap over sd −0.51. That is what "limited by the shared head" predicts, and it
+is the test designed to break the reframe. Test proposed by Dipankar Sarkar.
 
-- **Artifact**: [`artifacts/nla/omni/head_swap_roco.json`](artifacts/nla/omni/head_swap_roco.json)
+- **Artifact**: [`artifacts/nla/omni/head_swap_multi_roco.json`](artifacts/nla/omni/head_swap_multi_roco.json),
+  which supersedes [`artifacts/nla/omni/head_swap_roco.json`](artifacts/nla/omni/head_swap_roco.json)
 
 ## Medical imaging — frozen states, linear probes, split-matched
 

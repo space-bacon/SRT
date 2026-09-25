@@ -1,0 +1,299 @@
+{
+ "question": "does one shared tower beat a tower per modality when the two are paired query by query",
+ "replicates": "artifacts/nla/omni/omni_joint.json, one unseeded run",
+ "protocol": {
+  "split": "default_rng(0), holdout 0.2",
+  "dim": 512,
+  "epochs": 120,
+  "lr": 0.001,
+  "tau": 0.05,
+  "batch": 512,
+  "centring": "per modality for items, pooled for text, train split",
+  "device": "cpu",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "n_total": 6883,
+ "n_train": 5507,
+ "n_holdout": 1376,
+ "holdout_counts": {
+  "image": 1027,
+  "audio": 164,
+  "video": 185
+ },
+ "raw_anisotropy": {
+  "items": 0.9050723314285278,
+  "texts": 0.948759913444519
+ },
+ "per_seed": {
+  "0": {
+   "mixed_gallery": {
+    "shared": 0.2870639534883721,
+    "per_modality": 0.2623546511627907,
+    "wins": 132,
+    "losses": 98,
+    "sign_p": 0.02934,
+    "n": 1376
+   },
+   "image": {
+    "shared": 0.2891918208373905,
+    "per_modality": 0.2560856864654333,
+    "wins": 103,
+    "losses": 69,
+    "sign_p": 0.01164,
+    "n": 1027
+   },
+   "audio": {
+    "shared": 0.4451219512195122,
+    "per_modality": 0.4451219512195122,
+    "wins": 13,
+    "losses": 13,
+    "sign_p": 1.0,
+    "n": 164
+   },
+   "video": {
+    "shared": 0.25405405405405407,
+    "per_modality": 0.1837837837837838,
+    "wins": 27,
+    "losses": 14,
+    "sign_p": 0.05958,
+    "n": 185
+   }
+  },
+  "1": {
+   "mixed_gallery": {
+    "shared": 0.2601744186046512,
+    "per_modality": 0.25799418604651164,
+    "wins": 123,
+    "losses": 120,
+    "sign_p": 0.89795,
+    "n": 1376
+   },
+   "image": {
+    "shared": 0.25219084712755596,
+    "per_modality": 0.25803310613437197,
+    "wins": 90,
+    "losses": 96,
+    "sign_p": 0.71401,
+    "n": 1027
+   },
+   "audio": {
+    "shared": 0.4573170731707317,
+    "per_modality": 0.4268292682926829,
+    "wins": 16,
+    "losses": 11,
+    "sign_p": 0.44207,
+    "n": 164
+   },
+   "video": {
+    "shared": 0.22702702702702704,
+    "per_modality": 0.16756756756756758,
+    "wins": 25,
+    "losses": 14,
+    "sign_p": 0.10813,
+    "n": 185
+   }
+  },
+  "2": {
+   "mixed_gallery": {
+    "shared": 0.27325581395348836,
+    "per_modality": 0.25799418604651164,
+    "wins": 126,
+    "losses": 105,
+    "sign_p": 0.18809,
+    "n": 1376
+   },
+   "image": {
+    "shared": 0.2775073028237585,
+    "per_modality": 0.2619279454722493,
+    "wins": 94,
+    "losses": 78,
+    "sign_p": 0.25266,
+    "n": 1027
+   },
+   "audio": {
+    "shared": 0.3719512195121951,
+    "per_modality": 0.42073170731707316,
+    "wins": 11,
+    "losses": 19,
+    "sign_p": 0.20049,
+    "n": 164
+   },
+   "video": {
+    "shared": 0.24864864864864866,
+    "per_modality": 0.1783783783783784,
+    "wins": 23,
+    "losses": 10,
+    "sign_p": 0.03508,
+    "n": 185
+   }
+  },
+  "3": {
+   "mixed_gallery": {
+    "shared": 0.27761627906976744,
+    "per_modality": 0.2616279069767442,
+    "wins": 119,
+    "losses": 97,
+    "sign_p": 0.15288,
+    "n": 1376
+   },
+   "image": {
+    "shared": 0.27848101265822783,
+    "per_modality": 0.25219084712755596,
+    "wins": 98,
+    "losses": 71,
+    "sign_p": 0.04518,
+    "n": 1027
+   },
+   "audio": {
+    "shared": 0.4146341463414634,
+    "per_modality": 0.4695121951219512,
+    "wins": 5,
+    "losses": 14,
+    "sign_p": 0.06357,
+    "n": 164
+   },
+   "video": {
+    "shared": 0.25405405405405407,
+    "per_modality": 0.1945945945945946,
+    "wins": 23,
+    "losses": 12,
+    "sign_p": 0.08953,
+    "n": 185
+   }
+  },
+  "4": {
+   "mixed_gallery": {
+    "shared": 0.279796511627907,
+    "per_modality": 0.2703488372093023,
+    "wins": 129,
+    "losses": 116,
+    "sign_p": 0.44335,
+    "n": 1376
+   },
+   "image": {
+    "shared": 0.2775073028237585,
+    "per_modality": 0.2745861733203505,
+    "wins": 100,
+    "losses": 97,
+    "sign_p": 0.88674,
+    "n": 1027
+   },
+   "audio": {
+    "shared": 0.42073170731707316,
+    "per_modality": 0.42073170731707316,
+    "wins": 9,
+    "losses": 9,
+    "sign_p": 1.0,
+    "n": 164
+   },
+   "video": {
+    "shared": 0.23783783783783785,
+    "per_modality": 0.1783783783783784,
+    "wins": 22,
+    "losses": 11,
+    "sign_p": 0.08014,
+    "n": 185
+   }
+  }
+ },
+ "across_seeds": {
+  "mixed_gallery": {
+   "shared_mean": 0.2756,
+   "shared_sd": 0.01,
+   "per_modality_mean": 0.2621,
+   "per_modality_sd": 0.0051,
+   "gap_mean": 0.0135,
+   "gap_sd": 0.0084,
+   "gap_over_se": 3.62,
+   "seeds_shared_ahead": 5,
+   "seeds_significant_at_0.05": 1,
+   "n": 1376
+  },
+  "image": {
+   "shared_mean": 0.275,
+   "shared_sd": 0.0137,
+   "per_modality_mean": 0.2606,
+   "per_modality_sd": 0.0086,
+   "gap_mean": 0.0144,
+   "gap_sd": 0.0161,
+   "gap_over_se": 2.0,
+   "seeds_shared_ahead": 4,
+   "seeds_significant_at_0.05": 2,
+   "n": 1027
+  },
+  "audio": {
+   "shared_mean": 0.422,
+   "shared_sd": 0.0329,
+   "per_modality_mean": 0.4366,
+   "per_modality_sd": 0.0209,
+   "gap_mean": -0.0146,
+   "gap_sd": 0.0362,
+   "gap_over_se": -0.9,
+   "seeds_shared_ahead": 1,
+   "seeds_significant_at_0.05": 0,
+   "n": 164
+  },
+  "video": {
+   "shared_mean": 0.2443,
+   "shared_sd": 0.0117,
+   "per_modality_mean": 0.1805,
+   "per_modality_sd": 0.0098,
+   "gap_mean": 0.0638,
+   "gap_sd": 0.0059,
+   "gap_over_se": 24.09,
+   "seeds_shared_ahead": 5,
+   "seeds_significant_at_0.05": 1,
+   "n": 185
+  }
+ },
+ "across_items": {
+  "mixed_gallery": {
+   "gap": 0.0135,
+   "se": 0.0067,
+   "gap_over_se": 2.01,
+   "smallest_detectable_2se": 0.0134,
+   "queries_shared_ahead": 263,
+   "queries_per_modality_ahead": 240,
+   "sign_p": 0.32663,
+   "n": 1376
+  },
+  "image": {
+   "gap": 0.0144,
+   "se": 0.0076,
+   "gap_over_se": 1.89,
+   "smallest_detectable_2se": 0.0152,
+   "queries_shared_ahead": 208,
+   "queries_per_modality_ahead": 186,
+   "sign_p": 0.29006,
+   "n": 1027
+  },
+  "audio": {
+   "gap": -0.0146,
+   "se": 0.0148,
+   "gap_over_se": -0.99,
+   "smallest_detectable_2se": 0.0297,
+   "queries_shared_ahead": 25,
+   "queries_per_modality_ahead": 29,
+   "sign_p": 0.68349,
+   "n": 164
+  },
+  "video": {
+   "gap": 0.0638,
+   "se": 0.0242,
+   "gap_over_se": 2.63,
+   "smallest_detectable_2se": 0.0485,
+   "queries_shared_ahead": 45,
+   "queries_per_modality_ahead": 23,
+   "sign_p": 0.01034,
+   "n": 185
+  }
+ },
+ "derangement_floor_median_mean": 691.16,
+ "analytic_chance_median": 688.5
+}

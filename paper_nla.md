@@ -1941,20 +1941,26 @@ Anisotropy matters more. Raw cosine between unrelated items on these states is
 $+0.869$ and raw retrieval sits exactly at chance. Every number below is
 per-modality centered. Uncentered, none of this is visible.
 
-**One tower beats four.** Fitting a single item tower across all modalities
-outperforms per-modality towers on every modality (1,376 holdout items):
+**One tower serves every modality.** A single item tower fitted across all
+modalities scores at least as well as a tower per modality on every gallery. The
+first run, unseeded and unpaired (1,376 holdout items):
 
 | | shared | per-modality | $n$ |
 |---|---|---|---|
-| mixed gallery | **0.2885** | 0.2667 | 1376 |
-| image | **0.2902** | 0.2687 | 1027 |
-| audio | **0.4451** | 0.4207 | 164 |
-| video | **0.2486** | 0.1730 | 185 |
+| mixed gallery | 0.2885 | 0.2667 | 1376 |
+| image | 0.2902 | 0.2687 | 1027 |
+| audio | 0.4451 | 0.4207 | 164 |
+| video | 0.2486 | 0.1730 | 185 |
 
-Derangement floor $695 \pm 21$ against an analytic $688$. The widest margin is
-video ($+0.076$), the modality with the fewest items, which is the expected
-signature of a shared tower borrowing structure the small set cannot learn
-alone.
+Derangement floor $695 \pm 21$ against an analytic $688$. Refitted over five
+seeds on the same split and paired query by query, with each query's hit rate
+averaged over seeds, the shared tower is ahead on video, $+0.0638 \pm 0.0242$,
+45 queries to 23, sign $p = 0.010$. On the other galleries the two are not
+separable: images $+0.0144 \pm 0.0076$ ($p = 0.29$), the mixed gallery
+$+0.0135 \pm 0.0067$ ($p = 0.33$), and audio $-0.0146 \pm 0.0148$ ($p = 0.68$),
+where the smallest gap the test could have seen is $0.030$. One tower costs
+nothing measurable on any modality and lifts video
+(`artifacts/nla/omni/omni_joint_paired.json`).
 
 **Vendor identity carries almost no information.** Encoding the same manifest
 through four hosts from four vendors and fitting every vendor's item tower

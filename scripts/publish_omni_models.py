@@ -29,19 +29,23 @@ One linear tower that places image, audio and video beside text in a single
 searchable space, read off the frozen hidden states of Qwen3-Omni-30B-A3B at 60%
 depth. 8 MB.
 
-One shared tower beats one tower per modality on every modality (1,376 holdout
-items):
+One shared tower does at least as well as one tower per modality on every
+modality, and better on video. The first run, unseeded and unpaired (1,376
+holdout items):
 
 | | shared | per-modality | n |
 |---|---|---|---|
-| mixed gallery | **0.2885** | 0.2667 | 1376 |
-| image | **0.2902** | 0.2687 | 1027 |
-| audio | **0.4451** | 0.4207 | 164 |
-| video | **0.2486** | 0.1730 | 185 |
+| mixed gallery | 0.2885 | 0.2667 | 1376 |
+| image | 0.2902 | 0.2687 | 1027 |
+| audio | 0.4451 | 0.4207 | 164 |
+| video | 0.2486 | 0.1730 | 185 |
 
-Derangement floor 695 +/- 21 against an analytic 688. The widest margin is video
-(+0.076), the modality with the fewest items, which is what a shared tower
-borrowing structure from the larger modalities looks like.
+Derangement floor 695 +/- 21 against an analytic 688. Refitted over five seeds
+and paired query by query, the shared tower is ahead on video by +0.0638 +/-
+0.0242 (sign p 0.010) and not separable elsewhere: images +0.0144 (p 0.29), the
+mixed gallery +0.0135 (p 0.33), audio -0.0146 (p 0.68, where the smallest gap the
+test could see is 0.030). The paired result is `results/omni_joint_paired.json`
+in the states dataset.
 
 ## Contents
 

@@ -15,12 +15,13 @@ SCRIPTS = ["build_omni_manifest.py", "omni_encode_all.py", "omni_joint_fit.py",
            "xvendor_fit.py", "xvendor_fit_n.py", "omni_smoke.py",
            "head_swap_multi.py", "head_swap.py", "holonomy_edge_identity.py",
            "holonomy_palindrome.py", "mteb_composition.py", "joint_frame.py",
-           "rsicd_scene_probe.py", "cxr_probe_floor_seeds.py"]
+           "rsicd_scene_probe.py", "cxr_probe_floor_seeds.py", "omni_joint_paired.py"]
 
 # Section 11 of paper_crossvendor.md promises every result is reproducible from
 # published states. It named twelve result files; this repo shipped three.
 RESULTS = [
-    "omni_joint.json", "xvendor.json", "xvendor4.json",
+    "omni_joint.json", "omni_joint_paired.json", "omni_joint_paired_seeds.jsonl",
+    "xvendor.json", "xvendor4.json",
     "head_swap_multi_roco.json", "head_swap_roco.json",
     "holonomy_edge_identity_roco.json", "holonomy_edge_identity_rsicd.json",
     "holonomy_palindrome_roco.json", "holonomy_palindrome_rsicd.json",
@@ -55,21 +56,25 @@ results computed from them.
 
 A gallery encoded by one vendor is searchable by another vendor's text encoder
 at a rate statistically indistinguishable from native, and one linear map places
-image, audio and video in a single searchable space more effectively than one
-map per modality.
+image, audio and video in a single searchable space with no loss against one map
+per modality, and a gain on video.
 
 ## The two results
 
-**One tower beats one-per-modality** (Qwen3-Omni-30B, 1,376 holdout items):
+**One tower serves every modality** (Qwen3-Omni-30B, 1,376 holdout items, first
+run, unseeded):
 
 | | shared | per-modality | n |
 |---|---|---|---|
-| mixed gallery | **0.2885** | 0.2667 | 1376 |
-| image | **0.2902** | 0.2687 | 1027 |
-| audio | **0.4451** | 0.4207 | 164 |
-| video | **0.2486** | 0.1730 | 185 |
+| mixed gallery | 0.2885 | 0.2667 | 1376 |
+| image | 0.2902 | 0.2687 | 1027 |
+| audio | 0.4451 | 0.4207 | 164 |
+| video | 0.2486 | 0.1730 | 185 |
 
-Derangement floor 695 +/- 21 against an analytic 688.
+Derangement floor 695 +/- 21 against an analytic 688. Refitted over five seeds
+and paired query by query (`results/omni_joint_paired.json`), the shared tower is
+ahead on video, +0.0638 +/- 0.0242 at sign p 0.010, and not separable from the
+per-modality towers on images, audio or the mixed gallery.
 
 **Cross-vendor retrieval matches within-vendor:**
 

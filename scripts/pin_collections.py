@@ -19,8 +19,8 @@ RELEASE = [
     ("RiverRider/srt-omni-xvendor-towers", "model",
      "The 2 and 4 vendor towers. Retention 0.988, 95% CI [0.955, 1.023]."),
     ("RiverRider/srt-omni-shared-tower", "model",
-     "One linear tower placing image, audio and video beside text. Beats one "
-     "tower per modality on every modality."),
+     "One linear tower placing image, audio and video beside text. Loses "
+     "nothing to one tower per modality, and is ahead on video."),
     ("RiverRider/srt-omni-manifest", "dataset",
      "The item list on its own, so a fifth vendor can be added without "
      "re-deriving the setup."),

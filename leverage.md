@@ -14,10 +14,10 @@ that is the operational queue.
 >    patient-disjoint, three controls, published as dataset, model and Space.
 > 2. **The caption head is the bottleneck, and it is now measured.**
 >    Cross-vendor image agreement is **0.8024** against a 0.0007 floor, on ROCO radiology images;
->    within-vendor text-to-image is **0.1050**. Swapping the caption tower
->    moves both terms together (0.938 and 0.973), so the head is the shared
->    constraint. That 8x gap sits in one component and is the largest piece
->    of headroom in the program.
+>    within-vendor text-to-image is **0.1050**. Swapping in a distinct
+>    off-the-shelf caption tower per vendor raises both terms together (×1.21
+>    and ×1.23), so the head is the shared constraint. That 8x gap sits in one
+>    component and is the largest piece of headroom in the program.
 > 3. **GPUs are needed for exactly one thing: encoding.** Every fit, sweep,
 >    probe and retrieval here runs on CPU. The chest probe refits locally in
 >    48 seconds. Budget compute for "get a new backbone's reading of an image"
