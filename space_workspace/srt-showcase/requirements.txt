@@ -10,7 +10,7 @@ srt-adapter @ git+https://github.com/space-bacon/SRT.git@main
 # mitigated by usage — this Space loads only Qwen/Qwen2.5-7B + RiverRider
 # checkpoints and never uses LightGlue; no user-supplied Hub IDs reach
 # from_pretrained().
-transformers==4.53.3
+transformers==5.5.0
 torch>=2.6
 gradio==6.17.3
 spaces>=0.30
