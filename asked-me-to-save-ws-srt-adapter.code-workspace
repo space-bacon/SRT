@@ -17,6 +17,18 @@
         },
         {
             "path": "../sunstonenorthlabs"
+        },
+        {
+            "path": "../lodestone"
+        },
+        {
+            "path": "../sunstone-memory"
+        },
+        {
+            "path": "../meadow"
+        },
+        {
+            "path": "../loadedbakedpotato"
         }
     ],
     "settings": {
@@ -30,7 +42,8 @@
             "**/space_*/**",
             "**/media/**",
             "**/bench/results/**",
-            "**/.vscode-test/**"
+            "**/.vscode-test/**",
+            "**/agent_assessment_key.json"
         ]
     }
 }
