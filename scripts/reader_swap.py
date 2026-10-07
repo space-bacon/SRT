@@ -63,6 +63,8 @@ def parse_args():
     p.add_argument("--save-heads", type=Path, default=HERE / "artifacts/local/reader_swap/heads")
     p.add_argument("--device", default="mps" if torch.backends.mps.is_available() else "cpu")
     p.add_argument("--out", type=Path, default=HERE / "artifacts/nla/q4/reader_swap_123k.json")
+    p.add_argument("--encoder", action="append", default=[], help="NAME=MODEL_ID_OR_PATH, a CLS-pooled encoder added to the ladder")
+    p.add_argument("--ranks-out", type=Path, default=None, help="write each eval caption's full-gallery t2i rank per reader and seed")
     return p.parse_args()
 
 
@@ -152,11 +154,16 @@ def project_text(head, mu_t, X, dev):
 
 
 @torch.no_grad()
-def score_t2i(zt, Zg, gold):
-    """Rank of each caption's gold gallery row over Zg."""
+def t2i_ranks(zt, Zg, gold):
     S = zt @ Zg.T
     gold_s = S[torch.arange(len(gold)), gold]
-    rank = (S > gold_s[:, None]).sum(1) + 1
+    return (S > gold_s[:, None]).sum(1) + 1
+
+
+@torch.no_grad()
+def score_t2i(zt, Zg, gold):
+    """Rank of each caption's gold gallery row over Zg."""
+    rank = t2i_ranks(zt, Zg, gold)
     out = {f"t2i_r@{k}": round((rank <= k).float().mean().item(), 4) for k in (1, 5, 10)}
     out["t2i_median_rank"] = int(rank.float().median().item())
     return out
@@ -203,6 +210,10 @@ def main() -> None:
     args = parse_args()
     args.cache.mkdir(parents=True, exist_ok=True)
     dev = args.device
+    for e in args.encoder:
+        name, spec = e.split("=", 1)
+        ENCODERS[name] = (spec, "")
+        POOLING[name] = "cls"
 
     Zg, keys = read_srtidx(args.gallery)
     print(f"gallery {tuple(Zg.shape)} from {args.gallery.name}", flush=True)
@@ -255,6 +266,9 @@ def main() -> None:
             head, mu_t = fit(Zg[tr_rows], Xtr, offsets, args, seed)
             zt = project_text(head, mu_t, Xev, dev)
             full = score_t2i(zt, Zg, ev_gold)
+            if args.ranks_out:
+                args.ranks_out.mkdir(parents=True, exist_ok=True)
+                np.save(args.ranks_out / f"{name}_seed{seed}.npy", t2i_ranks(zt, Zg, ev_gold).numpy())
             pool = score_pool(zt, Zg, ev_gold)
             sh, smu = fit(Zg[tr_rows], Xtr, offsets, args, seed, shuffle=True)
             shuf = score_t2i(project_text(sh, smu, Xev, dev), Zg, ev_gold)
