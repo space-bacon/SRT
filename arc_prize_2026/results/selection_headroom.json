@@ -1,0 +1,16 @@
+{
+ "32768": {
+  "top1": 27.71,
+  "top2": 27.92,
+  "oracle": 29.17,
+  "oracle_minus_top1": 1.46,
+  "n_outputs": 333
+ },
+ "49152": {
+  "top1": 37.43,
+  "top2": 38.61,
+  "oracle": 38.61,
+  "oracle_minus_top1": 1.18,
+  "n_outputs": 333
+ }
+}

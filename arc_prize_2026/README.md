@@ -23,6 +23,8 @@ Qwen3.8-27B (FP8) is served by vLLM on Kaggle's 4 x L4 (tensor parallel 4, multi
 - At equal tokens one long trace beats two short ones: pooled K=2 at 32K minus a single trace at 63K is -6.5 (sem 3.0); pooled K=2 at 16K minus a single trace at 32K is -10.6 (sem 2.7).
 - Eight sampled programs beat one: top-1 at the 32K cap is 22.9 with one program and 31.7 with eight (`results/n_completions_eval.json`).
 - One trace per task costs under 1 point against one per output (`results/per_task_eval.json`).
+- Selection is not the bottleneck: the oracle (any candidate grid correct) is 29.2 at the 32K cap against top-1 27.7, and 38.6 at 49K against top-1 37.4 (`results/selection_headroom.json`).
+- Reasoning effort: medium effort scored 8.5 at 47.0K decoded tokens per output against 31.7 and 23.8 for the default (xhigh) at 41.8K, paired -23.2 (sem 4.0) and -15.3 (sem 3.6); 81 of the 97 medium traces that stopped by themselves ended abruptly with no answer (`results/effort_analysis.json`).
 - Tried and not adopted: execution feedback inside the reasoning (-21.0 points, sem 3.7), feedback as a fresh chat turn (-6.1, sem 4.3, smallest detectable effect 12), a direct grid as a second attempt (0 of 176 gains), INT4 on two TP2 replicas (344 tok/s at the 14 streams its KV cache allows against 368 tok/s at 20 streams for TP4 FP8, and a slightly worse NLL), MTP 3 (no throughput gain), a hidden-state probe for selection (AUROC within its permutation floor, underpowered). Details and populations are in `PREREG.md`.
 
 Public-evaluation numbers are not hidden-set numbers: the cap and selection rule were chosen on the same tasks, so they are optimistic. Nothing here has been scored on the hidden tasks yet.
