@@ -1,0 +1,82 @@
+{
+ "policy": "fixed_63K",
+ "n_outputs": 166,
+ "llm_top1": 41.11,
+ "llm_top2": 42.36,
+ "llm_verified_fraction": 0.476,
+ "llm_mean_tokens": 70151.0,
+ "s0": {
+  "nvarc_top1": 24.72,
+  "nvarc_top2": 26.81,
+  "llm_top1_plus_nvarc_top1": 50.28,
+  "verified_gate": 46.94,
+  "gate_llm_verified_else_nvarc_with_llm_top1": 50.69,
+  "oracle_union_top2s": 51.94,
+  "contrasts": [
+   {
+    "contrast": "LLM top1 + NVARC top1 minus LLM top2",
+    "n_tasks": 120,
+    "mean_diff_points": 7.92,
+    "sd_points": 28.25,
+    "sem_points": 2.58,
+    "mean_over_sem": 3.07,
+    "min_detectable_points_80pct": 7.22
+   },
+   {
+    "contrast": "LLM top1 + NVARC top1 minus NVARC top2",
+    "n_tasks": 120,
+    "mean_diff_points": 23.47,
+    "sd_points": 41.59,
+    "sem_points": 3.8,
+    "mean_over_sem": 6.18,
+    "min_detectable_points_80pct": 10.63
+   },
+   {
+    "contrast": "verified gate (LLM top1 + NVARC top1 if verified, else NVARC top2 + LLM top1) minus LLM top2",
+    "n_tasks": 120,
+    "mean_diff_points": 8.33,
+    "sd_points": 28.5,
+    "sem_points": 2.6,
+    "mean_over_sem": 3.2,
+    "min_detectable_points_80pct": 7.29
+   }
+  ]
+ },
+ "s1": {
+  "nvarc_top1": 23.89,
+  "nvarc_top2": 30.97,
+  "llm_top1_plus_nvarc_top1": 49.03,
+  "verified_gate": 49.86,
+  "gate_llm_verified_else_nvarc_with_llm_top1": 51.53,
+  "oracle_union_top2s": 53.61,
+  "contrasts": [
+   {
+    "contrast": "LLM top1 + NVARC top1 minus LLM top2",
+    "n_tasks": 120,
+    "mean_diff_points": 6.67,
+    "sd_points": 25.05,
+    "sem_points": 2.29,
+    "mean_over_sem": 2.92,
+    "min_detectable_points_80pct": 6.4
+   },
+   {
+    "contrast": "LLM top1 + NVARC top1 minus NVARC top2",
+    "n_tasks": 120,
+    "mean_diff_points": 18.06,
+    "sd_points": 44.94,
+    "sem_points": 4.1,
+    "mean_over_sem": 4.4,
+    "min_detectable_points_80pct": 11.49
+   },
+   {
+    "contrast": "verified gate (LLM top1 + NVARC top1 if verified, else NVARC top2 + LLM top1) minus LLM top2",
+    "n_tasks": 120,
+    "mean_diff_points": 9.17,
+    "sd_points": 28.24,
+    "sem_points": 2.58,
+    "mean_over_sem": 3.56,
+    "min_detectable_points_80pct": 7.22
+   }
+  ]
+ }
+}

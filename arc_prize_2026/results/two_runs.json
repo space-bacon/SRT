@@ -1,0 +1,164 @@
+{
+ "n_outputs": 166,
+ "n_tasks": 120,
+ "single": {
+  "g4_cap16384": {
+   "top1": 15.0,
+   "top2": 15.42
+  },
+  "g4_cap32768": {
+   "top1": 31.67,
+   "top2": 31.67
+  },
+  "g4_cap49152": {
+   "top1": 38.61,
+   "top2": 40.69
+  },
+  "g4_cap63000": {
+   "top1": 41.11,
+   "top2": 42.36
+  },
+  "g5_cap16384": {
+   "top1": 12.5,
+   "top2": 13.33
+  },
+  "g5_cap32768": {
+   "top1": 23.75,
+   "top2": 24.17
+  },
+  "g5_cap49152": {
+   "top1": 36.25,
+   "top2": 36.53
+  },
+  "g5_cap63000": {
+   "top1": 39.31,
+   "top2": 40.14
+  }
+ },
+ "pooled_k2": {
+  "cap16384": {
+   "top1": 17.08,
+   "top2": 19.58
+  },
+  "cap32768": {
+   "top1": 33.75,
+   "top2": 38.75
+  },
+  "cap49152": {
+   "top1": 44.86,
+   "top2": 49.44
+  },
+  "cap63000": {
+   "top1": 48.61,
+   "top2": 54.58
+  }
+ },
+ "contrasts": [
+  {
+   "contrast": "cap 16384: g5 minus g4, top-1 (run-to-run)",
+   "n_tasks": 120,
+   "mean_diff_points": -2.5,
+   "sd_points": 32.31,
+   "sem_points": 2.95,
+   "mean_over_sem": -0.85,
+   "min_detectable_points_80pct": 8.26
+  },
+  {
+   "contrast": "cap 32768: g5 minus g4, top-1 (run-to-run)",
+   "n_tasks": 120,
+   "mean_diff_points": -7.92,
+   "sd_points": 42.01,
+   "sem_points": 3.83,
+   "mean_over_sem": -2.06,
+   "min_detectable_points_80pct": 10.74
+  },
+  {
+   "contrast": "cap 49152: g5 minus g4, top-1 (run-to-run)",
+   "n_tasks": 120,
+   "mean_diff_points": -2.36,
+   "sd_points": 44.72,
+   "sem_points": 4.08,
+   "mean_over_sem": -0.58,
+   "min_detectable_points_80pct": 11.43
+  },
+  {
+   "contrast": "cap 63000: g5 minus g4, top-1 (run-to-run)",
+   "n_tasks": 120,
+   "mean_diff_points": -1.81,
+   "sd_points": 45.67,
+   "sem_points": 4.17,
+   "mean_over_sem": -0.43,
+   "min_detectable_points_80pct": 11.67
+  },
+  {
+   "contrast": "cap 16384: pooled K=2 minus mean of the two single runs, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": 3.33,
+   "sd_points": 15.18,
+   "sem_points": 1.39,
+   "mean_over_sem": 2.41,
+   "min_detectable_points_80pct": 3.88
+  },
+  {
+   "contrast": "cap 32768: pooled K=2 minus mean of the two single runs, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": 6.04,
+   "sd_points": 21.5,
+   "sem_points": 1.96,
+   "mean_over_sem": 3.08,
+   "min_detectable_points_80pct": 5.49
+  },
+  {
+   "contrast": "cap 49152: pooled K=2 minus mean of the two single runs, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": 7.43,
+   "sd_points": 22.08,
+   "sem_points": 2.02,
+   "mean_over_sem": 3.69,
+   "min_detectable_points_80pct": 5.64
+  },
+  {
+   "contrast": "cap 63000: pooled K=2 minus mean of the two single runs, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": 8.4,
+   "sd_points": 21.73,
+   "sem_points": 1.98,
+   "mean_over_sem": 4.24,
+   "min_detectable_points_80pct": 5.55
+  },
+  {
+   "contrast": "pooled K=2 at cap 16384 minus mean single run at cap 32768, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": -10.62,
+   "sd_points": 29.11,
+   "sem_points": 2.66,
+   "mean_over_sem": -4.0,
+   "min_detectable_points_80pct": 7.44
+  },
+  {
+   "contrast": "pooled K=2 at cap 32768 minus mean single run at cap 49152, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": -3.68,
+   "sd_points": 32.8,
+   "sem_points": 2.99,
+   "mean_over_sem": -1.23,
+   "min_detectable_points_80pct": 8.38
+  },
+  {
+   "contrast": "pooled K=2 at cap 32768 minus mean single run at cap 63000, top-1",
+   "n_tasks": 120,
+   "mean_diff_points": -6.46,
+   "sd_points": 32.97,
+   "sem_points": 3.01,
+   "mean_over_sem": -2.15,
+   "min_detectable_points_80pct": 8.43
+  }
+ ],
+ "mean_tokens_per_trace_approx": {
+  "16384": 24.5,
+  "32768": 41.9,
+  "49152": 58.2,
+  "63000": 70.1,
+  "unit": "thousand tokens, g4 and g5 agree to within 0.2K"
+ }
+}

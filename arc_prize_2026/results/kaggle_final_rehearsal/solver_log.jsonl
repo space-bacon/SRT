@@ -1,0 +1,290 @@
+{"event": "run_start", "n_tasks": 240, "resumed": 0, "max_cap": 49152, "streams": 24, "total_s": 2700.0, "fb": "off", "t": 649.1}
+{"event": "start", "task": "182e5d0f", "cap": 8192, "plen": 1330, "replica": 8000, "thr": 330.0, "left_s": 1751, "not_started": 239, "t": 649.2}
+{"event": "start", "task": "1cf80156", "cap": 8192, "plen": 907, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 238, "t": 650.2}
+{"event": "start", "task": "253bf280", "cap": 8192, "plen": 1822, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 237, "t": 650.3}
+{"event": "start", "task": "12422b43", "cap": 8192, "plen": 980, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 236, "t": 650.3}
+{"event": "start", "task": "3af2c5a8", "cap": 8192, "plen": 486, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 235, "t": 650.3}
+{"event": "start", "task": "195ba7dc", "cap": 8192, "plen": 766, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 234, "t": 650.3}
+{"event": "start", "task": "20818e16", "cap": 8192, "plen": 1442, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 233, "t": 650.3}
+{"event": "start", "task": "007bbfb7", "cap": 8192, "plen": 810, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 232, "t": 650.3}
+{"event": "start", "task": "3b4c2228", "cap": 8192, "plen": 644, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 231, "t": 650.3}
+{"event": "start", "task": "22806e14", "cap": 8192, "plen": 2168, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 230, "t": 650.3}
+{"event": "start", "task": "13713586", "cap": 8192, "plen": 2325, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 229, "t": 650.3}
+{"event": "start", "task": "22168020", "cap": 8192, "plen": 1034, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 228, "t": 650.3}
+{"event": "start", "task": "1da012fc", "cap": 8192, "plen": 2208, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 227, "t": 650.3}
+{"event": "start", "task": "212895b5", "cap": 8192, "plen": 2896, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 226, "t": 650.3}
+{"event": "start", "task": "25c199f5", "cap": 8192, "plen": 978, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 225, "t": 650.3}
+{"event": "start", "task": "15696249", "cap": 8192, "plen": 696, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 224, "t": 650.3}
+{"event": "start", "task": "13f06aa5", "cap": 8192, "plen": 1592, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 223, "t": 650.3}
+{"event": "start", "task": "22425bda", "cap": 8192, "plen": 1160, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 222, "t": 650.3}
+{"event": "start", "task": "12997ef3", "cap": 8192, "plen": 1023, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 221, "t": 650.3}
+{"event": "start", "task": "31adaf00", "cap": 8192, "plen": 1034, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 220, "t": 650.3}
+{"event": "start", "task": "22a4bbc2", "cap": 8192, "plen": 1102, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 219, "t": 650.3}
+{"event": "start", "task": "2ccd9fef", "cap": 8192, "plen": 1258, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 218, "t": 650.3}
+{"event": "start", "task": "18447a8d", "cap": 8192, "plen": 1404, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 217, "t": 650.3}
+{"event": "start", "task": "320afe60", "cap": 8192, "plen": 3718, "replica": 8000, "thr": 330.0, "left_s": 1750, "not_started": 216, "t": 650.3}
+{"event": "done", "task": "1cf80156", "cap": 8192, "replica": 8000, "fb": "off", "finish": "stop", "ntok": 3825, "forced_tokens": 0, "n_programs": 1, "seconds": 269.4, "n_verified": 1, "t": 919.7}
+{"event": "start", "task": "1caeab9d", "cap": 8192, "plen": 814, "replica": 8000, "thr": 330.0, "left_s": 1480, "not_started": 215, "t": 919.7}
+{"event": "done", "task": "3af2c5a8", "cap": 8192, "replica": 8000, "fb": "off", "finish": "stop", "ntok": 5822, "forced_tokens": 0, "n_programs": 1, "seconds": 375.3, "n_verified": 1, "t": 1025.7}
+{"event": "start", "task": "33067df9", "cap": 8192, "plen": 3344, "replica": 8000, "thr": 330.0, "left_s": 1374, "not_started": 214, "t": 1025.7}
+{"event": "done", "task": "212895b5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4547, "n_programs": 8, "seconds": 661.2, "n_verified": 0, "t": 1311.6}
+{"event": "start", "task": "252143c9", "cap": 8192, "plen": 810, "replica": 8000, "thr": 354.3, "left_s": 1088, "not_started": 213, "t": 1311.6}
+{"event": "done", "task": "31adaf00", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 2167, "n_programs": 8, "seconds": 668.4, "n_verified": 0, "t": 1318.8}
+{"event": "start", "task": "29c11459", "cap": 8192, "plen": 552, "replica": 8000, "thr": 354.3, "left_s": 1081, "not_started": 212, "t": 1318.8}
+{"event": "done", "task": "22806e14", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7720, "n_programs": 8, "seconds": 678.1, "n_verified": 0, "t": 1328.4}
+{"event": "start", "task": "41e4d17e", "cap": 8192, "plen": 1452, "replica": 8000, "thr": 354.3, "left_s": 1072, "not_started": 211, "t": 1328.5}
+{"event": "done", "task": "22a4bbc2", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3105, "n_programs": 8, "seconds": 732.2, "n_verified": 5, "t": 1382.6}
+{"event": "start", "task": "2e65ae53", "cap": 8192, "plen": 3088, "replica": 8000, "thr": 343.0, "left_s": 1017, "not_started": 210, "t": 1382.6}
+{"event": "done", "task": "182e5d0f", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 8154, "n_programs": 8, "seconds": 795.3, "n_verified": 0, "t": 1444.5}
+{"event": "start", "task": "1190e5a7", "cap": 8192, "plen": 1953, "replica": 8000, "thr": 339.9, "left_s": 955, "not_started": 209, "t": 1444.5}
+{"event": "done", "task": "3b4c2228", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 1544, "n_programs": 8, "seconds": 815.0, "n_verified": 5, "t": 1465.3}
+{"event": "start", "task": "1e32b0e9", "cap": 8192, "plen": 2406, "replica": 8000, "thr": 332.7, "left_s": 935, "not_started": 208, "t": 1465.3}
+{"event": "done", "task": "18447a8d", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 6647, "n_programs": 8, "seconds": 857.7, "n_verified": 0, "t": 1508.2}
+{"event": "start", "task": "25e02866", "cap": 8192, "plen": 1126, "replica": 8000, "thr": 329.1, "left_s": 892, "not_started": 207, "t": 1508.2}
+{"event": "done", "task": "195ba7dc", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 2490, "n_programs": 8, "seconds": 879.2, "n_verified": 8, "t": 1529.6}
+{"event": "start", "task": "3a301edc", "cap": 8192, "plen": 2974, "replica": 8000, "thr": 325.4, "left_s": 870, "not_started": 206, "t": 1529.6}
+{"event": "done", "task": "20818e16", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5098, "n_programs": 8, "seconds": 895.6, "n_verified": 3, "t": 1546.0}
+{"event": "start", "task": "42918530", "cap": 8192, "plen": 3966, "replica": 8000, "thr": 325.4, "left_s": 854, "not_started": 205, "t": 1546.0}
+{"event": "done", "task": "2ccd9fef", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4066, "n_programs": 8, "seconds": 913.4, "n_verified": 0, "t": 1563.8}
+{"event": "start", "task": "0607ce86", "cap": 8192, "plen": 3852, "replica": 8000, "thr": 321.7, "left_s": 836, "not_started": 204, "t": 1563.8}
+{"event": "done", "task": "007bbfb7", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 992, "n_programs": 8, "seconds": 947.1, "n_verified": 8, "t": 1597.4}
+{"event": "start", "task": "3618c87e", "cap": 8192, "plen": 474, "replica": 8000, "thr": 317.7, "left_s": 803, "not_started": 203, "t": 1597.4}
+{"event": "done", "task": "253bf280", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 2122, "n_programs": 8, "seconds": 947.2, "n_verified": 7, "t": 1597.5}
+{"event": "start", "task": "2f0c5170", "cap": 8192, "plen": 2152, "replica": 8000, "thr": 317.7, "left_s": 802, "not_started": 202, "t": 1597.5}
+{"event": "done", "task": "1da012fc", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 8062, "n_programs": 8, "seconds": 954.7, "n_verified": 1, "t": 1605.0}
+{"event": "start", "task": "0ca9ddb6", "cap": 8192, "plen": 894, "replica": 8000, "thr": 317.7, "left_s": 795, "not_started": 201, "t": 1605.0}
+{"event": "done", "task": "320afe60", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7477, "n_programs": 8, "seconds": 970.8, "n_verified": 0, "t": 1621.2}
+{"event": "start", "task": "14754a24", "cap": 8192, "plen": 2884, "replica": 8000, "thr": 311.3, "left_s": 779, "not_started": 200, "t": 1621.2}
+{"event": "done", "task": "25c199f5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4395, "n_programs": 8, "seconds": 985.0, "n_verified": 0, "t": 1635.4}
+{"event": "start", "task": "228f6490", "cap": 8192, "plen": 1034, "replica": 8000, "thr": 311.3, "left_s": 765, "not_started": 199, "t": 1635.4}
+{"event": "done", "task": "12422b43", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 1999, "n_programs": 8, "seconds": 1038.7, "n_verified": 7, "t": 1689.1}
+{"event": "start", "task": "1efba499", "cap": 8192, "plen": 1428, "replica": 8000, "thr": 309.0, "left_s": 711, "not_started": 198, "t": 1689.1}
+{"event": "done", "task": "15696249", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3311, "n_programs": 8, "seconds": 1045.9, "n_verified": 8, "t": 1696.3}
+{"event": "start", "task": "3f7978a0", "cap": 8192, "plen": 918, "replica": 8000, "thr": 309.0, "left_s": 704, "not_started": 197, "t": 1696.3}
+{"event": "done", "task": "12997ef3", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4345, "n_programs": 8, "seconds": 1047.8, "n_verified": 7, "t": 1698.2}
+{"event": "start", "task": "17829a00", "cap": 8192, "plen": 1612, "replica": 8000, "thr": 309.0, "left_s": 702, "not_started": 196, "t": 1698.2}
+{"event": "done", "task": "22168020", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 1732, "n_programs": 8, "seconds": 1052.7, "n_verified": 6, "t": 1703.0}
+{"event": "start", "task": "3428a4f5", "cap": 8192, "plen": 810, "replica": 8000, "thr": 310.4, "left_s": 697, "not_started": 195, "t": 1703.0}
+{"event": "done", "task": "13713586", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 10414, "n_programs": 8, "seconds": 1065.7, "n_verified": 3, "t": 1716.1}
+{"event": "start", "task": "2281f1f4", "cap": 8192, "plen": 1034, "replica": 8000, "thr": 310.4, "left_s": 684, "not_started": 194, "t": 1716.1}
+{"event": "done", "task": "22425bda", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 14289, "n_programs": 8, "seconds": 1072.9, "n_verified": 3, "t": 1723.3}
+{"event": "start", "task": "0c9aba6e", "cap": 8192, "plen": 721, "replica": 8000, "thr": 310.4, "left_s": 677, "not_started": 193, "t": 1723.3}
+{"event": "done", "task": "13f06aa5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 9566, "n_programs": 8, "seconds": 1096.3, "n_verified": 1, "t": 1746.7}
+{"event": "start", "task": "0d87d2a6", "cap": 8192, "plen": 2512, "replica": 8000, "thr": 315.9, "left_s": 653, "not_started": 192, "t": 1746.7}
+{"event": "done", "task": "1caeab9d", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4301, "n_programs": 8, "seconds": 957.3, "n_verified": 8, "t": 1877.0}
+{"event": "skipped", "task": "3aa6fb7a", "t": 1877.0}
+{"event": "skipped", "task": "37ce87bb", "t": 1877.0}
+{"event": "skipped", "task": "2a28add5", "t": 1877.0}
+{"event": "skipped", "task": "25ff71a9", "t": 1877.0}
+{"event": "skipped", "task": "0962bcdd", "t": 1877.0}
+{"event": "skipped", "task": "21f83797", "t": 1877.0}
+{"event": "skipped", "task": "2faf500b", "t": 1877.0}
+{"event": "skipped", "task": "3cd86f4f", "t": 1877.0}
+{"event": "skipped", "task": "19bb5feb", "t": 1877.0}
+{"event": "skipped", "task": "310f3251", "t": 1877.0}
+{"event": "skipped", "task": "342dd610", "t": 1877.0}
+{"event": "skipped", "task": "025d127b", "t": 1877.0}
+{"event": "skipped", "task": "1190bc91", "t": 1877.0}
+{"event": "skipped", "task": "3f23242b", "t": 1877.0}
+{"event": "skipped", "task": "1f642eb9", "t": 1877.0}
+{"event": "skipped", "task": "3d588dc9", "t": 1877.0}
+{"event": "skipped", "task": "3e980e27", "t": 1877.0}
+{"event": "skipped", "task": "0bb8deee", "t": 1877.0}
+{"event": "skipped", "task": "27a77e38", "t": 1877.0}
+{"event": "skipped", "task": "1acc24af", "t": 1877.0}
+{"event": "skipped", "task": "28bf18c6", "t": 1877.0}
+{"event": "skipped", "task": "39e1d7f9", "t": 1877.0}
+{"event": "skipped", "task": "28e73c20", "t": 1877.0}
+{"event": "skipped", "task": "00dbd492", "t": 1877.0}
+{"event": "skipped", "task": "281123b4", "t": 1877.0}
+{"event": "skipped", "task": "1e5d6875", "t": 1877.0}
+{"event": "skipped", "task": "05a7bcf2", "t": 1877.0}
+{"event": "skipped", "task": "140c817e", "t": 1877.0}
+{"event": "skipped", "task": "23581191", "t": 1877.0}
+{"event": "skipped", "task": "2c737e39", "t": 1877.0}
+{"event": "skipped", "task": "3194b014", "t": 1877.0}
+{"event": "skipped", "task": "4093f84a", "t": 1877.0}
+{"event": "skipped", "task": "3391f8c0", "t": 1877.0}
+{"event": "skipped", "task": "3979b1a8", "t": 1877.0}
+{"event": "skipped", "task": "25d487eb", "t": 1877.0}
+{"event": "skipped", "task": "2c0b0aff", "t": 1877.0}
+{"event": "skipped", "task": "184a9768", "t": 1877.0}
+{"event": "skipped", "task": "32e9702f", "t": 1877.0}
+{"event": "skipped", "task": "3de23699", "t": 1877.0}
+{"event": "skipped", "task": "017c7c7b", "t": 1877.0}
+{"event": "skipped", "task": "1e81d6f9", "t": 1877.0}
+{"event": "skipped", "task": "396d80d7", "t": 1877.0}
+{"event": "skipped", "task": "05f2a901", "t": 1877.0}
+{"event": "skipped", "task": "03560426", "t": 1877.0}
+{"event": "skipped", "task": "150deff5", "t": 1877.0}
+{"event": "skipped", "task": "2037f2c7", "t": 1877.0}
+{"event": "skipped", "task": "0a1d4ef5", "t": 1877.0}
+{"event": "skipped", "task": "29700607", "t": 1877.0}
+{"event": "skipped", "task": "0c786b71", "t": 1877.0}
+{"event": "skipped", "task": "363442ee", "t": 1877.0}
+{"event": "skipped", "task": "20fb2937", "t": 1877.0}
+{"event": "skipped", "task": "0e671a1a", "t": 1877.0}
+{"event": "skipped", "task": "1e0a9b12", "t": 1877.0}
+{"event": "skipped", "task": "009d5c81", "t": 1877.0}
+{"event": "skipped", "task": "31d5ba1a", "t": 1877.0}
+{"event": "skipped", "task": "3bdb4ada", "t": 1877.0}
+{"event": "skipped", "task": "11e1fe23", "t": 1877.0}
+{"event": "skipped", "task": "358ba94e", "t": 1877.0}
+{"event": "skipped", "task": "40f6cd08", "t": 1877.0}
+{"event": "skipped", "task": "3bd292e8", "t": 1877.0}
+{"event": "skipped", "task": "0692e18c", "t": 1877.0}
+{"event": "skipped", "task": "1b59e163", "t": 1877.0}
+{"event": "skipped", "task": "11dc524f", "t": 1877.0}
+{"event": "skipped", "task": "41ace6b5", "t": 1877.0}
+{"event": "skipped", "task": "12eac192", "t": 1877.0}
+{"event": "skipped", "task": "1f876c06", "t": 1877.0}
+{"event": "skipped", "task": "1d0a4b61", "t": 1877.0}
+{"event": "skipped", "task": "1bfc4729", "t": 1877.0}
+{"event": "skipped", "task": "37d3e8b2", "t": 1877.0}
+{"event": "skipped", "task": "17cae0c1", "t": 1877.0}
+{"event": "skipped", "task": "15663ba9", "t": 1877.0}
+{"event": "skipped", "task": "3c9b0459", "t": 1877.0}
+{"event": "skipped", "task": "36fdfd69", "t": 1877.0}
+{"event": "skipped", "task": "14b8e18c", "t": 1877.0}
+{"event": "skipped", "task": "264363fd", "t": 1877.0}
+{"event": "skipped", "task": "2072aba6", "t": 1877.0}
+{"event": "skipped", "task": "1a6449f1", "t": 1877.0}
+{"event": "skipped", "task": "1c786137", "t": 1877.0}
+{"event": "skipped", "task": "2dee498d", "t": 1877.0}
+{"event": "skipped", "task": "3d6c6e23", "t": 1877.0}
+{"event": "skipped", "task": "178fcbfb", "t": 1877.0}
+{"event": "skipped", "task": "1990f7a8", "t": 1877.0}
+{"event": "skipped", "task": "1f85a75f", "t": 1877.0}
+{"event": "skipped", "task": "2dd70a9a", "t": 1877.0}
+{"event": "skipped", "task": "0520fde7", "t": 1877.0}
+{"event": "skipped", "task": "11852cab", "t": 1877.0}
+{"event": "skipped", "task": "0e206a2e", "t": 1877.0}
+{"event": "skipped", "task": "0a2355a6", "t": 1877.0}
+{"event": "skipped", "task": "08ed6ac7", "t": 1877.0}
+{"event": "skipped", "task": "230f2e48", "t": 1877.0}
+{"event": "skipped", "task": "33b52de3", "t": 1877.0}
+{"event": "skipped", "task": "045e512c", "t": 1877.0}
+{"event": "skipped", "task": "278e5215", "t": 1877.0}
+{"event": "skipped", "task": "30f42897", "t": 1877.0}
+{"event": "skipped", "task": "137eaa0f", "t": 1877.0}
+{"event": "skipped", "task": "2bcee788", "t": 1877.0}
+{"event": "skipped", "task": "2f767503", "t": 1877.0}
+{"event": "skipped", "task": "34cfa167", "t": 1877.0}
+{"event": "skipped", "task": "4290ef0e", "t": 1877.0}
+{"event": "skipped", "task": "2de01db2", "t": 1877.0}
+{"event": "skipped", "task": "342ae2ed", "t": 1877.0}
+{"event": "skipped", "task": "1a244afd", "t": 1877.0}
+{"event": "skipped", "task": "29623171", "t": 1877.0}
+{"event": "skipped", "task": "2b01abd0", "t": 1877.0}
+{"event": "skipped", "task": "4258a5f9", "t": 1877.0}
+{"event": "skipped", "task": "2685904e", "t": 1877.0}
+{"event": "skipped", "task": "31aa019c", "t": 1877.0}
+{"event": "skipped", "task": "337b420f", "t": 1877.0}
+{"event": "skipped", "task": "0d3d703e", "t": 1877.0}
+{"event": "skipped", "task": "1a2e2828", "t": 1877.0}
+{"event": "skipped", "task": "3befdf3e", "t": 1877.0}
+{"event": "skipped", "task": "423a55dc", "t": 1877.0}
+{"event": "skipped", "task": "0becf7df", "t": 1877.0}
+{"event": "skipped", "task": "23b5c85d", "t": 1877.0}
+{"event": "skipped", "task": "412b6263", "t": 1877.0}
+{"event": "skipped", "task": "1be83260", "t": 1877.0}
+{"event": "skipped", "task": "09c534e7", "t": 1877.0}
+{"event": "skipped", "task": "332efdb3", "t": 1877.0}
+{"event": "skipped", "task": "22233c11", "t": 1877.0}
+{"event": "skipped", "task": "2697da3f", "t": 1877.0}
+{"event": "skipped", "task": "103eff5b", "t": 1877.0}
+{"event": "skipped", "task": "17b80ad2", "t": 1877.0}
+{"event": "skipped", "task": "15660dd6", "t": 1877.0}
+{"event": "skipped", "task": "27f8ce4f", "t": 1877.0}
+{"event": "skipped", "task": "137f0df0", "t": 1877.0}
+{"event": "skipped", "task": "070dd51e", "t": 1877.0}
+{"event": "skipped", "task": "1c02dbbe", "t": 1877.0}
+{"event": "skipped", "task": "17b866bd", "t": 1877.0}
+{"event": "skipped", "task": "1c56ad9f", "t": 1877.0}
+{"event": "skipped", "task": "25094a63", "t": 1877.0}
+{"event": "skipped", "task": "351d6448", "t": 1877.0}
+{"event": "skipped", "task": "00576224", "t": 1877.0}
+{"event": "skipped", "task": "2c608aff", "t": 1877.0}
+{"event": "skipped", "task": "305b1341", "t": 1877.0}
+{"event": "skipped", "task": "32597951", "t": 1877.0}
+{"event": "skipped", "task": "1fad071e", "t": 1877.0}
+{"event": "skipped", "task": "332202d5", "t": 1877.0}
+{"event": "skipped", "task": "0a938d79", "t": 1877.0}
+{"event": "skipped", "task": "00d62c1b", "t": 1877.0}
+{"event": "skipped", "task": "272f95fa", "t": 1877.0}
+{"event": "skipped", "task": "06df4c85", "t": 1877.0}
+{"event": "skipped", "task": "414297c0", "t": 1877.0}
+{"event": "skipped", "task": "25d8a9c8", "t": 1877.0}
+{"event": "skipped", "task": "22208ba4", "t": 1877.0}
+{"event": "skipped", "task": "3eda0437", "t": 1877.0}
+{"event": "skipped", "task": "2753e76c", "t": 1877.0}
+{"event": "skipped", "task": "1478ab18", "t": 1877.0}
+{"event": "skipped", "task": "2dc579da", "t": 1877.0}
+{"event": "skipped", "task": "2b9ef948", "t": 1877.0}
+{"event": "skipped", "task": "1b8318e3", "t": 1877.0}
+{"event": "skipped", "task": "2204b7a8", "t": 1877.0}
+{"event": "skipped", "task": "1d398264", "t": 1877.0}
+{"event": "skipped", "task": "3ac3eb23", "t": 1877.0}
+{"event": "skipped", "task": "27a28665", "t": 1877.0}
+{"event": "skipped", "task": "22eb0ac0", "t": 1877.0}
+{"event": "skipped", "task": "1c0d0a4b", "t": 1877.0}
+{"event": "skipped", "task": "319f2597", "t": 1877.0}
+{"event": "skipped", "task": "09629e4f", "t": 1877.0}
+{"event": "skipped", "task": "3345333e", "t": 1877.0}
+{"event": "skipped", "task": "0b17323b", "t": 1877.0}
+{"event": "skipped", "task": "1b60fb0c", "t": 1877.0}
+{"event": "skipped", "task": "10fcaaa3", "t": 1877.0}
+{"event": "skipped", "task": "2a5f8217", "t": 1877.0}
+{"event": "skipped", "task": "39a8645d", "t": 1877.0}
+{"event": "skipped", "task": "321b1fc6", "t": 1877.0}
+{"event": "skipped", "task": "2601afb7", "t": 1877.0}
+{"event": "skipped", "task": "18286ef8", "t": 1877.0}
+{"event": "skipped", "task": "3906de3d", "t": 1877.0}
+{"event": "skipped", "task": "2bee17df", "t": 1877.0}
+{"event": "skipped", "task": "0b148d64", "t": 1877.0}
+{"event": "skipped", "task": "3490cc26", "t": 1877.0}
+{"event": "skipped", "task": "3d31c5b3", "t": 1877.0}
+{"event": "skipped", "task": "1a07d186", "t": 1877.0}
+{"event": "skipped", "task": "0f63c0b9", "t": 1877.0}
+{"event": "skipped", "task": "2546ccf6", "t": 1877.0}
+{"event": "skipped", "task": "15113be4", "t": 1877.0}
+{"event": "skipped", "task": "292dd178", "t": 1877.0}
+{"event": "skipped", "task": "1d61978c", "t": 1877.0}
+{"event": "skipped", "task": "234bbc79", "t": 1877.0}
+{"event": "skipped", "task": "1b2d62fb", "t": 1877.0}
+{"event": "skipped", "task": "3ad05f52", "t": 1877.0}
+{"event": "skipped", "task": "36d67576", "t": 1877.0}
+{"event": "skipped", "task": "2013d3e2", "t": 1877.0}
+{"event": "skipped", "task": "239be575", "t": 1877.0}
+{"event": "skipped", "task": "256b0a75", "t": 1877.0}
+{"event": "skipped", "task": "18419cfa", "t": 1877.0}
+{"event": "skipped", "task": "05269061", "t": 1877.0}
+{"event": "skipped", "task": "20981f0e", "t": 1877.0}
+{"event": "skipped", "task": "3ee1011a", "t": 1877.0}
+{"event": "skipped", "task": "34b99a2b", "t": 1877.0}
+{"event": "skipped", "task": "1f0c79e5", "t": 1877.0}
+{"event": "skipped", "task": "3bd67248", "t": 1877.0}
+{"event": "done", "task": "33067df9", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 6098, "n_programs": 8, "seconds": 967.2, "n_verified": 0, "t": 1992.9}
+{"event": "done", "task": "14754a24", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3732, "n_programs": 8, "seconds": 686.6, "n_verified": 0, "t": 2307.9}
+{"event": "done", "task": "252143c9", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 2596, "n_programs": 8, "seconds": 996.3, "n_verified": 4, "t": 2307.9}
+{"event": "done", "task": "17829a00", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3301, "n_programs": 8, "seconds": 617.9, "n_verified": 0, "t": 2316.2}
+{"event": "done", "task": "0607ce86", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 6196, "n_programs": 8, "seconds": 765.7, "n_verified": 0, "t": 2329.6}
+{"event": "done", "task": "42918530", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5020, "n_programs": 8, "seconds": 881.1, "n_verified": 3, "t": 2427.1}
+{"event": "done", "task": "25e02866", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 6270, "n_programs": 8, "seconds": 944.0, "n_verified": 5, "t": 2452.2}
+{"event": "done", "task": "3428a4f5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 1503, "n_programs": 8, "seconds": 783.6, "n_verified": 6, "t": 2486.7}
+{"event": "done", "task": "2e65ae53", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 10557, "n_programs": 8, "seconds": 1139.5, "n_verified": 0, "t": 2522.2}
+{"event": "done", "task": "2f0c5170", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 8724, "n_programs": 8, "seconds": 950.0, "n_verified": 1, "t": 2547.5}
+{"event": "done", "task": "1e32b0e9", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7066, "n_programs": 8, "seconds": 1091.0, "n_verified": 0, "t": 2556.4}
+{"event": "done", "task": "41e4d17e", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5569, "n_programs": 8, "seconds": 1238.4, "n_verified": 8, "t": 2566.9}
+{"event": "done", "task": "1190e5a7", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4017, "n_programs": 8, "seconds": 1143.7, "n_verified": 4, "t": 2588.2}
+{"event": "done", "task": "3a301edc", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7197, "n_programs": 8, "seconds": 1066.0, "n_verified": 1, "t": 2595.6}
+{"event": "done", "task": "0c9aba6e", "cap": 8192, "replica": 8000, "fb": "off", "finish": "deadline", "ntok": 0, "forced_tokens": 1790, "n_programs": 8, "seconds": 890.4, "n_verified": 0, "t": 2613.7}
+{"event": "done", "task": "1efba499", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7698, "n_programs": 8, "seconds": 927.0, "n_verified": 0, "t": 2616.2}
+{"event": "done", "task": "2281f1f4", "cap": 8192, "replica": 8000, "fb": "off", "finish": "deadline", "ntok": 0, "forced_tokens": 1272, "n_programs": 8, "seconds": 901.8, "n_verified": 8, "t": 2617.9}
+{"event": "done", "task": "29c11459", "cap": 8192, "replica": 8000, "fb": "off", "finish": "deadline", "ntok": 0, "forced_tokens": 1961, "n_programs": 8, "seconds": 1302.4, "n_verified": 6, "t": 2621.5}
+{"event": "done", "task": "3618c87e", "cap": 8192, "replica": 8000, "fb": "off", "finish": "deadline", "ntok": 0, "forced_tokens": 1152, "n_programs": 8, "seconds": 1024.1, "n_verified": 8, "t": 2621.6}
+{"event": "done", "task": "228f6490", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 9452, "n_programs": 8, "seconds": 988.4, "n_verified": 0, "t": 2623.9}
+{"event": "done", "task": "3f7978a0", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5023, "n_programs": 8, "seconds": 930.4, "n_verified": 4, "t": 2626.7}
+{"event": "done", "task": "0ca9ddb6", "cap": 8192, "replica": 8000, "fb": "off", "finish": "deadline", "ntok": 0, "forced_tokens": 3205, "n_programs": 8, "seconds": 1025.8, "n_verified": 1, "t": 2630.9}
+{"event": "done", "task": "0d87d2a6", "cap": 8192, "replica": 8000, "fb": "off", "finish": "deadline", "ntok": 0, "forced_tokens": 5708, "n_programs": 8, "seconds": 886.4, "n_verified": 8, "t": 2633.1}
+{"event": "end", "mean_cap": 8192, "t": 2633.2}

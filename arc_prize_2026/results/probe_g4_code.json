@@ -1,0 +1,302 @@
+{
+ "n_samples": 166,
+ "positives": 65,
+ "positions": [
+  2048,
+  4096,
+  8192,
+  16384,
+  24576,
+  32768
+ ],
+ "layers": [
+  24,
+  32,
+  40,
+  48
+ ],
+ "by_position": {
+  "2048": {
+   "n": 166,
+   "positives": 65,
+   "layers": {
+    "24": {
+     "auc": 0.428,
+     "ci95_task_bootstrap": [
+      0.345,
+      0.518
+     ],
+     "permutation_floor_mean": 0.468,
+     "permutation_floor_sd": 0.064,
+     "raw_anisotropy": 0.849
+    },
+    "32": {
+     "auc": 0.436,
+     "ci95_task_bootstrap": [
+      0.348,
+      0.515
+     ],
+     "permutation_floor_mean": 0.482,
+     "permutation_floor_sd": 0.058,
+     "raw_anisotropy": 0.765
+    },
+    "40": {
+     "auc": 0.476,
+     "ci95_task_bootstrap": [
+      0.387,
+      0.565
+     ],
+     "permutation_floor_mean": 0.503,
+     "permutation_floor_sd": 0.05,
+     "raw_anisotropy": 0.727
+    },
+    "48": {
+     "auc": 0.505,
+     "ci95_task_bootstrap": [
+      0.422,
+      0.597
+     ],
+     "permutation_floor_mean": 0.492,
+     "permutation_floor_sd": 0.054,
+     "raw_anisotropy": 0.614
+    }
+   },
+   "confidence_baseline_auc": 0.476
+  },
+  "4096": {
+   "n": 166,
+   "positives": 65,
+   "layers": {
+    "24": {
+     "auc": 0.548,
+     "ci95_task_bootstrap": [
+      0.459,
+      0.627
+     ],
+     "permutation_floor_mean": 0.483,
+     "permutation_floor_sd": 0.065,
+     "raw_anisotropy": 0.855
+    },
+    "32": {
+     "auc": 0.548,
+     "ci95_task_bootstrap": [
+      0.462,
+      0.634
+     ],
+     "permutation_floor_mean": 0.496,
+     "permutation_floor_sd": 0.055,
+     "raw_anisotropy": 0.771
+    },
+    "40": {
+     "auc": 0.541,
+     "ci95_task_bootstrap": [
+      0.449,
+      0.622
+     ],
+     "permutation_floor_mean": 0.485,
+     "permutation_floor_sd": 0.055,
+     "raw_anisotropy": 0.73
+    },
+    "48": {
+     "auc": 0.501,
+     "ci95_task_bootstrap": [
+      0.402,
+      0.597
+     ],
+     "permutation_floor_mean": 0.486,
+     "permutation_floor_sd": 0.075,
+     "raw_anisotropy": 0.615
+    }
+   },
+   "confidence_baseline_auc": 0.471
+  },
+  "8192": {
+   "n": 166,
+   "positives": 65,
+   "layers": {
+    "24": {
+     "auc": 0.459,
+     "ci95_task_bootstrap": [
+      0.378,
+      0.545
+     ],
+     "permutation_floor_mean": 0.499,
+     "permutation_floor_sd": 0.056,
+     "raw_anisotropy": 0.858
+    },
+    "32": {
+     "auc": 0.542,
+     "ci95_task_bootstrap": [
+      0.46,
+      0.629
+     ],
+     "permutation_floor_mean": 0.489,
+     "permutation_floor_sd": 0.059,
+     "raw_anisotropy": 0.777
+    },
+    "40": {
+     "auc": 0.517,
+     "ci95_task_bootstrap": [
+      0.429,
+      0.608
+     ],
+     "permutation_floor_mean": 0.487,
+     "permutation_floor_sd": 0.056,
+     "raw_anisotropy": 0.742
+    },
+    "48": {
+     "auc": 0.467,
+     "ci95_task_bootstrap": [
+      0.383,
+      0.558
+     ],
+     "permutation_floor_mean": 0.47,
+     "permutation_floor_sd": 0.061,
+     "raw_anisotropy": 0.629
+    }
+   },
+   "confidence_baseline_auc": 0.478
+  },
+  "16384": {
+   "n": 166,
+   "positives": 65,
+   "layers": {
+    "24": {
+     "auc": 0.501,
+     "ci95_task_bootstrap": [
+      0.412,
+      0.596
+     ],
+     "permutation_floor_mean": 0.468,
+     "permutation_floor_sd": 0.068,
+     "raw_anisotropy": 0.854
+    },
+    "32": {
+     "auc": 0.539,
+     "ci95_task_bootstrap": [
+      0.445,
+      0.63
+     ],
+     "permutation_floor_mean": 0.488,
+     "permutation_floor_sd": 0.064,
+     "raw_anisotropy": 0.776
+    },
+    "40": {
+     "auc": 0.597,
+     "ci95_task_bootstrap": [
+      0.509,
+      0.686
+     ],
+     "permutation_floor_mean": 0.469,
+     "permutation_floor_sd": 0.06,
+     "raw_anisotropy": 0.74
+    },
+    "48": {
+     "auc": 0.536,
+     "ci95_task_bootstrap": [
+      0.45,
+      0.626
+     ],
+     "permutation_floor_mean": 0.516,
+     "permutation_floor_sd": 0.063,
+     "raw_anisotropy": 0.616
+    }
+   },
+   "confidence_baseline_auc": 0.465
+  },
+  "24576": {
+   "n": 165,
+   "positives": 64,
+   "layers": {
+    "24": {
+     "auc": 0.532,
+     "ci95_task_bootstrap": [
+      0.437,
+      0.616
+     ],
+     "permutation_floor_mean": 0.47,
+     "permutation_floor_sd": 0.059,
+     "raw_anisotropy": 0.853
+    },
+    "32": {
+     "auc": 0.52,
+     "ci95_task_bootstrap": [
+      0.422,
+      0.606
+     ],
+     "permutation_floor_mean": 0.484,
+     "permutation_floor_sd": 0.057,
+     "raw_anisotropy": 0.778
+    },
+    "40": {
+     "auc": 0.556,
+     "ci95_task_bootstrap": [
+      0.456,
+      0.639
+     ],
+     "permutation_floor_mean": 0.477,
+     "permutation_floor_sd": 0.047,
+     "raw_anisotropy": 0.741
+    },
+    "48": {
+     "auc": 0.527,
+     "ci95_task_bootstrap": [
+      0.434,
+      0.61
+     ],
+     "permutation_floor_mean": 0.489,
+     "permutation_floor_sd": 0.072,
+     "raw_anisotropy": 0.623
+    }
+   },
+   "confidence_baseline_auc": 0.478
+  },
+  "32768": {
+   "n": 162,
+   "positives": 61,
+   "layers": {
+    "24": {
+     "auc": 0.429,
+     "ci95_task_bootstrap": [
+      0.339,
+      0.507
+     ],
+     "permutation_floor_mean": 0.479,
+     "permutation_floor_sd": 0.069,
+     "raw_anisotropy": 0.858
+    },
+    "32": {
+     "auc": 0.521,
+     "ci95_task_bootstrap": [
+      0.428,
+      0.601
+     ],
+     "permutation_floor_mean": 0.47,
+     "permutation_floor_sd": 0.066,
+     "raw_anisotropy": 0.782
+    },
+    "40": {
+     "auc": 0.587,
+     "ci95_task_bootstrap": [
+      0.493,
+      0.671
+     ],
+     "permutation_floor_mean": 0.464,
+     "permutation_floor_sd": 0.066,
+     "raw_anisotropy": 0.745
+    },
+    "48": {
+     "auc": 0.59,
+     "ci95_task_bootstrap": [
+      0.506,
+      0.673
+     ],
+     "permutation_floor_mean": 0.493,
+     "permutation_floor_sd": 0.071,
+     "raw_anisotropy": 0.617
+    }
+   },
+   "confidence_baseline_auc": 0.516
+  }
+ }
+}

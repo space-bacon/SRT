@@ -1,0 +1,146 @@
+ng? Wait maybe there is a 3x3 ring of some color? In ex2, maybe color 7 is not the special; maybe 5 is special? Let's see output ex2 may have a 3x3 ring of 5? There are many 5s. Input has 5s in right area. Output maybe some 5s changed? Need compare ex2 more. Maybe the rule: There is a 3x3 ring of a "middle" color that remains, and all other pixels of that color are replaced by one of two other colors based on something. The 3x3 ring might be a marker/anchor. In ex0, ring of 8; ex1 ring of 5; ex2 maybe ring of 7? But output has no 7; perhaps input has no 3x3 ring of 7, so all 7 replaced? Or the ring color is 5? Let's inspect ex2 input for a 3x3 ring of 7 or 5. Input row1 has 5 at c12,c14; row2 c12? row2 66566788887655788888: positions: 1 6,2 6,3 5,4 6,5 6,6 7,7 8,8 8,9 8,10 8,11 7,12 6,13 5,14 5,15 7,16 8,17 8,18 8,19 8,20 8. There are 5s at c3,c13,c14. Row3 56666777887777788888: c1=5, c12? 8? c13 7? c14 7? c15 7? c16 7? c17 7? no 5? Row4 66666787888788888888: c12? 8? c13 7? no 5. Maybe no 3x3 ring of 5. Input 7s? Could there be a 3x3 ring of 7? Row3 c6-c10? 7 7 7 8 8? Row4 c7? 8? not.
+
+Maybe the 3x3 ring is not marker but result of equidistant boundary between two colors: The set of special cells exactly equidistant to the two object colors remains special, and it forms a 3x3 ring in training. In ex0, central ring of 8 around a 4 maybe equidistant? Ex1 central ring of 5 around a 2. Test input likely will have a similar 3x3 ring? Let's inspect test input. It has colors 2,3,4,6? Input rows:
+333333333466666666666666666666
+333333333466666666666666666666
+333323333466666666666666666666
+332233333466666666666666664444
+223233333444444666666666664232
+233333333466664666666644444232
+333333233466664666666646664444
+223333323444464666666646666666
+333333333466464666666446666666
+444444444466464666666466666666
+666664666666464666664466666666
+666664644444444444444666666666
+666664446666444666666666666666
+666666666444444666666666666666
+666666666466464666666666666666
+666666666466464446666666666666
+666666444466466646666666666666
+666666466666466646666666666666
+666666466666466646666666666666
+666666466666466646666666666666
+666666466666464444444444444444
+444666466666464222222222222222
+334444466666444222222222222222
+324666666666664222222322222232
+324666666666664222232222222332
+444666666666664222222222222232
+666666666666664222222222322232
+666666666666664222222222222222
+666666666666664222222222222222
+666666666666664222222222222222
+
+Colors: 2,3,4,6. 29 rows, 30 columns? Let's count row1 length: 333333333 (9) +4 + 666666666666666666666666666666? Total maybe 30. 9+1+20? 30. There is no 8,9,5,7. Colors {2,3,4,6}. Likely two object colors 2 and4? special 3? wall 6? Or object 3,4, special 2, wall 6? Need infer.
+
+The test input has a large 6 background? Many 6s. There are regions of 3 top-left, 4 middle/right
+
+Let me stop here and test my current best program on the training examples.
+
+```python
+import numpy as np
+
+def transform(grid):
+    grid = [list(row) for row in grid]
+    h, w = len(grid), len(grid[0])
+    a = np.array(grid, dtype=int)
+
+    # Identify the three non-background colors:
+    # background = most frequent color
+    # special = color that is changed in the training examples
+    # object colors = the other two colors
+    vals, counts = np.unique(a, return_counts=True)
+    bg = int(vals[np.argmax(counts)])
+
+    # special color is the one that is not background and has the
+    # second-highest frequency among non-background colors
+    non_bg = [(v, c) for v, c in zip(vals, counts) if v != bg]
+    non_bg.sort(key=lambda x: -x[1])
+    special = int(non_bg[0][0])
+    obj1 = int(non_bg[1][0])
+    obj2 = int(non_bg[2][0])
+
+    # Build masks
+    is_bg = (a == bg)
+    is_special = (a == special)
+    is_obj1 = (a == obj1)
+    is_obj2 = (a == obj2)
+
+    # Flood fill from each object color through special cells,
+    # treating background as walls.
+    def fill(start_mask):
+        dist = np.full((h, w), -1, dtype=int)
+        q = []
+        ys, xs = np.where(start_mask)
+        for y, x in zip(ys, xs):
+            dist[y, x] = 0
+            q.append((y, x))
+        head = 0
+        while head < len(q):
+            y, x = q[head]
+            head += 1
+            d = dist[y, x]
+            for dy, dx in ((1,0),(-1,0),(0,1),(0,-1)):
+                ny, nx = y+dy, x+dx
+                if 0 <= ny < h and 0 <= nx < w:
+                    if dist[ny, nx] == -1 and not is_bg[ny, nx] and (is_special[ny, nx] or start_mask[ny, nx]):
+                        dist[ny, nx] = d + 1
+                        q.append((ny, nx))
+        return dist
+
+    d1 = fill(is_obj1)
+    d2 = fill(is_obj2)
+
+    out = a.copy()
+
+    for y in range(h):
+        for x in range(w):
+            if is_special[y, x]:
+                dd1 = d1[y, x]
+                dd2 = d2[y, x]
+                if dd1 == -1 and dd2 == -1:
+                    # keep special if unreachable
+                    out[y, x] = special
+                elif dd1 == -1:
+                    out[y, x] = obj2
+                elif dd2 == -1:
+                    out[y, x] = obj1
+                elif dd1 < dd2:
+                    out[y, x] = obj1
+                elif dd2 < dd1:
+                    out[y, x] = obj2
+                else:
+                    # tie: keep special
+                    out[y, x] = special
+
+    return out.tolist()
+```
+
+I ran it. It reproduces 0 of 3 training examples.
+On training example 1 the output has the right shape (10x10) but 10 cells are wrong.
+Program output:
+0000000222
+0000222221
+0000200221
+0005220000
+0111522220
+0101520020
+0100000020
+2111000222
+2111000222
+1211000112
+Expected output:
+0000000222
+0000222221
+0000200222
+0005550000
+0115252220
+0105550020
+0100000020
+1111000222
+2111000222
+1211000212
+Wrong cells (row, col) program->expected: (2,9) 1->2, (3,4) 2->5, (3,5) 2->5, (4,3) 1->5, (4,4) 5->2, (4,5) 2->5, (5,3) 1->5, (5,5) 2->5, (7,0) 2->1, (9,7) 1->2
+
+So this program is not right yet. Let me work out exactly why it fails and what the real rule is, and then fix it.

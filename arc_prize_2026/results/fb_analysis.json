@@ -1,0 +1,127 @@
+{
+ "n_prep": 333,
+ "n_verified16": 58,
+ "variants": {
+  "A": {
+   "n_outputs": 205,
+   "n_tasks": 99,
+   "top1": 2.27,
+   "top2": 2.27,
+   "control_top1": 23.23,
+   "control_top2": 23.48,
+   "mean_cont_tokens": 1047,
+   "mean_forced_tokens": 0,
+   "own_program_fraction": 1.0,
+   "any_verified_fraction": 0.0,
+   "contrast_top1_vs_control": {
+    "contrast": "A minus control, top-1, outputs the arm finished",
+    "n_tasks": 99,
+    "mean_diff_points": -20.96,
+    "sd_points": 36.72,
+    "sem_points": 3.69,
+    "mean_over_sem": -5.68,
+    "min_detectable_points_80pct": 10.33
+   },
+   "contrast_top2_vs_control": {
+    "contrast": "A minus control, top-2, outputs the arm finished",
+    "n_tasks": 99,
+    "mean_diff_points": -21.21,
+    "sd_points": 36.83,
+    "sem_points": 3.7,
+    "mean_over_sem": -5.73,
+    "min_detectable_points_80pct": 10.37
+   },
+   "by_p_star": {
+    "p_star_0": {
+     "n": 140,
+     "arm_top1": 2.1,
+     "control_top1": 12.1
+    },
+    "p_star_1plus": {
+     "n": 65,
+     "arm_top1": 3.1,
+     "control_top1": 33.8
+    }
+   },
+   "gated_sub_benchmark": {
+    "n_outputs": 263,
+    "arm_top1": 14.06,
+    "control_top1": 27.68,
+    "contrast_top1": {
+     "contrast": "A minus control, top-1, gated, outputs verified at 16K or finished by the arm",
+     "n_tasks": 112,
+     "mean_diff_points": -13.62,
+     "sd_points": 26.61,
+     "sem_points": 2.51,
+     "mean_over_sem": -5.41,
+     "min_detectable_points_80pct": 7.04
+    }
+   }
+  },
+  "B": {
+   "n_outputs": 151,
+   "n_tasks": 90,
+   "top1": 16.11,
+   "top2": 16.67,
+   "control_top1": 22.22,
+   "control_top2": 22.78,
+   "mean_cont_tokens": 16384,
+   "mean_forced_tokens": 9035,
+   "own_program_fraction": 0.0,
+   "any_verified_fraction": 0.113,
+   "contrast_top1_vs_control": {
+    "contrast": "B minus control, top-1, outputs the arm finished",
+    "n_tasks": 90,
+    "mean_diff_points": -6.11,
+    "sd_points": 40.94,
+    "sem_points": 4.31,
+    "mean_over_sem": -1.42,
+    "min_detectable_points_80pct": 12.08
+   },
+   "contrast_top2_vs_control": {
+    "contrast": "B minus control, top-2, outputs the arm finished",
+    "n_tasks": 90,
+    "mean_diff_points": -6.11,
+    "sd_points": 41.28,
+    "sem_points": 4.35,
+    "mean_over_sem": -1.4,
+    "min_detectable_points_80pct": 12.18
+   },
+   "by_p_star": {
+    "p_star_0": {
+     "n": 105,
+     "arm_top1": 9.5,
+     "control_top1": 13.3
+    },
+    "p_star_1plus": {
+     "n": 46,
+     "arm_top1": 23.9,
+     "control_top1": 32.6
+    }
+   },
+   "gated_sub_benchmark": {
+    "n_outputs": 209,
+    "arm_top1": 24.53,
+    "control_top1": 27.83,
+    "contrast_top1": {
+     "contrast": "B minus control, top-1, gated, outputs verified at 16K or finished by the arm",
+     "n_tasks": 106,
+     "mean_diff_points": -3.3,
+     "sd_points": 30.29,
+     "sem_points": 2.94,
+     "mean_over_sem": -1.12,
+     "min_detectable_points_80pct": 8.24
+    }
+   }
+  }
+ },
+ "contrast_a_vs_b_top1": {
+  "contrast": "A minus B, top-1, 151 outputs both finished",
+  "n_tasks": 90,
+  "mean_diff_points": -13.06,
+  "sd_points": 32.93,
+  "sem_points": 3.47,
+  "mean_over_sem": -3.76,
+  "min_detectable_points_80pct": 9.72
+ }
+}

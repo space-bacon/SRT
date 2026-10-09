@@ -1,0 +1,14 @@
+{"event": "run_start", "n_tasks": 6, "resumed": 0, "max_cap": 8192, "streams": 24, "total_s": 2400.0, "fb": "off", "t": 655.1}
+{"event": "start", "task": "b10624e5", "cap": 8192, "replica": 8000, "thr": 330.0, "left_s": 1505, "not_started": 5, "t": 655.1}
+{"event": "start", "task": "7666fa5d", "cap": 8192, "replica": 8000, "thr": 330.0, "left_s": 1504, "not_started": 4, "t": 656.1}
+{"event": "start", "task": "28a6681f", "cap": 8192, "replica": 8000, "thr": 330.0, "left_s": 1504, "not_started": 3, "t": 656.1}
+{"event": "start", "task": "269e22fb", "cap": 8192, "replica": 8000, "thr": 330.0, "left_s": 1504, "not_started": 2, "t": 656.1}
+{"event": "start", "task": "c7f57c3e", "cap": 8192, "replica": 8000, "thr": 330.0, "left_s": 1504, "not_started": 1, "t": 656.1}
+{"event": "start", "task": "8e5c0c38", "cap": 8192, "replica": 8000, "thr": 330.0, "left_s": 1504, "not_started": 0, "t": 656.1}
+{"event": "done", "task": "8e5c0c38", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4151, "n_programs": 8, "seconds": 413.3, "n_verified": 0, "correct_top1": [false, false], "correct_top2": [false, false], "t": 1069.5}
+{"event": "done", "task": "7666fa5d", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4283, "n_programs": 8, "seconds": 437.7, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1093.8}
+{"event": "done", "task": "269e22fb", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4087, "n_programs": 8, "seconds": 439.6, "n_verified": 0, "correct_top1": [false, false], "correct_top2": [false, false], "t": 1095.8}
+{"event": "done", "task": "c7f57c3e", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7992, "n_programs": 8, "seconds": 455.2, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1111.4}
+{"event": "done", "task": "28a6681f", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3121, "n_programs": 8, "seconds": 458.3, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1114.4}
+{"event": "done", "task": "b10624e5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 9907, "n_programs": 8, "seconds": 462.7, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1117.8}
+{"event": "end", "mean_cap": 8192, "t": 1117.8}

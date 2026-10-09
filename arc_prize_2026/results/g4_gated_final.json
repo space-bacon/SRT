@@ -1,0 +1,53 @@
+{
+ "n_samples": 166,
+ "policies": {
+  "fixed_16K": {
+   "top1_tasks": 15.0,
+   "top2_tasks": 15.42,
+   "mean_tokens": 23764.0,
+   "complete_data": false
+  },
+  "fixed_32K": {
+   "top1_tasks": 30.0,
+   "top2_tasks": 30.0,
+   "mean_tokens": 41002.0,
+   "complete_data": false
+  },
+  "fixed_49K": {
+   "top1_tasks": 34.86,
+   "top2_tasks": 36.53,
+   "mean_tokens": 56907.0,
+   "complete_data": false
+  },
+  "fixed_63K": {
+   "top1_tasks": 41.11,
+   "top2_tasks": 42.36,
+   "mean_tokens": 70151.0,
+   "complete_data": false
+  },
+  "gated_16K_32K_49K_63K": {
+   "top1_tasks": 38.33,
+   "top2_tasks": 40.0,
+   "mean_tokens": 76007.0,
+   "complete_data": false
+  },
+  "gated_8K_to_63K": {
+   "top1_tasks": 35.97,
+   "top2_tasks": 37.64,
+   "mean_tokens": 79554.0,
+   "complete_data": false
+  },
+  "gated_8K_16K_24K_32K": {
+   "top1_tasks": 27.64,
+   "top2_tasks": 27.64,
+   "mean_tokens": 47372.0,
+   "complete_data": false
+  },
+  "gated_24K_40K_56K": {
+   "top1_tasks": 20.42,
+   "top2_tasks": 20.42,
+   "mean_tokens": 54363.0,
+   "complete_data": false
+  }
+ }
+}

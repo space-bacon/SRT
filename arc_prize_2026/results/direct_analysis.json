@@ -1,0 +1,126 @@
+{
+ "direct_units": {
+  "32768": 90,
+  "49152": 86
+ },
+ "caps": {
+  "32768": {
+   "outputs": 333,
+   "longer_than_cap": 323,
+   "with_direct_samples": 90,
+   "mean_direct_tokens_n4": 1689.0,
+   "subset_scores": {
+    "base_top1": 20.63,
+    "base_top2": 21.43,
+    "direct_1": 20.63,
+    "direct_2": 20.63,
+    "direct_4": 20.63,
+    "direct_alone_top1_n4": 4.76,
+    "direct_alone_top1_n1": 4.76
+   },
+   "program_wrong_but_direct_right_n4": 0,
+   "program_right_and_direct_right_n4": 3,
+   "contrasts_vs_base_top2": {
+    "direct_1": {
+     "contrast": "cap 32768: direct_1 minus base top-2, outputs longer than the cap",
+     "n_tasks": 63,
+     "mean_diff_points": -0.79,
+     "sd_points": 6.3,
+     "sem_points": 0.79,
+     "mean_over_sem": -1.0,
+     "min_detectable_points_80pct": 2.22
+    },
+    "direct_2": {
+     "contrast": "cap 32768: direct_2 minus base top-2, outputs longer than the cap",
+     "n_tasks": 63,
+     "mean_diff_points": -0.79,
+     "sd_points": 6.3,
+     "sem_points": 0.79,
+     "mean_over_sem": -1.0,
+     "min_detectable_points_80pct": 2.22
+    },
+    "direct_4": {
+     "contrast": "cap 32768: direct_4 minus base top-2, outputs longer than the cap",
+     "n_tasks": 63,
+     "mean_diff_points": -0.79,
+     "sd_points": 6.3,
+     "sem_points": 0.79,
+     "mean_over_sem": -1.0,
+     "min_detectable_points_80pct": 2.22
+    }
+   },
+   "whole_benchmark": {
+    "base_top2": 27.92,
+    "direct_4": 27.71,
+    "contrast_direct_4_minus_base": {
+     "contrast": "cap 32768: direct_4 minus base top-2, whole benchmark",
+     "n_tasks": 120,
+     "mean_diff_points": -0.21,
+     "sd_points": 2.28,
+     "sem_points": 0.21,
+     "mean_over_sem": -1.0,
+     "min_detectable_points_80pct": 0.58
+    }
+   }
+  },
+  "49152": {
+   "outputs": 333,
+   "longer_than_cap": 307,
+   "with_direct_samples": 86,
+   "mean_direct_tokens_n4": 1698.0,
+   "subset_scores": {
+    "base_top1": 30.33,
+    "base_top2": 30.33,
+    "direct_1": 30.33,
+    "direct_2": 30.33,
+    "direct_4": 30.33,
+    "direct_alone_top1_n4": 2.46,
+    "direct_alone_top1_n1": 3.28
+   },
+   "program_wrong_but_direct_right_n4": 0,
+   "program_right_and_direct_right_n4": 2,
+   "contrasts_vs_base_top2": {
+    "direct_1": {
+     "contrast": "cap 49152: direct_1 minus base top-2, outputs longer than the cap",
+     "n_tasks": 61,
+     "mean_diff_points": 0.0,
+     "sd_points": 0.0,
+     "sem_points": 0.0,
+     "mean_over_sem": null,
+     "min_detectable_points_80pct": 0.0
+    },
+    "direct_2": {
+     "contrast": "cap 49152: direct_2 minus base top-2, outputs longer than the cap",
+     "n_tasks": 61,
+     "mean_diff_points": 0.0,
+     "sd_points": 0.0,
+     "sem_points": 0.0,
+     "mean_over_sem": null,
+     "min_detectable_points_80pct": 0.0
+    },
+    "direct_4": {
+     "contrast": "cap 49152: direct_4 minus base top-2, outputs longer than the cap",
+     "n_tasks": 61,
+     "mean_diff_points": 0.0,
+     "sd_points": 0.0,
+     "sem_points": 0.0,
+     "mean_over_sem": null,
+     "min_detectable_points_80pct": 0.0
+    }
+   },
+   "whole_benchmark": {
+    "base_top2": 38.61,
+    "direct_4": 38.61,
+    "contrast_direct_4_minus_base": {
+     "contrast": "cap 49152: direct_4 minus base top-2, whole benchmark",
+     "n_tasks": 120,
+     "mean_diff_points": 0.0,
+     "sd_points": 0.0,
+     "sem_points": 0.0,
+     "mean_over_sem": null,
+     "min_detectable_points_80pct": 0.0
+    }
+   }
+  }
+ }
+}
