@@ -1,0 +1,51 @@
+{"event": "run_start", "n_tasks": 6, "resumed": 0, "max_cap": 16384, "streams": 24, "total_s": 2400.0, "fb": "off", "t": 762.7}
+{"event": "start", "task": "b10624e5", "cap": 12575, "plen": 4507, "replica": 8000, "thr": 330.0, "left_s": 1397, "not_started": 5, "t": 762.7}
+{"event": "start", "task": "7666fa5d", "cap": 12561, "plen": 2087, "replica": 8000, "thr": 330.0, "left_s": 1396, "not_started": 4, "t": 764.2}
+{"event": "start", "task": "28a6681f", "cap": 12561, "plen": 1509, "replica": 8000, "thr": 330.0, "left_s": 1396, "not_started": 3, "t": 764.2}
+{"event": "start", "task": "269e22fb", "cap": 12561, "plen": 3572, "replica": 8000, "thr": 330.0, "left_s": 1396, "not_started": 2, "t": 764.2}
+{"event": "start", "task": "c7f57c3e", "cap": 12561, "plen": 2907, "replica": 8000, "thr": 330.0, "left_s": 1396, "not_started": 1, "t": 764.3}
+{"event": "start", "task": "8e5c0c38", "cap": 12561, "plen": 3257, "replica": 8000, "thr": 330.0, "left_s": 1396, "not_started": 0, "t": 764.3}
+{"event": "turn", "task": "8e5c0c38", "turn": 1, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 3107, "t": 924.6}
+{"event": "turn", "task": "28a6681f", "turn": 1, "ntok": 3000, "finish": "stop", "calls": 2, "gen_total": 3095, "t": 927.2}
+{"event": "turn", "task": "c7f57c3e", "turn": 1, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 3104, "t": 937.6}
+{"event": "turn", "task": "7666fa5d", "turn": 1, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 3214, "t": 942.3}
+{"event": "turn", "task": "b10624e5", "turn": 1, "ntok": 3000, "finish": "stop", "calls": 2, "gen_total": 3171, "t": 942.4}
+{"event": "turn", "task": "28a6681f", "turn": 2, "ntok": 345, "finish": "stop", "calls": 1, "gen_total": 3440, "t": 952.1}
+{"event": "turn", "task": "c7f57c3e", "turn": 2, "ntok": 381, "finish": "stop", "calls": 1, "gen_total": 3485, "t": 957.8}
+{"event": "turn", "task": "269e22fb", "turn": 1, "ntok": 3000, "finish": "stop", "calls": 2, "gen_total": 3207, "t": 960.2}
+{"event": "turn", "task": "8e5c0c38", "turn": 2, "ntok": 689, "finish": "stop", "calls": 1, "gen_total": 3796, "t": 965.6}
+{"event": "turn", "task": "b10624e5", "turn": 2, "ntok": 476, "finish": "stop", "calls": 1, "gen_total": 3647, "t": 968.8}
+{"event": "turn", "task": "b10624e5", "turn": 3, "ntok": 149, "finish": "stop", "calls": 1, "gen_total": 3796, "t": 975.8}
+{"event": "turn", "task": "7666fa5d", "turn": 2, "ntok": 813, "finish": "stop", "calls": 1, "gen_total": 4027, "t": 981.5}
+{"event": "turn", "task": "8e5c0c38", "turn": 3, "ntok": 597, "finish": "stop", "calls": 1, "gen_total": 4393, "t": 991.3}
+{"event": "turn", "task": "7666fa5d", "turn": 3, "ntok": 488, "finish": "stop", "calls": 1, "gen_total": 4515, "t": 999.7}
+{"event": "turn", "task": "269e22fb", "turn": 2, "ntok": 1593, "finish": "stop", "calls": 2, "gen_total": 4800, "t": 1027.5}
+{"event": "turn", "task": "28a6681f", "turn": 3, "ntok": 2587, "finish": "stop", "calls": 1, "gen_total": 6027, "t": 1069.0}
+{"event": "turn", "task": "c7f57c3e", "turn": 3, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 6564, "t": 1078.2}
+{"event": "turn", "task": "b10624e5", "turn": 4, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 7548, "t": 1107.3}
+{"event": "turn", "task": "8e5c0c38", "turn": 4, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 7583, "t": 1112.9}
+{"event": "turn", "task": "7666fa5d", "turn": 4, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 7670, "t": 1117.7}
+{"event": "turn", "task": "b10624e5", "turn": 5, "ntok": 539, "finish": "stop", "calls": 1, "gen_total": 8087, "t": 1128.8}
+{"event": "turn", "task": "269e22fb", "turn": 3, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 8066, "t": 1160.7}
+{"event": "turn", "task": "269e22fb", "turn": 4, "ntok": 236, "finish": "stop", "calls": 1, "gen_total": 8302, "t": 1168.8}
+{"event": "turn", "task": "28a6681f", "turn": 4, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 9138, "t": 1191.8}
+{"event": "turn", "task": "269e22fb", "turn": 5, "ntok": 713, "finish": "stop", "calls": 1, "gen_total": 9015, "t": 1196.2}
+{"event": "turn", "task": "28a6681f", "turn": 5, "ntok": 270, "finish": "stop", "calls": 1, "gen_total": 9408, "t": 1205.2}
+{"event": "turn", "task": "c7f57c3e", "turn": 4, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 10015, "t": 1215.6}
+{"event": "turn", "task": "7666fa5d", "turn": 5, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 10862, "t": 1235.8}
+{"event": "turn", "task": "8e5c0c38", "turn": 5, "ntok": 3000, "finish": "stop", "calls": 1, "gen_total": 10716, "t": 1238.2}
+{"event": "turn", "task": "b10624e5", "turn": 6, "ntok": 3000, "finish": "length", "calls": 0, "gen_total": 11087, "t": 1246.6}
+{"event": "turn", "task": "269e22fb", "turn": 6, "ntok": 1055, "finish": "stop", "calls": 1, "gen_total": 10070, "t": 1261.1}
+{"event": "turn", "task": "269e22fb", "turn": 7, "ntok": 997, "finish": "stop", "calls": 1, "gen_total": 11067, "t": 1296.6}
+{"event": "turn", "task": "7666fa5d", "turn": 6, "ntok": 1699, "finish": "length", "calls": 0, "gen_total": 12561, "t": 1314.0}
+{"event": "done", "task": "b10624e5", "cap": 12575, "replica": 8000, "finish": "turn_cut", "ntok": 11087, "forced_tokens": 9518, "n_programs": 8, "turns": 6, "calls": 6, "seconds": 572.2, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1334.9}
+{"event": "turn", "task": "8e5c0c38", "turn": 6, "ntok": 1845, "finish": "length", "calls": 0, "gen_total": 12561, "t": 1335.5}
+{"event": "turn", "task": "c7f57c3e", "turn": 5, "ntok": 2546, "finish": "length", "calls": 0, "gen_total": 12561, "t": 1354.5}
+{"event": "turn", "task": "269e22fb", "turn": 8, "ntok": 856, "finish": "stop", "calls": 1, "gen_total": 11923, "t": 1367.1}
+{"event": "turn", "task": "28a6681f", "turn": 6, "ntok": 3000, "finish": "length", "calls": 0, "gen_total": 12408, "t": 1377.9}
+{"event": "done", "task": "7666fa5d", "cap": 12561, "replica": 8000, "finish": "turn_cut", "ntok": 12561, "forced_tokens": 6206, "n_programs": 8, "turns": 6, "calls": 5, "seconds": 651.4, "n_verified": 0, "correct_top1": [true], "correct_top2": [true], "t": 1415.6}
+{"event": "done", "task": "28a6681f", "cap": 12561, "replica": 8000, "finish": "turn_cut", "ntok": 12408, "forced_tokens": 3596, "n_programs": 8, "turns": 6, "calls": 6, "seconds": 669.4, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1433.7}
+{"event": "done", "task": "8e5c0c38", "cap": 12561, "replica": 8000, "finish": "turn_cut", "ntok": 12561, "forced_tokens": 7485, "n_programs": 8, "turns": 6, "calls": 5, "seconds": 670.7, "n_verified": 0, "correct_top1": [false, false], "correct_top2": [false, false], "t": 1435.0}
+{"event": "done", "task": "269e22fb", "cap": 12561, "replica": 8000, "finish": "budget", "ntok": 11923, "forced_tokens": 4117, "n_programs": 8, "turns": 8, "calls": 10, "seconds": 676.6, "n_verified": 0, "correct_top1": [false, false], "correct_top2": [false, false], "t": 1440.9}
+{"event": "done", "task": "c7f57c3e", "cap": 12561, "replica": 8000, "finish": "turn_cut", "ntok": 12561, "forced_tokens": 9030, "n_programs": 8, "turns": 5, "calls": 4, "seconds": 740.1, "n_verified": 0, "correct_top1": [false], "correct_top2": [false], "t": 1504.4}
+{"event": "end", "mean_cap": 12563, "t": 1504.4}

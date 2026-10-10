@@ -14,6 +14,7 @@ ap.add_argument("title")
 ap.add_argument("--datasets", default="burtonlancaster/arc-vllm-wheelhouse-py313-cu129,jakobbrggen/qwen3-8-27b-fp8-hf-snapshot,jsday96/qwen3-8-27b-awq,burtonlancaster/arc-bench-traces")
 ap.add_argument("--embed", default="", help="file whose text becomes the string SOLVER_SRC in the script")
 ap.add_argument("--cfg", default="", help="JSON file that becomes the dict CFG in the script")
+ap.add_argument("--embed-extra", action="append", default=[], help="name=path; the file text goes into the dict EXTRA_SRC under that name (repeatable)")
 ap.add_argument("--competition", default="arc-prize-2026-arc-agi-2")
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
@@ -22,6 +23,8 @@ if a.cfg:
     parts.append("CFG = json.loads(" + repr(json.dumps(json.load(open(a.cfg)))) + ")\n")
 if a.embed:
     parts.append("SOLVER_SRC = " + repr(open(a.embed).read()) + "\n")
+if a.embed_extra:
+    parts.append("EXTRA_SRC = " + repr({kv.split("=", 1)[0]: open(kv.split("=", 1)[1]).read() for kv in a.embed_extra}) + "\n")
 parts.append(open(a.driver).read())
 code = "\n".join(parts)
 compile(code, "script.py", "exec")

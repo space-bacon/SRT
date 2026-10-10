@@ -126,11 +126,99 @@ def grid_text(g):
     return "\n".join("".join(str(c) for c in r) for r in g)
 
 
+PROMPT_EXTRA = ""
+PROMPT_SUMMARY = False
+
+
+def summarize_text(train, test_inputs):
+    out = []
+    def _print(*a):
+        out.append(" ".join(str(x) for x in a))
+
+    import numpy as np
+    from collections import Counter
+
+    def comps(a, bg, diag=True):
+        h, w = a.shape
+        seen = np.zeros((h, w), bool)
+        out = []
+        for i in range(h):
+            for j in range(w):
+                if a[i, j] != bg and not seen[i, j]:
+                    c = a[i, j]
+                    st = [(i, j)]
+                    seen[i, j] = True
+                    cells = []
+                    while st:
+                        y, x = st.pop()
+                        cells.append((y, x))
+                        for dy in (-1, 0, 1):
+                            for dx in (-1, 0, 1):
+                                if (dy or dx) and (diag or not (dy and dx)):
+                                    yy, xx = y + dy, x + dx
+                                    if 0 <= yy < h and 0 <= xx < w and not seen[yy, xx] and a[yy, xx] == c:
+                                        seen[yy, xx] = True
+                                        st.append((yy, xx))
+                    ys = [c_[0] for c_ in cells]
+                    xs = [c_[1] for c_ in cells]
+                    out.append((int(c), len(cells), (min(ys), min(xs), max(ys), max(xs))))
+        return out
+
+    def desc(a, name):
+        bg = Counter(a.ravel().tolist()).most_common(1)[0][0]
+        cc = Counter(a.ravel().tolist())
+        cs = comps(a, bg)
+        t = name + ": " + str(a.shape[0]) + "x" + str(a.shape[1]) + ", colors " + ", ".join(str(k) + ":" + str(v) for k, v in sorted(cc.items())) + ", background guess " + str(bg)
+        t += "; " + str(len(cs)) + " same-color objects (8-connected)"
+        if cs:
+            big = sorted(cs, key=lambda o: -o[1])[:6]
+            t += ", largest: " + "; ".join("color " + str(c) + " size " + str(n) + " rows " + str(b[0]) + "-" + str(b[2]) + " cols " + str(b[1]) + "-" + str(b[3]) for c, n, b in big)
+        sym = []
+        if (a == a[::-1]).all(): sym.append("up-down symmetric")
+        if (a == a[:, ::-1]).all(): sym.append("left-right symmetric")
+        if a.shape[0] == a.shape[1] and (a == a.T).all(): sym.append("transpose symmetric")
+        if sym: t += "; " + ", ".join(sym)
+        return t
+
+    pairs = train
+    for i, ex in enumerate(pairs):
+        a, b = np.array(ex["input"]), np.array(ex["output"])
+        _print("Example", i)
+        _print("  " + desc(a, "input"))
+        _print("  " + desc(b, "output"))
+        if a.shape == b.shape:
+            d = a != b
+            n = int(d.sum())
+            tr = Counter((int(x), int(y)) for x, y in zip(a[d], b[d]))
+            if n:
+                ys, xs = np.where(d)
+                _print("  same shape; " + str(n) + " cells change (rows " + str(ys.min()) + "-" + str(ys.max()) + ", cols " + str(xs.min()) + "-" + str(xs.max()) + "); color changes (from, to): " + ", ".join(str(k) + " x" + str(v) for k, v in tr.most_common(8)))
+            else:
+                _print("  same shape; no cell changes")
+        else:
+            note = []
+            if b.shape[0] % a.shape[0] == 0 and b.shape[1] % a.shape[1] == 0:
+                fy, fx = b.shape[0] // a.shape[0], b.shape[1] // a.shape[1]
+                note.append("output is " + str(fy) + "x" + str(fx) + " times the input size" + (" and equals the input tiled" if (np.tile(a, (fy, fx)) == b).all() else "") + (" and equals the input scaled up" if (np.kron(a, np.ones((fy, fx), int)) == b).all() else ""))
+            if b.shape[0] <= a.shape[0] and b.shape[1] <= a.shape[1]:
+                hits = [(y, x) for y in range(a.shape[0] - b.shape[0] + 1) for x in range(a.shape[1] - b.shape[1] + 1) if (a[y:y + b.shape[0], x:x + b.shape[1]] == b).all()]
+                if hits: note.append("output is a sub-grid of the input at row, col " + str(hits[0]))
+            _print("  different shape" + ("; " + "; ".join(note) if note else ""))
+    tests = test_inputs
+    for k, t_ in enumerate(tests):
+        _print("Test input" + (" %d" % k if len(tests) > 1 else ""))
+        _print("  " + desc(np.array(t_), "input"))
+    return "\n".join(out)
+
+
 def build_prompt(task, ti=0):
-    parts = [HEADER_CODE, "--Training Examples--\n"]
+    parts = [HEADER_CODE + PROMPT_EXTRA, "--Training Examples--\n"]
     for i, ex in enumerate(task["train"]):
         parts.append(f"--Example {i}--\nINPUT:\n{grid_text(ex['input'])}\nOUTPUT:\n{grid_text(ex['output'])}\n")
     parts.append(f"--Test Input--\n{grid_text(task['test'][ti]['input'])}\n")
+    if PROMPT_SUMMARY:
+        parts.append("--Facts about the grids, computed by code (colors with their cell counts; objects are connected groups of cells of one color, largest first, with their row and column ranges)--\n"
+                     + summarize_text(task["train"], [task["test"][ti]["input"]]) + "\n")
     return "\n".join(parts)
 
 
@@ -226,6 +314,9 @@ class Solver:
         self.log = open(a.log, "a")
         self.sub_lock = asyncio.Lock()
         self.inflight_caps = {}
+        self.inflight_start = {}
+        self.stat_tokens, self.stat_pred, self.stat_secs, self.stat_n = 0.0, 0.0, 0.0, 0
+        self.last_cap, self.n_started = None, 0
         self.not_started = 0
         self.gen_hist = deque(maxlen=400)
         self.thr = a.thr_prior
@@ -282,18 +373,52 @@ class Solver:
                 dt = self.gen_hist[-1][0] - self.gen_hist[0][0]
                 self.thr = max(50.0, (self.gen_hist[-1][1] - self.gen_hist[0][1]) / dt)
 
+    def sec_per_cost(self):
+        """Stream-seconds per predicted decoded token (the cost table at the cap the task was given), from the tasks finished so far: decode, finalization and every wait are inside the
+        seconds, and a table that is too high or too low is absorbed. The prior counts as `prior-tasks` tasks of 40K tokens."""
+        base = 40e3 * self.a.prior_tasks
+        prior_r = max(self.target_streams, 1) / self.a.thr_prior
+        return (self.stat_secs + base * prior_r) / (self.stat_pred + base)
+
+    def thr_est(self):
+        """Decoded tokens per second of the whole group, from the tasks finished so far (for the log)."""
+        base = 40e3 * self.a.prior_tasks
+        n = max(self.target_streams, 1)
+        return (self.stat_tokens + base) / (self.stat_secs / n + base / self.a.thr_prior)
+
+    def note_done(self, rec):
+        toks = rec.get("ntok", 0) + rec.get("forced_tokens", 0)
+        secs = rec.get("seconds", 0.0)
+        if toks > 0 and secs > 0 and rec.get("cap"):
+            self.stat_tokens += toks
+            self.stat_pred += cost_of_cap(rec["cap"])
+            self.stat_secs += secs
+            self.stat_n += 1
+
     def choose_cap(self):
+        """Largest cap whose expected stream-seconds, added to what the tasks in flight still need, fit in the time left. The seconds per token come from finished tasks, so the waves of
+        decoding and finalization that come from tasks starting together average out; the cap moves by at most --cap-step between tasks and the first wave is spread."""
         a = self.a
-        left = self.main_deadline - time.time()
+        now = time.time()
+        left = self.main_deadline - now
+        r = self.sec_per_cost()
         fb_extra = a.fb_n1 * 1.2e3 if a.fb != "off" else 0.0
-        inflight = sum(0.5 * cost_of_cap(c) for c in self.inflight_caps.values())
-        budget = self.thr * left * a.safety
+        avail = max(self.target_streams, 1) * left * a.safety
+        inflight = 0.0
+        for tid, cap_i in self.inflight_caps.items():
+            d_i = r * cost_of_cap(cap_i)
+            inflight += max(0.15 * d_i, d_i - (now - self.inflight_start.get(tid, now)))
         c = a.max_cap
         while c > a.min_cap:
-            need = inflight + (self.not_started + 1) * (cost_of_cap(c) + fb_extra)
-            if need <= budget:
+            if inflight + (self.not_started + 1) * r * (cost_of_cap(c) + fb_extra) <= avail:
                 break
-            c -= 1024
+            c -= 512
+        if self.last_cap is not None:
+            c = max(self.last_cap - a.cap_step_down, min(self.last_cap + a.cap_step, c))
+        self.last_cap = c
+        if self.n_started < self.target_streams and a.first_wave_lo < 1.0:
+            c = int(c * (a.first_wave_lo + (1.0 - a.first_wave_lo) * self.n_started / max(self.target_streams - 1, 1)))
+        self.n_started += 1
         # a trace has to fit in the time that is left at a pessimistic per-stream speed
         return int(max(a.min_cap, min(c, left * a.stream_rate)))
 
@@ -370,6 +495,7 @@ class Solver:
                 self.submission[tid][j] = {"attempt_1": ranked[0], "attempt_2": ranked[1] if len(ranked) > 1 else ranked[0]}
         await self.write_submission()
         rec["n_verified"] = sum(1 for r in results if self.verified(r))
+        self.note_done(rec)
         if self.sol is not None:
             gold = self.sol[tid]
             rec["correct_top1"] = [self.submission[tid][j]["attempt_1"] == gold[j] for j in range(len(task["test"]))]
@@ -389,10 +515,11 @@ class Solver:
         # prompt, reasoning and the forced program have to fit in one server context
         cap = max(2048, min(self.choose_cap(), a.max_len - plen - a.forced_max_tokens - 64))
         self.inflight_caps[tid] = cap
+        self.inflight_start[tid] = time.time()
         rep.active += 1
         self.cap_sum += cap
         self.cap_n += 1
-        self.emit({"event": "start", "task": tid, "cap": cap, "plen": plen, "replica": rep.port, "thr": round(self.thr, 1), "left_s": round(self.main_deadline - time.time()), "not_started": self.not_started})
+        self.emit({"event": "start", "task": tid, "cap": cap, "plen": plen, "replica": rep.port, "thr": round(self.thr_est(), 1), "left_s": round(self.main_deadline - time.time()), "not_started": self.not_started})
         try:
             fb = a.fb != "off" and cap > a.fb_ckpt + 4096
             seg1 = a.fb_ckpt if fb else cap
@@ -455,6 +582,7 @@ class Solver:
         finally:
             rep.active -= 1
             self.inflight_caps.pop(tid, None)
+            self.inflight_start.pop(tid, None)
 
     async def run(self):
         a = self.a
@@ -483,7 +611,7 @@ class Solver:
         self.emit({"event": "end", "mean_cap": round(self.cap_sum / max(self.cap_n, 1))})
 
 
-def main():
+def make_parser():
     ap = argparse.ArgumentParser()
     ap.add_argument("--challenges", required=True)
     ap.add_argument("--solutions", default="")
@@ -511,10 +639,24 @@ def main():
     ap.add_argument("--min-trace-s", type=float, default=600)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--effort", default="", help="reasoning effort of the chat template (xhigh when empty; medium and low exist)")
+    ap.add_argument("--cap-step", type=int, default=1536, help="the cap of a task is at most this many tokens above the one before")
+    ap.add_argument("--cap-step-down", type=int, default=4096, help="the cap of a task is at most this many tokens below the one before")
+    ap.add_argument("--first-wave-lo", type=float, default=0.85, help="the caps of the first wave of tasks are spread over [this x the cap, the cap] so the streams do not finish together")
+    ap.add_argument("--prior-tasks", type=float, default=6.0, help="weight of the throughput prior, in tasks of 40K decoded tokens")
+    ap.add_argument("--prompt-summary", action="store_true", help="add code-computed facts about the grids (colors, objects, changes) to the prompt")
+    ap.add_argument("--prompt-extra", default="", help="text added to the instructions of the prompt (after the header, before the examples)")
     ap.add_argument("--cost-points", default="", help="JSON list of [cap, mean decoded tokens per task] pairs measured for this effort; replaces the built-in table")
-    a = ap.parse_args()
+    return ap
+
+
+def main():
+    a = make_parser().parse_args()
     if a.cost_points:
         COST_POINTS[:] = [tuple(p) for p in json.loads(a.cost_points)]
+    global PROMPT_EXTRA, PROMPT_SUMMARY
+    if a.prompt_extra:
+        PROMPT_EXTRA = a.prompt_extra + "\n\n"
+    PROMPT_SUMMARY = a.prompt_summary
     asyncio.run(Solver(a).run())
 
 

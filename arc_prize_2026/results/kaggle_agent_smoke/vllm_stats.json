@@ -1,0 +1,14 @@
+{
+ "windows": 71,
+ "active_windows": 70,
+ "active_s": 700.0,
+ "prefill_tokens_computed": 264780,
+ "tokens_decoded": 113018,
+ "prefill_per_decoded_token": 2.343,
+ "mean_running": 8.5,
+ "mean_decode_tok_s_active": 161.5,
+ "mean_kv_usage_pct": 16.7,
+ "final_prefix_hit_pct": 80.9,
+ "max_waiting": 4.0,
+ "prefill_share_of_active_time_est": 0.229
+}

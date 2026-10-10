@@ -1,0 +1,77 @@
+{
+ "events": {
+  "run_start": 1,
+  "start": 120,
+  "done": 120,
+  "end": 1
+ },
+ "n_done": 120,
+ "n_skipped": 0,
+ "cap": {
+  "mean": 36831,
+  "q10": 15257,
+  "median": 43008,
+  "q90": 49152,
+  "min": 8192,
+  "max": 49152
+ },
+ "decoded_tokens_per_task": {
+  "mean": 46311,
+  "reasoning_mean": 36440,
+  "forced_mean": 9872
+ },
+ "finish": {
+  "stop": 5,
+  "length": 115
+ },
+ "n_verified_ge1_share": 0.325,
+ "controller": {
+  "first_thr": 330.0,
+  "last_thr": 188.4,
+  "median_thr": 330.0,
+  "thr_by_decile_of_starts": [
+   330.0,
+   330.0,
+   209.6,
+   178.2,
+   371.0,
+   366.4,
+   225.1,
+   248.1,
+   333.7,
+   309.9
+  ],
+  "cap_by_decile_of_starts": [
+   41045,
+   44117,
+   19371,
+   18005,
+   49152,
+   49152,
+   24747,
+   33792,
+   49152,
+   39773
+  ]
+ },
+ "time_s": {
+  "first_done": 2926.5,
+  "last_event": 19361.0
+ },
+ "score": {
+  "top1": 24.31,
+  "top1_ci95": [
+   16.81,
+   32.22
+  ],
+  "top2": 25.97,
+  "top2_ci95": [
+   18.75,
+   33.75
+  ],
+  "n_tasks": 120,
+  "frontier_expectation_top1_at_mean_tokens": 30.38,
+  "top1_minus_frontier": -6.07,
+  "bootstrap_sem_points": 3.74
+ }
+}

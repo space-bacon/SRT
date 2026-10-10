@@ -1,0 +1,90 @@
+{
+ "layout": "tp4_fp8",
+ "layouts": {
+  "tp4_fp8": {
+   "model": "fp8",
+   "groups": [
+    [
+     0,
+     1,
+     2,
+     3
+    ]
+   ],
+   "tp": 4,
+   "max_len": 131072,
+   "max_seqs": 48,
+   "per_replica": 24,
+   "thr_prior": 260
+  },
+  "tp2x2_int4": {
+   "model": "int4",
+   "groups": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     3
+    ]
+   ],
+   "tp": 2,
+   "max_len": 65536,
+   "max_seqs": 32,
+   "per_replica": 12,
+   "thr_prior": 400
+  }
+ },
+ "total_s_rerun": 41400,
+ "hard_end_rerun": 42000,
+ "reserve_s": 1500,
+ "max_cap": 65536,
+ "min_cap": 8192,
+ "n_forced": 4,
+ "fb": "off",
+ "fb_ckpt": 16384,
+ "fb_n1": 4,
+ "mtp_tokens": 2,
+ "prefix_caching": true,
+ "safety": 0.92,
+ "min_trace_s": 600,
+ "max_restarts": 4,
+ "commit_mode": "replica",
+ "smoke_tasks": 6,
+ "smoke_cap": 16384,
+ "smoke_total_s": 2400,
+ "replica_tasks": 120,
+ "replica_s_per_task": 163.5,
+ "replica_seed": 11,
+ "replica_overhead_s": 2160,
+ "effort": "",
+ "cost_points": [
+  [
+   8192,
+   12000
+  ],
+  [
+   16384,
+   20500
+  ],
+  [
+   32768,
+   34000
+  ],
+  [
+   49152,
+   49000
+  ],
+  [
+   63000,
+   61000
+  ]
+ ],
+ "think_cap": 3000,
+ "max_turns": 60,
+ "out_limit": 2500,
+ "auto_summary": true,
+ "auto_check": true,
+ "all_tests": true
+}
