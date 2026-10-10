@@ -1,0 +1,264 @@
+{"event": "run_start", "n_tasks": 240, "resumed": 0, "max_cap": 55000, "streams": 24, "total_s": 2900.0, "fb": "off", "t": 658.0}
+{"event": "start", "task": "182e5d0f", "cap": 8192, "plen": 2575, "replica": 8000, "thr": 300.0, "left_s": 1942, "not_started": 239, "t": 658.0}
+{"event": "start", "task": "1cf80156", "cap": 8192, "plen": 1530, "replica": 8000, "thr": 300.0, "left_s": 1792, "not_started": 238, "t": 808.0}
+{"event": "done", "task": "1cf80156", "cap": 8192, "replica": 8000, "fb": "off", "finish": "stop", "ntok": 4488, "forced_tokens": 0, "n_programs": 1, "seconds": 146.4, "n_verified": 1, "t": 954.4}
+{"event": "start", "task": "253bf280", "cap": 8192, "plen": 3867, "replica": 8000, "thr": 303.3, "left_s": 1646, "not_started": 237, "t": 954.4}
+{"event": "start", "task": "12422b43", "cap": 8192, "plen": 2854, "replica": 8000, "thr": 303.3, "left_s": 1642, "not_started": 236, "t": 958.0}
+{"event": "done", "task": "182e5d0f", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 9511, "n_programs": 8, "seconds": 319.8, "n_verified": 0, "t": 977.9}
+{"event": "start", "task": "3af2c5a8", "cap": 8192, "plen": 1019, "replica": 8000, "thr": 320.0, "left_s": 1622, "not_started": 235, "t": 977.9}
+{"event": "start", "task": "195ba7dc", "cap": 8192, "plen": 1842, "replica": 8000, "thr": 320.0, "left_s": 1492, "not_started": 234, "t": 1108.0}
+{"event": "done", "task": "3af2c5a8", "cap": 8192, "replica": 8000, "fb": "off", "finish": "stop", "ntok": 7785, "forced_tokens": 0, "n_programs": 1, "seconds": 249.2, "n_verified": 1, "t": 1227.2}
+{"event": "start", "task": "20818e16", "cap": 8192, "plen": 2243, "replica": 8000, "thr": 325.3, "left_s": 1373, "not_started": 233, "t": 1227.2}
+{"event": "done", "task": "253bf280", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 2007, "n_programs": 8, "seconds": 279.3, "n_verified": 8, "t": 1233.9}
+{"event": "start", "task": "007bbfb7", "cap": 8192, "plen": 1953, "replica": 8000, "thr": 333.0, "left_s": 1366, "not_started": 232, "t": 1233.9}
+{"event": "start", "task": "3b4c2228", "cap": 8192, "plen": 1779, "replica": 8000, "thr": 333.0, "left_s": 1342, "not_started": 231, "t": 1258.0}
+{"event": "done", "task": "12422b43", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4036, "n_programs": 8, "seconds": 320.3, "n_verified": 7, "t": 1278.3}
+{"event": "start", "task": "22806e14", "cap": 8192, "plen": 3464, "replica": 8000, "thr": 342.1, "left_s": 1322, "not_started": 230, "t": 1278.3}
+{"event": "done", "task": "195ba7dc", "cap": 8192, "replica": 8000, "fb": "off", "finish": "stop", "ntok": 6227, "forced_tokens": 0, "n_programs": 1, "seconds": 221.3, "n_verified": 1, "t": 1329.3}
+{"event": "start", "task": "13713586", "cap": 8192, "plen": 3516, "replica": 8000, "thr": 345.6, "left_s": 1271, "not_started": 229, "t": 1329.4}
+{"event": "start", "task": "22168020", "cap": 8192, "plen": 1760, "replica": 8000, "thr": 345.6, "left_s": 1192, "not_started": 228, "t": 1408.0}
+{"event": "start", "task": "1da012fc", "cap": 8192, "plen": 3271, "replica": 8000, "thr": 345.6, "left_s": 1042, "not_started": 227, "t": 1558.0}
+{"event": "done", "task": "007bbfb7", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 960, "n_programs": 8, "seconds": 326.7, "n_verified": 8, "t": 1560.7}
+{"event": "start", "task": "212895b5", "cap": 8192, "plen": 4236, "replica": 8000, "thr": 350.7, "left_s": 1039, "not_started": 226, "t": 1560.7}
+{"event": "done", "task": "20818e16", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5494, "n_programs": 8, "seconds": 348.3, "n_verified": 5, "t": 1575.5}
+{"event": "start", "task": "25c199f5", "cap": 8192, "plen": 2373, "replica": 8000, "thr": 360.3, "left_s": 1025, "not_started": 225, "t": 1575.5}
+{"event": "done", "task": "3b4c2228", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 1345, "n_programs": 8, "seconds": 336.7, "n_verified": 8, "t": 1594.8}
+{"event": "start", "task": "15696249", "cap": 8192, "plen": 1718, "replica": 8000, "thr": 365.3, "left_s": 1005, "not_started": 224, "t": 1594.8}
+{"event": "done", "task": "22806e14", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 6675, "n_programs": 8, "seconds": 327.8, "n_verified": 0, "t": 1606.1}
+{"event": "start", "task": "13f06aa5", "cap": 8192, "plen": 2773, "replica": 8000, "thr": 376.0, "left_s": 994, "not_started": 223, "t": 1606.1}
+{"event": "start", "task": "22425bda", "cap": 8192, "plen": 2371, "replica": 8000, "thr": 376.0, "left_s": 892, "not_started": 222, "t": 1708.0}
+{"event": "done", "task": "13713586", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 6571, "n_programs": 8, "seconds": 405.2, "n_verified": 8, "t": 1734.7}
+{"event": "start", "task": "12997ef3", "cap": 8192, "plen": 2025, "replica": 8000, "thr": 385.0, "left_s": 865, "not_started": 221, "t": 1734.7}
+{"event": "done", "task": "22168020", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3591, "n_programs": 8, "seconds": 395.4, "n_verified": 8, "t": 1803.4}
+{"event": "start", "task": "31adaf00", "cap": 8192, "plen": 2083, "replica": 8000, "thr": 390.7, "left_s": 797, "not_started": 220, "t": 1803.5}
+{"event": "start", "task": "22a4bbc2", "cap": 8192, "plen": 2727, "replica": 8000, "thr": 390.7, "left_s": 742, "not_started": 219, "t": 1858.0}
+{"event": "done", "task": "212895b5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5779, "n_programs": 8, "seconds": 405.0, "n_verified": 0, "t": 1965.7}
+{"event": "start", "task": "2ccd9fef", "cap": 8192, "plen": 2122, "replica": 8000, "thr": 398.3, "left_s": 634, "not_started": 218, "t": 1965.7}
+{"event": "done", "task": "25c199f5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 2737, "n_programs": 8, "seconds": 411.2, "n_verified": 2, "t": 1986.7}
+{"event": "start", "task": "18447a8d", "cap": 8192, "plen": 2782, "replica": 8000, "thr": 402.5, "left_s": 613, "not_started": 217, "t": 1986.7}
+{"event": "skipped", "task": "320afe60", "t": 2008.0}
+{"event": "skipped", "task": "1caeab9d", "t": 2008.0}
+{"event": "skipped", "task": "33067df9", "t": 2008.0}
+{"event": "skipped", "task": "252143c9", "t": 2008.0}
+{"event": "skipped", "task": "29c11459", "t": 2008.0}
+{"event": "skipped", "task": "41e4d17e", "t": 2008.0}
+{"event": "skipped", "task": "2e65ae53", "t": 2008.0}
+{"event": "skipped", "task": "1190e5a7", "t": 2008.0}
+{"event": "skipped", "task": "1e32b0e9", "t": 2008.0}
+{"event": "skipped", "task": "25e02866", "t": 2008.0}
+{"event": "skipped", "task": "3a301edc", "t": 2008.0}
+{"event": "skipped", "task": "42918530", "t": 2008.0}
+{"event": "skipped", "task": "0607ce86", "t": 2008.0}
+{"event": "skipped", "task": "3618c87e", "t": 2008.0}
+{"event": "skipped", "task": "2f0c5170", "t": 2008.0}
+{"event": "skipped", "task": "0ca9ddb6", "t": 2008.0}
+{"event": "skipped", "task": "14754a24", "t": 2008.0}
+{"event": "skipped", "task": "228f6490", "t": 2008.0}
+{"event": "skipped", "task": "1efba499", "t": 2008.0}
+{"event": "skipped", "task": "3f7978a0", "t": 2008.0}
+{"event": "skipped", "task": "17829a00", "t": 2008.0}
+{"event": "skipped", "task": "3428a4f5", "t": 2008.0}
+{"event": "skipped", "task": "2281f1f4", "t": 2008.0}
+{"event": "skipped", "task": "0c9aba6e", "t": 2008.0}
+{"event": "skipped", "task": "0d87d2a6", "t": 2008.0}
+{"event": "skipped", "task": "3aa6fb7a", "t": 2008.0}
+{"event": "skipped", "task": "37ce87bb", "t": 2008.0}
+{"event": "skipped", "task": "2a28add5", "t": 2008.0}
+{"event": "skipped", "task": "25ff71a9", "t": 2008.0}
+{"event": "skipped", "task": "0962bcdd", "t": 2008.0}
+{"event": "skipped", "task": "21f83797", "t": 2008.0}
+{"event": "skipped", "task": "2faf500b", "t": 2008.0}
+{"event": "skipped", "task": "3cd86f4f", "t": 2008.0}
+{"event": "skipped", "task": "19bb5feb", "t": 2008.0}
+{"event": "skipped", "task": "310f3251", "t": 2008.0}
+{"event": "skipped", "task": "342dd610", "t": 2008.0}
+{"event": "skipped", "task": "025d127b", "t": 2008.0}
+{"event": "skipped", "task": "1190bc91", "t": 2008.0}
+{"event": "skipped", "task": "3f23242b", "t": 2008.0}
+{"event": "skipped", "task": "1f642eb9", "t": 2008.0}
+{"event": "skipped", "task": "3d588dc9", "t": 2008.0}
+{"event": "skipped", "task": "3e980e27", "t": 2008.0}
+{"event": "skipped", "task": "0bb8deee", "t": 2008.0}
+{"event": "skipped", "task": "27a77e38", "t": 2008.0}
+{"event": "skipped", "task": "1acc24af", "t": 2008.0}
+{"event": "skipped", "task": "28bf18c6", "t": 2008.0}
+{"event": "skipped", "task": "39e1d7f9", "t": 2008.0}
+{"event": "skipped", "task": "28e73c20", "t": 2008.0}
+{"event": "skipped", "task": "00dbd492", "t": 2008.0}
+{"event": "skipped", "task": "281123b4", "t": 2008.0}
+{"event": "skipped", "task": "1e5d6875", "t": 2008.0}
+{"event": "skipped", "task": "05a7bcf2", "t": 2008.0}
+{"event": "skipped", "task": "140c817e", "t": 2008.0}
+{"event": "skipped", "task": "23581191", "t": 2008.0}
+{"event": "skipped", "task": "2c737e39", "t": 2008.0}
+{"event": "skipped", "task": "3194b014", "t": 2008.0}
+{"event": "skipped", "task": "4093f84a", "t": 2008.0}
+{"event": "skipped", "task": "3391f8c0", "t": 2008.0}
+{"event": "skipped", "task": "3979b1a8", "t": 2008.0}
+{"event": "skipped", "task": "25d487eb", "t": 2008.0}
+{"event": "skipped", "task": "2c0b0aff", "t": 2008.0}
+{"event": "skipped", "task": "184a9768", "t": 2008.0}
+{"event": "skipped", "task": "32e9702f", "t": 2008.0}
+{"event": "skipped", "task": "3de23699", "t": 2008.0}
+{"event": "skipped", "task": "017c7c7b", "t": 2008.0}
+{"event": "skipped", "task": "1e81d6f9", "t": 2008.0}
+{"event": "skipped", "task": "396d80d7", "t": 2008.0}
+{"event": "skipped", "task": "05f2a901", "t": 2008.0}
+{"event": "skipped", "task": "03560426", "t": 2008.0}
+{"event": "skipped", "task": "150deff5", "t": 2008.0}
+{"event": "skipped", "task": "2037f2c7", "t": 2008.0}
+{"event": "skipped", "task": "0a1d4ef5", "t": 2008.0}
+{"event": "skipped", "task": "29700607", "t": 2008.0}
+{"event": "skipped", "task": "0c786b71", "t": 2008.0}
+{"event": "skipped", "task": "363442ee", "t": 2008.0}
+{"event": "skipped", "task": "20fb2937", "t": 2008.0}
+{"event": "skipped", "task": "0e671a1a", "t": 2008.0}
+{"event": "skipped", "task": "1e0a9b12", "t": 2008.0}
+{"event": "skipped", "task": "009d5c81", "t": 2008.0}
+{"event": "skipped", "task": "31d5ba1a", "t": 2008.0}
+{"event": "skipped", "task": "3bdb4ada", "t": 2008.0}
+{"event": "skipped", "task": "11e1fe23", "t": 2008.0}
+{"event": "skipped", "task": "358ba94e", "t": 2008.0}
+{"event": "skipped", "task": "40f6cd08", "t": 2008.0}
+{"event": "skipped", "task": "3bd292e8", "t": 2008.0}
+{"event": "skipped", "task": "0692e18c", "t": 2008.0}
+{"event": "skipped", "task": "1b59e163", "t": 2008.0}
+{"event": "skipped", "task": "11dc524f", "t": 2008.0}
+{"event": "skipped", "task": "41ace6b5", "t": 2008.0}
+{"event": "skipped", "task": "12eac192", "t": 2008.0}
+{"event": "skipped", "task": "1f876c06", "t": 2008.0}
+{"event": "skipped", "task": "1d0a4b61", "t": 2008.0}
+{"event": "skipped", "task": "1bfc4729", "t": 2008.0}
+{"event": "skipped", "task": "37d3e8b2", "t": 2008.0}
+{"event": "skipped", "task": "17cae0c1", "t": 2008.0}
+{"event": "skipped", "task": "15663ba9", "t": 2008.0}
+{"event": "skipped", "task": "3c9b0459", "t": 2008.0}
+{"event": "skipped", "task": "36fdfd69", "t": 2008.0}
+{"event": "skipped", "task": "14b8e18c", "t": 2008.0}
+{"event": "skipped", "task": "264363fd", "t": 2008.0}
+{"event": "skipped", "task": "2072aba6", "t": 2008.0}
+{"event": "skipped", "task": "1a6449f1", "t": 2008.0}
+{"event": "skipped", "task": "1c786137", "t": 2008.0}
+{"event": "skipped", "task": "2dee498d", "t": 2008.0}
+{"event": "skipped", "task": "3d6c6e23", "t": 2008.0}
+{"event": "skipped", "task": "178fcbfb", "t": 2008.0}
+{"event": "skipped", "task": "1990f7a8", "t": 2008.0}
+{"event": "skipped", "task": "1f85a75f", "t": 2008.0}
+{"event": "skipped", "task": "2dd70a9a", "t": 2008.0}
+{"event": "skipped", "task": "0520fde7", "t": 2008.0}
+{"event": "skipped", "task": "11852cab", "t": 2008.0}
+{"event": "skipped", "task": "0e206a2e", "t": 2008.0}
+{"event": "skipped", "task": "0a2355a6", "t": 2008.0}
+{"event": "skipped", "task": "08ed6ac7", "t": 2008.0}
+{"event": "skipped", "task": "230f2e48", "t": 2008.0}
+{"event": "skipped", "task": "33b52de3", "t": 2008.0}
+{"event": "skipped", "task": "045e512c", "t": 2008.0}
+{"event": "skipped", "task": "278e5215", "t": 2008.0}
+{"event": "skipped", "task": "30f42897", "t": 2008.0}
+{"event": "skipped", "task": "137eaa0f", "t": 2008.0}
+{"event": "skipped", "task": "2bcee788", "t": 2008.0}
+{"event": "skipped", "task": "2f767503", "t": 2008.0}
+{"event": "skipped", "task": "34cfa167", "t": 2008.0}
+{"event": "skipped", "task": "4290ef0e", "t": 2008.0}
+{"event": "skipped", "task": "2de01db2", "t": 2008.0}
+{"event": "skipped", "task": "342ae2ed", "t": 2008.0}
+{"event": "skipped", "task": "1a244afd", "t": 2008.0}
+{"event": "skipped", "task": "29623171", "t": 2008.0}
+{"event": "skipped", "task": "2b01abd0", "t": 2008.0}
+{"event": "skipped", "task": "4258a5f9", "t": 2008.0}
+{"event": "skipped", "task": "2685904e", "t": 2008.0}
+{"event": "skipped", "task": "31aa019c", "t": 2008.0}
+{"event": "skipped", "task": "337b420f", "t": 2008.0}
+{"event": "skipped", "task": "0d3d703e", "t": 2008.0}
+{"event": "skipped", "task": "1a2e2828", "t": 2008.0}
+{"event": "skipped", "task": "3befdf3e", "t": 2008.0}
+{"event": "skipped", "task": "423a55dc", "t": 2008.0}
+{"event": "skipped", "task": "0becf7df", "t": 2008.0}
+{"event": "skipped", "task": "23b5c85d", "t": 2008.0}
+{"event": "skipped", "task": "412b6263", "t": 2008.0}
+{"event": "skipped", "task": "1be83260", "t": 2008.0}
+{"event": "skipped", "task": "09c534e7", "t": 2008.0}
+{"event": "skipped", "task": "332efdb3", "t": 2008.0}
+{"event": "skipped", "task": "22233c11", "t": 2008.0}
+{"event": "skipped", "task": "2697da3f", "t": 2008.0}
+{"event": "skipped", "task": "103eff5b", "t": 2008.0}
+{"event": "skipped", "task": "17b80ad2", "t": 2008.0}
+{"event": "skipped", "task": "15660dd6", "t": 2008.0}
+{"event": "skipped", "task": "27f8ce4f", "t": 2008.0}
+{"event": "skipped", "task": "137f0df0", "t": 2008.0}
+{"event": "skipped", "task": "070dd51e", "t": 2008.0}
+{"event": "skipped", "task": "1c02dbbe", "t": 2008.0}
+{"event": "skipped", "task": "17b866bd", "t": 2008.0}
+{"event": "skipped", "task": "1c56ad9f", "t": 2008.0}
+{"event": "skipped", "task": "25094a63", "t": 2008.0}
+{"event": "skipped", "task": "351d6448", "t": 2008.0}
+{"event": "skipped", "task": "00576224", "t": 2008.0}
+{"event": "skipped", "task": "2c608aff", "t": 2008.0}
+{"event": "skipped", "task": "305b1341", "t": 2008.0}
+{"event": "skipped", "task": "32597951", "t": 2008.0}
+{"event": "skipped", "task": "1fad071e", "t": 2008.0}
+{"event": "skipped", "task": "332202d5", "t": 2008.0}
+{"event": "skipped", "task": "0a938d79", "t": 2008.0}
+{"event": "skipped", "task": "00d62c1b", "t": 2008.0}
+{"event": "skipped", "task": "272f95fa", "t": 2008.0}
+{"event": "skipped", "task": "06df4c85", "t": 2008.0}
+{"event": "skipped", "task": "414297c0", "t": 2008.0}
+{"event": "skipped", "task": "25d8a9c8", "t": 2008.0}
+{"event": "skipped", "task": "22208ba4", "t": 2008.0}
+{"event": "skipped", "task": "3eda0437", "t": 2008.0}
+{"event": "skipped", "task": "2753e76c", "t": 2008.0}
+{"event": "skipped", "task": "1478ab18", "t": 2008.0}
+{"event": "skipped", "task": "2dc579da", "t": 2008.0}
+{"event": "skipped", "task": "2b9ef948", "t": 2008.0}
+{"event": "skipped", "task": "1b8318e3", "t": 2008.0}
+{"event": "skipped", "task": "2204b7a8", "t": 2008.0}
+{"event": "skipped", "task": "1d398264", "t": 2008.0}
+{"event": "skipped", "task": "3ac3eb23", "t": 2008.0}
+{"event": "skipped", "task": "27a28665", "t": 2008.0}
+{"event": "skipped", "task": "22eb0ac0", "t": 2008.0}
+{"event": "skipped", "task": "1c0d0a4b", "t": 2008.0}
+{"event": "skipped", "task": "319f2597", "t": 2008.0}
+{"event": "skipped", "task": "09629e4f", "t": 2008.0}
+{"event": "skipped", "task": "3345333e", "t": 2008.0}
+{"event": "skipped", "task": "0b17323b", "t": 2008.0}
+{"event": "skipped", "task": "1b60fb0c", "t": 2008.0}
+{"event": "skipped", "task": "10fcaaa3", "t": 2008.0}
+{"event": "skipped", "task": "2a5f8217", "t": 2008.0}
+{"event": "skipped", "task": "39a8645d", "t": 2008.0}
+{"event": "skipped", "task": "321b1fc6", "t": 2008.0}
+{"event": "skipped", "task": "2601afb7", "t": 2008.0}
+{"event": "skipped", "task": "18286ef8", "t": 2008.0}
+{"event": "skipped", "task": "3906de3d", "t": 2008.0}
+{"event": "skipped", "task": "2bee17df", "t": 2008.0}
+{"event": "skipped", "task": "0b148d64", "t": 2008.0}
+{"event": "skipped", "task": "3490cc26", "t": 2008.0}
+{"event": "skipped", "task": "3d31c5b3", "t": 2008.0}
+{"event": "skipped", "task": "1a07d186", "t": 2008.0}
+{"event": "skipped", "task": "0f63c0b9", "t": 2008.0}
+{"event": "skipped", "task": "2546ccf6", "t": 2008.0}
+{"event": "skipped", "task": "15113be4", "t": 2008.0}
+{"event": "skipped", "task": "292dd178", "t": 2008.0}
+{"event": "skipped", "task": "1d61978c", "t": 2008.0}
+{"event": "skipped", "task": "234bbc79", "t": 2008.0}
+{"event": "skipped", "task": "1b2d62fb", "t": 2008.0}
+{"event": "skipped", "task": "3ad05f52", "t": 2008.0}
+{"event": "skipped", "task": "36d67576", "t": 2008.0}
+{"event": "skipped", "task": "2013d3e2", "t": 2008.0}
+{"event": "skipped", "task": "239be575", "t": 2008.0}
+{"event": "skipped", "task": "256b0a75", "t": 2008.0}
+{"event": "skipped", "task": "18419cfa", "t": 2008.0}
+{"event": "skipped", "task": "05269061", "t": 2008.0}
+{"event": "skipped", "task": "20981f0e", "t": 2008.0}
+{"event": "skipped", "task": "3ee1011a", "t": 2008.0}
+{"event": "skipped", "task": "34b99a2b", "t": 2008.0}
+{"event": "skipped", "task": "1f0c79e5", "t": 2008.0}
+{"event": "skipped", "task": "3bd67248", "t": 2008.0}
+{"event": "done", "task": "15696249", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 4113, "n_programs": 8, "seconds": 448.0, "n_verified": 8, "t": 2042.9}
+{"event": "done", "task": "13f06aa5", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 10749, "n_programs": 8, "seconds": 464.9, "n_verified": 0, "t": 2071.1}
+{"event": "done", "task": "1da012fc", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 16165, "n_programs": 8, "seconds": 523.0, "n_verified": 2, "t": 2081.1}
+{"event": "done", "task": "22425bda", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 1939, "n_programs": 8, "seconds": 416.1, "n_verified": 0, "t": 2124.1}
+{"event": "done", "task": "12997ef3", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 9120, "n_programs": 8, "seconds": 488.5, "n_verified": 8, "t": 2223.2}
+{"event": "done", "task": "31adaf00", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 7803, "n_programs": 8, "seconds": 439.4, "n_verified": 0, "t": 2243.0}
+{"event": "done", "task": "22a4bbc2", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3209, "n_programs": 8, "seconds": 437.5, "n_verified": 8, "t": 2295.5}
+{"event": "done", "task": "18447a8d", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 5729, "n_programs": 8, "seconds": 391.1, "n_verified": 0, "t": 2377.9}
+{"event": "done", "task": "2ccd9fef", "cap": 8192, "replica": 8000, "fb": "off", "finish": "length", "ntok": 8192, "forced_tokens": 3885, "n_programs": 8, "seconds": 413.2, "n_verified": 0, "t": 2379.0}

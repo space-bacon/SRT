@@ -2,7 +2,7 @@
 
 *Qwen3.8-27B with no task-specific training; every number is paired over tasks or says which population it comes from; code and artifacts are MIT-0.*
 
-[DRAFT 2026-10-10. Braces are filled when the hidden-set score, the seed-4 replicates and the ARC-AGI-1 sample arrive. Target 2,000 words.]
+[DRAFT 2026-10-10. Braces are filled when the hidden-set score arrives. Target 2,000 words.]
 
 ## Summary
 
@@ -18,7 +18,7 @@ A truncated reasoning trace usually contains a hypothesis but no answer. Asked f
 
 Tokens are best spent extending one trace. Top-1 rises from 13.8 (16K cap, 24.6K decoded tokens per output) to 27.8 (32K, 41.8K), 37.5 (49K, 58.1K) and 40.2 (63K, 70.2K); the slope falls from 0.81 to 0.60 and 0.22 points per 1K decoded tokens. Pooling the candidates of two independent traces of 32K (83.8K tokens) scores 6.5 points below a single 63K trace (70.1K tokens; sem 3.0), and two of 16K score 10.6 below a single 32K trace (sem 2.7). Using one trace per task instead of one per output costs under one point (-0.28, sem 0.65 at 32K).
 
-Universality and progress. The recipe needs a cheap verifier on the task's own examples and a prefix of reasoning; we have tested it only on ARC-AGI-2. Its measured curve flattens above 58K decoded tokens (0.22 points per 1K), and the 12 hour L4 budget, not the method, sets the score: a stack 1.4 times as fast would reach the measured 63K point (70K tokens per task, 40.2), about 7 points above the operating point, and the flat tail leaves 85 far out of reach of this component alone.
+Universality and progress. The recipe needs a cheap verifier on the task's own examples and a prefix of reasoning. The unchanged pipeline (same prompt with facts, forced programs and voting, at a fixed 32K cap) scores top-1 86.7 (task-bootstrap 95 percent interval 80.0 to 92.5) on 120 randomly drawn ARC-AGI-1 public evaluation tasks, at 32.1K decoded tokens per task: 50 traces stop by themselves (98 percent correct) and 70 reach the cap (78.6 percent correct). Those tasks have been public since 2019, so the figure shows that the recipe carries over to the earlier benchmark, not that unseen tasks are solved at that rate; no other benchmark has been tried. Its measured curve flattens above 58K decoded tokens (0.22 points per 1K), and the 12 hour L4 budget, not the method, sets the score: a stack 1.4 times as fast would reach the measured 63K point (70K tokens per task, 40.2), about 7 points above the operating point, and the flat tail leaves 85 far out of reach of this component alone.
 
 ## Grid facts in the prompt
 

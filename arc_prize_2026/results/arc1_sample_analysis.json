@@ -1,0 +1,26 @@
+{
+ "population": "120 ARC-AGI-1 public evaluation tasks drawn with random.Random(20261010), program arm with summary 1, cap 32,768, 8 forced programs, 4 x A100",
+ "n_tasks": 120,
+ "n_outputs": 126,
+ "top1": 86.67,
+ "top1_ci95": [
+  80.0,
+  92.5
+ ],
+ "top2": 86.67,
+ "top2_ci95": [
+  80.0,
+  92.5
+ ],
+ "decoded_tokens_per_task_mean": 32057,
+ "decoded_tokens_per_task_median": 36658,
+ "finish": {
+  "stop": 50,
+  "length": 70
+ },
+ "top1_when_trace_stopped_by_itself": 98.0,
+ "n_stopped_by_itself": 50,
+ "top1_when_trace_hit_cap": 78.6,
+ "n_hit_cap": 70,
+ "share_with_verified_program": 0.858
+}

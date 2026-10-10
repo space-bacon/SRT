@@ -1,0 +1,10 @@
+{
+ "kernel": "burtonlancaster/arc-final-a24-rerun-rehearsal",
+ "script": "the submitted a24 script with force_rerun true, rerun_total_s_override 2900 and reserve_s 300 in its embedded config",
+ "n_task_ids": 240,
+ "n_test_outputs": 259,
+ "tasks_done": 23,
+ "tasks_skipped_by_clock": 217,
+ "malformed_attempts": 0,
+ "version_1_note": "override 2400 with reserve_s 1500: the usable window was negative, all 240 tasks were skipped and the fallback submission.json was valid (240 ids, 259 outputs)"
+}
