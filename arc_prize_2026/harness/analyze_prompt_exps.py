@@ -57,7 +57,7 @@ def main():
     res = RES
     two = json.load(open(os.path.join(res, "two_runs_per_task.json")))
     runs, info = {"g4": two["g4_cap32768"]["top1"], "g5": two["g5_cap32768"]["top1"]}, {}
-    for n in ("p0", "ps", "psc", "ps2", "psi", "psw", "p2"):
+    for n in ("p0", "ps", "psc", "ps2", "psi", "psw", "p2", "r1ps", "r1p0"):
         full = load_done(os.path.join(RAW, n + ".jsonl"))
         runs[n] = {t: float(np.mean(r["correct_top1"])) for t, r in full.items()}
         tok = float(np.mean([r["ntok"] + r["forced_tokens"] for r in full.values()]))
@@ -67,7 +67,7 @@ def main():
                    "frontier_top1_at_tokens": round(frontier(tok), 2)}
     for n in ("g4", "g5"):
         info[n] = {"n_tasks": len(runs[n]), "top1": round(100 * np.mean(list(runs[n].values())), 2)}
-    ctrl_all = ("g4", "g5", "p0")
+    ctrl_all = ("g4", "g5", "p0", "r1p0")
     ctrl_ids = ("g4", "g5")
     arms = {}
     pre = mean_of(runs["g4"], runs["g5"])
@@ -79,6 +79,12 @@ def main():
     arms["psc minus mean(g4,g5,p0) [post hoc]"] = contrast(runs["psc"], pool)
     arms["mean(ps,psc) minus mean(g4,g5,p0) [post hoc]"] = contrast(mean_of(runs["ps"], runs["psc"]), pool)
     arms["psc minus ps [post hoc]"] = contrast(runs["psc"], runs["ps"])
+    arms["r1ps minus r1p0 [pre-registered replicate, seed 4]"] = contrast(runs["r1ps"], runs["r1p0"])
+    two_ps, two_p0 = mean_of(runs["ps"], runs["r1ps"]), mean_of(runs["p0"], runs["r1p0"])
+    arms["mean(ps,r1ps) minus mean(p0,r1p0) [pre-registered, pooled over seeds]"] = contrast(two_ps, two_p0)
+    arms["mean(ps,r1ps) minus mean(g4,g5,p0,r1p0) [pre-registered, pooled over seeds]"] = contrast(two_ps, mean_of(runs["g4"], runs["g5"], runs["p0"], runs["r1p0"]))
+    arms["r1p0 minus p0 [same configuration, two seeds]"] = contrast(runs["r1p0"], runs["p0"])
+    arms["r1ps minus ps [same configuration, two seeds]"] = contrast(runs["r1ps"], runs["ps"])
     arms["p0 minus mean(g4,g5) [control drift, post hoc]"] = contrast(runs["p0"], pre)
     arms["p0 minus g4 [control drift, post hoc]"] = contrast(runs["p0"], runs["g4"])
     arms["p0 minus g5 [control drift, post hoc]"] = contrast(runs["p0"], runs["g5"])

@@ -57,6 +57,22 @@
    "finish_stop": 2,
    "frontier_top1_at_tokens": 26.16
   },
+  "r1ps": {
+   "n_tasks": 120,
+   "top1": 33.06,
+   "tokens_per_task": 42442,
+   "share_verified_program": 0.408,
+   "finish_stop": 5,
+   "frontier_top1_at_tokens": 28.09
+  },
+  "r1p0": {
+   "n_tasks": 120,
+   "top1": 32.64,
+   "tokens_per_task": 42185,
+   "share_verified_program": 0.375,
+   "finish_stop": 3,
+   "frontier_top1_at_tokens": 27.93
+  },
   "g4": {
    "n_tasks": 120,
    "top1": 31.67
@@ -117,6 +133,14 @@
    "mean_over_sem": 3.21,
    "mde80": 10.9
   },
+  "ps minus r1p0": {
+   "n": 120,
+   "mean": 3.75,
+   "sd": 50.28,
+   "sem": 4.59,
+   "mean_over_sem": 0.82,
+   "mde80": 12.85
+  },
   "ps minus mean(g4,g5,p0) [post hoc]": {
    "n": 120,
    "mean": 9.95,
@@ -148,6 +172,46 @@
    "sem": 3.88,
    "mean_over_sem": -1.04,
    "mde80": 10.86
+  },
+  "r1ps minus r1p0 [pre-registered replicate, seed 4]": {
+   "n": 120,
+   "mean": 0.42,
+   "sd": 52.86,
+   "sem": 4.83,
+   "mean_over_sem": 0.09,
+   "mde80": 13.51
+  },
+  "mean(ps,r1ps) minus mean(p0,r1p0) [pre-registered, pooled over seeds]": {
+   "n": 120,
+   "mean": 6.46,
+   "sd": 37.02,
+   "sem": 3.38,
+   "mean_over_sem": 1.91,
+   "mde80": 9.46
+  },
+  "mean(ps,r1ps) minus mean(g4,g5,p0,r1p0) [pre-registered, pooled over seeds]": {
+   "n": 120,
+   "mean": 6.74,
+   "sd": 34.66,
+   "sem": 3.16,
+   "mean_over_sem": 2.13,
+   "mde80": 8.86
+  },
+  "r1p0 minus p0 [same configuration, two seeds]": {
+   "n": 120,
+   "mean": 8.75,
+   "sd": 46.59,
+   "sem": 4.25,
+   "mean_over_sem": 2.06,
+   "mde80": 11.91
+  },
+  "r1ps minus ps [same configuration, two seeds]": {
+   "n": 120,
+   "mean": -3.33,
+   "sd": 40.86,
+   "sem": 3.73,
+   "mean_over_sem": -0.89,
+   "mde80": 10.44
   },
   "p0 minus mean(g4,g5) [control drift, post hoc]": {
    "n": 120,
@@ -226,15 +290,17 @@
   "runs": [
    "g4",
    "g5",
-   "p0"
+   "p0",
+   "r1p0"
   ],
   "top1": [
    31.67,
    23.75,
-   23.89
+   23.89,
+   32.64
   ],
-  "mean": 26.44,
-  "sd": 4.53
+  "mean": 27.99,
+  "sd": 4.83
  },
  "decision_rule": "adopt summary 1 if ps minus mean(g4,g5) >= +5 (PREREG 2026-10-10 02:40 UTC); summary 2 replaces it only if >= +4 over summary 1 with at most 5% more tokens"
 }
