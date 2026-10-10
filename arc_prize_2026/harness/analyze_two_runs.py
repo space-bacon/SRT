@@ -125,6 +125,10 @@ def main():
     for lo, hi in ((16384, 32768), (32768, 49152), (32768, 63000)):
         a = {k: (single[("g4", hi)][0][k] + single[("g5", hi)][0][k]) / 2 for k in single[("g4", hi)][0]}
         res["contrasts"].append(paired(pooled[lo][0], a, f"pooled K=2 at cap {lo} minus mean single run at cap {hi}, top-1"))
+    per_task = {f"{run}_cap{cap}": {"top1": single[(run, cap)][0], "top2": single[(run, cap)][1]} for run in ("g4", "g5") for cap in CAPS}
+    tmp_pt = os.path.join(R, "two_runs_per_task.json.tmp")
+    json.dump(per_task, open(tmp_pt, "w"))
+    os.replace(tmp_pt, os.path.join(R, "two_runs_per_task.json"))
     res["mean_tokens_per_trace_approx"] = {"16384": 24.5, "32768": 41.9, "49152": 58.2, "63000": 70.1, "unit": "thousand tokens, g4 and g5 agree to within 0.2K"}
     tmp = os.path.join(R, "two_runs.json.tmp")
     json.dump(res, open(tmp, "w"), indent=1)

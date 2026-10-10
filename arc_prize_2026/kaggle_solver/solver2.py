@@ -499,12 +499,15 @@ def build_prompt(task, ti=0):
     for i, ex in enumerate(task["train"]):
         parts.append(f"--Example {i}--\nINPUT:\n{grid_text(ex['input'])}\nOUTPUT:\n{grid_text(ex['output'])}\n")
     parts.append(f"--Test Input--\n{grid_text(task['test'][ti]['input'])}\n")
-    if PROMPT_SUMMARY == "2":
-        parts.append("--Facts about the grids, computed by code (colors with their cell counts; objects are connected groups of cells of one color, largest first, with shape, rows and columns; "
-                     "regions of change, symmetries, repeats, panels and what the output is made of)--\n" + summarize_text2(task["train"], [task["test"][ti]["input"]]) + "\n")
-    elif PROMPT_SUMMARY:
-        parts.append("--Facts about the grids, computed by code (colors with their cell counts; objects are connected groups of cells of one color, largest first, with their row and column ranges)--\n"
-                     + summarize_text(task["train"], [task["test"][ti]["input"]]) + "\n")
+    try:
+        if PROMPT_SUMMARY == "2":
+            parts.append("--Facts about the grids, computed by code (colors with their cell counts; objects are connected groups of cells of one color, largest first, with shape, rows and columns; "
+                         "regions of change, symmetries, repeats, panels and what the output is made of)--\n" + summarize_text2(task["train"], [task["test"][ti]["input"]]) + "\n")
+        elif PROMPT_SUMMARY:
+            parts.append("--Facts about the grids, computed by code (colors with their cell counts; objects are connected groups of cells of one color, largest first, with their row and column ranges)--\n"
+                         + summarize_text(task["train"], [task["test"][ti]["input"]]) + "\n")
+    except Exception:
+        pass  # a task the fact code cannot read is solved from the examples alone
     return "\n".join(parts)
 
 

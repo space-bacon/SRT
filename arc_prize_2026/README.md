@@ -37,15 +37,15 @@ The staggered controller with grid facts (`cfg_final_v4_a24.json`, kernel `burto
 
 | run | tasks | top-1 | decoded tokens per task | share with a verified program |
 |---|---|---|---|---|
-| g4 at a fixed 32K | 120 | 30.0 | 41.0K | |
-| g5 at a fixed 32K | 120 | 31.7 | 41.8K | |
+| g4, 63K run scored at a fixed 32K cap | 120 | 31.7 | 41.8K | |
+| g5, 63K run scored at a fixed 32K cap | 120 | 23.8 | 41.9K | |
 | p0, no facts (run later) | 120 | 23.9 | 42.4K | 0.33 |
 | ps, summary 1 | 120 | 36.4 | 43.2K | 0.48 |
 | psc, summary 1 through the chat API | 120 | 32.4 | 43.3K | 0.43 |
 | ps2, summary 2 (stopped) | 48 | 36.8 | 42.5K | 0.44 |
 | psi, summary 1 plus a picture of the examples (stopped) | 55 | 27.3 | 30.3K | 0.42 |
 
-Pre-registered contrast, ps minus the mean of g4 and g5: +5.56 (sd 51.2, sem 4.68, mean/sem 1.19, smallest effect at 80 percent power 13.1), above the +5 set for adoption. Post hoc, ps minus p0 is +12.50 (sem 3.89, mean/sem 3.21) and ps minus the mean of the three no-facts runs +7.87 (sem 4.05, mean/sem 1.94). The three no-facts runs differ by up to 7.8 points (sd 4.1). Summary 2 minus ps is -3.12 on 48 tasks (sem 4.32) and the picture minus ps -13.94 on 55 tasks (sem 7.00), both stopped. The effect of the facts is positive and underpowered, not established.
+Pre-registered contrast, ps minus the mean of g4 and g5: +8.68 (sd 42.9, sem 3.92, mean/sem 2.22, smallest effect at 80 percent power 11.0), above the +5 set for adoption; against g4 alone +4.72 (sem 4.80) and against g5 alone +12.64 (sem 3.88). Post hoc, ps minus p0 is +12.50 (sem 3.89, mean/sem 3.21) and ps minus the mean of the three no-facts runs +9.95 (sem 3.60, mean/sem 2.77). The three no-facts runs differ by up to 7.9 points (sd 4.5). Summary 2 minus ps is -3.12 on 48 tasks (sem 4.32) and the picture minus ps -13.94 on 55 tasks (sem 7.00), both stopped. The effect of the facts is positive and supported at about the 2 sem level from one seed per arm, not settled; seed-4 replicates are running (`PREREG.md`, replicate pre-registration).
 
 ## Tool-integrated agent (not adopted so far)
 `harness/arc_agent.py` and `kaggle_solver/solver3.py` let the model run Python in a persistent per-task session (`execute_python`): a thinking turn that reaches 3,000 tokens without a tool call is ended and the model must write a test of its idea; the final answer is the last code block, or eight (later four) programs sampled when the budget ends. On the 120 public tasks (one rollout per task, `results/agent_b16k_analysis.json`, `results/agent_b32k_analysis.json`): top-1 14.72 at 25.0K decoded tokens per task (frontier 14.09) and 29.20 at 40.1K (frontier 26.33); the pre-registered rule asked for +5 at both budgets and the agent has +0.6 and +2.9. On Kaggle it computes 2.34 prefill tokens per decoded token (`results/kaggle_agent_smoke/vllm_stats.json`), because decoded tokens are not cached across requests in the hybrid model's align mode, so at equal time it has fewer tokens than the program arm. Union with the NVARC top-1 (runs s0, s1): 32.8 at 16K and 41.7 at 32K against 14.7 and 29.2 alone. A variant with grid facts, a check helper and all test inputs (`results/agent_v5_b16k_analysis.json`) scored 17.54 at 20.6K tokens per task (frontier 11.54, 114 tasks); a 32K run of it, stopped at 60 tasks, scored 36.1 where the program arm with facts scores 43.6 on the same tasks (-7.5, sem 5.9).

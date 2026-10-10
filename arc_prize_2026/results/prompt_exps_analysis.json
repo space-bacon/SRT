@@ -59,11 +59,11 @@
   },
   "g4": {
    "n_tasks": 120,
-   "top1": 30.0
+   "top1": 31.67
   },
   "g5": {
    "n_tasks": 120,
-   "top1": 31.67
+   "top1": 23.75
   },
   "a24": {
    "n_tasks": 120,
@@ -87,27 +87,27 @@
  "contrasts": {
   "ps minus mean(g4,g5) [pre-registered]": {
    "n": 120,
-   "mean": 5.56,
-   "sd": 51.24,
-   "sem": 4.68,
-   "mean_over_sem": 1.19,
-   "mde80": 13.1
+   "mean": 8.68,
+   "sd": 42.89,
+   "sem": 3.92,
+   "mean_over_sem": 2.22,
+   "mde80": 10.96
   },
   "ps minus g4": {
-   "n": 120,
-   "mean": 6.39,
-   "sd": 50.73,
-   "sem": 4.63,
-   "mean_over_sem": 1.38,
-   "mde80": 12.97
-  },
-  "ps minus g5": {
    "n": 120,
    "mean": 4.72,
    "sd": 52.54,
    "sem": 4.8,
    "mean_over_sem": 0.98,
    "mde80": 13.43
+  },
+  "ps minus g5": {
+   "n": 120,
+   "mean": 12.64,
+   "sd": 42.45,
+   "sem": 3.88,
+   "mean_over_sem": 3.26,
+   "mde80": 10.85
   },
   "ps minus p0": {
    "n": 120,
@@ -119,27 +119,27 @@
   },
   "ps minus mean(g4,g5,p0) [post hoc]": {
    "n": 120,
-   "mean": 7.87,
-   "sd": 44.41,
-   "sem": 4.05,
-   "mean_over_sem": 1.94,
-   "mde80": 11.35
+   "mean": 9.95,
+   "sd": 39.43,
+   "sem": 3.6,
+   "mean_over_sem": 2.77,
+   "mde80": 10.08
   },
   "psc minus mean(g4,g5,p0) [post hoc]": {
    "n": 120,
-   "mean": 3.84,
-   "sd": 43.22,
-   "sem": 3.95,
-   "mean_over_sem": 0.97,
-   "mde80": 11.05
+   "mean": 5.93,
+   "sd": 39.21,
+   "sem": 3.58,
+   "mean_over_sem": 1.66,
+   "mde80": 10.02
   },
   "mean(ps,psc) minus mean(g4,g5,p0) [post hoc]": {
    "n": 120,
-   "mean": 5.86,
-   "sd": 38.32,
-   "sem": 3.5,
-   "mean_over_sem": 1.67,
-   "mde80": 9.8
+   "mean": 7.94,
+   "sd": 33.08,
+   "sem": 3.02,
+   "mean_over_sem": 2.63,
+   "mde80": 8.46
   },
   "psc minus ps [post hoc]": {
    "n": 120,
@@ -151,11 +151,35 @@
   },
   "p0 minus mean(g4,g5) [control drift, post hoc]": {
    "n": 120,
-   "mean": -6.94,
-   "sd": 41.54,
-   "sem": 3.79,
-   "mean_over_sem": -1.83,
-   "mde80": 10.62
+   "mean": -3.82,
+   "sd": 35.35,
+   "sem": 3.23,
+   "mean_over_sem": -1.18,
+   "mde80": 9.04
+  },
+  "p0 minus g4 [control drift, post hoc]": {
+   "n": 120,
+   "mean": -7.78,
+   "sd": 41.89,
+   "sem": 3.82,
+   "mean_over_sem": -2.03,
+   "mde80": 10.71
+  },
+  "p0 minus g5 [control drift, post hoc]": {
+   "n": 120,
+   "mean": 0.14,
+   "sd": 40.34,
+   "sem": 3.68,
+   "mean_over_sem": 0.04,
+   "mde80": 10.31
+  },
+  "g5 minus g4 [run to run]": {
+   "n": 120,
+   "mean": -7.92,
+   "sd": 42.01,
+   "sem": 3.83,
+   "mean_over_sem": -2.06,
+   "mde80": 10.74
   },
   "ps2 minus ps (first 48 tasks, stopped)": {
    "n": 48,
@@ -183,11 +207,11 @@
   },
   "a24 minus mean(g4,g5,p0) [post hoc, different hardware and cap policy]": {
    "n": 120,
-   "mean": 11.76,
-   "sd": 44.91,
-   "sem": 4.1,
-   "mean_over_sem": 2.87,
-   "mde80": 11.48
+   "mean": 13.84,
+   "sd": 40.65,
+   "sem": 3.71,
+   "mean_over_sem": 3.73,
+   "mde80": 10.39
   },
   "a24 minus rep1 (Kaggle, old controller, no summary) [post hoc, controller and prompt change together]": {
    "n": 120,
@@ -205,12 +229,12 @@
    "p0"
   ],
   "top1": [
-   30.0,
    31.67,
+   23.75,
    23.89
   ],
-  "mean": 28.52,
-  "sd": 4.1
+  "mean": 26.44,
+  "sd": 4.53
  },
  "decision_rule": "adopt summary 1 if ps minus mean(g4,g5) >= +5 (PREREG 2026-10-10 02:40 UTC); summary 2 replaces it only if >= +4 over summary 1 with at most 5% more tokens"
 }

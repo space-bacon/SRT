@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Paired task-level contrasts for the grid-facts prompt experiments on the 120 public evaluation tasks (program arm, cap 32,768, eight forced programs, seed 3).
 
-Population: the 120 public-eval tasks; a task scores the mean of correct_top1 over its test outputs. No-summary controls are g4 and g5 (the 63K-cap runs scored at a fixed 32K
-end-forced cap, results/g4_gated_final*.json.per_output.json) and p0 (a direct run at cap 32,768 with solver2_v6 and no prompt option). Summary arms are ps (summary 1), psc (summary 1 through
+Population: the 120 public-eval tasks; a task scores the mean of correct_top1 over its test outputs. No-summary controls are g4 and g5 (two independent runs at a 63K cap scored
+at a fixed 32K cap, results/two_runs_per_task.json written by analyze_two_runs.py) and p0 (a direct run at cap 32,768 with solver2_v6 and no prompt option). Summary arms are ps (summary 1), psc (summary 1 through
 the chat API), ps2 (summary 2, stopped at 48 tasks), psi (summary 1 plus a picture of the examples, stopped at 55) and psw (stopped after one task).
 Every contrast is the signed per-task difference averaged over the common tasks; the report gives mean, sd, sem, mean/sem and the smallest effect 80% power could have seen (2.8 x sem).
 The pre-registered contrast is ps minus mean(g4, g5); every contrast that includes p0 or psc was added after seeing the data and is labelled post hoc.
@@ -24,14 +24,6 @@ def frontier(tokens):
         if tokens <= x1:
             return y0 + (y1 - y0) * (tokens - x0) / (x1 - x0)
     return FRONTIER[-1][1]
-
-
-def per_output_task(path, key):
-    out = {}
-    for k, v in json.load(open(path))[key].items():
-        tid, _ = k.rsplit("_", 1)
-        out.setdefault(tid, []).append(v["top1"])
-    return {t: float(np.mean(v)) for t, v in out.items()}
 
 
 def load_done(path):
@@ -63,9 +55,8 @@ def mean_of(*runs):
 
 def main():
     res = RES
-    g4 = per_output_task(os.path.join(res, "g4_gated_final.json.per_output.json"), "fixed_32K")
-    g5 = per_output_task(os.path.join(res, "g4_gated_final2.json.per_output.json"), "fixed_32K")
-    runs, info = {"g4": g4, "g5": g5}, {}
+    two = json.load(open(os.path.join(res, "two_runs_per_task.json")))
+    runs, info = {"g4": two["g4_cap32768"]["top1"], "g5": two["g5_cap32768"]["top1"]}, {}
     for n in ("p0", "ps", "psc", "ps2", "psi", "psw", "p2"):
         full = load_done(os.path.join(RAW, n + ".jsonl"))
         runs[n] = {t: float(np.mean(r["correct_top1"])) for t, r in full.items()}
@@ -89,6 +80,9 @@ def main():
     arms["mean(ps,psc) minus mean(g4,g5,p0) [post hoc]"] = contrast(mean_of(runs["ps"], runs["psc"]), pool)
     arms["psc minus ps [post hoc]"] = contrast(runs["psc"], runs["ps"])
     arms["p0 minus mean(g4,g5) [control drift, post hoc]"] = contrast(runs["p0"], pre)
+    arms["p0 minus g4 [control drift, post hoc]"] = contrast(runs["p0"], runs["g4"])
+    arms["p0 minus g5 [control drift, post hoc]"] = contrast(runs["p0"], runs["g5"])
+    arms["g5 minus g4 [run to run]"] = contrast(runs["g5"], runs["g4"])
     arms["ps2 minus ps (first 48 tasks, stopped)"] = contrast(runs["ps2"], runs["ps"])
     arms["psi minus ps (first 55 tasks, stopped)"] = contrast(runs["psi"], runs["ps"])
     for n, sub in (("a24", "kaggle_final_a24"), ("rep1", "kaggle_final_replica")):
