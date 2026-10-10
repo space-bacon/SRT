@@ -83,6 +83,20 @@ def progress():
     if starts:
         msg += f", last controller state: thr {starts[-1]['thr']} tok/s, left {starts[-1]['left_s']} s, not started {starts[-1]['not_started']}"
     log(msg)
+    try:
+        import glob as _g
+        lines = []
+        for f in sorted(_g.glob(f"{WORK}/vllm_run*_0.log")):
+            lines += [l for l in open(f, errors="replace") if "Avg prompt throughput" in l]
+        if lines:
+            log("vllm:", lines[-1].split("loggers.py")[-1].strip()[:260])
+        import urllib.request as _u
+        txt = _u.urlopen("http://127.0.0.1:8000/metrics", timeout=5).read().decode()
+        want = ("vllm:num_preemptions_total", "vllm:prefix_cache_queries_total", "vllm:prefix_cache_hits_total", "vllm:generation_tokens_total", "vllm:prompt_tokens_total")
+        vals = {k.split(":")[1]: float(l.rpartition(" ")[2]) for l in txt.splitlines() for k in want if l.startswith(k)}
+        log("vllm counters:", {k: round(v) for k, v in vals.items()})
+    except Exception as e:
+        log("vllm telemetry failed:", repr(e)[:100])
 
 
 def servers_alive():

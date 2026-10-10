@@ -32,7 +32,7 @@ try:
                 os.remove(f)
         sys.argv = ["solver2", "--challenges", "chal2.json", "--solutions", "sol2.json", "--model-dir", "x", "--out", "sub2.json", "--log", "log2.jsonl", "--ports", "8301,8302",
                     "--per-replica", "2", "--max-cap", "40000", "--min-cap", "4096", "--total-s", "3600", "--reserve-s", "10", "--min-trace-s", "5", "--fb", fb, "--fb-ckpt", "10000",
-                    "--exec-workers", "2", "--fb-n1", "2", "--n-forced", "3", "--effort", "medium", "--cost-points", "[[8192, 9000], [16384, 15000], [32768, 30000], [49152, 45000], [63000, 58000]]"]
+                    "--exec-workers", "2", "--stagger-s", "1", "--fb-n1", "2", "--n-forced", "3", "--effort", "medium", "--cost-points", "[[8192, 9000], [16384, 15000], [32768, 30000], [49152, 45000], [63000, 58000]]"]
         solver2.main()
         recs = [json.loads(l) for l in open("log2.jsonl")]
         print("== fb", fb)

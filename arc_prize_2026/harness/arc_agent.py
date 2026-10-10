@@ -206,7 +206,7 @@ def check_text(f=None, until=None):
             out += "\ntest input %d: error: %s" % (k, err)
         else:
             out += "\ntest input %d: output %dx%d" % (k, o.shape[0], o.shape[1])
-            if k == 0 and ok == len(G["train"]) and o.shape[0] <= 20:
+            if k == 0 and ok == len(G["train"]) and o.shape[0] <= 30:
                 out += "\n" + "\n".join("".join(str(c) for c in r) for r in o)
     return out
 

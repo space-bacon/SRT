@@ -1,0 +1,53 @@
+{
+ "n_tasks_done": 114,
+ "top1": 17.54,
+ "top2": 17.84,
+ "top1_ci95": [
+  11.4,
+  25.0
+ ],
+ "bootstrap_sem_points": 3.46,
+ "tokens_per_task": {
+  "mean": 20639,
+  "median": 20962,
+  "gen_mean": 15621,
+  "forced_mean": 5018
+ },
+ "status": {
+  "answered": 8,
+  "budget": 16,
+  "turn_cut": 90
+ },
+ "turns_mean": 7.5,
+ "calls_mean": 6.7,
+ "share_with_verified_program": 0.211,
+ "answered": {
+  "n": 8,
+  "mean_tokens": 10099,
+  "top1": 100.0
+ },
+ "budget_ended": {
+  "n": 106,
+  "top1": 11.32
+ },
+ "program_arm_frontier_top1_at_mean_tokens": 11.54,
+ "top1_minus_frontier": 6.01,
+ "gen_tokens_quartiles": [
+  15544,
+  16227,
+  16384,
+  16384
+ ],
+ "hybrid_s0": {
+  "agent_top1": 17.54,
+  "nvarc_top1": 23.39,
+  "agent_top1_plus_nvarc_top1": 33.48,
+  "n_outputs": 161
+ },
+ "hybrid_s1": {
+  "agent_top1": 17.54,
+  "nvarc_top1": 23.39,
+  "agent_top1_plus_nvarc_top1": 34.36,
+  "n_outputs": 161
+ }
+}
