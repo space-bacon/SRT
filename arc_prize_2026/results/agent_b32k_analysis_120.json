@@ -1,0 +1,41 @@
+{
+ "n_tasks_done": 120,
+ "top1": 28.47,
+ "top2": 30.14,
+ "top1_ci95": [
+  20.97,
+  36.25
+ ],
+ "bootstrap_sem_points": 3.97,
+ "tokens_per_task": {
+  "mean": 40274,
+  "median": 42854,
+  "gen_mean": 29968,
+  "forced_mean": 10306
+ },
+ "status": {
+  "answered": 22,
+  "budget": 23,
+  "turn_cut": 75
+ },
+ "turns_mean": 13.6,
+ "calls_mean": 13.4,
+ "share_with_verified_program": 0.35,
+ "answered": {
+  "n": 22,
+  "mean_tokens": 19095,
+  "top1": 82.58
+ },
+ "budget_ended": {
+  "n": 98,
+  "top1": 16.33
+ },
+ "program_arm_frontier_top1_at_mean_tokens": 26.46,
+ "top1_minus_frontier": 2.01,
+ "gen_tokens_quartiles": [
+  31700,
+  32338,
+  32768,
+  32768
+ ]
+}

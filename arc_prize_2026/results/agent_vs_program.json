@@ -1,0 +1,661 @@
+{
+ "population": "120 public ARC-AGI-2 evaluation tasks; agent runs have one rollout per task; task-level top-1",
+ "runs": {
+  "agent_b16k": {
+   "n_tasks": 120,
+   "top1": 14.72,
+   "decoded_tokens_per_task": 25022,
+   "frontier_on_these_tasks_by_cap": [
+    13.75,
+    27.71,
+    37.43,
+    40.21
+   ],
+   "agent_minus_matched_frontier_equal_tokens": {
+    "n": 120,
+    "mean": 0.63,
+    "sd": 30.22,
+    "sem": 2.76,
+    "mean_over_sem": 0.23,
+    "mde80": 7.72
+   },
+   "agent_minus_matched_frontier_equal_kaggle_time": {
+    "n": 120,
+    "mean": -3.46,
+    "sd": 29.59,
+    "sem": 2.7,
+    "mean_over_sem": -1.28,
+    "mde80": 7.56
+   },
+   "vs_program_runs_at_32K_cap_same_tasks": {
+    "g4": {
+     "program_top1": 31.67,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -16.94,
+      "sd": 43.16,
+      "sem": 3.94,
+      "mean_over_sem": -4.3,
+      "mde80": 11.03
+     }
+    },
+    "g5": {
+     "program_top1": 23.75,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -9.03,
+      "sd": 39.83,
+      "sem": 3.64,
+      "mean_over_sem": -2.48,
+      "mde80": 10.18
+     }
+    },
+    "p0": {
+     "program_top1": 23.89,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -9.17,
+      "sd": 41.5,
+      "sem": 3.79,
+      "mean_over_sem": -2.42,
+      "mde80": 10.61
+     }
+    },
+    "r1p0": {
+     "program_top1": 32.64,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -17.92,
+      "sd": 43.38,
+      "sem": 3.96,
+      "mean_over_sem": -4.52,
+      "mde80": 11.09
+     }
+    },
+    "ps": {
+     "program_top1": 36.39,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -21.67,
+      "sd": 47.07,
+      "sem": 4.3,
+      "mean_over_sem": -5.04,
+      "mde80": 12.03
+     }
+    },
+    "r1ps": {
+     "program_top1": 33.06,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -18.33,
+      "sd": 48.04,
+      "sem": 4.39,
+      "mean_over_sem": -4.18,
+      "mde80": 12.28
+     }
+    },
+    "psc": {
+     "program_top1": 32.36,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -17.64,
+      "sd": 47.6,
+      "sem": 4.35,
+      "mean_over_sem": -4.06,
+      "mde80": 12.17
+     }
+    }
+   },
+   "vs_no_facts_mean_32K_cap": {
+    "n": 120,
+    "mean": -13.26,
+    "sd": 33.03,
+    "sem": 3.01,
+    "mean_over_sem": -4.4,
+    "mde80": 8.44
+   },
+   "vs_facts_mean_32K_cap": {
+    "n": 120,
+    "mean": -19.21,
+    "sd": 41.6,
+    "sem": 3.8,
+    "mean_over_sem": -5.06,
+    "mde80": 10.63
+   }
+  },
+  "agent_b32k": {
+   "n_tasks": 120,
+   "top1": 28.47,
+   "decoded_tokens_per_task": 40274,
+   "frontier_on_these_tasks_by_cap": [
+    13.75,
+    27.71,
+    37.43,
+    40.21
+   ],
+   "agent_minus_matched_frontier_equal_tokens": {
+    "n": 120,
+    "mean": 2.0,
+    "sd": 37.79,
+    "sem": 3.45,
+    "mean_over_sem": 0.58,
+    "mde80": 9.66
+   },
+   "agent_minus_matched_frontier_equal_kaggle_time": {
+    "n": 120,
+    "mean": -3.16,
+    "sd": 37.09,
+    "sem": 3.39,
+    "mean_over_sem": -0.93,
+    "mde80": 9.48
+   },
+   "vs_program_runs_at_32K_cap_same_tasks": {
+    "g4": {
+     "program_top1": 31.67,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -3.19,
+      "sd": 46.96,
+      "sem": 4.29,
+      "mean_over_sem": -0.75,
+      "mde80": 12.0
+     }
+    },
+    "g5": {
+     "program_top1": 23.75,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": 4.72,
+      "sd": 40.84,
+      "sem": 3.73,
+      "mean_over_sem": 1.27,
+      "mde80": 10.44
+     }
+    },
+    "p0": {
+     "program_top1": 23.89,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": 4.58,
+      "sd": 40.48,
+      "sem": 3.7,
+      "mean_over_sem": 1.24,
+      "mde80": 10.35
+     }
+    },
+    "r1p0": {
+     "program_top1": 32.64,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -4.17,
+      "sd": 47.0,
+      "sem": 4.29,
+      "mean_over_sem": -0.97,
+      "mde80": 12.01
+     }
+    },
+    "ps": {
+     "program_top1": 36.39,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -7.92,
+      "sd": 45.83,
+      "sem": 4.18,
+      "mean_over_sem": -1.89,
+      "mde80": 11.72
+     }
+    },
+    "r1ps": {
+     "program_top1": 33.06,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -4.58,
+      "sd": 42.01,
+      "sem": 3.83,
+      "mean_over_sem": -1.2,
+      "mde80": 10.74
+     }
+    },
+    "psc": {
+     "program_top1": 32.36,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -3.89,
+      "sd": 39.18,
+      "sem": 3.58,
+      "mean_over_sem": -1.09,
+      "mde80": 10.01
+     }
+    }
+   },
+   "vs_no_facts_mean_32K_cap": {
+    "n": 120,
+    "mean": 0.49,
+    "sd": 35.46,
+    "sem": 3.24,
+    "mean_over_sem": 0.15,
+    "mde80": 9.06
+   },
+   "vs_facts_mean_32K_cap": {
+    "n": 120,
+    "mean": -5.46,
+    "sd": 35.6,
+    "sem": 3.25,
+    "mean_over_sem": -1.68,
+    "mde80": 9.1
+   }
+  },
+  "agent_v5_b16k": {
+   "n_tasks": 120,
+   "top1": 17.5,
+   "decoded_tokens_per_task": 20837,
+   "frontier_on_these_tasks_by_cap": [
+    13.75,
+    27.71,
+    37.43,
+    40.21
+   ],
+   "agent_minus_matched_frontier_equal_tokens": {
+    "n": 120,
+    "mean": 5.85,
+    "sd": 29.96,
+    "sem": 2.73,
+    "mean_over_sem": 2.14,
+    "mde80": 7.66
+   },
+   "agent_minus_matched_frontier_equal_kaggle_time": {
+    "n": 120,
+    "mean": 3.4,
+    "sd": 30.57,
+    "sem": 2.79,
+    "mean_over_sem": 1.22,
+    "mde80": 7.81
+   },
+   "vs_program_runs_at_32K_cap_same_tasks": {
+    "g4": {
+     "program_top1": 31.67,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -14.17,
+      "sd": 44.53,
+      "sem": 4.06,
+      "mean_over_sem": -3.49,
+      "mde80": 11.38
+     }
+    },
+    "g5": {
+     "program_top1": 23.75,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -6.25,
+      "sd": 40.77,
+      "sem": 3.72,
+      "mean_over_sem": -1.68,
+      "mde80": 10.42
+     }
+    },
+    "p0": {
+     "program_top1": 23.89,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -6.39,
+      "sd": 38.3,
+      "sem": 3.5,
+      "mean_over_sem": -1.83,
+      "mde80": 9.79
+     }
+    },
+    "r1p0": {
+     "program_top1": 32.64,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -15.14,
+      "sd": 41.95,
+      "sem": 3.83,
+      "mean_over_sem": -3.95,
+      "mde80": 10.72
+     }
+    },
+    "ps": {
+     "program_top1": 36.39,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -18.89,
+      "sd": 46.89,
+      "sem": 4.28,
+      "mean_over_sem": -4.41,
+      "mde80": 11.98
+     }
+    },
+    "r1ps": {
+     "program_top1": 33.06,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -15.56,
+      "sd": 43.52,
+      "sem": 3.97,
+      "mean_over_sem": -3.92,
+      "mde80": 11.12
+     }
+    },
+    "psc": {
+     "program_top1": 32.36,
+     "agent_minus_program": {
+      "n": 120,
+      "mean": -14.86,
+      "sd": 41.49,
+      "sem": 3.79,
+      "mean_over_sem": -3.92,
+      "mde80": 10.61
+     }
+    }
+   },
+   "vs_no_facts_mean_32K_cap": {
+    "n": 120,
+    "mean": -10.49,
+    "sd": 32.33,
+    "sem": 2.95,
+    "mean_over_sem": -3.55,
+    "mde80": 8.26
+   },
+   "vs_facts_mean_32K_cap": {
+    "n": 120,
+    "mean": -16.44,
+    "sd": 37.49,
+    "sem": 3.42,
+    "mean_over_sem": -4.8,
+    "mde80": 9.58
+   }
+  },
+  "agent_v6_b32k": {
+   "n_tasks": 60,
+   "top1": 36.11,
+   "decoded_tokens_per_task": 32009,
+   "frontier_on_these_tasks_by_cap": [
+    19.58,
+    34.58,
+    42.08,
+    45.42
+   ],
+   "agent_minus_matched_frontier_equal_tokens": {
+    "n": 60,
+    "mean": 10.07,
+    "sd": 39.56,
+    "sem": 5.11,
+    "mean_over_sem": 1.97,
+    "mde80": 14.3
+   },
+   "agent_minus_matched_frontier_equal_kaggle_time": {
+    "n": 60,
+    "mean": 4.44,
+    "sd": 40.83,
+    "sem": 5.27,
+    "mean_over_sem": 0.84,
+    "mde80": 14.76
+   },
+   "vs_program_runs_at_32K_cap_same_tasks": {
+    "g4": {
+     "program_top1": 42.5,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": -6.39,
+      "sd": 56.17,
+      "sem": 7.25,
+      "mean_over_sem": -0.88,
+      "mde80": 20.3
+     }
+    },
+    "g5": {
+     "program_top1": 26.67,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": 9.44,
+      "sd": 40.29,
+      "sem": 5.2,
+      "mean_over_sem": 1.82,
+      "mde80": 14.56
+     }
+    },
+    "p0": {
+     "program_top1": 26.94,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": 9.17,
+      "sd": 45.56,
+      "sem": 5.88,
+      "mean_over_sem": 1.56,
+      "mde80": 16.47
+     }
+    },
+    "r1p0": {
+     "program_top1": 38.61,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": -2.5,
+      "sd": 49.08,
+      "sem": 6.34,
+      "mean_over_sem": -0.39,
+      "mde80": 17.74
+     }
+    },
+    "ps": {
+     "program_top1": 43.61,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": -7.5,
+      "sd": 45.87,
+      "sem": 5.92,
+      "mean_over_sem": -1.27,
+      "mde80": 16.58
+     }
+    },
+    "r1ps": {
+     "program_top1": 40.28,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": -4.17,
+      "sd": 36.0,
+      "sem": 4.65,
+      "mean_over_sem": -0.9,
+      "mde80": 13.01
+     }
+    },
+    "psc": {
+     "program_top1": 41.11,
+     "agent_minus_program": {
+      "n": 60,
+      "mean": -5.0,
+      "sd": 42.88,
+      "sem": 5.54,
+      "mean_over_sem": -0.9,
+      "mde80": 15.5
+     }
+    }
+   },
+   "vs_no_facts_mean_32K_cap": {
+    "n": 60,
+    "mean": 2.43,
+    "sd": 40.54,
+    "sem": 5.23,
+    "mean_over_sem": 0.46,
+    "mde80": 14.65
+   },
+   "vs_facts_mean_32K_cap": {
+    "n": 60,
+    "mean": -5.56,
+    "sd": 35.08,
+    "sem": 4.53,
+    "mean_over_sem": -1.23,
+    "mde80": 12.68
+   }
+  }
+ },
+ "time_factor_agent_per_decoded_token_on_kaggle": 1.201,
+ "unique_solves": {
+  "agent_v6_b32k": {
+   "n_tasks": 60,
+   "per_run": {
+    "agent_v6_b32k": {
+     "solved": 23,
+     "unique": 1
+    },
+    "g4": {
+     "solved": 27,
+     "unique": 2
+    },
+    "g5": {
+     "solved": 17,
+     "unique": 0
+    },
+    "p0": {
+     "solved": 17,
+     "unique": 0
+    },
+    "r1p0": {
+     "solved": 25,
+     "unique": 0
+    },
+    "ps": {
+     "solved": 27,
+     "unique": 1
+    },
+    "r1ps": {
+     "solved": 26,
+     "unique": 0
+    },
+    "psc": {
+     "solved": 26,
+     "unique": 1
+    }
+   },
+   "union_of_program_runs": 39,
+   "agent_solved_not_in_any_program_run": [
+    "eee78d87"
+   ],
+   "union_with_agent": 40
+  },
+  "agent_b32k": {
+   "n_tasks": 120,
+   "per_run": {
+    "agent_b32k": {
+     "solved": 37,
+     "unique": 2
+    },
+    "g4": {
+     "solved": 42,
+     "unique": 2
+    },
+    "g5": {
+     "solved": 32,
+     "unique": 0
+    },
+    "p0": {
+     "solved": 32,
+     "unique": 0
+    },
+    "r1p0": {
+     "solved": 43,
+     "unique": 3
+    },
+    "ps": {
+     "solved": 47,
+     "unique": 2
+    },
+    "r1ps": {
+     "solved": 44,
+     "unique": 1
+    },
+    "psc": {
+     "solved": 41,
+     "unique": 3
+    }
+   },
+   "union_of_program_runs": 73,
+   "agent_solved_not_in_any_program_run": [
+    "35ab12c3",
+    "7666fa5d"
+   ],
+   "union_with_agent": 75
+  },
+  "agent_v5_b16k": {
+   "n_tasks": 120,
+   "per_run": {
+    "agent_v5_b16k": {
+     "solved": 23,
+     "unique": 0
+    },
+    "g4": {
+     "solved": 42,
+     "unique": 2
+    },
+    "g5": {
+     "solved": 32,
+     "unique": 0
+    },
+    "p0": {
+     "solved": 32,
+     "unique": 0
+    },
+    "r1p0": {
+     "solved": 43,
+     "unique": 3
+    },
+    "ps": {
+     "solved": 47,
+     "unique": 2
+    },
+    "r1ps": {
+     "solved": 44,
+     "unique": 1
+    },
+    "psc": {
+     "solved": 41,
+     "unique": 3
+    }
+   },
+   "union_of_program_runs": 73,
+   "agent_solved_not_in_any_program_run": [],
+   "union_with_agent": 73
+  },
+  "agent_b16k": {
+   "n_tasks": 120,
+   "per_run": {
+    "agent_b16k": {
+     "solved": 19,
+     "unique": 0
+    },
+    "g4": {
+     "solved": 42,
+     "unique": 2
+    },
+    "g5": {
+     "solved": 32,
+     "unique": 0
+    },
+    "p0": {
+     "solved": 32,
+     "unique": 0
+    },
+    "r1p0": {
+     "solved": 43,
+     "unique": 3
+    },
+    "ps": {
+     "solved": 47,
+     "unique": 1
+    },
+    "r1ps": {
+     "solved": 44,
+     "unique": 1
+    },
+    "psc": {
+     "solved": 41,
+     "unique": 3
+    }
+   },
+   "union_of_program_runs": 73,
+   "agent_solved_not_in_any_program_run": [],
+   "union_with_agent": 73
+  }
+ }
+}
