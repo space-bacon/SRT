@@ -273,10 +273,13 @@ heads are trained, on a fully frozen, forward-only backbone.
 ## SRT-Sunstone — the read-out reads images (cross-modal)
 
 A 12.3M community read-out head trained on **text only**, attached to a frozen
-multimodal `google/gemma-4-31B-it`, interprets **images** with zero image
-training. Point it at a picture and it retrieves the picture's own words
-(CIFAR-10 image→word retrieval@1 = **0.93**, chance 0.10) and names the
-nearest discourse community the head learned from prose. The same image state
+multimodal `google/gemma-4-31B-it`, organises **images** by their referent with
+zero image training (CIFAR-10 image-class centroid top-1 = **0.62**, kNN 0.64,
+chance 0.10) and names the nearest discourse community the head learned from
+prose. Image→word retrieval@1 through the head is 0.27 (2.7× chance), because
+its 64-dimensional community code discards visual detail; the frozen backbone's
+own states, centred per modality with no adapter, retrieve an image's class word
+at **0.93** (L47/L54, chance 0.10; `paper_nla.md` §11.6, §11.6.1). The same image state
 also retrieves full **sentences** from an open pool of 10,000 COCO captions,
 zero training (5/5 CIFAR natural images on-topic at rank 1; `paper_nla.md`
 §11.6.3). Cross-modal alignment peaks at ~80% of backbone depth and collapses

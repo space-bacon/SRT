@@ -27,6 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   selection-decay slope so both can be gated instead of trusted.
 
 ### Fixed
+- **The README attributed the cross-modal 0.93 to the trained head.** CIFAR-10
+  image→word retrieval@1 of 0.93 is the frozen gemma-4-31B backbone's own
+  states, centred per modality with no adapter, at L47/L54 (`paper_nla.md`
+  §11.6). Through the 12.3M text-trained community head, image→word
+  retrieval@1 is 0.27 (2.7× chance) and image-class centroid top-1 is 0.62
+  (§11.6.1). The README now states both. The same attribution remains in
+  `arxiv_program/paper.md`, `arxiv_program/paper.tex` and
+  `paper_srt_program.md`, which are tied to the arXiv submission and are not
+  changed here.
 - **The §3.1 head-swap control was degenerate, not weak, and the correction had
   never reached the prose.** The published version put one shared
   `all-MiniLM-L6-v2` in every vendor's caption slot, which deleted the swapped
