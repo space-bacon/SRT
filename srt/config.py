@@ -16,6 +16,7 @@ class MAHConfig:
     d_divergence: int = 256  # divergence vector dimension
     num_heads: int = 4  # attention heads
     dropout: float = 0.1
+    log_scale_base: int = 0  # 0 = off; else scale query t's scores by max(1, log(t+1)/log(base)) (length calibration)
 
 
 @dataclass

@@ -62,6 +62,7 @@ class MetapragmaticAttentionHead(nn.Module):
 
         # Divergence output projection
         self.div_proj = nn.Linear(d_sub, cfg.d_divergence, bias=False)
+        self.log_scale_base = int(getattr(cfg, "log_scale_base", 0) or 0)
 
     def forward(
         self,
@@ -146,6 +147,16 @@ class MetapragmaticAttentionHead(nn.Module):
         if kv_cache is not None:
             k = torch.cat([kv_cache[0], k], dim=2)
             v = torch.cat([kv_cache[1], v], dim=2)
+
+        # Optional length scaling: query t sees t + 1 keys; multiplying its scores by log(t + 1) / log(base) (never below
+        # 1) keeps the attention about as sharp at long context as at the training length, so the contextual reading,
+        # and the divergence with it, does not drift with the length of the sequence.
+        base = getattr(self, "log_scale_base", 0)
+        if base:
+            n_past = k.shape[2] - T
+            pos = torch.arange(n_past, n_past + T, device=q.device, dtype=torch.float32)
+            s = torch.clamp(torch.log(pos + 1.0) / math.log(base), min=1.0).to(q.dtype)
+            q = q * s.view(1, 1, T, 1)
 
         # Use memory-efficient SDPA instead of materializing the full (T, S)
         # attention matrix. At long prefill lengths (tens of thousands of
