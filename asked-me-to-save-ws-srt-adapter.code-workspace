@@ -32,6 +32,9 @@
         },
         {
             "path": "../hugginghuman"
+        },
+        {
+            "path": "../steerability"
         }
     ],
     "settings": {
@@ -46,6 +49,7 @@
             "**/media/**",
             "**/bench/results/**",
             "**/.vscode-test/**",
+            "**/.var_cache/**",
             "**/agent_assessment_key.json"
         ]
     }
